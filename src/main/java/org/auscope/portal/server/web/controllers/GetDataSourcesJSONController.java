@@ -157,6 +157,7 @@ public class GetDataSourcesJSONController extends AbstractController {
        //String server  = "http://localhost:8090/geoserver/wms?";
        //String server  = "http://c3dmm2.ivec.org/geoserver/wms?";
        String server  = "http://c3dmm2.ivec.org/geoserver/gwc/service/wms?";
+       String gmapsUrl = "http://c3dmm2.ivec.org/geoserver/gwc/service/gmaps?";
 
        WebMapServer wms = null;
         try {
@@ -179,7 +180,7 @@ public class GetDataSourcesJSONController extends AbstractController {
             layerNode.put("leaf", Boolean.TRUE);
             layerNode.put("layerType", "wms");
 
-            layerNode.put("wmsUrl", server);
+            layerNode.put("wmsUrl", gmapsUrl);
             layerNode.put("tileOverlay", "");
 
             //layerNode.put("layerURL", layer.get)

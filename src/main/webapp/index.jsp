@@ -156,17 +156,25 @@
             if (isChecked) {
                 //do something
                 //alert('about to check');
-                if (node.attributes.id == 'waCoe' && (node.attributes.tileOverlay == null || node.attributes.tileOverlay == '')) {
+                if (node.attributes.layerType == 'wms' && (node.attributes.tileOverlay == null || node.attributes.tileOverlay == '')) {
                     //alert('isnull');
-                    var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
-                    tileLayer.baseURL = node.attributes.wmsUrl;
-                    tileLayer.layers = node.id;
+                    //var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
+                    //tileLayer.baseURL = node.attributes.wmsUrl;
+                    //tileLayer.layers = node.id;
 
                     //alert('madetilelayer');
-                    node.attributes.tileOverlay = new GTileLayerOverlay(tileLayer);
-                    map.addOverlay(node.attributes.tileOverlay);
+                    //node.attributes.tileOverlay = new GTileLayerOverlay(tileLayer);
+                    //map.addOverlay(node.attributes.tileOverlay);
                     //node.attributes.tileOverlay = new OpenLayers.Layer.WMS( "Some WMS", node.attributes.wmsUrl, {layers: node.id, format: "image/png", transparent: "true", projection: "EPSG:900913"});
                     //map.addLayer(layer);
+
+                    var tileLayer =  new GTileLayer(null, null, null, {
+                        tileUrlTemplate: node.attributes.wmsUrl+'layers='+node.id+'&zoom={Z}&x={X}&y={Y}',
+                        isPng:true,
+                        opacity:1.0 }
+                    );
+                    node.attributes.tileOverlay = new GTileLayerOverlay(tileLayer);
+                    map.addOverlay(node.attributes.tileOverlay);
                 }
                 else if (node.attributes.id == 'nvcl') {
                     gaGroups["gsml:Borehole"].showMarkers(map);
@@ -196,8 +204,10 @@
                 } else if(node.attributes.id == 'gps') {
                     gaGroups["geodesy:stations"].hideMarkers(map);      
                 }
-                else
-                    map.removeLayer(node.attributes.tileOverlay);
+                else {
+                    map.removeOverlay(node.attributes.tileOverlay);
+                    node.attributes.tileOverlay = null;
+                }
             }
 
         });
