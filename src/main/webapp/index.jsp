@@ -4,7 +4,7 @@
 <head>
 <title>Auscope Portal</title>
 
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg" type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAZqsP68C-PfYEAobUmwen1xSei4j9m2Mi-rbOVQ0iCZaYodqdCRQbFXNtqGnMwriezq-u4iBCtlh5WQ" type="text/javascript"></script>
 
 <!-- Bring in the ExtJs Libraries and CSS -->
 <link rel="stylesheet" type="text/css" href="js/ext-2.2/resources/css/ext-all.css"/>
