@@ -42,7 +42,8 @@ public class GetDataSourcesJSONController extends AbstractController {
     public static final String XSLT_PROXY_URL = "/xsltRestProxy?url=";
     public static final String PROXY_URL = "/restproxy?";
 
-    public static final String CSW_URL = "http://auscope-portal.arrc.csiro.au/geonetwork/srv/en/csw";
+    //public static final String CSW_URL = "http://auscope-portal.arrc.csiro.au/geonetwork/srv/en/csw";
+    public static final String CSW_URL = "http://portal.auscope.org/geonetwork/srv/en/csw";
 
     public static final String BOREHOLE           = "Borehole";
     public static final String GNSS               = "Global Navigation Satellite Systems";
