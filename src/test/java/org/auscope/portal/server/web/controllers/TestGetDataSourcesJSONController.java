@@ -88,7 +88,8 @@ public class TestGetDataSourcesJSONController {
 
     @Test
     public void testStripURL() {
-        String url = "http://auscope-portal.arrc.csiro.au/nvcl/wfs?something=something";
+        //String url = "http://auscope-portal.arrc.csiro.au/nvcl/wfs?something=something";
+        String url = "http://portal.auscope.org/nvcl/wfs?something=something";
         System.out.println(controller.stripUrlAndGetFeatures(url));
     }
 }
