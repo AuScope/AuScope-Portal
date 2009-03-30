@@ -65,7 +65,8 @@ public class TestXSLTRestProxy {
         request.setMethod("GET");
 
         //We are simulating the click of the root node in the tree
-        request.setParameter("url", "http://auscope-portal.arrc.csiro.au/nvcl/wfs?request=GetFeature&typeName=gsml:Borehole");
+        //request.setParameter("url", "http://auscope-portal.arrc.csiro.au/nvcl/wfs?request=GetFeature&typeName=gsml:Borehole");
+        request.setParameter("url", "http://portal.auscope.org/nvcl/wfs?request=GetFeature&typeName=gsml:Borehole");
 
         restProxy.doGet(request, response);
     }
