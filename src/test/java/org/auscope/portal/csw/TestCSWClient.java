@@ -20,7 +20,7 @@ public class TestCSWClient {
         //String filter = "<?xml+version=\"1.0\"+encoding=\"UTF-8\"?><Filter+xmlns=\"http://www.opengis.net/ogc\"+xmlns:gml=\"http://www.opengis.net/gml\"><And><PropertyIsEqualTo><PropertyName>keyword</PropertyName><Literal>WFS</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>keyword</PropertyName><Literal>GPS</Literal></PropertyIsEqualTo></And></Filter>&constraintLanguage=FILTER&constraint_language_version=1.1.0";
         //String filter = "<?xml+version=\"1.0\"+encoding=\"UTF-8\"?><Filter+xmlns=\"http://www.opengis.net/ogc\"+xmlns:gml=\"http://www.opengis.net/gml\"><And><PropertyIsEqualTo><PropertyName>keyword</PropertyName><Literal>WFS</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>keyword</PropertyName><Literal>mo%3AMiningFeatureOccurrence</Literal></PropertyIsEqualTo></And></Filter>&constraintLanguage=FILTER&constraint_language_version=1.1.0";
         String filter = "<?xml+version=\"1.0\"+encoding=\"UTF-8\"?><Filter+xmlns=\"http://www.opengis.net/ogc\"+xmlns:gml=\"http://www.opengis.net/gml\"><PropertyIsEqualTo><PropertyName>any</PropertyName><Literal>WFS</Literal></PropertyIsEqualTo></Filter>&constraintLanguage=FILTER&constraint_language_version=1.1.0";
-        CSWRecord[] cswRecords = new CSWClient("http://auscope-portal.arrc.csiro.au/geonetwork/srv/en/csw", filter).getRecordResponse().getCSWRecords();
+        CSWRecord[] cswRecords = new CSWClient("http://portal.auscope.org/geonetwork/srv/en/csw", filter).getRecordResponse().getCSWRecords();
         
         for(CSWRecord record : cswRecords)
             System.out.println(record.getServiceName() + " " + record.getServiceUrl());
