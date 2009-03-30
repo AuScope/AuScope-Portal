@@ -118,7 +118,8 @@ function initialize(pMapContainer) {
 function getCapabilities() {
     //var proxy = "/restproxy?";
     // NVCL Get Capabilities url
-  var url = "http://auscope-portal.arrc.csiro.au/nvcl/wfs?request=GetCapabilities&version=1.0.0";
+  //var url = "http://auscope-portal.arrc.csiro.au/nvcl/wfs?request=GetCapabilities&version=1.0.0";
+  var url = "http://portal.auscope.org/nvcl/wfs?request=GetCapabilities&version=1.0.0";
   GDownloadUrl(ProxyURL+url, function(pData, pResponseCode) {
     if (pResponseCode == 200) {
       var xmlDoc = GXml.parse(pData);
@@ -127,7 +128,8 @@ function getCapabilities() {
   });
 
   // Geodesy Get Capabilities url
-  var url = "http://auscope-portal.arrc.csiro.au/geodesy/wfs?request=GetCapabilities";
+  //var url = "http://auscope-portal.arrc.csiro.au/geodesy/wfs?request=GetCapabilities";
+  var url = "http://portal.auscope.org/geodesy/wfs?request=GetCapabilities";
   GDownloadUrl(ProxyURL+url, function(pData, pResponseCode) {
     if (pResponseCode == 200) {
       var xmlDoc = GXml.parse(pData);
