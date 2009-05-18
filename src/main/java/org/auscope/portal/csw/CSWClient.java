@@ -41,7 +41,6 @@ public class CSWClient {
         this.constraint = constraint;
     }
 
-
     public CSWGetRecordResponse getRecordResponse() throws IOException, ParserConfigurationException, SAXException {
         URL cswQuery = buildQueryUrl();
         BufferedReader responseReader = new BufferedReader(new InputStreamReader(cswQuery.openStream()));

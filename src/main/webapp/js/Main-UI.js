@@ -6,8 +6,66 @@ Ext.onReady(function() {
     var map;
     var downloadUrls = new Hashtable();
 
-    //this tree holds all of the data sources
-    var tree = new Ext.tree.TreePanel({
+    var dataSourcesStore = new Ext.data.Store({
+        //baseParams: {serviceUrl: serviceUrl},
+        proxy: new Ext.data.HttpProxy({url: '/getDataSources.do'}),
+        reader: new Ext.data.ArrayReader({}, [
+            {name:'title'},
+            {name:'description'},
+            {name:'serviceURL'}
+        ])
+    });
+
+    dataSourcesStore.load();
+
+    var expander = new Ext.grid.RowExpander({
+        tpl : new Ext.Template(
+            '<p><b>Description:</b> {description}</p><br>'
+        )
+    });
+    
+    var tree = new Ext.grid.GridPanel({
+        store: dataSourcesStore,
+        columns: [
+            expander,
+            {id:'title',header: "Title", width: 160, sortable: true, dataIndex: 'title'}
+            //{header: "Price", width: 75, sortable: true, dataIndex: 'price'},
+            //{header: "Change", width: 75, sortable: true, dataIndex: 'change'},
+            //{header: "% Change", width: 75, sortable: true, dataIndex: 'pctChange'},
+            //{header: "Last Updated", width: 85, sortable: true, dataIndex: 'lastChange'}
+        ],
+        bbar: [{
+            text:'Add Layer to Map',
+            tooltip:'Add Layer to Map',
+            iconCls:'add',
+            handler: function() {
+                //alert(tree.getSelectionModel().getSelected().get('title'));
+                layersStore.add(tree.getSelectionModel().getSelected());
+                /*layersStore.add(new Layer({
+                    title: tree.getSelectionModel().getSelected().get('title'),
+                    description: tree.getSelectionModel().getSelected().get('description'),
+                    layerVisible: false
+                }));*/
+            }
+        }],
+
+        stripeRows: true,
+        autoExpandColumn: 'title',
+        plugins: [expander],
+        viewConfig: {scrollOffset: 0},
+
+        title: 'Themes',
+        region:'north',
+        split: true,
+        height: 300,
+        autoScroll: true
+    });
+
+
+    /**
+     * This tree holds all of the data sources
+     */
+    /*var tree = new Ext.tree.TreePanel({
         title: 'Themes',
         region:'north',
         split: true,
@@ -22,19 +80,100 @@ Ext.onReady(function() {
             draggable:false,
             id:'root'
         }
-    });
+    });*/
 
-    //used to show extra details for querying services
-    var filterPanel = new Ext.Panel({
+    /**
+     * Used to show extra details for querying services
+     */
+    var filterPanel2 = new Ext.Panel({
         title: "Filter Properties",
-        region: 'center',
+        region: 'south',
         width: '100%',
         layout: 'card',
         activeItem: 0,
+        height: 300,
         items: [{html: '<p style="margin:15px;padding:15px;border:1px dotted #999;color:#555;background: #f9f9f9;"> Filter options will be shown here for special services.</p>'}]
     });
 
-    //buttons for things like downloading datasets
+    /*var Layer = Ext.data.Record.create([
+        {name: 'title'},
+        {name: 'description'},
+        {name: 'layerVisible', type:'bool'}
+    ]);*/
+
+    var layersStore = new Ext.data.Store({
+        //baseParams: {serviceUrl: serviceUrl},
+        //proxy: new Ext.data.HttpProxy({url: '/getDataSources.do'}),
+        reader: new Ext.data.ArrayReader({}, [
+            {name:'title'},
+            {name:'description'},
+            {name: 'serviceURL'},    
+            {name:'layerVisible'}
+        ])
+    });
+
+    // custom column plugin example
+    var checkColumn = new Ext.grid.CheckColumn({
+       header: "Visible",
+       dataIndex: 'layerVisible',
+       width: 55,
+       handler: function(record) {
+            var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
+            tileLayer.baseURL=record.get('serviceURL');
+            tileLayer.layers=record.get('title');
+            //TODO: remove code specific to feature types and styles specific to GSV
+            if(record.get('title') == 'gsmlGeologicUnit')
+                tileLayer.styles='ColorByLithology';
+            if(record.get('title') == '7')
+                tileLayer.styles='7';
+            /*node.attributes.tileOverlay = new GTileLayerOverlay(tileLayer);
+            map.addOverlay(node.attributes.tileOverlay);*/ 
+           map.addOverlay(new GTileLayerOverlay(tileLayer));
+       }
+    });
+
+    var expander2 = new Ext.grid.RowExpander({
+        tpl : new Ext.Template(
+            '<p><b>Description:</b> {description}</p><br>'
+        )
+    });
+
+    var filterPanel = new Ext.grid.GridPanel({
+        store: layersStore,
+        columns: [
+            expander2,
+            {id:'title',header: "Title", width: 160, sortable: true, dataIndex: 'title'},
+            checkColumn
+            //{header: "Price", width: 75, sortable: true, dataIndex: 'price'},
+            //{header: "Change", width: 75, sortable: true, dataIndex: 'change'},
+            //{header: "% Change", width: 75, sortable: true, dataIndex: 'pctChange'},
+            //{header: "Last Updated", width: 85, sortable: true, dataIndex: 'lastChange'}
+        ],
+        bbar: [{
+            text:'Remove Layer',
+            tooltip:'Remove Layer',
+            iconCls:'remove',
+            handler: function() {
+                layersStore.remove(filterPanel.getSelectionModel().getSelected());
+            }
+        }],
+
+        plugins: [checkColumn, expander2],
+
+        stripeRows: true,
+        autoExpandColumn: 'title',
+        viewConfig: {scrollOffset: 0},
+        
+        title: 'Layers',
+        region:'center',
+        split: true,
+        height: 300,
+        autoScroll: true
+    });
+
+    /**
+     * Buttons for things like downloading datasets
+     */
     var buttonsPanel = new Ext.FormPanel({
         region: 'south',
         autoScroll:true,
@@ -43,7 +182,9 @@ Ext.onReady(function() {
         buttons: [{text: "Download Datasets", handler: function() {downloadController(downloadUrls);} }]
     });
 
-    //used as a placeholder for the tree and details panel on the left of screen
+    /**
+     * Used as a placeholder for the tree and details panel on the left of screen
+     */
     var westPanel = {
         layout: 'border',
         region:'west',
@@ -52,13 +193,18 @@ Ext.onReady(function() {
         margins: '100 0 0 0',
         width: 350,
 
-        items:[tree, filterPanel, buttonsPanel]
+        items:[tree, filterPanel, filterPanel2]
     }
 
-    //this center panel will hold the google maps
+    /**
+     * This center panel will hold the google maps
+     */
+
     var centerPanel = new Ext.Panel({region:"center", margins:'100 0 0 0', cmargins:'100 0 0 0'});
 
-    //used for notifications of activity
+    /**
+     * Used for notifications of activity
+     */
     var statusBar = new Ext.StatusBar({
         region: "south",
         id: 'my-status',
@@ -73,7 +219,9 @@ Ext.onReady(function() {
         iconCls: 'ready-icon'
     });
 
-    //add all the panels to the viewport
+    /**
+     * Add all the panels to the viewport
+     */
     var viewport = new Ext.Viewport({
         layout:'border',
         items:[westPanel, centerPanel, statusBar]
@@ -109,13 +257,48 @@ Ext.onReady(function() {
     theglobalexml = new GeoXml("theglobalexml", map, null, null);
 
     //event handlers and listeners
-    tree.on('click', function(node, event) { treeNodeOnClickController(node, event, viewport, filterPanel); });
-    tree.on('checkchange', function(node, isChecked) { treeCheckChangeController(node, isChecked, map, statusBar, viewport, downloadUrls, filterPanel); });
+    //tree.on('click', function(node, event) { treeNodeOnClickController(node, event, viewport, filterPanel); });
+    //tree.on('checkchange', function(node, isChecked) { treeCheckChangeController(node, isChecked, map, statusBar, viewport, downloadUrls, filterPanel); });
 
     //when a person clicks on a marker then do something
     GEvent.addListener(map, "click", function(overlay, latlng) { gMapClickController(map, overlay, latlng, statusBar, viewport); });
 
 });
+
+Ext.grid.CheckColumn = function(config){
+    Ext.apply(this, config);
+    if(!this.id){
+        this.id = Ext.id();
+    }
+    this.renderer = this.renderer.createDelegate(this);
+};
+
+Ext.grid.CheckColumn.prototype ={
+    init : function(grid){
+        this.grid = grid;
+        this.grid.on('render', function(){
+            var view = this.grid.getView();
+            view.mainBody.on('mousedown', this.onMouseDown, this);
+        }, this);
+    },
+
+    onMouseDown : function(e, t){
+        if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
+            e.stopEvent();
+            var index = this.grid.getView().findRowIndex(t);
+            var record = this.grid.store.getAt(index);
+            record.set(this.dataIndex, !record.data[this.dataIndex]);
+
+            //call the user defined check handler
+            this.handler(record);
+        }
+    },
+
+    renderer : function(v, p, record){
+        p.css += ' x-grid3-check-col-td';
+        return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+    }
+};
 
 
 
