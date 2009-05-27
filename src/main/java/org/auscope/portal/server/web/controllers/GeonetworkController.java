@@ -48,8 +48,8 @@ public class GeonetworkController {
      * Returns a JSON response with a data structure like so
      *
      * [
-     * [title: "", description: "", serviceURL: "", type: ""],
-     * [title: "", description: "", serviceURL: "", type: ""]
+     * [title: "", description: "", serviceURL: "", type: "", id: "", featureType: ""],
+     * [title: "", description: "", serviceURL: "", type: "", id: "", featureType: ""]
      * ]
      *
      * @param model
@@ -124,15 +124,18 @@ public class GeonetworkController {
         tableRow.add("Mineral Occurrence");
         //add the abstract text to be shown as a description
         tableRow.add("Based on the Mineral Occurence Model");
-        //TODO: add a unique id
-
-        //TODO: add a data type: the portal will do KML, or PNG
 
         //add the service URL - this is the spring controller for handling minocc
         tableRow.add("/doMineralOccurrenceFilter.do");
 
         //add the type: kml or wms
         tableRow.add("kml");
+
+        //TODO: add a proper unique id
+        tableRow.add("Mineral Occurrence");
+
+        //add the featureType name (in case of a WMS feature)
+        tableRow.add("mo:MineralOccurrence");
 
         dataItems.add(tableRow);
 

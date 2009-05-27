@@ -193,7 +193,11 @@ function buildMiningActivityFilterForm(id, loadUrl, submitUrl, serviceUrl, succe
  * @param id to specify the id of this formpanel instance
  * @param serviceUrl the service url for submit
  */
-function buildMineralOccurrenceFilterForm(id, loadUrl, submitUrl, serviceUrl, successFunction, preSubmitFunction) {
+function buildMineralOccurrenceFilterForm(id, loadUrl, submitUrl) {
+    this.submitUrl = submitUrl;
+
+
+
     unitsOfMeasure = [
             ['CRT', 'urn:ogc:def:uom:UCUM::%5Bcar_m%5D'],
             ['CUB M/HA', 'urn:ogc:def:uom:UCUM::m3.har-1'],
@@ -354,7 +358,7 @@ function buildMineralOccurrenceFilterForm(id, loadUrl, submitUrl, serviceUrl, su
                 valueField:'urn'
             })]
         }]
-        ,buttons: [{
+        /*,buttons: [{
             text: 'Show Me >>',
             handler: function() {
                 preSubmitFunction();
@@ -374,10 +378,31 @@ function buildMineralOccurrenceFilterForm(id, loadUrl, submitUrl, serviceUrl, su
                     }
                 });
             }
-        }]
+        }]*/
     });
+
+    thePanel.runFilter = function() {
+        /*thePanel.getForm().submit({
+            url:submitUrl,
+            waitMsg:'Running query...',
+            //params: {serviceUrl: serviceUrl},
+            success: function() {alert("all good");},
+            failure: function(form, action) {
+                Ext.MessageBox.show({
+                    title: 'Filter Failed',
+                    msg: action.result.msg,
+                    buttons: Ext.MessageBox.OK,
+                    animEl: 'mb9',
+                    icon: Ext.MessageBox.ERROR
+                });
+            }
+        });*/
+        alert(thePanel.getForm().url + "?" + thePanel.getForm().getValues(true));
+    };
+
     return thePanel;
-}
-;
+
+
+};
 
 //}

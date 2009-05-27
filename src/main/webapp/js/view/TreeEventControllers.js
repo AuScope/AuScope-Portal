@@ -9,7 +9,7 @@
  * @param downloadUrls
  * @param filterPanel
  */
-var treeCheckChangeController = function(node, isChecked, map, statusBar, viewport, downloadUrls, filterPanel) {
+var layerCheckChangeController = function(record, isChecked, map, statusBar, viewport, downloadUrls, filterPanel) {
 
     /**
      * Given a feature type string, determine which handler to use for that feature type
@@ -40,7 +40,7 @@ var treeCheckChangeController = function(node, isChecked, map, statusBar, viewpo
             });
         }
 
-        showNodesFilterPanel(node, filterPanel);
+        bringFilterPanelToFront(node, filterPanel);
     };
 
     /**
@@ -58,25 +58,25 @@ var treeCheckChangeController = function(node, isChecked, map, statusBar, viewpo
             });
         }
 
-        showNodesFilterPanel(node, filterPanel);
+        bringFilterPanelToFront(node, filterPanel);
     };
 
     /**
      * Handles feature types of type mo:MineralOccurrence
      */
     this.mineralOccurrenceHandler = function() {
-        if (node.attributes.filterPanel == null || node.attributes.filterPanel == "") {
-            node.attributes.filterPanel = new buildMineralOccurrenceFilterForm(node.id, "/getMineNames.do", "/doMineralOccurrenceFilter.do", node.attributes.wfsUrl, function(form, action) {
+        /*if (node.attributes.filterPanel == null || node.attributes.filterPanel == "") {
+            node.attributes.filterPanel = new buildMineralOccurrenceFilterForm(record.id, "/getMineNames.do", "/doMineralOccurrenceFilter.do");*//*, node.attributes.wfsUrl, function(form, action) {
                 addKmlLayer(node, action.result.data.kml, viewport, map, statusBar);
             }, function() {
                 if (node.attributes.tileOverlay instanceof GeoXml) {
                     node.attributes.tileOverlay.clear();
                     node.attributes.tileOverlay = null;
                 }
-            });
-        }
+            });*//*
+        }*/
 
-        showNodesFilterPanel(node, filterPanel);
+        bringFilterPanelToFront(record, filterPanel, isChecked);
     };
 
     /**
@@ -136,13 +136,13 @@ var treeCheckChangeController = function(node, isChecked, map, statusBar, viewpo
 
     //the check was checked on
     if (isChecked) {
-        if(node.attributes.layerType == 'gmap' && (node.attributes.tileOverlay == null || node.attributes.tileOverlay == '')) {
+        /*if(node.attributes.layerType == 'gmap' && (node.attributes.tileOverlay == null || node.attributes.tileOverlay == '')) {
             googleMapServiceHandler();    
         }
         if (node.attributes.layerType == 'wms' && (node.attributes.tileOverlay == null || node.attributes.tileOverlay == '')) {
             wmsHandler();
         }
-        else if (node.attributes.layerType == 'wfs') {
+        else if (node.attributes.layerType == 'wfs') {*/
             statusBar.setStatus({
                 text: 'Finished loading',
                 iconCls: 'ok-icon',
@@ -151,15 +151,15 @@ var treeCheckChangeController = function(node, isChecked, map, statusBar, viewpo
             statusBar.setVisible(true);
             viewport.doLayout();
             statusBar.showBusy();
-            node.disable();
+            //node.disable();
 
-            getFeatureTypeHandler(node.attributes.featureType)();
+            getFeatureTypeHandler(record.featureType)();
 
-            node.enable();
+            //node.enable();
             statusBar.setVisible(false);
             viewport.doLayout();
             statusBar.clearStatus();
-        }
+        //}
     }
     //the check was checked off so remove the overlay
     else {
@@ -187,7 +187,7 @@ var treeCheckChangeController = function(node, isChecked, map, statusBar, viewpo
  * @param filterPanel
  */
 var treeNodeOnClickController = function(node, event, viewport, filterPanel) {
-    showNodesFilterPanel(node, filterPanel);
+    bringFilterPanelToFront(node, filterPanel);
 };
 
 /**
@@ -195,12 +195,12 @@ var treeNodeOnClickController = function(node, event, viewport, filterPanel) {
  * @param node
  * @param filterPanel
  */
-var showNodesFilterPanel = function(node, filterPanel) {
+var bringFilterPanelToFront = function(record, filterPanel, show) {
     try {
-        if(node.getUI().isChecked()) {
-            filterPanel.add(node.attributes.filterPanel);
+        if(show) {
+            filterPanel.add(record.filterPanel);
             filterPanel.doLayout();
-            filterPanel.getLayout().setActiveItem(node.id);
+            filterPanel.getLayout().setActiveItem(record.id);
         } else {
             filterPanel.getLayout().setActiveItem(0);
         }

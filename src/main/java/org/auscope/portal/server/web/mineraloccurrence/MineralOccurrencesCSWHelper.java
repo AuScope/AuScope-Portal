@@ -5,6 +5,7 @@ import org.auscope.portal.csw.CSWClient;
 import org.xml.sax.SAXException;
 import org.apache.xmlbeans.XmlException;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -22,8 +23,9 @@ import javax.xml.parsers.ParserConfigurationException;
  * Date: 18/05/2009
  * Time: 9:27:45 AM
  */
-public class MoCSWHelper {
-    private Logger logger = Logger.getLogger(getClass());
+@Repository
+public class MineralOccurrencesCSWHelper implements IMineralOccurrencesCSWHelper {
+    private static Logger logger = Logger.getLogger(MineralOccurrencesCSWHelper.class);
 
     public ArrayList<String> getMineralOccurrenceServiceUrls() {
 

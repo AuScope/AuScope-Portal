@@ -7,51 +7,43 @@ Ext.onReady(function() {
     var downloadUrls = new Hashtable();
 
     var dataSourcesStore = new Ext.data.Store({
-        //baseParams: {serviceUrl: serviceUrl},
         proxy: new Ext.data.HttpProxy({url: '/getDataSources.do'}),
         reader: new Ext.data.ArrayReader({}, [
             {name:'title'},
             {name:'description'},
-            {name:'serviceURL'}
+            {name:'serviceURL'},
+            {name: 'type'},
+            {name: 'id'},
+            {name: 'featureType'}    
         ])
     });
 
     dataSourcesStore.load();
 
-    var expander = new Ext.grid.RowExpander({
+    var dataSourcesRowExpander = new Ext.grid.RowExpander({
         tpl : new Ext.Template(
             '<p><b>Description:</b> {description}</p><br>'
         )
     });
     
-    var tree = new Ext.grid.GridPanel({
+    var dataSourcePanel = new Ext.grid.GridPanel({
         store: dataSourcesStore,
         columns: [
-            expander,
+            dataSourcesRowExpander,
             {id:'title',header: "Title", width: 160, sortable: true, dataIndex: 'title'}
-            //{header: "Price", width: 75, sortable: true, dataIndex: 'price'},
-            //{header: "Change", width: 75, sortable: true, dataIndex: 'change'},
-            //{header: "% Change", width: 75, sortable: true, dataIndex: 'pctChange'},
-            //{header: "Last Updated", width: 85, sortable: true, dataIndex: 'lastChange'}
         ],
         bbar: [{
             text:'Add Layer to Map',
             tooltip:'Add Layer to Map',
             iconCls:'add',
             handler: function() {
-                //alert(tree.getSelectionModel().getSelected().get('title'));
-                layersStore.add(tree.getSelectionModel().getSelected());
-                /*layersStore.add(new Layer({
-                    title: tree.getSelectionModel().getSelected().get('title'),
-                    description: tree.getSelectionModel().getSelected().get('description'),
-                    layerVisible: false
-                }));*/
+                layersStore.add(dataSourcePanel.getSelectionModel().getSelected());
             }
         }],
 
         stripeRows: true,
         autoExpandColumn: 'title',
-        plugins: [expander],
+        plugins: [dataSourcesRowExpander],
         viewConfig: {scrollOffset: 0},
 
         title: 'Themes',
@@ -61,38 +53,27 @@ Ext.onReady(function() {
         autoScroll: true
     });
 
-
-    /**
-     * This tree holds all of the data sources
-     */
-    /*var tree = new Ext.tree.TreePanel({
-        title: 'Themes',
-        region:'north',
-        split: true,
-        height: 300,
-        autoScroll: true,
-
-        rootVisible: false,
-        dataUrl: 'dataSources.json',
-        root: {
-            nodeType: 'async',
-            text: 'Ext JS',
-            draggable:false,
-            id:'root'
-        }
-    });*/
-
     /**
      * Used to show extra details for querying services
      */
-    var filterPanel2 = new Ext.Panel({
+    var filterPanel = new Ext.Panel({
         title: "Filter Properties",
         region: 'south',
+        split: true,
         width: '100%',
         layout: 'card',
         activeItem: 0,
         height: 300,
-        items: [{html: '<p style="margin:15px;padding:15px;border:1px dotted #999;color:#555;background: #f9f9f9;"> Filter options will be shown here for special services.</p>'}]
+        items: [{html: '<p style="margin:15px;padding:15px;border:1px dotted #999;color:#555;background: #f9f9f9;"> Filter options will be shown here for special services.</p>'}],
+        bbar: ['->', {
+            text:'Apply Filter >>',
+            tooltip:'Apply Filter',
+            //iconCls:'remove',
+            handler: function() {
+                filterPanel.getLayout().activeItem.runFilter();
+            }
+        }]
+
     });
 
     /*var Layer = Ext.data.Record.create([
@@ -113,37 +94,40 @@ Ext.onReady(function() {
     });
 
     // custom column plugin example
-    var checkColumn = new Ext.grid.CheckColumn({
+    var layersPanelCheckColumn = new Ext.grid.CheckColumn({
        header: "Visible",
        dataIndex: 'layerVisible',
        width: 55,
-       handler: function(record) {
-            var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
-            tileLayer.baseURL=record.get('serviceURL');
-            tileLayer.layers=record.get('title');
-            //TODO: remove code specific to feature types and styles specific to GSV
-            if(record.get('title') == 'gsmlGeologicUnit')
-                tileLayer.styles='ColorByLithology';
-            if(record.get('title') == '7')
-                tileLayer.styles='7';
-            /*node.attributes.tileOverlay = new GTileLayerOverlay(tileLayer);
-            map.addOverlay(node.attributes.tileOverlay);*/ 
-           map.addOverlay(new GTileLayerOverlay(tileLayer));
+       handler: function(record, isChecked) {
+           if(isChecked) {
+                filterPanel.add(buildMineralOccurrenceFilterForm(2, "/getMineNames.do", "/doMineralOccurrenceFilter.do", "", function(form, action) {
+                        addKmlLayer(node, action.result.data.kml, viewport, map, statusBar);
+                    }, function() {
+                        if (node.attributes.tileOverlay instanceof GeoXml) {
+                            node.attributes.tileOverlay.clear();
+                            node.attributes.tileOverlay = null;
+                        }
+                    }));
+                filterPanel.doLayout();
+                filterPanel.getLayout().setActiveItem(2);
+            } else {
+                filterPanel.getLayout().setActiveItem(0);
+            }
        }
     });
 
-    var expander2 = new Ext.grid.RowExpander({
+    var layersPanelExpander = new Ext.grid.RowExpander({
         tpl : new Ext.Template(
             '<p><b>Description:</b> {description}</p><br>'
         )
     });
 
-    var filterPanel = new Ext.grid.GridPanel({
+    var layersPanel = new Ext.grid.GridPanel({
         store: layersStore,
         columns: [
-            expander2,
+            layersPanelExpander,
             {id:'title',header: "Title", width: 160, sortable: true, dataIndex: 'title'},
-            checkColumn
+            layersPanelCheckColumn
             //{header: "Price", width: 75, sortable: true, dataIndex: 'price'},
             //{header: "Change", width: 75, sortable: true, dataIndex: 'change'},
             //{header: "% Change", width: 75, sortable: true, dataIndex: 'pctChange'},
@@ -154,11 +138,11 @@ Ext.onReady(function() {
             tooltip:'Remove Layer',
             iconCls:'remove',
             handler: function() {
-                layersStore.remove(filterPanel.getSelectionModel().getSelected());
+                layersStore.remove(layersPanel.getSelectionModel().getSelected());
             }
         }],
 
-        plugins: [checkColumn, expander2],
+        plugins: [layersPanelCheckColumn, layersPanelExpander],
 
         stripeRows: true,
         autoExpandColumn: 'title',
@@ -174,13 +158,13 @@ Ext.onReady(function() {
     /**
      * Buttons for things like downloading datasets
      */
-    var buttonsPanel = new Ext.FormPanel({
+    /*var buttonsPanel = new Ext.FormPanel({
         region: 'south',
         autoScroll:true,
         width: '100%',
         items: [{border: false}],
         buttons: [{text: "Download Datasets", handler: function() {downloadController(downloadUrls);} }]
-    });
+    });*/
 
     /**
      * Used as a placeholder for the tree and details panel on the left of screen
@@ -193,8 +177,8 @@ Ext.onReady(function() {
         margins: '100 0 0 0',
         width: 350,
 
-        items:[tree, filterPanel, filterPanel2]
-    }
+        items:[dataSourcePanel, layersPanel, filterPanel]
+    };
 
     /**
      * This center panel will hold the google maps
@@ -265,40 +249,9 @@ Ext.onReady(function() {
 
 });
 
-Ext.grid.CheckColumn = function(config){
-    Ext.apply(this, config);
-    if(!this.id){
-        this.id = Ext.id();
-    }
-    this.renderer = this.renderer.createDelegate(this);
-};
 
-Ext.grid.CheckColumn.prototype ={
-    init : function(grid){
-        this.grid = grid;
-        this.grid.on('render', function(){
-            var view = this.grid.getView();
-            view.mainBody.on('mousedown', this.onMouseDown, this);
-        }, this);
-    },
 
-    onMouseDown : function(e, t){
-        if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
-            e.stopEvent();
-            var index = this.grid.getView().findRowIndex(t);
-            var record = this.grid.store.getAt(index);
-            record.set(this.dataIndex, !record.data[this.dataIndex]);
 
-            //call the user defined check handler
-            this.handler(record);
-        }
-    },
-
-    renderer : function(v, p, record){
-        p.css += ' x-grid3-check-col-td';
-        return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
-    }
-};
 
 
 

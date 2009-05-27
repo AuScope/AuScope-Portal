@@ -3,15 +3,27 @@ package org.auscope.portal.server.web.controllers;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.jmock.Mockery;
+import org.jmock.Expectations;
+import org.auscope.portal.server.web.HttpServiceCaller;
+import org.auscope.portal.server.web.mineraloccurrence.MineralOccurrencesCSWHelper;
+import org.auscope.portal.server.web.mineraloccurrence.IMineralOccurrencesCSWHelper;
 
 import java.io.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.parsers.ParserConfigurationException;
-
+import javax.xml.transform.TransformerException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
+import javax.servlet.ServletContext;
 
 /**
  * User: Mathew Wyyatt
@@ -19,6 +31,8 @@ import javax.xml.parsers.ParserConfigurationException;
  * Time: 12:50:56 PM
  */
 public class TestMineralOccurrencesFilterController {
+    private Mockery mockery = new Mockery();
+
 
     @Before
     public void setup() {
@@ -26,14 +40,39 @@ public class TestMineralOccurrencesFilterController {
     }
 
     @Test
-    public void testGetAllForMine() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
-        MineralOccurrencesFilterController minOccController = new MineralOccurrencesFilterController();
-        minOccController.doMiningActivityFilter("http://www.gsv-tb.dpi.vic.gov.au/AuScope-MineralOccurrence/services?", "Good Hope", "18/Mar/2009", "26/Mar/2009", "", "", "", "", null);
+    public void testQueryAllMineralOccurrenceServices() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException, TransformerException {
+        final IMineralOccurrencesCSWHelper mineralOccurrencesCSWHelper = mockery.mock(IMineralOccurrencesCSWHelper.class);
 
+        MineralOccurrencesFilterController mineralOccurrencesFilerController = new MineralOccurrencesFilterController(new HttpServiceCaller(), mineralOccurrencesCSWHelper);
+
+        final HttpServletRequest request = mockery.mock(HttpServletRequest.class);
+        final HttpSession session = mockery.mock(HttpSession.class);
+        final ServletContext servletContext = mockery.mock(ServletContext.class);
+
+        mockery.checking(new Expectations() {{
+            oneOf (mineralOccurrencesCSWHelper).getMineralOccurrenceServiceUrls(); will(returnValue(new ArrayList(Arrays.asList("http://www.gsv-tb.dpi.vic.gov.au/AuScope-MineralOccurrence/services?", "http://apacsrv3.arrc.csiro.au/deegree-wfs/services?"))));
+
+            oneOf (request).getSession(); will(returnValue(session));
+            oneOf (session).getServletContext(); will(returnValue(servletContext));
+            oneOf (servletContext).getResourceAsStream("/WEB-INF/xsl/kml.xsl"); will(returnValue(new BufferedInputStream(new FileInputStream(new File("src/main/webapp/WEB-INF/xsl/kml.xsl")))));
+
+            oneOf (request).getSession(); will(returnValue(session));
+            oneOf (session).getServletContext(); will(returnValue(servletContext));
+            oneOf (servletContext).getResourceAsStream("/WEB-INF/xsl/kml.xsl"); will(returnValue(new BufferedInputStream(new FileInputStream(new File("src/main/webapp/WEB-INF/xsl/kml.xsl")))));
+        }});
+
+        mineralOccurrencesFilerController.doAllMineralOccurrenceFilter("", "", "", "", "", "", "", "", "", request);
     }
-    @Test 
+
+    @Test
+    public void testGetAllForMine() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
+        MineralOccurrencesFilterController minOccController = new MineralOccurrencesFilterController(new HttpServiceCaller(), new MineralOccurrencesCSWHelper());
+        minOccController.doMiningActivityFilter("http://www.gsv-tb.dpi.vic.gov.au/AuScope-MineralOccurrence/services?", "Good Hope", "18/Mar/2009", "26/Mar/2009", "", "", "", "", null);
+    }
+
+    @Test
     public void testConvertToKML() {
-       MineralOccurrencesFilterController minOccController = new MineralOccurrencesFilterController();
+       MineralOccurrencesFilterController minOccController = new MineralOccurrencesFilterController(new HttpServiceCaller(), new MineralOccurrencesCSWHelper());
        
        // TODO write test case
     /*   

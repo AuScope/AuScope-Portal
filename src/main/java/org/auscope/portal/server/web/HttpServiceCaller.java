@@ -1,5 +1,7 @@
 package org.auscope.portal.server.web;
 
+import org.springframework.stereotype.Repository;
+
 import java.io.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -11,6 +13,8 @@ import java.net.MalformedURLException;
  * Date: 25/03/2009
  * Time: 11:37:40 AM
  */
+
+@Repository
 public class HttpServiceCaller {
 
     public BufferedInputStream callHttpUrlGet(String serviceUrl) throws IOException {

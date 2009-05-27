@@ -65,11 +65,15 @@ public class KMLSplitter {
         //get the root element
         Element rootElement = this.kmlDocument.getDocumentElement();
 
+        /*
         //get all of the <Placemark> elements
         XPathFactory factory = XPathFactory.newInstance();
         XPath xPath = factory.newXPath();
-        XPathExpression expr = xPath.compile("//*[name() = 'Placemark']");
-        NodeList placemarkNodes = (NodeList)expr.evaluate(kmlDocument, XPathConstants.NODESET);
+        XPathExpression expr = xPath.compile("/*//*[name() = 'Placemark']");
+        NodeList placemarkNodes = (NodeList)expr.evaluate(kmlDocument, XPathConstants.NODESET);*/
+
+        //get all of the <Placemark> elements
+        NodeList placemarkNodes = this.getPlacemarks();
 
         //create a new array based on the number of placemarks
         String[] kmlStrings = new String[placemarkNodes.getLength()];
@@ -102,5 +106,20 @@ public class KMLSplitter {
 
         //send it off!
         return kmlStrings;
+    }
+
+    /**
+     * Returns a list of the placemark nodes from the kml document
+     * @return placemarks
+     */
+    public NodeList getPlacemarks() throws XPathExpressionException {
+
+        //get all of the <Placemark> elements
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xPath = factory.newXPath();
+        XPathExpression expr = xPath.compile("//*[name() = 'Placemark']");
+        NodeList placemarkNodes = (NodeList)expr.evaluate(kmlDocument, XPathConstants.NODESET);
+
+        return placemarkNodes;
     }
 }

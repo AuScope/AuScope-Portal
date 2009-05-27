@@ -5,23 +5,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.auscope.portal.server.util.GmlToKml;
 import org.auscope.portal.server.util.XmlMerge;
+import org.auscope.portal.server.util.KMLSplitter;
 import org.auscope.portal.server.web.view.JSONView;
-import org.auscope.portal.server.web.mineraloccurrence.Commodity;
-import org.auscope.portal.server.web.mineraloccurrence.CommodityFilter;
-import org.auscope.portal.server.web.mineraloccurrence.MineFilter;
-import org.auscope.portal.server.web.mineraloccurrence.Mine;
-import org.auscope.portal.server.web.mineraloccurrence.MineralOccurrencesResponseHandler;
-import org.auscope.portal.server.web.mineraloccurrence.MiningActivityFilter;
-import org.auscope.portal.server.web.mineraloccurrence.MineralOccurrenceFilter;
+import org.auscope.portal.server.web.mineraloccurrence.*;
 import org.auscope.portal.server.web.HttpServiceCaller;
 import org.xml.sax.SAXException;
 import org.apache.log4j.Logger;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMSource;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,13 +50,12 @@ public class MineralOccurrencesFilterController {
     private static String ALL_MINES = "All Mines..";
 
     private HttpServiceCaller serviceCaller;
+    private IMineralOccurrencesCSWHelper mineralOccurrencesCSWHelper;
 
-    public MineralOccurrencesFilterController() {
-        this.serviceCaller = new HttpServiceCaller();
-    }
-
-    public MineralOccurrencesFilterController(HttpServiceCaller serviceCaller) {
+    @Autowired
+    public MineralOccurrencesFilterController(HttpServiceCaller serviceCaller, IMineralOccurrencesCSWHelper mineralOccurrencesCSWHelper) {
         this.serviceCaller = serviceCaller;
+        this.mineralOccurrencesCSWHelper = mineralOccurrencesCSWHelper;
     }
 
     @RequestMapping("/getMineNames.do")
@@ -114,6 +120,64 @@ public class MineralOccurrencesFilterController {
         }
     }
 
+    /**
+     * This method is responsible for querying all of the available MineralOccurrence WFS services. Its job is to
+     * send the query to each of the services with the specified filter parameters, then return a KML response.
+     * 
+     * @param commodityName
+     * @param commodityGroup
+     * @param measureType
+     * @param minOreAmount
+     * @param minOreAmountUOM
+     * @param minCommodityAmount
+     * @param minCommodityAmountUOM
+     * @param cutOffGrade
+     * @param cutOffGradeUOM
+     * @param request
+     * @return
+     */
+    @RequestMapping("/doAllMineralOccurrenceFilter.do")
+    public ModelAndView doAllMineralOccurrenceFilter(
+            @RequestParam("commodityName")         String commodityName,
+            @RequestParam("commodityGroup")        String commodityGroup,
+            @RequestParam("measureType")           String measureType,
+            @RequestParam("minOreAmount")          String minOreAmount,
+            @RequestParam("minOreAmountUOM")       String minOreAmountUOM,
+            @RequestParam("minCommodityAmount")    String minCommodityAmount,
+            @RequestParam("minCommodityAmountUOM") String minCommodityAmountUOM,
+            @RequestParam("cutOffGrade")           String cutOffGrade,
+            @RequestParam("cutOffGradeUOM")        String cutOffGradeUOM,
+            HttpServletRequest request
+    ) throws IOException, SAXException, XPathExpressionException, ParserConfigurationException, TransformerException {
+        //query geonetwork and get all of the service URLS
+        ArrayList<String> serviceUrls = mineralOccurrencesCSWHelper.getMineralOccurrenceServiceUrls();
+
+        //a list to hold converted KML documents
+        ArrayList<String> kmlDocuments = new ArrayList<String>();
+
+        //call each of the services
+        for(String serviceUrl : serviceUrls) {
+            Collection<String> commodityURIs = getCommodityURIs(serviceUrl, commodityGroup, commodityName);
+            if( commodityURIs.size() >=1 ) {
+                String mineralOccurrenceResponse = doMineralOccurrenceQuery(  serviceUrl,
+                                                                              commodityURIs,
+                                                                              measureType,
+                                                                              minOreAmount,
+                                                                              minOreAmountUOM,
+                                                                              minCommodityAmount,
+                                                                              minCommodityAmountUOM,
+                                                                              cutOffGrade,
+                                                                              cutOffGradeUOM);
+                kmlDocuments.add(convertToKML(mineralOccurrenceResponse, request));
+            }
+        }
+
+        //merge the kml documents
+        String kml = this.mergeKMLDocuments(kmlDocuments);
+        System.out.println(kml);
+        return makeModelAndViewSuccess(kml);
+    }
+
     @RequestMapping("/doMineralOccurrenceFilter.do")
     public ModelAndView doMineralOccurrenceFilter(
             
@@ -132,23 +196,12 @@ public class MineralOccurrencesFilterController {
     {
         try
         {
-            String commodityResponse = doCommodityQuery(serviceUrl,
-                                                        commodityGroup,
-                                                        commodityName);
-            
             String mineralOccurrenceResponse = "";
-            
-            Collection<Commodity> commodities =
-                MineralOccurrencesResponseHandler.getCommodities(commodityResponse);
-            
-            if( commodities.size() >=1 )
-            {
-                Collection<String> commodityURIs = new ArrayList<String>();
-                Commodity[] commoditiesArr = commodities.toArray(new Commodity[commodities.size()]);
-                
-                for(int i=0; i<commoditiesArr.length; i++)
-                    commodityURIs.add(commoditiesArr[i].getMineralOccurrenceURI());
 
+            Collection<String> commodityURIs = getCommodityURIs(serviceUrl, commodityGroup, commodityName);
+
+            if( commodityURIs.size() >=1 )
+            {
                 mineralOccurrenceResponse = doMineralOccurrenceQuery( serviceUrl,
                                                                       commodityURIs,
                                                                       measureType,
@@ -228,6 +281,22 @@ public class MineralOccurrencesFilterController {
         }
     }
 
+    private Collection<String> getCommodityURIs(String serviceUrl, String commodityGroup, String commodityName) throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
+        String commodityResponse = doCommodityQuery(serviceUrl,
+                                                        commodityGroup,
+                                                        commodityName);
+
+        Collection<Commodity> commodities = MineralOccurrencesResponseHandler.getCommodities(commodityResponse);
+
+        Collection<String> commodityURIs = new ArrayList<String>();
+        Commodity[] commoditiesArr = commodities.toArray(new Commodity[commodities.size()]);
+
+        for(int i=0; i<commoditiesArr.length; i++)
+            commodityURIs.add(commoditiesArr[i].getMineralOccurrenceURI());
+
+        return commodityURIs;
+    }
+
     private String doMineQuery(String serviceUrl, String mineName) throws IOException {
         //URL service = new URL(URLEncoder.encode(serviceUrl + new MineFilter(mineName).getFilterString(), "UTF-8"));
 
@@ -277,7 +346,8 @@ public class MineralOccurrencesFilterController {
 
     public String convertToKML(String gmlString, HttpServletRequest request) {
         String out = "";
-        InputStream inXSLT = request.getSession().getServletContext().getResourceAsStream("/WEB-INF/xsl/kml.xsl");
+        HttpSession session = request.getSession();
+        InputStream inXSLT = session.getServletContext().getResourceAsStream("/WEB-INF/xsl/kml.xsl");
         out = GmlToKml.convert(gmlString, inXSLT);
 
         /*System.out.println("KMLSTART-----");
@@ -297,6 +367,40 @@ public class MineralOccurrencesFilterController {
         System.out.println("KMLEND-----");*/
 
        return out;
+    }
+
+    public String mergeKMLDocuments(ArrayList<String> kmlDocuments) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, TransformerException {
+        //a NodeList array to hold all of the <placemarks>
+        ArrayList<NodeList> placemarkNodeLists = new ArrayList<NodeList>();
+
+        //pull out the placemarks from all of the documents
+        for(String kmlDoc : kmlDocuments) {
+            placemarkNodeLists.add(new KMLSplitter(kmlDoc).getPlacemarks());
+        }
+
+        //add them all to a new kml document
+        //create a new document
+        Document newDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+
+        Element kml = newDoc.createElement("kml");
+        newDoc.appendChild(kml);
+
+        Element document = newDoc.createElement("Document");
+        kml.appendChild(document);
+
+        for(NodeList nodeList : placemarkNodeLists)
+            for(int i = 0; i < nodeList.getLength(); i++) {
+                Node importedNode = newDoc.importNode(nodeList.item(i), true);
+                document.appendChild(importedNode);
+            }
+
+        //the strign writer to contain the newly formed kml
+        StringWriter sw = new StringWriter();
+
+        //transform the new document to a string
+        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(newDoc), new StreamResult(sw));
+
+        return sw.toString();
     }
 
     private ModelAndView makeModelAndViewSuccess(String kmlBlob) {
