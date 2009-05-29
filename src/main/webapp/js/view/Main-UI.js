@@ -1,6 +1,7 @@
 //this runs on DOM load - you can access all the good stuff now.
 var theglobalexml;
-Ext.Ajax.timeout = 180000; //3 minute timeout for ajax calls
+//Ext.Ajax.timeout = 180000; //3 minute timeout for ajax calls
+Ext.Ajax.timeout = 3600000; //3 minute timeout for ajax calls
 
 Ext.onReady(function() {
     var map;
@@ -70,7 +71,15 @@ Ext.onReady(function() {
             tooltip:'Apply Filter',
             //iconCls:'remove',
             handler: function() {
-                filterPanel.getLayout().activeItem.runFilter();
+                filterPanel.getLayout().activeItem.runFilter(function(form, action) {
+                    var icon = new GIcon(G_DEFAULT_ICON, "http://maps.google.com/mapfiles/kml/paddle/purple-blank.png");
+                    icon.iconSize = new GSize(32, 32);
+                    var exml = new GeoXml("theglobalexml", map, null, {baseicon:icon,markeroptions:{ markerHandler:function(marker) {
+                        //marker.featureType = node.attributes.featureType;
+                        //marker.wfsUrl = node.attributes.kmlUrl;
+                    }}});
+                    exml.parseString(action.result.data.kml);
+                });
             }
         }]
 
@@ -100,7 +109,7 @@ Ext.onReady(function() {
        width: 55,
        handler: function(record, isChecked) {
            if(isChecked) {
-                filterPanel.add(buildMineralOccurrenceFilterForm(2, "/getMineNames.do", "/doMineralOccurrenceFilter.do", "", function(form, action) {
+                filterPanel.add(buildMineralOccurrenceFilterForm(2, "/getMineNames.do", "/doAllMineralOccurrenceFilter.do", "", function(form, action) {
                         addKmlLayer(node, action.result.data.kml, viewport, map, statusBar);
                     }, function() {
                         if (node.attributes.tileOverlay instanceof GeoXml) {

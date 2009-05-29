@@ -274,7 +274,7 @@ function buildMineralOccurrenceFilterForm(id, loadUrl, submitUrl) {
         buttonAlign: 'right',
         labelAlign: 'right',
         labelWidth: 140,
-
+        timeout: 360,
         items: [{
             xtype:'fieldset',
             title: 'Mineral Occurrence Filter Properties',
@@ -381,12 +381,13 @@ function buildMineralOccurrenceFilterForm(id, loadUrl, submitUrl) {
         }]*/
     });
 
-    thePanel.runFilter = function() {
-        /*thePanel.getForm().submit({
+    
+    thePanel.runFilter = function(successFunction) {
+        thePanel.getForm().submit({
             url:submitUrl,
             waitMsg:'Running query...',
             //params: {serviceUrl: serviceUrl},
-            success: function() {alert("all good");},
+            success: successFunction,
             failure: function(form, action) {
                 Ext.MessageBox.show({
                     title: 'Filter Failed',
@@ -396,8 +397,8 @@ function buildMineralOccurrenceFilterForm(id, loadUrl, submitUrl) {
                     icon: Ext.MessageBox.ERROR
                 });
             }
-        });*/
-        alert(thePanel.getForm().url + "?" + thePanel.getForm().getValues(true));
+        });
+        //alert(thePanel.getForm().url + "?" + thePanel.getForm().getValues(true));
     };
 
     return thePanel;

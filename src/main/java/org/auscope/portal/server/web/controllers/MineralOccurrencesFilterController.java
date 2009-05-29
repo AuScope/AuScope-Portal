@@ -174,7 +174,6 @@ public class MineralOccurrencesFilterController {
 
         //merge the kml documents
         String kml = this.mergeKMLDocuments(kmlDocuments);
-        System.out.println(kml);
         return makeModelAndViewSuccess(kml);
     }
 

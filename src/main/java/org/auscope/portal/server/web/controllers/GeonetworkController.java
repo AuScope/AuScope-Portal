@@ -126,7 +126,7 @@ public class GeonetworkController {
         tableRow.add("Based on the Mineral Occurence Model");
 
         //add the service URL - this is the spring controller for handling minocc
-        tableRow.add("/doMineralOccurrenceFilter.do");
+        tableRow.add("/doAllMineralOccurrenceFilter.do");
 
         //add the type: kml or wms
         tableRow.add("kml");

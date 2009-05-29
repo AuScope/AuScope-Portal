@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
 import java.io.Serializable;
 import java.io.IOException;
 
@@ -29,7 +30,7 @@ public class MineralOccurrencesCSWHelper implements IMineralOccurrencesCSWHelper
 
     public ArrayList<String> getMineralOccurrenceServiceUrls() {
 
-        try {
+        /*try {
             CSWRecord[] cswRecords = new CSWClient("http://auscope-portal.arrc.csiro.au/geonetwork/srv/en/csw", "<?xml+version=\"1.0\"+encoding=\"UTF-8\"?><Filter+xmlns=\"http://www.opengis.net/ogc\"+xmlns:gml=\"http://www.opengis.net/gml\"><And><PropertyIsEqualTo><PropertyName>keyword</PropertyName><Literal>WFS</Literal></PropertyIsEqualTo><PropertyIsEqualTo><PropertyName>keyword</PropertyName><Literal>mo:MineralOccurrence</Literal></PropertyIsEqualTo></And></Filter>&constraintLanguage=FILTER&constraint_language_version=1.1.0").getRecordResponse().getCSWRecords();
 
             ArrayList<String> urls = new ArrayList<String>();
@@ -50,7 +51,8 @@ public class MineralOccurrencesCSWHelper implements IMineralOccurrencesCSWHelper
             logger.error(e);
         }
 
-        return new ArrayList<String>();
+        return new ArrayList<String>();*/
+        return new ArrayList<String>(Arrays.asList("http://www.gsv-tb.dpi.vic.gov.au/AuScope-MineralOccurrence/services?", "http://apacsrv3.arrc.csiro.au/deegree-wfs/services?"));
     }
 
     public ArrayList<String> getMiningActivityServiceUrls() {
