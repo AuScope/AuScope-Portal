@@ -5,6 +5,10 @@
   <head>
     <title>AuScope Portal</title>
 
+    <meta name="description" content="Access geoscientific information from around Australia, via AuScopes national e-Research infrastructure."/>
+    <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia"/>
+    <meta name="author" content="AuScope"/>
+
     <!-- Page Style -->
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <STYLE type="text/css">
