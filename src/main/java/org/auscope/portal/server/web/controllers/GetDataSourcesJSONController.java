@@ -2,11 +2,10 @@ package org.auscope.portal.server.web.controllers;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.xmlbeans.XmlException;
 
 import org.auscope.portal.csw.CSWClient;
 import org.auscope.portal.csw.CSWRecord;
-import org.auscope.portal.server.web.view.JSONView;
+import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.server.web.view.JSONModelAndView;
 
 import org.geotools.data.ows.Layer;
@@ -16,6 +15,8 @@ import org.geotools.ows.ServiceException;
 
 import org.xml.sax.SAXException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,6 +39,10 @@ import net.sf.json.JSONArray;
 public class GetDataSourcesJSONController extends AbstractController {
     //logger
     protected final Log logger = LogFactory.getLog(getClass());
+    
+    @Autowired
+    @Qualifier(value = "propertyConfigurer")
+    private PortalPropertyPlaceholderConfigurer hostConfigurer;
 
     public static final String WEPMAPSERVICE = "Web Map Service Layers";
 
@@ -45,8 +50,6 @@ public class GetDataSourcesJSONController extends AbstractController {
     //public static final String XSLT_PROXY_URL = "http://auscope-portal-dev.arrc.csiro.au/xsltRestProxy?url=";
     public static final String XSLT_PROXY_URL = "/xsltRestProxy?url=";
     public static final String PROXY_URL = "/restproxy?";
-
-    public static final String CSW_URL = "http://auscope-portal.arrc.csiro.au/geonetwork/srv/en/csw";
 
     public static final String BOREHOLE           = "Borehole";
     public static final String GNSS               = "Global Navigation Satellite Systems";
@@ -204,7 +207,11 @@ public class GetDataSourcesJSONController extends AbstractController {
         } else {*/
             CSWRecord[] cswRecords;
             try {
-                cswRecords = new CSWClient(CSW_URL, themeContraints.get(theme)).getRecordResponse().getCSWRecords();
+                String cswUrl = hostConfigurer.resolvePlaceholder("HOST.cswservice.url");
+                
+                cswRecords =
+                    new CSWClient(cswUrl, themeContraints.get(theme))
+                        .getRecordResponse().getCSWRecords();
 
                 JSONArray jsonArray = new JSONArray();
                 for(CSWRecord record : cswRecords) {
@@ -232,6 +239,8 @@ public class GetDataSourcesJSONController extends AbstractController {
                 }
 
                 return jsonArray;
+            } catch (MissingResourceException e) {
+                logger.error(e);
             } catch (XPathExpressionException e) {
                 logger.error(e);
             } catch (IOException e) {
@@ -239,8 +248,6 @@ public class GetDataSourcesJSONController extends AbstractController {
             } catch (ParserConfigurationException e) {
                 logger.error(e);
             } catch (SAXException e) {
-                logger.error(e);
-            } catch (XmlException e) {
                 logger.error(e);
             }
 

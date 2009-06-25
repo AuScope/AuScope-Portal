@@ -2,26 +2,17 @@ package org.auscope.portal.csw;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.namespace.NamespaceContext;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * User: Mathew Wyatt
@@ -29,6 +20,8 @@ import java.util.Iterator;
  * Time: 10:41:30 AM
  */
 public class CSWClient {
+    private Logger logger = Logger.getLogger(getClass());
+
     private String serviceUrl = "";
     private String constraint;
 
@@ -41,9 +34,9 @@ public class CSWClient {
         this.constraint = constraint;
     }
 
-
     public CSWGetRecordResponse getRecordResponse() throws IOException, ParserConfigurationException, SAXException {
         URL cswQuery = buildQueryUrl();
+        logger.debug("querying " + cswQuery);
         BufferedReader responseReader = new BufferedReader(new InputStreamReader(cswQuery.openStream()));
 
         String inputLine;
@@ -56,7 +49,15 @@ public class CSWClient {
     }
 
     private URL buildQueryUrl() throws MalformedURLException {
-        return new URL(serviceUrl+"?request=GetRecords&service=CSW&version=2.0.2&resultType=results&namespace=csw:http://www.opengis.net/cat/csw/2.0.2&outputSchema=csw:IsoRecord&constraint=" + constraint);
+        return new URL(serviceUrl +
+                "?request=GetRecords" +
+                "&service=CSW" +
+                "&version=2.0.2" +
+                "&resultType=results" +
+                "&namespace=csw:http://www.opengis.net/cat/csw/2.0.2" +
+                "&outputSchema=csw:IsoRecord" +
+                "&typeNames=csw:Record" +
+                "&constraint=" + constraint);
     }
 
     private Document buildDom(String xmlString) throws ParserConfigurationException, IOException, SAXException {
