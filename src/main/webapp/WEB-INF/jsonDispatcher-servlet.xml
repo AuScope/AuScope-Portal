@@ -14,7 +14,8 @@
     </bean>
     <!--<bean name="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver" />-->
 
-    <bean name="getDataSourcesJSONController" class="org.auscope.portal.server.web.controllers.GetDataSourcesJSONController"/>
-
+    <bean name="getDataSourcesJSONController" class="org.auscope.portal.server.web.controllers.GetDataSourcesJSONController">
+      <property name="hostConfigurer" ref="propertyConfigurer" />
+    </bean>
 
 </beans>

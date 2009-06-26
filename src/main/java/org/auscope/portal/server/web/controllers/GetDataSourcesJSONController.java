@@ -40,8 +40,6 @@ public class GetDataSourcesJSONController extends AbstractController {
     //logger
     protected final Log logger = LogFactory.getLog(getClass());
     
-    @Autowired
-    @Qualifier(value = "propertyConfigurer")
     private PortalPropertyPlaceholderConfigurer hostConfigurer;
 
     public static final String WEPMAPSERVICE = "Web Map Service Layers";
@@ -58,6 +56,10 @@ public class GetDataSourcesJSONController extends AbstractController {
     public static final String MINERAL_OCCURENCES = "Mineral Occurrences";
     public static final String MINING_ACTIVITY = "Mining Activity";
     public static final String MINES = "Mines";
+    
+    public void setHostConfigurer(PortalPropertyPlaceholderConfigurer hostConfigurer) {
+        this.hostConfigurer = hostConfigurer;
+    }
     
     //create some identifiers for each of the themes to be displayed in the portal
     public static final String[] THEMES = { BOREHOLE,
