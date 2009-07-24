@@ -433,7 +433,7 @@
                   </xsl:call-template>
                </xsl:when>
                <xsl:otherwise>
-                  <xsl:call-template name="parseLatLongCoord">
+                  <xsl:call-template name="parseLongLatCoord">
                      <xsl:with-param name="coordinates" select="$coordinates"/>
                   </xsl:call-template>
                </xsl:otherwise>
