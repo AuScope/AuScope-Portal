@@ -66,9 +66,9 @@ public class GetDataSourcesJSONController {
     public static final String GEODESY            = "Geodesy";
     public static final String GEOLOGIC_UNIT      = "Geologic Unit";
     public static final String EARTH_RESOURCES    = "Earth Resources";
-    public static final String MINERAL_OCCURENCES = "Earth Resource Mineral Occurrences";
-    public static final String MINING_ACTIVITY    = "Earth Resource Mining Activity";
-    public static final String MINES              = "Earth Resource Mines";
+    public static final String MINERAL_OCCURENCES = "Mineral Occurrences";
+    public static final String MINING_ACTIVITY    = "Mining Activity";
+    public static final String MINES              = "Mines";
     
     //create some identifiers for each of the themes to be displayed in the portal
     public static final String[] THEMES = { BOREHOLE,
