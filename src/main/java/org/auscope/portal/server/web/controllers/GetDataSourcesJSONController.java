@@ -324,12 +324,26 @@ public class GetDataSourcesJSONController {
 
         JSONArray jsonArray = new JSONArray();
 
-        Map<String, Serializable> coe = new HashMap<String, Serializable>();
-        coe.put("id", INSTITUTION + "waCoe");
-        coe.put("text", "WA Center of Excellence for 3D Mineral Mapping");
+        Map<String, Serializable> ei = new HashMap<String, Serializable>();
+        ei.put("id", INSTITUTION + "earthImg");
+        ei.put("text", "Earth Imaging");
+        //ei.put("checked", Boolean.FALSE);
+        ei.put("leaf", Boolean.FALSE);
+        jsonArray.add(ei);
+        
+        Map<String, Serializable> ga = new HashMap<String, Serializable>();
+        ga.put("id", INSTITUTION + "ga");
+        ga.put("text", "Geoscience Australia");
         //coe.put("checked", Boolean.FALSE);
-        coe.put("leaf", Boolean.FALSE);
-        jsonArray.add(coe);
+        ga.put("leaf", Boolean.FALSE);
+        jsonArray.add(ga);
+
+        Map<String, Serializable> gaOutcrop = new HashMap<String, Serializable>();
+        gaOutcrop.put("id", INSTITUTION + "gaOutcrop");
+        gaOutcrop.put("text", "Geoscience Australia Outcrop");
+        //coe.put("checked", Boolean.FALSE);
+        gaOutcrop.put("leaf", Boolean.FALSE);
+        jsonArray.add(gaOutcrop);
 
         Map<String, Serializable> gsv = new HashMap<String, Serializable>();
         gsv.put("id", INSTITUTION + "gsv");
@@ -345,20 +359,13 @@ public class GetDataSourcesJSONController {
         gswa.put("leaf", Boolean.FALSE);
         jsonArray.add(gswa);
 
-        Map<String, Serializable> ga = new HashMap<String, Serializable>();
-        ga.put("id", INSTITUTION + "ga");
-        ga.put("text", "Geoscience Australia");
+        Map<String, Serializable> coe = new HashMap<String, Serializable>();
+        coe.put("id", INSTITUTION + "waCoe");
+        coe.put("text", "WA Center of Excellence for 3D Mineral Mapping");
         //coe.put("checked", Boolean.FALSE);
-        ga.put("leaf", Boolean.FALSE);
-        jsonArray.add(ga);
-
-        Map<String, Serializable> gaOutcrop = new HashMap<String, Serializable>();
-        gaOutcrop.put("id", INSTITUTION + "gaOutcrop");
-        gaOutcrop.put("text", "Geoscience Australia Outcrop");
-        //coe.put("checked", Boolean.FALSE);
-        gaOutcrop.put("leaf", Boolean.FALSE);
-        jsonArray.add(gaOutcrop);
-
+        coe.put("leaf", Boolean.FALSE);
+        jsonArray.add(coe);
+        
         logger.debug(jsonArray.toString());
         
         return jsonArray;
@@ -405,6 +412,8 @@ public class GetDataSourcesJSONController {
             }
 
             return jsonArray;
+        } else if(institution.equals("earthImg")) {
+           return getWmsLayers(hostConfigurer.resolvePlaceholder("ei.wms"));
         } else if(institution.equals("gsv")) {
            return getWmsLayers(hostConfigurer.resolvePlaceholder("gsv.wms"));
         } else if(institution.equals("gswa")) {
