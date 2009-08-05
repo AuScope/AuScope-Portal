@@ -413,7 +413,7 @@ public class GetDataSourcesJSONController {
 
             return jsonArray;
         } else if(institution.equals("earthImg")) {
-           return getWmsLayers(hostConfigurer.resolvePlaceholder("ei.wms"));
+           return getWmsLayers(hostConfigurer.resolvePlaceholder("HOST.ei.wms.url"));
         } else if(institution.equals("gsv")) {
            return getWmsLayers(hostConfigurer.resolvePlaceholder("gsv.wms"));
         } else if(institution.equals("gswa")) {
