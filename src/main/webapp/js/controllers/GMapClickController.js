@@ -6,6 +6,7 @@
  * @param viewport
  */
 var gMapClickController = function(map, overlay, latlng, statusBar, viewport, treePanel) {
+	
     statusBar.showBusy();
     statusBar.setVisible(true);
     viewport.doLayout();
@@ -33,9 +34,34 @@ var gMapClickController = function(map, overlay, latlng, statusBar, viewport, tr
                     //map.openInfoWindowHtml(latlng, response);
                 }
             });
-        }
-    }
+        } else {        	
+        	map.getDragObject().setDraggableCursor("pointer");
+        	
+        	var TileUtl = new Tile(map,latlng);
+        	
+        	var BBOX = '&BBOX=' + TileUtl.getTileCoordinates();
+        	//alert( TileUtl.getTileCoordinates() );
+        	
+        	var WIDTH = '&WIDTH=' + TileUtl.getTileWidth();
+        	var HEIGHT = '&HEIGHT=' + TileUtl.getTileHeight();
+			//alert('WIDTH: ' + WIDTH + ' ; ' + 'HEIGHT' + HEIGHT);
 
+			var url = "/wmsMarkerPopup.do?lat=" + latlng.lat() + "&lng=" + latlng.lng();
+			url = url + "&QUERY_LAYERS=" + treePanel.getSelectionModel().getSelectedNode().id;
+			url = url + "&x=" + TileUtl.getTilePoint().x + 
+			            "&y=" + TileUtl.getTilePoint().y;
+			url = url + BBOX;
+			url = url + WIDTH + HEIGHT;
+			//alert(url);
+			
+        	//var url ="http://auscope-services-test.arrc.csiro.au/earth-imaging/wms?REQUEST=GetFeatureInfo&EXCEPTIONS=application/vnd.ogc.se_xml&BBOX=107.423088,-39.333396,155.40656,-13.160594&X=193&Y=239&INFO_FORMAT=text/html&QUERY_LAYERS=ei:BBSTA_experiments_view&FEATURE_COUNT=50&Srs=EPSG:4326&Layers=ei:BBSTA_experiments_view&Styles=&WIDTH=605&HEIGHT=330&format=text/html";
+            GDownloadUrl(url, function(response, pResponseCode) {
+                if(pResponseCode == 200) {
+                    map.openInfoWindowHtml(latlng, response, {autoScroll:true});
+                }
+            });
+        }        	
+    }
 
     statusBar.clearStatus();
     statusBar.setVisible(false);
