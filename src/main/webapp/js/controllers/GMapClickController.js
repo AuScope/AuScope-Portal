@@ -7,10 +7,13 @@
  */
 var gMapClickController = function(map, overlay, latlng, statusBar, viewport, treePanel) {
 	
+	var selectedNode = treePanel.getSelectionModel().getSelectedNode();
+	
     statusBar.showBusy();
     statusBar.setVisible(true);
     viewport.doLayout();
 
+    // WFS markers
     if (overlay instanceof GMarker) {
         if (overlay.featureType == "gsml:Borehole") {
             new NVCLMarker(overlay.title, overlay, overlay.description).getMarkerClickedFn()();
@@ -22,42 +25,38 @@ var gMapClickController = function(map, overlay, latlng, statusBar, viewport, tr
             overlay.openInfoWindowHtml(overlay.description, {maxWidth:800, maxHeight:600, autoScroll:true});
                // overlay.openInfoWindowHtml(overlay.description);
         }
-    }
-    else if(latlng != null && treePanel.getSelectionModel().getSelectedNode() != null) { //geologic unit layer
-        //var queryString = ProxyURL+"http://www.gsv-tb.dpi.vic.gov.au/AuScope-GeoSciML/services?service=WFS%26version=1.1.0%26request=GetFeature%26typeName=gsml:GeologicUnit%26outputFormat=text/xml;%20subtype=geoscimlhtml%26filter=%3Cogc:Filter%20xmlns:wfs=%22http://www.opengis.net/wfs%22%20xmlns:ogc=%22http://www.opengis.net/ogc%22%20xmlns:gml=%22http://www.opengis.net/gml%22%20xmlns:gsml=%22urn:cgi:xmlns:CGI:GeoSciML:2.0%22%3E%3Cogc:BBOX%3E%3Cogc:PropertyName%3Egsml:occurrence/gsml:MappedFeature/gsml:shape%3C/ogc:PropertyName%3E%3Cgml:Envelope%20srsName=%22EPSG:4326%22%3E%3Cgml:lowerCorner%3E"+latlng.lng()+"%20"+latlng.lat()+"%3C/gml:lowerCorner%3E%3Cgml:upperCorner%3E"+latlng.lng()+"%20"+latlng.lat()+"%3C/gml:upperCorner%3E%3C/gml:Envelope%3E%3C/ogc:BBOX%3E%3C/ogc:Filter%3E";
-        //var queryString = ProxyURL+'http://www.gsv-tb.dpi.vic.gov.au/AuScope-GeoSciML/services?service=WFS&version=1.1.0&request=GetFeature&typeName=gsml:GeologicUnit&outputFormat=text/xml;subtype=geoscimlhtml&filter=<ogc:Filter xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" xmlns:gsml="urn:cgi:xmlns:CGI:GeoSciML:2.0"><ogc:BBOX><ogc:PropertyName>gsml:occurrence/gsml:MappedFeature/gsml:shape</ogc:PropertyName><gml:Envelope srsName="EPSG:4326"><gml:lowerCorner>'+latlng.lng()+' '+latlng.lat()+'</gml:lowerCorner><gml:upperCorner>'+latlng.lng()+' '+latlng.lat()+'</gml:upperCorner></gml:Envelope></ogc:BBOX></ogc:Filter>';
-        if(treePanel.getSelectionModel().getSelectedNode().text == "Geologic Units") {
+    } // WMS markers
+    else if(latlng != null && selectedNode != null) {  
+        if( selectedNode.text == "Geologic Units") {
+        	// Query WMS location using WFS via Alistair's kml conversion stylesheet
             var url = "/geologicUnitPopup.do?lat=" + latlng.lat() + "&lng=" + latlng.lng();
             GDownloadUrl(url, function(response, pResponseCode) {
                 if(pResponseCode == 200) {
                     map.openInfoWindowHtml(latlng, response, {autoScroll:true});
-                    //map.openInfoWindowHtml(latlng, response);
                 }
             });
-        } else {        	
+        } else { 
+        	// Query WMS using GetFeatureInfo
+        	var TileUtl = new Tile(map,latlng);
+
+			var url = "/wmsMarkerPopup.do"
+			url += "?WMS_URL=" + selectedNode.attributes.wmsUrl;
+			url += "&lat=" + latlng.lat();
+			url += "&lng=" + latlng.lng();
+			url += "&QUERY_LAYERS=" + getCheckedNodes(selectedNode.parentNode);
+			url += "&x=" + TileUtl.getTilePoint().x; 
+			url += "&y=" + TileUtl.getTilePoint().y;
+			url += '&BBOX=' + TileUtl.getTileCoordinates();
+			url += '&WIDTH=' + TileUtl.getTileWidth();
+			url += '&HEIGHT=' + TileUtl.getTileHeight();
+			
         	map.getDragObject().setDraggableCursor("pointer");
         	
-        	var TileUtl = new Tile(map,latlng);
-        	
-        	var BBOX = '&BBOX=' + TileUtl.getTileCoordinates();
-        	//alert( TileUtl.getTileCoordinates() );
-        	
-        	var WIDTH = '&WIDTH=' + TileUtl.getTileWidth();
-        	var HEIGHT = '&HEIGHT=' + TileUtl.getTileHeight();
-			//alert('WIDTH: ' + WIDTH + ' ; ' + 'HEIGHT' + HEIGHT);
-
-			var url = "/wmsMarkerPopup.do?lat=" + latlng.lat() + "&lng=" + latlng.lng();
-			url = url + "&QUERY_LAYERS=" + treePanel.getSelectionModel().getSelectedNode().id;
-			url = url + "&x=" + TileUtl.getTilePoint().x + 
-			            "&y=" + TileUtl.getTilePoint().y;
-			url = url + BBOX;
-			url = url + WIDTH + HEIGHT;
-			//alert(url);
-			
-        	//var url ="http://auscope-services-test.arrc.csiro.au/earth-imaging/wms?REQUEST=GetFeatureInfo&EXCEPTIONS=application/vnd.ogc.se_xml&BBOX=107.423088,-39.333396,155.40656,-13.160594&X=193&Y=239&INFO_FORMAT=text/html&QUERY_LAYERS=ei:BBSTA_experiments_view&FEATURE_COUNT=50&Srs=EPSG:4326&Layers=ei:BBSTA_experiments_view&Styles=&WIDTH=605&HEIGHT=330&format=text/html";
             GDownloadUrl(url, function(response, pResponseCode) {
                 if(pResponseCode == 200) {
                     map.openInfoWindowHtml(latlng, response, {autoScroll:true});
+                } else {
+                	alert(pResponseCode);
                 }
             });
         }        	
@@ -68,3 +67,20 @@ var gMapClickController = function(map, overlay, latlng, statusBar, viewport, tr
     viewport.doLayout();
 
 };
+
+/**
+ * Iterates child nodes of a parent node, evaluating each node's checked status
+ * @param iParentNode The parent node that contains checked nodes 
+ * @return String of comma separated node ids. 
+ */
+function  getCheckedNodes(iParentNode) {
+	var arr = new Array();
+	var cs = iParentNode.childNodes;
+	
+	for (var i=0, len = cs.length; i<len; i++) {
+		if (cs[i].getUI().isChecked()) {
+			arr.push(cs[i].id);
+		}
+	}
+	return arr.toString(); 
+}

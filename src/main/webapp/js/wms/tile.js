@@ -15,7 +15,7 @@ Tile = function( iMap,iLatLng) {
    this.map = iMap;
    this.zoom = iMap.getZoom();
    this.latlng = iLatLng;
-   this.tileCoordinates = '';
+   this.tileCoordinates = null;
    this.currentProjection = iMap.getCurrentMapType().getProjection();
    
    var tile = new GPoint();
@@ -41,6 +41,7 @@ Tile = function( iMap,iLatLng) {
    this.tilePoint 
       = new GPoint((point.x % this.tileSize),(point.y % this.tileSize) );
 }
+
 
 Tile.prototype = {
 		
