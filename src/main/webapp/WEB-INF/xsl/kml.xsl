@@ -10,15 +10,11 @@
     xmlns:er="urn:cgi:xmlns:GGIC:EarthResource:1.1"
     xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xsl wfs gml gsml sa geodesy er xlink">
 
-   <xsl:output method="xml" version="1.0" encoding="UTF-8" 
-      indent="no" cdata-section-elements="description Snippet text" 
+   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no" 
+      cdata-section-elements="description Snippet text" 
       media-type="application/vnd.google-earth.kml+xml"/>
-    
-<!-- xmlns:mo="urn:cgi:xmlns:GGIC:MineralOccurrence:1.0" -->
-<!-- xmlns:geodesy="http://auscope.org.au/geodesy" -->
-<!-- xmlns:xalan="http://xml.apache.org/xalan" -->
-    
-<!--  Examples of available markers - not easy to find on the net
+        
+   <!--  Examples of available markers - not easy to find on the net
     xmlns:str="http://exslt.org/strings" exclude-result-prefixes="str"
     xmlns="http://earth.google.com/kml/2.0" 
     xmlns:set="http://exslt.org/sets" 
@@ -48,7 +44,7 @@
     http://maps.google.com/mapfiles/kml/paddle/grn-diamond.png
 
     http://maps.google.com/mapfiles/kml/shapes/target.png
--->
+   -->
 
    <!-- External parameter -->
    <xsl:param name="uriResolverURL"/>
@@ -116,8 +112,7 @@
             
             <xsl:apply-templates select="er:occurrence/er:MiningFeatureOccurrence/er:location/gml:Point"/>
          </Placemark>
-      </xsl:if>
-   
+      </xsl:if>   
    </xsl:template>
    
    
@@ -139,9 +134,12 @@
                <![CDATA[</td></tr><tr><td>Acitivity Start Date</td><td>]]><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition"/>
                <![CDATA[</td></tr><tr><td>Acitivity End Date</td><td>]]><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition"/>
                <![CDATA[</td></tr><tr><td>Activity Type</td><td>]]><xsl:value-of select="./er:activityType"/>            
-               <![CDATA[</td></tr><tr><td>Associated Mine</td><td>]]><xsl:value-of select="./er:associatedMine"/>
+               <xsl:call-template name="displayUrnResolverLink">
+                  <xsl:with-param name="tableRowLabel" select=" 'Associated Mine' "/>
+                  <xsl:with-param name="tableRowValue" select="./er:associatedMine/@xlink:href"/>
+               </xsl:call-template>               
                <![CDATA[</td></tr><tr><td>Product</td><td>]]><xsl:value-of select="./er:producedMaterial/er:Product/er:productName/gsml:CGI_TermValue/gsml:value"/>
-               <xsl:apply-templates select=".//er:sourceCommodity"/>
+               <xsl:apply-templates select="./er:sourceCommodity"/>
                <![CDATA[</td></tr></table>]]>
             </description>
             
@@ -172,7 +170,7 @@
    </xsl:template>
    
    
-   <!-- TEMPLATE FOR TRANSLATING Mineral Occurence -->
+   <!-- TEMPLATE FOR TRANSLATING Mineral Occurences -->
    <!-- ================================================================= -->
    <xsl:template match="gml:featureMember/er:MineralOccurrence | gml:featureMembers/er:MineralOccurrence">
    
@@ -206,7 +204,11 @@
    <!-- TEMPLATE FOR Commodity Description | Source Commodity -->
    <!-- ================================================================= -->
    <xsl:template match="er:commodityDescription | er:sourceCommodity">
-     <![CDATA[</td></tr><tr><td>Commodity Description</td><td><a href="#" onclick="var w=window.open(']]><xsl:value-of select="$uriResolverURL"/><xsl:value-of select="@xlink:href"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=800');w.focus();return false;">]]><xsl:value-of select="@xlink:href"/><![CDATA[</a>]]>
+   
+      <xsl:call-template name="displayUrnResolverLink">
+         <xsl:with-param name="tableRowLabel" select=" 'Commodity Description' "/>
+         <xsl:with-param name="tableRowValue" select="@xlink:href"/>
+      </xsl:call-template>            
    </xsl:template>
    
    
@@ -529,6 +531,20 @@
             </coordinates>
          </LinearRing>
       </innerBoundaryIs>
+   </xsl:template>
+
+
+   <!-- ================================================================= -->
+   <!--    FUNCTION TO DISPLAY URN RESOLVER LINK WITHIN HTML TABLE ROW    -->
+   <!--    PARAM: tableRowLabel                                           -->
+   <!--    PARAM: tableRowValue                                           -->
+   <!-- ================================================================= -->
+   <xsl:template name="displayUrnResolverLink">
+      <xsl:param name="tableRowLabel"/>
+      <xsl:param name="tableRowValue"/>
+      
+      <![CDATA[</td></tr><tr><td>]]><xsl:value-of select="$tableRowLabel"/><![CDATA[</td><td><a href="#" onclick="var w=window.open(']]><xsl:value-of select="$uriResolverURL"/><xsl:value-of select="$tableRowValue"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=800');w.focus();return false;">]]><xsl:value-of select="$tableRowValue"/><![CDATA[</a>]]>
+
    </xsl:template>
 
 
