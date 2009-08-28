@@ -17,11 +17,11 @@
 
 function GeodesyMarker (pWfsUrl, pDataLayerName, stationId, marker, description) {
   //this.moGeodesyStation = new GeodesyStation(pGeodesyStationNode);
-    this.stationId = stationId;
+    this.stationId = marker.title;
     this.moMarker = marker;
     
   // Initiaize all the members
-  //cut off this from the URL "%26request=GetFeature%26typeName=geodesy:stations"  
+  //cut off this from the URL "%26request=GetFeature%26typeName=ngcp:GnssStation"
   this.msWfsUrl = pWfsUrl.substring(0,pWfsUrl.indexOf('?')+1);
   this.msDataLayerName = pDataLayerName;
   this.maStationDataForDate = new Array();
@@ -369,7 +369,7 @@ function GeodesyMarker_getMarkerClickedFn() {
     // The onOpenFn option with GInfoWindow does not work
     // Hence this function is called with a time lag of 500ms
     var marker = geodesyMarker;
-    setTimeout( function(){ marker.updateInfoWindow() }, 500);
+    setTimeout( function(){ marker.updateInfoWindow() }, 1000);
   }
 }
 
@@ -471,7 +471,7 @@ function GeodesyMarker_markerClicked()
   
   // Open the popup window for the marker with the tabs Main and Data
   oMarker.openInfoWindowTabsHtml([new GInfoWindowTab(label1, this.msSummaryHtml),
-                                  new GInfoWindowTab(label2, this.msRenixFilesHtml)]);
+                                  new GInfoWindowTab(label2, this.msRenixFilesHtml)], {autoScroll:true});
     //oMarker.openInfoWindowTabsHtml([new GInfoWindowTab(label2, this.msRenixFilesHtml)]);
 }
 
@@ -665,7 +665,7 @@ function GeodesyMarker_yearChecked (pYear, pYearChkId, pYearHrefId, pMonthsDivId
   }
   
   var sStationDataUrl = ProxyURL + this.msWfsYearDataUrl[year];
-  sStationDataUrl= sStationDataUrl + "AND(id='" + station + "')";  
+  // sStationDataUrl= sStationDataUrl + "AND(id='" + station + "')";  
   
   // Download renix files for this year
   GDownloadUrl(sStationDataUrl, function(xmlData, pResponseCode) {
@@ -1022,7 +1022,7 @@ function GeodesyMarker_setDataForSelectedMonth(pYear, pMonth, pDatesDivObj) {
   
   // Create the wfs call that will get the data
   var sStationDataUrl = ProxyURL + this.msYearMonthWfsUrl[year][month];
-  sStationDataUrl= sStationDataUrl + "AND(id='" + station + "')";
+  //sStationDataUrl= sStationDataUrl + "AND(id='" + station + "')";
   
   if (this.maYearMonthWfsUrlQueried[year][month]) {
     this.makeCalendarForMonth(year, month);

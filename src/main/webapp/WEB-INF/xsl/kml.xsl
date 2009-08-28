@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  
-    xmlns:wfs="http://www.opengis.net/wfs"
     xmlns="http://www.opengis.net/kml/2.2"
+    xmlns:er="urn:cgi:xmlns:GGIC:EarthResource:1.1"
+    xmlns:geodesy="http://www.auscope.org/geodesy"
     xmlns:gml="http://www.opengis.net/gml"
     xmlns:gsml="urn:cgi:xmlns:CGI:GeoSciML:2.0"
-    xmlns:sa="http://www.opengis.net/sampling/1.0" 
-    xmlns:geodesy="http://www.auscope.org/geodesy"
-    xmlns:er="urn:cgi:xmlns:GGIC:EarthResource:1.1"
-    xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xsl wfs gml gsml sa geodesy er xlink">
+    xmlns:ngcp="http://www.auscope.org/ngcp"
+    xmlns:sa="http://www.opengis.net/sampling/1.0"
+    xmlns:wfs="http://www.opengis.net/wfs"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    exclude-result-prefixes="er geodesy gml gsml ngcp sa wfs xsl xlink">
 
-   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no" 
+   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="no"
       cdata-section-elements="description Snippet text" 
       media-type="application/vnd.google-earth.kml+xml"/>
         
@@ -73,12 +75,12 @@
             <xsl:apply-templates select="gml:featureMember/er:MiningActivity"/>
             <xsl:apply-templates select="gml:featureMember/er:MiningFeatureOccurrence"/>
             <xsl:apply-templates select="gml:featureMember/er:MineralOccurrence"/>
-            <xsl:apply-templates select="gml:featureMember/geodesy:stations"/>
+            <xsl:apply-templates select="gml:featureMember/ngcp:GnssStation"/>
             <xsl:apply-templates select="gml:featureMember/gsml:GeologicUnit"/>
             <xsl:apply-templates select="gml:featureMember/gsml:MappedFeature"/>
             <xsl:apply-templates select="gml:featureMember/gsml:ShearDisplacementStructure"/>
-            
-            <xsl:apply-templates select="gml:featureMembers/geodesy:stations"/>
+
+            <xsl:apply-templates select="gml:featureMembers/ngcp:GnssStation"/>
             <xsl:apply-templates select="gml:featureMembers/er:MineralOccurrence"/>
             <xsl:apply-templates select="gml:featureMembers/gsml:Borehole"/>
             <xsl:apply-templates select="gml:featureMembers/sa:SamplingPoint"/>
@@ -318,30 +320,34 @@
          </Placemark>
       </xsl:if>
    </xsl:template>
-
-
-   <!-- TEMPLATE FOR TRANSLATING GPS -->
+   
+   
+   <!-- TEMPLATE FOR TRANSLATING GEODESY -->
    <!-- ================================================================= -->
-   <xsl:template match="gml:featureMember/geodesy:stations | gml:featureMembers/geodesy:stations">
+   <xsl:template match="gml:featureMember/ngcp:GnssStation | gml:featureMembers/ngcp:GnssStation">
    
       <xsl:variable name="coordinates">
-         <xsl:value-of select="./gml:location/gml:Point/gml:pos"/>
+         <xsl:value-of select="./ngcp:GEOM/gml:Point/gml:pos"/>
       </xsl:variable>
       <Placemark>
-         <name><xsl:value-of select="./geodesy:station_id"/></name>
+         <name><xsl:value-of select="./ngcp:GPSSITEID"/></name>
          <description>
             <![CDATA[<table border="1" cellspacing="1" width="100%" bgcolor="#EAF0F8">
-            <tr><td>Station Id</td><td>]]><xsl:value-of select="./geodesy:station_id"/>
-            <![CDATA[</td></tr><tr><td>Name</td><td>]]><xsl:value-of select="./geodesy:name"/>
-            <![CDATA[</td></tr><tr><td>Url</td><td>]]><xsl:value-of select="./geodesy:url"/>
-            <![CDATA[</td></tr><tr><td>Location</td><td>]]><xsl:value-of select="$coordinates"/>            
-            <![CDATA[</td></tr></table>]]>            
+            <tr><td>Station Id</td><td>]]><xsl:value-of select="./ngcp:GPSSITEID"/>
+            <![CDATA[</td></tr><tr><td>Name</td><td>]]><xsl:value-of select="./ngcp:STATIONNAME"/>
+            <![CDATA[</td></tr><tr><td>Type</td><td>]]><xsl:value-of select="./ngcp:STATIONTYPE"/>
+            <![CDATA[</td></tr><tr><td>Country Id</td><td>]]><xsl:value-of select="./ngcp:COUNTRYID"/>
+            <![CDATA[</td></tr><tr><td>State</td><td>]]><xsl:value-of select="./ngcp:STATEID"/>
+            <![CDATA[</td></tr><tr><td>Location</td><td>]]><xsl:value-of select="$coordinates"/>
+            <![CDATA[</td></tr><tr><td>CoordinateNO</td><td>]]><xsl:value-of select="./ngcp:COORDINO"/>
+            <![CDATA[</td></tr><tr><td>DATUM</td><td>]]><xsl:value-of select="./ngcp:DATUM"/>
+            <![CDATA[</td></tr><tr><td>Equipment</td><td>]]><xsl:value-of select="./ngcp:EQUIPMENT"/>                                                        
+            <![CDATA[</td></tr></table>]]>
          </description>
          
-         <xsl:apply-templates select="./geodesy:location/gml:Point"/>
+         <xsl:apply-templates select="./ngcp:GEOM/gml:Point"/>
       </Placemark>
-   </xsl:template>
-   
+   </xsl:template> 
    
    <!-- TEMPLATE FOR TRANSLATING NVCL -->
    <!-- ================================================================= -->

@@ -60,5 +60,5 @@ Tile.prototype = {
    // Point on the tile by its pixel coordinates.
    'getTilePoint': function() {
       return this.tilePoint;
-   },
+   }
 }

@@ -18,7 +18,7 @@ var gMapClickController = function(map, overlay, latlng, statusBar, viewport, tr
         if (overlay.featureType == "gsml:Borehole") {
             new NVCLMarker(overlay.title, overlay, overlay.description).getMarkerClickedFn()();
         }
-        else if (overlay.featureType == "geodesy:stations") {
+        else if (overlay.featureType == "ngcp:GnssStation") {
             new GeodesyMarker(overlay.wfsUrl, "geodesy:station_observations", overlay.getTitle(), overlay, overlay.description).getMarkerClickedFn()();
         }
         else if (overlay.description != null) {
@@ -53,8 +53,9 @@ var gMapClickController = function(map, overlay, latlng, statusBar, viewport, tr
         	map.getDragObject().setDraggableCursor("pointer");
         	
             GDownloadUrl(url, function(response, pResponseCode) {
-                if(pResponseCode == 200) {
-                    map.openInfoWindowHtml(latlng, response, {autoScroll:true});
+                if (pResponseCode == 200) {
+                	if (isDataThere(response))
+                    	map.openInfoWindowHtml(latlng, response, {autoScroll:true});
                 } else {
                 	alert(pResponseCode);
                 }
@@ -83,4 +84,21 @@ function  getCheckedNodes(iParentNode) {
 		}
 	}
 	return arr.toString(); 
+}
+
+/**
+ * Attempts to find out if WMS GetFeatureInfo query returns data.
+ * 
+ * We need to hack a bit here as there is not much that we can check  
+ * for. For example the data does not have to come in tabular format.
+ * In addition html does not have to be well formed.
+ * 
+ * So ... we assume that minimum html must be longer then 30 chars
+ * eg. data string: <table border="1"></table>
+ * 
+ * @param iStr HTML string content to be verified 
+ * @return Boolean. 
+ */
+function isDataThere(iStr) {
+	return (iStr.length > 30) ? true : false;
 }
