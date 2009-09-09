@@ -1,0 +1,19 @@
+<ogc:Filter xmlns:er="urn:cgi:xmlns:GGIC:EarthResource:1.1" 
+        xmlns:wfs="http://www.opengis.net/wfs"
+        xmlns:ogc="http://www.opengis.net/ogc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ogc:Or>
+	        <ogc:PropertyIsEqualTo>
+	            <ogc:PropertyName>er:commodityName</ogc:PropertyName>
+	            <ogc:Literal>Gneiss - filling</ogc:Literal>
+	        </ogc:PropertyIsEqualTo>
+	        <ogc:PropertyIsEqualTo>
+	            <ogc:PropertyName>er:commodityName</ogc:PropertyName>
+	            <ogc:Literal>Gneiss - road seal aggregate</ogc:Literal>
+	        </ogc:PropertyIsEqualTo>
+	        <ogc:PropertyIsEqualTo>
+	            <ogc:PropertyName>er:commodityName</ogc:PropertyName>
+	            <ogc:Literal>Gneiss - crusher dust</ogc:Literal>
+	        </ogc:PropertyIsEqualTo>
+        </ogc:Or>
+</ogc:Filter>

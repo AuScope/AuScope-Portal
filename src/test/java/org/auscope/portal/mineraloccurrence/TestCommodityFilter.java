@@ -1,6 +1,8 @@
 package org.auscope.portal.mineraloccurrence;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import junit.framework.Assert;
 
@@ -31,7 +33,7 @@ public class TestCommodityFilter {
      */
     @Test
     public void testWithACommodityGroup() throws IOException {
-        CommodityFilter commodityFilter = new CommodityFilter("Industrial Minerals", "");
+        CommodityFilter commodityFilter = new CommodityFilter("Industrial Minerals", null);
         Assert.assertEquals(
                 Util.loadXML("src/test/resources/GetCommoditiesWithSpecifiedGroup.xml").replace("\n", "").replace(" ", ""),
                 commodityFilter.getFilterString().replace("\n", "").replace(" ", ""));
@@ -42,9 +44,28 @@ public class TestCommodityFilter {
      */
     @Test
     public void testWithACommodityName() throws IOException {
-        CommodityFilter commodityFilter = new CommodityFilter("", "Gold");
+        ArrayList<String> commodityNames = new ArrayList<String>();
+        commodityNames.add("Gold");
+        
+        CommodityFilter commodityFilter = new CommodityFilter("", commodityNames);
         Assert.assertEquals(
                 Util.loadXML("src/test/resources/GetCommoditiesWithSpecifiedName.xml").replace("\n", "").replace(" ", ""),
                 commodityFilter.getFilterString().replace("\n", "").replace(" ", ""));
+    }
+
+    /**
+     *  Test with three commodity names. A filter query should be generated searching for commodities with the given name.
+     */
+    @Test
+    public void testWithThreeCommodityNames() throws IOException {
+        ArrayList<String> commodityNames = new ArrayList<String>();
+        commodityNames.add("Gneiss - filling");
+        commodityNames.add("Gneiss - road seal aggregate");
+        commodityNames.add("Gneiss - crusher dust");
+        
+        CommodityFilter commodityFilter = new CommodityFilter("", commodityNames);
+        Assert.assertEquals(
+                Util.loadXML("src/test/resources/GetCommoditiesWithThreeNames.xml").replaceAll("\n", "").replaceAll("\\s+", ""),
+                commodityFilter.getFilterString().replaceAll("\n", "").replaceAll("\\s+", ""));
     }
 }

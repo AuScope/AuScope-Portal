@@ -1,12 +1,19 @@
 package org.auscope.portal.server.web.service;
 
+import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
 import org.auscope.portal.server.web.WFSGetFeatureMethodMakerPOST;
+import org.auscope.portal.vocabs.Concept;
+import org.auscope.portal.vocabs.VocabularyServiceResponseHandler;
 import org.auscope.portal.mineraloccurrence.*;
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +29,12 @@ import java.util.List;
 public class MineralOccurrenceService {
     private HttpServiceCaller httpServiceCaller;
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
+    private VocabularyServiceResponseHandler vocabularyServiceResponseHandler;
     private IWFSGetFeatureMethodMaker methodMaker;
+    
+    @Autowired
+    @Qualifier(value = "propertyConfigurer")
+    private PortalPropertyPlaceholderConfigurer hostConfigurer;
 
     /**
      * Initialise
@@ -30,6 +42,7 @@ public class MineralOccurrenceService {
     public MineralOccurrenceService() {
         this.httpServiceCaller = new HttpServiceCaller();
         this.mineralOccurrencesResponseHandler = new MineralOccurrencesResponseHandler();
+        this.vocabularyServiceResponseHandler = new VocabularyServiceResponseHandler();
         this.methodMaker = new WFSGetFeatureMethodMakerPOST();
     }
 
@@ -120,14 +133,54 @@ public class MineralOccurrenceService {
         //httpclient method
         HttpMethodBase method = null;
 
-        //if we don't have updateCSWRecords name or updateCSWRecords group, then just get all of them
+        //if we don't have a name or a group, then just get all of them
         if(commodityGroup.equals("") && commodityName.equals("")) {
             method = methodMaker.makeMethod(serviceURL, "er:Commodity", "");
         } else {
+            // query vocab service
+            String vocabServiceUrl =
+                hostConfigurer.resolvePlaceholder("HOST.vocabService.url");
+            
+            String vocabServiceQuery =
+                "?repository=commodity_vocab&conceptLabel=" + commodityName;
+            
+            GetMethod vocabMethod =
+                new GetMethod(vocabServiceUrl + vocabServiceQuery);
+            
+            String vocabResponse =
+                httpServiceCaller.getMethodResponseAsString(
+                        vocabMethod, httpServiceCaller.getHttpClient());
+            
+            Collection<Concept> concepts =
+                this.vocabularyServiceResponseHandler.getConcepts(vocabResponse);
+            
+            ArrayList<String> prefLabels = new ArrayList<String>();
+            
+            // PIRSA
+            if( serviceURL.contains("pirsa") ) {
+                // find prefLabels (for querying commodities)
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:PIRSA:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // GSV
+            } else if( serviceURL.contains("gsv")) {
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSV:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // GSWA
+            } else if( serviceURL.contains("gswa")) {
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSWA:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            }
+            
             //create the filter to append to the url
-            CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityName);
+            CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, prefLabels);
 
-            //create updateCSWRecords GetFeature request with an empty filter - get all
+            //create a GetFeature request with an empty filter - get all
             method = methodMaker.makeMethod(serviceURL, "er:Commodity", commodityFilter.getFilterString());
         }
 
