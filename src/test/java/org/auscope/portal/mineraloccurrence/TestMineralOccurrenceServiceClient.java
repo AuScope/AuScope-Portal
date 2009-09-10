@@ -132,9 +132,11 @@ public class TestMineralOccurrenceServiceClient {
     public void testGetCommodity() throws Exception {
         final String serviceURL = "http://localhost?";
         final String commodityName = "someName";
+        final ArrayList<String> commodityNameList = new ArrayList<String>();
+        commodityNameList.add(commodityName);
         final String commodityGroup = "";
 
-        final CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityName);
+        final CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityNameList);
         final GetMethod mockMethod = context.mock(GetMethod.class);
         final String mockCommodityResponse = new String();
         final Collection<Commodity> mockCommodities = (Collection<Commodity>)context.mock(Collection.class);
@@ -158,6 +160,8 @@ public class TestMineralOccurrenceServiceClient {
     public void testGetMineralOccurrenceGML() throws Exception {
         final String serviceURL = "http://localhost?";
         final String commodityName = "someName";
+        final ArrayList<String> commodityNameList = new ArrayList<String>();
+        commodityNameList.add(commodityName);
         final String commodityGroup = "";
         final String measureType = "";
         final String minOreAmount = "";
@@ -167,7 +171,7 @@ public class TestMineralOccurrenceServiceClient {
         final String cutOffGrade = "";
         final String cutOffGradeUOM = "";
 
-        final CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityName);
+        final CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityNameList);
         final GetMethod mockMethod = context.mock(GetMethod.class);
         final String mockCommodityResponse = new String();
         final Commodity mockCommodity = context.mock(Commodity.class);
@@ -221,6 +225,8 @@ public class TestMineralOccurrenceServiceClient {
     public void testGetMineralOccurrenceGMLNoResults() throws Exception {
         final String serviceURL = "http://localhost?";
         final String commodityName = "someName";
+        final ArrayList<String> commodityNameList = new ArrayList<String>();
+        commodityNameList.add(commodityName);
         final String commodityGroup = "";
         final String measureType = "";
         final String minOreAmount = "";
@@ -230,7 +236,7 @@ public class TestMineralOccurrenceServiceClient {
         final String cutOffGrade = "";
         final String cutOffGradeUOM = "";
 
-        final CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityName);
+        final CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityNameList);
         final GetMethod mockMethod = context.mock(GetMethod.class);
         final String mockCommodityResponse = new String();
         final Collection<Commodity> commodities = new ArrayList<Commodity>();
