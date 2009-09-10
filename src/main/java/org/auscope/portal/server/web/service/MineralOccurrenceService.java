@@ -1,16 +1,11 @@
 package org.auscope.portal.server.web.service;
 
-import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
 import org.auscope.portal.server.web.WFSGetFeatureMethodMakerPOST;
 import org.auscope.portal.vocabs.Concept;
-import org.auscope.portal.vocabs.VocabularyServiceResponseHandler;
 import org.auscope.portal.mineraloccurrence.*;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,27 +24,28 @@ import java.util.List;
 public class MineralOccurrenceService {
     private HttpServiceCaller httpServiceCaller;
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
-    private VocabularyServiceResponseHandler vocabularyServiceResponseHandler;
     private IWFSGetFeatureMethodMaker methodMaker;
+    private VocabularyService vocabularyService;
     
-    @Autowired
-    @Qualifier(value = "propertyConfigurer")
-    private PortalPropertyPlaceholderConfigurer hostConfigurer;
-
     /**
      * Initialise
      */
     public MineralOccurrenceService() {
         this.httpServiceCaller = new HttpServiceCaller();
         this.mineralOccurrencesResponseHandler = new MineralOccurrencesResponseHandler();
-        this.vocabularyServiceResponseHandler = new VocabularyServiceResponseHandler();
         this.methodMaker = new WFSGetFeatureMethodMakerPOST();
+        this.vocabularyService = new VocabularyService();
     }
 
-    public MineralOccurrenceService(HttpServiceCaller httpServiceCaller, MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler, IWFSGetFeatureMethodMaker methodMaker) {
+    public MineralOccurrenceService(
+            HttpServiceCaller httpServiceCaller,
+            MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler,
+            IWFSGetFeatureMethodMaker methodMaker,
+            VocabularyService vocabularyService) {
         this.httpServiceCaller = httpServiceCaller;
         this.mineralOccurrencesResponseHandler = mineralOccurrencesResponseHandler;
         this.methodMaker = methodMaker;
+        this.vocabularyService = vocabularyService;
     }
 
     /**
@@ -138,9 +134,37 @@ public class MineralOccurrenceService {
             method = methodMaker.makeMethod(serviceURL, "er:Commodity", "");
         } else {
             // query vocab service
-            ArrayList<String> prefLabels =
-                getCommodityConceptLabels(serviceURL, commodityName);
+            Collection<Concept> concepts =
+                this.vocabularyService.getCommodityConcepts(commodityName);
+           
+            ArrayList<String> prefLabels = new ArrayList<String>();
             
+            // PIRSA
+            if( serviceURL.contains("pirsa") ) {
+                // find prefLabels (for querying commodities)
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:PIRSA:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // GSV
+            } else if( serviceURL.contains("gsv")) {
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSV:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // GSWA
+            } else if( serviceURL.contains("gswa")) {
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSWA:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // all others
+            } else {
+                for( Concept concept : concepts ) {
+                    prefLabels.add(concept.getPreferredLabel());
+                }
+            }
+                 
             //create the filter to append to the url
             CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, prefLabels);
 
@@ -153,49 +177,6 @@ public class MineralOccurrenceService {
 
         //parse the commodites and return them
         return this.mineralOccurrencesResponseHandler.getCommodities(commodityResponse);
-    }
-
-    private ArrayList<String> getCommodityConceptLabels(String serviceURL,
-            String commodityName) throws Exception {
-        String vocabServiceUrl =
-            hostConfigurer.resolvePlaceholder("HOST.vocabService.url");
-        
-        String vocabServiceQuery =
-            "?repository=commodity_vocab&conceptLabel=" + commodityName;
-        
-        GetMethod vocabMethod =
-            new GetMethod(vocabServiceUrl + vocabServiceQuery);
-        
-        String vocabResponse =
-            httpServiceCaller.getMethodResponseAsString(
-                    vocabMethod, httpServiceCaller.getHttpClient());
-        
-        Collection<Concept> concepts =
-            this.vocabularyServiceResponseHandler.getConcepts(vocabResponse);
-        
-        ArrayList<String> prefLabels = new ArrayList<String>();
-        
-        // PIRSA
-        if( serviceURL.contains("pirsa") ) {
-            // find prefLabels (for querying commodities)
-            for( Concept concept : concepts ) {
-                if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:PIRSA:commodity") )
-                    prefLabels.add(concept.getPreferredLabel());
-            }
-        // GSV
-        } else if( serviceURL.contains("gsv")) {
-            for( Concept concept : concepts ) {
-                if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSV:commodity") )
-                    prefLabels.add(concept.getPreferredLabel());
-            }
-        // GSWA
-        } else if( serviceURL.contains("gswa")) {
-            for( Concept concept : concepts ) {
-                if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSWA:commodity") )
-                    prefLabels.add(concept.getPreferredLabel());
-            }
-        }
-        return prefLabels;
     }
 
     /**

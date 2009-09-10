@@ -2,7 +2,9 @@ package org.auscope.portal.mineraloccurrence;
 
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
+import org.auscope.portal.server.web.service.VocabularyService;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
+import org.auscope.portal.vocabs.Concept;
 import org.junit.Before;
 import org.junit.Test;
 import org.jmock.Mockery;
@@ -29,6 +31,7 @@ public class TestMineralOccurrenceServiceClient {
     private HttpServiceCaller httpServiceCaller;
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
     private HttpClient mockHttpClient;
+    private VocabularyService vocabularyService;
 
     private IWFSGetFeatureMethodMaker methodMaker;
 
@@ -42,7 +45,12 @@ public class TestMineralOccurrenceServiceClient {
         this.methodMaker = context.mock(IWFSGetFeatureMethodMaker.class);
         this.mineralOccurrencesResponseHandler = context.mock(MineralOccurrencesResponseHandler.class);
         this.httpServiceCaller = context.mock(HttpServiceCaller.class);
-        this.mineralOccurrenceService = new MineralOccurrenceService(this.httpServiceCaller, this.mineralOccurrencesResponseHandler, this.methodMaker);
+        this.vocabularyService = context.mock(VocabularyService.class);
+        this.mineralOccurrenceService = new MineralOccurrenceService(
+                this.httpServiceCaller,
+                this.mineralOccurrencesResponseHandler,
+                this.methodMaker,
+                this.vocabularyService);
         this.mockHttpClient = context.mock(HttpClient.class);
     }
 
@@ -139,9 +147,12 @@ public class TestMineralOccurrenceServiceClient {
         final CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityNameList);
         final GetMethod mockMethod = context.mock(GetMethod.class);
         final String mockCommodityResponse = new String();
-        final Collection<Commodity> mockCommodities = (Collection<Commodity>)context.mock(Collection.class);
-
+        
+        final Collection<Commodity> mockCommodities = (Collection<Commodity>)context.mock(Collection.class, "mockCommodities");
+        final Collection<Concept> mockConcepts =      (Collection<Concept>)context.mock(Collection.class, "mockConcepts");
+        
         context.checking(new Expectations() {{
+            oneOf (vocabularyService).getCommodityConcepts(commodityName); will(returnValue(mockConcepts));
             oneOf (methodMaker).makeMethod(serviceURL, "er:Commodity", commodityFilter.getFilterString()); will(returnValue(mockMethod));
             oneOf (httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
             oneOf (httpServiceCaller).getMethodResponseAsString(mockMethod, mockHttpClient); will(returnValue(mockCommodityResponse));
