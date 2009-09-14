@@ -2,7 +2,6 @@ package org.auscope.portal.server.web.service;
 
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMakerPOST;
 import org.auscope.portal.vocabs.Concept;
 import org.auscope.portal.mineraloccurrence.*;
 import org.apache.commons.httpclient.HttpMethodBase;
@@ -30,13 +29,6 @@ public class MineralOccurrenceService {
     /**
      * Initialise
      */
-    public MineralOccurrenceService() {
-        this.httpServiceCaller = new HttpServiceCaller();
-        this.mineralOccurrencesResponseHandler = new MineralOccurrencesResponseHandler();
-        this.methodMaker = new WFSGetFeatureMethodMakerPOST();
-        this.vocabularyService = new VocabularyService();
-    }
-
     public MineralOccurrenceService(
             HttpServiceCaller httpServiceCaller,
             MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler,

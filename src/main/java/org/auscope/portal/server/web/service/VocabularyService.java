@@ -1,19 +1,12 @@
 package org.auscope.portal.server.web.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.auscope.portal.mineraloccurrence.Mine;
-import org.auscope.portal.mineraloccurrence.MineralOccurrencesResponseHandler;
 import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
-import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMakerPOST;
 import org.auscope.portal.vocabs.Concept;
 import org.auscope.portal.vocabs.VocabularyServiceResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,23 +20,18 @@ import org.springframework.stereotype.Service;
 public class VocabularyService {
     private HttpServiceCaller httpServiceCaller;
     private VocabularyServiceResponseHandler vocabularyServiceResponseHandler;
-    
-    @Autowired
-    @Qualifier(value = "propertyConfigurer")
     private PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer;
 
     /**
      * Initialise
      */
-    public VocabularyService() {
-        this.httpServiceCaller = new HttpServiceCaller();
-        this.vocabularyServiceResponseHandler = new VocabularyServiceResponseHandler();
-        new WFSGetFeatureMethodMakerPOST();
-    }
-
-    public VocabularyService(HttpServiceCaller httpServiceCaller, VocabularyServiceResponseHandler vocabularyServiceResponseHandler, IWFSGetFeatureMethodMaker methodMaker) {
+    @Autowired
+    public VocabularyService(HttpServiceCaller httpServiceCaller,
+                             VocabularyServiceResponseHandler vocabularyServiceResponseHandler,
+                             PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer) {
         this.httpServiceCaller = httpServiceCaller;
         this.vocabularyServiceResponseHandler = vocabularyServiceResponseHandler;
+        this.portalPropertyPlaceholderConfigurer = portalPropertyPlaceholderConfigurer;
     }
 
     /**
@@ -71,5 +59,5 @@ public class VocabularyService {
             this.vocabularyServiceResponseHandler.getConcepts(vocabResponse);
         
         return concepts;
-    }        
+    }
 }
