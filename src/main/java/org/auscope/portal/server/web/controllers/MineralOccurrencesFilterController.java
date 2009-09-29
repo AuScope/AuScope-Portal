@@ -11,6 +11,8 @@ import org.auscope.portal.server.web.view.JSONModelAndView;
 import org.auscope.portal.mineraloccurrence.*;
 import org.auscope.portal.server.web.ErrorMessages;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
+import org.auscope.portal.server.web.service.VocabularyService;
+import org.auscope.portal.vocabs.Concept;
 import org.xml.sax.SAXException;
 import org.apache.log4j.Logger;
 import org.apache.commons.httpclient.ConnectTimeoutException;
@@ -39,6 +41,7 @@ public class MineralOccurrencesFilterController {
 
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
     private MineralOccurrenceService mineralOccurrenceService;
+    private VocabularyService vocabularyService;
     private GmlToKml gmlToKml;
 
     /**
@@ -50,9 +53,11 @@ public class MineralOccurrencesFilterController {
     @Autowired
     public MineralOccurrencesFilterController(MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler,
                                               MineralOccurrenceService mineralOccurrenceService,
+                                              VocabularyService vocabularyService,
                                               GmlToKml gmlToKml) {
         this.mineralOccurrencesResponseHandler = mineralOccurrencesResponseHandler;
         this.mineralOccurrenceService = mineralOccurrenceService;
+        this.vocabularyService = vocabularyService;
         this.gmlToKml = gmlToKml;
     }
 
@@ -166,9 +171,45 @@ public class MineralOccurrencesFilterController {
             @RequestParam("cutOffGradeUOM") String cutOffGradeUOM,
             HttpServletRequest request) {
         try {
+            // query vocab service
+            Collection<Concept> concepts =
+                this.vocabularyService.getCommodityConcepts(commodityName);
+           
+            ArrayList<String> prefLabels = new ArrayList<String>();
+            
+            /* kludge start */
+            
+            // PIRSA
+            if( serviceUrl.contains("pirsa") ) {
+                // find prefLabels (for querying commodities)
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:PIRSA:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // GSV
+            } else if( serviceUrl.contains("gsv")) {
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSV:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // GSWA
+            } else if( serviceUrl.contains("gswa")) {
+                for( Concept concept : concepts ) {
+                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSWA:commodity") )
+                        prefLabels.add(concept.getPreferredLabel());
+                }
+            // all others
+            } else {
+                for( Concept concept : concepts ) {
+                    prefLabels.add(concept.getPreferredLabel());
+                }
+            }
+
+            /* kludge end */
+
             //get the mineral occurrences
             String mineralOccurrenceResponse = this.mineralOccurrenceService.getMineralOccurrenceGML(serviceUrl,
-                                                                                        commodityName,
+                                                                                        prefLabels,
                                                                                         commodityGroup,
                                                                                         measureType,
                                                                                         minOreAmount,
@@ -177,7 +218,7 @@ public class MineralOccurrencesFilterController {
                                                                                         minCommodityAmountUOM,
                                                                                         cutOffGrade,
                                                                                         cutOffGradeUOM);
-            //if there are 0 features then send updateCSWRecords nice message to the user
+            //if there are 0 features then send a nice message to the user
             if (mineralOccurrencesResponseHandler.getNumberOfFeatures(mineralOccurrenceResponse) == 0)
                 return makeModelAndViewFailure(ErrorMessages.NO_RESULTS);
 

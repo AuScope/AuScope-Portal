@@ -2,12 +2,11 @@ package org.auscope.portal.server.web.service;
 
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
-import org.auscope.portal.vocabs.Concept;
+import org.auscope.portal.server.web.WFSGetFeatureMethodMakerPOST;
 import org.auscope.portal.mineraloccurrence.*;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,11 +23,16 @@ public class MineralOccurrenceService {
     private HttpServiceCaller httpServiceCaller;
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
     private IWFSGetFeatureMethodMaker methodMaker;
-    private VocabularyService vocabularyService;
     
     /**
      * Initialise
      */
+    public MineralOccurrenceService() {
+        this.httpServiceCaller = new HttpServiceCaller();
+        this.mineralOccurrencesResponseHandler = new MineralOccurrencesResponseHandler();
+        this.methodMaker = new WFSGetFeatureMethodMakerPOST();
+    }
+    
     public MineralOccurrenceService(
             HttpServiceCaller httpServiceCaller,
             MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler,
@@ -37,7 +41,6 @@ public class MineralOccurrenceService {
         this.httpServiceCaller = httpServiceCaller;
         this.mineralOccurrencesResponseHandler = mineralOccurrencesResponseHandler;
         this.methodMaker = methodMaker;
-        this.vocabularyService = vocabularyService;
     }
 
     /**
@@ -114,51 +117,21 @@ public class MineralOccurrenceService {
      * If both commodityGroup and commodityName are empty strings a GetALL query will be run
      *
      * @param commodityGroup
-     * @param commodityName
+     * @param prefLabels
      * @return
      */
-    public Collection<Commodity> getCommodity(String serviceURL, String commodityGroup, String commodityName) throws Exception {
+    public Collection<Commodity> getCommodity(String serviceURL, String commodityGroup, Collection<String> commodityNames) throws Exception {
         //httpclient method
         HttpMethodBase method = null;
 
         //if we don't have a name or a group, then just get all of them
-        if(commodityGroup.equals("") && commodityName.equals("")) {
+        if(commodityGroup.equals("") && commodityNames.isEmpty()) {
             method = methodMaker.makeMethod(serviceURL, "er:Commodity", "");
         } else {
             // query vocab service
-            Collection<Concept> concepts =
-                this.vocabularyService.getCommodityConcepts(commodityName);
-           
-            ArrayList<String> prefLabels = new ArrayList<String>();
-            
-            // PIRSA
-            if( serviceURL.contains("pirsa") ) {
-                // find prefLabels (for querying commodities)
-                for( Concept concept : concepts ) {
-                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:PIRSA:commodity") )
-                        prefLabels.add(concept.getPreferredLabel());
-                }
-            // GSV
-            } else if( serviceURL.contains("gsv")) {
-                for( Concept concept : concepts ) {
-                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSV:commodity") )
-                        prefLabels.add(concept.getPreferredLabel());
-                }
-            // GSWA
-            } else if( serviceURL.contains("gswa")) {
-                for( Concept concept : concepts ) {
-                    if( concept.getSchemeUrn().equals("urn:cgi:classifierScheme:GSWA:commodity") )
-                        prefLabels.add(concept.getPreferredLabel());
-                }
-            // all others
-            } else {
-                for( Concept concept : concepts ) {
-                    prefLabels.add(concept.getPreferredLabel());
-                }
-            }
                  
             //create the filter to append to the url
-            CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, prefLabels);
+            CommodityFilter commodityFilter = new CommodityFilter(commodityGroup, commodityNames);
 
             //create a GetFeature request with an empty filter - get all
             method = methodMaker.makeMethod(serviceURL, "er:Commodity", commodityFilter.getFilterString());
@@ -174,7 +147,7 @@ public class MineralOccurrenceService {
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
      * @param serviceURL
-     * @param commodityName
+     * @param prefLabels
      * @param commodityGroup
      * @param measureType
      * @param minOreAmount
@@ -186,7 +159,7 @@ public class MineralOccurrenceService {
      * @return
      */
     public String getMineralOccurrenceGML( String serviceURL,
-            String commodityName,
+            Collection<String> commodityNames,
             String commodityGroup,
             String measureType,
             String minOreAmount,
@@ -197,7 +170,7 @@ public class MineralOccurrenceService {
             String cutOffGradeUOM) throws Exception {
 
         //get the commodities, we need their URI's to do updateCSWRecords min occ query
-        Collection<Commodity> commodities = this.getCommodity(serviceURL, commodityGroup, commodityName);
+        Collection<Commodity> commodities = this.getCommodity(serviceURL, commodityGroup, commodityNames);
 
         //if there ar no commodities we cant continue
         if(commodities.size() == 0)
