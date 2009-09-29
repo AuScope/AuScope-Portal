@@ -114,7 +114,8 @@ public class TestMineralOccurrenceServiceClient {
     @Test
     public void testGetCommodityNoNameOrGroup() throws Exception {
         final String serviceURL = "http://localhost?";
-        final String commodityName = "";
+        final ArrayList<String> commodityNameList = new ArrayList<String>();
+        commodityNameList.add("");
         final String commodityGroup = "";
 
         final GetMethod mockMethod = context.mock(GetMethod.class);
@@ -128,7 +129,7 @@ public class TestMineralOccurrenceServiceClient {
             oneOf (mineralOccurrencesResponseHandler).getCommodities(mockCommodityResponse); will(returnValue(mockCommodities));
         }});
 
-        Collection<Commodity> commodities = this.mineralOccurrenceService.getCommodity(serviceURL, commodityName, commodityGroup);
+        Collection<Commodity> commodities = this.mineralOccurrenceService.getCommodity(serviceURL, commodityGroup, commodityNameList);
         Assert.assertEquals(mockCommodities, commodities);
     }
 
@@ -159,7 +160,7 @@ public class TestMineralOccurrenceServiceClient {
             oneOf (mineralOccurrencesResponseHandler).getCommodities(mockCommodityResponse); will(returnValue(mockCommodities));
         }});
 
-        Collection<Commodity> commodities = this.mineralOccurrenceService.getCommodity(serviceURL, commodityGroup, commodityName);
+        Collection<Commodity> commodities = this.mineralOccurrenceService.getCommodity(serviceURL, commodityGroup, commodityNameList);
         Assert.assertEquals(mockCommodities, commodities);
     }
 
@@ -218,15 +219,15 @@ public class TestMineralOccurrenceServiceClient {
         }});
 
         this.mineralOccurrenceService.getMineralOccurrenceGML(serviceURL,
-                                                                    commodityName,
-                                                                    commodityGroup,
-                                                                    measureType,
-                                                                    minOreAmount,
-                                                                    minCommodityAmountUOM,
-                                                                    minCommodityAmount,
-                                                                    minCommodityAmountUOM,
-                                                                    cutOffGrade,
-                                                                    cutOffGradeUOM);
+                                                              commodityNameList,
+                                                              commodityGroup,
+                                                              measureType,
+                                                              minOreAmount,
+                                                              minCommodityAmountUOM,
+                                                              minCommodityAmount,
+                                                              minCommodityAmountUOM,
+                                                              cutOffGrade,
+                                                              cutOffGradeUOM);
     }
 
     /**
@@ -261,7 +262,7 @@ public class TestMineralOccurrenceServiceClient {
         }});
 
         String returnValue = this.mineralOccurrenceService.getMineralOccurrenceGML(serviceURL,
-                                                                    commodityName,
+                                                                    commodityNameList,
                                                                     commodityGroup,
                                                                     measureType,
                                                                     minOreAmount,
