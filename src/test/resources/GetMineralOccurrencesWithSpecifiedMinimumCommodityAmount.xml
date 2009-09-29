@@ -8,7 +8,7 @@
         <ogc:And>
             <ogc:PropertyIsEqualTo>
                 <ogc:PropertyName>er:oreAmount/er:Resource/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom</ogc:PropertyName>
-                <ogc:Literal>urn:ogc:def:uom:UCUM:t</ogc:Literal>
+                <ogc:Literal>urn:ogc:def:uom:UCUM::t</ogc:Literal>
             </ogc:PropertyIsEqualTo>
             <ogc:PropertyIsGreaterThan>
                 <ogc:PropertyName>er:oreAmount/er:Resource/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue</ogc:PropertyName>
@@ -18,7 +18,7 @@
         <ogc:And>
             <ogc:PropertyIsEqualTo>
                 <ogc:PropertyName>er:oreAmount/er:Reserve/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom</ogc:PropertyName>
-                <ogc:Literal>urn:ogc:def:uom:UCUM:t</ogc:Literal>
+                <ogc:Literal>urn:ogc:def:uom:UCUM::t</ogc:Literal>
             </ogc:PropertyIsEqualTo>
             <ogc:PropertyIsGreaterThan>
                 <ogc:PropertyName>er:oreAmount/er:Reserve/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue</ogc:PropertyName>
