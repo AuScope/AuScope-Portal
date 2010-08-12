@@ -185,14 +185,20 @@ function showWCSDownload(serviceUrl, layerName) {
 			
 		    //Completely disables a field set and stops its values from being selected by the "getValues" function
 		    //This function is recursive over fieldset objects
-		    var setFieldSetDisabled = function (fieldSet, disabled) {
-		    	fieldSet.setDisabled(disabled);
+		    var setFieldSetDisabled = function (fieldSet, disabled, depth) {
+		    	if (depth == undefined)
+		    		depth = 0;
+		    	
+		    	//IE workaround
+		    	if (!Ext.isIE || depth !== 0) {
+		    	    fieldSet.setDisabled(disabled);
+		    	} 
 		    	
 		    	for (var i = 0; i < fieldSet.items.length; i++) {
 		    		var item = fieldSet.items.get(i);
 		    		
 		    		if (item.getXType() == 'fieldset') {
-		    			setFieldSetDisabled(item, disabled);
+		    			setFieldSetDisabled(item, disabled, depth + 1);
 		    		} else {
 		    			item.setDisabled(disabled);
 		    		}
