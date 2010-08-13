@@ -613,6 +613,7 @@ Ext.onReady(function() {
         activeLayersPanel.getSelectionModel().selectRecords([record], false);
 
         if (record.get('loadingStatus') == '<img src="js/external/extjs/resources/images/default/grid/loading.gif">') {
+        	record.set('layerVisible', !isChecked); //reverse selection
             Ext.MessageBox.show({
                 title: 'Please wait',
                 msg: "There is an operation in process for this layer. Please wait until it is finished.",
@@ -622,6 +623,8 @@ Ext.onReady(function() {
             });
             return;
         }
+        
+        record.set('layerVisible', isChecked);
 
         if (isChecked) {
             //Create our filter panel or use the existing one
