@@ -165,7 +165,6 @@ function showOPeNDAPDownload(opendapUrl) {
 	
 	var win = new Ext.Window({
         id              : 'opendapDownloadWindow',        
-        autoScroll      : true,
         border          : true,        
         layout          : 'fit',
         resizable       : true,
@@ -176,20 +175,27 @@ function showOPeNDAPDownload(opendapUrl) {
         height          : 600,
         width           : 500,
         items:[{
-            // Bounding form
-            id      :'opendapDownloadFrm',
-            xtype   :'form',
-            layout  :'form',
-            frame   : true,
-            autoHeight : true,
-            
-            // these are applied to columns
-            defaults:{
-                xtype: 'fieldset', layout: 'form'
-            },
-            
-            // fieldsets
-            items   : fieldSetsToDisplay
+        		xtype 		: 'panel',
+        		id			: 'blah-blah-bacon',
+        		layout 		: 'fit',
+        		autoScroll  : true,
+        		bodyStyle	: 'background-color: transparent;',
+        		items 		: [{
+		            // Bounding form
+		            id      :'opendapDownloadFrm',
+		            xtype   :'form',
+		            layout  :'form',
+		            frame   : true,
+		            autoHeight : true,
+		            
+		            // these are applied to columns
+		            defaults:{
+		                xtype: 'fieldset', layout: 'form'
+		            },
+		            
+		            // fieldsets
+		            items   : fieldSetsToDisplay
+		       }]
         }],
         buttons:[{
                 xtype: 'button',
