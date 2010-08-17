@@ -1174,7 +1174,7 @@ Ext.onReady(function() {
                     }
                 } else if (serviceType == 'wcs') {
                 	//Lets open the generic wcs download handler
-                	showWCSDownload(record.get('serviceURLs')[0], record.get('typeName'));
+                	showWCSDownload(record.get('serviceURLs')[0], record.get('typeName'), map.getBounds());
                 }
             }
         }

@@ -119,7 +119,21 @@ function validateWCSInfoWindow() {
 }
 
 //rec must be a record from the response from the describeCoverage.do handler
-function showWCSDownload(serviceUrl, layerName) {
+//The north, south, east and west reference the EPSG:4326 latitudes/longitudes that represent the current visible section of the map
+//Alternatively pass a GLatLng bounds as the north parameter
+function showWCSDownload(serviceUrl, layerName, north, south, east, west) {
+	var currentVisibleBounds = null;
+	
+	if (north) {
+		if (north instanceof GLatLngBounds) {
+			currentVisibleBounds = north;
+		} else {
+			currentVisibleBounds = new GLatLngBounds(new GLatLng(south, west), new GLatLng(north, east));
+		}
+	} else {
+		currentVisibleBounds = new GLatLngBounds(new GLatLng(-90, -180), new GLatLng(90, 180));
+	}
+	
 	Ext.Ajax.request({
     	url			: 'describeCoverage.do',
     	timeout		: 180000,
@@ -244,7 +258,7 @@ function showWCSDownload(serviceUrl, layerName) {
 			            id              : 'northBoundLatitude',                        
 			            xtype           : 'numberfield',
 			            fieldLabel      : 'Latitude (North)',
-			            value           : rec.spatialDomain[0].northBoundLatitude.toString(),
+			            value           : currentVisibleBounds.getNorthEast().lat().toString(),
 			            name            : 'northBoundLatitude',
 			            allowBlank      : false,
 			            anchor          : '-50'                                       
@@ -252,7 +266,7 @@ function showWCSDownload(serviceUrl, layerName) {
 			            id              : 'southBoundLatitude',                        
 			            xtype           : 'numberfield',
 			            fieldLabel      : 'Latitude (South)',
-			            value           : rec.spatialDomain[0].southBoundLatitude.toString(),
+			            value           : currentVisibleBounds.getSouthWest().lat().toString(),
 			            name            : 'southBoundLatitude',
 			            allowBlank      : false,
 			            anchor          : '-50'                                       
@@ -260,7 +274,7 @@ function showWCSDownload(serviceUrl, layerName) {
 			            id              : 'eastBoundLongitude',                        
 			            xtype           : 'numberfield',
 			            fieldLabel      : 'Longitude (East)',
-			            value           : rec.spatialDomain[0].eastBoundLongitude.toString(),
+			            value           : currentVisibleBounds.getNorthEast().lng().toString(),
 			            name            : 'eastBoundLongitude',
 			            allowBlank      : false,
 			            anchor          : '-50'                                       
@@ -268,7 +282,7 @@ function showWCSDownload(serviceUrl, layerName) {
 			            id              : 'westBoundLongitude',                        
 			            xtype           : 'numberfield',
 			            fieldLabel      : 'Longitude (West)',
-			            value           : rec.spatialDomain[0].westBoundLongitude.toString(),
+			            value           : currentVisibleBounds.getSouthWest().lng().toString(),
 			            name            : 'westBoundLongitude',
 			            allowBlank      : false,
 			            anchor          : '-50'                                       
@@ -863,13 +877,18 @@ GenericWCSInfoWindow.prototype.showInfoWindow = function() {
 	    			htmlFragment += '</table>';
 	    			htmlFragment += '</div>';
 	    			
+	    			var visibleMapBounds = opts.map.getBounds();
 	    			
 	    			//Add our "Download" button that when clicked will open up a download window
 	        		htmlFragment += '<div align="right">' + 
 	    					            '<br/>' +
 	    					            '<input type="button" id="downloadWCSBtn"  value="Download" onclick="showWCSDownload('+ 
 	    					            '\'' + opts.serviceUrl +'\',' + 
-	    					            '\''+ opts.layerName + '\'' +
+	    					            '\''+ opts.layerName + '\',' +
+	    					            '\''+ visibleMapBounds.getNorthEast().lat() + '\',' +
+	    					            '\''+ visibleMapBounds.getSouthWest().lat() + '\',' +
+	    					            '\''+ visibleMapBounds.getNorthEast().lng() + '\',' +
+	    					            '\''+ visibleMapBounds.getSouthWest().lng() + '\'' +
 	    					            ');"/>';
 	        		if (opts.openDapURLs && opts.openDapURLs.length > 0) {
 	        			htmlFragment += '<input type="button" id="downloadOpendapBtn"  value="Download (OPeNDAP)" onclick="showOPeNDAPDownload('+ 
@@ -915,7 +934,8 @@ GenericWCSInfoWindow.prototype.showInfoWindow = function() {
     	serviceUrl 		: this.serviceUrl,
     	layerName		: this.layerName,
     	openDapURLs		: this.openDapURLs,
-    	wmsURLs			: this.wmsURLs
+    	wmsURLs			: this.wmsURLs,
+    	map				: this.map
     };
     var windowManager = new GMapInfoWindowManager(this.map);
     windowManager.openInfoWindow(location, loadingFragment, undefined, startLoading, opts);
