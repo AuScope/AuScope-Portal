@@ -295,6 +295,8 @@ Ext.onReady(function() {
             {   name: 'typeName'        },
             {   name: 'serviceURLs'     },
             {   name: 'openDapURLs'     },
+            {   name: 'wmsURLs'     	},
+            {   name: 'opacity'         },
             {   name: 'layerVisible'    },
             {   name: 'loadingStatus'   },
             {   name: 'dataSourceImage' },
@@ -594,12 +596,16 @@ Ext.onReady(function() {
         for (var i = 0; i < activeLayersStore.getCount(); i++) {
             var record = activeLayersStore.getAt(i);
 
-            if (record.tileOverlay && record.get('serviceType') == 'wms') {
+            if (record.tileOverlay && (record.get('serviceType') == 'wms' || record.get('serviceType') == 'wcs')) {
                 if (record.get('layerVisible') == true) {
-                    record.tileOverlay.zPriority = activeLayersStore.getCount() - i;
-
-                    map.removeOverlay(record.tileOverlay);
-                    map.addOverlay(record.tileOverlay);
+                	var newZOrder = activeLayersStore.getCount() - i;
+                	if (record.tileOverlay instanceof OverlayManager) {
+                		record.tileOverlay.updateZOrder(newZOrder);
+                	} else {
+	                    record.tileOverlay.zPriority = newZOrder;
+	                    map.removeOverlay(record.tileOverlay);
+	                    map.addOverlay(record.tileOverlay);
+                	}
                 }
             }
         }
@@ -660,7 +666,12 @@ Ext.onReady(function() {
                     wfsHandler(record);
                 }
             } else if (record.get('serviceType') == 'wcs') {
-            	filterPanel.getLayout().setActiveItem(0);
+            	if (record.filterPanel != null) {
+                    filterPanel.add(record.filterPanel);
+                    filterPanel.getLayout().setActiveItem(record.get('id'));
+                    filterPanel.doLayout();
+                }
+            	
                 wcsHandler(record);
             }
         } else {
@@ -679,12 +690,14 @@ Ext.onReady(function() {
     };
     
     //The WCS handler will create a representation of a coverage on the map for a given WCS record
+    //If we have a linked WMS url we should use that (otherwise we draw an ugly red bounding box)
     var wcsHandler = function(selectedRecord) {
     	
         if (selectedRecord.tileOverlay instanceof OverlayManager) 
         	selectedRecord.tileOverlay.clearOverlays();
         
         var serviceUrlList = selectedRecord.get('serviceURLs');
+        var wmsObjList = selectedRecord.get('wmsURLs');
         var serviceUrl = serviceUrlList[0]; //assume a single service url
         
         selectedRecord.responseTooltip = new ResponseTooltip();
@@ -697,7 +710,16 @@ Ext.onReady(function() {
         if (!selectedRecord.tileOverlay)
         	selectedRecord.tileOverlay = new OverlayManager(map);
         
-        var polygonList = bboxToPolygon(bboxList[0],'#FF0000', 0, 0.7,'#FF0000', 0.6);
+        //We will need to add the bounding box polygons regardless of whether we have a WMS service or not.
+        //The difference is that we will make the "WMS" bounding box polygons transparent but still clickable
+        var polygonList = null;
+        if (wmsObjList.length > 0) {
+        	polygonList = bboxToPolygon(bboxList[0],'#000000', 0, 0.0,'#000000', 0.0);
+        } else {
+        	polygonList = bboxToPolygon(bboxList[0],'#FF0000', 0, 0.7,'#FF0000', 0.6);
+        }
+        
+        //Add our polygons (they may/may not be visible)
         for (var i = 0; i < polygonList.length; i++) {
         	polygonList[i].layerName = selectedRecord.get('typeName');
         	polygonList[i].wcsUrl = serviceUrl;
@@ -705,6 +727,19 @@ Ext.onReady(function() {
 	        
 	        selectedRecord.tileOverlay.addOverlay(polygonList[i]);
         }
+        
+        //Add our WMS tiles (if any)
+        for (var i = 0; i < wmsObjList.length; i++) {
+        	var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
+            tileLayer.baseURL = wmsObjList[i].url;
+            tileLayer.layers = wmsObjList[i].name;
+            tileLayer.opacity = 1.0;
+
+            selectedRecord.tileOverlay.addOverlay(new GTileLayerOverlay(tileLayer));
+        }
+        
+        //This will update the Z order of our WMS layers
+        updateActiveLayerZOrder();
     };
 
     var wfsHandler = function(selectedRecord) {
@@ -847,8 +882,7 @@ Ext.onReady(function() {
             } else if (record.get('serviceType') == 'wms') {
                 filterButton.disable();
             } else if (record.get('serviceType') == 'wcs') {
-            	filterButton.enable();
-                filterButton.toggle(true);
+            	filterButton.disable();
             }
 
         } else {
@@ -1430,7 +1464,6 @@ Ext.onReady(function() {
     	    var polygonList = bboxToPolygon(bboxes[i],'00FF00', 0, 0.7,'#00FF00', 0.6);
     	    
     	    for (var j = 0; j < polygonList.length; j++) {
-    	    	polygonList[j].description = 'bbox';
     	    	polygonList[j].title = 'bbox';
     	    	record.bboxOverlayManager.addOverlay(polygonList[j]);
     	    }
