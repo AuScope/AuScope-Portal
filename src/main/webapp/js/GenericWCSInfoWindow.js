@@ -121,18 +121,8 @@ function validateWCSInfoWindow() {
 //rec must be a record from the response from the describeCoverage.do handler
 //The north, south, east and west reference the EPSG:4326 latitudes/longitudes that represent the current visible section of the map
 //Alternatively pass a GLatLng bounds as the north parameter
-function showWCSDownload(serviceUrl, layerName, north, south, east, west) {
-	var currentVisibleBounds = null;
-	
-	if (north) {
-		if (north instanceof GLatLngBounds) {
-			currentVisibleBounds = north;
-		} else {
-			currentVisibleBounds = new GLatLngBounds(new GLatLng(south, west), new GLatLng(north, east));
-		}
-	} else {
-		currentVisibleBounds = new GLatLngBounds(new GLatLng(-90, -180), new GLatLng(90, 180));
-	}
+function showWCSDownload(serviceUrl, layerName) {
+	var currentVisibleBounds = mapInfoWindowManager.map.getBounds();
 	
 	Ext.Ajax.request({
     	url			: 'describeCoverage.do',
@@ -877,18 +867,12 @@ GenericWCSInfoWindow.prototype.showInfoWindow = function() {
 	    			htmlFragment += '</table>';
 	    			htmlFragment += '</div>';
 	    			
-	    			var visibleMapBounds = opts.map.getBounds();
-	    			
 	    			//Add our "Download" button that when clicked will open up a download window
 	        		htmlFragment += '<div align="right">' + 
 	    					            '<br/>' +
 	    					            '<input type="button" id="downloadWCSBtn"  value="Download" onclick="showWCSDownload('+ 
 	    					            '\'' + opts.serviceUrl +'\',' + 
-	    					            '\''+ opts.layerName + '\',' +
-	    					            '\''+ visibleMapBounds.getNorthEast().lat() + '\',' +
-	    					            '\''+ visibleMapBounds.getSouthWest().lat() + '\',' +
-	    					            '\''+ visibleMapBounds.getNorthEast().lng() + '\',' +
-	    					            '\''+ visibleMapBounds.getSouthWest().lng() + '\'' +
+	    					            '\''+ opts.layerName + '\'' +
 	    					            ');"/>';
 	        		if (opts.openDapURLs && opts.openDapURLs.length > 0) {
 	        			htmlFragment += '<input type="button" id="downloadOpendapBtn"  value="Download (OPeNDAP)" onclick="showOPeNDAPDownload('+ 
@@ -934,9 +918,8 @@ GenericWCSInfoWindow.prototype.showInfoWindow = function() {
     	serviceUrl 		: this.serviceUrl,
     	layerName		: this.layerName,
     	openDapURLs		: this.openDapURLs,
-    	wmsURLs			: this.wmsURLs,
-    	map				: this.map
+    	wmsURLs			: this.wmsURLs
     };
-    var windowManager = new GMapInfoWindowManager(this.map);
-    windowManager.openInfoWindow(location, loadingFragment, undefined, startLoading, opts);
+    
+    mapInfoWindowManager.openInfoWindow(location, loadingFragment, undefined, startLoading, opts);
 };

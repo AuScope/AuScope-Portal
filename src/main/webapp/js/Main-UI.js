@@ -3,6 +3,8 @@ var theglobalexml;
 //var host = "http://localhost:8080";
 //Ext.Ajax.timeout = 180000; //3 minute timeout for ajax calls
 
+//A global instance of GMapInfoWindowManager that helps to open GMap info windows
+var mapInfoWindowManager = null;
 
 Ext.onReady(function() {
     var map;
@@ -1174,7 +1176,7 @@ Ext.onReady(function() {
                     }
                 } else if (serviceType == 'wcs') {
                 	//Lets open the generic wcs download handler
-                	showWCSDownload(record.get('serviceURLs')[0], record.get('typeName'), map.getBounds());
+                	showWCSDownload(record.get('serviceURLs')[0], record.get('typeName'));
                 }
             }
         }
@@ -1343,6 +1345,8 @@ Ext.onReady(function() {
         map.addControl(new GOverviewMapControl(Tsize));
 
         map.addControl(new DragZoomControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(345, 7)));
+        
+        mapInfoWindowManager = new GMapInfoWindowManager(map);
     }
 
     // Fix for IE/Firefox resize problem (See issue AUS-1364 and AUS-1565 for more info)
