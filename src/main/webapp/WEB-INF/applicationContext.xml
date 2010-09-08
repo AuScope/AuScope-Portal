@@ -26,6 +26,7 @@
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeBorehole" />
                 <ref bean="knownTypeGeodesy" />
+				<ref bean="knownTypeGeochron" />
             </list>
         </constructor-arg>
     </bean>
@@ -65,6 +66,14 @@
     <bean id="knownTypeGeodesy" class="org.auscope.portal.server.web.KnownFeatureTypeDefinition">
        <constructor-arg index="0" value="ngcp:GnssStation"/>
        <constructor-arg index="1" value="Geodesy"/>
+       <constructor-arg index="2" value=""/>
+       <constructor-arg index="3" value="/getAllFeatures.do"/>
+       <constructor-arg index="4" value="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png"/>
+   </bean>
+   
+   <bean id="knownTypeGeochron" class="org.auscope.portal.server.web.KnownFeatureTypeDefinition">
+       <constructor-arg index="0" value="Geochron:geochronology"/>
+       <constructor-arg index="1" value="Geochronology"/>
        <constructor-arg index="2" value=""/>
        <constructor-arg index="3" value="/getAllFeatures.do"/>
        <constructor-arg index="4" value="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png"/>
