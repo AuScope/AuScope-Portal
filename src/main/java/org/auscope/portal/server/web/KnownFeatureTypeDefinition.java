@@ -2,13 +2,14 @@ package org.auscope.portal.server.web;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.io.Serializable;
 
 /**
  * User: Mathew Wyatt
  * Date: 27/08/2009
  * Time: 11:08:17 AM
  */
-public class KnownFeatureTypeDefinition {
+public class KnownFeatureTypeDefinition implements Serializable {
     private String featureTypeName;
     private String displayName;
     private String description;

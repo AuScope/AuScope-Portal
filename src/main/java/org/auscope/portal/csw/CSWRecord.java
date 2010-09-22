@@ -30,7 +30,7 @@ public class CSWRecord {
     private String contactOrganisation;
     private String fileIdentifier;
     private String recordInfoUrl;
-    private CSWGeographicElement cswGeographicElement;
+    private CSWGeographicElement[] cswGeographicElements;
 
 
     private String dataIdentificationAbstract;
@@ -74,13 +74,17 @@ public class CSWRecord {
         }
         onlineResources = resources.toArray(new CSWOnlineResource[resources.size()]);
         
-        //Parse our bounding box (if it exists). If it's unparsable, don't worry and just continue
+        //Parse our bounding boxes (if they exist). If any are unparsable, don't worry and just continue
         String bboxExpression = "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox";
-        tempNode = (Node)xPath.evaluate(bboxExpression, node, XPathConstants.NODE);
-        if (tempNode != null) {
-            try {
-                cswGeographicElement = CSWGeographicBoundingBox.fromGeographicBoundingBoxNode(tempNode, xPath);
-            } catch (Exception ex) { }
+        tempNodeList = (NodeList)xPath.evaluate(bboxExpression, node, XPathConstants.NODESET);
+        if (tempNodeList != null) {
+        	List<CSWGeographicElement> elList = new ArrayList<CSWGeographicElement>();
+        	for (int i = 0; i < tempNodeList.getLength(); i++) {
+	            try {
+	            	elList.add(CSWGeographicBoundingBox.fromGeographicBoundingBoxNode(tempNode, xPath));
+	            } catch (Exception ex) { }
+        	}
+        	cswGeographicElements = elList.toArray(new CSWGeographicElement[elList.size()]);
         }
     }
 
@@ -116,29 +120,30 @@ public class CSWRecord {
      * Set the CSWGeographicElement that bounds this record
      * @param cswGeographicElement (can be null)
      */
-    public void setCSWGeographicElement(CSWGeographicElement cswGeographicElement) {
-        this.cswGeographicElement = cswGeographicElement;
+    public void setCSWGeographicElements(CSWGeographicElement[] cswGeographicElements) {
+        this.cswGeographicElements = cswGeographicElements;
     }
 
     /**
      * gets the  CSWGeographicElement that bounds this record (or null if it DNE)
      * @return
      */
-    public CSWGeographicElement getCSWGeographicElement() {
-        return cswGeographicElement;
-    }
-    
-    @Override
-    public String toString() {
-        return "CSWRecord [contactOrganisation=" + contactOrganisation
-                + ", cswGeographicElement=" + cswGeographicElement
-                + ", dataIdentificationAbstract=" + dataIdentificationAbstract
-                + ", fileIdentifier=" + fileIdentifier + ", onlineResources="
-                + Arrays.toString(onlineResources) + ", recordInfoUrl="
-                + recordInfoUrl + ", serviceName=" + serviceName + "]";
+    public CSWGeographicElement[] getCSWGeographicElements() {
+        return cswGeographicElements;
     }
 
-    /**
+    @Override
+	public String toString() {
+		return "CSWRecord [contactOrganisation=" + contactOrganisation
+				+ ", cswGeographicElements="
+				+ Arrays.toString(cswGeographicElements)
+				+ ", dataIdentificationAbstract=" + dataIdentificationAbstract
+				+ ", fileIdentifier=" + fileIdentifier + ", onlineResources="
+				+ Arrays.toString(onlineResources) + ", recordInfoUrl="
+				+ recordInfoUrl + ", serviceName=" + serviceName + "]";
+	}
+
+	/**
      * Returns a filtered list of online resource protocols that match at least one of the specified types
      * 
      * @param types The list of types you want to filter by
