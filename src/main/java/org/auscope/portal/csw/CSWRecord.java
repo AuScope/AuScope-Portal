@@ -81,8 +81,11 @@ public class CSWRecord {
         	List<CSWGeographicElement> elList = new ArrayList<CSWGeographicElement>();
         	for (int i = 0; i < tempNodeList.getLength(); i++) {
 	            try {
-	            	elList.add(CSWGeographicBoundingBox.fromGeographicBoundingBoxNode(tempNode, xPath));
-	            } catch (Exception ex) { }
+	            	Node geographyNode = tempNodeList.item(i);
+	            	elList.add(CSWGeographicBoundingBox.fromGeographicBoundingBoxNode(geographyNode, xPath));
+	            } catch (Exception ex) { 
+	            	logger.debug(String.format("Unable to parse CSWGeographicBoundingBox resource for serviceName='%1$s' %2$s",serviceName, ex));
+	            }
         	}
         	cswGeographicElements = elList.toArray(new CSWGeographicElement[elList.size()]);
         }
