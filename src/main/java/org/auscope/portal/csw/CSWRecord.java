@@ -31,11 +31,21 @@ public class CSWRecord {
     private String fileIdentifier;
     private String recordInfoUrl;
     private CSWGeographicElement[] cswGeographicElements;
-
-
     private String dataIdentificationAbstract;
 
 
+    public CSWRecord(String serviceName, String contactOrganisation, String fileIdentifier,
+			String recordInfoUrl, String dataIdentificationAbstract, 
+			CSWOnlineResource[] onlineResources, CSWGeographicElement[] cswGeographicsElements) {
+    	this.serviceName = serviceName;
+    	this.contactOrganisation = contactOrganisation;
+    	this.fileIdentifier = fileIdentifier;
+    	this.recordInfoUrl = recordInfoUrl;
+    	this.dataIdentificationAbstract = dataIdentificationAbstract;
+    	this.onlineResources = onlineResources;
+    	this.cswGeographicElements = cswGeographicsElements;
+    }
+    
     public CSWRecord(Node node) throws XPathExpressionException {
 
         XPath xPath = XPathFactory.newInstance().newXPath();
