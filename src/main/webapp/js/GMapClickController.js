@@ -1,7 +1,10 @@
 
 //Returns true if the click has originated from a generic parser layer
-var genericParserClickHandler = function (map, overlay, latlng, activeLayersStore) {
+var genericParserClickHandler = function (map, overlay, latlng, parentOnlineResource) {
 	if (overlay == null || !overlay.description)
+		return false;
+	
+	if (!parentOnlineResource)
 		return false;
 	
 	//The generic parser stamps the description with a specific string followed by the gml:id of the node
@@ -10,20 +13,16 @@ var genericParserClickHandler = function (map, overlay, latlng, activeLayersStor
 	if (overlay.description.indexOf(genericParserString) == 0) {
 		
 		//Lets extract the ID and then lookup the parent record
+		//Assumption - We are only interested in the first WFS record
 		var gmlID = overlay.description.substring(genericParserString.length);
-		var parentRecord = null;
-		for (var i = 0; i < activeLayersStore.getCount(); i++) {
-			var recordToCheck = activeLayersStore.getAt(i);
-			if (recordToCheck == overlay.parentRecord) {
-				parentRecord = recordToCheck;
-				break;
-			} 
-		}
+		var cswRecords = parentActiveLayerRecord.getCSWRecords();
+		var wfsUrl = parentOnlineResource.url;
+		var wfsTypeName = parentOnlineResource.name;
 		
 		//Parse the parameters to our iframe popup and get that to request the raw gml
 		var html = '<iframe src="genericparser.html';
-		html += '?serviceUrl=' + overlay.wfsUrl;
-		html += '&typeName=' + parentRecord.get('typeName');
+		html += '?serviceUrl=' + wfsUrl;
+		html += '&typeName=' + wfsTypeName;
 		html += '&featureId=' + gmlID;
 		html += '" width="600" height="350"/>';
 		
@@ -63,67 +62,112 @@ var genericParserClickHandler = function (map, overlay, latlng, activeLayersStor
  * @version $Id$
  */
 var gMapClickController = function(map, overlay, latlng, activeLayersStore) {
+	//An instance of ActiveLayersRecord
+	var parentActiveLayerRecord = null;
+	if (overlay && overlay.activeLayerRecord) {
+		parentActiveLayerRecord = new ActiveLayersRecord(overlay.activeLayerRecord);
+	}
+	
+	//an instance of CSWRecord
+	var parentCSWRecord = null;
+	if (overlay && overlay.cswRecord) {
+		parentCSWRecord = new CSWRecord(overlay.cswRecord);
+	}
+	
+	//an object as returned from CSWRecord.getOnlineResources()
+	var parentOnlineResource = null;
+	if (overlay) {
+		parentOnlineResource = overlay.onlineResource;
+	};
 	
 	//Try to handle a generic parser layer click
-	if (genericParserClickHandler(map,overlay,latlng,activeLayersStore))
+	if (genericParserClickHandler(map,overlay,latlng,parentOnlineResource)) {
 		return;
+	}
 	
-	//Try to see if its a WCS layer
-	if (overlay && overlay.parentRecord && overlay.parentRecord.get('serviceType') == 'wcs') {
-		var infoWindow = new GenericWCSInfoWindow(map, overlay, overlay.wcsUrl, overlay.layerName, overlay.parentRecord.get('openDapURLs'), overlay.parentRecord.get('wmsURLs'));
-		infoWindow.showInfoWindow();
-	//Otherwise it could be a WFS marker
-	} if (overlay instanceof GMarker) {
-        if (overlay.typeName == "gsml:Borehole") {
-            new NvclInfoWindow(map,overlay).show();
-        }
-        else if (overlay.typeName == "ngcp:GnssStation") {
-            new GeodesyMarker(overlay.wfsUrl, "geodesy:station_observations", overlay.title, overlay, overlay.description).getMarkerClickedFn()();
-        }
-        else if (overlay.description != null) {
-            overlay.openInfoWindowHtml(overlay.description, {maxWidth:800, maxHeight:600, autoScroll:true});
-        }
-    //Otherwise it could be a WFS polygon
-    } else if (overlay instanceof GPolygon) {
-    	if (overlay.description != null) {
-    		map.openInfoWindowHtml(overlay.getVertex(0),overlay.description);
-    	}
-    //Otherwise we test each of our WMS layers to see a click will affect them
-    } else {
-    	//If the user clicks on an info window, we will still get click events, lets ignore these
+	//If a polygon or marker has been clicked, we will have a direct link to the parentActiveLayerRecord
+	if (parentActiveLayerRecord) {
+		//Handle for WFS services (if any)
+		var cswRecords = parentActiveLayerRecord.getCSWRecordsWithType('WFS');
+	    if (cswRecords.length != 0) {
+	    	
+	    	var wfsTypeName = parentOnlineResource.name;
+	    	var wfsUrl = parentOnlineResource.url;
+	    	
+	    	
+	    	if (overlay instanceof GMarker) {
+	            if (wfsTypeName === "gsml:Borehole") {
+	                new NvclInfoWindow(map,overlay, wfsUrl).show();
+	            }
+	            else if (wfsTypeName == "ngcp:GnssStation") {
+	                new GeodesyMarker(wfsUrl, "geodesy:station_observations", overlay.title, overlay, overlay.description).getMarkerClickedFn()();
+	            }
+	            else if (overlay.description != null) {
+	                overlay.openInfoWindowHtml(overlay.description, {maxWidth:800, maxHeight:600, autoScroll:true});
+	            }
+	        //Otherwise it could be a WFS polygon
+	        } else if (overlay instanceof GPolygon) {
+	        	if (overlay.description != null) {
+	        		map.openInfoWindowHtml(overlay.getVertex(0),overlay.description);
+	        	}
+	        }
+	    	return;
+	    }
+	    
+	    //otherwise Handle for WCS services (if any)
+	    cswRecords = parentActiveLayerRecord.getCSWRecordsWithType('WCS');
+	    if (cswRecords.length != 0) {
+	    	var infoWindow = new GenericWCSInfoWindow(map, overlay, parentOnlineResource.url, parentOnlineResource.name, parentCSWRecord);
+			infoWindow.showInfoWindow();
+			return;
+	    }
+	//Otherwise we test each of our WMS layers to see if a click will affect them
+	} else {
+		//If the user clicks on an info window, we will still get click events, lets ignore these
     	if (latlng == null || latlng == undefined)
     		return;
 
+    	//We will need to iterate over every WMS to see if they indicate a click event
         for (var i = 0; i < activeLayersStore.getCount(); i++) {
-            var record = activeLayersPanel.getStore().getAt(i);
-            if (record.get('serviceType') == 'wms' && record.get('layerVisible')) {
-            	           	               
-                map.getDragObject().setDraggableCursor("pointer");
-                
-                var TileUtl = new Tile(map,latlng);
-
-                var url = "wmsMarkerPopup.do";
-                url += "?WMS_URL=" + record.get('serviceURLs');
-                url += "&lat=" + latlng.lat();
-                url += "&lng=" + latlng.lng();
-                url += "&QUERY_LAYERS=" + record.get('typeName');
-                url += "&x=" + TileUtl.getTilePoint().x; 
-                url += "&y=" + TileUtl.getTilePoint().y;
-                url += '&BBOX=' + TileUtl.getTileCoordinates();
-                url += '&WIDTH=' + TileUtl.getTileWidth();
-                url += '&HEIGHT=' + TileUtl.getTileHeight();
-                
-                var typeName = record.get('typeName');
-                
-                if(typeName.substring(0, typeName.indexOf(":")) == "gt") {
-                	handleGeotransectWmsRecord(url, record, map, latlng);
-                } else {    
-                	handleGenericWmsRecord(url, i, map, latlng);
-            	}
-                
-            }
+	    	var alr = new ActiveLayersRecord(activeLayersPanel.getStore().getAt(i));
+	        
+	        if (!alr.getLayerVisible()) {
+	        	continue;
+	        }
+	        
+	        //each linked WMS record must be tested
+	        var wmsCSWRecords = alr.getCSWRecordsWithType('WMS');
+	        for (var j = 0; j < wmsCSWRecords.length; j++) {
+	        	var wmsOnlineResources = wmsCSWRecords[j].getFilteredOnlineResources('WMS');
+	        	
+	        	for (var k = 0; k < wmsOnlineResources.length; k++) {
+	            	map.getDragObject().setDraggableCursor("pointer");
+	                
+	                var TileUtl = new Tile(map,latlng);
+	
+	                var typeName = wmsOnlineResources[k].name;
+	                var serviceUrl = wmsOnlineResources[k].url
+	                
+	                var url = "wmsMarkerPopup.do";
+	                url += "?WMS_URL=" + serviceUrl;
+	                url += "&lat=" + latlng.lat();
+	                url += "&lng=" + latlng.lng();
+	                url += "&QUERY_LAYERS=" + typeName;
+	                url += "&x=" + TileUtl.getTilePoint().x; 
+	                url += "&y=" + TileUtl.getTilePoint().y;
+	                url += '&BBOX=' + TileUtl.getTileCoordinates();
+	                url += '&WIDTH=' + TileUtl.getTileWidth();
+	                url += '&HEIGHT=' + TileUtl.getTileHeight();
+	                
+	                if(typeName.substring(0, typeName.indexOf(":")) == "gt") {
+	                	handleGeotransectWmsRecord(url, alr, map, latlng);
+	                } else {    
+	                	handleGenericWmsRecord(url, i, map, latlng);
+	            	}
+	        	}
+	        }
         }
-    }
+	}
 };
 
 /**

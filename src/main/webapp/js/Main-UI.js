@@ -10,508 +10,261 @@ Ext.onReady(function() {
     var map;
     var formFactory = new FormFactory();
     var searchBarThreshold = 6; //how many records do we need to have before we show a search bar
-
-    //Converts an array of BBox records into an actual BBox object array
-    var convertBboxList = function(v, record) {
-        for (var i = 0; i < v.length; i++) {
-            v[i] = new BBox(v[i].northBoundLatitude,
-            		v[i].southBoundLatitude,
-            		v[i].eastBoundLongitude,
-            		v[i].westBoundLongitude);
-        }
+    
+    //Generate our data stores
+    var cswRecordStore = new CSWRecordStore('getCSWRecords.do');
+    var knownFeatureTypeStore = new KnownFeatureTypeStore('getKnownFeatureTypes.do');
+    var customLayersStore = new CSWRecordStore('getCustomLayers.do');
+    var activeLayersStore = new ActiveLayersStore();
+    
+    //Called whenever any of the KnownFeatureType panels click 'Add to Map'
+    var kftPanelAddHandler = function(knownFeatureType) {
+        var activeLayerRec = activeLayersStore.getByKnownFeatureType(knownFeatureType);
+        
+        //Only add if the record isn't already there
+        if (!activeLayerRec) {
+            //add to active layers (At the top of the Z-order)
+        	activeLayerRec = activeLayersStore.addKnownFeatureType(knownFeatureType, cswRecordStore);
             
-        return v;
+            //invoke this layer as being checked
+            activeLayerCheckHandler(activeLayerRec, true);
+        }
+        
+        //set this record to selected
+        activeLayersPanel.getSelectionModel().selectRecords([activeLayerRec.internalRecord], false);
     };
     
-    //-----------Complex Features Panel Configurations
-    var complexFeaturesStore = new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy(new Ext.data.Connection({url: 'getComplexFeatures.do', timeout:180000})),
-        reader: new Ext.data.ArrayReader({}, [
-            {   name: 'title'           },
-            {   name: 'description'     },
-            {   name: 'contactOrgs'     },
-            {   name: 'proxyURL'        },
-            {   name: 'serviceType'     },
-            {   name: 'id'              },
-            {   name: 'typeName'        },
-            {   name: 'serviceURLs'     },
-            {   name: 'layerVisible'    },
-            {   name: 'loadingStatus'   },
-            {   name: 'iconImgSrc'      },
-            {   name: 'iconUrl'         },
-            {   name: 'dataSourceImage' },
-            {   name: 'bboxes', convert : convertBboxList},
-            {	name: 'iconAnchor'		},
-            {	name: 'infoWindowAnchor'},
-            {   name: 'iconSize'        }
-        ]),
-        sortInfo: {field:'title', direction:'ASC'}
-    });
+    //Called whenever any of the CSWPanels click 'Add to Map'
+    var cswPanelAddHandler = function(cswRecord) {
+        var activeLayerRec = activeLayersStore.getByCSWRecord(cswRecord);
+        
+        //Only add if the record isn't already there
+        if (!activeLayerRec) {
+            //add to active layers (At the top of the Z-order)
+        	activeLayerRec = activeLayersStore.addCSWRecord(cswRecord);
+            
+            //invoke this layer as being checked
+            activeLayerCheckHandler(activeLayerRec, true);
+        }
 
-    var complexFeaturesRowExpander = new Ext.grid.RowExpander({
-        tpl : new Ext.Template('<p>{description} </p><br>')
-    });
-    
-    //Checks if the given bounding box is meaningful
-    //That is it will represent a bounding box that is useful for the end user to visualize
-    var isBBoxListMeaningful = function(bboxList) {
-    	if (!bboxList)
-    		return false;
-    	
-    	if (bboxList.length == 0) {
-    		return false;
-    	}
-    	
-    	
-    	var meaningful = false;
-    	for (var i = 0; i < bboxList.length && !meaningful; i++) {
-    		bbox = bboxList[i];
-    		
-    		//A bbox that covers the entire planet is not useful
-    		meaningful =!bbox.isGlobal();
-    	}
-    	
-    	return meaningful;
+        //set this record to selected
+        activeLayersPanel.getSelectionModel().selectRecords([activeLayerRec.internalRecord], false);
     };
     
-    //Returns true if the current records intersects the GMap viewport (based on its bounding box)
-    //False otherwise
-    var visibleRecordsFilter = function(record) {
-    	var bboxList = record.get('bboxes');
-		if (!isBBoxListMeaningful(bboxList)) {
-			return false;
+    //Returns true if the CSWRecord record intersects the GMap viewport (based on its bounding box)  
+    var visibleCSWRecordFilter = function(record) {
+    	var cswRecord = new CSWRecord(record);
+    	var geoEls = cswRecord.getGeographicElements();
+    	var visibleBounds = map.getBounds();
+		
+		//Iterate every 'bbox' geographic element type looking for an intersection
+		//(They will be instances of the BBox class)
+		for (var j = 0; j < geoEls.length; j++) {
+			var bbox = geoEls[j];
+			
+			var sw = new GLatLng(bbox.southBoundLatitude, bbox.westBoundLongitude);
+	    	var ne = new GLatLng(bbox.northBoundLatitude, bbox.eastBoundLongitude);
+	    	var bboxBounds = new GLatLngBounds(sw,ne);
+	    	
+	    	if (visibleBounds.intersects(bboxBounds)) {
+	    		return true;
+	    	}
+		}
+    };
+    
+    //Returns true if the current records (from the knownFeatureTypeStore) 
+    //intersects the GMap viewport (based on its bounding box)
+    //false otherwise
+    var visibleKnownFeaturesFilter = function(record) {
+    	var kft = new KnownFeatureType(record);
+    	var linkedCSWRecords = kft.getLinkedCSWRecords(cswRecordStore);
+    	var visibleBounds = map.getBounds();
+    	
+    	//iterate over every CSWRecord that makes up this layer, look for
+    	//one whose reported bounds intersects the view port
+		for (var i = 0; i < linkedCSWRecords.length; i++) {
+			if (visibleCSWRecordFilter(linkedCSWRecords[i].internalRecord)) {
+				return true;
+			}
 		}
 		
-		var bbox = bboxList[0];
+		return false;
+    };
+    
+    //Given a CSWRecord, show (on the map) the list of bboxes associated with that record temporarily
+    //bboxOverlayManager - if specified, will be used to store the overlays, otherwise the cswRecord's 
+    //                      bboxOverlayManager will be used
+    var showBoundsCSWRecord = function(cswRecord, bboxOverlayManager) {
+    	var geoEls = cswRecord.getGeographicElements();
     	
+    	if (!bboxOverlayManager) {
+	    	bboxOverlayManager = cswRecord.getBboxOverlayManager();
+	    	if (bboxOverlayManager) {
+	    		bboxOverlayManager.clearOverlays();
+	    	} else {
+	    		bboxOverlayManager = new OverlayManager(map);
+	    		cswRecord.setBboxOverlayManager(bboxOverlayManager);
+	    	}
+    	}
+    	
+    	//Iterate our geographic els to get our list of bboxes
+    	for (var i = 0; i < geoEls.length; i++) {
+    		var geoEl = geoEls[i];
+    		if (geoEl instanceof BBox) {
+    			var polygonList = geoEl.toGMapPolygon('00FF00', 0, 0.7,'#00FF00', 0.6);
+        	    
+        	    for (var j = 0; j < polygonList.length; j++) {
+        	    	polygonList[j].title = 'bbox';
+        	    	bboxOverlayManager.addOverlay(polygonList[j]);
+        	    }
+    		}
+    	}
+    	
+    	//Make the bbox disappear after a short while 
+    	var clearTask = new Ext.util.DelayedTask(function(){
+    		bboxOverlayManager.clearOverlays();
+    	});
+
+    	clearTask.delay(2000); 
+    };
+    
+    //Pans/Zooms the map so the specified BBox object is visible
+    var moveMapToBounds = function(bbox) {
     	var sw = new GLatLng(bbox.southBoundLatitude, bbox.westBoundLongitude);
     	var ne = new GLatLng(bbox.northBoundLatitude, bbox.eastBoundLongitude);
     	var layerBounds = new GLatLngBounds(sw,ne);
     	
+    	//Adjust zoom if required
     	var visibleBounds = map.getBounds();
-    	return visibleBounds.intersects(layerBounds);
+    	map.setZoom(map.getBoundsZoomLevel(layerBounds));
+    	
+    	//Pan to position
+    	var layerCenter = layerBounds.getCenter();
+    	map.panTo(layerCenter);
     };
-
-    var complexFeaturesPanel = new Ext.grid.GridPanel({
-        stripeRows       : true,
-        autoExpandColumn : 'title',
-        plugins          : [ complexFeaturesRowExpander ],
-        viewConfig       : {scrollOffset: 0, forceFit:true},
-        title            : 'Featured Layers',
-        region           :'north',
-        split            : true,
-        height           : 160,
-        //width: 80,
-        autoScroll       : true,
-        store            : complexFeaturesStore,
-        columns: [
-            complexFeaturesRowExpander,
-            {
-                id:'title',
-                header: "Title",
-                width: 80,
-                sortable: true,
-                dataIndex: 'title'
-            },{
-            	id:'search',
-            	header: '',
-            	width: 45,
-            	dataIndex: 'bboxes',
-            	resizable: false,
-            	menuDisabled: true,
-            	sortable: false,
-            	fixed: true,
-            	renderer: function (value) {
-            		//Only show the icon if we have a meaningful bounding box 
-            		if (isBBoxListMeaningful(value))
-            			return '<img src="img/magglass.gif"/>';
-            		else
-            			return '';
-            	}
-            }
-        ],
-        bbar: [{
-            text:'Add Layer to Map',
-            tooltip:'Add Layer to Map',
-            iconCls:'add',
-            pressed: true,
-            handler: function() {
-                var recordToAdd = complexFeaturesPanel.getSelectionModel().getSelected();
-
-                //Only add if the record isn't already there
-                if (activeLayersStore.findExact("id",recordToAdd.get("id")) < 0) {
-                    //add to active layers (At the top of the Z-order)
-                    activeLayersStore.insert(0, [recordToAdd]);
-                    
-                    //invoke this layer as being checked
-                    activeLayerCheckHandler(complexFeaturesPanel.getSelectionModel().getSelected(), true);
-                }
-                
-                
-                //set this record to selected
-                activeLayersPanel.getSelectionModel().selectRecords([recordToAdd], false);
-            }
-        }],
+    
+    //Pans the map so that all bboxes linked to this record are visible.
+    //If currentBounds is specified
+    var moveToBoundsCSWRecord = function(cswRecord) {
+    	var bboxExtent = cswRecord.generateGeographicExtent();
+    	
+    	if (!bboxExtent) {
+    		return;
+    	}
+    	
+    	moveMapToBounds(bboxExtent);
+    };
+    
+    //Given a KnownFeatureType, show (on the map) the list of bboxes associated with that layer temporarily
+    var showBoundsKnownFeatureType = function(knownFeatureType) {
+    	var bboxOverlayManager = knownFeatureType.getBboxOverlayManager();
+    	if (bboxOverlayManager) {
+    		bboxOverlayManager.clearOverlays();
+    	} else {
+    		bboxOverlayManager = new OverlayManager(map);
+    		knownFeatureType.setBboxOverlayManager(bboxOverlayManager);
+    	}
+    	
+    	var linkedRecords = knownFeatureType.getLinkedCSWRecords(cswRecordStore);
+    	for (var i = 0; i < linkedRecords.length; i++) {
+    		showBoundsCSWRecord(linkedRecords[i], bboxOverlayManager);
+    	}
+    };
+    
+    var moveToBoundsKnownFeatureType = function(knownFeatureType) {
+    	var linkedRecords = knownFeatureType.getLinkedCSWRecords(cswRecordStore);
+    	var superBbox = null;
+    	for (var i = 0; i < linkedRecords.length; i++) {
+    		var bboxToCombine =  linkedRecords[i].generateGeographicExtent();
+    		if (bboxToCombine != null) {
+	    		if (superBbox == null) {
+	    			superBbox = bboxToCombine;
+	    		} else {
+	    			superBbox = superBbox.combine(bboxToCombine);
+	    		}
+    		}
+    	}
+    	
+    	moveMapToBounds(superBbox);
+    };
+    
+    //-----------Known Features Panel Configurations (Groupings of various CSWRecords)
+    var knownFeaturesPanel = new KnownFeatureTypeGridPanel('kft-layers-panel', 
+												    		'Featured Layers', 
+												    		knownFeatureTypeStore, 
+												    		kftPanelAddHandler, 
+												    		visibleKnownFeaturesFilter, 
+												    		showBoundsKnownFeatureType, 
+												    		moveToBoundsKnownFeatureType);
         
-        tbar: [
-               'Search: ', ' ',
-               new Ext.ux.form.ClientSearchField({
-                   store: complexFeaturesStore,
-                   width:200,
-                   id:'search-complex',
-                   fieldName:'title'
-               }), {
-              	   	xtype:'button',
-               	   	text:'Visible',
-               	   	handler:function() {
-               	   		var searchPanel = Ext.getCmp('search-complex');
-               	   		searchPanel.runCustomFilter('<visible layers>', visibleRecordsFilter);
-                  		}
-               }
-           ]
-    });
+    //----------- Map Layers Panel Configurations (Drawn from CSWRecords that aren't a KnownFeatureType and are primarily a WMS)
+    var wmsLayersFilter = function(cswRecord) {
+    	//doesnt show WFS's
+    	var onlineResources = cswRecord.getFilteredOnlineResources('WFS');
+    	if (onlineResources.length > 0) {
+    		return false;
+    	}
+    	
+    	//doesn't show WCS's
+    	onlineResources = cswRecord.getFilteredOnlineResources('WCS');
+    	if (onlineResources.length > 0) {
+    		return false;
+    	}
+    	
+    	//If we don't have a WMS, dont include it
+    	onlineResources = cswRecord.getFilteredOnlineResources('WMS');
+    	if (onlineResources.length == 0) {
+    		return false;
+    	}
+    	
+    	//ensure its not referenced via KnownFeatureType
+    	var knownFeatureTypes = cswRecord.getLinkedKnownFeatureTypes(knownFeatureTypeStore);
+    	return knownFeatureTypes.length == 0;
+    };
+    var wmsLayersPanel = new CSWRecordGridPanel('wms-layers-panel', 
+									    		'Map Layers', 
+									    		cswRecordStore, 
+									    		cswPanelAddHandler, 
+									    		wmsLayersFilter, 
+									    		visibleCSWRecordFilter,
+									    		showBoundsCSWRecord, 
+									    		moveToBoundsCSWRecord);
         
-
-    //----------- WMS Layers Panel Configurations
-
-    var wmsLayersStore = new Ext.data.GroupingStore({
-        proxy: new Ext.data.HttpProxy({url: 'getWMSLayers.do'}),
-        reader: new Ext.data.ArrayReader({}, [
-            {   name: 'title'           },
-            {   name: 'description'     },
-            {   name: 'contactOrg'      },
-            {   name: 'proxyURL'        },
-            {   name: 'serviceType'     },
-            {   name: 'id'              },
-            {   name: 'typeName'        },
-            {   name: 'serviceURLs'     },
-            {   name: 'layerVisible'    },
-            {   name: 'loadingStatus'   },
-            {   name: 'dataSourceImage' },
-            {   name: 'opacity'         },
-            {   name: 'bboxes', convert : convertBboxList}
-        ]),
-        groupField:'contactOrg',
-        sortInfo: {field:'title', direction:'ASC'}
-    });
-
-    var wmsLayersRowExpander = new Ext.grid.RowExpander({
-        tpl : new Ext.Template('<p>{description}</p><br>')
-    });
-
-    var wmsLayersPanel = new Ext.grid.GridPanel({
-        stripeRows       : true,
-        autoExpandColumn : 'title',
-        plugins          : [ wmsLayersRowExpander ],
-        viewConfig       : {scrollOffset: 0, forceFit:true},
-        title            : 'Map Layers',
-        region           :'north',
-        split            : true,
-        height           : 160,
-        autoScroll       : true,
-        store            : wmsLayersStore,
-        columns: [
-            wmsLayersRowExpander,
-            {
-                id:'title',
-                header: "Title",
-                sortable: true,
-                dataIndex: 'title'
-            }, {
-            	id:'search',
-            	header: '',
-            	width: 45,
-            	dataIndex: 'bboxes',
-            	resizable: false,
-            	menuDisabled: true,
-            	sortable: false,
-            	fixed: true,
-            	renderer: function (value) {
-            		//Only show the icon if we have a meaningful bounding box 
-            		if (isBBoxListMeaningful(value))
-            			return '<img src="img/magglass.gif"/>';
-            		else
-            			return '';
-            	}
-            },{
-                id:'contactOrg',
-                header: "Provider",
-                width: 160,
-                sortable: true,
-                dataIndex: 'contactOrg',
-                hidden:true
-            }
-        ],
-        bbar: [{
-            text:'Add Layer to Map',
-            tooltip:'Add Layer to Map',
-            iconCls:'add',
-            pressed:true,
-            handler: function() {
-                var recordToAdd = wmsLayersPanel.getSelectionModel().getSelected();
-
-                //Only add if the record isn't already there
-                if (activeLayersStore.findExact("id",recordToAdd.get("id")) < 0) {                
-                    //add to active layers (At the top of the Z-order)
-                    activeLayersStore.insert(0, [recordToAdd]);
-                    
-                    //invoke this layer as being checked
-                    activeLayerCheckHandler(wmsLayersPanel.getSelectionModel().getSelected(), true);
-                }
-
-                //set this record to selected
-                activeLayersPanel.getSelectionModel().selectRecords([recordToAdd], false);
-            }
-        }],
-        
-        view: new Ext.grid.GroupingView({
-            forceFit:true,
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-        }),
-        tbar: [
-               'Search: ', ' ',
-               new Ext.ux.form.ClientSearchField({
-                   store: wmsLayersStore,
-                   width:200,
-                   id:'search-wms-panel',
-                   fieldName:'title'
-               }), {
-            	   	xtype:'button',
-            	   	text:'Visible',
-            	   	handler:function() {
-            	   		var searchPanel = Ext.getCmp('search-wms-panel');
-            	   		searchPanel.runCustomFilter('<visible layers>', visibleRecordsFilter);
-               		}
-               }
-           ]
-
-    });
-
-  //----------- WCS Layers Panel Configurations
-
-    var wcsLayersStore = new Ext.data.GroupingStore({
-        proxy: new Ext.data.HttpProxy({url: 'getWCSLayers.do'}),
-        reader: new Ext.data.ArrayReader({}, [
-            {   name: 'title'           },
-            {   name: 'description'     },
-            {   name: 'contactOrg'      },
-            {   name: 'proxyURL'        },
-            {   name: 'serviceType'     },
-            {   name: 'id'              },
-            {   name: 'typeName'        },
-            {   name: 'serviceURLs'     },
-            {   name: 'openDapURLs'     },
-            {   name: 'wmsURLs'     	},
-            {   name: 'opacity'         },
-            {   name: 'layerVisible'    },
-            {   name: 'loadingStatus'   },
-            {   name: 'dataSourceImage' },
-            {   name: 'bboxes', convert : convertBboxList}
-        ]),
-        groupField:'contactOrg',
-        sortInfo: {field:'title', direction:'ASC'}
-    });
-
-    var wcsLayersRowExpander = new Ext.grid.RowExpander({
-        tpl : new Ext.Template('<p>{description}</p><br>')
-    });
-
-    var wcsLayersPanel = new Ext.grid.GridPanel({
-        stripeRows       : true,
-        autoExpandColumn : 'title',
-        plugins          : [ wcsLayersRowExpander ],
-        viewConfig       : {scrollOffset: 0, forceFit:true},
-        title            : 'Coverage Layers',
-        region           :'north',
-        split            : true,
-        height           : 160,
-        autoScroll       : true,
-        store            : wcsLayersStore,
-        columns: [
-            wcsLayersRowExpander,
-            {
-                id:'title',
-                header: "Title",
-                sortable: true,
-                dataIndex: 'title'
-            }, {
-            	id:'search',
-            	header: '',
-            	width: 45,
-            	dataIndex: 'bboxes',
-            	resizable: false,
-            	menuDisabled: true,
-            	sortable: false,
-            	fixed: true,
-            	renderer: function (value) {
-            		//Only show the icon if we have a meaningful bounding box 
-            		if (isBBoxListMeaningful(value))
-            			return '<img src="img/magglass.gif"/>';
-            		else
-            			return '';
-            	}
-            },{
-                id:'contactOrg',
-                header: "Provider",
-                width: 160,
-                sortable: true,
-                dataIndex: 'contactOrg',
-                hidden:true
-            }
-        ],
-        bbar: [{
-            text:'Add Layer to Map',
-            tooltip:'Add Layer to Map',
-            iconCls:'add',
-            pressed:true,
-            handler: function() {
-                var recordToAdd = wcsLayersPanel.getSelectionModel().getSelected();
-
-                //Only add if the record isn't already there
-                if (activeLayersStore.findExact("id",recordToAdd.get("id")) < 0) {                
-                    //add to active layers (At the top of the Z-order)
-                    activeLayersStore.insert(0, [recordToAdd]);
-                    
-                    //invoke this layer as being checked
-                    activeLayerCheckHandler(wcsLayersPanel.getSelectionModel().getSelected(), true);
-                }
-
-                //set this record to selected
-                activeLayersPanel.getSelectionModel().selectRecords([recordToAdd], false);
-            }
-        }],
-        
-        view: new Ext.grid.GroupingView({
-            forceFit:true,
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-        }),
-        tbar: [
-               'Search: ', ' ',
-               new Ext.ux.form.ClientSearchField({
-                   store: wcsLayersStore,
-                   width:200,
-                   id:'search-wcs-panel',
-                   fieldName:'title'
-               }), {
-            	   	xtype:'button',
-            	   	text:'Visible',
-            	   	handler:function() {
-            	   		var searchPanel = Ext.getCmp('search-wcs-panel');
-            	   		searchPanel.runCustomFilter('<visible layers>', visibleRecordsFilter);
-               		}
-               }
-           ]
-
-    });
+    
+    //----------- Coverage Layers Panel Configurations (Drawn from CSWRecords that aren't a KnownFeatureType and are primarily a WCS)
+    var wcsLayersFilter = function(cswRecord) {
+    	//doesnt show WFS's
+    	var onlineResources = cswRecord.getFilteredOnlineResources('WFS');
+    	if (onlineResources.length > 0) {
+    		return false;
+    	}    	
+    	
+    	//must include show WCS's
+    	onlineResources = cswRecord.getFilteredOnlineResources('WCS');
+    	if (onlineResources.length == 0) {
+    		return false;
+    	}
+    	
+    	//ensure its not referenced via KnownFeatureType
+    	var knownFeatureTypes = cswRecord.getLinkedKnownFeatureTypes(knownFeatureTypeStore);
+    	return knownFeatureTypes.length == 0;
+    };
+    var wcsLayersPanel = new CSWRecordGridPanel('wcs-layers-panel', 
+									    		'Coverage Layers',  
+									    		cswRecordStore, 
+									    		cswPanelAddHandler, 
+									    		wcsLayersFilter,
+									    		visibleCSWRecordFilter,
+									    		showBoundsCSWRecord, 
+									    		moveToBoundsCSWRecord);
     
     //------ Custom Layers
-
-    var customLayersStore = new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy({url: '/getCustomLayers.do'}),
-        //baseParams : {service_URL : 'fullName' }, // one parameter, column, which is set to ‘fullNname’
-        baseParams : { service_URL : '' },
-        reader: new Ext.data.ArrayReader({}, [
-            {   name: 'title'           },
-            {   name: 'description'     },
-            {   name: 'contactOrg'      },
-            {   name: 'proxyURL'        },
-            {   name: 'serviceType'     },
-            {   name: 'id'              },
-            {   name: 'typeName'        },
-            {   name: 'serviceURLs'     },
-            {   name: 'layerVisible'    },
-            {   name: 'loadingStatus'   },
-            {   name: 'dataSourceImage' },
-            {   name: 'opacity'         },
-            {   name: 'bboxes' 			}
-        ]),
-        groupField:'contactOrg',
-        sortInfo: {field:'title', direction:'ASC'}
-    });
-
-    var customLayersRowExpander = new Ext.grid.RowExpander({
-        tpl : new Ext.Template('<p>{description}</p><br>')
-    });
-    
-    //----------- Search Panel
-    var customLayersPanel = new Ext.grid.GridPanel({
-        stripeRows       : true,
-        autoExpandColumn : 'title',
-        plugins          : [ customLayersRowExpander ],
-        viewConfig       : {scrollOffset: 0, forceFit:true},
-        title            : 'Custom Layers',
-        region           :'north',
-        split            : true,
-        height           : 160,
-        //width: 80,
-        autoScroll       : true,
-        store            : customLayersStore,
-        loadMask         : true,
-        columns: [
-            customLayersRowExpander,
-            {
-                id:'title',
-                header: "Title",
-                sortable: true,
-                dataIndex: 'title'
-            },{
-                id:'contactOrg',
-                header: "Provider",
-                width: 160,
-                sortable: true,
-                dataIndex: 'contactOrg',
-                hidden:true
-            }, {
-            	id:'search',
-            	header: '',
-            	width: 45,
-            	dataIndex: 'bboxes',
-            	resizable: false,
-            	menuDisabled: true,
-            	sortable: false,
-            	fixed: true,
-            	renderer: function (value) {
-            		//Only show the icon if we have a meaningful bounding box 
-            		if (isBBoxListMeaningful(value))
-            			return '<img src="img/magglass.gif"/>';
-            		else
-            			return '';
-            	}
-            }
-        ],
-        tbar: [
-            '<span style="color:#15428B; font-weight:bold">Enter WMS Url: </span>',
-            ' ',
-            new Ext.ux.form.SearchTwinTriggerField({
-                store: customLayersStore,
-                width:260,
-                name : 'STTField',
-                emptyText : 'http://'
-            })
-        ],
-        bbar: [{
-            text:'Add Layer to Map',
-            tooltip:'Add Layer to Map',
-            iconCls:'add',
-            pressed: true,
-            region :'south',
-            handler: function() {
-                var recordToAdd = customLayersPanel.getSelectionModel().getSelected();
-
-                //Only add if the record isn't already there
-                if (activeLayersStore.findExact("id",recordToAdd.get("id")) < 0) {
-                    //add to active layers (At the top of the Z-order)
-                    activeLayersStore.insert(0, [recordToAdd]);
-                    
-                    //invoke this layer as being checked
-                    activeLayerCheckHandler(customLayersPanel.getSelectionModel().getSelected(), true);
-                }
-
-                //set this record to selected
-                activeLayersPanel.getSelectionModel().selectRecords([recordToAdd], false);
-            }
-        }]
-    });
+    var customLayersPanel = new CustomLayersGridPanel('custom-layers-panel', 
+										    		'Custom Layers', 
+										    		customLayersStore, 
+										    		cswPanelAddHandler, 
+										    		showBoundsCSWRecord, 
+										    		moveToBoundsCSWRecord);
     
     //Returns an object
     //{
@@ -548,8 +301,8 @@ Ext.onReady(function() {
         tooltip  :'Apply Filter',
         disabled : true,
         handler  : function() {
-            var selectedRecord = activeLayersPanel.getSelectionModel().getSelected();
-            wfsHandler(selectedRecord);
+            var activeLayerRecord = new ActiveLayersRecord(activeLayersPanel.getSelectionModel().getSelected());
+            wfsHandler(activeLayerRecord);
         }
     });
 
@@ -575,23 +328,6 @@ Ext.onReady(function() {
         bbar: ['->', filterButton]
     });
 
-    var activeLayersStore = new Ext.data.Store({
-        reader: new Ext.data.ArrayReader({}, [
-            {   name:'title'            },
-            {   name:'description'      },
-            {   name:'proxyURL'         },
-            {   name: 'serviceType'     },
-            {   name: 'id'              },
-            {   name: 'typeName'        },
-            {   name: 'serviceURLs'     },
-            {   name: 'layerVisible'    },
-            {   name: 'loadingStatus'   },
-            {   name: 'iconImgSrc'      },
-            {   name: 'iconUrl'         },
-            {   name: 'dataSourceImage' }
-        ])
-    });
-
     /**
      *Iterates through the activeLayersStore and updates each WMS layer's Z-Order to is position within the store
      *
@@ -600,19 +336,13 @@ Ext.onReady(function() {
     var updateActiveLayerZOrder = function() {
         //Update the Z index for each WMS item in the store
         for (var i = 0; i < activeLayersStore.getCount(); i++) {
-            var record = activeLayersStore.getAt(i);
-
-            if (record.tileOverlay && (record.get('serviceType') == 'wms' || record.get('serviceType') == 'wcs')) {
-                if (record.get('layerVisible') == true) {
-                	var newZOrder = activeLayersStore.getCount() - i;
-                	if (record.tileOverlay instanceof OverlayManager) {
-                		record.tileOverlay.updateZOrder(newZOrder);
-                	} else {
-	                    record.tileOverlay.zPriority = newZOrder;
-	                    map.removeOverlay(record.tileOverlay);
-	                    map.addOverlay(record.tileOverlay);
-                	}
-                }
+            var activeLayerRec = new ActiveLayersRecord(activeLayersStore.getAt(i));
+            var overlayManager = activeLayerRec.getOverlayManager();
+            
+            if (overlayManager && activeLayerRec.getLayerVisible()) {
+            	var newZOrder = activeLayersStore.getCount() - i;
+            	
+            	overlayManager.updateZOrder(newZOrder);
             }
         }
     };
@@ -620,12 +350,12 @@ Ext.onReady(function() {
     /**
      *@param forceApplyFilter (Optional) if set AND isChecked is set AND this function has a filter panel, it will force the current filter to be loaded
      */
-    var activeLayerCheckHandler = function(record, isChecked, forceApplyFilter) {
+    var activeLayerCheckHandler = function(activeLayerRecord, isChecked, forceApplyFilter) {
         //set the record to be selected if checked
-        activeLayersPanel.getSelectionModel().selectRecords([record], false);
+        activeLayersPanel.getSelectionModel().selectRecords([activeLayerRecord.internalRecord], false);
 
-        if (record.get('loadingStatus') == '<img src="js/external/extjs/resources/images/default/grid/loading.gif">') {
-        	record.set('layerVisible', !isChecked); //reverse selection
+        if (activeLayerRecord.getIsLoading()) {
+        	activeLayersPanel.setLayerVisible(!isChecked); //reverse selection
             Ext.MessageBox.show({
                 title: 'Please wait',
                 msg: "There is an operation in process for this layer. Please wait until it is finished.",
@@ -636,60 +366,69 @@ Ext.onReady(function() {
             return;
         }
         
-        record.set('layerVisible', isChecked);
+        activeLayerRecord.setLayerVisible(isChecked); 
 
         if (isChecked) {
-            //Create our filter panel or use the existing one
-            if (record.filterPanel == null) {
-                record.filterPanel = formFactory.getFilterForm(record, map);
-            } else if (forceApplyFilter && !filterButton.disabled) {
-                filterButton.handler(); //If we are using an existing one, we may need to retrigger it's filter
+        	var filterPanelObj = activeLayerRecord.getFilterPanel();
+        	
+            //Create our filter panel if we haven't already
+            if (!filterPanelObj) {
+            	filterPanelObj = formFactory.getFilterForm(activeLayerRecord, map);
+            	activeLayerRecord.setFilterPanel(filterPanelObj);
+            } 
+
+            //If the filter panel already exists, this may be a case where we are retriggering visiblity
+            //in which case just rerun the previous filter
+            if (filterPanelObj.form && forceApplyFilter && !filterButton.disabled) {
+                filterButton.handler();
             }
             
-            //Hide show filter panel based on WMS / WFS type
-            //WFS layers will NOT load immediately if they have a filter type (they wait on the filterButton to be clicked)
-            //WFS layers will load normally if they DONT have a filter type
-            //WMS layers will ALWAYS load normally
-            //WCS layers will ALWAYS load normally
-            if (record.get('serviceType') == 'wms') {
-                if (record.filterPanel != null) {
-                    filterPanel.add(record.filterPanel);
-                    filterPanel.getLayout().setActiveItem(record.get('id'));
-                    filterPanel.doLayout();
-                }
-
-                wmsHandler(record);
-            } else if (record.get('serviceType') == 'wfs') {
-                if (record.filterPanel != null) {
-                    filterPanel.add(record.filterPanel);
-                    filterPanel.getLayout().setActiveItem(record.get('id'));
-                    filterButton.enable();
-                    filterButton.toggle(true);
-                    filterPanel.doLayout();
-                } else {
-                    filterPanel.getLayout().setActiveItem(0);
-
-                    wfsHandler(record);
-                }
-            } else if (record.get('serviceType') == 'wcs') {
-            	if (record.filterPanel != null) {
-                    filterPanel.add(record.filterPanel);
-                    filterPanel.getLayout().setActiveItem(record.get('id'));
-                    filterPanel.doLayout();
-                }
-            	
-                wcsHandler(record);
+            //If there is a filter panel, show it
+            if (filterPanelObj.form) {
+            	filterPanel.add(filterPanelObj.form);
+                filterPanel.getLayout().setActiveItem(activeLayerRecord.getId());
             }
+            
+            //if we enable the filter button we don't download the layer immediately (as the user will have to enter in filter params)
+            if (filterPanelObj.supportsFiltering) {
+                filterButton.enable();
+                filterButton.toggle(true);
+            } else {
+            	//Otherwise the layer doesn't need filtering, just display it immediately
+                var cswRecords = activeLayerRecord.getCSWRecords();
+                
+                //We simplify things by treating the record list as a single type of WFS, WCS or WMS
+                //So lets find the first record with a type we can choose (Prioritise WFS -> WCS -> WMS) 
+                for (var i = 0; i < cswRecords.length; i++) {
+                	
+                	var onlineResources = cswRecords[i].getFilteredOnlineResources('WFS');
+                	if (onlineResources.length != 0) {
+                		wfsHandler(activeLayerRecord);
+                		break;
+                	}
+                	
+                	onlineResources = cswRecords[i].getFilteredOnlineResources('WCS');
+                	if (onlineResources.length != 0) {
+                		wcsHandler(activeLayerRecord);
+                		break;
+                	}
+                	
+                	onlineResources = cswRecords[i].getFilteredOnlineResources('WMS');
+                	if (onlineResources.length != 0) {
+                		wmsHandler(activeLayerRecord);
+                		break;
+                	}
+                }
+            }
+            filterPanel.doLayout();
+            
         } else {
-            if (record.get('serviceType') == 'wfs') {
-                if (record.tileOverlay instanceof OverlayManager) record.tileOverlay.clearOverlays();
-            } else if (record.get('serviceType') == 'wcs') {
-            	if (record.tileOverlay instanceof OverlayManager) record.tileOverlay.clearOverlays();
-            } else if (record.get('serviceType') == 'wms') {
-                //remove from the map
-                map.removeOverlay(record.tileOverlay);
-            }
-
+        	//Otherwise we are making the layer invisible, so clear any overlays
+        	var overlayManager = activeLayerRecord.getOverlayManager();
+        	if (overlayManager) {
+        		overlayManager.clearOverlays();
+        	}
+        	
             filterPanel.getLayout().setActiveItem(0);
             filterButton.disable();
         }
@@ -697,60 +436,76 @@ Ext.onReady(function() {
     
     //The WCS handler will create a representation of a coverage on the map for a given WCS record
     //If we have a linked WMS url we should use that (otherwise we draw an ugly red bounding box)
-    var wcsHandler = function(selectedRecord) {
+    var wcsHandler = function(activeLayerRecord) {
     	
-        if (selectedRecord.tileOverlay instanceof OverlayManager) 
-        	selectedRecord.tileOverlay.clearOverlays();
+    	//get our overlay manager (create if required)
+    	var overlayManager = activeLayerRecord.getOverlayManager();
+    	if (!overlayManager) {
+    		overlayManager = new OverlayManager(map);
+    		activeLayerRecord.setOverlayManager(overlayManager);
+    	}
+    	
+    	overlayManager.clearOverlays();
         
-        var serviceUrlList = selectedRecord.get('serviceURLs');
-        var wmsObjList = selectedRecord.get('wmsURLs');
-        var serviceUrl = serviceUrlList[0]; //assume a single service url
-        
-        selectedRecord.responseTooltip = new ResponseTooltip();
-        var bboxList = selectedRecord.get('bboxes');
-        if (!bboxList || bboxList.length == 0) {
-        	selectedRecord.responseTooltip.addResponse(serviceUrl, 'No bounding box has been specified for this coverage.');
-        	return;
-        }
-        
-        if (!selectedRecord.tileOverlay)
-        	selectedRecord.tileOverlay = new OverlayManager(map);
-        
-        //We will need to add the bounding box polygons regardless of whether we have a WMS service or not.
-        //The difference is that we will make the "WMS" bounding box polygons transparent but still clickable
-        var polygonList = null;
-        if (wmsObjList.length > 0) {
-        	polygonList = bboxToPolygon(bboxList[0],'#000000', 0, 0.0,'#000000', 0.0);
-        } else {
-        	polygonList = bboxToPolygon(bboxList[0],'#FF0000', 0, 0.7,'#FF0000', 0.6);
-        }
-        
-        //Add our polygons (they may/may not be visible)
-        for (var i = 0; i < polygonList.length; i++) {
-        	polygonList[i].layerName = selectedRecord.get('typeName');
-        	polygonList[i].wcsUrl = serviceUrl;
-        	polygonList[i].parentRecord = selectedRecord;
-	        
-	        selectedRecord.tileOverlay.addOverlay(polygonList[i]);
-        }
-        
-        //Add our WMS tiles (if any)
-        for (var i = 0; i < wmsObjList.length; i++) {
-        	var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
-            tileLayer.baseURL = wmsObjList[i].url;
-            tileLayer.layers = wmsObjList[i].name;
-            tileLayer.opacity = 1.0;
+    	var responseTooltip = new ResponseTooltip();
+    	activeLayerRecord.setResponseToolTip(responseTooltip);
+    	
+    	//Attempt to handle each CSW record as a WCS (if possible).
+    	var cswRecords = activeLayerRecord.getCSWRecordsWithType('WCS');
+    	for (var i = 0; i < cswRecords.length; i++) {
+    		var wmsOnlineResources = cswRecords[i].getFilteredOnlineResources('WMS');
+    		var wcsOnlineResources = cswRecords[i].getFilteredOnlineResources('WCS');
+    		var geographyEls = cswRecords[i].getGeographicElements();
+    		
+    		//Assumption - We only contain a single WCS in a CSWRecord (although more would be possible)
+    		var wcsOnlineResource = wcsOnlineResources[0];
+    		
+    		if (geographyEls.length == 0) {
+    			responseTooltip.addResponse(wcsOnlineResource.url, 'No bounding box has been specified for this coverage.');
+    			continue;
+    		}
+    		
+    		//We will need to add the bounding box polygons regardless of whether we have a WMS service or not.
+            //The difference is that we will make the "WMS" bounding box polygons transparent but still clickable
+    		var polygonList = [];
+    		for (var j = 0; j < geographyEls.length; j++) {
+    			var thisPolygon = null;
+    			if (wmsOnlineResources.length > 0) {
+    				thisPolygon = geographyEls[j].toGMapPolygon('#000000', 0, 0.0,'#000000', 0.0);
+    	        } else {
+    	        	thisPolygon = geographyEls[j].toGMapPolygon('#FF0000', 0, 0.7,'#FF0000', 0.6);
+    	        }
+    			
+    			polygonList = polygonList.concat(thisPolygon);
+    		}
+    		
+    		//Add our overlays (they will be used for clicking so store some extra info)
+    		for (var j = 0; j < polygonList.length; j++) {
+    			polygonList[j].onlineResource = wcsOnlineResource;
+            	polygonList[j].cswRecord = cswRecords[i].internalRecord;
+            	polygonList[j].activeLayerRecord = activeLayerRecord.internalRecord;
+    	        
+            	overlayManager.addOverlay(polygonList[j]);
+    		}
+    		
+    		//Add our WMS tiles (if any)
+            for (var j = 0; j < wmsOnlineResources.length; j++) {
+            	var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
+                tileLayer.baseURL = wmsOnlineResources[i].url;
+                tileLayer.layers = wmsOnlineResources[i].name;
+                tileLayer.opacity = activeLayerRecord.getOpacity();
 
-            selectedRecord.tileOverlay.addOverlay(new GTileLayerOverlay(tileLayer));
-        }
-        
-        //This will update the Z order of our WMS layers
+                overlayManager.addOverlay(new GTileLayerOverlay(tileLayer));
+            }
+    	}
+    	
+    	//This will update the Z order of our WMS layers
         updateActiveLayerZOrder();
     };
 
-    var wfsHandler = function(selectedRecord) {
-        //if there is already updateCSWRecords filter running for this record then don't call another
-        if (selectedRecord.get('loadingStatus') == '<img src="js/external/extjs/resources/images/default/grid/loading.gif">') {
+    var wfsHandler = function(activeLayerRecord) {
+        //if there is already a filter running for this record then don't call another
+        if (activeLayerRecord.getIsLoading()) {
             Ext.MessageBox.show({
                 title: 'Please wait',
                 msg: "There is an operation in process for this layer. Please wait until it is finished.",
@@ -761,71 +516,94 @@ Ext.onReady(function() {
             return;
         }
 
-        if (selectedRecord.tileOverlay instanceof OverlayManager) selectedRecord.tileOverlay.clearOverlays();
+        //Get our overlay manager (create if required).
+        var overlayManager = activeLayerRecord.getOverlayManager();
+        if (!overlayManager) {
+        	overlayManager = new OverlayManager(map);
+        	activeLayerRecord.setOverlayManager(overlayManager);
+        }
+        overlayManager.clearOverlays();
 
         //a response status holder
-        selectedRecord.responseTooltip = new ResponseTooltip();
+        var responseTooltip = new ResponseTooltip();
+        activeLayerRecord.setResponseToolTip(responseTooltip);
 
-        var serviceURLs = selectedRecord.get('serviceURLs');
-        var proxyURL = selectedRecord.get('proxyURL');
-        var iconUrl = selectedRecord.get('iconUrl');
-
-        var finishedLoadingCounter = serviceURLs.length;
-        // var markerOverlay = new MarkerOverlay();
-
-        var overlayManager = new OverlayManager(map);
-        selectedRecord.tileOverlay = overlayManager;
-
-        //set the status as loading for this record
-        selectedRecord.set('loadingStatus', '<img src="js/external/extjs/resources/images/default/grid/loading.gif">');
-
-        var filterParameters = '';
-        if (filterPanel.getLayout().activeItem == filterPanel.getComponent(0)) {
-        	filterParameters = "&typeName=" + selectedRecord.get('typeName'); 
-        } else {
-        	filterParameters = filterPanel.getLayout().activeItem.getForm().getValues(true);
-        }
-        filterParameters += '&maxFeatures=200'; // limit our feature request to 200 so we don't overwhelm the browser
-        // This line activates bbox support AUS-1597 
-    	filterParameters += '&bbox=' + escape(Ext.util.JSON.encode(fetchVisibleMapBounds(map)));
+        //Prepare our query/locations
+        var cswRecords = activeLayerRecord.getCSWRecordsWithType('WFS');
+        var iconUrl = activeLayerRecord.getIconUrl();
+        var finishedLoadingCounter = cswRecords.length;
         
-        for (var i = 0; i < serviceURLs.length; i++) {
-            handleQuery(serviceURLs[i], selectedRecord, proxyURL, iconUrl, overlayManager, filterParameters, function() {
+        //Begin loading from each service 
+        activeLayerRecord.setIsLoading(true);
+        for (var i = 0; i < cswRecords.length; i++) {
+        	//Assumption - We will only have 1 WFS linked per CSW
+        	var wfsOnlineResource = cswRecords[i].getFilteredOnlineResources('WFS')[0];
+        	
+        	//Generate our filter parameters for this service
+        	var filterParameters = null;
+            if (filterPanel.getLayout().activeItem == filterPanel.getComponent(0)) {
+            	filterParameters = {typeName : wfsOnlineResource.name}; 
+            } else {
+            	filterParameters = filterPanel.getLayout().activeItem.getForm().getValues();
+            }
+            filterParameters.maxFeatures=200; // limit our feature request to 200 so we don't overwhelm the browser
+        	filterParameters.bbox = Ext.util.JSON.encode(fetchVisibleMapBounds(map)); // This line activates bbox support AUS-1597
+        	filterParameters.serviceUrl = wfsOnlineResource.url;
+        	
+            handleQuery(activeLayerRecord, cswRecords[i], wfsOnlineResource, filterParameters, function() {
                 //decrement the counter
                 finishedLoadingCounter--;
 
                 //check if we can set the status to finished
                 if (finishedLoadingCounter <= 0) {
-                    selectedRecord.set('loadingStatus', '<img src="js/external/extjs/resources/images/default/grid/done.gif">');
+                	activeLayerRecord.setIsLoading(false);
                 }
             });
         }
     };
+                    
+    /**
+     * internal helper method for Handling WFS filter queries via a proxyUrl and adding them to the map.
+     */
+    var handleQuery = function(activeLayerRecord, cswRecord, onlineResource, filterParameters, finishedLoadingHandler) {
 
-    var handleQuery = function(serviceUrl, selectedRecord, proxyURL, iconUrl, overlayManager, filterParameters, finishedLoadingHandler) {
-        selectedRecord.responseTooltip.addResponse(serviceUrl, "Loading...");
-        GDownloadUrl(proxyURL + '?' + filterParameters + '&serviceUrl=' + serviceUrl, function(data, responseCode) {
-            if (responseCode == 200) {
-                var jsonResponse = eval('(' + data + ')');
-                if (jsonResponse.success) {
+    	var responseTooltip = activeLayerRecord.getResponseToolTip();
+        responseTooltip.addResponse(filterParameters.serviceUrl, "Loading...");
 
-                	var icon = new GIcon(G_DEFAULT_ICON, iconUrl);   
+        var kfts = cswRecord.getLinkedKnownFeatureTypes(knownFeatureTypeStore);
+        
+        Ext.Ajax.request({
+        	url			: activeLayerRecord.getProxyUrl(),
+        	params		: filterParameters,
+        	timeout		: 1000 * 60 * 20, //20 minute timeout
+        	failure		: function(response) {
+        		responseTooltip.addResponse(filterParameters.serviceUrl, 'ERROR ' + response.status + ':' + response.statusText);
+        		finishedLoadingHandler();
+        	},
+        	success		: function(response) {
+        		var jsonResponse = Ext.util.JSON.decode(response.responseText);
+        		
+        		if (jsonResponse.success) {
+                	var icon = new GIcon(G_DEFAULT_ICON, activeLayerRecord.getIconUrl());   
                 	
-                	var iconSize = selectedRecord.get('iconSize');
-                	if(iconSize) {
-                        icon.iconSize = new GSize(iconSize.width, iconSize.height);
+                	//Assumption - we are only interested in the first (if any) KnownFeatureType
+                	if (kfts.length > 0) {
+                		var iconSize = kfts[0].getIconSize();
+                		if (iconSize) {
+                			icon.iconSize = new GSize(iconSize.width, iconSize.height);
+                		}
+                		
+                		var iconAnchor = kfts[0].getIconAnchor();
+                		if(iconAnchor) {
+                        	icon.iconAnchor = new GPoint(iconAnchor.x, iconAnchor.y);
+                        }
+                		
+                		var infoWindowAnchor = kfts[0].getInfoWindowAnchor();
+                        if(infoWindowAnchor) {
+                        	icon.infoWindowAnchor = new GPoint(infoWindowAnchor.x, infoWindowAnchor.y);
+                        }
                 	}
-
-                	var iconAnchor = selectedRecord.get('iconAnchor');
-                    if(iconAnchor) {
-                    	icon.iconAnchor = new GPoint(iconAnchor.x, iconAnchor.y);
-                    }
-
-                	var infoWindowAnchor = selectedRecord.get('infoWindowAnchor');
-                    if(infoWindowAnchor) {
-                    	icon.infoWindowAnchor = new GPoint(infoWindowAnchor.x, infoWindowAnchor.y);
-                    }
-
+                	
                 	//TODO: This is a hack to remove marker shadows. Eventually it should be 
                     // put into an external config file or become a session-based preference.
                 	icon.shadow = null;
@@ -833,82 +611,82 @@ Ext.onReady(function() {
                     //Parse our KML
                     var parser = new KMLParser(jsonResponse.data.kml);
                     parser.makeMarkers(icon, function(marker) {
-                        marker.typeName = selectedRecord.get('typeName');
-                        marker.wfsUrl = serviceUrl;
-                        marker.parentRecord = selectedRecord;
+                        marker.activeLayerRecord = activeLayerRecord.internalRecord;
+                        marker.cswRecord = cswRecord.internalRecord;
+                        marker.onlineResource = onlineResource;
                     });
                     
                     var markers = parser.markers;
                     var overlays = parser.overlays;
                     
                     //Add our single points and overlays
+                    var overlayManager = activeLayerRecord.getOverlayManager();
                     overlayManager.markerManager.addMarkers(markers, 0);
                     for(var i = 0; i < overlays.length; i++) {
                     	overlayManager.addOverlay(overlays[i]);
                     }
                     overlayManager.markerManager.refresh();
 
-                    //store the gml for later download needs
-                    selectedRecord.gml = jsonResponse.data.gml;
-
                     //store the status
-                    selectedRecord.responseTooltip.addResponse(serviceUrl, (markers.length + overlays.length) + " records retrieved.");
+                    responseTooltip.addResponse(filterParameters.serviceUrl, (markers.length + overlays.length) + " records retrieved.");
                 } else {
                     //store the status
-                    selectedRecord.responseTooltip.addResponse(serviceUrl, jsonResponse.msg);
+                	responseTooltip.addResponse(filterParameters.serviceUrl, jsonResponse.msg);
                 }
-                //markerOverlay.addList(markers);
-            }else if(responseCode == -1) {
-                selectedRecord.responseTooltip.addResponse(serviceUrl, "Data request timed out. Please try again later.");
-            } else if ((responseCode >= 400) & (responseCode < 500)){
-                alert('Request not found, bad request or similar problem. Error code is: ' + responseCode);
-            } else if ((responseCode >= 500) & (responseCode <= 506)){
-                alert('Requested service not available, not implemented or internal service error. Error code is: ' + responseCode);
-            } else {
-                alert('Remote server returned error code: ' + responseCode);
-            } 
-
-            //we are finito
-            finishedLoadingHandler();
+        		
+        		//we are finished
+        		finishedLoadingHandler();
+        	}
         });
     };
 
-    var wmsHandler = function(record) {
-        var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
-        tileLayer.baseURL = record.get('serviceURLs')[0];
-        tileLayer.layers = record.get('typeName');
-
-        tileLayer.opacity = record.get('opacity');
-
-        //TODO: remove code specific to feature types and styles specific to GSV
-        if (record.get('typeName') == 'gsmlGeologicUnit') {
-            tileLayer.styles = 'ColorByLithology';
+    var wmsHandler = function(activeLayerRecord) {
+    	
+    	//Get our overlay manager (create if required).
+        var overlayManager = activeLayerRecord.getOverlayManager();
+        if (!overlayManager) {
+        	overlayManager = new OverlayManager(map);
+        	activeLayerRecord.setOverlayManager(overlayManager);
         }
-
-        record.tileOverlay = new GTileLayerOverlay(tileLayer);
-
-        //This will handle adding the WMS layer (as well as updating the Z-Order)
+        overlayManager.clearOverlays();
+    	
+    	//Add each and every WMS we can find
+    	var cswRecords = activeLayerRecord.getCSWRecordsWithType('WMS');
+    	for (var i = 0; i < cswRecords.length; i++) {
+    		var wmsOnlineResources = cswRecords[i].getFilteredOnlineResources('WMS');
+    		for (var j = 0; j < wmsOnlineResources.length; j++) {
+		        var tileLayer = new GWMSTileLayer(map, new GCopyrightCollection(""), 1, 17);
+		        tileLayer.baseURL = wmsOnlineResources[j].url;
+		        tileLayer.layers = wmsOnlineResources[j].name;
+		        tileLayer.opacity = activeLayerRecord.getOpacity();
+		
+		        overlayManager.addOverlay(new GTileLayerOverlay(tileLayer));
+    		}
+    	}
+    	
+    	//This will handle adding the WMS layer(s) (as well as updating the Z-Order)
         updateActiveLayerZOrder();
     };
 
     var activeLayerSelectionHandler = function(sm, index, record) {
+    	var activeLayerRecord = new ActiveLayersRecord(record);
+    	
         //if its not checked then don't do any actions
-        if (record.get('layerVisible') == false) {
+        if (!activeLayerRecord.getLayerVisible()) {
             filterPanel.getLayout().setActiveItem(0);
             filterButton.disable();
-        } else if (record.filterPanel != null) {
+        } else if (activeLayerRecord.getFilterPanel() != null) {
+        	var filterPanelObj = activeLayerRecord.getFilterPanel();
+        	
             //if filter panel already exists then show it
-            filterPanel.getLayout().setActiveItem(record.get('id'));
-
-            if (record.get('serviceType') == 'wfs') {
-                filterButton.enable();
+            filterPanel.getLayout().setActiveItem(activeLayerRecord.getId());
+            
+            if (filterPanelObj.supportsFiltering) {
+            	filterButton.enable();
                 filterButton.toggle(true);
-            } else if (record.get('serviceType') == 'wms') {
-                filterButton.disable();
-            } else if (record.get('serviceType') == 'wcs') {
+            } else {
             	filterButton.disable();
             }
-
         } else {
             //if this type doesnt need a filter panel then just show the default filter panel
             filterPanel.getLayout().setActiveItem(0);
@@ -922,7 +700,7 @@ Ext.onReady(function() {
         dataIndex: 'layerVisible',
         width: 30,
         handler: function(record, data) {
-            activeLayerCheckHandler(record,data,true);
+            activeLayerCheckHandler(new ActiveLayersRecord(record),data,true);
         }
     });
 
@@ -939,8 +717,10 @@ Ext.onReady(function() {
                     var record = activeLayersPanel.getSelectionModel().getSelected();
                     if (record == null)
                         return;
+                    
+                    var activeLayerRecord = new ActiveLayersRecord(record);
 
-                    if (record.get('loadingStatus') == '<img src="js/external/extjs/resources/images/default/grid/loading.gif">') {
+                    if (activeLayerRecord.getIsLoading()) {
                         Ext.MessageBox.show({
                             title: 'Please wait',
                             msg: "There is an operation in process for this layer. Please wait until it is finished.",
@@ -950,21 +730,11 @@ Ext.onReady(function() {
                         });
                         return;
                     }
-
-                    if (record.get('serviceType') == 'wfs') {
-                        if (record.tileOverlay instanceof OverlayManager) { 
-                        	record.tileOverlay.clearOverlays();
-                        }
-                    } else if (record.get('serviceType') == 'wms') {
-                        //remove from the map
-                        map.removeOverlay(record.tileOverlay);
-                    } else if (record.get('serviceType') == 'wcs') {
-                        if (record.tileOverlay instanceof OverlayManager) { 
-                        	record.tileOverlay.clearOverlays();
-                        }
+                    
+                    var overlayManager = activeLayerRecord.getOverlayManager();
+                    if (overlayManager) {
+                    	overlayManager.clearOverlays();
                     }
-                    //remove from the map
-                    //map.removeOverlay(activeLayersPanel.getSelectionModel().getSelected().tileOverlay);
 
                     //remove it from active layers
                     activeLayersStore.remove(record);
@@ -1003,32 +773,23 @@ Ext.onReady(function() {
                 header: "",
                 width: 18,
                 sortable: false,
-                dataIndex: 'iconImgSrc',
-                align: 'center',
-                renderer: function(value, metaData, record) {
-            		var serviceType = record.get('serviceType');
-            		var showKey = false;
-            		
-            		if (serviceType === 'wms') {
-            			showKey = true;
-            		} else if (serviceType === 'wcs') {
-            			showKey = record.get('wmsURLs').length > 0;
-            		}
-            		
-            		if (showKey) {
-            			return '<img width="16" height="16" src="img/key.png">';
-            		}
-            		
-            		return value;
-            	}
+                dataIndex: 'keyIconHtml',
+                align: 'center'
             },
             {
-                id:'loadingStatus',
+                id:'isLoading',
                 header: "",
                 width: 25,
                 sortable: false,
-                dataIndex: 'loadingStatus',
-                align: 'center'
+                dataIndex: 'isLoading',
+                align: 'center',
+                renderer: function(value, metaData, record) {
+            		if (value) {
+            			return '<img src="js/external/extjs/resources/images/default/grid/loading.gif">';
+            		} else {
+            			return '<img src="js/external/extjs/resources/images/default/grid/nowait.gif">';
+            		}
+            	}
             },
             {
                 id:'title',
@@ -1039,11 +800,11 @@ Ext.onReady(function() {
             },
             activeLayersPanelCheckColumn,
             {
-                id:'dataSourceImage',
+                id:'downloadIconHtml',
                 header: "",
                 width: 20,
                 sortable: false,
-                dataIndex: 'dataSourceImage',
+                dataIndex: 'downloadIconHtml',
                 align: 'center'
             }
         ],
@@ -1064,7 +825,7 @@ Ext.onReady(function() {
     /**
      * Tooltip for the active layers
      */
-    var activeLayersToolTip;
+    var activeLayersToolTip = null;
 
     /**
      * Handler for mouse over events on the active layers panel, things like server status, and download buttons
@@ -1080,12 +841,12 @@ Ext.onReady(function() {
 
             //get the actual data record
             var theRow = activeLayersPanel.getView().findRow(row);
-            var record = activeLayersPanel.getStore().getAt(theRow.rowIndex);
-            var serviceType = record.get('serviceType');
-
+            var activeLayerRecord = new ActiveLayersRecord(activeLayersPanel.getStore().getAt(theRow.rowIndex));
+            
             //This is for the key/legend column
             if (col.cellIndex == '1') {
-            	if (serviceType === 'wms' || (serviceType === 'wcs' && record.get('wmsURLs').length > 0)) {
+            	
+            	if (activeLayerRecord.getCSWRecordsWithType('WMS').length > 0) {
 	                activeLayersToolTip = new Ext.ToolTip({
 	                    target: e.target ,
 	                    autoHide : true,
@@ -1101,9 +862,9 @@ Ext.onReady(function() {
             //this is the status icon column
             else if (col.cellIndex == '2') {
                 var html = 'No status has been recorded.';
-
-                if (record.responseTooltip != null)
-                    html = record.responseTooltip.getHtml();
+                
+                if (activeLayerRecord.getResponseToolTip() != null)
+                    html = activeLayerRecord.getResponseToolTip().getHtml();
 
                 activeLayersToolTip = new Ext.ToolTip({
                     target: e.target ,
@@ -1119,14 +880,6 @@ Ext.onReady(function() {
             }
             //this is the column for download link icons
             else if (col.cellIndex == '5') {
-                //var html = 'Download layer data.';
-
-                /*if (serviceType == 'wms') { //if a WMS
-                    html = 'Click here to view this layers Image in new browser window.';
-                } else if (serviceType == 'wfs') {//if a WFS
-                    html = 'Click here to view this layers GML in new browser window.';
-                }*/
-
                 activeLayersToolTip = new Ext.ToolTip({
                     target: e.target ,
                     //title: 'Status Information',
@@ -1158,35 +911,40 @@ Ext.onReady(function() {
 
             //get the actual data record
             var theRow = activeLayersPanel.getView().findRow(row);
-            var record = activeLayersPanel.getStore().getAt(theRow.rowIndex);
-            
-            var serviceType = record.get('serviceType');
-            var serviceUrls = record.get('serviceURLs');
-            var typeName    = record.get('typeName');
+            var activeLayerRecord = new ActiveLayersRecord(activeLayersPanel.getStore().getAt(theRow.rowIndex));
             
             //This is the marker key column
             if (col.cellIndex == '1') {
             	//For WMS, we request the Legend and display it
-            	if (serviceType === 'wms' || (serviceType === 'wcs' && record.get('wmsURLs').length > 0)) {
+            	var cswRecords = activeLayerRecord.getCSWRecordsWithType('WMS');
+            	if (cswRecords.length > 0) {
             		
-            		//Only show the legend window if it's not current visible
-            		var win = record.legendWindow;
+            		//Only show the legend window if it's not currently visible
+            		var win = activeLayerRecord.getLegendWindow();
             		if (!win || (win && !win.isVisible())) {
-	            		var url = '';
-	            		
-	            		if (serviceType === 'wms') {
-	            			url = new LegendManager(serviceUrls[0], typeName).generateImageUrl();
-	            		} else {
-	            			var wmsUrl = record.get('wmsURLs')[0];
-	            			url = new LegendManager(wmsUrl.url, wmsUrl.name).generateImageUrl();
-	            		}
-	            		
-	            		var html = '<a target="_blank" href="' + url + '">';
-	            		html += '<img alt="Loading legend..." src="' + url + '"/>';
-	            		html += '</a>';
+            			
+            			//Generate a legend for each and every WMS linked to this record
+            			var html = '';
+            			var titleTypes = '';
+            			for (var i = 0; i < cswRecords.length; i++) {
+            				var wmsOnlineResources = cswRecords[i].getFilteredOnlineResources('WMS');
+            				for (var j = 0; j < wmsOnlineResources.length; j++) {
+			            		var url = new LegendManager(wmsOnlineResources[j].url, wmsOnlineResources[j].name).generateImageUrl();
+			            		
+			            		if (titleTypes.length != 0) {
+			            			titleTypes += ', ';
+			            		}
+			            		titleTypes += wmsOnlineResources[j].name;
+			            		
+			            		html += '<a target="_blank" href="' + url + '">';
+			            		html += '<img alt="Loading legend..." src="' + url + '"/>';
+			            		html += '</a>';
+			            		html += '<br/>';
+            				}
+            			}
 	            		
 	            		win = new Ext.Window({
-	            			title		: 'Legend: ' + typeName,
+	            			title		: 'Legend: ' + titleTypes,
 	                        layout		: 'fit',
 	                        width		: 200,
 	                        height		: 300,
@@ -1199,8 +957,7 @@ Ext.onReady(function() {
 	                    });
 	
 	            		//Save our window reference so we can tell if its already been open
-	            		//(Using record.set('legendWindow', win) causes a stack overflow.)
-	            		record.legendWindow = win;
+	            		activeLayerRecord.setLegendWindow(win);
 	            		
 	            		win.show(this);
             		} else if (win){
@@ -1213,72 +970,83 @@ Ext.onReady(function() {
             }
             //this is the column for download link icons
             else if (col.cellIndex == '5') {
-                var keys = [serviceUrls.length];
-                var values = [serviceUrls.length];
+            	var keys = [];
+                var values = [];
+            	
+                //We simplify things by treating the record list as a single type of WFS, WCS or WMS
+                //So lets find the first record with a type we can choose (Prioritise WFS -> WCS -> WMS)
+                var cswRecords = activeLayerRecord.getCSWRecordsWithType('WFS');
+                if (cswRecords.length != 0) {
+                	for (var i = 0; i < cswRecords.length; i++) {
+                		var wfsOnlineResources = cswRecords[i].getFilteredOnlineResources('WFS');
+                		
+                		for (var j = 0; j < wfsOnlineResources; j++) {
+                			var typeName = wfsOnlineResource[j].name;
+                			var url = wfsOnlineResource[j].url;
+                			var filterParameters = filterPanel.getLayout().activeItem == filterPanel.getComponent(0) ? "&typeName=" + typeName : filterPanel.getLayout().activeItem.getForm().getValues(true);
+                			
+                			keys.push('serviceUrls');
+                			values.push(window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + activeLayerRecord.getProxyUrl() + "?" + filterParameters + "&serviceUrl=" + url);
+                		}
+                	}
+
+                    openWindowWithPost("downloadGMLAsZip.do?", 'WFS_Layer_Download_'+new Date().getTime(), keys, values);
+                }
                 
-                if (serviceType == 'wms') { //if a WMS, open a new window calling the download controller
-                    if (serviceUrls.length >= 1) {
-
-                        for (i = 0; i < serviceUrls.length; i++) {
-
-                            var boundBox = (map.getBounds().getSouthWest().lng() < 0 ? map.getBounds().getSouthWest().lng() + 360.0 : map.getBounds().getSouthWest().lng()) + "," +
-                                           map.getBounds().getSouthWest().lat() + "," +
-                                           (map.getBounds().getNorthEast().lng() < 0 ? map.getBounds().getNorthEast().lng() + 360.0 : map.getBounds().getNorthEast().lng()) + "," +
-                                           map.getBounds().getNorthEast().lat();
-
-                            var url = serviceUrls[i];
-                                                          
-                            var last_char = url.charAt(url.length - 1);
-                            if ((last_char !== "?") && (last_char !== "&")) {
-                                if (url.indexOf('?') == -1) {
-                                    url += "?";
-                                } else {
-                                    url += "&";
-                                }
-                            }
-                             
-                            url += "REQUEST=GetMap";
-                            url += "&SERVICE=WMS";
-                            url += "&VERSION=1.1.0";
-                            url += "&LAYERS=" + typeName;
-                            if (this.styles)
-                                url += "&STYLES=" + this.styles;
-                            else
-                                url += "&STYLES="; //Styles parameter is mandatory, using a null string ensures default style  
-                            /*
-                             if (this.sld)
-                             url += "&SLD=" + this.sld;*/
-                            url += "&FORMAT=" + "image/png";
-                            url += "&BGCOLOR=0xFFFFFF";
-                            url += "&TRANSPARENT=TRUE";
-                            url += "&SRS=" + "EPSG:4326";
-                            url += "&BBOX=" + boundBox;
-                            url += "&WIDTH=" + map.getSize().width;
-                            url += "&HEIGHT=" + map.getSize().height;
-
-                            keys[i] = 'serviceUrls';
-                            values[i] = url;
-                        }
-                        //alert("downloadProxy?" + url);
-                        openWindowWithPost("downloadWMSAsZip.do?", 'WMS_Layer_Download_'+new Date().getTime(), keys, values);
-                    }
-
-                } else if (serviceType == 'wfs') {//if a WFS open a new window calling the download controller
-
-                    if (serviceUrls.length >= 1) {
-                        var filterParameters = filterPanel.getLayout().activeItem == filterPanel.getComponent(0) ? "&typeName=" + record.get('typeName') : filterPanel.getLayout().activeItem.getForm().getValues(true);
-
-                        for (i = 0; i < serviceUrls.length; i++) {
-                            //urlsParameter += "serviceUrls=" + serviceUrls[i] + filterParameters.replace('&', '%26') + '&';
-                            keys[i] = 'serviceUrls';
-                            values[i] =  window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + record.get('proxyURL') + "?" + filterParameters + "&serviceUrl=" + serviceUrls[i];
-                        }
-
-                        openWindowWithPost("downloadGMLAsZip.do?", 'WFS_Layer_Download_'+new Date().getTime(), keys, values);
-                    }
-                } else if (serviceType == 'wcs') {
-                	//Lets open the generic wcs download handler
-                	showWCSDownload(record.get('serviceURLs')[0], record.get('typeName'));
+                cswRecords = activeLayerRecord.getCSWRecordsWithType('WCS');
+                if (cswRecords.length != 0) {
+                	//Assumption - we only expect 1 WCS 
+            		var wcsOnlineResource = cswRecords[0].getFilteredOnlineResources('WCS')[0];
+            		showWCSDownload(wcsOnlineResource.url, wcsOnlineResource.name);
+                }
+                
+                //For WMS we download every WMS
+                cswRecords = activeLayerRecord.getCSWRecordsWithType('WMS');
+                if (cswRecords.length != 0) {
+                	for (var i = 0; i < cswRecords.length; i++) {
+	                	var wmsOnlineResources = cswRecords[i].getFilteredOnlineResources('WMS');
+	    				for (var j = 0; j < wmsOnlineResources.length; j++) {
+	    					var boundBox = (map.getBounds().getSouthWest().lng() < 0 ? map.getBounds().getSouthWest().lng() + 360.0 : map.getBounds().getSouthWest().lng()) + "," +
+	                        map.getBounds().getSouthWest().lat() + "," +
+	                        (map.getBounds().getNorthEast().lng() < 0 ? map.getBounds().getNorthEast().lng() + 360.0 : map.getBounds().getNorthEast().lng()) + "," +
+	                        map.getBounds().getNorthEast().lat();
+	
+					         var url = serviceUrls[i];
+					                                       
+					         var last_char = url.charAt(url.length - 1);
+					         if ((last_char !== "?") && (last_char !== "&")) {
+					             if (url.indexOf('?') == -1) {
+					                 url += "?";
+					             } else {
+					                 url += "&";
+					             }
+					         }
+					          
+					         url += "REQUEST=GetMap";
+					         url += "&SERVICE=WMS";
+					         url += "&VERSION=1.1.0";
+					         url += "&LAYERS=" + typeName;
+					         if (this.styles)
+					             url += "&STYLES=" + this.styles;
+					         else
+					             url += "&STYLES="; //Styles parameter is mandatory, using a null string ensures default style  
+					         /*
+					          if (this.sld)
+					          url += "&SLD=" + this.sld;*/
+					         url += "&FORMAT=" + "image/png";
+					         url += "&BGCOLOR=0xFFFFFF";
+					         url += "&TRANSPARENT=TRUE";
+					         url += "&SRS=" + "EPSG:4326";
+					         url += "&BBOX=" + boundBox;
+					         url += "&WIDTH=" + map.getSize().width;
+					         url += "&HEIGHT=" + map.getSize().height;
+					
+					         keys.push('serviceUrls');
+					         values.push(url);
+	    				}
+	                }
+                	
+                	openWindowWithPost("downloadWMSAsZip.do?", 'WMS_Layer_Download_'+new Date().getTime(), keys, values);
                 }
             }
         }
@@ -1347,7 +1115,7 @@ Ext.onReady(function() {
         autoScroll: true,
         //autosize:true,
         items:[
-            complexFeaturesPanel,
+            knownFeaturesPanel,
             wmsLayersPanel,
             wcsLayersPanel,
             customLayersPanel
@@ -1377,24 +1145,6 @@ Ext.onReady(function() {
         margins: '100 0 0 0', 
         cmargins:'100 0 0 0'
     });
-
-    /**
-     * Used for notifications of activity
-     *
-    var statusBar = new Ext.StatusBar({
-        region: "south",
-        id: 'my-status',
-        hidden: true,
-
-        // defaults to use when the status is cleared:
-        defaultText: 'Default status text',
-        defaultIconCls: 'default-icon',
-
-        // values to set initially:
-        text: 'Ready',
-        iconCls: 'ready-icon'
-    });
-    */
 
     /**
      * Add all the panels to the viewport
@@ -1480,164 +1230,10 @@ Ext.onReady(function() {
         document.getElementById("latlng").innerHTML = "";
     });
     
-    new Ext.LoadMask(tabsPanel.el, {msg: 'Please Wait...', store: wmsLayersStore});
+    //new Ext.LoadMask(tabsPanel.el, {msg: 'Please Wait...', store: wmsLayersStore});
     //new Ext.LoadMask(complexFeaturesPanel.el, {msg: 'Please Wait...', store: complexFeaturesStore});
     //new Ext.LoadMask(wmsLayersPanel.el, {msg: 'Please Wait...', store: wmsLayersStore});
-
-    complexFeaturesStore.load();
-    wmsLayersStore.load();
-    wcsLayersStore.load();
     
-    //param bbox The bounding box to split
-    //param okBboxList The list of boxes that the split boxes will be appended to
-    var splitBboxes = function(bbox, okBboxList) {
-
-    	//SPLIT CASE 1: Polygon crossing meridian
-    	if (bbox.westBoundLongitude < 0 && bbox.eastBoundLongitude > 0) {
-    		var splits = bbox.splitAt(0); 
-    		for (var i = 0; i < splits.length; i++) {
-    			splitBboxes(splits[i], okBboxList);
-    		}
-    		return okBboxList;
-    	}
-    	
-    	//SPLIT CASE 2: Polygon crossing anti meridian
-    	if (bbox.westBoundLongitude < 0 && bbox.eastBoundLongitude > 0) {
-    		var splits = bbox.splitAt(-180); 
-    		for (var i = 0; i < splits.length; i++) {
-    			splitBboxes(splits[i], okBboxList);
-    		}
-    		return okBboxList;
-    	}
-    	
-    	//SPLIT CASE 3: Polygon is too wide (Gmap can't handle click events for wide polygons)
-    	if (Math.abs(bbox.westBoundLongitude - bbox.eastBoundLongitude) > 60) {
-    		var splits = bbox.splitAt((bbox.westBoundLongitude + bbox.eastBoundLongitude) / 2); 
-    		for (var i = 0; i < splits.length; i++) {
-    			splitBboxes(splits[i], okBboxList);
-    		}
-    		return okBboxList;
-    	}
-    	
-    	//OTHERWISE - bounding box is OK to render
-    	okBboxList.push(bbox);
-    	return okBboxList; 
-    };
-    
-    //Converts a portal bbox into an array of GMap Polygon's
-    //Normally a single polygon is returned but if the polygon wraps around the antimeridian, it will be split
-    //into 2 polygons
-    var bboxToPolygon = function(bbox, strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts) {
-    	
-    	var splits = splitBboxes(bbox, []);
-    	var result = [];
-    	
-    	for (var i = 0; i < splits.length; i++) {
-    		var splitBbox = splits[i];
-    		var ne = new GLatLng(splitBbox.northBoundLatitude, splitBbox.eastBoundLongitude);
-    	    var se = new GLatLng(splitBbox.southBoundLatitude, splitBbox.eastBoundLongitude);
-    	    var sw = new GLatLng(splitBbox.southBoundLatitude, splitBbox.westBoundLongitude);
-    	    var nw = new GLatLng(splitBbox.northBoundLatitude, splitBbox.westBoundLongitude);
-    	    
-    	    result.push(new GPolygon([sw, nw, ne, se, sw], strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts));
-    	}
-    	
-    	return result;
-    };
-    
-    //Generates a bounding box polygon and puts it on the map for the given record
-    var showRecordBoundingBox = function (grid, rowIndex, colIndex, e) {
-    	var record = grid.getStore().getAt(rowIndex); 
-        var fieldName = grid.getColumnModel().getDataIndex(colIndex); 
-        if (fieldName !== 'bboxes') {
-        	return;
-        }
-    	
-    	var bboxes = record.get('bboxes');
-    	if (!isBBoxListMeaningful(bboxes)) {
-    		return;
-    	}
-    	
-    	if (record.bboxOverlayManager) {
-    		record.bboxOverlayManager.clearOverlays();
-    		record.bboxOverlayManager = null;
-    	}
-    	
-    	var overlayManager = new OverlayManager(map);
-    	record.bboxOverlayManager = overlayManager;
-    	
-    	for (var i = 0; i < bboxes.length; i++) {    	    
-    	    var polygonList = bboxToPolygon(bboxes[i],'00FF00', 0, 0.7,'#00FF00', 0.6);
-    	    
-    	    for (var j = 0; j < polygonList.length; j++) {
-    	    	polygonList[j].title = 'bbox';
-    	    	record.bboxOverlayManager.addOverlay(polygonList[j]);
-    	    }
-    	}
-    	
-    	record.bboxOverlayManager.markerManager.refresh();
-    	
-    	//Make the bbox disappear after a short while 
-    	if (!record.bboxOverlayClearTask) {
-	    	record.bboxOverlayClearTask = new Ext.util.DelayedTask(function(){
-	    		hideRecordBoundingBox(record);
-	    	});
-    	}
-
-    	record.bboxOverlayClearTask.delay(2000); 
-    };
-    
-    //Hides a bounding box polygon
-    var hideRecordBoundingBox = function (record) {
-    	//var record = grid.getStore().getAt(rowIndex); 
-    		
-        if (record.bboxOverlayManager) {
-        	record.bboxOverlayManager.clearOverlays();
-        	record.bboxOverlayManager = null;
-        }
-        
-        record.bboxOverlayClearTask = null;
-    };
-    
-    //Moves the GMap portlet display to display the bounding box
-    var moveToBoundingBox = function (grid, rowIndex, colIndex, e) {
-    	var record = grid.getStore().getAt(rowIndex); 
-        var fieldName = grid.getColumnModel().getDataIndex(colIndex); 
-        if (fieldName !== 'bboxes') {
-        	return;
-        }
-    	
-    	var bboxes = record.get('bboxes');
-    	if (!isBBoxListMeaningful(bboxes)) {
-    		return;
-    	}
-    	
-    	//Problems : It doesn't take into account multiple bounding boxes
-    	//           It fails with bounding boxes spanning the anti-meridian (the layer centre fails).
-    	var bbox = bboxes[0];
-    	
-    	var sw = new GLatLng(bbox.southBoundLatitude, bbox.westBoundLongitude);
-    	var ne = new GLatLng(bbox.northBoundLatitude, bbox.eastBoundLongitude);
-    	var layerBounds = new GLatLngBounds(sw,ne);
-    	
-    	//Adjust zoom if required
-    	var visibleBounds = map.getBounds();
-    	map.setZoom(map.getBoundsZoomLevel(layerBounds));
-    	
-    	//Pan to position
-    	var layerCenter = layerBounds.getCenter();
-    	map.panTo(layerCenter);
-    	
-    	
-    	
-    };
-    
-    complexFeaturesPanel.on("cellclick", showRecordBoundingBox, complexFeaturesPanel.on);
-    wmsLayersPanel.on("cellclick", showRecordBoundingBox, wmsLayersPanel);
-    wcsLayersPanel.on("cellclick", showRecordBoundingBox, wcsLayersPanel);
-    
-    complexFeaturesPanel.on("celldblclick", moveToBoundingBox, complexFeaturesPanel);
-    wmsLayersPanel.on("celldblclick", moveToBoundingBox, wmsLayersPanel);
-    wcsLayersPanel.on("celldblclick", moveToBoundingBox, wcsLayersPanel);
-    
+    cswRecordStore.load({});
+    knownFeatureTypeStore.load();
 });
