@@ -145,7 +145,8 @@ var gMapClickController = function(map, overlay, latlng, activeLayersStore) {
 	                
 	                var TileUtl = new Tile(map,latlng);
 	
-	                var typeName = wmsOnlineResources[k].name;
+	                var wmsOnlineResource = wmsOnlineResources[k];
+	                var typeName = wmsOnlineResource.name;
 	                var serviceUrl = wmsOnlineResources[k].url
 	                
 	                var url = "wmsMarkerPopup.do";
@@ -160,7 +161,7 @@ var gMapClickController = function(map, overlay, latlng, activeLayersStore) {
 	                url += '&HEIGHT=' + TileUtl.getTileHeight();
 	                
 	                if(typeName.substring(0, typeName.indexOf(":")) == "gt") {
-	                	handleGeotransectWmsRecord(url, alr, map, latlng);
+	                	handleGeotransectWmsRecord(url, wmsCSWRecords[j], wmsOnlineResource, map, latlng);
 	                } else {    
 	                	handleGenericWmsRecord(url, i, map, latlng);
 	            	}
@@ -179,13 +180,15 @@ var gMapClickController = function(map, overlay, latlng, activeLayersStore) {
  * @param map
  * @param latlng
  */
-function handleGeotransectWmsRecord(url, record, map, latlng) {
+function handleGeotransectWmsRecord(url, cswRecord, wmsOnlineResource, map, latlng) {
 	
 	url += "&INFO_FORMAT=application/vnd.ogc.gml";
 	
     Ext.Ajax.request({
     	url: url,
     	timeout		: 180000,
+    	wmsOnlineResource : wmsOnlineResource,
+    	cswRecord : cswRecord,
     	success: function(response, options) {
             if (isGmlDataThere(response.responseText)) {                                  
             	
@@ -220,13 +223,13 @@ function handleGeotransectWmsRecord(url, record, map, latlng) {
             	    	lineId = lineId.substring(3, lineId.length);
             	    }
             	    
-                	new GeotransectsInfoWindow(latlng, map, lineId, this).show();                                
+                	new GeotransectsInfoWindow(latlng, map, lineId, options.cswRecord, options.wmsOnlineResource).show();                                
                 } else {
                 	alert("Remote server returned an unsupported response.");
                 }
                          
             }
-    	}.createDelegate(record),
+    	},
     	failure: function(response, options) {
     		Ext.Msg.alert('Error requesting data', 'Error (' + 
     				response.status + '): ' + response.statusText);
