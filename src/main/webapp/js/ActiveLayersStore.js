@@ -117,5 +117,14 @@ Ext.extend(ActiveLayersStore, Ext.data.Store, {
 			return new ActiveLayersRecord(rec);
 		}
 		return null;
+	},
+	
+	/**
+	 * Removes the specified activeLayersRecord from this store
+	 */
+	removeActiveLayersRecord : function(activeLayersRecord) {
+		if (activeLayersRecord) {
+			ActiveLayersStore.superclass.remove.call(this, activeLayersRecord.internalRecord);
+		}
 	}
 });

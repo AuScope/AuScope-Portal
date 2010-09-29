@@ -185,7 +185,9 @@ Ext.onReady(function() {
     		}
     	}
     	
-    	moveMapToBounds(superBbox);
+    	if (superBbox) {
+    		moveMapToBounds(superBbox);
+    	}
     };
     
     //-----------Known Features Panel Configurations (Groupings of various CSWRecords)
@@ -668,9 +670,8 @@ Ext.onReady(function() {
         updateActiveLayerZOrder();
     };
 
-    var activeLayerSelectionHandler = function(sm, index, record) {
-    	var activeLayerRecord = new ActiveLayersRecord(record);
-    	
+    //This handler is called whenever the user selects an active layer
+    var activeLayerSelectionHandler = function(activeLayerRecord) {
         //if its not checked then don't do any actions
         if (!activeLayerRecord.getLayerVisible()) {
             filterPanel.getLayout().setActiveItem(0);
@@ -694,134 +695,40 @@ Ext.onReady(function() {
         }
     };
 
-    // custom column plugin example
-    var activeLayersPanelCheckColumn = new Ext.ux.grid.EventCheckColumn({
-        header: "Visible",
-        dataIndex: 'layerVisible',
-        width: 30,
-        handler: function(record, data) {
-            activeLayerCheckHandler(new ActiveLayersRecord(record),data,true);
+
+    //This handler is called on records that the user has requested to delete from the active layer list
+    var activeLayersRemoveHandler = function(activeLayerRecord) {
+        if (activeLayerRecord.getIsLoading()) {
+            Ext.MessageBox.show({
+                title: 'Please wait',
+                msg: "There is an operation in process for this layer. Please wait until it is finished.",
+                buttons: Ext.MessageBox.OK,
+                animEl: 'mb9',
+                icon: Ext.MessageBox.INFO
+            });
+            return;
         }
-    });
+        
+        var overlayManager = activeLayerRecord.getOverlayManager();
+        if (overlayManager) {
+        	overlayManager.clearOverlays();
+        }
 
-    var activeLayersPanelExpander = new Ext.grid.RowExpander({
-        tpl : new Ext.Template('<p>{description}</p><br>')
-    });
+        //remove it from active layers
+        activeLayersStore.removeActiveLayersRecord(activeLayerRecord);
 
-    var activeLayersRemoveButton = {
-                text:'Remove Layer',
-                tooltip:'Remove Layer',
-                iconCls:'remove',
-                pressed:true,
-                handler: function() {
-                    var record = activeLayersPanel.getSelectionModel().getSelected();
-                    if (record == null)
-                        return;
-                    
-                    var activeLayerRecord = new ActiveLayersRecord(record);
+        //set the filter panels active item to 0
+        filterPanel.getLayout().setActiveItem(0);
+    };             
 
-                    if (activeLayerRecord.getIsLoading()) {
-                        Ext.MessageBox.show({
-                            title: 'Please wait',
-                            msg: "There is an operation in process for this layer. Please wait until it is finished.",
-                            buttons: Ext.MessageBox.OK,
-                            animEl: 'mb9',
-                            icon: Ext.MessageBox.INFO
-                        });
-                        return;
-                    }
-                    
-                    var overlayManager = activeLayerRecord.getOverlayManager();
-                    if (overlayManager) {
-                    	overlayManager.clearOverlays();
-                    }
-
-                    //remove it from active layers
-                    activeLayersStore.remove(record);
-
-                    //set the filter panels active item to 0
-                    filterPanel.getLayout().setActiveItem(0);
-                }
-            };
-
-    var activeLayersRowDragPlugin = new Ext.ux.dd.GridDragDropRowOrder({
-                    copy: false, 
-                    scrollable: true,
-                    listeners: {afterrowmove: updateActiveLayerZOrder}
-                 });
-
-    this.activeLayersPanel = new Ext.grid.GridPanel({
-        plugins: [activeLayersPanelCheckColumn, 
-                  activeLayersPanelExpander,
-                  activeLayersRowDragPlugin],
-
-        stripeRows: true,
-        autoExpandColumn: 'title',
-        viewConfig: {scrollOffset: 0,forceFit:true},
-        title: 'Active Layers',
-        region:'center',
-        split: true,
-        height: '100',
-        ddText:'',
-        //autoScroll: true,
-        store: activeLayersStore,
-        layout: 'fit',
-        columns: [
-            activeLayersPanelExpander,
-            {
-                id:'iconImgSrc',
-                header: "",
-                width: 18,
-                sortable: false,
-                dataIndex: 'keyIconHtml',
-                align: 'center'
-            },
-            {
-                id:'isLoading',
-                header: "",
-                width: 25,
-                sortable: false,
-                dataIndex: 'isLoading',
-                align: 'center',
-                renderer: function(value, metaData, record) {
-            		if (value) {
-            			return '<img src="js/external/extjs/resources/images/default/grid/loading.gif">';
-            		} else {
-            			return '<img src="js/external/extjs/resources/images/default/grid/nowait.gif">';
-            		}
-            	}
-            },
-            {
-                id:'title',
-                header: "Title",
-                width: 100,
-                sortable: true,
-                dataIndex: 'title'
-            },
-            activeLayersPanelCheckColumn,
-            {
-                id:'downloadIconHtml',
-                header: "",
-                width: 20,
-                sortable: false,
-                dataIndex: 'downloadIconHtml',
-                align: 'center'
-            }
-        ],
-        bbar: [
-            activeLayersRemoveButton
-        ],
-
-        sm: new Ext.grid.RowSelectionModel({
-            singleSelect: true,
-            listeners: {
-                rowselect: {
-                    fn: activeLayerSelectionHandler
-                }
-            }
-        })
-    });
-
+    this.activeLayersPanel = new ActiveLayersGridPanel('active-layers-panel', 
+											    		'Active Layers', 
+											    		activeLayersStore, 
+											    		activeLayerSelectionHandler, 
+											    		updateActiveLayerZOrder, 
+											    		activeLayersRemoveHandler,
+											    		activeLayerCheckHandler);
+    
     /**
      * Tooltip for the active layers
      */
@@ -980,9 +887,9 @@ Ext.onReady(function() {
                 	for (var i = 0; i < cswRecords.length; i++) {
                 		var wfsOnlineResources = cswRecords[i].getFilteredOnlineResources('WFS');
                 		
-                		for (var j = 0; j < wfsOnlineResources; j++) {
-                			var typeName = wfsOnlineResource[j].name;
-                			var url = wfsOnlineResource[j].url;
+                		for (var j = 0; j < wfsOnlineResources.length; j++) {
+                			var typeName = wfsOnlineResources[j].name;
+                			var url = wfsOnlineResources[j].url;
                 			var filterParameters = filterPanel.getLayout().activeItem == filterPanel.getComponent(0) ? "&typeName=" + typeName : filterPanel.getLayout().activeItem.getForm().getValues(true);
                 			
                 			keys.push('serviceUrls');
@@ -991,6 +898,7 @@ Ext.onReady(function() {
                 	}
 
                     openWindowWithPost("downloadGMLAsZip.do?", 'WFS_Layer_Download_'+new Date().getTime(), keys, values);
+                    return;
                 }
                 
                 cswRecords = activeLayerRecord.getCSWRecordsWithType('WCS');
@@ -998,6 +906,7 @@ Ext.onReady(function() {
                 	//Assumption - we only expect 1 WCS 
             		var wcsOnlineResource = cswRecords[0].getFilteredOnlineResources('WCS')[0];
             		showWCSDownload(wcsOnlineResource.url, wcsOnlineResource.name);
+            		return;
                 }
                 
                 //For WMS we download every WMS
@@ -1011,7 +920,8 @@ Ext.onReady(function() {
 	                        (map.getBounds().getNorthEast().lng() < 0 ? map.getBounds().getNorthEast().lng() + 360.0 : map.getBounds().getNorthEast().lng()) + "," +
 	                        map.getBounds().getNorthEast().lat();
 	
-					         var url = serviceUrls[i];
+					         var url = wmsOnlineResources[j].url;
+					         var typeName = wmsOnlineResources[j].name;
 					                                       
 					         var last_char = url.charAt(url.length - 1);
 					         if ((last_char !== "?") && (last_char !== "&")) {
@@ -1047,26 +957,12 @@ Ext.onReady(function() {
 	                }
                 	
                 	openWindowWithPost("downloadWMSAsZip.do?", 'WMS_Layer_Download_'+new Date().getTime(), keys, values);
+                	return;
                 }
             }
         }
     });
 
-    this.activeLayersPanel.on('cellcontextmenu', function(grid, rowIndex, colIndex, event) {
-        //Stop the event propogating
-        event.stopEvent();
-
-        //Ensure the row that is right clicked gets selected
-        activeLayersPanel.getSelectionModel().selectRow(rowIndex);
-
-        //Create the context menu to hold the buttons
-        var contextMenu = new Ext.menu.Menu();
-        contextMenu.add(activeLayersRemoveButton);
-
-        //Show the menu
-        contextMenu.showAt(event.getXY());
-    });
-    
     /**
      * Opens a new window to the specified URL and passes URL parameters like so keys[x]=values[x]
      *

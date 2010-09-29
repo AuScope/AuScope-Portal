@@ -4,9 +4,6 @@
  * This particular specialization will update the CSWRecordStore on the fly with whatever layers
  * are available at a configurable WMS location.
  * 
- * This panel will create a 'copy' of the cswRecordStore with cswRecordFilter applied over the top of it.
- * Further - every time the cswRecordStore is altered, the 'copied' data will also be updated
- * 
  * id				: unique ID to identify this grid
  * title 			: The title this grid panel will display
  * cswRecordStore 	: an instance of CSWRecordStore that will be used to populate this panel. It will be regularly loaded 
