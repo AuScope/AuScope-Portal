@@ -15,7 +15,6 @@ var genericParserClickHandler = function (map, overlay, latlng, parentOnlineReso
 		//Lets extract the ID and then lookup the parent record
 		//Assumption - We are only interested in the first WFS record
 		var gmlID = overlay.description.substring(genericParserString.length);
-		var cswRecords = parentActiveLayerRecord.getCSWRecords();
 		var wfsUrl = parentOnlineResource.url;
 		var wfsTypeName = parentOnlineResource.name;
 		
