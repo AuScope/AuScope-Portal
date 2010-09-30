@@ -100,7 +100,7 @@ CSWRecordGridPanel = function(id, title, cswRecordStore, addLayerHandler, cswRec
         tbar: [
                'Search: ', ' ',
                new Ext.ux.form.ClientSearchField({
-                   store: cswRecordStore,
+                   store: dsCopy,
                    width:200,
                    id: searchPanelId,
                    fieldName:'serviceName'
