@@ -129,10 +129,8 @@
 		        <executions>
         			<execution>
             			<goals>
-            				<!-- Disabled for testing 
 		                    <goal>jslint</goal>
               				<goal>compress</goal>
-              				 -->
             			</goals>
           			</execution>
         		</executions>
