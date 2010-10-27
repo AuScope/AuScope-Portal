@@ -76,7 +76,8 @@ public class WFSGetFeatureMethodMakerPOST implements IWFSGetFeatureMethodMaker {
         
         // If this does not work, try params: "text/xml; charset=ISO-8859-1"
         httpMethod.setRequestEntity(new StringRequestEntity(sb.toString(),null,null));
-
+        
+        
         return httpMethod;
     }
 

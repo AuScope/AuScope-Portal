@@ -3,6 +3,9 @@ package org.auscope.portal.server.domain.filter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * Represents a partial implementation of the IFilter interface with protected
@@ -16,7 +19,7 @@ import java.util.Map;
  *
  */
 public abstract class AbstractFilter implements IFilter {
-    
+	protected final Log log = LogFactory.getLog(getClass());
     /**
      * returns a ogc:Filter string fragment that can be embedded in
      * <ogc:And> <ogc:Or> <ogc:Not> <ogc:Filter> parent elements.
@@ -32,13 +35,27 @@ public abstract class AbstractFilter implements IFilter {
        //Curse the lack of String.Join
        StringBuilder lowerCorner = new StringBuilder();
        StringBuilder upperCorner = new StringBuilder();
-       for (double d : bbox.getLowerCornerPoints()) {
-           lowerCorner.append(Double.toString(d));
-           lowerCorner.append(" ");
-       }
-       for (double d : bbox.getUpperCornerPoints()) {
-           upperCorner.append(Double.toString(d));
-           upperCorner.append(" ");
+       
+       //To deal with axis order issues http://geoserver.org/display/GEOSDOC/2.+WFS+-+Web+Feature+Service
+       //Basically crs with urn:x-ogc:def:crs:EPSG:XXXX will need to lat/long, otherwise it will need to be long/lat
+       if (bbox.getBboxSrs().startsWith("urn:x-ogc:def:crs:EPSG:")) {
+           for (int i = bbox.getLowerCornerPoints().length - 1; i >= 0; i--) {
+               lowerCorner.append(Double.toString(bbox.getLowerCornerPoints()[i]));
+               lowerCorner.append(" ");
+           }
+           for (int i = bbox.getUpperCornerPoints().length - 1; i >= 0; i--) {
+               upperCorner.append(Double.toString(bbox.getUpperCornerPoints()[i]));
+               upperCorner.append(" ");
+           }
+       } else {
+           for (double d : bbox.getLowerCornerPoints()) {
+               lowerCorner.append(Double.toString(d));
+               lowerCorner.append(" ");
+           }
+           for (double d : bbox.getUpperCornerPoints()) {
+               upperCorner.append(Double.toString(d));
+               upperCorner.append(" ");
+           }
        }
        
        
@@ -300,7 +317,6 @@ public abstract class AbstractFilter implements IFilter {
        
        if (nonEmptyFragmentCount >= minParams)
            sb.append(String.format("</%1$s>", logicalComparison));
-       
        return sb.toString();
    }
    

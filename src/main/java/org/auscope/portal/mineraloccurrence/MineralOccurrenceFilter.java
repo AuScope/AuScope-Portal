@@ -12,16 +12,20 @@ import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.domain.filter.AbstractFilter;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 
+
 /**
  * Class that represents ogc:Filter markup for er:MineralOccurrence queries
  * 
  * @author Jarek Sanders
  * @version $Id$
  */
+@SuppressWarnings("deprecation")
 public class MineralOccurrenceFilter extends AbstractFilter {
  
     // TODO: Include ENDOWMENT when GeoServers accept this element 
     //       (...you may just just put it b/w RESERVE and RESOURCE) 
+	
+
     public enum MeasureTypes { ENDOWMENT, RESERVE, RESOURCE, ANY, NONE }
     
     /** Log object for this class. */
@@ -64,6 +68,8 @@ public class MineralOccurrenceFilter extends AbstractFilter {
 
     @Override
     public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
+    	
+
         return this.generateFilter(
                 this.generateAndComparisonFragment(
                         this.generateBboxFragment(bbox, "gsml:shape"), 
@@ -233,7 +239,7 @@ public class MineralOccurrenceFilter extends AbstractFilter {
         if ((this.minCommodityAmountUOM != null) && (!this.minCommodityAmountUOM.isEmpty())) 
             count++;                
         
-        log.debug("Returning count: " + count);        
+        log.debug("Returning count: " + count);
         return count;
     }
 
