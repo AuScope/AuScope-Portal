@@ -238,7 +238,10 @@ var gMapClickController = function(map, overlay, latlng, overlayLatlng, activeLa
 
 	                var url = "wmsMarkerPopup.do";
 	                url += "?WMS_URL=" + serviceUrl;
-	                url += "&lat=" + latlng.lat();
+	                if( serviceUrl.substr(-1) !== "&" ) {
+	                	url += '&';
+	                }
+	                url += "lat=" + latlng.lat();
 	                url += "&lng=" + latlng.lng();
 	                url += "&QUERY_LAYERS=" + typeName;
 	                url += "&x=" + TileUtl.getTilePoint().x;
@@ -326,7 +329,7 @@ function handleGeotransectWmsRecord(url, cswRecord, wmsOnlineResource, map, latl
             	    	lineId = lineId.substring(3, lineId.length);
             	    }
 
-                	var infoWindow = new GeotransectsInfoWindow(latlng, map, lineId, options.cswRecord, options.wmsOnlineResource);
+                	var infoWindow = new GeotransectsInfoWindow(latlng, map, lineId, options.cswRecord, options.wmsOnlineResource, rootNode);
                 	infoWindow.show();
                 } else {
                 	alert("Remote server returned an unsupported response.");
