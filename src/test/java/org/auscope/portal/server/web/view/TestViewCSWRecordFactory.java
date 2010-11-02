@@ -52,7 +52,6 @@ public class TestViewCSWRecordFactory {
 
     	expectation.put("serviceName", serviceName);
     	expectation.put("contactOrganisation", contactOrg);
-    	expectation.put("resourceProvider", resourceProvider);
     	expectation.put("fileIdentifier", fileId);
     	expectation.put("recordInfoUrl", recordInfoUrl);
     	expectation.put("dataIdentificationAbstract", dataAbstract);
