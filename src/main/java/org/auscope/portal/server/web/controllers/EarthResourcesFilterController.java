@@ -159,9 +159,10 @@ public class EarthResourcesFilterController {
             requestInfo.add(serviceUrl);
             requestInfo.add(body);
 
-            String kmlBlob =  convertToKml(gmlBlob, request, serviceUrl);
+            String kmlBlob =  convertMineResponseToKml(gmlBlob, request, serviceUrl);
 
-            //log.debug(kmlBlob);
+            log.debug(kmlBlob);
+
             //This failure test should be made a little bit more robust
             //And should probably try to extract an error message
             if (kmlBlob == null || kmlBlob.length() == 0) {
@@ -540,6 +541,17 @@ public class EarthResourcesFilterController {
         return new JSONModelAndView(model);
     }
 
+    /**
+     * Assemble a call to convert GeoSciML into kml format
+     * @param geoXML
+     * @param httpRequest
+     * @param serviceUrl
+     */
+    private String convertMineResponseToKml(String geoXML, HttpServletRequest httpRequest, String serviceUrl) {
+        InputStream inXSLT = httpRequest.getSession().getServletContext().getResourceAsStream("/WEB-INF/xsl/mine-kml.xslt");
+
+        return gmlToKml.convert(geoXML, inXSLT, serviceUrl);
+    }
 
     /**
      * Assemble a call to convert GeoSciML into kml format

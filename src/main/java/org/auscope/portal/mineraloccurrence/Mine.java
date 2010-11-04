@@ -38,7 +38,11 @@ public class Mine {
         xPath = factory.newXPath();
         xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
     }
-
+    
+    
+    /*
+     * Find a prefered name or the first name you have in the list.
+     */
     public String getMineNamePreffered() throws XPathExpressionException {
         XPathExpression expr = xPath.compile("er:mineName/er:MineName/er:isPreferred");
         NodeList prefferedNodes = (NodeList)expr.evaluate(mineNode, XPathConstants.NODESET);
@@ -55,7 +59,6 @@ public class Mine {
     }
 
     public String getMineNameURI() {
-
         try {
             XPathExpression expr = xPath.compile("er:occurrence/er:MiningFeatureOccurrence/er:specification");
             Node result = (Node)expr.evaluate(mineNode, XPathConstants.NODE);
