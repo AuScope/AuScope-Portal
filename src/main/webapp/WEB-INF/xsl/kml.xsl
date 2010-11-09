@@ -285,7 +285,7 @@
       <xsl:variable name="idHrefLink">
          <xsl:call-template name="createHrefLink">
             <xsl:with-param name="thisGmlName" select="./gsml:specification/er:MineralOccurrence/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-         <xsl:with-param name="specification" select="./gsml:specification/er:MineralOccurrence/er:commodityDescription[1]/er:Commodity/er:source/@xlink:href"/>
+            <xsl:with-param name="specification" select="./gsml:specification/er:MineralOccurrence/gsml:occurrence/@xlink:href"/>
          <xsl:with-param name="candidate1" select="''"/>
          <xsl:with-param name="candidate2">
             <xsl:value-of select="$serviceURL"/><![CDATA[service=WFS&version=1.1.0&request=GetFeature&typename=er:MineralOccurrence&featureid=]]><xsl:value-of select="./gsml:specification/er:MineralOccurrence/@gml:id"/>
@@ -297,7 +297,7 @@
          <name><xsl:value-of select="$resource_id"/></name>
          <description>
             <![CDATA[<table border="3" cellspacing="1" cellpadding="2" height="100%" bgcolor="#EAF0F8">
-               <tr><td>Id</td><td><a href="#" onclick="var w=window.open(']]><xsl:value-of select="'wfsFeaturePopup.do?url='"/><xsl:value-of select="$idHrefLink"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;">]]><xsl:value-of select="$resource_id"/><![CDATA[</a></td>]]>
+               <tr><td>Id</td><td><a href="#" onclick="var w=window.open(']]><xsl:value-of select="'wfsFeaturePopup.do?url='"/><xsl:value-of select="$resource_id"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;">]]><xsl:value-of select="$resource_id"/><![CDATA[</a></td>]]>
             <![CDATA[</tr><tr><td>Type</td><td>]]><xsl:value-of select="./gsml:specification/er:MineralOccurrence/er:type"/>
             <![CDATA[</td></tr><tr><td>Mineral Deposit Group</td><td>]]><xsl:value-of select="./gsml:specification/er:MineralOccurrence/er:classification/er:MineralDepositModel/er:mineralDepositGroup"/><![CDATA[</td></tr>]]>
             <xsl:apply-templates select="./gsml:specification/er:MineralOccurrence/er:commodityDescription"/>
