@@ -71,7 +71,7 @@ public class Mine {
     public List<String> getRelatedActivities() {
         List<String> result = new ArrayList<String>();
         try {
-            XPathExpression expr = xPath.compile("er:relatedActivity/@xlink:href");
+            XPathExpression expr = xPath.compile("er:relatedActivity/er:MiningActivity/er:occurrence/@xlink:href");
             Object relatedNodes = expr.evaluate(mineNode, XPathConstants.NODESET);
             NodeList nodes = (NodeList) relatedNodes;
             String search  = "urn:cgi";

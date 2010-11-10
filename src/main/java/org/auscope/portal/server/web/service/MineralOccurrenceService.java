@@ -304,7 +304,7 @@ log.info(".......default C'tor");
         log.trace("Mining Activity query... filter:" + miningActivityFilter.getFilterStringAllRecords());
 
         //create the method
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningActivity", miningActivityFilter.getFilterStringAllRecords(), maxFeatures);
+        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", miningActivityFilter.getFilterStringAllRecords(), maxFeatures);
         log.debug("After methodMaker.makeMethod");
         //run dat query
         //return this.httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
@@ -330,7 +330,7 @@ log.info(".......default C'tor");
 
 
         //create the method
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningActivity", miningActivityFilter.getFilterStringBoundingBox(bbox), maxFeatures, bbox.getBboxSrs());
+        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", miningActivityFilter.getFilterStringBoundingBox(bbox), maxFeatures, bbox.getBboxSrs());
 
         //run dat query
         //return this.httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());

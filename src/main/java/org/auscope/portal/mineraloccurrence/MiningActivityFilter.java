@@ -58,7 +58,7 @@ public class MiningActivityFilter extends AbstractFilter {
         
         return this.generateFilter(
                 this.generateAndComparisonFragment(
-                        this.generateBboxFragment(bbox, "er:occurrence/er:MiningFeatureOccurrence/er:location"), 
+                        this.generateBboxFragment(bbox, "er:location"), 
                         this.generateFilterFragment()));
     }
 
@@ -80,27 +80,27 @@ public class MiningActivityFilter extends AbstractFilter {
             for (String s : mine.getRelatedActivities()) {
                 log.debug("___" + (++y) + " : " + s);
                 
-                mineFragments.add(this.generatePropertyIsEqualToFragment("gml:name", s));
+                mineFragments.add(this.generatePropertyIsEqualToFragment("er:specification/er:Mine/er:mineName/er:MineName/er:mineName", s));
             }
         }
  
         if(this.startDate.length() > 0)
-            parameterFragments.add(this.generatePropertyIsGreaterThanOrEqualTo("er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition", this.startDate));
+            parameterFragments.add(this.generatePropertyIsGreaterThanOrEqualTo("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition", this.startDate));
         
         if(this.endDate.length() > 0)
-            parameterFragments.add(this.generatePropertyIsLessThanOrEqualTo("er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition", this.endDate));
+            parameterFragments.add(this.generatePropertyIsLessThanOrEqualTo("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition", this.endDate));
         
         if(this.oreProcessed.length() > 0)
-            parameterFragments.add(this.generatePropertyIsGreaterThan("er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue", this.oreProcessed));
+            parameterFragments.add(this.generatePropertyIsGreaterThan("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue", this.oreProcessed));
         
         if(this.producedMaterial.length() > 0)
-            parameterFragments.add(this.generatePropertyIsEqualToFragment("er:producedMaterial/er:Product/er:productName/gsml:CGI_TermValue/gsml:value", this.producedMaterial));
+            parameterFragments.add(this.generatePropertyIsEqualToFragment("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:productName/gsml:CGI_TermValue/gsml:value", this.producedMaterial));
         
         if(this.cutOffGrade.length() > 0)
-            parameterFragments.add(this.generatePropertyIsGreaterThan("er:producedMaterial/er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue", this.cutOffGrade));
+            parameterFragments.add(this.generatePropertyIsGreaterThan("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue", this.cutOffGrade));
         
         if(this.production.length() > 0)
-            parameterFragments.add(this.generatePropertyIsGreaterThan("er:producedMaterial/er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue", this.production));
+            parameterFragments.add(this.generatePropertyIsGreaterThan("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue", this.production));
         
         return this.generateAndComparisonFragment(
                 this.generateOrComparisonFragment(mineFragments.toArray(new String[mineFragments.size()])),
