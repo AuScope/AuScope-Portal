@@ -121,54 +121,91 @@
    <!-- TEMPLATE FOR TRANSLATING Mining Activity -->
    <!-- ================================================================= -->
    <xsl:template match="gml:featureMember/er:MiningFeatureOccurrence | gml:featureMembers/er:MiningFeatureOccurrence" priority="100">
-
-      <xsl:variable name="activity">
+  	      
+  	  <xsl:variable name="activity">
          <xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/@gml:id"/>
       </xsl:variable>
       
-      <xsl:if test="$activity">     	      
-	      <xsl:variable name="coordinates">
-	         <xsl:value-of select="./er:location/gml:Point/gml:pos"/>
-	      </xsl:variable>
+      <xsl:if test="$activity"> 
+            
+	  <xsl:variable name="coordinates">
+	     <xsl:value-of select="./er:location/gml:Point/gml:pos"/>
+	  </xsl:variable>
 	
-	      <xsl:variable name="mineNameHrefLink">
+	  <xsl:if test="$coordinates">  
+	  
+	  	  <xsl:variable name="mineNameHrefLink">
 	         <xsl:call-template name="createHrefLink">
-	            <xsl:with-param name="thisGmlName" select="./er:specification/er:Mine/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-	            <xsl:with-param name="specification" select="./er:specification/er:Mine/er:occurrence/@xlink:href"/>
+	            <xsl:with-param name="thisGmlName" select="gml:id"/>
+	            <xsl:with-param name="specification" select="gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
 	            <xsl:with-param name="candidate1" select="''"/>
-	            <xsl:with-param name="candidate2">
-	               <xsl:value-of select="$serviceURL"/><![CDATA[service=WFS&version=1.1.0&request=GetFeature&typename=er:MiningFeatureOccurrence&featureid=]]>
-	               <xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/@gml:id"/></xsl:with-param>
 	         </xsl:call-template>
 	      </xsl:variable>
-	
-	      <xsl:if test="$coordinates">  
-	         <Placemark>
-	            <name><xsl:value-of select="@gml:id"/></name>
-	            <description>
-	               <![CDATA[<table border="1" cellspacing="1" cellpadding="3" width="100%" bgcolor="#EAF0F8">
-	               <tr><td>Name</td><td><a href="#" onclick="var w=window.open(']]><xsl:value-of select="'wfsFeaturePopup.do?url='"/><xsl:value-of select="$mineNameHrefLink"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;">]]><xsl:value-of select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/><![CDATA[</a></td>]]>
-	               <![CDATA[</tr><tr><td>Location</td><td>]]><xsl:value-of select="$coordinates"/><![CDATA[</td>]]>
-	               <![CDATA[</tr><tr><td>Acitivity Start Date</td><td>]]><xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition"/><![CDATA[</td>]]>
-	               <![CDATA[</tr><tr><td>Acitivity End Date</td><td>]]><xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition"/><![CDATA[</td>]]>
-	               <![CDATA[</tr><tr><td>Activity Type</td><td>]]><xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityType"/><![CDATA[</td></tr>]]>
-	               <xsl:call-template name="displayUrnResolverLinkWithoutHTTP">
-	                  <xsl:with-param name="tableRowLabel" select=" 'Associated Mine' "/>
-<!-- 	                  <xsl:with-param name="tableRowValue" select="./er:specification/er:Mine/er:mineName/er:MineName[./er:isPreferred = true()]/er:mineName"/> -->
-	                  <xsl:with-param name="tableRowValue" select="./er:specification/er:Mine/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-	               </xsl:call-template>
-	               <xsl:call-template name="displayUrnResolverLinkWithoutHTTP">
-	                  <xsl:with-param name="tableRowLabel" select=" 'Deposit' "/>
-	                  <xsl:with-param name="tableRowValue" select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:deposit/@xlink:href"/>
-	               </xsl:call-template>               
-	               <![CDATA[<tr><td>Product</td><td>]]><xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:productName/gsml:CGI_TermValue/gsml:value"/><![CDATA[</td>]]>
-	               <xsl:apply-templates select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:sourceCommodity"/>
-	               <![CDATA[</table>]]>
-	            </description>
-	            
-	            <xsl:apply-templates select="./descendant::gml:Point"/>
-	         </Placemark>
-	      </xsl:if>
+	      
+	      <xsl:variable name="count">
+	         <xsl:value-of select="count(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity)"/>
+	      </xsl:variable>
+	      
+	      <xsl:variable name="startDates">
+	         <xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition"/>
+	      </xsl:variable>
+	      
+	      <!-- 
+	      <xsl:variable name="minStartDate">
+	         <xsl:value-of select="min(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition)"/>
+	      </xsl:variable>
+	      <xsl:variable name="maxEndDate">
+	         <xsl:value-of select="max(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition)"/>
+	      </xsl:variable>
+	      -->
+	      
+         <Placemark>
+            <name><xsl:value-of select="@gml:id"/></name>
+            <description>
+               <![CDATA[<table border="1" cellspacing="1" cellpadding="3" width="100%" bgcolor="#EAF0F8">
+               <tr><td>Name</td><td><a href="#" onclick="var w=window.open(']]><xsl:value-of select="'wfsFeaturePopup.do?url='"/><xsl:value-of select="$mineNameHrefLink"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;">]]><xsl:value-of select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/><![CDATA[</a></td>]]>
+               <![CDATA[</tr><tr><td>Location</td><td>]]><xsl:value-of select="$coordinates"/><![CDATA[</td>]]>
+               <![CDATA[</tr><tr><td>Mining Activity Count</td><td>]]><xsl:value-of select="$count"/><![CDATA[</td>]]>
+               <!-- 
+               <![CDATA[</tr><tr><td>Activity Start Date</td><td>]]><xsl:value-of select="$minStartDate"/><![CDATA[</td>]]>
+               <![CDATA[</tr><tr><td>Activity End Date</td><td>]]><xsl:value-of select="$maxEndDate"/><![CDATA[</td>]]>
+               -->
+               <![CDATA[<tr><td>Product</td><td>]]>
+               <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:productName/gsml:CGI_TermValue/gsml:value" group-by=".">
+					<xsl:if test="position()= 1">
+               			<xsl:value-of select="."/>
+               		</xsl:if>
+               		<xsl:if test="position() != 1">
+               		   	<![CDATA[, ]]><xsl:value-of select="."/>
+               		</xsl:if>
+               </xsl:for-each-group>
+               <![CDATA[</td>]]>
+               <![CDATA[</tr><tr><td>Activity Type</td><td>]]>
+               <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityType" group-by=".">
+					<xsl:if test="position()= 1">
+               			<xsl:value-of select="."/>
+               		</xsl:if>
+               		<xsl:if test="position() != 1">
+               		   	<![CDATA[, ]]><xsl:value-of select="."/>
+               		</xsl:if>
+			   </xsl:for-each-group>
+			   <![CDATA[</td></tr>]]>  
+               <![CDATA[<tr><td>Commodity Description</td><td>]]>            
+               <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:sourceCommodity/er:Commodity/er:commodityName[@codeSpace='urn:cgi:classifierScheme:GA:commodity']" group-by=".">
+					<xsl:if test="position()= 1">
+               			<xsl:value-of select="."/>
+               		</xsl:if>
+               		<xsl:if test="position() != 1">
+               		   	<![CDATA[, ]]><xsl:value-of select="."/>
+               		</xsl:if>
+			   </xsl:for-each-group>
+			   <![CDATA[</td></tr>]]>
+	           <![CDATA[</table>]]>              
+            </description>           
+            <xsl:apply-templates select="./descendant::gml:Point"/>
+         </Placemark>
+   
+      </xsl:if>
       </xsl:if>
    </xsl:template>
    

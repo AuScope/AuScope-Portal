@@ -98,10 +98,11 @@
     <!-- =============================================================== -->
     <xsl:template match="er:MiningActivity">
         <table>
+            <colgroup span="4" width="15%"/>
+            <colgroup span="1" width="45%"/>
             <tbody>
                 <tr>
-                    <td class="caption" colspan="2" rowspan="1">EarthResourceML - MiningActivity</td>
-                    <td>&#160;</td>
+                    <td class="caption" colspan="3" rowspan="1">EarthResourceML - MiningActivity</td>
                     <td colspan="2" ALIGN="right"><b>View As: </b>
                         <xsl:call-template name="make-popup-url">
                             <xsl:with-param name="friendly-name" select="'EarthResourceML'"/>
@@ -132,11 +133,10 @@
                     <td class="row header">Associated Mine</td>
                     <td class="row"></td>
                     <td class="row header">Associated Mine Id:</td>
-                    <td class="row"><xsl:call-template name="make-wfspopup-url">
+                    <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
                         <xsl:with-param name="friendly-name" select="./er:associatedMine/@xlink:href"/>
                         <xsl:with-param name="real-url" select="./er:associatedMine/@xlink:href"/>
                     </xsl:call-template></td>
-                    <td class="row">&#160;</td>
                 </tr>
                 <!-- Amount of Ore Processed -->
                 <tr>
@@ -221,10 +221,11 @@
         <xsl:variable name="mineID" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
         <xsl:variable name="minePrefName" select="./er:mineName/er:MineName[./er:isPreferred = true()]/er:mineName/text()" />
         <table>
+            <colgroup span="4" width="15%"/>
+            <colgroup span="1" width="45%"/>
             <tbody>
                 <tr>
-                    <td class="caption" colspan="2" rowspan="1">EarthResourceML - Mine</td>
-                    <td>&#160;</td>
+                    <td class="caption" colspan="3" rowspan="1">EarthResourceML - Mine</td>
                     <td colspan="2" ALIGN="right"><b>View As: </b>
                         <xsl:call-template name="make-popup-url">
                             <xsl:with-param name="friendly-name" select="'EarthResourceML'"/>
@@ -818,15 +819,19 @@
             </tbody>
         </table>
     </xsl:template>
+    
 
-
+    <!-- TEMPLATE FOR TRANSLATING MiningFeatureOccurrence -->
+    <!-- =============================================================== -->
     <xsl:template match="er:MiningFeatureOccurrence">
-        <h2>Style Sheet Not yet implemented.</h2>
+        <xsl:variable name="mfoID" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
+    
         <table>
+            <colgroup span="4" width="15%"/>
+            <colgroup span="1" width="45%"/>
             <tbody>
                 <tr>
-                    <td class="caption" colspan="2" rowspan="1">EarthResourceML - MiningFeatureOccurrence</td>
-                    <td>&#160;</td>
+                    <td class="caption" colspan="3" rowspan="1">EarthResourceML - MiningFeatureOccurrence</td>          
                     <td colspan="2" ALIGN="right"><b>View As: </b>
                         <xsl:call-template name="make-popup-url">
                             <xsl:with-param name="friendly-name" select="'EarthResourceML'"/>
@@ -834,9 +839,49 @@
                         </xsl:call-template>
                     </td>
                 </tr>
+                
+                <!-- MiningFeatureOccurrence Type -->
+                <tr>
+                    <td class="row header">Mining Feature Occurrence Description:</td>
+                    <td class="row"><xsl:value-of select="./gml:description"/></td>
+                    <td class="row header">Mining Feature Occurrence Id:</td>
+                    <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
+                            <xsl:with-param name="friendly-name" select="$mfoID"/>
+                            <xsl:with-param name="real-url" select="$mfoID"/>
+                        </xsl:call-template></td>
+                </tr>
+                <!-- Observation Method -->
+                <tr>
+                    <td class="row header" colspan="2">Observation Method:</td>
+                    <td class="row" colspan="2"><xsl:value-of select="./er:observationMethod/gsml:CGI_TermValue/gsml:value"/></td>
+                    <td class="row" colspan="1">&#160;</td>
+                </tr>
+                <!-- Positional Accuracy -->
+                <tr>
+                    <td class="row header" colspan="2">Positional Accuracy:</td>
+                    <td class="row" colspan="2"><xsl:value-of select="./er:positionalAccuracy/gsml:CGI_TermValue/gsml:value"/></td>
+                    <td class="row" colspan="1">&#160;</td>
+                </tr>
             </tbody>
-        </table>
-
+        </table>&#160;  
+               
+        <xsl:for-each select="./er:specification/er:Mine">
+            <p></p>        
+            <table>
+                <tbody>
+                    <xsl:apply-templates select=". | er:Mine"/>  
+                </tbody>
+            </table>&#160;   
+        </xsl:for-each>
+        
+        <xsl:for-each select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity">
+		<p></p>
+            <table>
+                <tbody>
+                    <xsl:apply-templates select=". | er:MiningActivity"/>    
+            	</tbody>
+            </table>&#160;      
+        </xsl:for-each>               
     </xsl:template>
 
 
