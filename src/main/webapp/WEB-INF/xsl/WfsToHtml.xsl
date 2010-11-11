@@ -98,8 +98,10 @@
     <!-- =============================================================== -->
     <xsl:template match="er:MiningActivity">
         <table>
-            <colgroup span="4" width="15%"/>
-            <colgroup span="1" width="45%"/>
+            <colgroup span="1" width="15%"/>
+            <colgroup span="1" width="25%"/>
+            <colgroup span="2" width="15%"/>
+            <colgroup span="1" width="35%"/>
             <tbody>
                 <tr>
                     <td class="caption" colspan="3" rowspan="1">EarthResourceML - MiningActivity</td>
@@ -221,8 +223,10 @@
         <xsl:variable name="mineID" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
         <xsl:variable name="minePrefName" select="./er:mineName/er:MineName[./er:isPreferred = true()]/er:mineName/text()" />
         <table>
-            <colgroup span="4" width="15%"/>
-            <colgroup span="1" width="45%"/>
+            <colgroup span="1" width="15%"/>
+            <colgroup span="1" width="25%"/>
+            <colgroup span="2" width="15%"/>
+            <colgroup span="1" width="35%"/>
             <tbody>
                 <tr>
                     <td class="caption" colspan="3" rowspan="1">EarthResourceML - Mine</td>
@@ -827,8 +831,10 @@
         <xsl:variable name="mfoID" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
     
         <table>
-            <colgroup span="4" width="15%"/>
-            <colgroup span="1" width="45%"/>
+            <colgroup span="1" width="15%"/>
+            <colgroup span="1" width="25%"/>
+            <colgroup span="2" width="15%"/>
+            <colgroup span="1" width="35%"/>
             <tbody>
                 <tr>
                     <td class="caption" colspan="3" rowspan="1">EarthResourceML - MiningFeatureOccurrence</td>          
