@@ -70,7 +70,6 @@ CSWRecordDescriptionWindow = function(cswRecords) {
         title: 'Service Information',
         autoDestroy : true,
         width : 800,
-        height : 400,
         items : [{
         	xtype : 'grid',
         	store : this.store,
@@ -136,7 +135,7 @@ CSWRecordDescriptionWindow = function(cswRecords) {
             		//We preview types differently
             		switch(record.get('type')) {
             		case 'WFS':
-            			var getFeatureUrl = onlineRes.url + this.internalURLSeperator(onlineRes.url) + 'SERVICE=WFS&REQUEST=GetFeature&VERSION=1.1.0&maxFeatures=5&typeName=' + onlineRes.name
+            			var getFeatureUrl = onlineRes.url + this.internalURLSeperator(onlineRes.url) + 'SERVICE=WFS&REQUEST=GetFeature&VERSION=1.1.0&maxFeatures=5&typeName=' + onlineRes.name;
             			return '<a target="_blank" href="' + getFeatureUrl + '"><p>First 5 features</p></a>';
             			break;
             		case 'WCS':
