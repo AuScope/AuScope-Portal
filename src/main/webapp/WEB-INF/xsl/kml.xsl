@@ -139,37 +139,41 @@
 	            <xsl:with-param name="thisGmlName" select="gml:id"/>
 	            <xsl:with-param name="specification" select="gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
 	            <xsl:with-param name="candidate1" select="''"/>
+	            <xsl:with-param name="candidate2" select="''"/>
 	         </xsl:call-template>
 	      </xsl:variable>
 	      
 	      <xsl:variable name="count">
 	         <xsl:value-of select="count(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity)"/>
-	      </xsl:variable>
-	      
-	      <xsl:variable name="startDates">
-	         <xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition"/>
-	      </xsl:variable>
-	      
-	      <!-- 
+	      </xsl:variable>	      
+
 	      <xsl:variable name="minStartDate">
-	         <xsl:value-of select="min(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition)"/>
+	        <xsl:for-each select="./er:specification/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition">
+            <xsl:sort select="." data-type="text" order="ascending"/>
+	        <xsl:if test="position()=1">
+	      	  <xsl:value-of select="."/>
+	        </xsl:if>
+	        </xsl:for-each>
 	      </xsl:variable>
+	      
 	      <xsl:variable name="maxEndDate">
-	         <xsl:value-of select="max(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition)"/>
+	        <xsl:for-each select="./er:specification/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition">
+            <xsl:sort select="." data-type="text" order="descending"/>
+	        <xsl:if test="position()=1">
+	      	  <xsl:value-of select="."/>
+	        </xsl:if>
+	        </xsl:for-each>
 	      </xsl:variable>
-	      -->
 	      
          <Placemark>
             <name><xsl:value-of select="@gml:id"/></name>
             <description>
-               <![CDATA[<table border="1" cellspacing="1" cellpadding="3" width="100%" bgcolor="#EAF0F8">
+               <![CDATA[<table border="1" cellspacing="1" cellpadding="3" width="600px" bgcolor="#EAF0F8">
                <tr><td>Name</td><td><a href="#" onclick="var w=window.open(']]><xsl:value-of select="'wfsFeaturePopup.do?url='"/><xsl:value-of select="$mineNameHrefLink"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;">]]><xsl:value-of select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/><![CDATA[</a></td>]]>
                <![CDATA[</tr><tr><td>Location</td><td>]]><xsl:value-of select="$coordinates"/><![CDATA[</td>]]>
                <![CDATA[</tr><tr><td>Mining Activity Count</td><td>]]><xsl:value-of select="$count"/><![CDATA[</td>]]>
-               <!-- 
-               <![CDATA[</tr><tr><td>Activity Start Date</td><td>]]><xsl:value-of select="$minStartDate"/><![CDATA[</td>]]>
-               <![CDATA[</tr><tr><td>Activity End Date</td><td>]]><xsl:value-of select="$maxEndDate"/><![CDATA[</td>]]>
-               -->
+               <![CDATA[</tr><tr><td>Earliest Start Date</td><td>]]><xsl:value-of select="$minStartDate"/><![CDATA[</td>]]>
+               <![CDATA[</tr><tr><td>Latest End Date</td><td>]]><xsl:value-of select="$maxEndDate"/><![CDATA[</td>]]>
                <![CDATA[<tr><td>Product</td><td>]]>
                <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:productName/gsml:CGI_TermValue/gsml:value" group-by=".">
 					<xsl:if test="position()= 1">

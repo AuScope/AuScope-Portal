@@ -288,7 +288,7 @@ log.info(".......default C'tor");
 
 
     public HttpMethodBase getMiningActivityGML( String serviceURL,
-                                        List<Mine> mines,
+                                        String mineName,
                                         String startDate,
                                         String endDate,
                                         String oreProcessed,
@@ -298,7 +298,7 @@ log.info(".......default C'tor");
                                         int maxFeatures) throws Exception {
 
         //create the filter
-        MiningActivityFilter miningActivityFilter = new MiningActivityFilter(mines, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        MiningActivityFilter miningActivityFilter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
 
         log.debug("Mining Activity query... url:" + serviceURL);
         log.trace("Mining Activity query... filter:" + miningActivityFilter.getFilterStringAllRecords());
@@ -312,7 +312,7 @@ log.info(".......default C'tor");
     }
 
     public HttpMethodBase getVisibleMiningActivityGML( String serviceURL,
-            List<Mine> mines,
+            String mineName,
             String startDate,
             String endDate,
             String oreProcessed,
@@ -323,7 +323,7 @@ log.info(".......default C'tor");
             int maxFeatures) throws Exception {
 
         //create the filter
-        MiningActivityFilter miningActivityFilter = new MiningActivityFilter(mines, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        MiningActivityFilter miningActivityFilter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
 
         log.debug("Mining Activity query... url:" + serviceURL);
         log.trace("Mining Activity query... filter:" + miningActivityFilter.getFilterStringBoundingBox(bbox));

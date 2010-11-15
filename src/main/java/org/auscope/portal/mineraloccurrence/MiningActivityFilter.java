@@ -14,7 +14,7 @@ import org.auscope.portal.server.domain.filter.FilterBoundingBox;
  * @version $Id$
  */
 public class MiningActivityFilter extends AbstractFilter {
-    private List<Mine> associatedMines;
+    private String mineName;
     private String startDate;
     private String endDate;
     private String oreProcessed;
@@ -30,14 +30,14 @@ public class MiningActivityFilter extends AbstractFilter {
     
     // ----------------------------------------------------------- Constructors
     
-    public MiningActivityFilter(List<Mine> associatedMines,
+    public MiningActivityFilter(String mineName,
                                 String startDate,
                                 String endDate,
                                 String oreProcessed,
                                 String producedMaterial,
                                 String cutOffGrade,
                                 String production) {
-        this.associatedMines = associatedMines;
+        this.mineName = mineName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.oreProcessed = oreProcessed;
@@ -62,28 +62,16 @@ public class MiningActivityFilter extends AbstractFilter {
                         this.generateFilterFragment()));
     }
 
-    
     // -------------------------------------------------------- Private Methods
     private String generateFilterFragment() {
         List<String> mineFragments = new ArrayList<String>();
         List<String> parameterFragments = new ArrayList<String>();
+
+    	String filterFragment = this.generatePropertyIsLikeFragment("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/gml:name", "*");
         
-        int z = 0;
-        for (Mine mine : this.associatedMines) {
-
-            log.debug((++z) + " : " + mine.getMineNameURI());
-
-            int relActCount = mine.getRelatedActivities().size();
-            log.debug("___Number of mine related activities: " + relActCount);
-
-            int y = 0;
-            for (String s : mine.getRelatedActivities()) {
-                log.debug("___" + (++y) + " : " + s);
-                
-                mineFragments.add(this.generatePropertyIsEqualToFragment("er:specification/er:Mine/er:mineName/er:MineName/er:mineName", s));
-            }
-        }
- 
+        if(this.mineName.length() > 0)
+        	mineFragments.add(this.generatePropertyIsLikeFragment("er:specification/er:Mine/er:mineName/er:MineName/er:mineName", this.mineName));
+        
         if(this.startDate.length() > 0)
             parameterFragments.add(this.generatePropertyIsGreaterThanOrEqualTo("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition", this.startDate));
         
@@ -103,6 +91,7 @@ public class MiningActivityFilter extends AbstractFilter {
             parameterFragments.add(this.generatePropertyIsGreaterThan("er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue", this.production));
         
         return this.generateAndComparisonFragment(
+        		filterFragment,
                 this.generateOrComparisonFragment(mineFragments.toArray(new String[mineFragments.size()])),
                 this.generateAndComparisonFragment(parameterFragments.toArray(new String[parameterFragments.size()])));
     }

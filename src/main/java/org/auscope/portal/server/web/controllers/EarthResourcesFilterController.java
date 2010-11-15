@@ -301,27 +301,12 @@ public class EarthResourcesFilterController {
 
         JSONArray requestInfo = new JSONArray();
         try {
-
-            List<Mine> mines = new ArrayList<Mine>();
-
-            if (!mineName.equals("")) {
-                //We intentionally do not bbox filter here, the bbox will happen during the main response
-                mines = this.mineralOccurrenceService.getMineWithSpecifiedName
-                                                                    ( serviceUrl
-                                                                    , mineName
-                                                                    , maxFeatures);
-
-                // If there are 0 features then send nice message to the user
-                if (mines.size() == 0)
-                    return makeModelAndViewFailure(ErrorMessages.NO_RESULTS);
-            }
-
             // Get the mining activities
             HttpMethodBase method = null;;
             String miningActivityResponse = null;
             if (bbox == null) {
             	method = this.mineralOccurrenceService.getMiningActivityGML( serviceUrl
-                        											, mines
+                        											, mineName
                         											, startDate
                         											, endDate
                         											, oreProcessed
@@ -333,7 +318,7 @@ public class EarthResourcesFilterController {
 
             } else {
             	method = this.mineralOccurrenceService.getVisibleMiningActivityGML( serviceUrl
-            																, mines
+            																, mineName
             																, startDate
             																, endDate
             																, oreProcessed
