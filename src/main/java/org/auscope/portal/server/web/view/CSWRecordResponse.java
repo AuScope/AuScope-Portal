@@ -19,6 +19,17 @@ public abstract class CSWRecordResponse {
     
     protected final Log log = LogFactory.getLog(getClass());
     
+    
+    protected JSONModelAndView generateJSONCountResponse(CSWRecord[] records) {
+    	ModelMap response = new ModelMap();
+    	
+    	response.put("success", true);
+    	response.put("msg", null);
+    	response.put("count", records.length);
+    	
+    	return new JSONModelAndView(response);
+    }
+    
 	/**
      * Utility for generating a response model
      * @param success
@@ -41,7 +52,8 @@ public abstract class CSWRecordResponse {
     
     /**
      * Utility for generating a response model
-     * @param records
+     * @param records cannot be null
+     * @param startIndex the index of the first record
      * @return
      */
     protected JSONModelAndView generateJSONResponse(ViewCSWRecordFactory viewCSWRecordFactory, CSWRecord[] records) {

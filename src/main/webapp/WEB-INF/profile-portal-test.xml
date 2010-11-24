@@ -18,6 +18,10 @@
                 <ref bean="knownTypeGeodesy" />
                 <ref bean="knownTypeGeochron" />
                 <ref bean="knownTypeGeotransects" />
+                <ref bean="knownTypeReports" />
+                <ref bean="knownTypeERCommodity"/>
+                <ref bean="knownTypeERMiningFeatureOccurence"/>
+                <ref bean="knownTypeGSMLMappedFeature"/>
             </list>
         </constructor-arg>
     </bean>
