@@ -165,15 +165,23 @@ KnownLayerRecord.prototype.setBboxOverlayManager = function(bboxOverlayManager) 
 KnownLayerRecord.prototype.getLinkedCSWRecords = function(cswRecordStore) {
 	var type = this.getType();
 	
+	//Internal cache added for AUS-1968
+	if (this.internalRecord.cachedLinkedRecords) {
+		return this.internalRecord.cachedLinkedRecords;
+	}
+	
 	switch (this.getType()) {
 	case 'KnownLayerWFS':
 		var featureTypeName = this.getFeatureTypeName();
-		return cswRecordStore.getCSWRecordsByOnlineResource(featureTypeName, null);
+		this.internalRecord.cachedLinkedRecords = cswRecordStore.getCSWRecordsByOnlineResource(featureTypeName, null);
+		return this.internalRecord.cachedLinkedRecords;
 	case 'KnownLayerWMS':
 		var layerName = this.getLayerName();
-		return cswRecordStore.getCSWRecordsByOnlineResource(layerName, null);
+		this.internalRecord.cachedLinkedRecords = cswRecordStore.getCSWRecordsByOnlineResource(layerName, null);
+		return this.internalRecord.cachedLinkedRecords;
 	case 'KnownLayerKeywords':
 		var keyword = this.getDescriptiveKeyword();
+		this.internalRecord.cachedLinkedRecords = cswRecordStore.getCSWRecordsByKeyword(keyword);
 		return cswRecordStore.getCSWRecordsByKeyword(keyword);
 	}
 	
