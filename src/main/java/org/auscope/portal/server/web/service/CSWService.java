@@ -77,6 +77,8 @@ public class CSWService {
 
     	public void run() {
     		try {
+    			log.info("Update started for "+this.serviceItem.getServiceUrl());
+    			
             	//This section is all "thread safe" because it uses all local variables (or rather its methods do)
         		//It might be useful to mark this behaviour in the definition of the objects
                 ICSWMethodMaker getRecordsMethod = new CSWMethodMakerGetDataRecords(this.serviceItem.getServiceUrl());
