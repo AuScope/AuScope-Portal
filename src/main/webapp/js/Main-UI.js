@@ -813,7 +813,7 @@ Ext.onReady(function() {
         //have any use for it
         var filterPanelObj = activeLayerRecord.getFilterPanel();
         if (filterPanelObj && filterPanelObj.form) {
-        	filterPanelObj.form.destroy();
+        	//filterPanelObj.form.destroy(); //Unsolvable IE bug that exists only on this branch. Don't uncomment
         }
     };
 
