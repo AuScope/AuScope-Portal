@@ -97,7 +97,7 @@
     <!-- TEMPLATE FOR TRANSLATING Mining Activity -->
     <!-- =============================================================== -->
     <xsl:template match="er:MiningActivity">
-        <xsl:variable name="miningActivityID" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>            
+        <xsl:variable name="miningActivityID" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>        
         <xsl:variable name="substring" select="substring(./er:producedMaterial/er:Product/er:sourceCommodity/@xlink:href, 2)"/>
         <xsl:variable name="commodity" select="//*[@gml:id=$substring]"/>
 
@@ -114,7 +114,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        
+    
         <xsl:variable name="commodityID">
             <xsl:choose>
                 <xsl:when test="exists(./er:producedMaterial/er:Product/er:sourceCommodity/er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616'])">
@@ -128,7 +128,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        
+
         <table>
             <colgroup span="1" width="15%"/>
             <colgroup span="1" width="25%"/>
@@ -183,10 +183,10 @@
                     <td class="row header">Commodity</td>
                     <td class="row"><xsl:value-of select="$commodityName"/></td>
                     <td class="row header">Commodity Id:</td>
-                    <td class="row" colspan="2">
+                    <td class="row" colspan="2">                   
                         <xsl:choose>
                             <xsl:when test="starts-with($commodityID, 'http://')">
-                                <a href="#" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
+                                <a href="wfsFeaturePopup.do?url={$commodityID}" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="$commodityID"/>
@@ -398,7 +398,7 @@
                     <td class="caption" colspan="2" rowspan="1">EarthResourceML - Commodity</td>
                     <td>&#160;</td>
                     <td colspan="2" ALIGN="right"><b>View As: </b>
-                        <a href="#" onclick="var w=window.open('{$serviceURL}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;">EarthResourceML</a>
+                        <a href="{$serviceURL}" onclick="var w=window.open('{$serviceURL}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;">EarthResourceML</a>
                     </td>
                 </tr>
                 <!-- Commodity -->
@@ -477,7 +477,7 @@
                     <td class="caption" colspan="2" rowspan="1">EarthResourceML - MineralOccurrence</td>
                     <td>&#160;</td>
                     <td colspan="2" ALIGN="right"><b>View As: </b>
-                        <a href="#" onclick="var w=window.open('{$serviceURL}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;">EarthResourceML</a>
+                        <a href="{$serviceURL}" onclick="var w=window.open('{$serviceURL}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;">EarthResourceML</a>
                     </td>
                 </tr>
                 <!-- Type -->
@@ -833,7 +833,7 @@
                     <td class="row">&#160;</td>
                     <td class="row header">Id:</td>
                     <td class="row" colspan="2">
-                        <a href="#" onclick="var w=window.open('wfsFeaturePopup.do?url={./er:resourceExtraction/@xlink:href}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="substring-after(./er:resourceExtraction/@xlink:href,'=')"/></a>
+                        <a href="wfsFeaturePopup.do?url={./er:resourceExtraction/@xlink:href}" onclick="var w=window.open('wfsFeaturePopup.do?url={./er:resourceExtraction/@xlink:href}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="substring-after(./er:resourceExtraction/@xlink:href,'=')"/></a>
                     </td>
                 </tr>
        </xsl:if>
@@ -844,7 +844,7 @@
                     <td class="row">&#160;</td>
                     <td class="row header">Id:</td>
                     <td class="row" colspan="2">
-                        <a href="#" onclick="var w=window.open('wfsFeaturePopup.do?url={./er:parent/@xlink:href}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="substring-after(./er:parent/@xlink:href,'=')"/></a>
+                        <a href="wfsFeaturePopup.do?url={./er:parent/@xlink:href}" onclick="var w=window.open('wfsFeaturePopup.do?url={./er:parent/@xlink:href}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="substring-after(./er:parent/@xlink:href,'=')"/></a>
                     </td>
                 </tr>
        </xsl:if>
@@ -855,13 +855,14 @@
                     <td class="row">&#160;</td>
                     <td class="row header">Id:</td>
                     <td class="row" colspan="2">
-                        <a href="#" onclick="var w=window.open('wfsFeaturePopup.do?url={./er:child/@xlink:href}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="substring-after(./er:child/@xlink:href,'=')"/></a>
+                        <a href="wfsFeaturePopup.do?url={./er:child/@xlink:href}" onclick="var w=window.open('wfsFeaturePopup.do?url={./er:child/@xlink:href}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="substring-after(./er:child/@xlink:href,'=')"/></a>
                     </td>
                 </tr>
        </xsl:if>
             </tbody>
         </table>
     </xsl:template>
+    
 
 
     <!-- TEMPLATE FOR TRANSLATING MiningFeatureOccurrence -->
@@ -929,7 +930,6 @@
         </xsl:for-each>
     </xsl:template>
 
-
     <!-- ================================================================= -->
     <!--    FUNCTION TO GET STRING AFTER LAST OCCURRENCE OF A SUBSTR       -->
     <!--    PARAM: input - string to search within                         -->
@@ -986,7 +986,7 @@
     <xsl:template name="make-popup-url">
         <xsl:param name="friendly-name"/>
         <xsl:param name="real-url"/>
-        <a href="#" onclick="var w=window.open('{$real-url}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;"><xsl:value-of select="$friendly-name"/></a>
+        <a href="{$real-url}" onclick="var w=window.open('{$real-url}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;"><xsl:value-of select="$friendly-name"/></a>
     </xsl:template>
 
     <!-- ================================================================= -->
@@ -1000,7 +1000,7 @@
     <xsl:template name="make-wfspopup-url">
         <xsl:param name="friendly-name"/>
         <xsl:param name="real-url"/>
-        <a href="#" onclick="var w=window.open('wfsFeaturePopup.do?url={$real-url}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;"><xsl:value-of select="$friendly-name"/></a>
+        <a href="wfsFeaturePopup.do?url={$real-url}" onclick="var w=window.open('wfsFeaturePopup.do?url={$real-url}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;"><xsl:value-of select="$friendly-name"/></a>
     </xsl:template>
 
 </xsl:stylesheet>
