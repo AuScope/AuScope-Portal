@@ -24,7 +24,7 @@ function getOPeNDAPParameters() {
 			
 			var obj = {
 				type		: component.initialConfig.variableType,
-				name 		: component.initialConfig.name,
+				name 		: component.initialConfig.name
 			};
 			
 			if (component.initialConfig.usingDimensionBounds) {
