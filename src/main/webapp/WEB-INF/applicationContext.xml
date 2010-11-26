@@ -123,7 +123,7 @@
     <bean id="knownTypeGeodesy" class="org.auscope.portal.server.web.KnownLayerWFS">
        <constructor-arg name="featureTypeName" value="ngcp:GnssStation"/>
        <constructor-arg name="title" value="Geodesy"/>
-       <constructor-arg name="description" value=""/>
+       <constructor-arg name="description" value="A collection of continuous operating Global Navigation Satellite Systems (GNSS) stations in Australia, its Territories and the South Pacific."/>
        <constructor-arg name="proxyUrl" value="getAllFeatures.do"/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png"/>
        <constructor-arg name="iconAnchor">
@@ -173,7 +173,7 @@
    </bean>
    <bean id="knownTypeGeotransects" class="org.auscope.portal.server.web.KnownLayerWMS">
        <constructor-arg name="title" value="Geotransects"/>
-       <constructor-arg name="description" value=""/>
+       <constructor-arg name="description" value="Seismic geotransect data for a strategically selected set of corridors across Australia that cross major geological features."/>
        <constructor-arg name="layerName" value="gt:AuScope_Land_Seismic_gda94"/>
    </bean>
 
