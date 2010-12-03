@@ -834,7 +834,17 @@ Ext.onReady(function() {
         //have any use for it
         var filterPanelObj = activeLayerRecord.getFilterPanel();
         if (filterPanelObj && filterPanelObj.form) {
-        	//filterPanelObj.form.destroy(); //Unsolvable IE bug that exists only on this branch. Don't uncomment
+        	//Unsolvable IE bug that exists only on this branch.
+        	if (Ext.isIE6 || Ext.isIE7) {
+        		//AUS-1969 Likely an Ext JS bug relating to the slider control in WMSLayerFilterForm
+        		//Unsure of why it only manifests on this branch...
+        		if (!(filterPanelObj.form instanceof WMSLayerFilterForm)) {
+        			filterPanelObj.form.destroy();
+        		}
+        	} else {
+        		//For other browsers, this works as expected
+        		filterPanelObj.form.destroy();
+        	}
         }
     };
 
