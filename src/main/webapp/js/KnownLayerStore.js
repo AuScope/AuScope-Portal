@@ -26,6 +26,7 @@ KnownLayerStore = function(url) {
 		    'relatedFeatureTypeNames',
 		    'id',
 		    'proxyUrl',
+		    'proxyRecordCountUrl',
 		    'iconUrl',
 		    'iconAnchor',
 		    'infoWindowAnchor',

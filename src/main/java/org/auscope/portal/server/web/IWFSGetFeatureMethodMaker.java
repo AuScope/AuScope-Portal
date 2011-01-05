@@ -11,4 +11,5 @@ public interface IWFSGetFeatureMethodMaker {
     
     public HttpMethodBase makeMethod(String serviceURL, String featureType, String filterString, int maxFeatures) throws Exception;
     public HttpMethodBase makeMethod(String serviceURL, String featureType, String filterString, int maxFeatures, String srsName) throws Exception;
+    public HttpMethodBase makeMethod(String serviceURL, String featureType, String filterString, String resultType) throws Exception;
 }

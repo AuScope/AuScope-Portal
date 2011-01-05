@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import net.sf.json.JSONArray;
 
@@ -26,6 +29,8 @@ import org.auscope.portal.server.web.view.JSONModelAndView;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.domain.filter.IFilter;
 import org.auscope.portal.server.util.GmlToKml;
+import org.auscope.portal.server.util.Util;
+import org.auscope.portal.csw.CSWNamespaceContext;
 import org.auscope.portal.csw.ICSWMethodMaker;
 
 import org.apache.commons.httpclient.ConnectTimeoutException;
@@ -58,6 +63,7 @@ public class GSMLController {
     private IWFSGetFeatureMethodMaker methodMaker;
     private IFilter filter;
     private GSMLResponseHandler gsmlResponseHandler;
+    private Util util;
     
     @Autowired
     public GSMLController(HttpServiceCaller serviceCaller,
@@ -71,8 +77,47 @@ public class GSMLController {
         this.methodMaker = methodMaker;
         this.filter = filter;
         this.gsmlResponseHandler = gsmlResponseHandler;
+        this.util = new Util();
     }
     
+    
+   
+
+    /**
+     * Given a service Url and a feature type this will query for the count of all of the features within a given bounding box
+     * Returns a JSON response with a data structure like so
+     * [
+     * [recordCount]
+     * ]
+     */
+    @RequestMapping("/getFeatureCount.do")
+    public ModelAndView requestFeatureCount(@RequestParam("serviceUrl") final String serviceUrl,
+                                           @RequestParam("typeName") final String featureType,
+                                           @RequestParam(required=false, value="bbox") final String bboxJSONString,
+                                           HttpServletRequest request) throws Exception {
+    	
+    	FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJSONString);
+    	
+    	JSONArray dataItems = new JSONArray();
+    	String filterString;
+    	String resultType = "hits";
+    	if (bbox == null) {
+            filterString = filter.getFilterStringAllRecords();
+        } else {
+            filterString = filter.getFilterStringBoundingBox(bbox);
+        }
+    	HttpMethodBase method = methodMaker.makeMethod(serviceUrl, featureType, filterString, resultType);
+        
+        String gmlResponse = serviceCaller.getMethodResponseAsString(method, 
+                                                                     serviceCaller.getHttpClient());
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        xPath.setNamespaceContext(new CSWNamespaceContext());
+
+        String extractCountExpression = "@numberOfFeatures";
+		String featureCountString = (String)xPath.evaluate(extractCountExpression, util.buildDomFromString(gmlResponse).getDocumentElement(), XPathConstants.STRING);
+		dataItems.add(featureCountString);
+		return new JSONModelAndView(dataItems);
+    }
 
     /**
      * Given a service Url and a feature type this will query for all of the features, then convert them into KML,
@@ -88,7 +133,7 @@ public class GSMLController {
     public ModelAndView requestAllFeatures(@RequestParam("serviceUrl") final String serviceUrl,
                                            @RequestParam("typeName") final String featureType,
                                            @RequestParam(required=false, value="bbox") final String bboxJSONString,
-                                           @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures,
+                                           //@RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures,
                                            HttpServletRequest request) throws Exception {
 
         
@@ -102,7 +147,7 @@ public class GSMLController {
         } else {
             filterString = filter.getFilterStringBoundingBox(bbox);
         }
-        HttpMethodBase method = methodMaker.makeMethod(serviceUrl, featureType, filterString, maxFeatures);
+        HttpMethodBase method = methodMaker.makeMethod(serviceUrl, featureType, filterString, 0);
         RequestEntity ent;
         String body = null;
         if (method instanceof PostMethod) {

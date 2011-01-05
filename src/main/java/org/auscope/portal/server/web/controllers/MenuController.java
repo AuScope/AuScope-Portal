@@ -50,12 +50,12 @@ public class MenuController {
       String vocabServiceUrl
          = hostConfigurer.resolvePlaceholder("HOST.vocabService.url");
       String maxFeatureValue
-      	 = hostConfigurer.resolvePlaceholder("HOST.maxFeatures.value");
-
+   	 	= hostConfigurer.resolvePlaceholder("HOST.maxFeatures.value");
+      
       logger.debug("googleKey: " + googleKey);
       logger.debug("vocabServiceUrl: " + vocabServiceUrl);
       logger.debug("maxFeatureValue: " + maxFeatureValue);
-
+      
       ModelAndView mav = new ModelAndView("gmap");
       mav.addObject("googleKey", googleKey);
       mav.addObject("vocabServiceUrl", vocabServiceUrl);
@@ -85,9 +85,17 @@ public class MenuController {
       return mav;
    }
 
-   @RequestMapping("/links.html")
+   /*@RequestMapping("/links.html")
    public ModelAndView links() {
       return new ModelAndView("links");
+   }*/
+   
+   @RequestMapping("/login.html")
+   public ModelAndView login(HttpServletRequest request) {
+      logger.debug("Shib-Identity-Provider : " + request.getHeader("Shib-Identity-Provider"));
+
+      //return new ModelAndView("login");
+      return new ModelAndView("redirect:/gmap.html");
    }
 
    @RequestMapping("/about.html")
@@ -127,5 +135,16 @@ public class MenuController {
          e.printStackTrace();
       }
       return mav;
+   }
+   
+   @RequestMapping("/admin.html")
+   public ModelAndView admin() {
+      return new ModelAndView("admin");
+   }
+   
+   
+   @RequestMapping("/access_error.html")
+   public ModelAndView access_error() {
+      return new ModelAndView("access_error");
    }
 }

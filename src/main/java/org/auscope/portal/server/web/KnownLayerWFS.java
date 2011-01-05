@@ -11,6 +11,7 @@ import java.awt.Point;
 public class KnownLayerWFS extends KnownLayer {
     private String featureTypeName;
     private String proxyUrl;
+    private String proxyRecordCountUrl;
     private String iconUrl;
     private Point iconAnchor;
     private Point infoWindowAnchor;
@@ -39,11 +40,12 @@ public class KnownLayerWFS extends KnownLayer {
      * @param iconUrl The Icon that will be used to render this feature on the map 
      */
     public KnownLayerWFS(String featureTypeName, String title, 
-            String description, String proxyUrl, String iconUrl) {
+            String description, String proxyUrl, String proxyRecordCountUrl, String iconUrl) {
         this(featureTypeName);
         this.title = title;
         this.description = description;
         this.proxyUrl = proxyUrl;
+        this.proxyRecordCountUrl = proxyRecordCountUrl;
         this.iconUrl = iconUrl;
         this.disableBboxFiltering = false;
     }
@@ -61,9 +63,9 @@ public class KnownLayerWFS extends KnownLayer {
      * @param iconSize  The size of the icon in pixels
      */
     public KnownLayerWFS(String featureTypeName, String title, 
-            String description, String proxyUrl, String iconUrl, Point iconAnchor,
+            String description, String proxyUrl, String proxyRecordCountUrl, String iconUrl, Point iconAnchor,
             Point infoWindowAnchor, Dimension iconSize) {
-        this(featureTypeName, title, description, proxyUrl, iconUrl, iconAnchor, 
+        this(featureTypeName, title, description, proxyUrl, proxyRecordCountUrl, iconUrl, iconAnchor, 
              infoWindowAnchor, iconSize, false);
     }    
     
@@ -81,15 +83,22 @@ public class KnownLayerWFS extends KnownLayer {
      * @param disableBboxFiltering if true, the GUI will be instructed NOT to use to bounding box filters for this WFS collection
      */
     public KnownLayerWFS(String featureTypeName, String title, 
-            String description, String proxyUrl, String iconUrl, Point iconAnchor,
+            String description, String proxyUrl, String proxyRecordCountUrl, String iconUrl, Point iconAnchor,
             Point infoWindowAnchor, Dimension iconSize, boolean disableBboxFiltering) {
-        this(featureTypeName, title, description, proxyUrl, iconUrl);
+        this(featureTypeName, title, description, proxyUrl, proxyRecordCountUrl, iconUrl);
         this.iconAnchor = iconAnchor;
         this.infoWindowAnchor = infoWindowAnchor;
         this.iconSize = iconSize;
         this.disableBboxFiltering = disableBboxFiltering;
-    }    
-
+    }  
+    
+    /*public KnownLayerWFS(String featureTypeName, String title, 
+            String description, String proxyUrl, int proxyRecordCountUrl, String iconUrl, Point iconAnchor,
+            Point infoWindowAnchor, Dimension iconSize, boolean disableBboxFiltering) {
+        this(featureTypeName, title, description, proxyUrl, iconUrl, iconAnchor, infoWindowAnchor, iconSize, disableBboxFiltering);
+        this.proxyRecordCountUrl = proxyRecordCountUrl;
+    } */ 
+   
     public String getFeatureTypeName() {
         return featureTypeName;
     }
@@ -109,6 +118,10 @@ public class KnownLayerWFS extends KnownLayer {
     public String getIconUrl() {
         return iconUrl;
     }
+    public String getProxyRecordCountUrl(){
+    	return proxyRecordCountUrl;
+    }
+    
     
     /**
      * Gets the pixel coordinates relative to the top left corner of the icon 

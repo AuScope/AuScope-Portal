@@ -4,11 +4,11 @@
 <!-- Credits for icons from http://www.fatcow.com/free-icons/ under http://creativecommons.org/licenses/by/3.0/us/-->
 <html xmlns:v="urn:schemas-microsoft-com:vml">
    <head>
-      <title>AuScope Discovery Portal</title>
+      <title>MDU Discovery Portal</title>
 
-      <meta name="description" content="Access geoscientific information from around Australia, via AuScopes national e-Research infrastructure.">
-      <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
-      <meta name="author" content="AuScope">
+      <meta name="description" content="Access geoscientific information from around Australia, via MDUs national e-Research infrastructure.">
+      <meta name="keywords" content="MDU, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
+      <meta name="author" content="MDU">
 
       <%-- Google Maps imports --%>
       <script src="http://maps.google.com/maps?file=api&amp;v=2.X&amp;key=${googleKey}" type="text/javascript"></script>
@@ -42,6 +42,12 @@
    <body onunload="GUnload()">
       <!-- Include Navigation Header -->
       <%@ include file="page_header.jsp" %>
+      
+      <security:authorize ifAllGranted="ROLE_DOWNLOAD">
+        <script type="text/javascript">
+          //buttonsPanel.enable();
+        </script>
+      </security:authorize>
    </body>
 
 </html>

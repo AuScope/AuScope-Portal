@@ -99,6 +99,10 @@ KnownLayerRecord.prototype.getProxyUrl = function() {
 /**
  * Gets the icon URL as a String. Only valid if type=='KnownLayerWFS'
  */
+KnownLayerRecord.prototype.getProxyRecordCountUrl = function() {
+	return this.internalGetStringField('proxyRecordCountUrl');
+};
+
 KnownLayerRecord.prototype.getIconUrl = function() {
 	return this.internalGetStringField('iconUrl');
 };

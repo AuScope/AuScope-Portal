@@ -36,6 +36,7 @@ public class TestViewKnownLayerFactory {
     	final String title = "co";
     	final String description = "asb";
     	final String proxyUrl = "http://bob.xom";
+    	final String proxyRecordCountUrl = "http://bob.xom";
     	final String iconUrl = "http://bob.xom.foo.bar";
     	final String id = "eyedee";
     	final boolean disableBboxFiltering = false;
@@ -62,6 +63,7 @@ public class TestViewKnownLayerFactory {
     	expectation.put("title", title);
     	expectation.put("description", description);
     	expectation.put("proxyUrl", proxyUrl);
+    	expectation.put("proxyRecordCountUrl", proxyRecordCountUrl);
     	expectation.put("iconUrl", iconUrl);
     	expectation.put("iconAnchor", anchorExpectation);
     	expectation.put("infoWindowAnchor", infoExpectation);
@@ -87,6 +89,7 @@ public class TestViewKnownLayerFactory {
     		allowing(mockWFS).getTitle();will(returnValue(title));
     		allowing(mockWFS).getDescription();will(returnValue(description));
     		allowing(mockWFS).getProxyUrl();will(returnValue(proxyUrl));
+    		allowing(mockWFS).getProxyRecordCountUrl();will(returnValue(proxyUrl));
     		allowing(mockWFS).getIconUrl();will(returnValue(iconUrl));
     		allowing(mockWFS).getIconAnchor();will(returnValue(mockP1));
     		allowing(mockWFS).getInfoWindowAnchor();will(returnValue(mockP2));
@@ -123,6 +126,7 @@ public class TestViewKnownLayerFactory {
     	final String title = "co";
     	final String description = "asb";
     	final String proxyUrl = "http://bob.xom";
+    	final String proxyRecordCountUrl = "http://bob.xom";
     	final String iconUrl = "http://bob.xom.foo.bar";
     	final String id = "eyedee";
     	final boolean disableBboxFiltering = true;
@@ -137,6 +141,7 @@ public class TestViewKnownLayerFactory {
     	expectation.put("title", title);
     	expectation.put("description", description);
     	expectation.put("proxyUrl", proxyUrl);
+    	expectation.put("proxyRecordCountUrl", proxyRecordCountUrl);
     	expectation.put("iconUrl", iconUrl);
     	expectation.put("id", id);
     	expectation.put("disableBboxFiltering", disableBboxFiltering);
@@ -149,6 +154,7 @@ public class TestViewKnownLayerFactory {
     		allowing(mockWFS).getTitle();will(returnValue(title));
     		allowing(mockWFS).getDescription();will(returnValue(description));
     		allowing(mockWFS).getProxyUrl();will(returnValue(proxyUrl));
+    		allowing(mockWFS).getProxyRecordCountUrl();will(returnValue(proxyUrl));
     		allowing(mockWFS).getIconUrl();will(returnValue(iconUrl));
     		allowing(mockWFS).getIconAnchor();will(returnValue(null));
     		allowing(mockWFS).getInfoWindowAnchor();will(returnValue(null));

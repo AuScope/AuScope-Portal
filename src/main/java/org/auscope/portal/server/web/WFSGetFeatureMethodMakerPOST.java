@@ -79,5 +79,40 @@ public class WFSGetFeatureMethodMakerPOST implements IWFSGetFeatureMethodMaker {
         
         return httpMethod;
     }
+    
+    public HttpMethodBase makeMethod(String serviceURL, String featureType, String filterString, String resultType) throws Exception {
+    	// Make sure the required parameters are given
+        if (featureType == null || featureType.equals(""))
+            throw new Exception("featureType parameter can not be null or empty.");
+
+        if (serviceURL == null || serviceURL.equals(""))
+            throw new Exception("serviceURL parameter can not be null or empty.");
+        
+        PostMethod httpMethod = new PostMethod(serviceURL);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        sb.append("<wfs:GetFeature service=\"WFS\" version=\"1.1.0\"\n");
+        sb.append("                xmlns:wfs=\"http://www.opengis.net/wfs\"\n");
+        sb.append("                xmlns:ogc=\"http://www.opengis.net/ogc\"\n");
+        sb.append("                xmlns:gml=\"http://www.opengis.net/gml\"\n");
+        sb.append("                xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\"\n");
+        sb.append("                xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\"\n");
+        sb.append(" resultType=\"" + resultType + "\"");
+        sb.append(">\n");        
+        sb.append("  <wfs:Query typeName=\""+featureType+"\"");
+        sb.append(">\n");
+        sb.append(filterString);
+        sb.append("  </wfs:Query>\n");
+        sb.append("</wfs:GetFeature>");
+ 
+        log.debug("Service URL:\n\t" + serviceURL);
+        log.debug("Get Feature Query:\n" + sb.toString());
+        // If this does not work, try params: "text/xml; charset=ISO-8859-1"
+        httpMethod.setRequestEntity(new StringRequestEntity(sb.toString(),null,null));
+        
+        
+        return httpMethod;
+    }
 
 }

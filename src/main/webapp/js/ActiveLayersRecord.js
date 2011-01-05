@@ -71,6 +71,10 @@ ActiveLayersRecord.prototype.getProxyUrl = function() {
 	return this.internalRecord.get('proxyUrl');
 };
 
+ActiveLayersRecord.prototype.getProxyRecordCountUrl = function() {
+	return this.internalRecord.get('proxyRecordCountUrl');
+};
+
 /**
  * Gets an array of CSWRecord objects that represent this layer
  */

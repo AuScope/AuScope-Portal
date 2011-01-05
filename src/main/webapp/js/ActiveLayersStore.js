@@ -12,6 +12,7 @@ ActiveLayersStore = function() {
 			    {   name	: 'description'     },	//String: Text that appears when the row is 'expanded'
 			    {   name	: 'cswRecords'      },	//[CSWRecord]: Objects that represent the content of this layer
 			    {	name	: 'proxyUrl'		},	//String: The raw URL that references the location the active layer should query 
+			    {   name	: 'proxyRecordCountUrl' },//number:To chk the total number of records
 			    {   name	: 'iconUrl'         },	//String: The raw URL pointing to an appropriate image icon (used for WFS) 
 			    {   name	: 'keyIconHtml'     },	//String: HTML that will appear under the 'key' column
 			    {   name	: 'isLoading' 		},	//boolean: Whether this layer is currently 'loading'
@@ -78,6 +79,7 @@ Ext.extend(ActiveLayersStore, Ext.data.Store, {
 			title		: knownLayerRecord.getTitle(),
 			description	: knownLayerRecord.getDescription(),
 			proxyUrl	: knownLayerRecord.getProxyUrl(),
+			proxyRecordCountUrl : knownLayerRecord.getProxyRecordCountUrl(),
 			cswRecords	: linkedCSWRecords,
 			iconUrl		: knownLayerRecord.getIconUrl(),
 			keyIconHtml	: '<img width="16" height="16" src="' + knownLayerRecord.getIconUrl() + '">',

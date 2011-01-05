@@ -8,6 +8,16 @@
     version="2.4">
 
    <display-name>AuScope Portal</display-name>
+   
+   <filter>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+   </filter>
+   
+   <filter-mapping>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
 
     <!-- This is so our our profile 'magic' context is utilised -->
     <context-param>

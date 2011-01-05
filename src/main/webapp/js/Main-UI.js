@@ -277,7 +277,7 @@ Ext.onReady(function() {
     //    lowerCornerPoints : [numbers]
     //    upperCornerPoints : [numbers]
     //}
-    var fetchVisibleMapBounds = function(gMapInstance) {
+    /*var fetchVisibleMapBounds = function(gMapInstance) {
     	var mapBounds = gMapInstance.getBounds();
 		var sw = mapBounds.getSouthWest();
 		var ne = mapBounds.getNorthEast();
@@ -299,7 +299,7 @@ Ext.onReady(function() {
 				lowerCornerPoints : [Math.min(adjustedSWLng, adjustedNELng), Math.min(sw.lat(), ne.lat())],
 				upperCornerPoints : [Math.max(adjustedSWLng, adjustedNELng), Math.max(sw.lat(), ne.lat())]
 		};
-    };
+    };*/
 
     var filterButton = new Ext.Button({
         text     :'Apply Filter >>',
@@ -648,11 +648,11 @@ Ext.onReady(function() {
             	filterParameters = filterPanel.getLayout().activeItem.getForm().getValues();
             }
             filterParameters.maxFeatures = MAX_FEATURES; // limit our feature request to 200 so we don't overwhelm the browser
-        	filterParameters.bbox = Ext.util.JSON.encode(fetchVisibleMapBounds(map)); // This line activates bbox support AUS-1597
+        	//filterParameters.bbox = Ext.util.JSON.encode(fetchVisibleMapBounds(map)); // This line activates bbox support AUS-1597
         	filterParameters.serviceUrl = wfsOnlineResource.url;
-        	if (parentKnownLayer && parentKnownLayer.getDisableBboxFiltering()) {
+        	/*if (parentKnownLayer && parentKnownLayer.getDisableBboxFiltering()) {
         		filterParameters.bbox = null; //some WFS layer groupings may wish to disable bounding boxes
-        	}
+        	}*/
 
             handleQuery(activeLayerRecord, cswRecords[i], wfsOnlineResource, filterParameters, function() {
                 //decrement the counter
@@ -669,32 +669,11 @@ Ext.onReady(function() {
     /**
      * internal helper method for Handling WFS filter queries via a proxyUrl and adding them to the map.
      */
+   
     var handleQuery = function(activeLayerRecord, cswRecord, onlineResource, filterParameters, finishedLoadingHandler) {
-
-    	var responseTooltip = activeLayerRecord.getResponseToolTip();
-        responseTooltip.addResponse(filterParameters.serviceUrl, "Loading...");
-
-        var debuggerData = activeLayerRecord.getDebuggerData();
-
-        var knownLayer = activeLayerRecord.getParentKnownLayer();
-
-        //If we don't have a proxy URL specified, use the generic 'getAllFeatures.do'
-        var url = activeLayerRecord.getProxyUrl();
-        if (!url) {
-        	url = 'getAllFeatures.do';
-        }
-
-        Ext.Ajax.request({
-        	url			: url,
-        	params		: filterParameters,
-        	timeout		: 1000 * 60 * 20, //20 minute timeout
-        	failure		: function(response) {
-        		responseTooltip.addResponse(filterParameters.serviceUrl, 'ERROR ' + response.status + ':' + response.statusText);
-        		finishedLoadingHandler();
-        	},
-        	success		: function(response) {
-        		var jsonResponse = Ext.util.JSON.decode(response.responseText);
-
+		var handleDownloadSuccess = function(response, options) {
+			var jsonResponse = Ext.util.JSON.decode(response.responseText);
+				//var jsonResponse = eval('(' + data + ')');
         		if (jsonResponse.success) {
                 	var icon = new GIcon(G_DEFAULT_ICON, activeLayerRecord.getIconUrl());
 
@@ -757,9 +736,38 @@ Ext.onReady(function() {
 
         		//we are finished
         		finishedLoadingHandler();
-        	}
-        });
-    };
+        	};
+			
+			//This is run if the download fails
+			var handleDownloadFailure = function(response, options) {
+				responseTooltip.addResponse(filterParameters.serviceUrl, 'ERROR ' + response.status + ':' + response.statusText);
+        		finishedLoadingHandler();
+			};
+			
+			//This is run if the user cancels the download
+			var handleDownloadCancelled = function() {
+				responseTooltip.addResponse(filterParameters.serviceUrl, "The request was cancelled by the user.");
+				activeLayerRecord.setLayerVisible(false);
+				finishedLoadingHandler();
+			};
+			var url = activeLayerRecord.getProxyUrl();
+			var recordCount = activeLayerRecord.getProxyRecordCountUrl();
+			if (!url) {
+				url = 'getAllFeatures.do';
+				recordCount = 'getFeatureCount.do';
+			}
+			var downloadManager = new FeatureDownloadManager(filterParameters.serviceUrl,recordCount,url, filterParameters, map);
+    	
+			downloadManager.downloadFinishedHandler = handleDownloadSuccess;
+			downloadManager.downloadErrorHandler = handleDownloadFailure;
+			downloadManager.downloadCancelledHandler = handleDownloadCancelled;
+			var responseTooltip = activeLayerRecord.getResponseToolTip();
+			responseTooltip.addResponse(filterParameters.serviceUrl, "Loading...");
+			var debuggerData = activeLayerRecord.getDebuggerData();
+			var knownLayer = activeLayerRecord.getParentKnownLayer();
+			
+			downloadManager.startDownload();
+	};
 
     var wmsHandler = function(activeLayerRecord) {
 

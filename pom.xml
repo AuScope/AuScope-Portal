@@ -228,7 +228,40 @@
             <version>${spring.version}</version>
             <scope>compile</scope>
         </dependency>
+        <!--  Required by any application which uses Spring Security. -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-support</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
+        <!-- 
+        The security namespace parsing code (and hence nothing that you are 
+        likely to use directly in your application). You need it if you are 
+        using the Spring Security XML namespace for configuration. The main 
+        package is org.springframework.security.config.Namespace parsing code -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
         <!--
         Application Context (depends on spring-core, spring-expression, spring-aop, spring-beans)
         This is the central artifact for Spring's Dependency Injection Container and is generally

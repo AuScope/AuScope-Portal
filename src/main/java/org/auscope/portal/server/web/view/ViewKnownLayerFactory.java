@@ -76,6 +76,7 @@ public class ViewKnownLayerFactory {
 	    obj.put("type", "KnownLayerWFS");
         obj.put("featureTypeName", k.getFeatureTypeName());
         obj.put("proxyUrl", k.getProxyUrl());
+        obj.put("proxyRecordCountUrl", k.getProxyRecordCountUrl());
         obj.put("iconUrl", k.getIconUrl());
         obj.put("disableBboxFiltering", k.getDisableBboxFiltering());
         obj.put("relatedFeatureTypeNames", k.getRelatedFeatureTypeNames());

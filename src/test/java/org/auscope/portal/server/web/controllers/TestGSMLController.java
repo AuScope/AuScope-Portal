@@ -135,7 +135,7 @@ public class TestGSMLController {
             oneOf(mockFilter).getFilterStringAllRecords(); will(returnValue(filterString));
         }});
 
-        ModelAndView modelAndView = gsmlController.requestAllFeatures("fake", "fake", null, 0, mockHttpRequest);
+        ModelAndView modelAndView = gsmlController.requestAllFeatures("fake", "fake", null, mockHttpRequest);
 
         //check that the kml blob has been put ont he model
         modelAndView.getModel().get("data").equals(kmlBlob);
@@ -164,7 +164,7 @@ public class TestGSMLController {
             oneOf(mockFilter).getFilterStringBoundingBox(with(any(FilterBoundingBox.class))); will(returnValue(filterString));
         }});
 
-        ModelAndView modelAndView = gsmlController.requestAllFeatures("fake", "fake", bboxToParse, 0, mockHttpRequest);
+        ModelAndView modelAndView = gsmlController.requestAllFeatures("fake", "fake", bboxToParse, mockHttpRequest);
 
         //check that the kml blob has been put ont he model
         modelAndView.getModel().get("data").equals(kmlBlob);
@@ -279,6 +279,7 @@ public class TestGSMLController {
         //check that kmlblob made it through
         if(kmlBlob.equals(responseString.getBuffer().toString()))
             Assert.assertTrue(true);
-    }
+    }    
+    
      
 }

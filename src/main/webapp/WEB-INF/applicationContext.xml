@@ -13,6 +13,7 @@
       <property name="locations">
          <list>
             <value>classpath:config.properties</value>
+            <value>classpath:env.properties</value>
          </list>
       </property>
    </bean>
@@ -33,15 +34,26 @@
 	<bean id="cswAuscopeProduction" class="org.auscope.portal.server.web.service.CSWServiceItem">
         <constructor-arg index="0" value="http://portal.auscope.org/geonetwork/srv/en/csw"/>
     </bean>
-
-	<bean id="cswMDUTest" class="org.auscope.portal.server.web.service.CSWServiceItem">
-		<constructor-arg index="0" value="http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/csw"/>
-	</bean>
-
-	<bean id="cswMDUProduction" class="org.auscope.portal.server.web.service.CSWServiceItem">
-        <constructor-arg index="0" value="http://mdu-data.arrc.csiro.au/geonetwork/srv/en/csw"/>
-	</bean>
-
+    <bean id="cswMDUTest" class="org.auscope.portal.server.web.service.CSWServiceItem">  
+        <constructor-arg index="0" value="http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/csw"/>
+        <constructor-arg index="1" value="http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/metadata.show?uuid=%recordID%"/>
+        <constructor-arg index="2">
+            <list>
+                <value>ROLE_ADMINISTRATOR</value>
+                <value>ROLE_USER</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="cswMDUProduction" class="org.auscope.portal.server.web.service.CSWServiceItem">  
+        <constructor-arg index="0" value="http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/csw"/>
+        <constructor-arg index="1" value="http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/metadata.show?uuid=%recordID%"/>
+        <constructor-arg index="2">
+            <list>
+                <value>ROLE_ADMINISTRATOR</value>
+                <value>ROLE_USER</value>
+            </list>
+        </constructor-arg>
+    </bean>
     <bean id="cswSissANUProduction" class="org.auscope.portal.server.web.service.CSWServiceItem">
         <constructor-arg index="0" value="http://siss1.anu.edu.au/geonetwork/srv/en/csw"/>
     </bean>
@@ -51,6 +63,7 @@
        <constructor-arg name="title" value="Earth Resource Mine"/>
        <constructor-arg name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
        <constructor-arg name="proxyUrl" value="doMineFilter.do"/>
+       <constructor-arg name="proxyRecordCountUrl" value=""/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
@@ -83,6 +96,7 @@
        <constructor-arg name="title" value="Earth Resource Mineral Occurrence"/>
        <constructor-arg name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MineralOccurence"/>
        <constructor-arg name="proxyUrl" value="doMineralOccurrenceFilter.do"/>
+       <constructor-arg name="proxyRecordCountUrl" value=""/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
@@ -115,6 +129,7 @@
        <constructor-arg name="title" value="Earth Resource Mining Activity"/>
        <constructor-arg name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
        <constructor-arg name="proxyUrl" value="doMiningActivityFilter.do"/>
+       <constructor-arg name="proxyRecordCountUrl" value=""/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
@@ -147,6 +162,7 @@
        <constructor-arg name="title" value="Geodesy"/>
        <constructor-arg name="description" value="A collection of continuous operating Global Navigation Satellite Systems (GNSS) stations in Australia, its Territories and the South Pacific."/>
        <constructor-arg name="proxyUrl" value="getAllFeatures.do"/>
+       <constructor-arg name="proxyRecordCountUrl" value="getFeatureCount.do"/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
@@ -179,6 +195,7 @@
        <constructor-arg name="title" value="Geochronology"/>
        <constructor-arg name="description" value=""/>
        <constructor-arg name="proxyUrl" value="getAllFeatures.do"/>
+       <constructor-arg name="proxyRecordCountUrl" value="getFeatureCount.do"/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-blank.png"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
@@ -212,6 +229,7 @@
        <constructor-arg name="title" value="National Virtual Core Library"/>
        <constructor-arg name="description" value="A collection of services that implement the AuScope National Virtual Core Library v1 Profile for gsml:Borehole"/>
        <constructor-arg name="proxyUrl" value="doNvclFilter.do"/>
+       <constructor-arg name="proxyRecordCountUrl" value=""/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
        <constructor-arg name="disableBboxFiltering" value="false"/>
        <constructor-arg name="iconAnchor">
@@ -264,6 +282,7 @@
        <constructor-arg name="title" value="Yilgarn Geochemistry"/>
        <constructor-arg name="description" value="A collection of detailed information about all analytes that were detected at a specific location"/>
        <constructor-arg name="proxyUrl" value="doYilgarnGeochemistry.do"/>
+       <constructor-arg name="proxyRecordCountUrl" value=""/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">

@@ -22,6 +22,7 @@ public class PortalProfileXmlWebApplicationContext extends
         
         //Return applicationContext.xml AND our profile
         return new String[] {DEFAULT_CONFIG_LOCATION,
-                DEFAULT_CONFIG_LOCATION_PREFIX + "profile-" + profile + DEFAULT_CONFIG_LOCATION_SUFFIX};
+                DEFAULT_CONFIG_LOCATION_PREFIX + "profile-" + profile + DEFAULT_CONFIG_LOCATION_SUFFIX,
+                DEFAULT_CONFIG_LOCATION_PREFIX + "applicationContext-security" + DEFAULT_CONFIG_LOCATION_SUFFIX};
     }
 }
