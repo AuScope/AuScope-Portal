@@ -1096,26 +1096,7 @@ Ext.onReady(function() {
                     }
                 });
             }
-            //this is to show Service Information window tooltip
-            else if (col.cellIndex == '3'){
-            	
-            	this.currentToolTip = new Ext.ToolTip({
-                    target: e.target ,
-                    title: 'Service Information',
-                    autoHide : true,
-                    html: 'Click for detailed information about the web services this layer utilises',
-                    anchor: 'bottom',
-                    trackMouse: true,
-                    showDelay:60,
-                    autoHeight:true,
-                    autoWidth: autoWidth,
-                    listeners : {
-                        hide : function(component) {
-                            component.destroy();
-                        }
-                    }
-                });
-            }
+           
             //this is the column for download link icons
             else if (col.cellIndex == '5') {
                 if(activeLayerRecord.hasData()) {
@@ -1230,8 +1211,25 @@ Ext.onReady(function() {
             		}
             	}
             }
+            //this is to add Service Information Popup Window to Active Layers
+            else if (col.cellIndex == '2'){
+            	
+            	if (this.onlineResourcesPopup && this.onlineResourcesPopup.isVisible()) {
+        			this.onlineResourcesPopup.close();
+        		}
+            	var cswRecords = activeLayerRecord.getCSWRecords();
+            	if (activeLayerRecord.getSource() === 'KnownLayer'){            	 
+            		var knownLayerRecord = knownLayersStore.getKnownLayerById(activeLayerRecord.getId());
+            		this.onlineResourcesPopup = new CSWRecordDescriptionWindow(cswRecords, knownLayerRecord);
+            	}else{
+            		this.onlineResourcesPopup = new CSWRecordDescriptionWindow(cswRecords);
+            	}
+        		this.onlineResourcesPopup.show(e.getTarget());
+        		
+            }
+            
             //this is for clicking the loading icon
-            else if (col.cellIndex == '2') {
+            else if (col.cellIndex == '3') {
 
 	            //to get the value of variable used in url
             	var gup = function ( name ) {
@@ -1270,23 +1268,6 @@ Ext.onReady(function() {
 		            debugWin.show(this);
             	}
             }
-            
-            //this is to add Service Information Popup Window to Active Layers
-            else if (col.cellIndex == '3'){
-            	
-            	if (this.onlineResourcesPopup && this.onlineResourcesPopup.isVisible()) {
-        			this.onlineResourcesPopup.close();
-        		}
-            	var cswRecords = activeLayerRecord.getCSWRecords();
-            	if (activeLayerRecord.getSource() === 'KnownLayer'){            	 
-            		var knownLayerRecord = knownLayersStore.getKnownLayerById(activeLayerRecord.getId());
-            		this.onlineResourcesPopup = new CSWRecordDescriptionWindow(cswRecords, knownLayerRecord);
-            	}else{
-            		this.onlineResourcesPopup = new CSWRecordDescriptionWindow(cswRecords);
-            	}
-        		this.onlineResourcesPopup.show(e.getTarget());
-        		
-            }
             //this is the column for download link icons
             else if (col.cellIndex == '5') {
             	if(activeLayerRecord.hasData()) {
@@ -1301,15 +1282,26 @@ Ext.onReady(function() {
 	                		var wfsOnlineResources = cswRecords[i].getFilteredOnlineResources('WFS');
 
 	                		for (var j = 0; j < wfsOnlineResources.length; j++) {
-	                			var typeName = wfsOnlineResources[j].name;
-	                			var url = wfsOnlineResources[j].url;
-	                			var proxyUrl = activeLayerRecord.getProxyUrl()!== null ? activeLayerRecord.getProxyUrl() : 'getAllFeatures.do';
-	                			var filterParameters = filterPanel.getLayout().activeItem == filterPanel.getComponent(0) ? "&typeName=" + typeName : filterPanel.getLayout().activeItem.getForm().getValues(true);
+	                		    //Generate our filter parameters (or just grab the last set used
+	                		    var typeName = wfsOnlineResources[j].name;
+	                		    var url = wfsOnlineResources[j].url;
+	                            var filterParameters = activeLayerRecord.getLastFilterParameters(); //filterPanel.getLayout().activeItem == filterPanel.getComponent(0) ? "&typeName=" + typeName : filterPanel.getLayout().activeItem.getForm().getValues(true);
+	                            if (!filterParameters) {
+	                                filterParameters = {};
+	                            }
+	                            filterParameters.serviceUrl = wfsOnlineResources[j].url;
+	                            filterParameters.typeName = wfsOnlineResources[j].name;
+	                            filterParameters.maxFeatures = 0;
+
+	                            //The url that will actually call a WFS and return XML
+	                            var proxyUrl = activeLayerRecord.getProxyUrl()!== null ? activeLayerRecord.getProxyUrl() : 'getAllFeatures.do';
 
 	                			if(activeLayerRecord.getServiceEndpoints() == null || 
 	                					includeEndpoint(activeLayerRecord.getServiceEndpoints(), url, activeLayerRecord.includeEndpoints())) {
+	                			    var prefixUrl = window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + proxyUrl + "?";
+	                			    
 	                				keys.push('serviceUrls');
-	                				values.push(window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + proxyUrl + "?" + filterParameters + "&serviceUrl=" + url);
+	                				values.push(Ext.urlEncode(filterParameters, prefixUrl));
 	                			}
 	                		}
 	                	}
