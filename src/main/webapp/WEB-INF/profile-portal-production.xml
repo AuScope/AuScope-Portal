@@ -58,7 +58,7 @@
 	           <value>http://services.auscope.org:80/pressuredb/wfs</value>
 	       </list>
 	   </constructor-arg>
-	   <constructor-arg name="includeEndpoints" value="false"/>
+	   <constructor-arg name="includeEndpoints" value="true"/>
        <constructor-arg name="disableBboxFiltering" value="false"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
