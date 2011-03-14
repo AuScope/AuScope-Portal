@@ -13,13 +13,13 @@
        <constructor-arg name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
        <constructor-arg name="proxyUrl" value="doBoreholeFilter.do"/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
-	   <constructor-arg name="serviceEndpoints">
-	       <list>
-	           <value>http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs</value>
-	           <value>http://www.mrt.tas.gov.au:80/web-services/wfs</value>
-	       </list>
-	   </constructor-arg>
-	   <constructor-arg name="includeEndpoints" value="true"/>
+           <constructor-arg name="serviceEndpoints">
+               <list>
+                   <value>http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs</value>
+                   <value>http://www.mrt.tas.gov.au:80/web-services/wfs</value>
+               </list>
+           </constructor-arg>
+           <constructor-arg name="includeEndpoints" value="true"/>
        <constructor-arg name="disableBboxFiltering" value="false"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
@@ -53,12 +53,12 @@
        <constructor-arg name="description" value="A collection of services implementing the Pressure DB Profile for gsml:Borehole and a collection of observations"/>
        <constructor-arg name="proxyUrl" value="doBoreholeFilter.do"/>
        <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
-	   <constructor-arg name="serviceEndpoints">
-	       <list>
-	           <value>http://services.auscope.org:80/pressuredb/wfs</value>
-	       </list>
-	   </constructor-arg>
-	   <constructor-arg name="includeEndpoints" value="true"/>
+           <constructor-arg name="serviceEndpoints">
+               <list>
+                   <value>http://services.auscope.org:80/pressuredb/wfs</value>
+               </list>
+           </constructor-arg>
+           <constructor-arg name="includeEndpoints" value="true"/>
        <constructor-arg name="disableBboxFiltering" value="false"/>
        <constructor-arg name="iconAnchor">
            <bean class="java.awt.Point">
@@ -93,13 +93,13 @@
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
-                <ref bean="knownTypeBoreholeNvcl" />
-                <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeGeodesy" />
-                <ref bean="knownTypeReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeSamplingPoint"/>
+                <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeFeatureCollection"/>
+                <ref bean="knownTypeBoreholePressureDB" />
+                <ref bean="knownTypeReports" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
                 <ref bean="knownTypeHighPSiteFeatureType"/>
@@ -110,6 +110,12 @@
                 <ref bean="knownTypeHighPSitePhosLayer"/>
                 <ref bean="geodesyWorkflowPortal"/>
                 <ref bean="c3dmmPortal"/>
+                <ref bean="VEGLPortal"/>
+                <ref bean="mduPortal"/>
+                <ref bean="yilgarnLocSpec"/>
+                <ref bean="yilgarnObs"/>
+                <ref bean="yilgarnObsProc"/>
+
             </list>
         </constructor-arg>
     </bean>

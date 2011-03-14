@@ -324,4 +324,38 @@
         <property name="hidden" value="true"/>
     </bean>
 
+    <!-- This layer is NOT selectable, it is only used for hiding these features -->
+    <bean id="yilgarnObsProc" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <constructor-arg name="featureTypeName" value="omx:ObservationProcess"/>
+        <constructor-arg name="title" value="Yilgarn Observation Processes"/>
+        <property name="hidden" value="true"/>
+    </bean>
+
+    <!-- This layer is NOT selectable, it is only used for hiding these features -->
+    <bean id="yilgarnObs" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <constructor-arg name="featureTypeName" value="gml:TimeInstant"/>
+        <constructor-arg name="title" value="Yilgarn Observations"/>
+        <property name="hidden" value="true"/>
+    </bean>
+
+    <!-- This layer is NOT selectable, it is only used for hiding these features -->
+    <bean id="yilgarnLocSpec" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <constructor-arg name="featureTypeName" value="sa:LocatedSpecimen"/>
+        <constructor-arg name="title" value="Yilgarn located specimens"/>
+        <property name="hidden" value="true"/>
+    </bean>
+
+    <!-- This layer is NOT selectable, it is only used for hiding these features -->
+    <bean id="mduPortal" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <constructor-arg name="featureTypeName" value="Minerals Down Under Portal"/>
+        <constructor-arg name="title" value="Minerals Down Under Portal"/>
+        <property name="hidden" value="true"/>
+    </bean>
+
+    <!-- This layer is NOT selectable, it is only used for hiding these features -->
+    <bean id="VEGLPortal" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <constructor-arg name="featureTypeName" value="VEGL Workflow Portal"/>
+        <constructor-arg name="title" value="VEGL Workflow Portal"/>
+        <property name="hidden" value="true"/>
+    </bean>
 </beans>
