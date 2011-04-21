@@ -48,11 +48,15 @@ public class XMLStreamAttributeExtractor implements Iterator<String> {
 	@Override
 	public boolean hasNext() {
 		if (nextValue == null) {
-			nextValue = scanner.findWithinHorizon(this.compiledPattern, 0);
-			return nextValue != null;
-		} else {
-			return true;
+			do {
+				nextValue = scanner.findWithinHorizon(this.compiledPattern, 0);
+				if (nextValue == null) {
+					return false;
+				}
+			} while(!this.compiledAttributeToFind.matcher(nextValue).matches());
 		}
+		
+		return true;
 	}
 
 	/**

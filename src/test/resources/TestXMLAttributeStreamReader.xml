@@ -19,4 +19,10 @@
 		<e>Value3</e>
 	</b>
 	<b attr="dontCare"><c>Value1</c><c attr="dontCare">Value2</c><dElement attr="attr-4">Value3</dElement><e>Value3</e></b><b attr="dontCare"><c>Value1</c><c attr="dontCare">Value2</c><dElement attr="attr-5"/><e>Value3</e></b>
+	<b attr="dontCare">
+		<c>Value1</c>
+		<c attr="dontCare">Value2</c>
+		<dElement attrFubar="blah" dontCare="DNE"/>
+		<e>Value3</e>
+	</b>
 </a>
