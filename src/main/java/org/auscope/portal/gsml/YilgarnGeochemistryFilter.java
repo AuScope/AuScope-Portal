@@ -15,6 +15,7 @@ import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 
 public class YilgarnGeochemistryFilter extends AbstractFilter{	
     private String geologicName;
+    private List<String> restrictToIDList;
     
 // -------------------------------------------------------------- Constants
     
@@ -24,8 +25,9 @@ public class YilgarnGeochemistryFilter extends AbstractFilter{
     
     // ----------------------------------------------------------- Constructors
     
-    public YilgarnGeochemistryFilter(String geologicName) {
+    public YilgarnGeochemistryFilter(String geologicName, List<String> restrictToIDList) {
     	this.geologicName = geologicName;
+    	this.restrictToIDList = restrictToIDList;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -50,6 +52,16 @@ public class YilgarnGeochemistryFilter extends AbstractFilter{
         List<String> parameterFragments = new ArrayList<String>();
         if(this.geologicName.length() > 0)
         	parameterFragments.add(this.generatePropertyIsLikeFragment("gml:name", this.geologicName));
+        
+        if (this.restrictToIDList != null && this.restrictToIDList.size() > 0) {
+            List<String> idFragments = new ArrayList<String>();
+            for (String id : restrictToIDList) {
+                if (id != null && id.length() > 0) {                    
+                    idFragments.add(this.generateGmlObjectIdFragment(id));
+                }
+            }
+            parameterFragments.add(this.generateOrComparisonFragment(idFragments.toArray(new String[idFragments.size()])));
+        }
         
         
         return this.generateAndComparisonFragment(

@@ -3,6 +3,7 @@ package org.auscope.portal.server.web.controllers;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.auscope.portal.gsml.GSMLResponseHandler;
 import org.auscope.portal.gsml.YilgarnGeochemistryFilter;
+import org.auscope.portal.gsml.YilgarnLocSpecimenFilter;
 import org.auscope.portal.server.web.ErrorMessages;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
+import org.auscope.portal.server.web.service.YilgarnService;
 import org.auscope.portal.server.web.view.JSONModelAndView;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.domain.filter.IFilter;
@@ -105,43 +108,6 @@ public class GSMLController extends BaseWFSToKMLController {
         return makeModelAndViewKML(convertToKml(gmlResponse, request, serviceUrl), gmlResponse, method);
     }
     
-    @RequestMapping("/doYilgarnGeochemistry.do")
-    public ModelAndView doYilgarnGeochemistryFilter(
-    		@RequestParam(required=false,	value="serviceUrl") String serviceUrl,
-    		@RequestParam(required=false,	value="geologicName") String geologicName,
-    		@RequestParam(required=false, value="bbox") String bboxJson,
-            @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures,
-            HttpServletRequest request) throws Exception  {
-
-        
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-     
-        HttpMethodBase method = null;
-        try{
-        	String filterString;
-	        YilgarnGeochemistryFilter yilgarnGeochemistryFilter = new YilgarnGeochemistryFilter(geologicName);
-	        if (bbox == null) {
-	            filterString = yilgarnGeochemistryFilter.getFilterStringAllRecords();
-	        } else {
-	            filterString = yilgarnGeochemistryFilter.getFilterStringBoundingBox(bbox);
-	        }
-	      
-	        method = methodMaker.makeMethod(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures);
-	        String yilgarnGeochemResponse = httpServiceCaller.getMethodResponseAsString(method,httpServiceCaller.getHttpClient());
-	        
-	        String kmlBlob =  convertToKml(yilgarnGeochemResponse, request, serviceUrl);
-	        
-	        if (kmlBlob == null || kmlBlob.length() == 0) {
-	        	log.error(String.format("Transform failed serviceUrl='%1$s' gmlBlob='%2$s'",serviceUrl, yilgarnGeochemResponse));
-            	return makeModelAndViewFailure(ErrorMessages.OPERATION_FAILED ,method);
-            } else {
-            	return makeModelAndViewKML(kmlBlob, yilgarnGeochemResponse, method);
-            }
-	        
-        } catch (Exception e) {
-            return this.handleExceptionResponse(e, serviceUrl, method);
-        }
-    }
     
     /**
      * Given a service Url, a feature type and a specific feature ID, this function will fetch the specific feature and 

@@ -198,7 +198,7 @@ public class TestGSMLController {
      * Test doing geochemistry filter and getting all values
      */
     
-    @Test
+  /*  @Test
     public void testYilgarnGeochemistryFilter() throws Exception{
     	final String kmlBlob = "kmlBlob";
         final String filterString = "filterStr";
@@ -225,9 +225,9 @@ public class TestGSMLController {
         modelAndView.getView().render(modelAndView.getModel(), mockHttpRequest, mockHttpResponse);
         
         testJSONResponse(actualJSONResponse.getBuffer().toString(), new Boolean(true), expectedGML, kmlBlob);
-    }
+    }*/
     
-    @Test
+   /* @Test
     public void testYilgarnGeochemistryFilterInBbox() throws Exception{
     	final String kmlBlob = "kmlBlob";
         final String filterString = "filterStr";
@@ -256,7 +256,7 @@ public class TestGSMLController {
         modelAndView.getView().render(modelAndView.getModel(), mockHttpRequest, mockHttpResponse);
         
         testJSONResponse(actualJSONResponse.getBuffer().toString(), new Boolean(true), expectedGML, kmlBlob);
-    }
+    }*/
 
     /**
      * Test that the gmltokml converter is called and the response put on the servlet response

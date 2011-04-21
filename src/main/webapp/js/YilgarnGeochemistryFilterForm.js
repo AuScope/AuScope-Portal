@@ -27,12 +27,19 @@ YilgarnGeochemistryFilterForm = function(id) {
                 xtype      : 'textfield',
                 fieldLabel : 'Geologic Unit Name',
                 name       : 'geologicName'
-            }
-            ]
+            },
+            {
+            	anchor     : '100%',
+                xtype      : 'textfield',
+                fieldLabel : 'Analyte Name',
+                name       : 'analyteNameFilter'
+            }]
         }]
 	});
     //return thePanel;
 };
 
-YilgarnGeochemistryFilterForm.prototype = new Ext.FormPanel();
+Ext.extend(YilgarnGeochemistryFilterForm, BaseFilterForm, {
+
+});
 
