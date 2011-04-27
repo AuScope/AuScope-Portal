@@ -3,11 +3,17 @@ package org.auscope.portal.server.web.service;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.server.domain.filter.IFilter;
+import org.auscope.portal.server.web.DistributedHTTPServiceCallerException;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -25,6 +31,8 @@ public class TestDistributedWFSIDFilterService {
         setImposteriser(ClassImposteriser.INSTANCE);
     }};
     
+    protected final Log log = LogFactory.getLog(getClass());
+    
     private DistributedWFSIDFilterService service;
     private IWFSGetFeatureMethodMaker mockMethodMaker = context.mock(IWFSGetFeatureMethodMaker.class);
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
@@ -35,10 +43,11 @@ public class TestDistributedWFSIDFilterService {
     private HttpMethodBase mockMethod2 = context.mock(HttpMethodBase.class, "mockmethod-2");
     private HttpMethodBase mockMethod3 = context.mock(HttpMethodBase.class, "mockmethod-3");
     private IFilter mockFilter = context.mock(IFilter.class);
+    private Executor executor = Executors.newSingleThreadExecutor();
     
     @Before
     public void setup() {
-    	service = new DistributedWFSIDFilterService(mockServiceCaller, mockMethodMaker);
+    	service = new DistributedWFSIDFilterService(mockServiceCaller, mockMethodMaker, executor);
     }
     
     /**
@@ -53,14 +62,15 @@ public class TestDistributedWFSIDFilterService {
     	
     	final List<InputStream> expectedResult = Arrays.asList(mockInputStream);
     	
-    	context.checking(new Expectations() {{
+		context.checking(new Expectations() {{
     		oneOf(mockMethodMaker).makeMethod(url, featureTypeName, null, maxFeatures, null);will(returnValue(mockMethod));
     		oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
     		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockHttpClient);will(returnValue(expectedResult.get(0)));
         }});
+		
+    	Iterator<InputStream> results = service.makeIDFilterRequest(url, featureTypeName, maxFeatures);
+    	assertIteratorMatchesList(results, expectedResult);
     	
-    	List<InputStream> results = service.makeIDFilterRequest(url, featureTypeName, maxFeatures);
-    	Assert.assertArrayEquals(expectedResult.toArray(), results.toArray());
     }
     
     /**
@@ -88,8 +98,8 @@ public class TestDistributedWFSIDFilterService {
     		oneOf(mockFilter).getFilterString(null, ids);will(returnValue(filterString));
         }});
     	
-    	List<InputStream> results = service.makeIDFilterRequest(url, featureTypeName, mockFilter,maxFeatures, null, ids);
-    	Assert.assertArrayEquals(expectedResult.toArray(), results.toArray());
+    	Iterator<InputStream> results = service.makeIDFilterRequest(url, featureTypeName, mockFilter,maxFeatures, null, ids);
+    	assertIteratorMatchesList(results, expectedResult);
     }
     
     /**
@@ -130,11 +140,27 @@ public class TestDistributedWFSIDFilterService {
     		oneOf(mockMethodMaker).makeMethod(url, featureTypeName, filterString3, maxFeatures, null);will(returnValue(mockMethod3));
     		
     		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod1, mockHttpClient);will(returnValue(expectedResult.get(0)));
-    		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2, mockHttpClient);will(returnValue(expectedResult.get(0)));
-    		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod3, mockHttpClient);will(returnValue(expectedResult.get(0)));
+    		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2, mockHttpClient);will(returnValue(expectedResult.get(1)));
+    		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod3, mockHttpClient);will(returnValue(expectedResult.get(2)));
         }});
     	
-    	List<InputStream> results = service.makeIDFilterRequest(url, featureTypeName, mockFilter,maxFeatures, null, ids);
-    	Assert.assertArrayEquals(expectedResult.toArray(), results.toArray());
+    	Iterator<InputStream> results = service.makeIDFilterRequest(url, featureTypeName, mockFilter,maxFeatures, null, ids);
+    	assertIteratorMatchesList(results, expectedResult);
+    }
+    
+    private void assertIteratorMatchesList(Iterator o, List l) {
+    	while (o.hasNext()) {
+    		Object obj = null;
+    		try {
+    			obj = o.next();
+    		} catch (DistributedHTTPServiceCallerException ex) {
+    			log.warn(ex, ex.getCause());
+    		}
+    		
+    		if (!l.contains(obj)) {
+    			Assert.fail(String.format("%1$s does not contain %2$s",l,obj));
+    		}
+    		
+    	}
     }
 }

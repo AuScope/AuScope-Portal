@@ -1,6 +1,7 @@
 package org.auscope.portal.server.web.service;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.logging.Log;
@@ -10,7 +11,6 @@ import org.auscope.portal.csw.CSWMethodMakerGetDataRecords;
 import org.auscope.portal.csw.CSWOnlineResource;
 import org.auscope.portal.csw.CSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.csw.CSWRecord;
-import org.auscope.portal.csw.CSWThreadExecutor;
 import org.auscope.portal.csw.ICSWMethodMaker;
 import org.auscope.portal.server.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,12 +131,12 @@ public class CSWService {
      */
     private UrlCache[]  cache;
     private HttpServiceCaller serviceCaller;
-    private CSWThreadExecutor executor;
+    private Executor executor;
     private Util util;
     private static final int UPDATE_INTERVAL = 600000;
 
     @Autowired
-    public CSWService(CSWThreadExecutor executor,
+    public CSWService(Executor executor,
                       HttpServiceCaller serviceCaller,
                       Util util,
                       @Qualifier(value = "cswServiceList") ArrayList cswServiceList) throws Exception {

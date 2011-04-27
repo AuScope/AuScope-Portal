@@ -3,11 +3,15 @@ package org.auscope.portal.server.web.service;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.domain.filter.IFilter;
+import org.auscope.portal.server.web.DistributedHTTPServiceCaller;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +22,6 @@ import org.springframework.stereotype.Service;
  * 
  * The service will contain a number of optimisations to minimise load/query
  * times at the WFS (It will generate a series of requests
- * 
- * TODO - internal requests are fired sequentially - they could probably be fired in batches simultaneously.
- * TODO - the return type for these functions give very little information about HTTP errors
- * TODO - instead of returning a list - return a blocking iterator so that processing can occur whilst requests return.
  * 
  * @author Josh Vote
  *
@@ -36,16 +36,21 @@ public class DistributedWFSIDFilterService {
 	
 	private HttpServiceCaller httpServiceCaller;
     private IWFSGetFeatureMethodMaker methodMaker;
+    private Executor executor;
     
     @Autowired
-    public DistributedWFSIDFilterService(HttpServiceCaller httpServiceCaller, IWFSGetFeatureMethodMaker methodMaker) {
+    public DistributedWFSIDFilterService(HttpServiceCaller httpServiceCaller, IWFSGetFeatureMethodMaker methodMaker, Executor executor) {
+    	this.executor = executor;
     	this.httpServiceCaller = httpServiceCaller;
     	this.methodMaker = methodMaker;
     }
     
     /**
      * Creates a series of WFS requests using the specified parameters. The response from each WFS request will be returned
-     * as a list of Strings
+     * an an Input Stream
+     * 
+     * Please note that the returned iterator will throw a DistributedHTTPServiceCallerException on the "next" method
+     * if the underlying service call resulted in an exception
      * 
      * @param serviceURL The remote URL of the WFS
      * @param featureType The name of the WFS feature type to query 
@@ -53,13 +58,16 @@ public class DistributedWFSIDFilterService {
      * @return
      * @throws Exception
      */
-    public List<InputStream> makeIDFilterRequest(String serviceURL, String featureType, int maxFeatures) throws Exception {
+    public Iterator<InputStream> makeIDFilterRequest(String serviceURL, String featureType, int maxFeatures) throws Exception {
         return makeIDFilterRequest(serviceURL, featureType, null, maxFeatures, null, null, null);
     }
     
     /**
      * Creates a series of WFS requests using the specified parameters. The response from each WFS request will be returned
-     * as a list of Strings
+     * an an Input Stream
+     * 
+     * Please note that the returned iterator will throw a DistributedHTTPServiceCallerException on the "next" method
+     * if the underlying service call resulted in an exception
      * 
      * @param serviceURL The remote URL of the WFS
      * @param featureType The name of the WFS feature type to query
@@ -70,13 +78,16 @@ public class DistributedWFSIDFilterService {
      * @return
      * @throws Exception
      */
-    public List<InputStream> makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList) throws Exception {
+    public Iterator<InputStream> makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList) throws Exception {
         return makeIDFilterRequest(serviceURL, featureType, filter, maxFeatures, bbox, restrictedIDList, null);
     }
     
     /**
      * Creates a series of WFS requests using the specified parameters. The response from each WFS request will be returned
-     * as a list of Strings
+     * an an Input Stream
+     * 
+     * Please note that the returned iterator will throw a DistributedHTTPServiceCallerException on the "next" method
+     * if the underlying service call resulted in an exception
      * 
      * @param serviceURL The remote URL of the WFS
      * @param featureType The name of the WFS feature type to query
@@ -88,8 +99,8 @@ public class DistributedWFSIDFilterService {
      * @return
      * @throws Exception if service URL or featureType is not provided
      */
-    public List<InputStream> makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList, String srsName) throws Exception {
-    	List<InputStream> resultingData = new ArrayList<InputStream>();
+    public Iterator<InputStream> makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList, String srsName) throws Exception {
+    	List<HttpMethodBase> methods = new ArrayList<HttpMethodBase>();
     	
     	//We may need to split our WFS request into multiple requests
     	if (filter != null && restrictedIDList != null && restrictedIDList.size() > 0) {
@@ -106,8 +117,7 @@ public class DistributedWFSIDFilterService {
     			String filterString = filter.getFilterString(bbox, restrictedIDList.subList(subsetStart, subsetEnd));
     			
     			//Generate our HTTP method and make the request
-    			HttpMethodBase method = methodMaker.makeMethod(serviceURL, featureType, filterString, maxFeatures, srsName);
-    			resultingData.add(httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient()));
+    			methods.add(methodMaker.makeMethod(serviceURL, featureType, filterString, maxFeatures, srsName));
     		}
     	} else {
     		//Otherwise we can just make a plain old single WFS request
@@ -117,10 +127,12 @@ public class DistributedWFSIDFilterService {
     		}
 			
 			//Generate our HTTP method and make the request
-			HttpMethodBase method = methodMaker.makeMethod(serviceURL, featureType, filterString, maxFeatures, srsName);
-			resultingData.add(httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient()));
+			methods.add(methodMaker.makeMethod(serviceURL, featureType, filterString, maxFeatures, srsName));
     	}
     	
-    	return resultingData;
+    	//Start making our requests and immediately return a fancy blocking iterator
+    	DistributedHTTPServiceCaller dsc = new DistributedHTTPServiceCaller(methods, this.httpServiceCaller);
+    	dsc.beginCallingServices(executor);
+    	return dsc;
     }
 }

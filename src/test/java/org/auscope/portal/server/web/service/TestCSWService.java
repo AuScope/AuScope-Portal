@@ -3,11 +3,13 @@ package org.auscope.portal.server.web.service;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.csw.CSWThreadExecutor;
 import org.auscope.portal.server.util.Util;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -55,7 +57,7 @@ public class TestCSWService {
     /**
      * Thread executor
      */
-    private CSWThreadExecutor threadExecutor;
+    private ExecutorService threadExecutor;
 
     /**
      * Mock Util
@@ -66,7 +68,7 @@ public class TestCSWService {
     @Before
     public void setup() throws Exception {
 
-    	this.threadExecutor = new CSWThreadExecutor();
+    	this.threadExecutor = Executors.newFixedThreadPool(5);
 
       	//Create our service list
       	ArrayList<CSWServiceItem> serviceUrlList = new ArrayList<CSWServiceItem>(CONCURRENT_THREADS_TO_RUN);
@@ -185,11 +187,11 @@ public class TestCSWService {
         this.cswService.updateRecordsInBackground();
         this.cswService.updateRecordsInBackground();
         try {
-        	threadExecutor.getExecutorService().shutdown();
-        	threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
+        	threadExecutor.shutdown();
+        	threadExecutor.awaitTermination(180, TimeUnit.SECONDS);
         }
         catch (Exception ex) {
-        	threadExecutor.getExecutorService().shutdownNow();
+        	threadExecutor.shutdownNow();
         	Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
         }
 

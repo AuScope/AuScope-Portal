@@ -16,6 +16,11 @@
          </list>
       </property>
    </bean>
+   
+	<!-- This is our threadpool that is shared for any service expecting to make multiple simultaneous HTTP requests -->
+   	<bean id="httpServiceThreadPool" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool"> 
+        <constructor-arg index="0" value="5"/> <!-- maximum # of threads -->
+	</bean> 
 
    <bean id="connectionParams" class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">
         <property name="connectionTimeout" value="900000"/> <!--  15 minutes -->
