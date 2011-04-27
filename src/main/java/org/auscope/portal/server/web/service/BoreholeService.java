@@ -73,11 +73,11 @@ public class BoreholeService {
      */
     public HttpMethodBase getAllBoreholes(String serviceURL, String boreholeName, String custodian, String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList) throws Exception {
         String filterString;
-        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictToIDList);
+        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling);
         if (bbox == null) {
-            filterString = nvclFilter.getFilterStringAllRecords();
+            filterString = nvclFilter.getFilterString();
         } else {
-            filterString = nvclFilter.getFilterStringBoundingBox(bbox);
+            filterString = nvclFilter.getFilterString(bbox, restrictToIDList);
         }
         
         // Create a GetFeature request with an empty filter - get all

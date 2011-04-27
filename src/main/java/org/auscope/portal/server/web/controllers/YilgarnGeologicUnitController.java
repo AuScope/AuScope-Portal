@@ -63,7 +63,7 @@ public class YilgarnGeologicUnitController extends BaseWFSToKMLController {
 			String locSpecFilterString;
 			try{
 				YilgarnLocSpecimenFilter yilgarnLocSpecFilter = new YilgarnLocSpecimenFilter(analyteNameFilter);				
-				locSpecFilterString = yilgarnLocSpecFilter.getFilterStringAllRecords();
+				locSpecFilterString = yilgarnLocSpecFilter.getFilterString();
 				geologicUnitIds = this.yilgarnService.discoverGeologicIDs(serviceUrl,locSpecFilterString,maxFeatures);
 			}catch (Exception e){
 				log.warn("Error requesting list of geologic Unit ID's", e);

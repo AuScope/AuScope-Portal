@@ -51,7 +51,7 @@ public class TestBoreholeService {
         final List<String> restrictedIds = null;
         
         context.checking(new Expectations() {{
-            allowing(mockFilter).getFilterStringBoundingBox(bbox);will(returnValue(filterString));
+            allowing(mockFilter).getFilterString(bbox);will(returnValue(filterString));
             
             oneOf(mockMethodMaker).makeMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(Integer.class)));
             oneOf(mockHttpServiceCaller).getHttpClient();
@@ -73,7 +73,7 @@ public class TestBoreholeService {
         final List<String> restrictedIds = null;
         
         context.checking(new Expectations() {{
-            allowing(mockFilter).getFilterStringAllRecords();will(returnValue(filterString));
+            allowing(mockFilter).getFilterString();will(returnValue(filterString));
             
             oneOf(mockMethodMaker).makeMethod(serviceURL, "gsml:Borehole", filterString, maxFeatures);
             oneOf(mockHttpServiceCaller).getHttpClient();
@@ -95,7 +95,7 @@ public class TestBoreholeService {
         final String dateOfDrilling = "2010-01-02";
         final String responseString = "xmlString";
         final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
-        final String filterString = (new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictedIds)).getFilterStringAllRecords();
+        final String filterString = (new BoreholeFilter(boreholeName, custodian, dateOfDrilling)).getFilterString();
         
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeMethod(serviceURL, "gsml:Borehole", filterString, maxFeatures);

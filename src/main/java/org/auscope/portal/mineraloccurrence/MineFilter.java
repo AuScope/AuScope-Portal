@@ -1,5 +1,7 @@
 package org.auscope.portal.mineraloccurrence;
 
+import java.util.List;
+
 import org.auscope.portal.server.domain.filter.AbstractFilter;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 
@@ -33,15 +35,20 @@ public class MineFilter extends AbstractFilter {
         }
     }
 
-    public String getFilterStringAllRecords() {
+    public String getFilterString() {
         return this.generateFilter(this.filterFragment);
     }
+    
+    public String getFilterString(FilterBoundingBox bbox) {
+        return this.getFilterString(bbox, null);
+    }
 
-    public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
+    public String getFilterString(FilterBoundingBox bbox, List<String> restrictedIDs) {
         return this.generateFilter(
                 this.generateAndComparisonFragment(
                         this.generateBboxFragment(bbox, "er:location"),
-                        this.filterFragment));
+                        this.filterFragment,
+                        this.generateRestrictedIDListFragment(restrictedIDs)));
     }
 
 }

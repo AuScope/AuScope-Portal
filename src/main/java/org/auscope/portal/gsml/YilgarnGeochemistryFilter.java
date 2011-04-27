@@ -33,17 +33,22 @@ public class YilgarnGeochemistryFilter extends AbstractFilter{
     // --------------------------------------------------------- Public Methods
     
     @Override
-    public String getFilterStringAllRecords() {
+    public String getFilterString() {
         return this.generateFilter(this.generateFilterFragment());
     }
     
+    public String getFilterString(FilterBoundingBox bbox) {
+    	return this.getFilterString(bbox, null);
+    }
+    
     @Override
-    public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
+    public String getFilterString(FilterBoundingBox bbox, List<String> restrictedIDList) {
         
         return this.generateFilter(
                 this.generateAndComparisonFragment(                		
                         this.generateBboxFragment(bbox, "gsml:occurrence/gsml:MappedFeature/gsml:shape"), 
-                        this.generateFilterFragment()));
+                        this.generateFilterFragment(),
+                        this.generateRestrictedIDListFragment(restrictedIDList)));
     }
 
     

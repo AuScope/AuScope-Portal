@@ -1,6 +1,8 @@
 package org.auscope.portal.server.domain.filter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -23,6 +25,48 @@ public abstract class AbstractFilter implements IFilter {
 	
 	protected String generateGmlObjectIdFragment(String gmlId) {
 	    return String.format("<ogc:GmlObjectId gml:id=\"%1$s\"/>", gmlId);
+	}
+	
+	
+	/**
+	 * Given a list of gml:ids this function returns an OR element encompassing a PropertyIsEqualTo element for each ID
+	 * @param propertyXPath
+	 * @param gmlIds
+	 * @return
+	 */
+	protected String generateRestrictedIDListFragment(String propertyXPath, List<String> ids) {
+		if (ids != null && ids.size() > 0) {
+            List<String> idFragments = new ArrayList<String>();
+            for (String id : ids) {
+                if (id != null && id.length() > 0) {
+                    idFragments.add(this.generatePropertyIsEqualToFragment(propertyXPath, id));
+                }
+            }
+            return this.generateOrComparisonFragment(idFragments.toArray(new String[idFragments.size()]));
+        }
+		
+		return null;
+	}
+	
+	/**
+	 * Given a list of gml:ids this function returns an OR element encompassing a GmlObjectId element for each ID
+	 * 
+	 * Use this function to generate a top level restriction on the list of ID's that will be queried as part of a filter
+	 * @param gmlIds
+	 * @return
+	 */
+	protected String generateRestrictedIDListFragment(List<String> gmlIds) {
+		if (gmlIds != null && gmlIds.size() > 0) {
+            List<String> idFragments = new ArrayList<String>();
+            for (String id : gmlIds) {
+                if (id != null && id.length() > 0) {
+                    idFragments.add(this.generateGmlObjectIdFragment(id));
+                }
+            }
+            return this.generateOrComparisonFragment(idFragments.toArray(new String[idFragments.size()]));
+        }
+		
+		return null;
 	}
 	
     /**
@@ -317,7 +361,9 @@ public abstract class AbstractFilter implements IFilter {
        }
        
        for (String fragment : fragments) {
-           sb.append(fragment);
+    	   if (fragment != null && !fragment.isEmpty()) {
+    		   sb.append(fragment);
+    	   }
        }
        
        if (nonEmptyFragmentCount >= minParams)

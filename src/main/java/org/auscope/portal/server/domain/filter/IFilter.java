@@ -1,5 +1,7 @@
 package org.auscope.portal.server.domain.filter;
 
+import java.util.List;
+
 
 /**
  * an interface for an ogc:Filter class to implement. Implementors must support filtering
@@ -15,8 +17,7 @@ public interface IFilter {
      *
      * @return String
      */
-    public String getFilterStringAllRecords();
-    
+    public String getFilterString();
     
     /**
      * The implementation of this method should return a valid
@@ -25,10 +26,21 @@ public interface IFilter {
      * The filter should be designed to fetch all appropriate records that pass the filter AND
      * appear within the the specified bounding box
      *
-     * @param bboxSrs The srs that the other parameters are using
-     * @param lowerCornerPoints The point(s) representing the lower corner of the bounding box
-     * @param upperCornerPoints The point(s) representing the upper corner of the bounding box
+     * @param bbox (Optional) The bounding box that should act as a top level constraint
      * @return String
      */
-    public String getFilterStringBoundingBox(FilterBoundingBox bbox);
+    public String getFilterString(FilterBoundingBox bbox);
+    
+    /**
+     * The implementation of this method should return a valid
+     * ogc:Filter xml blob - http://www.opengeospatial.org/standards/filter
+     *
+     * The filter should be designed to fetch all appropriate records that pass the filter AND
+     * appear within the the specified bounding box AND match one of the specified ID's
+     *
+     * @param bbox (Optional) The bounding box that should act as a top level constraint
+     * @param restrictedIDs (Optional) The list of gml:id values that should act as a top level constraint
+     * @return String
+     */
+    public String getFilterString(FilterBoundingBox bbox, List<String> restrictedIDs);
 }

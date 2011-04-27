@@ -1,5 +1,7 @@
 package org.auscope.portal.server.domain.filter;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,15 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class SimpleBBoxFilter extends AbstractFilter {
     @Override
-    public String getFilterStringAllRecords() {
+    public String getFilterString() {
         return "";
     }
 
     @Override
-    public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
-        if (bbox == null)
-            return getFilterStringAllRecords();
+    public String getFilterString(FilterBoundingBox bbox) {
+    	return getFilterString(bbox, null);
+    }
+
+	@Override
+	public String getFilterString(FilterBoundingBox bbox, List<String> restrictedIDs) {
+		if (bbox == null)
+            return getFilterString();
         
         return this.generateFilter(this.generateBboxFragment(bbox, null));
-    }
+	}
 }

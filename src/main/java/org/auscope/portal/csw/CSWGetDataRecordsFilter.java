@@ -1,6 +1,7 @@
 package org.auscope.portal.csw;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +28,7 @@ public class CSWGetDataRecordsFilter extends AbstractFilter {
      * Returns an ogc:filter fragment that will fetch all WFS, WMS and WCS records from a CSW
      */
     @Override
-    public String getFilterStringAllRecords() {
+    public String getFilterString() {
         
         //This is a bit of a hack - unfortunately the NamespaceContext class is unsuitable here
         //as it contains no methods to iterate the contianted list of Namespaces
@@ -40,7 +41,16 @@ public class CSWGetDataRecordsFilter extends AbstractFilter {
      * Not implemented
      */
     @Override
-    public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
+    public String getFilterString(FilterBoundingBox bbox) {
+        
+    	return null;
+    }
+    
+    /**
+     * Not implemented
+     */
+    @Override
+    public String getFilterString(FilterBoundingBox bbox, List<String> restrictToIDList) {
         
     	return null;
     }

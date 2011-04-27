@@ -60,10 +60,10 @@ public class CommodityServiceImpl implements CommodityService{
         String srsName = null;
         
         if (bbox != null) {
-            filterString = commodityFilter.getFilterStringBoundingBox(bbox);
+            filterString = commodityFilter.getFilterString(bbox);
             srsName = bbox.getBboxSrs();
         } else {
-            filterString = commodityFilter.getFilterStringAllRecords();
+            filterString = commodityFilter.getFilterString();
         }
         
         method = methodMaker.makeMethod(serviceURL, "er:Commodity", filterString, maxFeatures, srsName);

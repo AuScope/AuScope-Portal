@@ -19,7 +19,6 @@ public class BoreholeFilter extends AbstractFilter{
 		private String boreholeName;
 	    private String custodian;
 	    private String dateOfDrilling;
-	    private List<String> restrictToIDList;
 	    
 	// -------------------------------------------------------------- Constants
 	    
@@ -30,32 +29,37 @@ public class BoreholeFilter extends AbstractFilter{
 	    // ----------------------------------------------------------- Constructors
 	    
 	    public BoreholeFilter(String boreholeName, String custodian,
-	                          String dateOfDrilling, List<String> restrictToIDList) {
+	                          String dateOfDrilling) {
 	    	this.boreholeName = boreholeName;
 	        this.custodian = custodian;
 	        this.dateOfDrilling = dateOfDrilling;
-	        this.restrictToIDList = restrictToIDList;
 	    }
 
 	    // --------------------------------------------------------- Public Methods
 	    
 	    @Override
-	    public String getFilterStringAllRecords() {
-	        return this.generateFilter(this.generateFilterFragment());
+	    public String getFilterString() {
+	        return this.generateFilter(this.generateFilterFragment(null));
 	    }
 	    
 	    @Override
-	    public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
+	    public String getFilterString(FilterBoundingBox bbox) {
+	        return this.getFilterString(bbox, null);
+	    }
+	    
+	    @Override
+	    public String getFilterString(FilterBoundingBox bbox, List<String> restrictToIDList) {
 	        
 	        return this.generateFilter(
 	                this.generateAndComparisonFragment(                		
 	                        this.generateBboxFragment(bbox, "gsml:collarLocation/gsml:BoreholeCollar/gsml:location"), 
-	                        this.generateFilterFragment()));
+	                        this.generateFilterFragment(restrictToIDList)));
 	    }
 
 	    
 	    // -------------------------------------------------------- Private Methods
-	    private String generateFilterFragment() {
+	    
+	    private String generateFilterFragment(List<String> restrictToIDList) {
 	        List<String> parameterFragments = new ArrayList<String>();
 	        if(this.boreholeName.length() > 0)
 	        	parameterFragments.add(this.generatePropertyIsLikeFragment("gml:name", this.boreholeName));
@@ -66,18 +70,10 @@ public class BoreholeFilter extends AbstractFilter{
 	        if(this.dateOfDrilling.length() > 0)
 	            parameterFragments.add(this.generatePropertyIsLikeFragment("gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling", this.dateOfDrilling));
 	        
-	        if (this.restrictToIDList != null && this.restrictToIDList.size() > 0) {
-	            List<String> idFragments = new ArrayList<String>();
-	            for (String id : restrictToIDList) {
-	                if (id != null && id.length() > 0) {
-	                    //TODO - Uncomment this when http://jira.codehaus.org/browse/GEOT-3522 is fixed
-	                    //idFragments.add(this.generatePropertyIsEqualToFragment("gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']", id));
-	                    idFragments.add(this.generatePropertyIsEqualToFragment("gml:name[1]", id));
-	                }
-	            }
-	            parameterFragments.add(this.generateOrComparisonFragment(idFragments.toArray(new String[idFragments.size()])));
-	        }
-	        
+	        // TODO - Uncomment this when http://jira.codehaus.org/browse/GEOT-3522 is fixed
+	        //parameterFragments.add(this.generateRestrictedIDListFragment("gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']", restrictToIDList));
+            parameterFragments.add(this.generateRestrictedIDListFragment("gml:name[1]", restrictToIDList));
+            
 	        return this.generateAndComparisonFragment(
 	                this.generateAndComparisonFragment(parameterFragments.toArray(new String[parameterFragments.size()])));
 	    }

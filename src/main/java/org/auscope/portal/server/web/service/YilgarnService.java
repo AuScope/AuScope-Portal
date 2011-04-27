@@ -76,9 +76,9 @@ public class YilgarnService {
 		String filterString;
         YilgarnGeochemistryFilter yilgarnGeochemistryFilter = new YilgarnGeochemistryFilter(geologicName, geologicUnitIds);
         if (bbox == null) {
-        	filterString = yilgarnGeochemistryFilter.getFilterStringAllRecords();
+        	filterString = yilgarnGeochemistryFilter.getFilterString();
         } else {
-        	filterString = yilgarnGeochemistryFilter.getFilterStringBoundingBox(bbox);
+        	filterString = yilgarnGeochemistryFilter.getFilterString(bbox);
         }
         HttpMethodBase method = methodMaker.makeMethod(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures);
         

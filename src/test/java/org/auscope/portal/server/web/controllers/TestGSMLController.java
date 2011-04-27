@@ -132,7 +132,7 @@ public class TestGSMLController {
             oneOf(mockHttpSession).getServletContext();will(returnValue(mockServletContext));
             oneOf(mockServletContext).getResourceAsStream(with(any(String.class))); will(returnValue(null));
 
-            oneOf(mockFilter).getFilterStringAllRecords(); will(returnValue(filterString));
+            oneOf(mockFilter).getFilterString(); will(returnValue(filterString));
         }});
 
         ModelAndView modelAndView = gsmlController.requestAllFeatures("fake", "fake", null, 0, mockHttpRequest);
@@ -161,7 +161,7 @@ public class TestGSMLController {
             oneOf(mockHttpSession).getServletContext();will(returnValue(mockServletContext));
             oneOf(mockServletContext).getResourceAsStream(with(any(String.class))); will(returnValue(null));
 
-            oneOf(mockFilter).getFilterStringBoundingBox(with(any(FilterBoundingBox.class))); will(returnValue(filterString));
+            oneOf(mockFilter).getFilterString(with(any(FilterBoundingBox.class))); will(returnValue(filterString));
         }});
 
         ModelAndView modelAndView = gsmlController.requestAllFeatures("fake", "fake", bboxToParse, 0, mockHttpRequest);
@@ -218,7 +218,7 @@ public class TestGSMLController {
             oneOf(mockHttpSession).getServletContext();will(returnValue(mockServletContext));
             oneOf(mockServletContext).getResourceAsStream(with(any(String.class))); will(returnValue(null));
 
-            oneOf(mockGeochemFilter).getFilterStringAllRecords(); will(returnValue(filterString));
+            oneOf(mockGeochemFilter).getFilterString(); will(returnValue(filterString));
         }});
         ModelAndView modelAndView = gsmlController.doYilgarnGeochemistryFilter("fake", "fake", null, 0,mockHttpRequest);
         
@@ -249,7 +249,7 @@ public class TestGSMLController {
             oneOf(mockHttpSession).getServletContext();will(returnValue(mockServletContext));
             oneOf(mockServletContext).getResourceAsStream(with(any(String.class))); will(returnValue(null));
 
-            oneOf(mockGeochemFilter).getFilterStringAllRecords(); will(returnValue(filterString));
+            oneOf(mockGeochemFilter).getFilterString(); will(returnValue(filterString));
         }});
         ModelAndView modelAndView = gsmlController.doYilgarnGeochemistryFilter("fake", "fake", bboxToParse, 0,mockHttpRequest);
         

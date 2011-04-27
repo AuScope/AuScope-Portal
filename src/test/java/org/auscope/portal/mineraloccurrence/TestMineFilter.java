@@ -22,7 +22,7 @@ public class TestMineFilter {
     public void testWithNoMineName() throws IOException {
         MineFilter mineFilter = new MineFilter("");
 
-        String filter = mineFilter.getFilterStringAllRecords();
+        String filter = mineFilter.getFilterString();
         Assert.assertEquals("<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" singleChar=\"#\" ><ogc:PropertyName>er:specification/er:Mine/gml:name</ogc:PropertyName><ogc:Literal>*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>", filter);
     }
 
@@ -33,7 +33,7 @@ public class TestMineFilter {
     public void testWithAMineName() throws Exception {
         MineFilter mineFilter = new MineFilter("Dominion Copper Mine");
 
-        String filter = mineFilter.getFilterStringAllRecords();
+        String filter = mineFilter.getFilterString();
         Document doc = FilterTestUtilities.parsefilterStringXML(filter);
 
         FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/ogc:PropertyName",

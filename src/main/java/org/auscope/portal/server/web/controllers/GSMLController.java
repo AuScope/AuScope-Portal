@@ -96,9 +96,9 @@ public class GSMLController extends BaseWFSToKMLController {
         String filterString;
         
         if (bbox == null) {
-            filterString = filter.getFilterStringAllRecords();
+            filterString = filter.getFilterString();
         } else {
-            filterString = filter.getFilterStringBoundingBox(bbox);
+            filterString = filter.getFilterString(bbox);
         }
         HttpMethodBase method = methodMaker.makeMethod(serviceUrl, featureType, filterString, maxFeatures);
         
