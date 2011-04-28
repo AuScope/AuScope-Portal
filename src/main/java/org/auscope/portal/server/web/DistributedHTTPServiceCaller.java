@@ -177,7 +177,6 @@ public class DistributedHTTPServiceCaller implements Iterator<InputStream> {
 		@Override
 		public void run() {
 			this.setRunning(true);
-			log.trace(String.format("starting running"));
 
 			InputStream data = null;
 			Exception error = null;
