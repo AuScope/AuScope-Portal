@@ -1,5 +1,7 @@
 package org.auscope.portal.server.web.service;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -125,7 +127,7 @@ public class TestBoreholeService {
         
         final CSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", "dne", "description");
         
-        final String successResponse = org.auscope.portal.Util.loadXML("src/test/resources/GetScannedBorehole.xml");
+        final InputStream successResponse = new FileInputStream("src/test/resources/GetScannedBorehole.xml");
 
         context.checking(new Expectations() {{
             oneOf(mockCSWService).getWFSRecords();will(returnValue(new CSWRecord[] {mockRecord1, mockRecord2, mockRecord3}));
@@ -136,7 +138,7 @@ public class TestBoreholeService {
             
             oneOf(mockMethodMaker).makeMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), "", 0);
             oneOf(mockHttpServiceCaller).getHttpClient();
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(successResponse));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(successResponse));
         }});
         
         List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService);
