@@ -1,12 +1,8 @@
 package org.auscope.portal.server.web.service;
 
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
@@ -17,14 +13,11 @@ import org.auscope.portal.csw.CSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.mineraloccurrence.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.domain.filter.IFilter;
+import org.auscope.portal.server.domain.xml.XMLStreamAttributeExtractor;
 import org.auscope.portal.server.util.Util;
 import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 /**
  * A utility class which provides methods for querying borehole service
  * 
@@ -91,20 +84,12 @@ public class BoreholeService {
     private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList) throws Exception {
         //Make request
         HttpMethodBase method = methodMaker.makeMethod(url, typeName, "", 0);
-        String wfsResponse = httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
+        InputStream wfsResponse = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
         
-        //Parse response
-        Document doc = util.buildDomFromString(wfsResponse);
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setNamespaceContext(new NVCLNamespaceContext());
-        
-        //Get our ID's
-        NodeList publishedDatasets = (NodeList)xPath.evaluate("/wfs:FeatureCollection/gml:featureMembers/" + NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME + "/nvcl:scannedBorehole", doc, XPathConstants.NODESET);
-        for (int i = 0; i < publishedDatasets.getLength(); i++) {
-            Node holeIdentifier = (Node)xPath.evaluate("@xlink:href", publishedDatasets.item(i), XPathConstants.NODE);
-            if (holeIdentifier != null) {
-                idList.add(holeIdentifier.getTextContent());
-            }
+        //Parse using a simplistic attribute extractor to avoid loading the entire response as a DOM object
+        XMLStreamAttributeExtractor attrExtractor = new XMLStreamAttributeExtractor("nvcl:scannedBorehole", "xlink:href", wfsResponse);
+        while (attrExtractor.hasNext()) {
+        	idList.add(attrExtractor.next());
         }
     }
     
