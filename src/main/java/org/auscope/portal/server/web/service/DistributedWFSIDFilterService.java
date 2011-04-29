@@ -58,7 +58,7 @@ public class DistributedWFSIDFilterService {
      * @return
      * @throws Exception
      */
-    public Iterator<InputStream> makeIDFilterRequest(String serviceURL, String featureType, int maxFeatures) throws Exception {
+    public DistributedHTTPServiceCaller makeIDFilterRequest(String serviceURL, String featureType, int maxFeatures) throws Exception {
         return makeIDFilterRequest(serviceURL, featureType, null, maxFeatures, null, null, null);
     }
     
@@ -78,7 +78,7 @@ public class DistributedWFSIDFilterService {
      * @return
      * @throws Exception
      */
-    public Iterator<InputStream> makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList) throws Exception {
+    public DistributedHTTPServiceCaller makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList) throws Exception {
         return makeIDFilterRequest(serviceURL, featureType, filter, maxFeatures, bbox, restrictedIDList, null);
     }
     
@@ -99,7 +99,7 @@ public class DistributedWFSIDFilterService {
      * @return
      * @throws Exception if service URL or featureType is not provided
      */
-    public Iterator<InputStream> makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList, String srsName) throws Exception {
+    public DistributedHTTPServiceCaller makeIDFilterRequest(String serviceURL, String featureType, IFilter filter, int maxFeatures, FilterBoundingBox bbox, List<String> restrictedIDList, String srsName) throws Exception {
     	List<HttpMethodBase> methods = new ArrayList<HttpMethodBase>();
     	
     	//We may need to split our WFS request into multiple requests
