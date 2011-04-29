@@ -116,7 +116,7 @@ public class TestDistributedWFSIDFilterService {
     	final String filterString2 = "<bar/>";
     	final String filterString3 = "<baz/>";
     	
-    	//ensure we make 3 requests
+    	//ensure we make 3 requests (the last being for a single ID)
     	final List<String> ids = new ArrayList<String>();
     	final int idsSize = ((DistributedWFSIDFilterService.MAXIMUM_IDS_PER_REQUEST * 2) + 1);
     	final int expectedRequests = 3;
@@ -137,7 +137,8 @@ public class TestDistributedWFSIDFilterService {
     		
     		oneOf(mockMethodMaker).makeMethod(url, featureTypeName, filterString1, maxFeatures, null);will(returnValue(mockMethod1));
     		oneOf(mockMethodMaker).makeMethod(url, featureTypeName, filterString2, maxFeatures, null);will(returnValue(mockMethod2));
-    		oneOf(mockMethodMaker).makeMethod(url, featureTypeName, filterString3, maxFeatures, null);will(returnValue(mockMethod3));
+    		//Just remember that our final request will have a single ID so maxFeatures will be set to 1
+    		oneOf(mockMethodMaker).makeMethod(url, featureTypeName, filterString3, 1, null);will(returnValue(mockMethod3)); 
     		
     		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod1, mockHttpClient);will(returnValue(expectedResult.get(0)));
     		oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2, mockHttpClient);will(returnValue(expectedResult.get(1)));

@@ -113,11 +113,17 @@ public class DistributedWFSIDFilterService {
     				subsetEnd = restrictedIDList.size();
     			}
     			
+    			//Don't go requesting 200 features if we are only searching a space of 20 ID's
+    			int featuresToRequest = maxFeatures;
+    			if (featuresToRequest > (subsetEnd - subsetStart)) {
+    				featuresToRequest = (subsetEnd - subsetStart);
+    			}
+    			
     			//Generate our filter for this set of ID's
     			String filterString = filter.getFilterString(bbox, restrictedIDList.subList(subsetStart, subsetEnd));
     			
     			//Generate our HTTP method and make the request
-    			methods.add(methodMaker.makeMethod(serviceURL, featureType, filterString, maxFeatures, srsName));
+    			methods.add(methodMaker.makeMethod(serviceURL, featureType, filterString, featuresToRequest, srsName));
     		}
     	} else {
     		//Otherwise we can just make a plain old single WFS request
