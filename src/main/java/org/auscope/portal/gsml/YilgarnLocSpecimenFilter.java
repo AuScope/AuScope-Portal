@@ -38,12 +38,19 @@ public class YilgarnLocSpecimenFilter extends AbstractFilter{
 
 		@Override
 	    public String getFilterString(FilterBoundingBox bbox, List<String> restrictedIDList) {
+	        if(bbox != null){
+		        return this.generateFilter(
+		                this.generateAndComparisonFragment(                		
+		                        this.generateBboxFragment(bbox, "sa:samplingLocation"), 
+		                        this.generateFilterFragment(),
+		                        this.generateRestrictedIDListFragment(restrictedIDList)));
+	        }else{
+	        	return this.generateFilter(
+                this.generateAndComparisonFragment(
+                        this.generateFilterFragment(),
+                        this.generateRestrictedIDListFragment(restrictedIDList)));
+	        }
 	        
-	        return this.generateFilter(
-	                this.generateAndComparisonFragment(                		
-	                        this.generateBboxFragment(bbox, "sa:samplingLocation"), 
-	                        this.generateFilterFragment(),
-	                        this.generateRestrictedIDListFragment(restrictedIDList)));
 	    }
 		
 		 
