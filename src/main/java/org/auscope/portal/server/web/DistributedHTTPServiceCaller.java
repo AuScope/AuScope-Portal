@@ -115,6 +115,20 @@ public class DistributedHTTPServiceCaller implements Iterator<InputStream> {
 
 
 	/**
+	 * Call this function if do not intend to use any further iterator functions. It will prevent
+	 * any threads yet to start from making HTTP connections.
+	 * 
+	 * Any running threads will be interrupted 
+	 * 
+	 * No guarantee is made that 'cancelled' threads WONT attempt to make a connection.
+	 */
+	public void dispose() {
+		for (ServiceCallStatus status : statusList) {
+			status.interrupt();
+		}
+	}
+	
+	/**
 	 * Utility class for lumping the request status information for a single method into a single object
 	 */
 	private class ServiceCallStatus extends Thread {
@@ -125,6 +139,7 @@ public class DistributedHTTPServiceCaller implements Iterator<InputStream> {
 		private Exception resultingError;
 		private volatile boolean running;
 		private volatile boolean iterated;
+		private volatile boolean abortStart;
 		
 		public ServiceCallStatus(DistributedHTTPServiceCaller parent, HttpMethodBase method,
 				HttpServiceCaller serviceCaller) {
@@ -136,6 +151,12 @@ public class DistributedHTTPServiceCaller implements Iterator<InputStream> {
 
 		public boolean isIterated() {
 			return iterated;
+		}
+		
+		@Override
+		public void interrupt() {
+			this.abortStart = true;
+			super.interrupt();
 		}
 		
 		/**
@@ -176,6 +197,11 @@ public class DistributedHTTPServiceCaller implements Iterator<InputStream> {
 
 		@Override
 		public void run() {
+			//If this thread has been interrupted before it started running - don't start processing.
+			if (this.abortStart) {
+				return;
+			}
+			
 			this.setRunning(true);
 
 			InputStream data = null;
