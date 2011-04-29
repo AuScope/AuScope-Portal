@@ -64,14 +64,8 @@ public class YilgarnService {
 		    	   geologicUnitIDs.add(replacedGeoUnitString);
 		       }  
 		}	
-		List<String> finalGeologicUnitIDs = new ArrayList<String>();
-		if(geologicUnitIDs.size()> maxFeatures){
-			finalGeologicUnitIDs = geologicUnitIDs.subList(0, maxFeatures);
-		}else {
-			finalGeologicUnitIDs = geologicUnitIDs;
-		}
-	    
-		   return finalGeologicUnitIDs;
+		
+		   return geologicUnitIDs;
 	}   
    
 

@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -73,6 +74,7 @@ public class YilgarnGeologicUnitController extends BaseWFSToKMLController {
         List<InputStream> locSpecXMLDataList = new ArrayList<InputStream>();
         DistributedHTTPServiceCaller methodIterator = null;
         List<String> finalGeologicUnitIds = null;
+        List<String> maxGeologicUnitIds = null;
         
 		String yilgarnGeoUnitFilterString;
 		try{
@@ -110,6 +112,12 @@ public class YilgarnGeologicUnitController extends BaseWFSToKMLController {
 					
 				}
 				finalGeologicUnitIds = this.yilgarnService.discoverGeologicUnitIDs(locSpecXMLDataList, maxFeatures);
+				if(finalGeologicUnitIds.size() > maxFeatures){
+					Collections.copy(maxGeologicUnitIds, finalGeologicUnitIds.subList(0, maxFeatures));
+				}else {
+					Collections.copy(maxGeologicUnitIds, finalGeologicUnitIds);
+				}
+
 			}catch (Exception e){
 				log.warn("Error requesting locatedSpecimen Data", e);
 	            return makeModelAndViewFailure("Failure when getting data related to analytes filter.", null);
