@@ -16,6 +16,11 @@
          </list>
       </property>
    </bean>
+   
+   <bean id="sesameRepository" class="org.openrdf.repository.http.HTTPRepository">
+   		<constructor-arg name="serverURL" value="http://localhost:8080/openrdf-sesame"/>
+   		<constructor-arg name="repositoryID" value="topology-vocab"/>
+    </bean>
 
    <bean id="connectionParams" class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">
         <property name="connectionTimeout" value="900000"/> <!--  15 minutes -->

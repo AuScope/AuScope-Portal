@@ -38,9 +38,8 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-public abstract class BaseWFSToKMLController {
+public abstract class BaseWFSToKMLController extends BaseJSONResponseController {
     
-    protected final Log log = LogFactory.getLog(getClass());
     protected HttpServiceCaller httpServiceCaller;
     protected GmlToKml gmlToKml;
     
@@ -85,37 +84,7 @@ public abstract class BaseWFSToKMLController {
         return debugInfo;
     }
     
-    /**
-     * Creates a generic response ModelAndView
-     * @param success
-     * @param message
-     * @param data
-     * @param debugInfo Optional - can be null or empty
-     * @return
-     */
-    protected ModelAndView makeModelAndView(boolean success, String message, Object data) {
-        return makeModelAndView(success, message, data, null);
-    }
     
-    /**
-     * Creates a generic response ModelAndView
-     * @param success
-     * @param message
-     * @param data
-     * @param debugInfo Optional - can be null or empty
-     * @return
-     */
-    protected ModelAndView makeModelAndView(boolean success, String message, Object data, Object debugInfo) {
-        ModelMap model = new ModelMap();
-        model.put("success", success);
-        model.put("data", data);
-        model.put("msg", message);
-        if (debugInfo != null) {
-            model.put("debugInfo", debugInfo);
-        }
-        
-        return new JSONModelAndView(model);
-    }
     
     /**
      * Create a success response
