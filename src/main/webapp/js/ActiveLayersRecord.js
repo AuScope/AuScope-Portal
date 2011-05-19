@@ -56,79 +56,25 @@ ActiveLayersRecord.prototype.getTitle = function() {
 };
 
 /**
- * Gets the description of this active layer as a String
+ * Gets an array of FeatureType objects
  */
-ActiveLayersRecord.prototype.getDescription = function() {
-	return this.internalGetStringField('description');
+ActiveLayersRecord.prototype.getFeatureTypes = function() {
+	return this.internalGetArrayField('featureTypes');
 };
 
 /**
- * Gets the Proxy URL of this active layer as a String (or null)
- * 
- * The Proxy URL is the url that should be queried instead of the onlineResource URL.
+ * Gets an array of WebService objects
  */
-ActiveLayersRecord.prototype.getProxyUrl = function() {
-	return this.internalRecord.get('proxyUrl');
+ActiveLayersRecord.prototype.getWebServices = function() {
+	return this.internalGetArrayField('webServices');
 };
 
-/**
- * Gets an array of CSWRecord objects that represent this layer
- */
-ActiveLayersRecord.prototype.getCSWRecords = function() {
-	return this.internalGetArrayField('cswRecords');
-};
-
-/**
- * Gets an array of CSWRecord objects which have at least one online resource with the specified type
- * 
- * type: One of ['WFS', 'WMS', 'WCS', 'OPeNDAP']
- */
-ActiveLayersRecord.prototype.getCSWRecordsWithType = function(type) {
-	var unfilteredRecords = this.getCSWRecords();
-	var filteredRecords = [];
-	
-	for (var i = 0; i < unfilteredRecords.length; i++) {
-		var onlineRess = unfilteredRecords[i].getOnlineResources();
-
-		//Search for a matching type
-		for (var j = 0; j < onlineRess.length; j++) {
-			if (onlineRess[j].onlineResourceType === type) {
-				filteredRecords.push(unfilteredRecords[i]);
-				break;
-			}
-		}
-	}
-	
-	return filteredRecords;
-};
 
 /**
  * Gets the URL of this active layer's icon as a String (Can be null/empty)
  */
 ActiveLayersRecord.prototype.getIconUrl = function() {
 	return this.internalRecord.get('iconUrl');
-};
-
-/**
- * Gets the list of service endpoints applicable to the layer
- */
-ActiveLayersRecord.prototype.getServiceEndpoints = function() {
-	return this.internalRecord.get('serviceEndpoints');
-};
-
-/**
- * Gets the flag indicating whether the listed service endpoints should be 
- * included or excluded from the layer.
- */
-ActiveLayersRecord.prototype.includeEndpoints = function() {
-	return this.internalRecord.get('includeEndpoints');
-};
-
-/**
- * Gets the html representation of the key column as a String
- */
-ActiveLayersRecord.prototype.getKeyIconHtml = function() {
-	return this.internalGetStringField('keyIconHtml');
 };
 
 /**
@@ -146,20 +92,6 @@ ActiveLayersRecord.prototype.setIsLoading = function(isLoading) {
 };
 
 /**
- * Gets whether this record currently has data available for download or not.
- */
-ActiveLayersRecord.prototype.hasData = function() {
-	return this.internalGetBooleanField('hasData');
-};
-
-/**
- * Sets whether this record currently has data available for download or not.
- */
-ActiveLayersRecord.prototype.setHasData = function(hasData) {
-    return this.internalRecord.set('hasData', hasData);	
-};
-
-/**
  * Gets whether this record is visible or not as a boolean
  */
 ActiveLayersRecord.prototype.getLayerVisible = function() {
@@ -173,41 +105,6 @@ ActiveLayersRecord.prototype.setLayerVisible = function(layerVisible) {
 	this.internalRecord.set('layerVisible', layerVisible);
 };
 
-/**
- * Gets the html representation of the download column as a String
- */
-ActiveLayersRecord.prototype.getDownloadIconHtml = function() {
-	return this.internalGetStringField('downloadIconHtml');
-};
-
-/**
- * Gets the numerical representation of the Opacity as a Number in the range [0,1]
- */
-ActiveLayersRecord.prototype.getOpacity = function() {
-	return this.internalGetNumberField('opacity', 1);
-};
-
-/**
- * Gets the numerical representation of the Opacity as a Number in the range [0,1]
- */
-ActiveLayersRecord.prototype.setOpacity = function(opacity) {
-	if (opacity < 0) {
-		opacity = 0;
-	} else if (opacity > 1) {
-		opacity = 1;
-	}
-		
-	this.internalRecord.set('opacity', opacity);
-};
-
-/**
- * Gets the source record type that was used to make this ActiveLayer
- * 
- * Returns one of the following ['KnownLayer', 'CSWRecord']
- */
-ActiveLayersRecord.prototype.getSource = function() {
-    return this.internalGetStringField('source');
-};
 
 /**
  * Gets an instance of OverlayManager or null
@@ -305,39 +202,6 @@ ActiveLayersRecord.prototype.setDebuggerData = function(debuggerData) {
 	//We are forced to read/write directly to the record because this 
 	//field is too complex to be serialized using JSON
 	this.internalRecord.debuggerData = debuggerData;
-};
-
-/**
- * Gets an instance of KnownLayerRecord or null
- * 
- * It represents the KnownLayer 'owns' the CSWRecords of this active layer 
- * (not all layers will be created from an active layer) 
- */
-ActiveLayersRecord.prototype.getParentKnownLayer = function() {
-	//We are forced to read/write directly to the record because this 
-	//field is too complex to be serialized using JSON
-	var rec = this.internalRecord.parentKnownLayer;
-	if (rec) {
-		return new KnownLayerRecord(rec);
-	}
-	
-	return null;
-};
-
-/**
- * Sets an instance of KnownLayerRecord or null
- * 
- * It represents the KnownLayer that 'owns' the CSWRecords of this active layer 
- * (not all layers will be created from an active layer) 
- */
-ActiveLayersRecord.prototype.setParentKnownLayer = function(knownLayerRecord) {
-	//We are forced to read/write directly to the record because this 
-	//field is too complex to be serialized using JSON
-	if (knownLayerRecord) {
-		this.internalRecord.parentKnownLayer = knownLayerRecord.internalRecord;
-	} else {
-		this.internalRecord.parentKnownLayer = null;
-	}
 };
 
 /**

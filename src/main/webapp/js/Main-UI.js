@@ -24,65 +24,38 @@ Ext.onReady(function() {
     var searchBarThreshold = 6; //how many records do we need to have before we show a search bar
 
     //Generate our data stores
-    cswRecordStore = new CSWRecordStore('getCSWRecords.do');
-    var knownLayersStore = new KnownLayerStore('getKnownLayers.do');
-    var customLayersStore = new CSWRecordStore('getCustomLayers.do');
+    var informationModelStore = new InformationModelStore('getInformationModels.do');
     var activeLayersStore = new ActiveLayersStore();
 
-    //Called whenever any of the KnownLayer panels click 'Add to Map'
-    //defaultVisibility [boolean] - Optional - Set this to override the visibility setting for the new layer
-    var knownLayerAddHandler = function(knownLayer, defaultVisibility, deferLayerLoad) {
-        var activeLayerRec = activeLayersStore.getByKnownLayerRecord(knownLayer);
+    //Called whenever the information model panel clicks 'Add to Map'
+    var informationModelAddHandler = function(informationModel, defaultVisibility, deferLayerLoad) {
+    	
+    	//set this record to selected if it already exists
+    	var activeLayerRec = activeLayersStore.getByInformationModelRecord(informationModel);
+    	if (activeLayerRec) {
+            activeLayersPanel.getSelectionModel().selectRecords([activeLayerRec.internalRecord], false);
+            return;
+    	}
+    	
+    	//Otherwise get the vocab to describe our info model in great detail (so we can add it to the map) 
+    	InformationModelDescriptionFactory.newInstance(informationModel.getUrn(), function(success, infoModelDesc) {
+    		if (!success) {
+    			return;
+    		}
 
-        if (defaultVisibility == null || defaultVisibility == undefined) {
-            defaultVisibility = true;
-        }
+    		if (defaultVisibility == null || defaultVisibility == undefined) {
+                defaultVisibility = true;
+            }
 
-        if (deferLayerLoad == null || deferLayerLoad == undefined) {
-            deferLayerLoad = false;
-        }
-
-        //Only add if the record isn't already there
-        if (!activeLayerRec) {
-            //add to active layers (At the top of the Z-order)
-        	activeLayerRec = activeLayersStore.addKnownLayer(knownLayer, cswRecordStore);
-
-            //invoke this layer as being checked
-            activeLayerCheckHandler(activeLayerRec, defaultVisibility, false, deferLayerLoad);
-
-            showCopyrightInfo(activeLayerRec);
-        }
-
-        //set this record to selected
-        activeLayersPanel.getSelectionModel().selectRecords([activeLayerRec.internalRecord], false);
-    };
-
-    //Called whenever any of the CSWPanels click 'Add to Map'
-    //defaultVisibility [boolean] - Optional - Set this to override the visibility setting for the new layer
-    var cswPanelAddHandler = function(cswRecord, defaultVisibility, deferLayerLoad) {
-        var activeLayerRec = activeLayersStore.getByCSWRecord(cswRecord);
-
-        if (defaultVisibility == null || defaultVisibility == undefined) {
-            defaultVisibility = true;
-        }
-
-        if (deferLayerLoad == null || deferLayerLoad == undefined) {
-            deferLayerLoad = false;
-        }
-
-        //Only add if the record isn't already there
-        if (!activeLayerRec) {
-            //add to active layers (At the top of the Z-order)
-        	activeLayerRec = activeLayersStore.addCSWRecord(cswRecord);
-
-            //invoke this layer as being checked
-            activeLayerCheckHandler(activeLayerRec, defaultVisibility, false, deferLayerLoad);
-
-            showCopyrightInfo(activeLayerRec);
-        }
-
-        //set this record to selected
-        activeLayersPanel.getSelectionModel().selectRecords([activeLayerRec.internalRecord], false);
+            if (deferLayerLoad == null || deferLayerLoad == undefined) {
+                deferLayerLoad = false;
+            }
+    		
+    		activeLayerRec = activeLayersStore.addInformationModelDescription(infoModelDesc);
+    		activeLayerCheckHandler(activeLayerRec, defaultVisibility, false, deferLayerLoad);
+    		
+    		activeLayersPanel.getSelectionModel().selectRecords([activeLayerRec.internalRecord], false);
+    	});
     };
 
     //Display any copyright information associated with the layer.
@@ -148,225 +121,13 @@ Ext.onReady(function() {
     	}
     };
 
-    //Returns true if the CSWRecord record intersects the GMap viewport (based on its bounding box)
-    var visibleCSWRecordFilter = function(record) {
-    	var geoEls = record.getGeographicElements();
-    	var visibleBounds = map.getBounds();
+    var infoModelPanel = new InformationModelGridPanel('infomodel-layers-panel', 
+											    		'Information Models', 
+											    		'Information Models', 
+											    		informationModelStore, 
+											    		informationModelAddHandler);
 
-		//Iterate every 'bbox' geographic element type looking for an intersection
-		//(They will be instances of the BBox class)
-		for (var j = 0; j < geoEls.length; j++) {
-			var bbox = geoEls[j];
-
-			var sw = new GLatLng(bbox.southBoundLatitude, bbox.westBoundLongitude);
-	    	var ne = new GLatLng(bbox.northBoundLatitude, bbox.eastBoundLongitude);
-	    	var bboxBounds = new GLatLngBounds(sw,ne);
-
-	    	if (visibleBounds.intersects(bboxBounds)) {
-	    		return true;
-	    	}
-		}
-    };
-
-    //Returns true if the current records (from the knownLayersStore)
-    //intersects the GMap viewport (based on its bounding box)
-    //false otherwise
-    var visibleKnownLayersFilter = function(record) {
-    	var linkedCSWRecords = record.getLinkedCSWRecords(cswRecordStore);
-    	var visibleBounds = map.getBounds();
-
-    	//iterate over every CSWRecord that makes up this layer, look for
-    	//one whose reported bounds intersects the view port
-		for (var i = 0; i < linkedCSWRecords.length; i++) {
-			if (visibleCSWRecordFilter(linkedCSWRecords[i])) {
-				return true;
-			}
-		}
-
-		return false;
-    };
-
-    //Given a CSWRecord, show (on the map) the list of bboxes associated with that record temporarily
-    //bboxOverlayManager - if specified, will be used to store the overlays, otherwise the cswRecord's
-    //                      bboxOverlayManager will be used
-    var showBoundsCSWRecord = function(cswRecord, bboxOverlayManager) {
-    	var geoEls = cswRecord.getGeographicElements();
-
-    	if (!bboxOverlayManager) {
-	    	bboxOverlayManager = cswRecord.getBboxOverlayManager();
-	    	if (bboxOverlayManager) {
-	    		bboxOverlayManager.clearOverlays();
-	    	} else {
-	    		bboxOverlayManager = new OverlayManager(map);
-	    		cswRecord.setBboxOverlayManager(bboxOverlayManager);
-	    	}
-    	}
-
-    	//Iterate our geographic els to get our list of bboxes
-    	for (var i = 0; i < geoEls.length; i++) {
-    		var geoEl = geoEls[i];
-    		if (geoEl instanceof BBox) {
-    			var polygonList = geoEl.toGMapPolygon('00FF00', 0, 0.7,'#00FF00', 0.6);
-
-        	    for (var j = 0; j < polygonList.length; j++) {
-        	    	polygonList[j].title = 'bbox';
-        	    	bboxOverlayManager.addOverlay(polygonList[j]);
-        	    }
-    		}
-    	}
-
-    	//Make the bbox disappear after a short while
-    	var clearTask = new Ext.util.DelayedTask(function(){
-    		bboxOverlayManager.clearOverlays();
-    	});
-
-    	clearTask.delay(2000);
-    };
-
-    //Pans/Zooms the map so the specified BBox object is visible
-    var moveMapToBounds = function(bbox) {
-    	var sw = new GLatLng(bbox.southBoundLatitude, bbox.westBoundLongitude);
-    	var ne = new GLatLng(bbox.northBoundLatitude, bbox.eastBoundLongitude);
-    	var layerBounds = new GLatLngBounds(sw,ne);
-
-    	//Adjust zoom if required
-    	var visibleBounds = map.getBounds();
-    	map.setZoom(map.getBoundsZoomLevel(layerBounds));
-
-    	//Pan to position
-    	var layerCenter = layerBounds.getCenter();
-    	map.panTo(layerCenter);
-    };
-
-    //Pans the map so that all bboxes linked to this record are visible.
-    //If currentBounds is specified
-    var moveToBoundsCSWRecord = function(cswRecord) {
-    	var bboxExtent = cswRecord.generateGeographicExtent();
-
-    	if (!bboxExtent) {
-    		return;
-    	}
-
-    	moveMapToBounds(bboxExtent);
-    };
-
-    //Given a KnownLayer, show (on the map) the list of bboxes associated with that layer temporarily
-    var showBoundsKnownLayer = function(knownLayer) {
-    	var bboxOverlayManager = knownLayer.getBboxOverlayManager();
-    	if (bboxOverlayManager) {
-    		bboxOverlayManager.clearOverlays();
-    	} else {
-    		bboxOverlayManager = new OverlayManager(map);
-    		knownLayer.setBboxOverlayManager(bboxOverlayManager);
-    	}
-
-    	var linkedRecords = knownLayer.getLinkedCSWRecords(cswRecordStore);
-    	for (var i = 0; i < linkedRecords.length; i++) {
-    		showBoundsCSWRecord(linkedRecords[i], bboxOverlayManager);
-    	}
-    };
-
-    var moveToBoundsKnownLayer = function(knownLayer) {
-    	var linkedRecords = knownLayer.getLinkedCSWRecords(cswRecordStore);
-    	var superBbox = null;
-    	for (var i = 0; i < linkedRecords.length; i++) {
-    		var bboxToCombine =  linkedRecords[i].generateGeographicExtent();
-    		if (bboxToCombine !== null) {
-	    		if (superBbox === null) {
-	    			superBbox = bboxToCombine;
-	    		} else {
-	    			superBbox = superBbox.combine(bboxToCombine);
-	    		}
-    		}
-    	}
-
-    	if (superBbox) {
-    		moveMapToBounds(superBbox);
-    	}
-    };
-
-    //Returns true if the specified cswRecord is linked or related by a known layer
-    var isCSWRecordKnown = function(cswRecord) {
-
-    	//little utility function that returns true if the cswRecord is known by knownLayer
-    	var isKnownBy = function(knownLayer, cswRecord) {
-
-    		//Check this known layer
-    		var childRecords = knownLayer.getLinkedCSWRecords(cswRecordStore);
-    		for (var i = 0; i < childRecords.length; i++) {
-    			if (childRecords[i].getFileIdentifier() === cswRecord.getFileIdentifier()) {
-    				return true;
-    			}
-    		}
-
-    		//Check the related known layers
-    		var relatedRecords = knownLayer.getRelatedCSWRecords(cswRecordStore);
-    		for (var i = 0; i < relatedRecords.length; i++) {
-    			if (relatedRecords[i].getFileIdentifier() === cswRecord.getFileIdentifier()) {
-    				return true;
-    			}
-    		}
-
-    		return false;
-    	};
-
-    	//This is our known layer iterator
-    	var recordKnown = false;
-    	knownLayersStore.each(function(rec) {
-    		var knownLayer = new KnownLayerRecord(rec);
-
-    		//check if this layer
-    		if (isKnownBy(knownLayer, cswRecord)) {
-    			recordKnown = true;//we found the record
-    			return false;//abort iteration
-    		}
-    	});
-
-    	return recordKnown;
-    };
-
-    //-----------Known Features Panel Configurations (Groupings of various CSWRecords)
-    var knownLayersPanel = new KnownLayerGridPanel('kft-layers-panel',
-												    		'Featured Layers',
-												    		'Layers or layer groups with custom handlers',
-												    		knownLayersStore,
-												    		cswRecordStore,
-												    		knownLayerAddHandler,
-												    		visibleKnownLayersFilter,
-												    		showBoundsKnownLayer,
-												    		moveToBoundsKnownLayer);
-
-    //----------- Map Layers Panel Configurations (Drawn from CSWRecords that aren't a KnownLayer)
-    var mapLayersFilter = function(cswRecord) {
-    	var serviceName = cswRecord.getServiceName();
-    	if (!serviceName || serviceName.length === 0) {
-    		return false;
-    	}
-
-    	//ensure its not referenced via KnownLayer
-    	return !isCSWRecordKnown(cswRecord);
-    };
-    var mapLayersPanel = new CSWRecordGridPanel('wms-layers-panel',
-									    		'Map Layers',
-									    		'Other layers present in the Registry',
-									    		cswRecordStore,
-									    		cswPanelAddHandler,
-									    		mapLayersFilter,
-									    		visibleCSWRecordFilter,
-									    		showBoundsCSWRecord,
-									    		moveToBoundsCSWRecord);
-
-
-
-    //------ Custom Layers
-    var customLayersPanel = new CustomLayersGridPanel('custom-layers-panel',
-										    		'Custom Layers',
-										    		'Add your own WMS Layers',
-										    		customLayersStore,
-										    		cswPanelAddHandler,
-										    		showBoundsCSWRecord,
-										    		moveToBoundsCSWRecord);
-
+    
     //Returns an object
     //{
     //    bboxSrs : 'EPSG:4326'
@@ -1520,9 +1281,7 @@ Ext.onReady(function() {
         enableTabScroll: true,
         //autosize:true,
         items:[
-            knownLayersPanel,
-            mapLayersPanel,
-            customLayersPanel
+            infoModelPanel
         ]
     });
 
@@ -1709,28 +1468,6 @@ Ext.onReady(function() {
         }
     };
 
-    //As there is a relationship between these two stores,
-    //We should refresh any GUI components whose view is dependent on these stores
-    cswRecordStore.load({callback : function(r, options, success) {
-    	knownLayersStore.load({callback : function() {
-        	cswRecordStore.fireEvent('datachanged');
-
-        	//Afterwards we decode any saved state included as a URL parameter
-        	var urlParams = Ext.urlDecode(location.search.substring(1));
-        	if (urlParams && urlParams.state) {
-        	    attemptDeserialization(urlParams.state);
-        	}
-
-        	if(r.length == 0) {
-                Ext.MessageBox.show({
-                    title : 'No Services Available',
-                    icon : Ext.MessageBox.WARNING,
-                    msg : 'The CSW(s) are not returning any records and functionality will be affected.',
-                    multiline : false
-                });
-        	}
-        }});
-    }});
-
-
+    //Load our data stores
+    informationModelStore.load();
 });

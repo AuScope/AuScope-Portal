@@ -5,8 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.auscope.portal.registry.BaseConcept;
+import org.auscope.portal.registry.BaseConceptFactory;
+import org.auscope.portal.registry.FeatureType;
 import org.auscope.portal.registry.InformationModel;
 import org.auscope.portal.registry.PortalRegistryNamespace;
+import org.auscope.portal.registry.WebService;
 import org.auscope.portal.serql.PortalSerqlQueryMaker;
 import org.auscope.portal.serql.SerqlException;
 import org.openrdf.model.Statement;
@@ -49,39 +53,60 @@ public class SesameService {
 	}
 	
 	/**
-	 * Attempts to parse a list of information models from the Sesame service
+	 * Internal generic method for parsing a TupleQueryResult into a Map of parsed results
+	 * @param <B>
+	 * @param clazz
+	 * @param result
+	 * @return
+	 * @throws QueryEvaluationException
 	 */
-	public List<InformationModel> getAllInformationModels() throws RepositoryException, SerqlException, QueryEvaluationException, MalformedQueryException {
+	private <B extends BaseConcept> Map<String, B> parseTupleQueryResult(Class<B> clazz, String urnBinding, TupleQueryResult result) throws QueryEvaluationException {
+		Map<String, B> parsedConcepts = new HashMap<String, B>(); 
+		BaseConceptFactory<B> factory = new BaseConceptFactory<B>(clazz);
+		
+		
+		while (result.hasNext()) {
+			boolean newInstance = false;
+			BindingSet bindingSet = result.next();
+			
+			
+			//Extract our bound variables and put them into an information model
+			String urn = bindingSet.getValue(urnBinding).stringValue();
+			B concept = parsedConcepts.get(urn);
+			if (concept == null) {
+				concept = factory.createInstance(urn);
+				newInstance = true;
+			}
+			concept.mergeBindingSet(bindingSet);
+			
+			if (newInstance) {
+				parsedConcepts.put(urn, concept);
+			}
+		}
+		
+		return parsedConcepts;
+	}
+	
+	/**
+	 * Utility method for making a tuple query and parsing (and merging) the results into a single list of results
+	 * @param <B>
+	 * @param expectedResultType What class to you want to parse the results into
+	 * @param urnBinding The binding name that the query string is using to uniquely identify the URN's of the returned types
+	 * @param tupleQueryString The SeRQL query to make
+	 * @return
+	 */
+	private <B extends BaseConcept> List<B> makeTupleQuery(Class<B> expectedResultType, String urnBinding, String tupleQueryString) throws RepositoryException, SerqlException, QueryEvaluationException, MalformedQueryException {
 		RepositoryConnection conn = repository.getConnection();
-		Map<String, InformationModel> parsedInformationModels = new HashMap<String, InformationModel>();
+		Map<String, B> parsedConcepts = null;
 		
 		try {
 			//Generate our SeRQL query and evaluate it
-			String queryString = serqlQueryMaker.selectInformationModels(portalRegistryNamespace);
-			TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SERQL, queryString);
+			TupleQuery tupleQuery = conn.prepareTupleQuery(QueryLanguage.SERQL, tupleQueryString);
 			TupleQueryResult result = tupleQuery.evaluate();
 			
 			//Get a response and parse it
 			try {
-				while (result.hasNext()) {
-					BindingSet bindingSet = result.next();
-					
-					//Extract our bound variables and put them into an information model
-					String urn = bindingSet.getValue(PortalSerqlQueryMaker.BINDING_INFO_MODEL).stringValue();
-					InformationModel infoModel = parsedInformationModels.get(urn);
-					if (infoModel == null) {
-						String name = bindingSet.getValue(PortalSerqlQueryMaker.BINDING_INFO_MODEL_NAME).stringValue();
-						infoModel = new InformationModel(urn, name);
-					}
-					
-					String vocabUrn = bindingSet.getValue(PortalSerqlQueryMaker.BINDING_VOCABULARY).stringValue();
-					infoModel.addVocabularyUrn(vocabUrn);
-					
-					String featureTypeUrn = bindingSet.getValue(PortalSerqlQueryMaker.BINDING_FEATURE_TYPE).stringValue();
-					infoModel.addFeatureTypeUrn(featureTypeUrn);
-					
-					parsedInformationModels.put(vocabUrn, infoModel);
-				}
+				parsedConcepts = this.parseTupleQueryResult(expectedResultType, urnBinding, result);
 			} finally {
 				result.close();
 			}
@@ -90,10 +115,38 @@ public class SesameService {
 			conn.close();
 		}
 		
-		List<InformationModel> infoModelList = new ArrayList<InformationModel>();
-		for (InformationModel infoModel : parsedInformationModels.values()) {
-			infoModelList.add(infoModel);
+		//Turn our map into a list
+		List<B> conceptList = new ArrayList<B>();
+		for (B concept : parsedConcepts.values()) {
+			conceptList.add(concept);
 		}
-		return infoModelList;
+		return conceptList;
+	}
+	
+	/**
+	 * Attempts to parse a list of information models from the Sesame service
+	 * @param infoModelIDs [Optional] list of ID's to restrict the result set. If omitted ALL information models will be requested
+	 */
+	public List<InformationModel> getInformationModels(List<String> infoModelIDs) throws RepositoryException, SerqlException, QueryEvaluationException, MalformedQueryException {		
+		String queryString = serqlQueryMaker.selectInformationModels(portalRegistryNamespace, infoModelIDs);
+		return makeTupleQuery(InformationModel.class, PortalSerqlQueryMaker.BINDING_INFO_MODEL, queryString);
+	}
+	
+	/**
+	 * Attempts to parse a list of feature types from the Sesame service
+	 * @param featureTypeIDs [Optional] list of ID's to restrict the result set. If omitted ALL feature types will be requested
+	 */
+	public List<FeatureType> getFeatureTypes(List<String> featureTypeIDs) throws RepositoryException, SerqlException, QueryEvaluationException, MalformedQueryException {
+		String queryString = serqlQueryMaker.selectFeatureTypes(portalRegistryNamespace, featureTypeIDs);
+		return makeTupleQuery(FeatureType.class, PortalSerqlQueryMaker.BINDING_FEATURE_TYPE, queryString);
+	}
+	
+	/**
+	 * Attempts to parse a list of web services from the Sesame service
+	 * @param webServiceIDs [Optional] list of ID's to restrict the result set. If omitted ALL web services will be requested
+	 */
+	public List<WebService> getWebServices(List<String> webServiceIDs) throws RepositoryException, SerqlException, QueryEvaluationException, MalformedQueryException {
+		String queryString = serqlQueryMaker.selectWebServices(portalRegistryNamespace, webServiceIDs);
+		return makeTupleQuery(WebService.class, PortalSerqlQueryMaker.BINDING_WEB_SERVICE, queryString);
 	}
 }
