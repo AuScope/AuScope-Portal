@@ -212,22 +212,12 @@ Ext.onReady(function() {
     //Loads the contents for the specified activeLayerRecord (applying any filtering too)
     //overrideFilterParams [Object] - Optional - specify to ignore any calculated filter parameters and use these values instead
     var loadLayer = function(activeLayerRecord, overrideFilterParams) {
-    	var cswRecords = activeLayerRecord.getCSWRecords();
+    	var featureTypes = activeLayerRecord.getFeatureTypes();
 
         //We simplify things by treating the record list as a single type of WFS, WCS or WMS
         //So lets find the first record with a type we can choose (Prioritise WFS -> WCS -> WMS)
-        if (cswRecords.length > 0) {
-        	var cswRecord = cswRecords[0];
-
-        	if (cswRecord.getFilteredOnlineResources('WFS').length !== 0) {
-        		wfsHandler(activeLayerRecord, overrideFilterParams);
-        	} else if (cswRecord.getFilteredOnlineResources('WCS').length !== 0) {
-        		wcsHandler(activeLayerRecord);
-        	} else if (cswRecord.getFilteredOnlineResources('WMS').length !== 0) {
-        		wmsHandler(activeLayerRecord);
-        	} else {
-        		genericRecordHandler(activeLayerRecord, overrideFilterParams);
-        	}
+        if (featureTypes.length > 0) {
+        	wfsHandler(activeLayerRecord, overrideFilterParams);
         }
     };
 
@@ -508,57 +498,45 @@ Ext.onReady(function() {
         var debuggerData = new DebuggerData();
         activeLayerRecord.setDebuggerData(debuggerData);
 
-        //Prepare our query/locations
-        var cswRecords = activeLayerRecord.getCSWRecordsWithType('WFS');
-        var iconUrl = activeLayerRecord.getIconUrl();
-        var finishedLoadingCounter = cswRecords.length;
-        var parentKnownLayer = activeLayerRecord.getParentKnownLayer();
-
-        //Begin loading from each service
         activeLayerRecord.setIsLoading(true);
-        activeLayerRecord.setHasData(false);
         
-        var transId = [];
-        var transIdUrl = [];
-
-        for (var i = 0; i < cswRecords.length; i++) {
-        	//Assumption - We will only have 1 WFS linked per CSW
-        	var wfsOnlineResource = cswRecords[i].getFilteredOnlineResources('WFS')[0];
-
-        	//Proceed with the query only if the resource url is contained in the list
-        	//of service endpoints for the known layer, or if the list is null.
-        	if(activeLayerRecord.getServiceEndpoints() == null  || 
-        			includeEndpoint(activeLayerRecord.getServiceEndpoints(),
-        					wfsOnlineResource.url, activeLayerRecord.includeEndpoints())) {
+        //Generate our filter parameters for this service (or use the override values if specified)
+        var filterParameters = { };
+        if (overrideFilterParams) {
+            filterParameters = overrideFilterParams;
+        } else {
+            if (filterPanel.getLayout().activeItem != filterPanel.getComponent(0)) {
+                filterParameters = filterPanel.getLayout().activeItem.getForm().getValues();
+            }
+            
+            // limit our feature request to 200 so we don't overwhelm the browser
+            if (Ext.isNumber(MAX_FEATURES)) {
+                filterParameters.maxFeatures = MAX_FEATURES; 
+            } else {
+                filterParameters.maxFeatures = 200;
+            }
+            filterParameters.bbox = Ext.util.JSON.encode(fetchVisibleMapBounds(map)); // This line activates bbox support AUS-1597
+        }
+        activeLayerRecord.setLastFilterParameters(filterParameters);
+        
+        //Make our queries to the various WFS
+        var finishedLoadingCounter = 0;
+        var featureTypes = activeLayerRecord.getFeatureTypes();
+        var iconUrl = activeLayerRecord.getIconUrl();
+        for (var i = 0; i < featureTypes.length; i++) {
+        	//Hack
+        	if (featureTypes[i].getTypeName() !== 'gsml:Borehole') {
+        		continue;
+        	}
         	
-	            //Generate our filter parameters for this service (or use the override values if specified)
-	            var filterParameters = { };
+        	var webServices = activeLayerRecord.getWebServicesForFeatureType(featureTypes[i]);
+        	finishedLoadingCounter += webServices.length;
+        	for (var j = 0; j < webServices.length; j++) {
+	        	filterParameters.serviceUrl = webServices[j].getServiceEndPoint();
+	        	filterParameters.typeName = featureTypes[i].getTypeName();
 	
-	            if (overrideFilterParams) {
-	                filterParameters = overrideFilterParams;
-	            } else {
-	                if (filterPanel.getLayout().activeItem != filterPanel.getComponent(0)) {
-	                    filterParameters = filterPanel.getLayout().activeItem.getForm().getValues();
-	                }
-	                
-	                // limit our feature request to 200 so we don't overwhelm the browser
-	                if (Ext.isNumber(MAX_FEATURES)) {
-	                    filterParameters.maxFeatures = MAX_FEATURES; 
-	                } else {
-	                    filterParameters.maxFeatures = 200;
-	                }
-	                filterParameters.bbox = Ext.util.JSON.encode(fetchVisibleMapBounds(map)); // This line activates bbox support AUS-1597
-	                if (parentKnownLayer && parentKnownLayer.getDisableBboxFiltering()) {
-	                    filterParameters.bbox = null; //some WFS layer groupings may wish to disable bounding boxes
-	                }
-	            }
-	            activeLayerRecord.setLastFilterParameters(filterParameters);
-	
-	        	//Generate our filter parameters for this service
-	        	filterParameters.serviceUrl = wfsOnlineResource.url;
-	        	filterParameters.typeName = wfsOnlineResource.name;
-	
-	            handleQuery(activeLayerRecord, cswRecords[i], wfsOnlineResource, filterParameters, function() {
+	        	
+	            handleQuery(activeLayerRecord, featureTypes[i], webServices[j], filterParameters, function() {
 	                //decrement the counter
 	                finishedLoadingCounter--;
 	
@@ -567,21 +545,8 @@ Ext.onReady(function() {
 	                	activeLayerRecord.setIsLoading(false);
 	                }
 	            });
-	            transId[i] = this.Ext.Ajax.transId;
-	            transIdUrl[i] = wfsOnlineResource.url;
-	            
-	        } else { //If the endpoint will not be part of this layer just mark it as finished loading
-	            //decrement the counter
-	            finishedLoadingCounter--;
-	
-	            //check if we can set the status to finished
-	            if (finishedLoadingCounter <= 0) {
-	            	activeLayerRecord.setIsLoading(false);
-	            }
-	        }
+	       	}
         }
-        activeLayerRecord.setWFSRequestTransId(transId);
-        activeLayerRecord.setWFSRequestTransIdUrl(transIdUrl);
     };
     
     /**
@@ -600,20 +565,16 @@ Ext.onReady(function() {
     /**
      * internal helper method for Handling WFS filter queries via a proxyUrl and adding them to the map.
      */
-    var handleQuery = function(activeLayerRecord, cswRecord, onlineResource, filterParameters, finishedLoadingHandler) {
+    var handleQuery = function(activeLayerRecord, featureType, webService, filterParameters, finishedLoadingHandler) {
 
     	var responseTooltip = activeLayerRecord.getResponseToolTip();
         responseTooltip.addResponse(filterParameters.serviceUrl, "Loading...");
 
         var debuggerData = activeLayerRecord.getDebuggerData();
 
-        var knownLayer = activeLayerRecord.getParentKnownLayer();
-
         //If we don't have a proxy URL specified, use the generic 'getAllFeatures.do'
-        var url = activeLayerRecord.getProxyUrl();
-        if (!url) {
-        	url = 'getAllFeatures.do';
-        }
+        var url = 'getAllFeatures.do';
+        
 
         Ext.Ajax.request({
         	url			: url,
@@ -629,24 +590,6 @@ Ext.onReady(function() {
         		if (jsonResponse.success) {
                 	var icon = new GIcon(G_DEFAULT_ICON, activeLayerRecord.getIconUrl());
 
-                	//Assumption - we are only interested in the first (if any) KnownLayer
-                	if (knownLayer) {
-                		var iconSize = knownLayer.getIconSize();
-                		if (iconSize) {
-                			icon.iconSize = new GSize(iconSize.width, iconSize.height);
-                		}
-
-                		var iconAnchor = knownLayer.getIconAnchor();
-                		if(iconAnchor) {
-                        	icon.iconAnchor = new GPoint(iconAnchor.x, iconAnchor.y);
-                        }
-
-                		var infoWindowAnchor = knownLayer.getInfoWindowAnchor();
-                        if(infoWindowAnchor) {
-                        	icon.infoWindowAnchor = new GPoint(infoWindowAnchor.x, infoWindowAnchor.y);
-                        }
-                	}
-
                 	//TODO: This is a hack to remove marker shadows. Eventually it should be
                     // put into an external config file or become a session-based preference.
                 	icon.shadow = null;
@@ -655,8 +598,8 @@ Ext.onReady(function() {
                     var parser = new KMLParser(jsonResponse.data.kml);
                     parser.makeMarkers(icon, function(marker) {
                         marker.activeLayerRecord = activeLayerRecord.internalRecord;
-                        marker.cswRecord = cswRecord.internalRecord;
-                        marker.onlineResource = onlineResource;
+                        marker.featureType = featureType;
+                        marker.webService = webService;
                     });
 
                     var markers = parser.markers;
@@ -676,10 +619,6 @@ Ext.onReady(function() {
 
                     //store the status
                     responseTooltip.addResponse(filterParameters.serviceUrl, (markers.length + overlays.length) + " record(s) retrieved.");
-
-                    if(markers.length > 0 || overlays.length > 0) {
-                    	activeLayerRecord.setHasData(true);
-                    }
 
         		} else {
                     //store the status

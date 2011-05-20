@@ -105,6 +105,24 @@ ActiveLayersRecord.prototype.setLayerVisible = function(layerVisible) {
 	this.internalRecord.set('layerVisible', layerVisible);
 };
 
+ActiveLayersRecord.prototype.getWebServicesForFeatureType = function(featureType) {
+	var webServices = this.getWebServices();
+	var webServiceUrns = featureType.getWebServiceUrns();
+	var matchingWebServices = [];
+	
+	for (var i = 0; i < webServices.length; i++) {
+		var webService = webServices[i];
+		for (var j = 0; j < webServiceUrns.length; j++) {
+			if (webService.getUrn() === webServiceUrns[j]) {
+				matchingWebServices.push(webService);
+				break;
+			}
+		}
+	}
+	
+	return matchingWebServices;
+};
+
 
 /**
  * Gets an instance of OverlayManager or null

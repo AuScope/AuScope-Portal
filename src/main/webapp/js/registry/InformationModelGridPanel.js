@@ -43,7 +43,7 @@ InformationModelGridPanel = function(id, title, description, informationModelSto
             pressed:true,
             scope:this,
             handler: function() {
-        		var recordToAdd = new InformationModelRecord(this.getSelectionModel().getSelected());
+        		var recordToAdd = new InformationModelRecord({dataStoreRecord : this.getSelectionModel().getSelected()});
         		addLayerHandler(recordToAdd);
         	}
         }],

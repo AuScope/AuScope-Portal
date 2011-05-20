@@ -111,23 +111,7 @@ ActiveLayersGridPanel = function(id, title, description, activeLayersStore, laye
                 dataIndex: 'keyIconHtml', //this doesn't matter, its not used
                 align: 'center',
                 renderer: function(value, metaData, record) {
-            		var activeLayersRecord = new ActiveLayersRecord(record);
-            		var wfsRecords = activeLayersRecord.getCSWRecordsWithType('WFS');
-            		var wcsRecords = activeLayersRecord.getCSWRecordsWithType('WCS');
-
-            		if(!activeLayersRecord.hasData()) {
-            			if(wfsRecords.length > 0 || wcsRecords.length > 0) {
-            			    return '<a href=".." id="mylink" target="_blank"><img src="img/page_code_disabled.png"></a>';
-            			} else {
-                    		return '<a href=".." id="mylink" target="_blank"><img src="img/picture_link_disabled.png"></a>';
-            			}
-            		} else {
-	            		if (wfsRecords.length > 0 || wcsRecords.length > 0) {
-	            			return '<a href=".." id="mylink" target="_blank"><img src="img/page_code.png"></a>';
-	            		} else {
-	            		    return '<a href=".." id="mylink" target="_blank"><img src="img/picture_link.png"></a>';
-	            		}
-            		}
+            		return '<a href=".." id="mylink" target="_blank"><img src="img/picture_link_disabled.png"></a>';
             	}
             }
         ],
