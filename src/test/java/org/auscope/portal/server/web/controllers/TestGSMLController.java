@@ -126,7 +126,7 @@ public class TestGSMLController {
 
             oneOf(gmlToKml).convert(with(any(String.class)), with(any(InputStream.class)),with(any(String.class)));will(returnValue(kmlBlob));
 
-            oneOf(wfsGetFeatureMethodMakerPOST).makeMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(Integer.class)));
+            oneOf(wfsGetFeatureMethodMakerPOST).makeMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(Integer.class)), with(any(String.class)));
 
             oneOf(mockHttpRequest).getSession();will(returnValue(mockHttpSession));
             oneOf(mockHttpSession).getServletContext();will(returnValue(mockServletContext));
@@ -155,7 +155,7 @@ public class TestGSMLController {
 
             oneOf(gmlToKml).convert(with(any(String.class)), with(any(InputStream.class)),with(any(String.class)));will(returnValue(kmlBlob));
 
-            oneOf(wfsGetFeatureMethodMakerPOST).makeMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(Integer.class)));
+            oneOf(wfsGetFeatureMethodMakerPOST).makeMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(Integer.class)), with(any(String.class)));
 
             oneOf(mockHttpRequest).getSession();will(returnValue(mockHttpSession));
             oneOf(mockHttpSession).getServletContext();will(returnValue(mockServletContext));
@@ -220,7 +220,7 @@ public class TestGSMLController {
 
             oneOf(mockGeochemFilter).getFilterStringAllRecords(); will(returnValue(filterString));
         }});
-        ModelAndView modelAndView = gsmlController.doYilgarnGeochemistryFilter("fake","fake", "fake", "fake", null, 0,mockHttpRequest);
+        ModelAndView modelAndView = gsmlController.doYilgarnGeochemistryFilter("fake", "fake", null, 0,mockHttpRequest);
         
         modelAndView.getView().render(modelAndView.getModel(), mockHttpRequest, mockHttpResponse);
         
@@ -251,7 +251,7 @@ public class TestGSMLController {
 
             oneOf(mockGeochemFilter).getFilterStringAllRecords(); will(returnValue(filterString));
         }});
-        ModelAndView modelAndView = gsmlController.doYilgarnGeochemistryFilter("fake","fake", "fake", "fake", bboxToParse, 0,mockHttpRequest);
+        ModelAndView modelAndView = gsmlController.doYilgarnGeochemistryFilter("fake", "fake", bboxToParse, 0,mockHttpRequest);
         
         modelAndView.getView().render(modelAndView.getModel(), mockHttpRequest, mockHttpResponse);
         

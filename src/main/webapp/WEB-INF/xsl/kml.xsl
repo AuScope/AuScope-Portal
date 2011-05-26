@@ -51,6 +51,7 @@
 
    <!-- External parameter -->
    <xsl:param name="serviceURL"/>
+   <xsl:variable name="vocab-hard-coded-lookupCGI" select="concat('http://services-test.auscope.org/SISSVoc/getConceptByURI?CGI/', '')"/>
 
    <!-- Replace the above parameter with the one below for stand-alone testing
    <xsl:variable name="serviceURL" select="'http://gsv-ws.dpi.vic.gov.au/EarthResourceML/1.1/wfs?'"/>
@@ -439,11 +440,21 @@
 
       <xsl:variable name="idTokens" select="tokenize($rawId, '/')"/>
 
+      <xsl:variable name="clickyName">
+            <xsl:call-template name="make-popup-url">
+                <xsl:with-param name="friendly-name" select="./gml:name[@codeSpace!='http://www.ietf.org/rfc/rfc2616']"/>
+                <xsl:with-param name="real-url" select="$rawId"/>
+            </xsl:call-template>
+      </xsl:variable>
+
+
+
+
       <Placemark>
          <name><xsl:value-of select="$idTokens[last()]"/></name>
          <description>
             <xsl:call-template name="start-table"></xsl:call-template>
-            <![CDATA[<tr><td>Borehole Name</td><td>]]><xsl:value-of select="./gml:name[@codeSpace!='http://www.ietf.org/rfc/rfc2616']"/>
+            <![CDATA[<tr><td>Borehole Name</td><td>]]><xsl:value-of select="$clickyName"/>
             <![CDATA[</td></tr><tr><td>Location</td><td>]]><xsl:value-of select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:location/gml:Point/gml:pos"/>
             <![CDATA[</td></tr><tr><td>Elevation (]]><xsl:value-of select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation/@uomLabels"/><![CDATA[)</td><td>]]><xsl:value-of select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation"/>
             <![CDATA[</td></tr><tr><td>Start Depth (m)</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:coredInterval/gml:Envelope/gml:lowerCorner"/>
@@ -492,6 +503,15 @@
       <xsl:variable name="coordinates">
          <xsl:value-of select="./gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point/gml:pos"/>
       </xsl:variable>
+      <xsl:variable name="observationMethod">
+         <xsl:value-of select="./gsml:occurrence/gsml:MappedFeature/gsml:observationMethod/gsml:CGI_TermValue/gsml:value[@codeSpace='www.ietf.org/rfc/rfc1738']"/>
+      </xsl:variable>
+      <xsl:variable name="rockMaterial">
+         <xsl:value-of select="./gsml:composition/gsml:CompositionPart/gsml:material/gsml:RockMaterial/gsml:lithology/@xlink:href"/>
+      </xsl:variable>
+      <xsl:variable name="proportion">
+         <xsl:value-of select="./gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value"/>
+      </xsl:variable>
      <Placemark>
         <name><xsl:value-of select="@gml:id"/></name>
         <description>
@@ -499,14 +519,29 @@
            <xsl:call-template name="start-table"></xsl:call-template>
            <![CDATA[<tr><td>Name</td><td>]]>
            <xsl:call-template name="make-wfspopup-url">
-               <xsl:with-param name="friendly-name" select="./gml:name[@codeSpace='http://www.cgi-iugs.org/uri']"/>
+               <xsl:with-param name="friendly-name" select="@gml:id"/>
                <xsl:with-param name="real-url">
                <xsl:value-of select="$serviceURL"/><xsl:value-of select="$gsmlGeoUnitString"/><xsl:value-of select="@gml:id"/></xsl:with-param>
            </xsl:call-template><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Location</td><td>]]><xsl:value-of select="$coordinates"/><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Observation Method</td><td>]]><xsl:value-of select="./gsml:occurrence/gsml:MappedFeature/gsml:observationMethod/gsml:CGI_TermValue/gsml:value[@codeSpace='urn:cgi:classifier:CGI:MappedFeatureObservationMethod:200811']"/><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Rock Material</td><td>]]><xsl:value-of select="./gsml:composition/gsml:CompositionPart/gsml:material/gsml:RockMaterial/gsml:lithology/@xlink:href"/><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Proportion</td><td>]]><xsl:value-of select="./gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value[@codeSpace='urn:cgi:classifier:CGI:ProportionTerm:200811']"/><![CDATA[</td></tr>]]>
+           <![CDATA[<tr><td>Location</td><td>]]>
+           <xsl:call-template name="swapLatLongCoord">
+               <xsl:with-param name="coordinates" select="./gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point"/>
+           </xsl:call-template><![CDATA[</td></tr>]]>
+           <![CDATA[<tr><td>Observation Method</td><td>]]>
+           <xsl:call-template name="make-popup-url">
+               <xsl:with-param name="friendly-name" select="$observationMethod"/>
+               <xsl:with-param name="real-url" select = "concat($vocab-hard-coded-lookupCGI,$observationMethod)"/>
+           </xsl:call-template><![CDATA[</td></tr>]]>
+           <![CDATA[<tr><td>Rock Material</td><td>]]>
+           <xsl:call-template name="make-popup-url">
+               <xsl:with-param name="friendly-name" select="$rockMaterial"/>
+               <xsl:with-param name="real-url" select = "concat($vocab-hard-coded-lookupCGI,$rockMaterial)"/>
+           </xsl:call-template><![CDATA[</td></tr>]]>
+           <![CDATA[<tr><td>Proportion</td><td>]]>
+           <xsl:call-template name="make-popup-url">
+               <xsl:with-param name="friendly-name" select="$proportion"/>
+               <xsl:with-param name="real-url" select = "concat($vocab-hard-coded-lookupCGI,$proportion)"/>
+           </xsl:call-template><![CDATA[</td></tr>]]>
            <![CDATA[<tr><td>Weathering Description</td><td>]]><xsl:value-of select="./gsml:weatheringCharacter/gsml:WeatheringDescription/gsml:weatheringProduct/gsml:RockMaterial/gsml:lithology/@xlink:href"/><![CDATA[</td></tr>]]>
            <![CDATA[</table></div>]]>
         </description>
@@ -818,6 +853,36 @@
             <!-- Print set of coordinates -->
             <xsl:if test="$pos mod 2 != 0">
                <xsl:value-of select="concat($tokens[$pos + 1],',',.,',0')" />
+            </xsl:if>
+         </xsl:if>
+      </xsl:for-each>
+
+   </xsl:template>
+
+
+    <!-- ================================================================= -->
+   <!--    This function swaps the coordinates                             -->
+   <!--    PARAM: coordinates                                              -->
+   <!-- ================================================================= -->
+
+   <xsl:template name="swapLatLongCoord">
+   	<xsl:param name="coordinates"/>
+
+      <xsl:variable name="tokens" select="tokenize($coordinates, '\s+')"/>
+      <xsl:variable name="start" select="true()"/>
+
+      <xsl:for-each select="$tokens">
+         <xsl:variable name="pos" select="position()"/>
+         <xsl:if test="$pos != last()">
+
+            <!-- Add space after each set of coordinates -->
+            <xsl:if test="$pos != 1 and $pos != (last() - 1)">
+               <xsl:value-of select="' '" />
+            </xsl:if>
+
+            <!-- Print set of coordinates -->
+            <xsl:if test="$pos mod 2 != 0">
+               <xsl:value-of select="concat($tokens[$pos + 1],'   ',.)" />
             </xsl:if>
          </xsl:if>
       </xsl:for-each>

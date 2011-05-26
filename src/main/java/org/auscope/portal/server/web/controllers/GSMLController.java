@@ -50,23 +50,19 @@ import java.net.UnknownHostException;
  */
 
 @Controller
-public class GSMLController {
-	/** Log object for this class. */
-    protected final Log logger = LogFactory.getLog(getClass().getName());
-    private HttpServiceCaller serviceCaller;
-    private GmlToKml gmlToKml;
+public class GSMLController extends BaseWFSToKMLController {
     private IWFSGetFeatureMethodMaker methodMaker;
     private IFilter filter;
     private GSMLResponseHandler gsmlResponseHandler;
     
     @Autowired
-    public GSMLController(HttpServiceCaller serviceCaller,
+    public GSMLController(HttpServiceCaller httpServiceCaller,
                           GmlToKml gmlToKml,
                           IWFSGetFeatureMethodMaker methodMaker,
                           IFilter filter,
                           GSMLResponseHandler gsmlResponseHandler
                           ) {
-        this.serviceCaller = serviceCaller;
+        this.httpServiceCaller = httpServiceCaller;
         this.gmlToKml = gmlToKml;
         this.methodMaker = methodMaker;
         this.filter = filter;
@@ -94,7 +90,6 @@ public class GSMLController {
         
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJSONString);
      
-        JSONArray requestInfo = new JSONArray();
         String filterString;
         
         if (bbox == null) {
@@ -102,72 +97,51 @@ public class GSMLController {
         } else {
             filterString = filter.getFilterStringBoundingBox(bbox);
         }
-        HttpMethodBase method = methodMaker.makeMethod(serviceUrl, featureType, filterString, maxFeatures);
-        RequestEntity ent;
-        String body = null;
-        if (method instanceof PostMethod) {
-        	ent = ((PostMethod) method).getRequestEntity();
-            body = ((StringRequestEntity) ent).getContent(); 
-        }
-        requestInfo.add(serviceUrl);
-        requestInfo.add(body);
+        HttpMethodBase method = methodMaker.makeMethod(serviceUrl, featureType, filterString, maxFeatures, "http://www.opengis.net/gml/srs/epsg.xml#4326");
         
-        String gmlResponse = serviceCaller.getMethodResponseAsString(method, 
-                                                                     serviceCaller.getHttpClient());
+        String gmlResponse = httpServiceCaller.getMethodResponseAsString(method, 
+                                                                     httpServiceCaller.getHttpClient());
 
-        return makeModelAndViewKML(convertToKml(gmlResponse, request, serviceUrl), gmlResponse, requestInfo);
+        return makeModelAndViewKML(convertToKml(gmlResponse, request, serviceUrl), gmlResponse, method);
     }
     
     @RequestMapping("/doYilgarnGeochemistry.do")
     public ModelAndView doYilgarnGeochemistryFilter(
     		@RequestParam(required=false,	value="serviceUrl") String serviceUrl,
     		@RequestParam(required=false,	value="geologicName") String geologicName,
-            @RequestParam(required=false,	value="rockLithology") String rockLithology,
-            @RequestParam(required=false,	value="weatherLithology") String weatherLithology,            
-            @RequestParam(required=false, value="bbox") String bboxJson,
+    		@RequestParam(required=false, value="bbox") String bboxJson,
             @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures,
             HttpServletRequest request) throws Exception  {
 
         
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
      
-        JSONArray requestInfo = new JSONArray();
+        HttpMethodBase method = null;
         try{
         	String filterString;
-	        YilgarnGeochemistryFilter yilgarnGeochemistryFilter = new YilgarnGeochemistryFilter(geologicName, rockLithology, weatherLithology);
+	        YilgarnGeochemistryFilter yilgarnGeochemistryFilter = new YilgarnGeochemistryFilter(geologicName);
 	        if (bbox == null) {
 	            filterString = yilgarnGeochemistryFilter.getFilterStringAllRecords();
 	        } else {
 	            filterString = yilgarnGeochemistryFilter.getFilterStringBoundingBox(bbox);
 	        }
 	      
-	        HttpMethodBase method = methodMaker.makeMethod(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures);
-	        RequestEntity ent;
-	        String body = null;
-	        if (method instanceof PostMethod) {
-	        	ent = ((PostMethod) method).getRequestEntity();
-	            body = ((StringRequestEntity) ent).getContent(); 
-	        }
-	        requestInfo.add(serviceUrl);
-	        requestInfo.add(body);
-	        
-	        String yilgarnGeochemResponse = serviceCaller.getMethodResponseAsString(method,serviceCaller.getHttpClient());
+	        method = methodMaker.makeMethod(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures);
+	        String yilgarnGeochemResponse = httpServiceCaller.getMethodResponseAsString(method,httpServiceCaller.getHttpClient());
 	        
 	        String kmlBlob =  convertToKml(yilgarnGeochemResponse, request, serviceUrl);
 	        
 	        if (kmlBlob == null || kmlBlob.length() == 0) {
-	        	logger.error(String.format("Transform failed serviceUrl='%1$s' gmlBlob='%2$s'",serviceUrl, yilgarnGeochemResponse));
-            	return makeModelAndViewFailure(ErrorMessages.OPERATION_FAILED ,requestInfo);
+	        	log.error(String.format("Transform failed serviceUrl='%1$s' gmlBlob='%2$s'",serviceUrl, yilgarnGeochemResponse));
+            	return makeModelAndViewFailure(ErrorMessages.OPERATION_FAILED ,method);
             } else {
-            	return makeModelAndViewKML(kmlBlob, yilgarnGeochemResponse, requestInfo);
+            	return makeModelAndViewKML(kmlBlob, yilgarnGeochemResponse, method);
             }
 	        
         } catch (Exception e) {
-            return this.handleExceptionResponse(e, serviceUrl, requestInfo);
+            return this.handleExceptionResponse(e, serviceUrl, method);
         }
     }
-    
-    
     
     /**
      * Given a service Url, a feature type and a specific feature ID, this function will fetch the specific feature and 
@@ -183,7 +157,7 @@ public class GSMLController {
             						   @RequestParam("typeName") final String featureType,
             						   @RequestParam("featureId") final String featureId,
             						   HttpServletRequest request) throws Exception {
-    	String gmlResponse = serviceCaller.getMethodResponseAsString(new ICSWMethodMaker() {
+    	String gmlResponse = httpServiceCaller.getMethodResponseAsString(new ICSWMethodMaker() {
             public HttpMethodBase makeMethod() {
                 GetMethod method = new GetMethod(serviceUrl);
 
@@ -200,7 +174,7 @@ public class GSMLController {
 
                 return method;
             }
-        }.makeMethod(), serviceCaller.getHttpClient());
+        }.makeMethod(), httpServiceCaller.getHttpClient());
 
         return makeModelAndViewKML(convertToKml(gmlResponse, request, serviceUrl), gmlResponse);
     }
@@ -210,98 +184,12 @@ public class GSMLController {
                               HttpServletRequest request,
                               HttpServletResponse response) {
         try {
-            String result = serviceCaller.getMethodResponseAsString(new GetMethod(serviceUrl), serviceCaller.getHttpClient());
+            String result = httpServiceCaller.getMethodResponseAsString(new GetMethod(serviceUrl), httpServiceCaller.getHttpClient());
 
             // Send response back to client
             response.getWriter().println(convertToKml(result, request, serviceUrl));
         } catch (Exception e) {
-            logger.error(e);
+            log.error(e);
         }
-    }
-
-    /**
-     * Insert a kml block into a successful JSON response
-     * @param kmlBlob
-     * @return
-     */
-    private ModelAndView makeModelAndViewKML(final String kmlBlob, final String gmlBlob) {
-
-        final Map<String,String> data = new HashMap<String,String>();
-        data.put("kml", kmlBlob);
-        data.put("gml", gmlBlob);
-
-        
-        ModelMap model = new ModelMap();
-        model.put("success", true);
-        model.put("data", data);
-
-        return new JSONModelAndView(model);
-    }
-    
-    
-    public ModelAndView handleExceptionResponse(Exception e, String serviceUrl, JSONArray requestInfo) {
-
-    	logger.error(String.format("Exception! serviceUrl='%1$s'", serviceUrl),e);
-
-        // Service down or host down
-        if(e instanceof ConnectException || e instanceof UnknownHostException) {
-            return this.makeModelAndViewFailure(ErrorMessages.UNKNOWN_HOST_OR_FAILED_CONNECTION, requestInfo);
-        }
-
-        // Timouts
-        if(e instanceof ConnectTimeoutException) {
-            return this.makeModelAndViewFailure(ErrorMessages.OPERATION_TIMOUT, requestInfo);
-        }
-        
-        if(e instanceof SocketTimeoutException) {
-            return this.makeModelAndViewFailure(ErrorMessages.OPERATION_TIMOUT, requestInfo);
-        }        
-
-        // An error we don't specifically handle or expect
-        return makeModelAndViewFailure(ErrorMessages.FILTER_FAILED, requestInfo);
-    } 
-    //for debugger:
-    private ModelAndView makeModelAndViewKML(final String kmlBlob, final String gmlBlob, JSONArray requestInfo) {
-    	
-    	
-    	final Map<String,String> data = new HashMap<String,String>();
-        data.put("kml", kmlBlob);
-        data.put("gml", gmlBlob);
-        
-        final Map<String,String> debugInfo = new HashMap<String,String>();
-        debugInfo.put("url",requestInfo.getString(0) );
-        debugInfo.put("info",requestInfo.getString(1) );
-        
-        ModelMap model = new ModelMap();
-        model.put("success", true);
-        model.put("data", data);
-        model.put("debugInfo", debugInfo);
-
-        return new JSONModelAndView(model);
-    }
-    
-    private ModelAndView makeModelAndViewFailure(final String message, JSONArray requestInfo) {    	
-    	final Map<String,String> debugInfo = new HashMap<String,String>();
-        debugInfo.put("url",requestInfo.getString(0) );
-        debugInfo.put("info",requestInfo.getString(1) );
-    	
-    	ModelMap model = new ModelMap(); 
-        
-        model.put("success", false);
-        model.put("msg", message); 
-        model.put("debugInfo", debugInfo);
-        
-        return new JSONModelAndView(model);
-    }
-    
-    /**
-     * Assemble a call to convert GeoSciML into kml format 
-     * @param geoXML
-     * @param httpRequest
-     * @param serviceUrl
-     */
-    private String convertToKml(String geoXML, HttpServletRequest httpRequest, String serviceUrl) {
-        InputStream inXSLT = httpRequest.getSession().getServletContext().getResourceAsStream("/WEB-INF/xsl/kml.xsl");
-        return gmlToKml.convert(geoXML, inXSLT, serviceUrl);
     }
 }

@@ -237,9 +237,9 @@ var gMapClickController = function(map, overlay, latlng, overlayLatlng, activeLa
 	        if (!alr.getLayerVisible()) {
 	        	continue;
 	        }
-			
-			var wcsCSWRecords = alr.getCSWRecordsWithType('WCS');
-	        if (wcsCSWRecords.length !== 0){
+	        
+	        var wcsCSWRecords = alr.getCSWRecordsWithType('WCS');
+	        if(wcsCSWRecords.length !== 0){
 	        	continue;
 	        }
 
