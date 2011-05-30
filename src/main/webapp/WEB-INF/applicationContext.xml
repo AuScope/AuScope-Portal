@@ -257,6 +257,13 @@
                <constructor-arg index="1" value="32"/>
            </bean>
        </constructor-arg>
+       <property name="relatedFeatureTypeNames">
+            <list>
+                <value>omx:ObservationProcess</value>
+                <value>gml:TimeInstant</value>
+                <value>sa:LocatedSpecimen</value>
+            </list>
+       </property>
    </bean>
    
    <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.server.web.KnownLayerWFS">
@@ -301,6 +308,7 @@
                 <value>sa:SamplingFeatureCollection</value>
                 <value>om:GETPUBLISHEDSYSTEMTSA</value>
                 <value>nvcl:scannedBorehole</value>
+                <value>nvcl:ScannedBoreholeCollection</value>
             </list>
        </property>
        <property name="group" value="Boreholes"/>
@@ -343,6 +351,13 @@
             <list>
                 <value>sa:SamplingFeatureCollection</value>
                 <value>om:GETPUBLISHEDSYSTEMTSA</value>
+                <value>pdb:rft</value>
+                <value>pdb:nacl</value>
+                <value>pdb:t</value>
+                <value>pdb:cl</value>
+                <value>pdb:tds</value>
+                <value>pdb:dst</value>
+                <value>pdb:fitp</value>
             </list>
        </property>
        <property name="group" value="Boreholes"/>
