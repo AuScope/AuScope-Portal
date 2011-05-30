@@ -347,7 +347,7 @@ Ext.onReady(function() {
     	return !isCSWRecordKnown(cswRecord);
     };
     var mapLayersPanel = new CSWRecordGridPanel('wms-layers-panel',
-									    		'Map Layers',
+									    		'Registered Layers',
 									    		'Other layers present in the Registry',
 									    		cswRecordStore,
 									    		cswPanelAddHandler,
