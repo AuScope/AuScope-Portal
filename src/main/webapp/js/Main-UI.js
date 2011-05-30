@@ -1629,7 +1629,19 @@ Ext.onReady(function() {
     //Attempts to deserialize the state string and apply its contents to the current map
     var attemptDeserialization = function(stateString) {
         var s = new MapStateSerializer();
-        s.deserialize(stateString);
+        
+        //Attempt to deserialize - there shouldn't be any problems unless we are trying to backport a 'future' serialization string
+        try {
+        	s.deserialize(stateString);
+        } catch(er) {
+        	Ext.MessageBox.show({
+                title : 'Unsupported Permanent Link',
+                icon : Ext.MessageBox.WARNING,
+                msg : 'The permanent link that you are using is in a format that this portal cannot recognize. The saved layers and viewport will not be loaded.',
+                multiline : false
+            });
+        	return;
+        }
 
         //Pan our map to the appropriate location
         map.setZoom(s.mapState.zoom);
