@@ -1728,7 +1728,7 @@ Ext.onReady(function() {
         	cswRecordStore.fireEvent('datachanged');
 
         	//Afterwards we decode any saved state included as a URL parameter
-        	var urlParams = Ext.urlDecode(location.search.substring(1));
+        	var urlParams = Ext.urlDecode(window.location.search.substring(1));
         	if (urlParams && urlParams.state) {
         	    attemptDeserialization(urlParams.state);
         	}
