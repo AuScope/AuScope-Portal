@@ -20,6 +20,7 @@
                 <ref bean="knownTypeGeodesy" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypeGeotransects" />
+                <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
