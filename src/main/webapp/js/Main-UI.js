@@ -1637,6 +1637,7 @@ Ext.onReady(function() {
         	Ext.MessageBox.show({
                 title : 'Unsupported Permanent Link',
                 icon : Ext.MessageBox.WARNING,
+                buttons : Ext.Msg.OK,
                 msg : 'The permanent link that you are using is in a format that this portal cannot recognize. The saved layers and viewport will not be loaded.',
                 multiline : false
             });
@@ -1715,6 +1716,7 @@ Ext.onReady(function() {
             Ext.MessageBox.show({
                 title : 'Missing Layers',
                 icon : Ext.MessageBox.WARNING,
+                buttons : Ext.Msg.OK,
                 msg : 'Some of the layers that were saved no longer exist and will be ignored. The remaining layers will load normally',
                 multiline : false
             });
@@ -1730,13 +1732,30 @@ Ext.onReady(function() {
         	//Afterwards we decode any saved state included as a URL parameter
         	var urlParams = Ext.urlDecode(window.location.search.substring(1));
         	if (urlParams && urlParams.state) {
-        	    attemptDeserialization(urlParams.state);
+        		//IE will truncate our URL at 2048 characters which destroys our state string.
+        		//Let's warn the user if we suspect this to have occurred 
+        		if (Ext.isIE && window.location.href.length === 2047) {
+        			Ext.MessageBox.show({
+        				title : 'Mangled Permanent Link',
+                        icon : Ext.MessageBox.WARNING,
+                        msg : 'The web browser you are using (Internet Explorer) has likely truncated the permanent link you are using which will probably render it unuseable. The AuScope portal will attempt to restore the saved state anyway.',
+                        buttons : Ext.Msg.OK,
+                        multiline : false,
+                        fn : function() {
+        					attemptDeserialization(urlParams.state);
+        				}
+        			});
+        		} else {
+        			//otherwise there *shouldn't* be any problems
+        			attemptDeserialization(urlParams.state);
+        		}
         	}
 
         	if(r.length == 0) {
                 Ext.MessageBox.show({
                     title : 'No Services Available',
                     icon : Ext.MessageBox.WARNING,
+                    buttons : Ext.Msg.OK,
                     msg : 'The CSW(s) are not returning any records and functionality will be affected.',
                     multiline : false
                 });
