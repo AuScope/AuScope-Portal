@@ -453,17 +453,26 @@
         <constructor-arg name="title" value="HighP-Site-PhosLayer"/>
         <property name="hidden" value="true"/>
     </bean>
-    <!-- This layer is NOT selectable, it is only used for hiding these features -->
-    <bean id="geodesyWorkflowPortal" class="org.auscope.portal.server.web.KnownLayerWFS">
-        <constructor-arg name="featureTypeName" value="Geodesy Workflow Portal"/>
-        <constructor-arg name="title" value="Geodesy Workflow Portal"/>
-        <property name="hidden" value="true"/>
-    </bean>
-    <!-- This layer is NOT selectable, it is only used for hiding these features -->
-    <bean id="c3dmmPortal" class="org.auscope.portal.server.web.KnownLayerWFS">
-        <constructor-arg name="featureTypeName" value="C3DMM Portal"/>
-        <constructor-arg name="title" value="C3DMM Portal"/>
-        <property name="hidden" value="true"/>
-    </bean>
+	<!-- This layer is NOT selectable, it is only used for hiding these features -->
+	<bean id="knownTypePortals" class="org.auscope.portal.server.web.KnownLayerKeywords">
+       <constructor-arg name="title" value="Portals"/>
+       <constructor-arg name="description" value="A collection of SISS enabled web portals"/>
+       <constructor-arg name="descriptiveKeyword" value="Portal"/>
+       <constructor-arg name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png"/>
+       <constructor-arg name="iconAnchor">
+           <bean class="java.awt.Point">
+               <constructor-arg index="0" value="16"/>
+               <constructor-arg index="1" value="32"/>
+           </bean>
+       </constructor-arg>
+       <constructor-arg name="iconSize">
+           <bean class="java.awt.Dimension">
+               <constructor-arg index="0" value="32"/>
+               <constructor-arg index="1" value="32"/>
+           </bean>
+       </constructor-arg>
+
+       <property name="hidden" value="true"/>
+   </bean>
 
 </beans>
