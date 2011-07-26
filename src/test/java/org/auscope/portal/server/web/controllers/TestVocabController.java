@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
+import org.auscope.portal.server.web.SISSVocMethodMaker;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.auscope.portal.vocabs.VocabularyServiceResponseHandler;
 import org.jmock.Expectations;
@@ -58,27 +59,16 @@ public class TestVocabController {
      * Mock http response
      */
     private HttpServletResponse mockHttpResponse = context.mock(HttpServletResponse.class);
-    
+
+    private SISSVocMethodMaker mockSissVocMethodMaker = context.mock(SISSVocMethodMaker.class);
+
     @Before
     public void setup() throws Exception {
-        final String serviceUrl = "http://service.example.com/query";
-//        GetMethod getMethod;
-
-        context.checking(new Expectations() {{
-            //constructor gets a host property
-        	allowing(propertyConfigurer).resolvePlaceholder(with(any(String.class)));will(returnValue(serviceUrl));
-            
-            //TODO check, that queryString has been built correctly!
-            
-            //check that the executor was called
-//            oneOf(threadExecutor).execute(with(any(Runnable.class)));
-        }});
-
         VocabularyServiceResponseHandler responseHandler =
             new VocabularyServiceResponseHandler();
-        
+
         this.vocabController = new VocabController(
-                this.httpServiceCaller, responseHandler, this.propertyConfigurer);
+                this.httpServiceCaller, responseHandler, this.propertyConfigurer, mockSissVocMethodMaker);
     }
 
     /**
@@ -87,7 +77,8 @@ public class TestVocabController {
      */
     @Test
     public void testGetScalarQuery() throws Exception {
-    	final String docString = org.auscope.portal.Util.loadXML("src/test/resources/GetVocabQuery_Success.xml");
+        final String serviceUrl = "http://service.example.com/query";
+        final String docString = org.auscope.portal.Util.loadXML("src/test/resources/GetVocabQuery_Success.xml");
         final String returnedString = docString.replace("\"", "\\\"").replace("\t","\\t").replace("</", "<\\/");
         final String expectedScopeNote =  "\"scopeNote\":\"Mineral index for TSA singleton match or primary mixture component\"";
         final String expectedSuccess = "\"success\":true";
@@ -98,24 +89,28 @@ public class TestVocabController {
         final String labelName = "testLabel";
 
         context.checking(new Expectations() {{
+            allowing(propertyConfigurer).resolvePlaceholder("HOST.vocabService.url");will(returnValue(serviceUrl));
+            oneOf(mockSissVocMethodMaker).getCommodityMethod(serviceUrl, "commodity_vocab", "urn:cgi:classifierScheme:GA:commodity");
+
             oneOf(httpServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)),with(any(HttpClient.class)));will(returnValue(docString));
             oneOf(httpServiceCaller).getHttpClient();
-            
-            
+
+            oneOf(mockSissVocMethodMaker).getConceptByLabelMethod(serviceUrl, repositoryName, labelName);
+
             //check that the correct response is getting output
             oneOf(mockHttpResponse).setContentType(with(any(String.class)));
             oneOf(mockHttpResponse).getWriter(); will(returnValue(new PrintWriter(actualJSONResponse)));
         }});
-        
+
         ModelAndView mav = this.vocabController.getScalarQuery(repositoryName, labelName);
         mav.getView().render(mav.getModel(), mockHttpRequest, mockHttpResponse);
-        
-        
+
+
         String response = actualJSONResponse.getBuffer().toString();
         Assert.assertTrue(response.contains(expectedScopeNote));
         Assert.assertTrue(response.contains(expectedSuccess));
         Assert.assertTrue(response.contains(expectedLabel));
         Assert.assertTrue(response.contains(expectedData));
-        
+
     }
 }

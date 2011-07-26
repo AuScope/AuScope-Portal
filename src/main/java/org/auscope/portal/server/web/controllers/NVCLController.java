@@ -1,23 +1,13 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.csw.CSWOnlineResource;
-import org.auscope.portal.csw.CSWRecord;
-import org.auscope.portal.csw.CSWOnlineResource.OnlineResourceType;
-import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.util.GmlToKml;
-import org.auscope.portal.server.util.Util;
 import org.auscope.portal.server.web.ErrorMessages;
-import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
 import org.auscope.portal.server.web.service.BoreholeService;
 import org.auscope.portal.server.web.service.CSWService;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
@@ -26,9 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Controller for handling requests for the NVCL boreholes
@@ -37,10 +24,10 @@ import org.w3c.dom.NodeList;
  */
 @Controller
 public class NVCLController extends BaseWFSToKMLController {
-    
+
     private BoreholeService boreholeService;
     private CSWService cswService;
-    
+
     @Autowired
     public NVCLController(GmlToKml gmlToKml,
                             BoreholeService boreholeService,
@@ -52,9 +39,9 @@ public class NVCLController extends BaseWFSToKMLController {
         this.httpServiceCaller = httpServiceCaller;
         this.cswService = cswService;
     }
-    
-    
-    
+
+
+
     /**
      * Handles the borehole filter queries.
      *
@@ -82,11 +69,11 @@ public class NVCLController extends BaseWFSToKMLController {
                 onlyHylogger = Boolean.parseBoolean(onlyHyloggerString);
             }
         }
-        
+
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, maxFeatures,bbox, onlyHylogger, request);
     }
-    
+
     /**
      * Handles the borehole filter queries.
      *
@@ -107,13 +94,13 @@ public class NVCLController extends BaseWFSToKMLController {
                 log.warn("Error requesting list of hylogger borehole ID's", e);
                 return makeModelAndViewFailure("Failure when identifying which boreholes have Hylogger data.", null);
             }
-            
+
             if (hyloggerBoreholeIDs.size() == 0) {
                 log.warn("No hylogger boreholes exist (or the services are missing)");
                 return makeModelAndViewFailure("Unable to identify any boreholes with Hylogger data.", null);
             }
         }
-        
+
         HttpMethodBase method = null;
         try {
             method = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
