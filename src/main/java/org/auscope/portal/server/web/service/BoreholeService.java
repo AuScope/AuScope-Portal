@@ -17,7 +17,7 @@ import org.auscope.portal.csw.CSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.mineraloccurrence.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.util.Util;
+import org.auscope.portal.server.util.DOMUtil;
 import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,6 @@ public class BoreholeService {
     // ----------------------------------------------------- Instance variables
     private HttpServiceCaller httpServiceCaller;
     private WFSGetFeatureMethodMaker methodMaker;
-    private Util util = new Util();
 
     // ----------------------------------------------------------- Constructors
 
@@ -93,7 +92,7 @@ public class BoreholeService {
         String wfsResponse = httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
 
         //Parse response
-        Document doc = util.buildDomFromString(wfsResponse);
+        Document doc = DOMUtil.buildDomFromString(wfsResponse);
         XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new NVCLNamespaceContext());
 

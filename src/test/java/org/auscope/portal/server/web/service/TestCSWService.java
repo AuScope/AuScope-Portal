@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.csw.CSWThreadExecutor;
-import org.auscope.portal.server.util.Util;
+import org.auscope.portal.server.util.DOMUtil;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.api.Action;
@@ -26,14 +26,14 @@ import org.junit.Test;
  */
 public class TestCSWService {
 
-	//determines the size of the test + congestion
-	static final int CONCURRENT_THREADS_TO_RUN = 10;
+    //determines the size of the test + congestion
+    static final int CONCURRENT_THREADS_TO_RUN = 10;
 
-	//These determine the correct numbers for a single read of the test file
-	static final int RECORD_COUNT_WMS = 2;
-	static final int RECORD_COUNT_WFS = 12;
-	static final int RECORD_COUNT_TOTAL = 15;
-	static final int RECORD_COUNT_ERMINE_RECORDS = 2;
+    //These determine the correct numbers for a single read of the test file
+    static final int RECORD_COUNT_WMS = 2;
+    static final int RECORD_COUNT_WFS = 12;
+    static final int RECORD_COUNT_TOTAL = 15;
+    static final int RECORD_COUNT_ERMINE_RECORDS = 2;
 
     /**
      * JMock context
@@ -57,24 +57,18 @@ public class TestCSWService {
      */
     private CSWThreadExecutor threadExecutor;
 
-    /**
-     * Mock Util
-     * @throws Exception
-     */
-     private Util util = new Util();//context.mock(Util.class);
-
     @Before
     public void setup() throws Exception {
 
-    	this.threadExecutor = new CSWThreadExecutor();
+        this.threadExecutor = new CSWThreadExecutor();
 
-      	//Create our service list
-      	ArrayList<CSWServiceItem> serviceUrlList = new ArrayList<CSWServiceItem>(CONCURRENT_THREADS_TO_RUN);
-      	for (int i = 0; i < CONCURRENT_THREADS_TO_RUN; i++){
-      		serviceUrlList.add(new CSWServiceItem("http://localhost"));
-      	}
+          //Create our service list
+          ArrayList<CSWServiceItem> serviceUrlList = new ArrayList<CSWServiceItem>(CONCURRENT_THREADS_TO_RUN);
+          for (int i = 0; i < CONCURRENT_THREADS_TO_RUN; i++){
+              serviceUrlList.add(new CSWServiceItem("http://localhost"));
+          }
 
-        this.cswService = new CSWService(threadExecutor, httpServiceCaller, util, serviceUrlList);
+        this.cswService = new CSWService(threadExecutor, httpServiceCaller, serviceUrlList);
     }
 
     /**
@@ -122,11 +116,11 @@ public class TestCSWService {
 
         Runnable r = new Runnable() {
             public void run() {
-            	try {
-            		service.updateRecordsInBackground();
-            	} catch(Exception e) {
-            		Assert.fail(e.toString());
-            	}
+                try {
+                    service.updateRecordsInBackground();
+                } catch(Exception e) {
+                    Assert.fail(e.toString());
+                }
             }
         };
 
@@ -177,7 +171,7 @@ public class TestCSWService {
         context.checking(new Expectations() {{
             exactly(CONCURRENT_THREADS_TO_RUN).of(httpServiceCaller).getHttpClient();
             exactly(CONCURRENT_THREADS_TO_RUN).of(httpServiceCaller).getMethodResponseAsString(with(
-            		any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(docString));
+                    any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(docString));
         }});
 
         //We call this twice to test that an update wont commence whilst
@@ -185,22 +179,22 @@ public class TestCSWService {
         this.cswService.updateRecordsInBackground();
         this.cswService.updateRecordsInBackground();
         try {
-        	threadExecutor.getExecutorService().shutdown();
-        	threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
+            threadExecutor.getExecutorService().shutdown();
+            threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
         }
         catch (Exception ex) {
-        	threadExecutor.getExecutorService().shutdownNow();
-        	Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
+            threadExecutor.getExecutorService().shutdownNow();
+            Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
         }
 
         //in the response we loaded from the text file it contains 55 records
         Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_TOTAL,
-        		this.cswService.getAllRecords().length);
+                this.cswService.getAllRecords().length);
         Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_WMS,
-        		this.cswService.getWMSRecords().length);
+                this.cswService.getWMSRecords().length);
         Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_WFS,
-        		this.cswService.getWFSRecords().length);
+                this.cswService.getWFSRecords().length);
         Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_ERMINE_RECORDS,
-        		this.cswService.getWCSRecords().length);
+                this.cswService.getWCSRecords().length);
     }
 }

@@ -11,7 +11,7 @@ import org.auscope.portal.csw.CSWOnlineResource;
 import org.auscope.portal.csw.CSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.csw.CSWRecord;
 import org.auscope.portal.csw.CSWThreadExecutor;
-import org.auscope.portal.server.util.Util;
+import org.auscope.portal.server.util.DOMUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -40,17 +40,15 @@ public class CSWService {
 
         //These are cached for the run method
         private HttpServiceCaller serviceCaller;
-        private Util util;
 
         //This isn't perfect, but it does the job we need it to
         //This will stop multiple updates on different threads from running at the same time
         private volatile boolean updateInProgress;
 
-        public UrlCache(CSWServiceItem serviceItem, HttpServiceCaller serviceCaller, Util util) {
+        public UrlCache(CSWServiceItem serviceItem, HttpServiceCaller serviceCaller) {
             this.serviceItem = serviceItem;
             this.cache = new CSWRecord[0];
             this.serviceCaller = serviceCaller;
-            this.util = util;
         }
 
         public synchronized void setCache(CSWRecord[] cache, String lastCSWresponse) {
@@ -93,7 +91,7 @@ public class CSWService {
                 }
                 else {
                     log.info(String.format("Update required for serviceName='%1$s'",this.serviceItem.getServiceUrl()));
-                    Document document = util.buildDomFromString(methodResponse);
+                    Document document = DOMUtil.buildDomFromString(methodResponse);
                     CSWRecord[] tempRecords = new CSWGetRecordResponse(document).getCSWRecords();
                     //These records should also have a link back to their provider
                     if (serviceItem.getRecordInformationUrl() != null && serviceItem.getRecordInformationUrl().length() > 0) {
@@ -131,22 +129,19 @@ public class CSWService {
     private UrlCache[]  cache;
     private HttpServiceCaller serviceCaller;
     private CSWThreadExecutor executor;
-    private Util util;
     private static final int UPDATE_INTERVAL = 600000;
 
     @Autowired
     public CSWService(CSWThreadExecutor executor,
                       HttpServiceCaller serviceCaller,
-                      Util util,
                       @Qualifier(value = "cswServiceList") ArrayList cswServiceList) throws Exception {
 
         this.executor = executor;
         this.serviceCaller = serviceCaller;
-        this.util = util;
 
         this.cache = new UrlCache[cswServiceList.size()];
         for (int i = 0; i < cswServiceList.size(); i++) {
-            cache[i] = new UrlCache((CSWServiceItem) cswServiceList.get(i), serviceCaller, util);
+            cache[i] = new UrlCache((CSWServiceItem) cswServiceList.get(i), serviceCaller);
         }
     }
 

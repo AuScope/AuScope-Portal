@@ -23,13 +23,18 @@ import java.io.StringWriter;
 import java.util.Properties;
 
 /**
- * User: Mathew Wyatt
- * Date: 20/08/2009
- * Time: 4:42:13 PM
+ * Utility functions for interacting with a DOM object
+ *
+ * @author Matt Wyatt
+ * @author Josh Vote
  */
-@Repository
 public class DOMUtil {
-    public Document buildDomFromString(String xmlString) throws ParserConfigurationException, IOException, SAXException {
+    /**
+     * Given a String containing XML, parse it and return a DOM object representation (that is namespace aware).
+     * @param xmlString A string containing valid XML
+     * @return
+     */
+    public static Document buildDomFromString(String xmlString) throws ParserConfigurationException, IOException, SAXException {
         //build the XML dom
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true); // never forget this!
@@ -39,31 +44,31 @@ public class DOMUtil {
 
         return doc;
     }
-    
+
     /**
      * Given a DOM (sub)tree generate a string representation with no formatting
      * @param node The node to generate the XML for
      * @param omitXmlDeclaration Whether the <?xml?> header should be omitted
-     * 
+     *
      * @return
      * @throws TransformerException
      */
-    public String buildStringFromDom(Node node, boolean omitXmlDeclaration) throws TransformerException {
-    	StringWriter outText = new StringWriter();
-    	StreamResult sr = new StreamResult(outText);
-    	Properties oprops = new Properties();
-    	oprops.put(OutputKeys.METHOD, "xml");
-    	if (omitXmlDeclaration) {
-    		oprops.put(OutputKeys.OMIT_XML_DECLARATION, "yes");
-    	} else {
-    		oprops.put(OutputKeys.OMIT_XML_DECLARATION, "no");
-    	}
-    	TransformerFactory tf = TransformerFactory.newInstance();
-    	
-    	Transformer t = tf.newTransformer();
-		t.setOutputProperties(oprops);
-		t.transform(new DOMSource(node),sr);
-		
-		return outText.toString();
+    public static String buildStringFromDom(Node node, boolean omitXmlDeclaration) throws TransformerException {
+        StringWriter outText = new StringWriter();
+        StreamResult sr = new StreamResult(outText);
+        Properties oprops = new Properties();
+        oprops.put(OutputKeys.METHOD, "xml");
+        if (omitXmlDeclaration) {
+            oprops.put(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        } else {
+            oprops.put(OutputKeys.OMIT_XML_DECLARATION, "no");
+        }
+        TransformerFactory tf = TransformerFactory.newInstance();
+
+        Transformer t = tf.newTransformer();
+        t.setOutputProperties(oprops);
+        t.transform(new DOMSource(node),sr);
+
+        return outText.toString();
     }
 }
