@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.auscope.portal.DelayedReturnValueAction;
 import org.auscope.portal.csw.CSWThreadExecutor;
 import org.auscope.portal.server.util.DOMUtil;
 import org.jmock.Expectations;
@@ -71,24 +72,6 @@ public class TestCSWService {
         this.cswService = new CSWService(threadExecutor, httpServiceCaller, serviceUrlList);
     }
 
-    /**
-     * A simple extension on ReturnValue that adds a delay before the object is returned
-     * @author vot002
-     *
-     */
-    private static class DelayedReturnValueAction extends ReturnValueAction {
-        private long delayMs;
-        public DelayedReturnValueAction(long delayMs, Object returnValue) {
-            super(returnValue);
-            this.delayMs = delayMs;
-        }
-
-        @Override
-        public Object invoke(Invocation i) throws Throwable {
-            Thread.sleep(delayMs);
-            return super.invoke(i);
-        }
-    }
 
     private static Action delayReturnValue(long msDelay, Object returnValue) throws Exception {
         return new DelayedReturnValueAction(msDelay, returnValue);
