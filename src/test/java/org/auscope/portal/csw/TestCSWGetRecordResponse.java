@@ -1,6 +1,7 @@
 package org.auscope.portal.csw;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,9 +35,9 @@ public class TestCSWGetRecordResponse {
     @Test
     public void testGetCSWRecords() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 
-        CSWRecord[] recs = this.recordResponse.getCSWRecords();
+        List<CSWRecord> recs = this.recordResponse.getCSWRecords();
 
-        Assert.assertEquals(15, recs.length);
+        Assert.assertEquals(15, recs.size());
     }
 
 }

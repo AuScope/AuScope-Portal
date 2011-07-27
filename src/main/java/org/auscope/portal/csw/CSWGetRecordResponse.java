@@ -22,7 +22,6 @@ import org.w3c.dom.NodeList;
  * Time: 11:56:00 AM
  */
 public class CSWGetRecordResponse {
-    private CSWRecord[] records;
     private Document recordResponse;
 
     // -------------------------------------------------------------- Constants
@@ -37,8 +36,37 @@ public class CSWGetRecordResponse {
         this.recordResponse = getRecordResponseText;
     }
 
+    /**
+     * Returns the number of CSWRecords as recorded in the header of the GetRecordsResponse element
+     *
+     * If the document cannot be parsed for the required fields 0 will be returned
+     * @return
+     * @throws XPathExpressionException
+     */
+    public int getCSWRecordsCount() throws XPathExpressionException {
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        xPath.setNamespaceContext(new CSWNamespaceContext());
 
-    public CSWRecord[] getCSWRecords() throws XPathExpressionException {
+        String recordCountExpression = "/csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched";
+        Node node = (Node) xPath.evaluate( recordCountExpression
+                                                  , this.recordResponse
+                                                  , XPathConstants.NODE);
+
+        if (node == null) {
+            log.warn("Couldn't find numberOfRecordsMatched element. Returning 0");
+            return 0;
+        }
+
+        int count = 0;
+        try {
+            count = Integer.parseInt(node.getTextContent());
+        } catch (NumberFormatException ex) {
+            log.warn("numberOfRecordsMatched format is not parseable into an int", ex);
+        }
+        return count;
+    }
+
+    public List<CSWRecord> getCSWRecords() throws XPathExpressionException {
 
         XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new CSWNamespaceContext());
@@ -52,13 +80,14 @@ public class CSWGetRecordResponse {
 
         log.info("Number of records retrieved from GeoNetwork: " + nodes.getLength());
 
-        records = new CSWRecord[nodes.getLength()];
+        List<CSWRecord> records = new ArrayList<CSWRecord>(nodes.getLength());
 
         for(int i=0; i<nodes.getLength(); i++ ) {
             Node metadataNode = nodes.item(i);
             CSWRecordTransformer transformer = new CSWRecordTransformer(metadataNode);
-            records[i] = transformer.transformToCSWRecord();
-            log.debug("GN layer " + (i+1) + " : " + records[i].toString());            
+            CSWRecord newRecord = transformer.transformToCSWRecord();
+            records.add(newRecord);
+            log.trace("GN layer " + (i+1) + " : " + newRecord.toString());
         }
 
         return records;

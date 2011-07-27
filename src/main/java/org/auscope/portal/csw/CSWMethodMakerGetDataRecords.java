@@ -1,5 +1,7 @@
 package org.auscope.portal.csw;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -30,7 +32,7 @@ public class CSWMethodMakerGetDataRecords {
     protected final Log log = LogFactory.getLog(getClass());
     private String serviceUrl;
 
-    public CSWMethodMakerGetDataRecords(String serviceUrl) throws Exception {
+    public CSWMethodMakerGetDataRecords(String serviceUrl) {
         //pretty hard to do a GetFeature query without a serviceURL, so we had better check that we have one
         if(serviceUrl == null || serviceUrl.isEmpty()) {
             throw new IllegalArgumentException("serviceUrl parameter can not be null or empty.");
@@ -54,9 +56,9 @@ public class CSWMethodMakerGetDataRecords {
      *
      * @param filter [Optional] The filter to constrain our request
      * @return
-     * @throws Exception
+     * @throws UnsupportedEncodingException If the PostMethod body cannot be encoded ISO-8859-1
      */
-    public HttpMethodBase makeMethod(CSWGetDataRecordsFilter filter, ResultType resultType, int maxRecords) throws Exception {
+    public HttpMethodBase makeMethod(CSWGetDataRecordsFilter filter, ResultType resultType, int maxRecords) throws UnsupportedEncodingException {
         PostMethod httpMethod = new PostMethod(serviceUrl);
 
         String filterString = null;

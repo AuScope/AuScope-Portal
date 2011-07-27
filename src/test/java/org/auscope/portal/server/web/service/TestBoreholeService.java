@@ -118,7 +118,7 @@ public class TestBoreholeService {
         final CSWRecord mockRecord1 = context.mock(CSWRecord.class, "mockRecord1"); //good record
         final CSWRecord mockRecord2 = context.mock(CSWRecord.class, "mockRecord2"); //has the wrong wfs
         final CSWRecord mockRecord3 = context.mock(CSWRecord.class, "mockRecord3"); //has no wfs
-        final CSWService mockCSWService = context.mock(CSWService.class);
+        final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
 
         final CSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", "dne", "description");
         final CSWOnlineResource mockRecord1Resource2 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.2"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
@@ -152,7 +152,7 @@ public class TestBoreholeService {
     public void testGetHyloggerIDsWithError() throws Exception {
         final CSWRecord mockRecord1 = context.mock(CSWRecord.class, "mockRecord1"); //will return failure
         final CSWRecord mockRecord2 = context.mock(CSWRecord.class, "mockRecord2"); //good record
-        final CSWService mockCSWService = context.mock(CSWService.class);
+        final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
         final HttpClient mockHttpClient = context.mock(HttpClient.class);
         final HttpMethodBase mockRecord1Method = context.mock(HttpMethodBase.class, "rec1method");
         final HttpMethodBase mockRecord2Method = context.mock(HttpMethodBase.class, "rec2method");

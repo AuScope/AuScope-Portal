@@ -17,6 +17,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -41,6 +42,21 @@ public class DOMUtil {
         DocumentBuilder builder = factory.newDocumentBuilder();
         InputSource inputSource = new InputSource(new StringReader(xmlString.toString()));
         Document doc = builder.parse(inputSource);
+
+        return doc;
+    }
+
+    /**
+     * Given a Stream containing XML, parse it and return a DOM object representation (that is namespace aware).
+     * @param xmlString A string containing valid XML
+     * @return
+     */
+    public static Document buildDomFromStream(InputStream stream) throws ParserConfigurationException, IOException, SAXException {
+        //build the XML dom
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true); // never forget this!
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(stream);
 
         return doc;
     }

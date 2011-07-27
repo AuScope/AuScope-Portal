@@ -11,7 +11,7 @@ import net.sf.json.JSONObject;
 
 import org.auscope.portal.csw.CSWRecord;
 import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
-import org.auscope.portal.server.web.service.CSWService;
+import org.auscope.portal.server.web.service.CSWCacheService;
 import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -36,7 +36,7 @@ public class TestCSWController {
         setImposteriser(ClassImposteriser.INSTANCE);
     }};
 
-    private CSWService mockCSWService = context.mock(CSWService.class);
+    private CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
     private PortalPropertyPlaceholderConfigurer mockPropertyConfigurer = context.mock(PortalPropertyPlaceholderConfigurer.class);
 
     private HttpServletRequest mockHttpRequest = context.mock(HttpServletRequest.class);

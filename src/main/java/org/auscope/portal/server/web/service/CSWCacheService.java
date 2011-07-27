@@ -1,6 +1,7 @@
 package org.auscope.portal.server.web.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.logging.Log;
@@ -19,14 +20,12 @@ import org.w3c.dom.Document;
 
 
 /**
- * Provides some utility methods for accessing data from a CSW service
+ * Provides methods for accessing unfiltered, cached data from multiple CSW services
  *
- * @version $Id$
- * TODO: create an interface, as this implementation does things like caching,
- * 		 which is not desirable in all cases
+ * @author Josh Vote
  */
 @Service
-public class CSWService {
+public class CSWCacheService {
     protected final Log log = LogFactory.getLog(getClass());
 
     /**
@@ -92,7 +91,7 @@ public class CSWService {
                 else {
                     log.info(String.format("Update required for serviceName='%1$s'",this.serviceItem.getServiceUrl()));
                     Document document = DOMUtil.buildDomFromString(methodResponse);
-                    CSWRecord[] tempRecords = new CSWGetRecordResponse(document).getCSWRecords();
+                    List<CSWRecord> tempRecords = new CSWGetRecordResponse(document).getCSWRecords();
                     //These records should also have a link back to their provider
                     if (serviceItem.getRecordInformationUrl() != null && serviceItem.getRecordInformationUrl().length() > 0) {
                         for (CSWRecord record : tempRecords) {
@@ -105,7 +104,7 @@ public class CSWService {
                     }
 
                     //This is where we need to avoid race conditions
-                    this.setCache(tempRecords, methodResponse);
+                    this.setCache(tempRecords.toArray(new CSWRecord[tempRecords.size()]), methodResponse);
                     log.info(String.format("Update completed for serviceName='%1$s'",this.serviceItem.getServiceUrl()));
                 }
 
@@ -132,7 +131,7 @@ public class CSWService {
     private static final int UPDATE_INTERVAL = 600000;
 
     @Autowired
-    public CSWService(CSWThreadExecutor executor,
+    public CSWCacheService(CSWThreadExecutor executor,
                       HttpServiceCaller serviceCaller,
                       @Qualifier(value = "cswServiceList") ArrayList cswServiceList) throws Exception {
 

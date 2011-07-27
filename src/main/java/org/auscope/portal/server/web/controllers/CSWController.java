@@ -2,7 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import org.auscope.portal.csw.CSWRecord;
 import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
-import org.auscope.portal.server.web.service.CSWService;
+import org.auscope.portal.server.web.service.CSWCacheService;
 import org.auscope.portal.server.web.view.CSWRecordResponse;
 import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CSWController extends CSWRecordResponse {
 
-    private CSWService cswService;
+    private CSWCacheService cswService;
     private ViewCSWRecordFactory viewCSWRecordFactory;
 
     public CSWController(ViewCSWRecordFactory viewCSWRecordFactory) {
@@ -28,7 +28,7 @@ public class CSWController extends CSWRecordResponse {
      * @param
      */
     @Autowired
-    public CSWController(CSWService cswService,
+    public CSWController(CSWCacheService cswService,
                          ViewCSWRecordFactory viewCSWRecordFactory,
                          PortalPropertyPlaceholderConfigurer propertyResolver) {
 

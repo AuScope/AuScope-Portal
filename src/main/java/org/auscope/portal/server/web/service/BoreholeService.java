@@ -115,7 +115,7 @@ public class BoreholeService {
      * @param cswService Will be used to find the appropriate service to query
      * @throws Exception
      */
-    public List<String> discoverHyloggerBoreholeIDs(CSWService cswService) throws Exception {
+    public List<String> discoverHyloggerBoreholeIDs(CSWCacheService cswService) throws Exception {
         List<String> ids = new ArrayList<String>();
 
         for (CSWRecord record : cswService.getWFSRecords()) {

@@ -25,7 +25,7 @@ import org.junit.Test;
  * Date: 20/08/2009
  * @version $Id$
  */
-public class TestCSWService {
+public class TestCSWCacheService {
 
     //determines the size of the test + congestion
     static final int CONCURRENT_THREADS_TO_RUN = 10;
@@ -46,7 +46,7 @@ public class TestCSWService {
     /**
      * Main object we are testing
      */
-    private CSWService cswService;
+    private CSWCacheService cswService;
 
     /**
      * Mock httpService caller
@@ -69,7 +69,7 @@ public class TestCSWService {
               serviceUrlList.add(new CSWServiceItem("http://localhost"));
           }
 
-        this.cswService = new CSWService(threadExecutor, httpServiceCaller, serviceUrlList);
+        this.cswService = new CSWCacheService(threadExecutor, httpServiceCaller, serviceUrlList);
     }
 
 
@@ -95,7 +95,7 @@ public class TestCSWService {
             allowing(httpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(delayReturnValue(delay, cswResponse));
         }});
 
-        final CSWService service = this.cswService;
+        final CSWCacheService service = this.cswService;
 
         Runnable r = new Runnable() {
             public void run() {

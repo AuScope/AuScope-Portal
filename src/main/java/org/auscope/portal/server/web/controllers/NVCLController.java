@@ -9,7 +9,7 @@ import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.util.GmlToKml;
 import org.auscope.portal.server.web.ErrorMessages;
 import org.auscope.portal.server.web.service.BoreholeService;
-import org.auscope.portal.server.web.service.CSWService;
+import org.auscope.portal.server.web.service.CSWCacheService;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,13 +26,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class NVCLController extends BaseWFSToKMLController {
 
     private BoreholeService boreholeService;
-    private CSWService cswService;
+    private CSWCacheService cswService;
 
     @Autowired
     public NVCLController(GmlToKml gmlToKml,
                             BoreholeService boreholeService,
                             HttpServiceCaller httpServiceCaller,
-                            CSWService cswService) {
+                            CSWCacheService cswService) {
 
         this.boreholeService = boreholeService;
         this.gmlToKml = gmlToKml;
