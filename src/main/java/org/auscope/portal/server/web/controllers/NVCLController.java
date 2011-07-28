@@ -118,7 +118,7 @@ public class NVCLController extends BaseWFSToKMLController {
                 return makeModelAndViewKML(kmlBlob, gmlBlob, method);
             }
         } catch (Exception e) {
-            return this.handleExceptionResponse(e, serviceUrl, method);
+            return this.generateExceptionResponse(e, serviceUrl, method);
         }
     }
 }

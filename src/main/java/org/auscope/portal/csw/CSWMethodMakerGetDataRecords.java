@@ -71,13 +71,15 @@ public class CSWMethodMakerGetDataRecords {
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         sb.append("<csw:GetRecords xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\" service=\"CSW\" constraint_language_version=\"1.1.0\" startPosition=\"1\" outputFormat=\"application/xml\" outputSchema=\"csw:IsoRecord\" typeNames=\"csw:Record\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:gml=\"http://www.opengis.net/gml\"");
         sb.append(String.format(" maxRecords=\"%1$s\"", maxRecords));
-        switch (resultType) {
-        case Hits:
-            sb.append(" resultType=\"hits\"");
-            break;
-        case Results:
-            sb.append(" resultType=\"results\"");
-            break;
+        if (resultType != null) {
+            switch (resultType) {
+            case Hits:
+                sb.append(" resultType=\"hits\"");
+                break;
+            case Results:
+                sb.append(" resultType=\"results\"");
+                break;
+            }
         }
         sb.append(">");
         sb.append("<csw:Query typeNames=\"csw:Record\">");

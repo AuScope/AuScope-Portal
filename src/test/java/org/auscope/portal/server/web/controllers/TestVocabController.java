@@ -18,6 +18,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -79,12 +80,8 @@ public class TestVocabController {
     public void testGetScalarQuery() throws Exception {
         final String serviceUrl = "http://service.example.com/query";
         final String docString = org.auscope.portal.Util.loadXML("src/test/resources/GetVocabQuery_Success.xml");
-        final String returnedString = docString.replace("\"", "\\\"").replace("\t","\\t").replace("</", "<\\/");
-        final String expectedScopeNote =  "\"scopeNote\":\"Mineral index for TSA singleton match or primary mixture component\"";
-        final String expectedSuccess = "\"success\":true";
-        final String expectedLabel = "\"label\":\"TSA_S_Mineral1\"";
-        final String expectedData = "\"data\":\"" + returnedString + "\"";
-        final StringWriter actualJSONResponse = new StringWriter();
+        final String expectedScopeNote =  "Mineral index for TSA singleton match or primary mixture component";
+        final String expectedLabel = "TSA_S_Mineral1";
         final String repositoryName = "testRepository";
         final String labelName = "testLabel";
 
@@ -96,21 +93,15 @@ public class TestVocabController {
             oneOf(httpServiceCaller).getHttpClient();
 
             oneOf(mockSissVocMethodMaker).getConceptByLabelMethod(serviceUrl, repositoryName, labelName);
-
-            //check that the correct response is getting output
-            oneOf(mockHttpResponse).setContentType(with(any(String.class)));
-            oneOf(mockHttpResponse).getWriter(); will(returnValue(new PrintWriter(actualJSONResponse)));
         }});
 
         ModelAndView mav = this.vocabController.getScalarQuery(repositoryName, labelName);
-        mav.getView().render(mav.getModel(), mockHttpRequest, mockHttpResponse);
 
+        ModelMap data = (ModelMap) mav.getModel().get("data");
 
-        String response = actualJSONResponse.getBuffer().toString();
-        Assert.assertTrue(response.contains(expectedScopeNote));
-        Assert.assertTrue(response.contains(expectedSuccess));
-        Assert.assertTrue(response.contains(expectedLabel));
-        Assert.assertTrue(response.contains(expectedData));
+        Assert.assertTrue((Boolean)mav.getModel().get("success"));
+        Assert.assertEquals(expectedScopeNote, data.get("scopeNote"));
+        Assert.assertEquals(expectedLabel, data.get("label"));
 
     }
 }

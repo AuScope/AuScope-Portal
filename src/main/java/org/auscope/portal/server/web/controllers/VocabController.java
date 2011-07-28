@@ -34,7 +34,7 @@ import org.xml.sax.InputSource;
  * Controller that enables access to vocabulary services.
  */
 @Controller
-public class VocabController {
+public class VocabController extends BasePortalController {
     protected final Log log = LogFactory.getLog(getClass());
 
     private HttpServiceCaller httpServiceCaller;
@@ -99,25 +99,24 @@ public class VocabController {
             tempNode = (Node)xPath.evaluate(extractDefinitionExpression, doc, XPathConstants.NODE);
             final String definitionString = tempNode != null ? tempNode.getTextContent() : "";
 
-            return CreateScalarQueryModel(true,response, scopeNoteString, labelString, definitionString);
+            return generateJSONResponseMAV(true, createScalarQueryModel(response, scopeNoteString, labelString, definitionString), "");
         } catch (Exception ex) {
             //On error, just return failure JSON (and the response string if any)
             log.error("getVocabQuery ERROR: " + ex.getMessage());
 
-            return CreateScalarQueryModel(false,response, "", "", "");
+            return generateJSONResponseMAV(true, null, "");
         }
     }
 
-    private JSONModelAndView CreateScalarQueryModel
-            (final boolean success, final String data, final String scopeNote, final String label, final String definition) {
+    private ModelMap createScalarQueryModel
+            (final String response, final String scopeNote, final String label, final String definition) {
         ModelMap map = new ModelMap();
-        map.put("success", success);
-        map.put("data", data);
+        map.put("response", response);
         map.put("scopeNote", scopeNote);
         map.put("definition", definition);
         map.put("label", label);
 
-        return new JSONModelAndView(map);
+        return map;
     }
 
     /**

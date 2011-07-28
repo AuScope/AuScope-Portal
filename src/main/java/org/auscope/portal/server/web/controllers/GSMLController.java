@@ -117,7 +117,7 @@ public class GSMLController extends BaseWFSToKMLController {
             }
 
         } catch (Exception e) {
-            return this.handleExceptionResponse(e, serviceUrl, method);
+            return this.generateExceptionResponse(e, serviceUrl, method);
         }
     }
 

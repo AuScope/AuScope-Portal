@@ -98,4 +98,22 @@ public class CSWGetDataRecordsFilter extends AbstractFilter {
         throw new NotImplementedException();
     }
 
+    public FilterBoundingBox getSpatialBounds() {
+        return spatialBounds;
+    }
+
+    public String[] getKeywords() {
+        return keywords;
+    }
+
+    public String getCapturePlatform() {
+        return capturePlatform;
+    }
+
+    public String getSensor() {
+        return sensor;
+    }
+
+
+
 }

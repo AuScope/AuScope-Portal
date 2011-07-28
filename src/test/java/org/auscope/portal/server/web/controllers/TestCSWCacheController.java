@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Date: 27/08/2009
  * @version $Id$
  */
-public class TestCSWController {
+public class TestCSWCacheController {
 
     /**
      * JMock context
@@ -45,7 +45,7 @@ public class TestCSWController {
     private CSWRecord mockCSWRecord1 = context.mock(CSWRecord.class, "mockCSWRecord1");
     private CSWRecord mockCSWRecord2 = context.mock(CSWRecord.class, "mockCSWRecord2");
 
-    private CSWController cswController;
+    private CSWCacheController cswController;
 
     @Before
     public void setup() throws Exception {
@@ -56,7 +56,7 @@ public class TestCSWController {
             oneOf(mockCSWService).updateRecordsInBackground();
         }});
 
-        cswController = new CSWController(mockCSWService, mockViewCSWRecordFactory, mockPropertyConfigurer);
+        cswController = new CSWCacheController(mockCSWService, mockViewCSWRecordFactory, mockPropertyConfigurer);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class TestCSWController {
 
     	//Check our response contains useful info...
     	Assert.assertEquals(true, jsonObj.getBoolean("success"));
-    	JSONArray records = jsonObj.getJSONArray("records");
+    	JSONArray records = jsonObj.getJSONArray("data");
     	Assert.assertNotNull(records);
     	Assert.assertEquals(2, records.size());
 
@@ -117,7 +117,7 @@ public class TestCSWController {
 
     	//Check our response contains useful info...
     	Assert.assertEquals(false, jsonObj.getBoolean("success"));
-    	JSONArray records = (JSONArray)jsonObj.get("records");
+    	JSONArray records = (JSONArray)jsonObj.get("data");
     	Assert.assertNotNull(records);
     	Assert.assertEquals(0, records.size());
     }
@@ -151,7 +151,7 @@ public class TestCSWController {
 
     	//Check our response contains useful info...
     	Assert.assertEquals(false, jsonObj.getBoolean("success"));
-    	JSONArray records = (JSONArray)jsonObj.get("records");
+    	JSONArray records = (JSONArray)jsonObj.get("data");
         Assert.assertNotNull(records);
         Assert.assertEquals(0, records.size());
     }

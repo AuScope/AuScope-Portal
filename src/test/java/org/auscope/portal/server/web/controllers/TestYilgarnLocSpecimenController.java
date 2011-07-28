@@ -26,6 +26,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 public class TestYilgarnLocSpecimenController {
@@ -86,36 +87,10 @@ public class TestYilgarnLocSpecimenController {
 
         Assert.assertEquals(true, model.get("success"));
 
-        Assert.assertNotNull(model.get("records"));
-        Assert.assertEquals(1, ((YilgarnLocSpecimenRecords[]) model.get("records")).length);
-        Assert.assertNotNull(((YilgarnLocSpecimenRecords[]) model.get("records"))[0]);
-    }
-
-    @Test
-    public void testYilgarnGeochemistryDownload()throws Exception{
-        final String serviceUrl = "http://fake.com/bob";
-        final String layerName = "layer_name";
-        final String featureId = "feature_id";
-        final String xmlResponse ="<gml/>";
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
-
-        context.checking(new Expectations() {{
-            oneOf(httpServiceCaller).getHttpClient();
-            oneOf(httpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(xmlResponse));
-
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, layerName, featureId);will(returnValue(mockMethod));
-
-            oneOf(mockHttpRequest).getSession();will(returnValue(mockHttpSession));
-            oneOf(mockHttpSession).getServletContext();will(returnValue(mockServletContext));
-            oneOf(mockServletContext).getResourceAsStream(with(any(String.class))); will(returnValue(null));
-        }});
-
-        ModelAndView modelAndView = yilgarnLocSpecimenController.doYilgarnGeochemistryDownload( serviceUrl,layerName, featureId,mockHttpRequest);
-
-        Assert.assertNotNull(modelAndView);
-        Map<String, Object> model = modelAndView.getModel();
-
-        Assert.assertEquals(true, model.get("success"));
+        ModelMap data = (ModelMap) model.get("data");
+        Assert.assertNotNull(data);
+        Assert.assertEquals(1, ((YilgarnLocSpecimenRecords[]) data.get("records")).length);
+        Assert.assertNotNull(((YilgarnLocSpecimenRecords[]) data.get("records"))[0]);
     }
 
     @Test

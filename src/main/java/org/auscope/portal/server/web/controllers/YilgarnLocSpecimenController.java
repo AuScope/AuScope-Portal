@@ -2,11 +2,8 @@ package org.auscope.portal.server.web.controllers;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -17,14 +14,12 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.gsml.YilgarnLocSpecimenRecords;
 import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
-import org.auscope.portal.server.web.view.JSONModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,9 +27,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-
+/**
+ * A controller for controlling access to the Yilgarn Laterite Geochemistry
+ * Web Feature Services.
+ *
+ * @author Tannu Gupta
+ * @author Joshua Vote
+ *
+ */
 @Controller
-public class YilgarnLocSpecimenController {
+public class YilgarnLocSpecimenController extends BasePortalController {
 
     /** Log object for this class. */
 
@@ -63,7 +65,7 @@ public class YilgarnLocSpecimenController {
             gmlResponse = serviceCaller.getMethodResponseAsString(method, serviceCaller.getHttpClient());
         }catch (Exception e){
             logger.error("Error occured whilst communicating to remote service", e);
-            return generateJSONResponse(false, "Error occured whilst communicating to remote service: " + e.getMessage(), null, null,null, null);
+            return generateJSONResponseMAV(false, null, "Error occured whilst communicating to remote service: " + e.getMessage());
         }
         YilgarnLocSpecimenRecords[] records = null;
         String materialDesc = null;
@@ -91,45 +93,26 @@ public class YilgarnLocSpecimenController {
         }
         catch (Exception ex) {
             logger.warn("Error parsing request", ex);
-            return generateJSONResponse(false, "Error occured whilst parsing response: " + ex.getMessage(), null, null,null, null);
+            return generateJSONResponseMAV(false, null, "Error occured whilst parsing response: " + ex.getMessage());
         }
-        return generateJSONResponse(true, "No errors found", gmlResponse, records, materialDesc, uniqueSpecName);
+        return generateJSONResponseMAV(true, generateYilgarnModel(records, materialDesc, uniqueSpecName), "");
 
     }
 
-    @RequestMapping("/doYilgarnGeochemistryDownload.do")
-    public ModelAndView doYilgarnGeochemistryDownload(
-                                            @RequestParam(required=false,	value="serviceUrl") final String serviceUrl,
-                                            @RequestParam("typeName") final String featureType,
-                                            @RequestParam("featureId") final String featureId,
-                                            HttpServletRequest request) throws Exception  {
-
-
-        String gmlResponse = null;
-        try{
-            HttpMethodBase method = methodMaker.makeMethod(serviceUrl, featureType, featureId);
-            gmlResponse = serviceCaller.getMethodResponseAsString(method, serviceCaller.getHttpClient());
-        }catch (Exception e){
-            logger.error("Error occured whilst communicating to remote service", e);
-            return generateJSONResponse(false, "Error occured whilst communicating to remote service: " + e.getMessage(), null, null,null,null);
-        }
-        return generateJSONResponse(true, "No errors found",gmlResponse, null,null,null);
-    }
-
-
-    protected JSONModelAndView generateJSONResponse(boolean success, String errorMessage, final String gmlResponse, YilgarnLocSpecimenRecords[] records, String materialDesc, String[] uniqueSpecName){
-        final Map<String,String> data = new HashMap<String,String>();
-        data.put("gml", gmlResponse);
-
+    /**
+     * Generates a Model object to send to the view
+     * @param records
+     * @param materialDesc
+     * @param uniqueSpecName
+     * @return
+     */
+    protected ModelMap generateYilgarnModel(YilgarnLocSpecimenRecords[] records, String materialDesc, String[] uniqueSpecName){
         ModelMap response = new ModelMap();
-        response.put("success", success);
-        response.put("msg", errorMessage);
-        response.put("data", data);
         response.put("records", records);
         response.put("materialDesc", materialDesc);
         response.put("uniqueSpecName", uniqueSpecName);
 
-        return new JSONModelAndView(response);
+        return response;
     }
 
 

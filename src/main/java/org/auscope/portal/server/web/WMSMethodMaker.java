@@ -25,7 +25,7 @@ public class WMSMethodMaker {
      * @param wmsUrl The Web Map Service url with optional query parameters.
      */
     public WMSMethodMaker(String wmsUrl) {
-        String[] parts = wmsUrl.split("?");
+        String[] parts = wmsUrl.split("\\?");
 
         //Decompose our URL into query parameters and wms URL
         this.wmsUrl = parts[0];
