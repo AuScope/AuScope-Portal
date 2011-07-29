@@ -112,6 +112,8 @@ public class CSWFilterService {
             Document responseDoc = DOMUtil.buildDomFromStream(responseStream);
             CSWGetRecordResponse response = new CSWGetRecordResponse(responseDoc);
 
+            log.debug("bacon: " + DOMUtil.buildStringFromDom(responseDoc, false));
+
             filteredRecords.addAll(response.getCSWRecords());
         }
 

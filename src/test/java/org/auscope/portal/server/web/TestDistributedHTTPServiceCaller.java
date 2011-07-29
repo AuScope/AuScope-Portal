@@ -163,7 +163,7 @@ public class TestDistributedHTTPServiceCaller implements Thread.UncaughtExceptio
         Assert.assertEquals(mockInputStream2, dsc.next());
         long delayTime = endTimer() + 1L;
 
-        assertRange(delayTime, delay2ms, delay2ms + timeEpsilonMs);//this next should block for at least delay2ms
+        assertRange(delayTime, delay2ms - timeEpsilonMs, delay2ms + timeEpsilonMs);//this next should block for at least delay2ms
 
         //And then there should be no more data
         Assert.assertFalse(dsc.hasNext());

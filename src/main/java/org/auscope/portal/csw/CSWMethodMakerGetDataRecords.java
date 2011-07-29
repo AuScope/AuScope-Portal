@@ -92,6 +92,8 @@ public class CSWMethodMakerGetDataRecords {
         sb.append("</csw:Query>");
         sb.append("</csw:GetRecords>");
 
+        log.trace("CSW GetRecords Request: " + sb.toString());
+
         // If this does not work, try params: "text/xml; charset=ISO-8859-1"
         httpMethod.setRequestEntity(new StringRequestEntity(sb.toString(),"text/xml", "ISO-8859-1"));
 

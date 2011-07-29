@@ -1,6 +1,8 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -168,6 +170,147 @@ public class VocabController extends BasePortalController {
             log.error("getAllCommodities Exception: " + ex.getMessage());
 
             return new JSONModelAndView(dataItems);
+        }
+    }
+
+
+    /**
+     * Get all GA CSW themes with preferred labels
+     *
+     * @param
+     */
+    @RequestMapping("getAllCSWThemes.do")
+    public ModelAndView getAllCSWThemes() throws Exception {
+        List<ModelMap> dataItems = new ArrayList<ModelMap>();
+
+        //TODO: Lookup from vocab instead of using hardcoded values
+        try {
+            ModelMap map;
+
+            String tab = "";
+
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geography");map.put("label","Geography");map.put("indent",0);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:builtenvironment");map.put("label",tab + "Built Environment");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:legislativelimits");map.put("label",tab + "Legislative Limits");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:physgeo");map.put("label",tab + "Physical Geography");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:earthobservations");map.put("label",tab + "Earth Observations");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:socialgeoandeconomics");map.put("label",tab + "Social Geography and Economics");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geodesy");map.put("label",tab + "Geodesy");map.put("indent",1);
+            dataItems.add(map);
+
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geology");map.put("label","Geology");map.put("indent",0);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geounits");map.put("label",tab + "Geological Units");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:events");map.put("label",tab + "Events");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:earthmat");map.put("label",tab + "Earth Materials");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geomorph");map.put("label",tab + "Geomorphology");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:timescale");map.put("label",tab + "Timescale");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geologicalstructures");map.put("label",tab + "Geological Structures");map.put("indent",1);
+            dataItems.add(map);
+
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geophysics");map.put("label",tab + "Geophysics");map.put("indent",0);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:gravimetry");map.put("label",tab + "Gravimetry");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:mag");map.put("label",tab + "Magnetism");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:electrmag");map.put("label",tab + "Electromagnetics");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:sesimology");map.put("label",tab + "Seismology");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:acoustic");map.put("label",tab + "Acoustic");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:radiometrics");map.put("label",tab + "Radiometrics");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:spectra");map.put("label",tab + "Spectra");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:rockprop");map.put("label",tab + "Rock Properties");map.put("indent",1);
+            dataItems.add(map);
+
+            map = new ModelMap();
+            map.put("urn", "urn:fake:geochemistry");map.put("label","Geochemistry");map.put("indent",0);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:atmo");map.put("label",tab + "Atmospheric Geochemistry");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:hydro");map.put("label",tab + "Hydro-Geochemistry");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:iso");map.put("label",tab + "Isotope Geochemistry");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:ino");map.put("label",tab + "Inorganic Geochemistry");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:org");map.put("label",tab + "Organic Geochemistry");map.put("indent",1);
+            dataItems.add(map);
+
+            map = new ModelMap();
+            map.put("urn", "urn:fake:resources");map.put("label","Resources");map.put("indent",0);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:energy");map.put("label",tab + "Energy");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:mineralcomm");map.put("label",tab + "Mineral Commodities");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:water");map.put("label",tab + "Water resources");map.put("indent",1);
+            dataItems.add(map);
+
+            map = new ModelMap();
+            map.put("urn", "urn:fake:biology");map.put("label","Biology");map.put("indent",0);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:pal");map.put("label",tab + "Palaeontology");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:marine");map.put("label",tab + "Marine Ecology");map.put("indent",1);
+            dataItems.add(map);
+            map = new ModelMap();
+            map.put("urn", "urn:fake:terreco");map.put("label",tab + "Terrestrial Ecology");map.put("indent",1);
+            dataItems.add(map);
+
+            return generateJSONResponseMAV(true, dataItems, "");
+        } catch (Exception ex) {
+            //On error, just return failure JSON (and the response string if any)
+            log.error("getAllCSWThemes Exception: ", ex);
+            return generateJSONResponseMAV(false, null, "");
         }
     }
 }

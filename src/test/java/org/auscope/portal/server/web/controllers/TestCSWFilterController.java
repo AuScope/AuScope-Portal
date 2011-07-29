@@ -58,6 +58,7 @@ public class TestCSWFilterController {
         final String[] keywords = new String[] {"kw1", "kw2"};
         final String capturePlatform = "capturePlatform";
         final String sensor = "sensor";
+        final Integer maxRecords = 123;
         final FilterBoundingBox expectedBBox = new FilterBoundingBox("",
                 new double[] {east, south},
                 new double[] {west, north});
@@ -70,13 +71,13 @@ public class TestCSWFilterController {
 
 
         context.checking(new Expectations() {{
-            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(any(Integer.class)));will(returnValue(filteredRecs));
+            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(maxRecords)));will(returnValue(filteredRecs));
 
             oneOf(mockViewRecordFactory).toView(filteredRecs[0]);will(returnValue(mockViewRec1));
             oneOf(mockViewRecordFactory).toView(filteredRecs[1]);will(returnValue(mockViewRec2));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor);
+        ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
@@ -99,16 +100,17 @@ public class TestCSWFilterController {
         final String[] keywords = new String[] {"kw1", "kw2"};
         final String capturePlatform = "capturePlatform";
         final String sensor = "sensor";
+        final Integer maxRecords = 123;
         final FilterBoundingBox expectedBBox = new FilterBoundingBox("",
                 new double[] {east, south},
                 new double[] {west, north});
 
         context.checking(new Expectations() {{
             //Throw an error
-            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(any(Integer.class)));will(throwException(new Exception()));
+            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(maxRecords)));will(throwException(new Exception()));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor);
+        ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
         Assert.assertNotNull(mav);
         Assert.assertFalse((Boolean) mav.getModel().get("success"));
     }
@@ -128,6 +130,7 @@ public class TestCSWFilterController {
         final String capturePlatform = null;
         final String sensor = null;
         final FilterBoundingBox expectedBBox = null;
+        final Integer maxRecords = null;
         final CSWRecord[] filteredRecs = new CSWRecord[] {
                 context.mock(CSWRecord.class, "cswRecord1"),
                 context.mock(CSWRecord.class, "cswRecord2"),
@@ -137,13 +140,13 @@ public class TestCSWFilterController {
 
         context.checking(new Expectations() {{
             //Throw an error
-            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(any(Integer.class)));will(returnValue(filteredRecs));
+            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(CSWFilterController.DEFAULT_MAX_RECORDS)));will(returnValue(filteredRecs));
 
             oneOf(mockViewRecordFactory).toView(filteredRecs[0]);will(returnValue(mockViewRec1));
             oneOf(mockViewRecordFactory).toView(filteredRecs[1]);will(returnValue(mockViewRec2));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor);
+        ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
@@ -170,13 +173,14 @@ public class TestCSWFilterController {
                 new double[] {east, south},
                 new double[] {west, north});
         final Integer expectedCount = 15;
+        final Integer maxRecords = 123;
 
 
         context.checking(new Expectations() {{
-            oneOf(mockService).getFilteredRecordsCount(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(any(Integer.class)));will(returnValue(expectedCount));
+            oneOf(mockService).getFilteredRecordsCount(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(maxRecords)));will(returnValue(expectedCount));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecordsCount(west, east, north, south, keywords, capturePlatform, sensor);
+        ModelAndView mav = controller.getFilteredCSWRecordsCount(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Assert.assertEquals(expectedCount, (Integer) mav.getModel().get("data"));
@@ -198,13 +202,14 @@ public class TestCSWFilterController {
         final String sensor = null;
         final FilterBoundingBox expectedBBox = null;
         final Integer expectedCount = 15;
+        final Integer maxRecords = null;
 
 
         context.checking(new Expectations() {{
-            oneOf(mockService).getFilteredRecordsCount(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(any(Integer.class)));will(returnValue(expectedCount));
+            oneOf(mockService).getFilteredRecordsCount(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(CSWFilterController.DEFAULT_MAX_RECORDS)));will(returnValue(expectedCount));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecordsCount(west, east, north, south, keywords, capturePlatform, sensor);
+        ModelAndView mav = controller.getFilteredCSWRecordsCount(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Assert.assertEquals(expectedCount, (Integer) mav.getModel().get("data"));
@@ -227,13 +232,13 @@ public class TestCSWFilterController {
         final FilterBoundingBox expectedBBox = new FilterBoundingBox("",
                 new double[] {east, south},
                 new double[] {west, north});
-
+        final Integer maxRecords = 13;
 
         context.checking(new Expectations() {{
-            oneOf(mockService).getFilteredRecordsCount(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(any(Integer.class)));will(throwException(new Exception()));
+            oneOf(mockService).getFilteredRecordsCount(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(maxRecords)));will(throwException(new Exception()));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecordsCount(west, east, north, south, keywords, capturePlatform, sensor);
+        ModelAndView mav = controller.getFilteredCSWRecordsCount(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
         Assert.assertNotNull(mav);
         Assert.assertFalse((Boolean) mav.getModel().get("success"));
     }

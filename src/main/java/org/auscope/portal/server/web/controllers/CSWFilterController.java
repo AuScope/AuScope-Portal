@@ -6,6 +6,7 @@ import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.web.service.CSWFilterService;
 import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,8 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
  * A controller class for marshalling access to the underling CSWFilterService
  * @author Josh Vote
  */
+@Controller
 public class CSWFilterController extends BaseCSWController {
-    private static final int DEFAULT_MAX_RECORDS = 100;
+    public static final int DEFAULT_MAX_RECORDS = 100;
     private CSWFilterService cswFilterService;
 
     /**
@@ -68,7 +70,8 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value="southBoundLatitude", required=false) Double southBoundLatitude,
             @RequestParam(value="keyword", required=false) String[] keywords,
             @RequestParam(value="capturePlatform", required=false) String capturePlatform,
-            @RequestParam(value="sensor", required=false) String sensor) {
+            @RequestParam(value="sensor", required=false) String sensor,
+            @RequestParam(value="maxRecords", required=false) Integer maxRecords) {
 
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
@@ -79,7 +82,7 @@ public class CSWFilterController extends BaseCSWController {
         //Then make our requests to all of CSW's
         CSWRecord[] records = null;
         try {
-            records = cswFilterService.getFilteredRecords(filter, DEFAULT_MAX_RECORDS);
+            records = cswFilterService.getFilteredRecords(filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords);
         } catch (Exception ex) {
             log.warn(String.format("Error fetching filtered records for filter '%1$s'", filter), ex);
         }
@@ -107,7 +110,8 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value="southBoundLatitude", required=false) Double southBoundLatitude,
             @RequestParam(value="keyword", required=false) String[] keywords,
             @RequestParam(value="capturePlatform", required=false) String capturePlatform,
-            @RequestParam(value="sensor", required=false) String sensor) {
+            @RequestParam(value="sensor", required=false) String sensor,
+            @RequestParam(value="maxRecords", required=false) Integer maxRecords) {
 
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
@@ -118,7 +122,7 @@ public class CSWFilterController extends BaseCSWController {
         //Then make our requests to all of CSW's
         int count = 0;
         try {
-            count = cswFilterService.getFilteredRecordsCount(filter, DEFAULT_MAX_RECORDS);
+            count = cswFilterService.getFilteredRecordsCount(filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords);
         } catch (Exception ex) {
             log.warn(String.format("Error fetching filtered record count for filter '%1$s'", filter), ex);
             return generateJSONResponseMAV(false, null, "Error fetching filtered record count");
