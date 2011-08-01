@@ -1,8 +1,10 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.auscope.portal.CSWGetDataRecordsFilterMatcher;
+import org.auscope.portal.csw.CSWGetRecordResponse;
 import org.auscope.portal.csw.CSWRecord;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.web.service.CSWFilterService;
@@ -65,16 +67,26 @@ public class TestCSWFilterController {
         final CSWRecord[] filteredRecs = new CSWRecord[] {
                 context.mock(CSWRecord.class, "cswRecord1"),
                 context.mock(CSWRecord.class, "cswRecord2"),
+                context.mock(CSWRecord.class, "cswRecord3")
+        };
+        final CSWGetRecordResponse[] filteredResponses = new CSWGetRecordResponse[] {
+                context.mock(CSWGetRecordResponse.class, "cswResponse1"),
+                context.mock(CSWGetRecordResponse.class, "cswResponse2"),
         };
         final ModelMap mockViewRec1 = context.mock(ModelMap.class, "mockViewRec1");
         final ModelMap mockViewRec2 = context.mock(ModelMap.class, "mockViewRec2");
+        final ModelMap mockViewRec3 = context.mock(ModelMap.class, "mockViewRec3");
 
 
         context.checking(new Expectations() {{
-            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(maxRecords)));will(returnValue(filteredRecs));
+            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(maxRecords)));will(returnValue(filteredResponses));
+
+            oneOf(filteredResponses[0]).getRecords();will(returnValue(Arrays.asList(filteredRecs[0])));
+            oneOf(filteredResponses[1]).getRecords();will(returnValue(Arrays.asList(filteredRecs[1], filteredRecs[2])));
 
             oneOf(mockViewRecordFactory).toView(filteredRecs[0]);will(returnValue(mockViewRec1));
             oneOf(mockViewRecordFactory).toView(filteredRecs[1]);will(returnValue(mockViewRec2));
+            oneOf(mockViewRecordFactory).toView(filteredRecs[2]);will(returnValue(mockViewRec3));
         }});
 
         ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
@@ -84,7 +96,8 @@ public class TestCSWFilterController {
         Assert.assertNotNull(dataRecs);
         Assert.assertTrue(dataRecs.contains(mockViewRec1));
         Assert.assertTrue(dataRecs.contains(mockViewRec2));
-        Assert.assertEquals(2, dataRecs.size());
+        Assert.assertTrue(dataRecs.contains(mockViewRec3));
+        Assert.assertEquals(3, dataRecs.size());
     }
 
     /**
@@ -134,16 +147,26 @@ public class TestCSWFilterController {
         final CSWRecord[] filteredRecs = new CSWRecord[] {
                 context.mock(CSWRecord.class, "cswRecord1"),
                 context.mock(CSWRecord.class, "cswRecord2"),
+                context.mock(CSWRecord.class, "cswRecord3")
+        };
+        final CSWGetRecordResponse[] filteredResponses = new CSWGetRecordResponse[] {
+                context.mock(CSWGetRecordResponse.class, "cswResponse1"),
+                context.mock(CSWGetRecordResponse.class, "cswResponse2"),
         };
         final ModelMap mockViewRec1 = context.mock(ModelMap.class, "mockViewRec1");
         final ModelMap mockViewRec2 = context.mock(ModelMap.class, "mockViewRec2");
+        final ModelMap mockViewRec3 = context.mock(ModelMap.class, "mockViewRec3");
 
         context.checking(new Expectations() {{
             //Throw an error
-            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(CSWFilterController.DEFAULT_MAX_RECORDS)));will(returnValue(filteredRecs));
+            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor)), with(equal(CSWFilterController.DEFAULT_MAX_RECORDS)));will(returnValue(filteredResponses));
+
+            oneOf(filteredResponses[0]).getRecords();will(returnValue(Arrays.asList(filteredRecs[0])));
+            oneOf(filteredResponses[1]).getRecords();will(returnValue(Arrays.asList(filteredRecs[1], filteredRecs[2])));
 
             oneOf(mockViewRecordFactory).toView(filteredRecs[0]);will(returnValue(mockViewRec1));
             oneOf(mockViewRecordFactory).toView(filteredRecs[1]);will(returnValue(mockViewRec2));
+            oneOf(mockViewRecordFactory).toView(filteredRecs[2]);will(returnValue(mockViewRec3));
         }});
 
         ModelAndView mav = controller.getFilteredCSWRecords(west, east, north, south, keywords, capturePlatform, sensor, maxRecords);
@@ -153,7 +176,7 @@ public class TestCSWFilterController {
         Assert.assertNotNull(dataRecs);
         Assert.assertTrue(dataRecs.contains(mockViewRec1));
         Assert.assertTrue(dataRecs.contains(mockViewRec2));
-        Assert.assertEquals(2, dataRecs.size());
+        Assert.assertEquals(3, dataRecs.size());
     }
 
     /**

@@ -91,7 +91,7 @@ public class CSWCacheService {
                 else {
                     log.info(String.format("Update required for serviceName='%1$s'",this.serviceItem.getServiceUrl()));
                     Document document = DOMUtil.buildDomFromString(methodResponse);
-                    List<CSWRecord> tempRecords = new CSWGetRecordResponse(document).getCSWRecords();
+                    List<CSWRecord> tempRecords = new CSWGetRecordResponse(document).getRecords();
                     //These records should also have a link back to their provider
                     if (serviceItem.getRecordInformationUrl() != null && serviceItem.getRecordInformationUrl().length() > 0) {
                         for (CSWRecord record : tempRecords) {

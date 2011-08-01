@@ -4,10 +4,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -17,70 +19,47 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
- * User: Mathew Wyatt
- * Date: 11/02/2009
- * Time: 11:56:00 AM
+ * Represents the response from a CSW GetRecord request
  */
 public class CSWGetRecordResponse {
-    private Document recordResponse;
-
-    // -------------------------------------------------------------- Constants
 
     /** Log object for this class. */
     protected final Log log = LogFactory.getLog(getClass());
 
-    // --------------------------------------------------------- Public Methods
-
-
-    public CSWGetRecordResponse(Document getRecordResponseText) {
-        this.recordResponse = getRecordResponseText;
-    }
+    private List<CSWRecord> records = null;
+    private int recordsReturned = 0;
+    private int recordsMatched = 0;
+    private int nextRecord = 0;
 
     /**
-     * Returns the number of CSWRecords as recorded in the header of the GetRecordsResponse element
-     *
-     * If the document cannot be parsed for the required fields 0 will be returned
-     * @return
+     * Creates a new instance from the specified record response by parsing its contents
+     * @param getRecordResponse an XML CSW GetRecords response parsed into a DOM tree
      * @throws XPathExpressionException
      */
-    public int getCSWRecordsCount() throws XPathExpressionException {
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setNamespaceContext(new CSWNamespaceContext());
+    public CSWGetRecordResponse(Document getRecordResponse) throws XPathExpressionException {
+        //These cannot be static pre-compiled expressions as they are NOT threadsafe
+        XPathExpression exprRecordsMatched = CSWXPathUtil.attemptCompileXpathExpr("/csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched");
+        XPathExpression exprRecordsReturned = CSWXPathUtil.attemptCompileXpathExpr("/csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsReturned");
+        XPathExpression exprNextRecord = CSWXPathUtil.attemptCompileXpathExpr("/csw:GetRecordsResponse/csw:SearchResults/@nextRecord");
+        XPathExpression exprRecordMetadata = CSWXPathUtil.attemptCompileXpathExpr("/csw:GetRecordsResponse/csw:SearchResults/gmd:MD_Metadata");
 
-        String recordCountExpression = "/csw:GetRecordsResponse/csw:SearchResults/@numberOfRecordsMatched";
-        Node node = (Node) xPath.evaluate( recordCountExpression
-                                                  , this.recordResponse
-                                                  , XPathConstants.NODE);
-
-        if (node == null) {
-            log.warn("Couldn't find numberOfRecordsMatched element. Returning 0");
-            return 0;
+        Node node = (Node) exprRecordsMatched.evaluate(getRecordResponse, XPathConstants.NODE);
+        if (node != null) {
+            recordsMatched = Integer.parseInt(node.getTextContent());
         }
 
-        int count = 0;
-        try {
-            count = Integer.parseInt(node.getTextContent());
-        } catch (NumberFormatException ex) {
-            log.warn("numberOfRecordsMatched format is not parseable into an int", ex);
+        node = (Node) exprRecordsReturned.evaluate(getRecordResponse, XPathConstants.NODE);
+        if (node != null) {
+            recordsReturned = Integer.parseInt(node.getTextContent());
         }
-        return count;
-    }
 
-    public List<CSWRecord> getCSWRecords() throws XPathExpressionException {
+        node = (Node) exprNextRecord.evaluate(getRecordResponse, XPathConstants.NODE);
+        if (node != null) {
+            nextRecord = Integer.parseInt(node.getTextContent());
+        }
 
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setNamespaceContext(new CSWNamespaceContext());
-
-        String serviceTitleExpression
-                = "/csw:GetRecordsResponse/csw:SearchResults/gmd:MD_Metadata";
-
-        NodeList nodes = (NodeList) xPath.evaluate( serviceTitleExpression
-                                                  , this.recordResponse
-                                                  , XPathConstants.NODESET );
-
-        log.info("Number of records retrieved from GeoNetwork: " + nodes.getLength());
-
-        List<CSWRecord> records = new ArrayList<CSWRecord>(nodes.getLength());
+        NodeList nodes = (NodeList) exprRecordMetadata.evaluate(getRecordResponse, XPathConstants.NODESET);
+        records = new ArrayList<CSWRecord>(nodes.getLength());
 
         for(int i=0; i<nodes.getLength(); i++ ) {
             Node metadataNode = nodes.item(i);
@@ -89,8 +68,44 @@ public class CSWGetRecordResponse {
             records.add(newRecord);
             log.trace("GN layer " + (i+1) + " : " + newRecord.toString());
         }
-
-        return records;
     }
+
+    /**
+     * Returns an unmodifiable list of CSWRecords that were parsed from the response
+     * that built this instance.
+     * @return
+     */
+    public List<CSWRecord> getRecords() {
+        return Collections.unmodifiableList(records);
+    }
+
+
+    /**
+     * Gets the number of records returned (as identified by the response).
+     * @return
+     */
+    public int getRecordsReturned() {
+        return recordsReturned;
+    }
+
+    /**
+     * Gets the number of records that match the original GetRecords query.
+     *
+     * This can be greater than records returned indicating that only the first
+     * X records were returned and subsequent queries are required to get the rest
+     * @return
+     */
+    public int getRecordsMatched() {
+        return recordsMatched;
+    }
+
+    /**
+     * Gets the index of the next record (if there are more following) or 0 otherwise
+     * @return
+     */
+    public int getNextRecord() {
+        return nextRecord;
+    }
+
 
 }

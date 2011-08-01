@@ -1,6 +1,11 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.auscope.portal.csw.CSWGetDataRecordsFilter;
+import org.auscope.portal.csw.CSWGetRecordResponse;
 import org.auscope.portal.csw.CSWRecord;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.web.service.CSWFilterService;
@@ -80,14 +85,18 @@ public class CSWFilterController extends BaseCSWController {
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
-        CSWRecord[] records = null;
+        List<CSWRecord> records = new ArrayList<CSWRecord>();
         try {
-            records = cswFilterService.getFilteredRecords(filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords);
+            CSWGetRecordResponse[] responses = cswFilterService.getFilteredRecords(filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords);
+            for (CSWGetRecordResponse response : responses) {
+                records.addAll(response.getRecords());
+            }
         } catch (Exception ex) {
             log.warn(String.format("Error fetching filtered records for filter '%1$s'", filter), ex);
+            return generateJSONResponseMAV(false, null, "Error fetching filtered records");
         }
 
-        return generateJSONResponseMAV(records);
+        return generateJSONResponseMAV(records.toArray(new CSWRecord[records.size()]));
     }
 
     /**

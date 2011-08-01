@@ -1,23 +1,18 @@
 package org.auscope.portal.server.web.service;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.DelayedReturnValueAction;
 import org.auscope.portal.HttpMethodBaseMatcher;
 import org.auscope.portal.HttpMethodBaseMatcher.HttpMethodType;
 import org.auscope.portal.csw.CSWGetDataRecordsFilter;
+import org.auscope.portal.csw.CSWGetRecordResponse;
 import org.auscope.portal.csw.CSWRecord;
 import org.auscope.portal.csw.CSWThreadExecutor;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.api.Action;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,6 +29,7 @@ public class TestCSWFilterService {
 
     //These determine the correct numbers for a single read of the test file
     static final int RECORD_COUNT_TOTAL = 15;
+    static final int RECORD_MATCH_TOTAL = 30;
 
     /**
      * JMock context
@@ -69,11 +65,6 @@ public class TestCSWFilterService {
         this.cswFilterService = new CSWFilterService(threadExecutor, httpServiceCaller, serviceUrlList);
     }
 
-
-    private static Action delayReturnValue(long msDelay, Object returnValue) throws Exception {
-        return new DelayedReturnValueAction(msDelay, returnValue);
-    }
-
     private static HttpMethodBaseMatcher aHttpMethodBase(HttpMethodType type, String url,
             String postBody) {
         return new HttpMethodBaseMatcher(type, url, postBody);
@@ -102,7 +93,7 @@ public class TestCSWFilterService {
 
         //We call this twice to test that an update wont commence whilst
         //an update for a service is already running (if it does it will trigger too many calls to getHttpClient
-        CSWRecord[] records = this.cswFilterService.getFilteredRecords(mockFilter, 100);
+        CSWGetRecordResponse[] records = this.cswFilterService.getFilteredRecords(mockFilter, 100);
         try {
             threadExecutor.getExecutorService().shutdown();
             threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
@@ -113,7 +104,13 @@ public class TestCSWFilterService {
         }
 
         Assert.assertNotNull(records);
-        Assert.assertEquals(RECORD_COUNT_TOTAL * CONCURRENT_THREADS_TO_RUN, records.length);
+        Assert.assertEquals(CONCURRENT_THREADS_TO_RUN, records.length);
+
+        int totalCSWRecords = 0;
+        for (CSWGetRecordResponse response : records) {
+            totalCSWRecords += response.getRecords().size();
+        }
+        Assert.assertEquals(RECORD_COUNT_TOTAL * CONCURRENT_THREADS_TO_RUN, totalCSWRecords);
     }
 
     /**
@@ -149,6 +146,6 @@ public class TestCSWFilterService {
             Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
         }
 
-        Assert.assertEquals(RECORD_COUNT_TOTAL * CONCURRENT_THREADS_TO_RUN, count);
+        Assert.assertEquals(RECORD_MATCH_TOTAL * CONCURRENT_THREADS_TO_RUN, count);
     }
 }

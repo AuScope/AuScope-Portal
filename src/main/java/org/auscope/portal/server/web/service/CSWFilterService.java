@@ -46,7 +46,6 @@ public class CSWFilterService {
      * @param cswServiceList Must be an untyped array of CSWServiceItem objects (for bean autowiring) representing CSW URL endpoints
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     @Autowired
     public CSWFilterService(CSWThreadExecutor executor,
                       HttpServiceCaller serviceCaller,
@@ -102,22 +101,18 @@ public class CSWFilterService {
      * @throws DistributedHTTPServiceCallerException If an underlying service call returns an exception
      * @return
      */
-    public CSWRecord[] getFilteredRecords(CSWGetDataRecordsFilter filter, int maxRecords) throws Exception {
-        List<CSWRecord> filteredRecords = new ArrayList<CSWRecord>();
+    public CSWGetRecordResponse[] getFilteredRecords(CSWGetDataRecordsFilter filter, int maxRecords) throws Exception {
+        List<CSWGetRecordResponse> responses = new ArrayList<CSWGetRecordResponse>();
 
         //Call our services and start iterating the responses
         DistributedHTTPServiceCaller dsc = callAllServices(filter, maxRecords, ResultType.Results);
         while (dsc.hasNext()) {
             InputStream responseStream = dsc.next();
             Document responseDoc = DOMUtil.buildDomFromStream(responseStream);
-            CSWGetRecordResponse response = new CSWGetRecordResponse(responseDoc);
-
-            log.debug("bacon: " + DOMUtil.buildStringFromDom(responseDoc, false));
-
-            filteredRecords.addAll(response.getCSWRecords());
+            responses.add(new CSWGetRecordResponse(responseDoc));
         }
 
-        return filteredRecords.toArray(new CSWRecord[filteredRecords.size()]);
+        return responses.toArray(new CSWGetRecordResponse[responses.size()]);
     }
 
     /**
@@ -143,7 +138,7 @@ public class CSWFilterService {
             Document responseDoc = DOMUtil.buildDomFromStream(responseStream);
             CSWGetRecordResponse response = new CSWGetRecordResponse(responseDoc);
 
-            count += response.getCSWRecordsCount();
+            count += response.getRecordsMatched();
         }
 
         return count;

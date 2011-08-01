@@ -47,7 +47,7 @@ public class CSWMethodMakerGetDataRecords {
      * @throws Exception
      */
     public HttpMethodBase makeMethod() throws Exception {
-        return this.makeMethod(null, ResultType.Results, 1000);
+        return this.makeMethod(null, ResultType.Results, 1000, 1);
     }
 
     /**
@@ -59,6 +59,18 @@ public class CSWMethodMakerGetDataRecords {
      * @throws UnsupportedEncodingException If the PostMethod body cannot be encoded ISO-8859-1
      */
     public HttpMethodBase makeMethod(CSWGetDataRecordsFilter filter, ResultType resultType, int maxRecords) throws UnsupportedEncodingException {
+        return this.makeMethod(filter, resultType, maxRecords, 1);
+    }
+
+    /**
+     * Generates a method that performs a CSW GetRecords request
+     * with the specified filter
+     *
+     * @param filter [Optional] The filter to constrain our request
+     * @return
+     * @throws UnsupportedEncodingException If the PostMethod body cannot be encoded ISO-8859-1
+     */
+    public HttpMethodBase makeMethod(CSWGetDataRecordsFilter filter, ResultType resultType, int maxRecords, int startPosition) throws UnsupportedEncodingException {
         PostMethod httpMethod = new PostMethod(serviceUrl);
 
         String filterString = null;
@@ -69,7 +81,7 @@ public class CSWMethodMakerGetDataRecords {
         // We should be using a library for this call...
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        sb.append("<csw:GetRecords xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\" service=\"CSW\" constraint_language_version=\"1.1.0\" startPosition=\"1\" outputFormat=\"application/xml\" outputSchema=\"csw:IsoRecord\" typeNames=\"csw:Record\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:gml=\"http://www.opengis.net/gml\"");
+        sb.append("<csw:GetRecords xmlns:csw=\"http://www.opengis.net/cat/csw/2.0.2\" service=\"CSW\" constraint_language_version=\"1.1.0\" outputFormat=\"application/xml\" outputSchema=\"csw:IsoRecord\" typeNames=\"csw:Record\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:gml=\"http://www.opengis.net/gml\"");
         sb.append(String.format(" maxRecords=\"%1$s\"", maxRecords));
         if (resultType != null) {
             switch (resultType) {
@@ -80,6 +92,9 @@ public class CSWMethodMakerGetDataRecords {
                 sb.append(" resultType=\"results\"");
                 break;
             }
+        }
+        if (startPosition >= 0) {
+            sb.append(" startPosition=\"" + startPosition + "\"");
         }
         sb.append(">");
         sb.append("<csw:Query typeNames=\"csw:Record\">");
