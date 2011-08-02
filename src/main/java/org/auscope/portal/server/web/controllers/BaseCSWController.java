@@ -23,11 +23,23 @@ public abstract class BaseCSWController extends BasePortalController {
     }
 
     /**
-     * Utility for generating a response model
-     * @param records
+     * Utility for generating a response model that represents a number of
+     * CSWRecord objects
+     * @param records The records to transform
      * @return
      */
     protected ModelAndView generateJSONResponseMAV(CSWRecord[] records) {
+        return generateJSONResponseMAV(records, null);
+    }
+
+    /**
+     * Utility for generating a response model that represents a number of
+     * CSWRecord objects
+     * @param records The records to transform
+     * @param matchedResults The total number of records available (which may differ from records.length)
+     * @return
+     */
+    protected ModelAndView generateJSONResponseMAV(CSWRecord[] records, Integer matchedResults) {
         if (records == null) {
             return generateJSONResponseMAV(false, new CSWRecord[] {}, "");
         }
@@ -40,8 +52,8 @@ public abstract class BaseCSWController extends BasePortalController {
             }
          } catch (Exception ex) {
              log.error("Error converting data records", ex);
-             return generateJSONResponseMAV(false, new CSWRecord[] {}, "Error converting data records");
+             return generateJSONResponseMAV(false, new CSWRecord[] {}, 0, "Error converting data records");
          }
-        return generateJSONResponseMAV(true, recordRepresentations, "No errors");
+        return generateJSONResponseMAV(true, recordRepresentations, matchedResults, "No errors");
     }
 }

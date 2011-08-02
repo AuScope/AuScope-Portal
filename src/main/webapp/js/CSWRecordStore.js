@@ -1,7 +1,10 @@
 /**
  * An extension of a normal JSON store that makes it specialize into storing and retrieving CSWRecord's
+ *
+ * @param url The base URL used to populate this store
+ * @param baseParams [Optional] An object containing parameters to be sent with every request
  */
-CSWRecordStore = function(url) {
+CSWRecordStore = function(url, baseParams) {
     var conn = new Ext.data.Connection({
         url: url,
         timeout:180000
@@ -28,11 +31,13 @@ CSWRecordStore = function(url) {
             field			: 'serviceName',
             direction		: 'ASC'
         },
+        baseParams      : baseParams,
         reader			: new Ext.data.JsonReader({
             root			: 'data',
             id				: 'fileIdentifier',
             successProperty	: 'success',
             messageProperty : 'msg',
+            totalProperty   : 'totalResults',
             fields			: [
                 'serviceName',
                 'contactOrganisation',

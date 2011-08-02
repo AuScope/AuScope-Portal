@@ -408,28 +408,6 @@ Ext.onReady(function() {
     });
 
     /**
-     * Used to show extra details for querying services
-     */
-    var filterPanel = new Ext.Panel({
-        title: '<span qtip="Layer Specific filter properties. <br>Dont forget to hit \'Apply Filter\'">Filter Properties</span>',
-        region: 'south',
-        split: true,
-        layout: 'card',
-        activeItem: 0,
-        height: 200,
-        autoScroll  : true,
-        layoutConfig: {
-            layoutOnCardChange: true// Important when not specifying an items array
-        },
-        items: [
-            {
-                html: '<p id="filterpanelbox"> Filter options will be shown here for special services.</p>'
-            }
-        ],
-        bbar: ['->', filterButton]
-    });
-
-    /**
      *Iterates through the activeLayersStore and updates each WMS layer's Z-Order to is position within the store
      *
      *This function will refresh every WMS layer too
@@ -1509,12 +1487,36 @@ Ext.onReady(function() {
         form.dom.submit();
     };
 
-    // basic tabs 1, built from existing content
+    // a form for filtering records from a CSW and then displaying the results
     var cswFilterPanel = new CSWThemeFilterForm({
+        id : 'csw-filter-panel',
         region:'north',
         split: true,
-        height: 225,
+        height: 425,
         autoScroll: true,
+        bbar: [{
+            xtype : 'button',
+            text : 'Search',
+            handler : function() {
+                var filterPanel = Ext.getCmp('csw-filter-panel');
+                var filterParams = filterPanel.generateCSWFilterParameters();
+
+                var filterResultsPanel = new CSWFilterResultsPanel({
+                    filterParams : filterParams,
+                    autoScroll : true
+                });
+
+                win = new Ext.Window({
+                    title       : 'Search Results',
+                    layout      : 'fit',
+                    width       : 500,
+                    height      : 420,
+                    items: [filterResultsPanel]
+                });
+
+                win.show(this);
+            }
+        }]
     });
 
     /**
@@ -1528,7 +1530,7 @@ Ext.onReady(function() {
         //margins: '100 0 0 0',
         margins:'100 0 0 3',
         width: 350,
-        items:[cswFilterPanel , activeLayersPanel, filterPanel]
+        items:[cswFilterPanel , activeLayersPanel]
     };
 
     /**

@@ -66,9 +66,10 @@ public class CSWFilterService {
      * @param filter An optional filter to apply to each of the subset requests
      * @param maxRecords The max records PER SERVICE that will be requested
      * @param resultType The type of response that is required from the CSW
+     * @param startIndex The first record index to start filtering from (for pagination). Set to 1 for the first record
      * @return
      */
-    private DistributedHTTPServiceCaller callAllServices(CSWGetDataRecordsFilter filter, int maxRecords, ResultType resultType) throws DistributedHTTPServiceCallerException {
+    private DistributedHTTPServiceCaller callAllServices(CSWGetDataRecordsFilter filter, int maxRecords, int startIndex, ResultType resultType) throws DistributedHTTPServiceCallerException {
         List<HttpMethodBase> requestMethods = new ArrayList<HttpMethodBase>();
 
         //Create various HTTP Methods for making each and every CSW request
@@ -76,7 +77,7 @@ public class CSWFilterService {
             try {
                 log.trace(String.format("serviceItem='%1$s' maxRecords=%2$s resultType='%3$s' filter='%4$s'", serviceItem, maxRecords, resultType, filter));
                 CSWMethodMakerGetDataRecords methodMaker = new CSWMethodMakerGetDataRecords(serviceItem.getServiceUrl());
-                requestMethods.add(methodMaker.makeMethod(filter, resultType, maxRecords));
+                requestMethods.add(methodMaker.makeMethod(filter, resultType, maxRecords, startIndex));
             } catch (UnsupportedEncodingException ex) {
                 log.warn(String.format("Error generating HTTP method for serviceItem '%1$s'",serviceItem), ex);
             }
@@ -98,14 +99,15 @@ public class CSWFilterService {
      *
      * @param filter An optional filter to apply to each of the subset requests
      * @param maxRecords The max records PER SERVICE that will be requested
+     * @param startPosition The first record index to start filtering from (for pagination). Set to 1 for the first record
      * @throws DistributedHTTPServiceCallerException If an underlying service call returns an exception
      * @return
      */
-    public CSWGetRecordResponse[] getFilteredRecords(CSWGetDataRecordsFilter filter, int maxRecords) throws Exception {
+    public CSWGetRecordResponse[] getFilteredRecords(CSWGetDataRecordsFilter filter, int maxRecords, int startPosition) throws Exception {
         List<CSWGetRecordResponse> responses = new ArrayList<CSWGetRecordResponse>();
 
         //Call our services and start iterating the responses
-        DistributedHTTPServiceCaller dsc = callAllServices(filter, maxRecords, ResultType.Results);
+        DistributedHTTPServiceCaller dsc = callAllServices(filter, maxRecords, startPosition, ResultType.Results);
         while (dsc.hasNext()) {
             InputStream responseStream = dsc.next();
             Document responseDoc = DOMUtil.buildDomFromStream(responseStream);
@@ -132,7 +134,7 @@ public class CSWFilterService {
         int count = 0;
 
         //Call our services and start iterating the responses
-        DistributedHTTPServiceCaller dsc = callAllServices(filter, maxRecords, ResultType.Hits);
+        DistributedHTTPServiceCaller dsc = callAllServices(filter, maxRecords, 1, ResultType.Hits);
         while (dsc.hasNext()) {
             InputStream responseStream = dsc.next();
             Document responseDoc = DOMUtil.buildDomFromStream(responseStream);

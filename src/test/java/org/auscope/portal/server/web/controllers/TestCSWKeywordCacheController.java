@@ -1,6 +1,9 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.auscope.portal.server.web.service.CSWKeywordCacheService;
@@ -11,6 +14,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -46,14 +50,22 @@ public class TestCSWKeywordCacheController {
     }
 
     /**
-     * Tests that the underlying services are called correctly
+     * Tests that the underlying services are called correctly and the response
+     * is transformed into an appropriate format
      */
     @Test
     public void testGetKeywords() {
         final Map<String, Integer> expectedKeywords = new HashMap<String, Integer>();
-
         expectedKeywords.put("keyword1", 5);
         expectedKeywords.put("keyword2", 17);
+
+        ModelMap kw1 = new ModelMap();
+        kw1.put("keyword", "keyword1");
+        kw1.put("count", 5);
+        ModelMap kw2 = new ModelMap();
+        kw2.put("keyword", "keyword2");
+        kw2.put("count", 17);
+        final List<ModelMap> expectedDataObj = Arrays.asList(kw1, kw2);
 
         context.checking(new Expectations() {{
             oneOf(mockCSWKeywordCacheService).getKeywordCache();will(returnValue(expectedKeywords));
@@ -62,6 +74,6 @@ public class TestCSWKeywordCacheController {
         ModelAndView mav = controller.getCSWKeywords();
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean)mav.getModel().get("success"));
-        Assert.assertEquals(expectedKeywords, mav.getModel().get("data"));
+        Assert.assertEquals(expectedDataObj, mav.getModel().get("data"));
     }
 }

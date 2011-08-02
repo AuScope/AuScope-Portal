@@ -65,7 +65,7 @@ CSWThemeFilterForm = Ext.extend(Ext.form.FormPanel, {
                     listeners : {
                         // On selection update our list of active base components
                         select : function(combo, record, index) {
-                            cswThemeFilterForm.clearBaseComponents();
+                            cswThemeFilterForm._clearBaseComponents();
                             if (record) {
                                 var urn = record.get('urn');
                                 for (var i = 0; i < cswThemeFilterForm.availableComponents.length; i++) {
@@ -90,19 +90,45 @@ CSWThemeFilterForm = Ext.extend(Ext.form.FormPanel, {
     },
 
     /**
+     * Gets every BaseComponent instance that is added to this form's fieldset
+     *
+     * Returns an array of BaseComponent objects.
+     */
+    _getBaseComponents : function() {
+        var parentFieldSet = this.findByType('fieldset')[0];
+        return parentFieldSet.items.filterBy(function(item) {
+            return item.isBaseComponent;
+        });
+    },
+
+    /**
      * Deletes all BaseComponents (excluding the Theme Combo) from a
      * CSWThemeFilterForm
      */
-    clearBaseComponents : function() {
-        var parentFieldSet = this.findByType('fieldset')[0];
-        var components = parentFieldSet.items.filterBy(function(item) {
-            return item.isBaseComponent;
-        });
+    _clearBaseComponents : function() {
+        var components = this._getBaseComponents();
 
-        for (var i = 0; i < components.length; i++) {
+        for (var i = 0; i < components.getCount(); i++) {
             var cmp = components.get(i);
             var parent = cmp.ownerCt;
             var obj = parent.remove(cmp);
         }
+    },
+
+    /**
+     * Iterates through all components in this filter form and merges their
+     * filter attributes into a single object which is returned
+     *
+     * Returns a javascript object
+     */
+    generateCSWFilterParameters : function() {
+        var components = this._getBaseComponents();
+        var filterParams = {};
+        for (var i = 0; i < components.getCount(); i++) {
+            var cmpFilterValues = components.get(i).getFilterValues();
+            Ext.apply(filterParams, cmpFilterValues);
+        }
+
+        return filterParams;
     }
 });

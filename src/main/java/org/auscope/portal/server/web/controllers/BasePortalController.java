@@ -29,13 +29,17 @@ public abstract class BasePortalController {
      * @param data [Optional] Raw response information. Can be null, must be serialisable into a JSON object.
      * @param message [Optional] A string indicating more information about status of information
      * @param debugInfo [Optional] Debugging Information. Can be null, must be serialisable into a JSON object
+     * @param matchedResults [Optional] The number of results available (not necessarily the count of data)
      * @return
      */
-    protected ModelMap generateResponseModel(boolean success, Object data, String message, Object debugInfo) {
+    protected ModelMap generateResponseModel(boolean success, Object data, Integer matchedResults, String message, Object debugInfo) {
         ModelMap model = new ModelMap();
 
         model.put("data", data);
         model.put("success", success);
+        if (matchedResults != null) {
+            model.put("totalResults", matchedResults);
+        }
         model.put("msg", success);
         if (debugInfo != null) {
             model.put("debugInfo", debugInfo);
@@ -50,7 +54,7 @@ public abstract class BasePortalController {
      * @return
      */
     protected ModelAndView generateJSONResponseMAV(boolean success) {
-        return generateJSONResponseMAV(success, null, "", null);
+        return generateJSONResponseMAV(success, null, "", null, null);
     }
 
     /**
@@ -61,7 +65,19 @@ public abstract class BasePortalController {
      * @return
      */
     protected ModelAndView generateJSONResponseMAV(boolean success, Object data, String message) {
-        return generateJSONResponseMAV(success, data, message, null);
+        return generateJSONResponseMAV(success, data, message, null, null);
+    }
+
+    /**
+     * Utility method to generate a standard ModelAndView response for rendering JSON
+     * @param success The result of the operation
+     * @param data [Optional] Raw response information. Can be null, must be serialisable into a JSON object.
+     * @param message [Optional] A string indicating more information about status of information
+     * @param matchedResults [Optional] The total amount of data available (not necessarily the count of data)
+     * @return
+     */
+    protected ModelAndView generateJSONResponseMAV(boolean success, Object data, Integer matchedResults, String message) {
+        return generateJSONResponseMAV(success, data, message, matchedResults, null);
     }
 
     /**
@@ -70,11 +86,25 @@ public abstract class BasePortalController {
      * @param data [Optional] Raw response information. Can be null, must be serialisable into a JSON object.
      * @param message [Optional] A string indicating more information about status of information
      * @param debugInfo [Optional] Debugging Information. Can be null, must be serialisable into a JSON object
+     * @param matchedResults [Optional] The total amount of data available (not necessarily the count of data)
      * @return
      */
     protected ModelAndView generateJSONResponseMAV(boolean success, Object data, String message, Object debugInfo) {
+        return generateJSONResponseMAV(success, data, message, null, debugInfo);
+    }
+
+    /**
+     * Utility method to generate a standard ModelAndView response for rendering JSON
+     * @param success The result of the operation
+     * @param data [Optional] Raw response information. Can be null, must be serialisable into a JSON object.
+     * @param message [Optional] A string indicating more information about status of information
+     * @param debugInfo [Optional] Debugging Information. Can be null, must be serialisable into a JSON object
+     * @param matchedResults [Optional] The total amount of data available (not necessarily the count of data)
+     * @return
+     */
+    protected ModelAndView generateJSONResponseMAV(boolean success, Object data, String message, Integer matchedResults, Object debugInfo) {
         JSONView view = new JSONView();
-        ModelMap model = generateResponseModel(success, data, message, debugInfo);
+        ModelMap model = generateResponseModel(success, data, matchedResults, message, debugInfo);
 
         return new ModelAndView(view, model);
     }
@@ -103,7 +133,7 @@ public abstract class BasePortalController {
     protected ModelAndView generateHTMLResponseMAV(boolean success, Object data, String message, Object debugInfo) {
         JSONView view = new JSONView();
         view.setContentType("text/html");
-        ModelMap model = generateResponseModel(success, data, message, debugInfo);
+        ModelMap model = generateResponseModel(success, data, null, message, debugInfo);
 
         return new ModelAndView(view, model);
     }

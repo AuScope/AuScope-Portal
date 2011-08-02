@@ -93,7 +93,7 @@ public class TestCSWFilterService {
 
         //We call this twice to test that an update wont commence whilst
         //an update for a service is already running (if it does it will trigger too many calls to getHttpClient
-        CSWGetRecordResponse[] records = this.cswFilterService.getFilteredRecords(mockFilter, 100);
+        CSWGetRecordResponse[] records = this.cswFilterService.getFilteredRecords(mockFilter, 100, 1);
         try {
             threadExecutor.getExecutorService().shutdown();
             threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);

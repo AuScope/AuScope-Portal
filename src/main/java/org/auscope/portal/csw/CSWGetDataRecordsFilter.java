@@ -1,6 +1,7 @@
 package org.auscope.portal.csw;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,10 +17,25 @@ import org.auscope.portal.server.domain.filter.FilterBoundingBox;
  */
 public class CSWGetDataRecordsFilter extends AbstractFilter {
 
+    /**
+     * How the list of keywords will be used to match records
+     */
+    public enum KeywordMatchType {
+        /**
+         * Any record that matches ANY of the specified keywords will pass
+         */
+        Any,
+        /**
+         * Any record that matches EACH AND EVERY keyword in the specified list will pass
+         */
+        All
+    }
+
     private FilterBoundingBox spatialBounds;
     private String[] keywords;
     private String capturePlatform;
     private String sensor;
+    private KeywordMatchType keywordMatchType;
 
     /**
      * Generates a new filter generator for the specified fields.
@@ -38,10 +54,33 @@ public class CSWGetDataRecordsFilter extends AbstractFilter {
      */
     public CSWGetDataRecordsFilter(FilterBoundingBox spatialBounds,
             String[] keywords, String capturePlatform, String sensor) {
+        this(spatialBounds, keywords, capturePlatform, sensor, null);
+    }
+
+    /**
+     * Generates a new filter generator for the specified fields.
+     *
+     * @param spatialBounds
+     *            [Optional] The spatial bounds to filter by
+     * @param keywords
+     *            [Optional] A list of keywords which must ALL be satisfied for
+     *            a record to be included
+     * @param capturePlatform
+     *            [Optional] A capture platform filter that must be specified
+     *            for a record to be included
+     * @param sensor
+     *            [Optional] A sensor filter that must be specified for a record
+     *            to be included
+     * @param keywordMatchType [Optional] How the list of keywords will be matched (defaults to All)
+     */
+    public CSWGetDataRecordsFilter(FilterBoundingBox spatialBounds,
+            String[] keywords, String capturePlatform, String sensor,
+            KeywordMatchType keywordMatchType) {
         this.spatialBounds = spatialBounds;
         this.keywords = keywords;
         this.capturePlatform = capturePlatform;
         this.sensor = sensor;
+        this.keywordMatchType = keywordMatchType;
     }
 
     /**
@@ -58,9 +97,17 @@ public class CSWGetDataRecordsFilter extends AbstractFilter {
         if (keywords != null && keywords.length > 0) {
             List<String> keywordFragments = new ArrayList<String>();
             for (String keyword : keywords) {
-                keywordFragments.add(this.generatePropertyIsEqualToFragment("gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString", keyword));
+                if (keyword != null && !keyword.isEmpty()) {
+                    //keywordFragments.add(this.generatePropertyIsEqualToFragment("gmd:identificationInfo/gmd:MD_DataIdentification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString", keyword));
+                    keywordFragments.add(this.generatePropertyIsEqualToFragment("keyword", keyword));
+                }
             }
-            fragments.add(this.generateAndComparisonFragment(keywordFragments.toArray(new String[keywordFragments.size()])));
+
+            if (keywordMatchType == null || keywordMatchType == KeywordMatchType.All) {
+                fragments.add(this.generateAndComparisonFragment(keywordFragments.toArray(new String[keywordFragments.size()])));
+            } else {
+                fragments.add(this.generateOrComparisonFragment(keywordFragments.toArray(new String[keywordFragments.size()])));
+            }
         }
 
         if (capturePlatform != null && !capturePlatform.isEmpty()) {
@@ -114,6 +161,17 @@ public class CSWGetDataRecordsFilter extends AbstractFilter {
         return sensor;
     }
 
+    public KeywordMatchType getKeywordMatchType() {
+        return keywordMatchType;
+    }
+
+    @Override
+    public String toString() {
+        return "CSWGetDataRecordsFilter [spatialBounds=" + spatialBounds
+                + ", keywords=" + Arrays.toString(keywords)
+                + ", capturePlatform=" + capturePlatform + ", sensor=" + sensor
+                + ", keywordMatchType=" + keywordMatchType + "]";
+    }
 
 
 }

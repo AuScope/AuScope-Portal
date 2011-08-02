@@ -6,11 +6,12 @@ Ext.namespace("CSWThemeFilter");
 CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
     keywordStore : null,
     keywordIDCounter : 0,
+    spacerHeight : 22,
 
     constructor : function() {
         this.keywordStore = new Ext.data.Store({
             proxy    : new Ext.data.HttpProxy({url: 'getCSWKeywords.do'}),
-            sortInfo : {field:'keyword',order:'ASC'},
+            sortInfo : {field:'keyword',direction:'ASC'},
             reader : new Ext.data.JsonReader({
                 root            : 'data',
                 id              : 'urn',
@@ -24,29 +25,55 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
         });
         this.keywordStore.load();
 
+        var keywordMatchStore = new Ext.data.SimpleStore({
+            fields : ['type'],
+            data   : [['Any'],
+                      ['All']]
+        });
 
         //Create our shell form (with columns preconfigured)
         var keywordsComponent = this;
         CSWThemeFilter.Keywords.superclass.constructor.call(this, {
             title : 'Keywords',
             collapsible : true,
-            layout : 'column',
+            border : false,
             items : [{
-                columnWidth : 1.0,
+                xtype : 'form',
                 border : false,
-                layout : 'anchor',
-                bodyStyle:'padding:0px 0 0px 2px',
-                items : []
+                items : [{
+                    xtype : 'combo',
+                    store : keywordMatchStore,
+                    forceSelection : true,
+                    triggerAction : 'all',
+                    typeAhead : true,
+                    typeAheadDelay : 500,
+                    displayField : 'type',
+                    valueField : 'type',
+                    fieldLabel : 'Match Type',
+                    value : 'Any',
+                    mode : 'local'
+                }]
             },{
-                width : 25,
+                xtype : 'fieldset',
+                layout : 'column',
                 border : false,
-                bodyStyle:'padding:0px 0 0px 2px',
-                items : []
-            }, {
-                width : 25,
-                border : false,
-                bodyStyle:'padding:0px 0 0px 2px',
-                items : []
+                items : [{
+                    columnWidth : 1.0,
+                    border : false,
+                    layout : 'anchor',
+                    bodyStyle:'padding:0px 0 0px 2px',
+                    items : []
+                },{
+                    width : 25,
+                    border : false,
+                    bodyStyle:'padding:0px 0 0px 2px',
+                    items : []
+                }, {
+                    width : 25,
+                    border : false,
+                    bodyStyle:'padding:0px 0 0px 2px',
+                    items : []
+                }]
             }],
             listeners : {
                 afterrender : function() {
@@ -60,9 +87,9 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
      * Updates the visibility on all add/remove buttons
      */
     updateAddRemoveButtons : function() {
-        var comboKeywordColumn = this.items.itemAt(0);
-        var buttonRemoveColumn = this.items.itemAt(1);
-        var buttonAddColumn = this.items.itemAt(2);
+        var comboKeywordColumn = this.items.itemAt(1).items.itemAt(0);
+        var buttonRemoveColumn = this.items.itemAt(1).items.itemAt(1);
+        var buttonAddColumn = this.items.itemAt(1).items.itemAt(2);
 
         var existingKeywordFields = comboKeywordColumn.items.getCount();
 
@@ -83,9 +110,9 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
      * This function removes the buttons and keywords associated with button
      */
     handlerRemoveKeywordField : function(button, e) {
-        var comboKeywordColumn = this.items.itemAt(0);
-        var buttonRemoveColumn = this.items.itemAt(1);
-        var buttonAddColumn = this.items.itemAt(2);
+        var comboKeywordColumn = this.items.itemAt(1).items.itemAt(0);
+        var buttonRemoveColumn = this.items.itemAt(1).items.itemAt(1);
+        var buttonAddColumn = this.items.itemAt(1).items.itemAt(2);
 
         //Figure out what component index we are attempting to remove
         var id = button.initialConfig.keywordIDCounter;
@@ -107,9 +134,9 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
      * This function adds a new keyword form component to this field set
      */
     handlerNewKeywordField : function(button, e) {
-        var comboKeywordColumn = this.items.itemAt(0);
-        var buttonRemoveColumn = this.items.itemAt(1);
-        var buttonAddColumn = this.items.itemAt(2);
+        var comboKeywordColumn = this.items.itemAt(1).items.itemAt(0);
+        var buttonRemoveColumn = this.items.itemAt(1).items.itemAt(1);
+        var buttonAddColumn = this.items.itemAt(1).items.itemAt(2);
 
         //Add our combo for selecting keywords
         comboKeywordColumn.add({
@@ -160,7 +187,7 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
             buttonAddColumn.insert(0, {
                 xtype : 'spacer',
                 width : 20,
-                height : 22
+                height : this.spacerHeight
             })
         }
 
@@ -174,17 +201,19 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
      * Returns every keyword specified
      */
     getFilterValues : function() {
-        var comboKeywordColumn = this.items.itemAt(0);
+        var matchType = this.items.itemAt(0).items.itemAt(0).getValue();
+        var comboKeywordColumn = this.items.itemAt(1).items.itemAt(0);
         var keywords = [];
 
         comboKeywordColumn.items.each(function(combo) {
-            var value = keywords.getValue();
-            if (value) {
+            var value = combo.getValue();
+            if (value && value.length > 0) {
                 keywords.push(value);
             }
         });
 
         return {
+            keywordMatchType : matchType,
             keyword : keywords
         };
     },

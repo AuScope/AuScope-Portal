@@ -7,6 +7,7 @@ import java.util.List;
 import org.auscope.portal.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.csw.CSWGetRecordResponse;
 import org.auscope.portal.csw.CSWRecord;
+import org.auscope.portal.csw.CSWGetDataRecordsFilter.KeywordMatchType;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
 import org.auscope.portal.server.web.service.CSWFilterService;
 import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
@@ -63,8 +64,10 @@ public class CSWFilterController extends BaseCSWController {
      * @param northBoundLatitude [Optional] Spatial bbox constraint
      * @param southBoundLatitude [Optional] Spatial bbox constraint
      * @param keywords [Optional] One or more keywords to filter by
+     * @param keywordMatchType [Optional] how the keyword list will be matched against records
      * @param capturePlatform [Optional]  A capture platform filter
      * @param sensor [Optional] A sensor filter
+     * @param startPosition [Optional] 0 based index indicating what index to start reading records from
      * @return
      */
     @RequestMapping("/getFilteredCSWRecords.do")
@@ -74,29 +77,40 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value="northBoundLatitude", required=false) Double northBoundLatitude,
             @RequestParam(value="southBoundLatitude", required=false) Double southBoundLatitude,
             @RequestParam(value="keyword", required=false) String[] keywords,
+            @RequestParam(value="keywordMatchType", required=false) KeywordMatchType keywordMatchType,
             @RequestParam(value="capturePlatform", required=false) String capturePlatform,
             @RequestParam(value="sensor", required=false) String sensor,
-            @RequestParam(value="maxRecords", required=false) Integer maxRecords) {
+            @RequestParam(value="limit", required=false) Integer maxRecords,
+            @RequestParam(value="start", required=false, defaultValue="1") Integer startPosition) {
+
+        //CSW uses a 1 based index
+        if (startPosition == null) {
+            startPosition = 1;
+        } else {
+            startPosition = startPosition + 1;
+        }
 
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(filterBbox, keywords, capturePlatform, sensor);
+        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(filterBbox, keywords, capturePlatform, sensor, keywordMatchType);
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
         List<CSWRecord> records = new ArrayList<CSWRecord>();
+        int matchedResults = 0;
         try {
-            CSWGetRecordResponse[] responses = cswFilterService.getFilteredRecords(filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords);
+            CSWGetRecordResponse[] responses = cswFilterService.getFilteredRecords(filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords, startPosition);
             for (CSWGetRecordResponse response : responses) {
                 records.addAll(response.getRecords());
+                matchedResults += response.getRecordsMatched();
             }
         } catch (Exception ex) {
             log.warn(String.format("Error fetching filtered records for filter '%1$s'", filter), ex);
             return generateJSONResponseMAV(false, null, "Error fetching filtered records");
         }
 
-        return generateJSONResponseMAV(records.toArray(new CSWRecord[records.size()]));
+        return generateJSONResponseMAV(records.toArray(new CSWRecord[records.size()]), matchedResults);
     }
 
     /**
@@ -107,6 +121,7 @@ public class CSWFilterController extends BaseCSWController {
      * @param northBoundLatitude [Optional] Spatial bbox constraint
      * @param southBoundLatitude [Optional] Spatial bbox constraint
      * @param keywords [Optional] One or more keywords to filter by
+     * @param keywordMatchType [Optional] how the keyword list will be matched against records
      * @param capturePlatform [Optional]  A capture platform filter
      * @param sensor [Optional] A sensor filter
      * @return
@@ -118,6 +133,7 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value="northBoundLatitude", required=false) Double northBoundLatitude,
             @RequestParam(value="southBoundLatitude", required=false) Double southBoundLatitude,
             @RequestParam(value="keyword", required=false) String[] keywords,
+            @RequestParam(value="keywordMatchType", required=false) KeywordMatchType keywordMatchType,
             @RequestParam(value="capturePlatform", required=false) String capturePlatform,
             @RequestParam(value="sensor", required=false) String sensor,
             @RequestParam(value="maxRecords", required=false) Integer maxRecords) {
@@ -125,7 +141,7 @@ public class CSWFilterController extends BaseCSWController {
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(filterBbox, keywords, capturePlatform, sensor);
+        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(filterBbox, keywords, capturePlatform, sensor, keywordMatchType);
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
