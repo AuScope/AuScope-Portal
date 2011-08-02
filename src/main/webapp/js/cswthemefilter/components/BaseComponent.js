@@ -12,7 +12,7 @@ CSWThemeFilter.BaseComponent = Ext.extend(Ext.form.FieldSet, {
      */
     constructor : function(cfg) {
         Ext.apply(cfg, {
-            autoDestroy : false, //We don't want to destroy our components upon removal as they will be recycled
+            autoDestroy : true, //Ensure that as components get removed they are also destroyed
             isBaseComponent : true //how we identify base components
         }, {
 

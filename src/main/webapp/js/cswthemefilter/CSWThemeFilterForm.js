@@ -53,6 +53,7 @@ CSWThemeFilterForm = Ext.extend(Ext.form.FormPanel, {
                     typeAheadDelay : 500,
                     displayField : 'label',
                     valueField : 'urn',
+                    mode : 'local',
                     //This template allows us to treat 'indent' levels differently
                     tpl :  new Ext.XTemplate(
                             '<tpl for=".">',

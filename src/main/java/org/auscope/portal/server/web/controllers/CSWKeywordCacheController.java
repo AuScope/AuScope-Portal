@@ -1,11 +1,14 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.auscope.portal.server.web.service.CSWKeywordCacheService;
 import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,6 +41,15 @@ public class CSWKeywordCacheController extends BaseCSWController {
     @RequestMapping("getCSWKeywords.do")
     public ModelAndView getCSWKeywords() {
         Map<String, Integer> keywords = this.keywordCacheService.getKeywordCache();
-        return generateJSONResponseMAV(true, keywords, "");
+
+        List<ModelMap> response = new ArrayList<ModelMap>();
+        for (String keyword : keywords.keySet()) {
+            ModelMap modelMap = new ModelMap();
+            modelMap.put("keyword", keyword);
+            modelMap.put("count", keywords.get(keyword));
+            response.add(modelMap);
+        }
+
+        return generateJSONResponseMAV(true, response, "");
     }
 }
