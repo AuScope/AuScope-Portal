@@ -31,6 +31,7 @@ CSWFilterResultsPanel = Ext.extend(Ext.grid.GridPanel, {
 
         //Build our configuration object
         Ext.apply(cfg, {
+            hideHeaders : true,
             cm : new Ext.grid.ColumnModel([{
                 id : 'title',
                 dataIndex : 'serviceName',
@@ -49,7 +50,12 @@ CSWFilterResultsPanel = Ext.extend(Ext.grid.GridPanel, {
                 showPreview:true,
                 getRowClass : function(record, rowIndex, p, ds){
                     if(this.showPreview){
-                        p.body = '<p style="margin:5px 10px 10px 25px;color:#555;">'+record.data.dataIdentificationAbstract+'</p>';
+                        var description = record.data.dataIdentificationAbstract;
+                        var maxLength = 190;
+                        if (description.length > maxLength) {
+                            description = description.substring(0, maxLength) + '...';
+                        }
+                        p.body = '<p style="margin:5px 10px 10px 25px;color:#555;">'+description+'</p>';
                         return 'x-grid3-row-expanded';
                     }
                     return 'x-grid3-row-collapsed';
@@ -61,11 +67,35 @@ CSWFilterResultsPanel = Ext.extend(Ext.grid.GridPanel, {
                 displayInfo : true,
                 displayMsg : 'Displaying records {0} - {1} of {2}',
                 emptyMsg: 'No records pass the specified filter(s)'
-            })
+            }),
+            listeners : {
+                //On double click show a popup window with more information about the record
+                rowdblclick : function(grid, index, e) {
+                    var selectedRecord = grid.cswRecordStore.getCSWRecordAt(index);
+                    var popup = new CSWRecordDescriptionWindow(selectedRecord);
+                    popup.show(this);
+                }
+            }
 
         });
 
         //Call parent constructor
         CSWFilterResultsPanel.superclass.constructor.call(this, cfg);
-    }
+    },
+
+    /**
+     * Returns a (possibly empty) Array of CSWRecord objects representing the
+     * selected records
+     */
+    getSelectedCSWRecords : function() {
+        var sm = this.getSelectionModel();
+        var selectedRecords = sm.getSelections();
+
+        //Transform our selected records into proper CSWRecord objects
+        for (var i = 0; i < selectedRecords.length; i++) {
+            selectedRecords[i] = new CSWRecord(selectedRecords[i]);
+        }
+
+        return selectedRecords;
+    },
 });

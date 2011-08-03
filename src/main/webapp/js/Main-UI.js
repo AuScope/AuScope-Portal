@@ -472,46 +472,13 @@ Ext.onReady(function() {
         activeLayerRecord.setLayerVisible(isChecked);
 
         if (isChecked) {
-            var filterPanelObj = activeLayerRecord.getFilterPanel();
-
-            //Create our filter panel if we haven't already
-            if (!filterPanelObj) {
-                filterPanelObj = formFactory.getFilterForm(activeLayerRecord, map, cswRecordStore);
-                activeLayerRecord.setFilterPanel(filterPanelObj);
-            }
-
-            //If the filter panel already exists, this may be a case where we are retriggering visiblity
-            //in which case just rerun the previous filter
-            if (filterPanelObj.form && forceApplyFilter && !filterButton.disabled) {
-                filterButton.handler();
-            }
-
-            //If there is a filter panel, show it
-            if (filterPanelObj.form) {
-                filterPanel.add(filterPanelObj.form);
-                filterPanel.getLayout().setActiveItem(activeLayerRecord.getId());
-            }
-
-            if (!deferLayerLoad) {
-                //if we enable the filter button we don't download the layer immediately (as the user will have to enter in filter params)
-                if (filterPanelObj.supportsFiltering) {
-                    filterButton.enable();
-                    filterButton.toggle(true);
-                } else {
-                    //Otherwise the layer doesn't need filtering, just display it immediately
-                    loadLayer(activeLayerRecord);
-                }
-            }
-            filterPanel.doLayout();
+            loadLayer(activeLayerRecord);
         } else {
             //Otherwise we are making the layer invisible, so clear any overlays
             var overlayManager = activeLayerRecord.getOverlayManager();
             if (overlayManager) {
                 overlayManager.clearOverlays();
             }
-
-            filterPanel.getLayout().setActiveItem(0);
-            filterButton.disable();
         }
     };
 
@@ -949,7 +916,7 @@ Ext.onReady(function() {
     //This handler is called whenever the user selects an active layer
     var activeLayerSelectionHandler = function(activeLayerRecord) {
         //if its not checked then don't do any actions
-        if (!activeLayerRecord.getLayerVisible()) {
+        /*if (!activeLayerRecord.getLayerVisible()) {
             filterPanel.getLayout().setActiveItem(0);
             filterButton.disable();
         } else if (activeLayerRecord.getFilterPanel() !== null) {
@@ -972,7 +939,7 @@ Ext.onReady(function() {
             //if this type doesnt need a filter panel then just show the default filter panel
             filterPanel.getLayout().setActiveItem(0);
             filterButton.disable();
-        }
+        }*/
     };
 
 
@@ -1511,7 +1478,23 @@ Ext.onReady(function() {
                     layout      : 'fit',
                     width       : 500,
                     height      : 420,
-                    items: [filterResultsPanel]
+                    items: [filterResultsPanel],
+                    bbar        : [{
+                        xtype : 'button',
+                        text : 'Add Selected Records',
+                        handler : function() {
+                            //Get our selected records
+                            var selection = filterResultsPanel.getSelectedCSWRecords();
+                            if (selection.length === 0) {
+                                return;
+                            }
+
+                            for (var i = 0; i < selection.length; i++) {
+                                cswPanelAddHandler(selection[i]);
+                            }
+                        }
+                    }]
+
                 });
 
                 win.show(this);
