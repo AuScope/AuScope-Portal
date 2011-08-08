@@ -1461,6 +1461,9 @@ Ext.onReady(function() {
         split: true,
         height: 425,
         autoScroll: true,
+        getMapFn : function() {
+            return map;
+        },
         bbar: [{
             xtype : 'button',
             text : 'Search',

@@ -8,13 +8,19 @@ CSWThemeFilterForm = Ext.extend(Ext.form.FormPanel, {
 
     availableComponents : [],
     themeStore : null,
+    getMapFn : null,
 
     /**
      * Constructor for this class, accepts all configuration options that can be
-     * specified for a Ext.form.FormPanel
+     * specified for a Ext.form.FormPanel as well as the following extensions
+     * {
+     *  getMapFn : [Required] A function which returns an instance of GMap2 that may be utilised by child components
+     * }
      */
     constructor : function(cfg) {
         var cswThemeFilterForm = this;  //To maintain our scope in callbacks
+
+        this.getMapFn = cfg.getMapFn;
 
         //Load our list of themes
         this.themeStore = new Ext.data.Store({
@@ -35,6 +41,7 @@ CSWThemeFilterForm = Ext.extend(Ext.form.FormPanel, {
 
         //Load all components
         this.availableComponents.push(CSWThemeFilter.Keywords);
+        this.availableComponents.push(CSWThemeFilter.Spatial);
 
         //Build our configuration
         Ext.apply(cfg, {
@@ -70,7 +77,9 @@ CSWThemeFilterForm = Ext.extend(Ext.form.FormPanel, {
                                 var urn = record.get('urn');
                                 for (var i = 0; i < cswThemeFilterForm.availableComponents.length; i++) {
                                     //Only add components that support the newly selected theme
-                                    var cmp = new cswThemeFilterForm.availableComponents[i]();
+                                    var cmp = new cswThemeFilterForm.availableComponents[i]({
+                                        map : cswThemeFilterForm.getMapFn()
+                                    });
                                     if (cmp.supportsTheme(urn)) {
                                         this.ownerCt.add(cmp);
                                     } else {

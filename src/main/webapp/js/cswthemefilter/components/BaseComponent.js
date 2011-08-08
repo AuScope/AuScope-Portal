@@ -7,10 +7,20 @@ Ext.namespace("CSWThemeFilter");
 CSWThemeFilter.BaseComponent = Ext.extend(Ext.form.FieldSet, {
 
     /**
+     * An instance of GMap2
+     */
+    map : null,
+
+    /**
      * Constructor for this class, accepts all configuration options that can
-     * be specified for a Ext.form.FieldSet
+     * be specified for a Ext.form.FieldSet as well as the following extensions
+     * {
+     *  map : [Required] A google map GMap2 instance
+     * }
      */
     constructor : function(cfg) {
+        this.map = cfg.map;
+
         Ext.apply(cfg, {
             autoDestroy : true, //Ensure that as components get removed they are also destroyed
             isBaseComponent : true //how we identify base components

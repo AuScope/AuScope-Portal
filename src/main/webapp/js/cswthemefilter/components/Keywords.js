@@ -8,7 +8,7 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
     keywordIDCounter : 0,
     spacerHeight : 22,
 
-    constructor : function() {
+    constructor : function(cfg) {
         this.keywordStore = new Ext.data.Store({
             proxy    : new Ext.data.HttpProxy({url: 'getCSWKeywords.do'}),
             sortInfo : {field:'keyword',direction:'ASC'},
@@ -31,9 +31,9 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
                       ['All']]
         });
 
-        //Create our shell form (with columns preconfigured)
+        //Generate our configuration (
         var keywordsComponent = this;
-        CSWThemeFilter.Keywords.superclass.constructor.call(this, {
+        Ext.apply(cfg, {
             title : 'Keywords',
             collapsible : true,
             border : false,
@@ -81,6 +81,9 @@ CSWThemeFilter.Keywords = Ext.extend(CSWThemeFilter.BaseComponent, {
                 }
             }
         });
+
+        //Create our shell form (with columns preconfigured)
+        CSWThemeFilter.Keywords.superclass.constructor.call(this, cfg);
     },
 
     /**
