@@ -1,11 +1,16 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.auscope.portal.csw.CSWRecord;
 import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.server.web.service.CSWCacheService;
 import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,11 +37,10 @@ public class CSWCacheController extends BaseCSWController {
 
         super(viewCSWRecordFactory);
         this.cswService = cswService;
-
         try {
-            cswService.updateRecordsInBackground();
+            cswService.updateCache();
         } catch (Exception e) {
-            log.error(e);
+            log.error("Error whilst starting initial cache update",e);
         }
     }
 
@@ -46,21 +50,14 @@ public class CSWCacheController extends BaseCSWController {
      */
     @RequestMapping("/getCSWRecords.do")
     public ModelAndView getCSWRecords() {
+        List<CSWRecord> records = null;
         try {
-            this.cswService.updateRecordsInBackground();
-        } catch (Exception ex) {
-            log.error("Error updating cache", ex);
-            return generateJSONResponseMAV(false, new CSWRecord[] {}, "Error updating cache");
-        }
-
-        CSWRecord[] records = null;
-        try {
-            records = this.cswService.getAllRecords();
+            records = this.cswService.getRecordCache();
         } catch (Exception e) {
             log.error("error getting data records", e);
             return generateJSONResponseMAV(false, new CSWRecord[] {}, "Error getting data records");
         }
-        return generateJSONResponseMAV(records);
+        return generateJSONResponseMAV(records.toArray(new CSWRecord[records.size()]));
     }
 
     /**
@@ -70,11 +67,30 @@ public class CSWCacheController extends BaseCSWController {
     @RequestMapping("/updateCSWCache.do")
     public ModelAndView updateCSWCache() {
         try {
-            this.cswService.updateRecordsInBackground(true);
+            this.cswService.updateCache();
             return generateJSONResponseMAV(true);
         } catch (Exception e) {
             log.warn("Error updating CSW cache", e);
             return generateJSONResponseMAV(false);
         }
+    }
+
+    /**
+     * Requests every keyword as cached by
+     * @return
+     */
+    @RequestMapping("/getCSWKeywords.do")
+    public ModelAndView getCSWKeywords() {
+        Map<String, Integer> keywords = this.cswService.getKeywordCache();
+
+        List<ModelMap> response = new ArrayList<ModelMap>();
+        for (String keyword : keywords.keySet()) {
+            ModelMap modelMap = new ModelMap();
+            modelMap.put("keyword", keyword);
+            modelMap.put("count", keywords.get(keyword));
+            response.add(modelMap);
+        }
+
+        return generateJSONResponseMAV(true, response, "");
     }
 }

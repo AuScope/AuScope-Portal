@@ -128,7 +128,7 @@ public class TestBoreholeService {
         final String successResponse = org.auscope.portal.Util.loadXML("src/test/resources/GetScannedBorehole.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockCSWService).getWFSRecords();will(returnValue(new CSWRecord[] {mockRecord1, mockRecord2, mockRecord3}));
+            oneOf(mockCSWService).getWFSRecords();will(returnValue(Arrays.asList(mockRecord1, mockRecord2, mockRecord3)));
 
             oneOf(mockRecord1).getOnlineResourcesByType(OnlineResourceType.WFS);will(returnValue(new CSWOnlineResource[] {mockRecord1Resource1, mockRecord1Resource2}));
             oneOf(mockRecord2).getOnlineResourcesByType(OnlineResourceType.WFS);will(returnValue(new CSWOnlineResource[] {mockRecord2Resource1}));
@@ -163,7 +163,7 @@ public class TestBoreholeService {
         final String successResponse = org.auscope.portal.Util.loadXML("src/test/resources/GetScannedBorehole.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockCSWService).getWFSRecords();will(returnValue(new CSWRecord[] {mockRecord1, mockRecord2}));
+            oneOf(mockCSWService).getWFSRecords();will(returnValue(Arrays.asList(mockRecord1, mockRecord2)));
 
             oneOf(mockRecord1).getOnlineResourcesByType(OnlineResourceType.WFS);will(returnValue(new CSWOnlineResource[] {mockRecord1Resource1}));
             oneOf(mockRecord2).getOnlineResourcesByType(OnlineResourceType.WFS);will(returnValue(new CSWOnlineResource[] {mockRecord2Resource1}));

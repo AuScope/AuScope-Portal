@@ -1,16 +1,23 @@
 package org.auscope.portal.server.web.service;
 
+import java.io.ByteArrayInputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.DelayedReturnValueAction;
+import org.auscope.portal.HttpMethodBaseMatcher;
+import org.auscope.portal.HttpMethodBaseMatcher.HttpMethodType;
+import org.auscope.portal.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.csw.CSWThreadExecutor;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.Sequence;
 import org.jmock.api.Action;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
@@ -18,20 +25,23 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * User: Mathew Wyatt
- * Date: 20/08/2009
- * @version $Id$
+ * Unit tests for CSWCacheService
+ * @author Josh Vote
  */
-public class TestCSWCacheService {
-
-    //determines the size of the test + congestion
-    static final int CONCURRENT_THREADS_TO_RUN = 10;
+public class TestCSWCacheService extends CSWCacheService {
+  //determines the size of the test + congestion
+    static final int CONCURRENT_THREADS_TO_RUN = 3;
 
     //These determine the correct numbers for a single read of the test file
+    static final int RECORD_COUNT_TOTAL = 15;
+    static final int RECORD_MATCH_TOTAL = 30;
     static final int RECORD_COUNT_WMS = 2;
     static final int RECORD_COUNT_WFS = 12;
-    static final int RECORD_COUNT_TOTAL = 15;
     static final int RECORD_COUNT_ERMINE_RECORDS = 2;
+
+    public TestCSWCacheService() throws Exception {
+        super(null, null, new ArrayList());
+    }
 
     /**
      * JMock context
@@ -40,21 +50,19 @@ public class TestCSWCacheService {
         setImposteriser(ClassImposteriser.INSTANCE);
     }};
 
-    /**
-     * Main object we are testing
-     */
-    private CSWCacheService cswService;
 
-    /**
-     * Mock httpService caller
-     */
+    private CSWCacheService cswCacheService;
     private HttpServiceCaller httpServiceCaller = context.mock(HttpServiceCaller.class);
+    private CSWThreadExecutor threadExecutor;
+    private CSWGetDataRecordsFilter mockFilter = context.mock(CSWGetDataRecordsFilter.class);
+    private HttpClient mockHttpClient = context.mock(HttpClient.class);
+
+    private static final String serviceUrlFormatString = "http://cswservice.%1$s.url/";
 
     /**
-     * Thread executor
+     * Initialises each of our unit tests with a new CSWFilterService
+     * @throws Exception
      */
-    private CSWThreadExecutor threadExecutor;
-
     @Before
     public void setup() throws Exception {
 
@@ -63,12 +71,236 @@ public class TestCSWCacheService {
           //Create our service list
           ArrayList<CSWServiceItem> serviceUrlList = new ArrayList<CSWServiceItem>(CONCURRENT_THREADS_TO_RUN);
           for (int i = 0; i < CONCURRENT_THREADS_TO_RUN; i++){
-              serviceUrlList.add(new CSWServiceItem("http://localhost"));
+              serviceUrlList.add(new CSWServiceItem(String.format(serviceUrlFormatString, i + 1)));
           }
 
-        this.cswService = new CSWCacheService(threadExecutor, httpServiceCaller, serviceUrlList);
+        this.cswCacheService = new CSWCacheService(threadExecutor, httpServiceCaller, serviceUrlList);
     }
 
+    private static HttpMethodBaseMatcher aHttpMethodBase(HttpMethodType type, String url, String postBody) {
+        return new HttpMethodBaseMatcher(type, url, postBody);
+    }
+
+    /**
+     * Tests a regular update goes through and makes multiple requests over multiple threads
+     * @throws Exception
+     */
+    @Test
+    public void testMultiUpdate() throws Exception {
+        final String moreRecordsString = org.auscope.portal.Util.loadXML("src/test/resources/cswRecordResponse.xml");
+        final String noMoreRecordsString = org.auscope.portal.Util.loadXML("src/test/resources/cswRecordResponse_NoMoreRecords.xml");
+        final ByteArrayInputStream t1r1 = new ByteArrayInputStream(moreRecordsString.getBytes());
+        final ByteArrayInputStream t1r2 = new ByteArrayInputStream(noMoreRecordsString.getBytes());
+        final ByteArrayInputStream t2r1 = new ByteArrayInputStream(noMoreRecordsString.getBytes());
+        final ByteArrayInputStream t3r1 = new ByteArrayInputStream(moreRecordsString.getBytes());
+        final ByteArrayInputStream t3r2 = new ByteArrayInputStream(noMoreRecordsString.getBytes());
+
+        final Sequence t1Sequence = context.sequence("t1Sequence");
+        final Sequence t2Sequence = context.sequence("t2Sequence");
+        final Sequence t3Sequence = context.sequence("t3Sequence");
+
+        final Map<String, Integer> expectedResult = new HashMap<String, Integer>();
+        final int totalRequestsMade = CONCURRENT_THREADS_TO_RUN + 2;
+        expectedResult.put("er:Commodity", new Integer(totalRequestsMade));
+        expectedResult.put("gsml:GeologicUnit", new Integer(totalRequestsMade));
+        expectedResult.put("er:MineralOccurrence", new Integer(totalRequestsMade));
+        expectedResult.put("manhattan", new Integer(totalRequestsMade));
+        expectedResult.put("DS_poi", new Integer(totalRequestsMade));
+        expectedResult.put("GeologicUnit", new Integer(totalRequestsMade));
+        expectedResult.put("poi", new Integer(totalRequestsMade));
+        expectedResult.put("Manhattan", new Integer(totalRequestsMade));
+        expectedResult.put("landmarks", new Integer(totalRequestsMade));
+        expectedResult.put("DS_poly_landmarks", new Integer(totalRequestsMade));
+        expectedResult.put("WFS", new Integer(totalRequestsMade * 2));
+        expectedResult.put("gsml:MappedFeature", new Integer(totalRequestsMade * 2));
+        expectedResult.put("World", new Integer(totalRequestsMade));
+        expectedResult.put("points_of_interest", new Integer(totalRequestsMade));
+        expectedResult.put("poly_landmarks", new Integer(totalRequestsMade));
+        expectedResult.put("MappedFeature", new Integer(totalRequestsMade));
+
+        context.checking(new Expectations() {{
+            allowing(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
+
+            //Thread 1 will make 2 requests
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 1), null)), with(any(HttpClient.class)));
+            inSequence(t1Sequence);
+            will(returnValue(t1r1));
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 1), null)), with(any(HttpClient.class)));
+            inSequence(t1Sequence);
+            will(returnValue(t1r2));
+
+            //Thread 2 will make 1 requests
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 2), null)), with(any(HttpClient.class)));
+            inSequence(t2Sequence);
+            will(returnValue(t2r1));
+
+            //Thread 3 will make 2 requests
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 3), null)), with(any(HttpClient.class)));
+            inSequence(t3Sequence);
+            will(returnValue(t3r1));
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 3), null)), with(any(HttpClient.class)));
+            inSequence(t3Sequence);
+            will(returnValue(t3r2));
+        }});
+
+        //Start our updating and wait for our threads to finish
+        Assert.assertTrue(this.cswCacheService.updateCache());
+        Thread.sleep(50);
+        try {
+            threadExecutor.getExecutorService().shutdown();
+            threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            threadExecutor.getExecutorService().shutdownNow();
+            Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
+        }
+
+        //Check our expected responses
+        Assert.assertEquals(expectedResult, this.cswCacheService.getKeywordCache());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_TOTAL, this.cswCacheService.getRecordCache().size());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_WMS, this.cswCacheService.getWMSRecords().size());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_WFS, this.cswCacheService.getWFSRecords().size());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_ERMINE_RECORDS, this.cswCacheService.getWCSRecords().size());
+
+        //Ensure that our internal state is set to NOT RUNNING AN UPDATE
+        Assert.assertFalse(this.cswCacheService.updateRunning);
+    }
+
+    /**
+     * Tests a regular update goes through and makes multiple requests over multiple threads
+     * @throws Exception
+     */
+    @Test
+    public void testMultiUpdateWithErrors() throws Exception {
+        final String moreRecordsString = org.auscope.portal.Util.loadXML("src/test/resources/cswRecordResponse.xml");
+        final String noMoreRecordsString = org.auscope.portal.Util.loadXML("src/test/resources/cswRecordResponse_NoMoreRecords.xml");
+        final ByteArrayInputStream t1r1 = new ByteArrayInputStream(moreRecordsString.getBytes());
+        final ByteArrayInputStream t1r2 = new ByteArrayInputStream(noMoreRecordsString.getBytes());
+        final ByteArrayInputStream t2r1 = new ByteArrayInputStream(noMoreRecordsString.getBytes());
+        final ByteArrayInputStream t3r1 = new ByteArrayInputStream(moreRecordsString.getBytes());
+        final ByteArrayInputStream t3r2 = new ByteArrayInputStream(noMoreRecordsString.getBytes());
+
+        final Sequence t1Sequence = context.sequence("t1Sequence");
+        final Sequence t2Sequence = context.sequence("t2Sequence");
+        final Sequence t3Sequence = context.sequence("t3Sequence");
+
+        final Map<String, Integer> expectedResult = new HashMap<String, Integer>();
+        final int totalRequestsMade = CONCURRENT_THREADS_TO_RUN + 1;
+        expectedResult.put("er:Commodity", new Integer(totalRequestsMade));
+        expectedResult.put("gsml:GeologicUnit", new Integer(totalRequestsMade));
+        expectedResult.put("er:MineralOccurrence", new Integer(totalRequestsMade));
+        expectedResult.put("manhattan", new Integer(totalRequestsMade));
+        expectedResult.put("DS_poi", new Integer(totalRequestsMade));
+        expectedResult.put("GeologicUnit", new Integer(totalRequestsMade));
+        expectedResult.put("poi", new Integer(totalRequestsMade));
+        expectedResult.put("Manhattan", new Integer(totalRequestsMade));
+        expectedResult.put("landmarks", new Integer(totalRequestsMade));
+        expectedResult.put("DS_poly_landmarks", new Integer(totalRequestsMade));
+        expectedResult.put("WFS", new Integer(totalRequestsMade * 2));
+        expectedResult.put("gsml:MappedFeature", new Integer(totalRequestsMade * 2));
+        expectedResult.put("World", new Integer(totalRequestsMade));
+        expectedResult.put("points_of_interest", new Integer(totalRequestsMade));
+        expectedResult.put("poly_landmarks", new Integer(totalRequestsMade));
+        expectedResult.put("MappedFeature", new Integer(totalRequestsMade));
+
+        context.checking(new Expectations() {{
+            allowing(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
+
+            //Thread 1 will make 2 requests
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 1), null)), with(any(HttpClient.class)));
+            inSequence(t1Sequence);
+            will(returnValue(t1r1));
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 1), null)), with(any(HttpClient.class)));
+            inSequence(t1Sequence);
+            will(returnValue(t1r2));
+
+            //Thread 2 will throw an exception
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 2), null)), with(any(HttpClient.class)));
+            inSequence(t2Sequence);
+            will(throwException(new Exception()));
+
+            //Thread 3 will make 2 requests
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 3), null)), with(any(HttpClient.class)));
+            inSequence(t3Sequence);
+            will(returnValue(t3r1));
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 3), null)), with(any(HttpClient.class)));
+            inSequence(t3Sequence);
+            will(returnValue(t3r2));
+        }});
+
+        //Start our updating and wait for our threads to finish
+        Assert.assertTrue(this.cswCacheService.updateCache());
+        Thread.sleep(50);
+        try {
+            threadExecutor.getExecutorService().shutdown();
+            threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            threadExecutor.getExecutorService().shutdownNow();
+            Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
+        }
+
+        //Check our expected responses
+        Assert.assertEquals(expectedResult, this.cswCacheService.getKeywordCache());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_TOTAL, this.cswCacheService.getRecordCache().size());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_WMS, this.cswCacheService.getWMSRecords().size());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_WFS, this.cswCacheService.getWFSRecords().size());
+        Assert.assertEquals(totalRequestsMade * RECORD_COUNT_ERMINE_RECORDS, this.cswCacheService.getWCSRecords().size());
+
+        //Ensure that our internal state is set to NOT RUNNING AN UPDATE
+        Assert.assertFalse(this.cswCacheService.updateRunning);
+    }
+
+    /**
+     * Tests a regular update goes through and makes multiple requests over multiple threads
+     * @throws Exception
+     */
+    @Test
+    public void testMultiUpdateAllErrors() throws Exception {
+        final Sequence t1Sequence = context.sequence("t1Sequence");
+        final Sequence t2Sequence = context.sequence("t2Sequence");
+        final Sequence t3Sequence = context.sequence("t3Sequence");
+
+        final Map<String, Integer> expectedResult = new HashMap<String, Integer>();
+
+        context.checking(new Expectations() {{
+            allowing(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
+
+            //Thread 1 will throw an exception
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 1), null)), with(any(HttpClient.class)));
+            inSequence(t1Sequence);
+            will(throwException(new Exception()));
+
+            //Thread 2 will throw an exception
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 2), null)), with(any(HttpClient.class)));
+            inSequence(t2Sequence);
+            will(throwException(new Exception()));
+
+            //Thread 3 will throw an exception
+            oneOf(httpServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(HttpMethodType.POST, String.format(serviceUrlFormatString, 3), null)), with(any(HttpClient.class)));
+            inSequence(t3Sequence);
+            will(throwException(new Exception()));
+        }});
+
+        //Start our updating and wait for our threads to finish
+        Assert.assertTrue(this.cswCacheService.updateCache());
+        Thread.sleep(50);
+        try {
+            threadExecutor.getExecutorService().shutdown();
+            threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            threadExecutor.getExecutorService().shutdownNow();
+            Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
+        }
+
+        //Check our expected responses
+        Assert.assertEquals(expectedResult, this.cswCacheService.getKeywordCache());
+        Assert.assertEquals(0, this.cswCacheService.getRecordCache().size());
+        Assert.assertEquals(0, this.cswCacheService.getWMSRecords().size());
+        Assert.assertEquals(0, this.cswCacheService.getWFSRecords().size());
+        Assert.assertEquals(0, this.cswCacheService.getWCSRecords().size());
+
+        //Ensure that our internal state is set to NOT RUNNING AN UPDATE
+        Assert.assertFalse(this.cswCacheService.updateRunning);
+    }
 
     private static Action delayReturnValue(long msDelay, Object returnValue) throws Exception {
         return new DelayedReturnValueAction(msDelay, returnValue);
@@ -92,12 +324,12 @@ public class TestCSWCacheService {
             allowing(httpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(delayReturnValue(delay, cswResponse));
         }});
 
-        final CSWCacheService service = this.cswService;
+        final CSWCacheService service = this.cswCacheService;
 
         Runnable r = new Runnable() {
             public void run() {
                 try {
-                    service.updateRecordsInBackground();
+                    service.updateCache();
                 } catch(Exception e) {
                     Assert.fail(e.toString());
                 }
@@ -138,43 +370,5 @@ public class TestCSWCacheService {
         Calendar finish = Calendar.getInstance();
         long totalTime = finish.getTimeInMillis() - start.getTimeInMillis();
         Assert.assertTrue("Test took too long, assuming other threads are NOT returning immediately", totalTime < (delay * 2));
-    }
-
-    /**
-     * Test that the function is able to actually load CSW records
-     * @throws Exception
-     */
-    @Test
-    public void testUpdateCSWRecords() throws Exception {
-        final String docString = org.auscope.portal.Util.loadXML("src/test/resources/cswRecordResponse.xml");
-
-        context.checking(new Expectations() {{
-            exactly(CONCURRENT_THREADS_TO_RUN).of(httpServiceCaller).getHttpClient();
-            exactly(CONCURRENT_THREADS_TO_RUN).of(httpServiceCaller).getMethodResponseAsString(with(
-                    any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(docString));
-        }});
-
-        //We call this twice to test that an update wont commence whilst
-        //an update for a service is already running (if it does it will trigger too many calls to getHttpClient
-        this.cswService.updateRecordsInBackground();
-        this.cswService.updateRecordsInBackground();
-        try {
-            threadExecutor.getExecutorService().shutdown();
-            threadExecutor.getExecutorService().awaitTermination(180, TimeUnit.SECONDS);
-        }
-        catch (Exception ex) {
-            threadExecutor.getExecutorService().shutdownNow();
-            Assert.fail("Exception whilst waiting for update to finish " + ex.getMessage());
-        }
-
-        //in the response we loaded from the text file it contains 55 records
-        Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_TOTAL,
-                this.cswService.getAllRecords().length);
-        Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_WMS,
-                this.cswService.getWMSRecords().length);
-        Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_WFS,
-                this.cswService.getWFSRecords().length);
-        Assert.assertEquals(CONCURRENT_THREADS_TO_RUN * RECORD_COUNT_ERMINE_RECORDS,
-                this.cswService.getWCSRecords().length);
     }
 }
