@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<!-- Credits for icons from http://www.fatcow.com/free-icons/ under http://creativecommons.org/licenses/by/3.0/us/-->
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+    <head>
+        <title>Administration Diagnostics</title>
+
+        <link rel="stylesheet" type="text/css" href="js/external/extjs/resources/css/ext-all.css">
+        <link rel="stylesheet" type="text/css" href="js/external/extjs/ux/css/ux-all.css">
+
+        <script type="text/javascript" src="js/external/extjs/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="js/external/extjs/ext-all.js"></script>
+        <script type="text/javascript" src="js/external/extjs/ux/ux-all-debug.js"></script>
+
+        <script type="text/javascript" src="js/admin/tests/TestStatus.js"></script>
+        <script type="text/javascript" src="js/admin/tests/BaseTest.js"></script>
+        <script type="text/javascript" src="js/admin/tests/TestTest.js"></script>
+        <script type="text/javascript" src="js/admin/TestResultsPanel.js"></script>
+        <script type="text/javascript" src="js/admin/BuildInfoFieldSet.js"></script>
+        <script type="text/javascript" src="js/admin/RuntimeInfoFieldSet.js"></script>
+   </head>
+
+   <body>
+        <script type="text/javascript">
+        var manifest = {
+            specificationTitle : '${specificationTitle}',
+            implementationVersion : '${implementationVersion}',
+            implementationBuild : '${implementationBuild}',
+            buildDate : '${buildDate}',
+            buildJdk : '${buildJdk}',
+            javaVendor : '${javaVendor}',
+            builtBy : '${builtBy}',
+            osName : '${osName}',
+            osVersion : '${osVersion}',
+            serverName : '${serverName}',
+            serverInfo : '${serverInfo}',
+            serverJavaVersion : '${serverJavaVersion}',
+            serverJavaVendor : '${serverJavaVendor}',
+            javaHome : '${javaHome}',
+            serverOsArch : '${serverOsArch}',
+            serverOsName : '${serverOsName}',
+            serverOsVersion : '${serverOsVersion}'
+        };
+
+        Ext.onReady(function() {
+            var viewport = new Ext.Viewport({
+                layout:'border',
+                margins: '5 5 5 5',
+                items:[{
+                      xtype : 'form',
+                      region : 'west',
+                      title : String.format('Manifest Details for \'{0}\'', manifest.specificationTitle),
+                      collapsible : true,
+                      autoScroll: true,
+                      width : 350,
+                      split: true,
+                      minSize: 200,
+                      maxSize: 500,
+                      items : [{
+                          xtype : 'buildinfofieldset',
+                          manifest : manifest,
+                          height: 245
+                      },{
+                          xtype : 'runtimeinfofieldset',
+                          manifest : manifest,
+                          height: 300
+                      }]
+                },{
+                    region : 'center',
+                    title : 'Diagnostic Tests',
+                    autoScroll : true,
+                    items : [{
+                        xtype : 'testresultspanel',
+                        autoHeight : true,
+                    }]
+                }]
+            });
+        });
+        </script>
+   </body>
+
+</html>
