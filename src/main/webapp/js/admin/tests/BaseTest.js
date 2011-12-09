@@ -9,6 +9,9 @@ Admin.Tests.TestIDCounter = 0;
 Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
     _id : null,
     _status : null,
+    _errors : [],
+    _warnings : [],
+    _details : [],
 
     /**
      * Accepts all Ext.util.Observable configuration options with the following additions
@@ -45,7 +48,19 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
      * This function may be called before, during or after a test is run. Ideally the results of this function
      * should be amended with details of the TestResult.
      */
-    getDescription : Ext.emptyFn,
+    getDescription : function() {
+        var description = '';
+        for (var i = 0; i < this._errors.length; i++) {
+            description += '<br/>[ERROR] ' + this._errors[i];
+        }
+        for (var i = 0; i < this._warnings.length; i++) {
+            description += '<br/>[WARN] ' + this._warnings[i];
+        }
+        for (var i = 0; i < this._details.length; i++) {
+            description += '<br/>[INFO] ' + this._details[i];
+        }
+        return description;
+    },
 
     /**
      * Gets the tooltip string for the current status of this test. This f
@@ -61,7 +76,7 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
         case Admin.Tests.TestStatus.Running:
             return 'This test is currently running. The result will be available shortly.';
         case Admin.Tests.TestStatus.Unavailable:
-            return 'This test is currently unavailable as it is unable to initialise all of it\'s dependencies.';
+            return 'This test is currently unavailable because the backend is unreachable or unable to initialise this test\'s dependencies.';
         }
     },
 
@@ -76,6 +91,26 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
     _changeStatus : function(newStatus) {
         this._status = newStatus;
         this.fireEvent('statuschanged', this, newStatus);
-    }
+    },
 
+    /**
+     * Utility for handling the typical responses from the backend AdminController
+     */
+    _handleAdminControllerResponse : function(responseObj) {
+        this._errors = responseObj.errors;
+        this._warnings = responseObj.warnings;
+        this._details = responseObj.details;
+
+        if (!responseObj.success) {
+            this._changeStatus(Admin.Tests.TestStatus.Error);
+            return;
+        }
+
+        if (responseObj.errors.length > 0 || responseObj.warnings.length > 0) {
+            this._changeStatus(Admin.Tests.TestStatus.Warning);
+            return;
+        }
+
+        this._changeStatus(Admin.Tests.TestStatus.Success);
+    }
 });

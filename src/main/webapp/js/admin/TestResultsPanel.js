@@ -137,11 +137,7 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
         };
 
         //Create new test instances
-        addTestFn(this, new Admin.Tests.TestTest({}));
-        addTestFn(this, new Admin.Tests.TestTest({}));
-        addTestFn(this, new Admin.Tests.TestTest({}));
-        addTestFn(this, new Admin.Tests.TestTest({}));
-        addTestFn(this, new Admin.Tests.TestTest({}));
+        addTestFn(this, new Admin.Tests.ExternalConnectivity({}));
     },
 
     /**
