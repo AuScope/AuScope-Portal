@@ -17,6 +17,7 @@
         <script type="text/javascript" src="js/admin/tests/BaseTest.js"></script>
         <script type="text/javascript" src="js/admin/tests/TestTest.js"></script>
         <script type="text/javascript" src="js/admin/tests/ExternalConnectivity.js"></script>
+        <script type="text/javascript" src="js/admin/tests/RegistryConnectivity.js"></script>
         <script type="text/javascript" src="js/admin/TestResultsPanel.js"></script>
         <script type="text/javascript" src="js/admin/BuildInfoFieldSet.js"></script>
         <script type="text/javascript" src="js/admin/RuntimeInfoFieldSet.js"></script>
