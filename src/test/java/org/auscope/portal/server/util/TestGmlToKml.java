@@ -1,76 +1,62 @@
 package org.auscope.portal.server.util;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
+import javax.servlet.ServletContext;
 
+import org.auscope.portal.PortalTestClass;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 
-public class TestGmlToKml {
-	private GmlToKml gmlToKml = new GmlToKml();
+public class TestGmlToKml extends PortalTestClass {
 
-	private Util util = new Util();
+    private ServletContext mockServletContext = context.mock(ServletContext.class);
+    private PortalXSLTTransformer mockTransformer = context.mock(PortalXSLTTransformer.class);
+    private InputStream mockInputStream = context.mock(InputStream.class);
+    private GmlToKml gmlToKml;
 
-	private Mockery context = new Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+    @Before
+    public void setup() {
+        gmlToKml = new GmlToKml(mockTransformer, mockServletContext);
+    }
 
-	private PortalPropertyPlaceholderConfigurer propertyConfigurer = context.mock(PortalPropertyPlaceholderConfigurer.class);
+    /**
+     * Tests that the transform is setup correctly
+     */
+    @Test
+    public void testTransform() {
+        final String inputXml = "<input/>";
+        final String outputXml = "<output/>";
+        final String serviceUrl = "http://service/wfs";
 
-
-	@Before
-    public void setup() throws Exception {
-        final String serviceUrl = "somejunk";
 
         context.checking(new Expectations() {{
-            oneOf(propertyConfigurer).resolvePlaceholder(with(any(String.class)));will(returnValue(serviceUrl));
+            oneOf(mockServletContext).getResourceAsStream(GmlToKml.GML_TO_KML_XSLT);will(returnValue(mockInputStream));
+            oneOf(mockTransformer).convert(with(equal(inputXml)), with(same(mockInputStream)), with(aProperty("serviceURL", serviceUrl)));will(returnValue(outputXml));
         }});
-	}
 
-	@Test
-	public void testGenericFeatureParser() throws Exception {
-		String testXml = org.auscope.portal.Util.loadXML("src/test/resources/GetUndefinedFeatureSet.xml");
-		InputStream inputStream = new FileInputStream("src/main/webapp/WEB-INF/xsl/kml.xsl");
+        final String result = gmlToKml.convert(inputXml, serviceUrl);
+        Assert.assertEquals(outputXml, result);
+    }
+
+    /**
+     * Tests that the transform returns "" on failure
+     */
+    @Test
+    public void testFileDNE() {
+        final String inputXml = "<input/>";
+        final String outputXml = "";
+        final String serviceUrl = "http://service/wfs";
 
 
-		String convertedText = gmlToKml.convert(testXml, inputStream, "");
+        context.checking(new Expectations() {{
+            oneOf(mockServletContext).getResourceAsStream(GmlToKml.GML_TO_KML_XSLT);will(returnValue(null));
+        }});
 
-		//Check we have data
-		Assert.assertNotNull(convertedText);
-		Assert.assertTrue(convertedText.length() > 0);
+        final String result = gmlToKml.convert(inputXml, serviceUrl);
+        Assert.assertEquals(outputXml, result);
+    }
 
-		//Pull the converted data back as XML (It is now technically KML)
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	        factory.setNamespaceAware(false); // never forget this!
-	        DocumentBuilder builder = factory.newDocumentBuilder();
-	        InputSource inputSource = new InputSource(new StringReader(convertedText));
-	        Document document = builder.parse(inputSource);
-	        Element root = document.getDocumentElement();
-
-		//Lets query the transformed data to make sure its correct
-		XPath xPath = XPathFactory.newInstance().newXPath();
-
-		Double counter = (Double) xPath.evaluate("count(Document)", root, XPathConstants.NUMBER);
-		Assert.assertEquals(1.0, counter.doubleValue(),0);
-
-		counter = (Double) xPath.evaluate("count(Document/Placemark)", root, XPathConstants.NUMBER);
-		Assert.assertEquals(8.0, counter.doubleValue(),0);
-
-		counter = (Double) xPath.evaluate("count(Document/Placemark/MultiGeometry/Point/Style/IconStyle/Icon/href)", root, XPathConstants.NUMBER);
-		Assert.assertEquals(8.0, counter.doubleValue(),0);
-	}
 }

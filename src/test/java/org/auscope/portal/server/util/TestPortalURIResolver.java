@@ -6,9 +6,8 @@ import javax.servlet.ServletContext;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 
+import org.auscope.portal.PortalTestClass;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,14 +17,7 @@ import org.junit.Test;
  * Date: 28/08/2009
  * @version $Id$
  */
-public class TestPortalURIResolver {
-
-    /**
-     * JMock context
-     */
-    private Mockery context = new Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+public class TestPortalURIResolver extends PortalTestClass {
 
     /**
      * Portal URI resolver to test
@@ -38,7 +30,7 @@ public class TestPortalURIResolver {
     private ServletContext servletContext = context.mock(ServletContext.class);
 
     @Before
-    public void setup() {
+    public void setUp() {
         portalURIResolver = new PortalURIResolver(servletContext);
     }
 
@@ -59,7 +51,7 @@ public class TestPortalURIResolver {
         Source source2 = portalURIResolver.resolve("href", "");
 
         //the two should be the same
-        if(source == source2)
+        if (source == source2)
             Assert.assertTrue(true);
     }
 
@@ -96,7 +88,7 @@ public class TestPortalURIResolver {
         Source source = portalURIResolver.resolve("", "");
 
         //expect a null source
-        if(source == null)
+        if (source == null)
             Assert.assertTrue(true);
 
     }*/

@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.AbstractView;
  *
  * This class is a JSON spring MVC View class which takes a JSONArray and sends the actual json structure down the
  * wire on the httpResponse
- * 
+ *
  */
 public class JSONView extends AbstractView {
     private JSONArray jsonArray;
@@ -34,7 +34,7 @@ public class JSONView extends AbstractView {
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.setContentType(getContentType());
 
-        if(jsonArray != null) { //convert just the array
+        if (jsonArray != null) { //convert just the array
             response.getWriter().write(JSONSerializer.toJSON(jsonArray).toString());
         } else { //send of the object
             response.getWriter().write(JSONSerializer.toJSON(model).toString());

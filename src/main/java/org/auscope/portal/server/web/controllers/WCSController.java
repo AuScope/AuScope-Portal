@@ -1,8 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,16 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.csw.CSWGeographicBoundingBox;
+import org.auscope.portal.csw.record.CSWGeographicBoundingBox;
 import org.auscope.portal.server.domain.wcs.DescribeCoverageRecord;
+import org.auscope.portal.server.util.FileIOUtil;
 import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.server.web.IWCSDescribeCoverageMethodMaker;
 import org.auscope.portal.server.web.IWCSGetCoverageMethodMaker;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
-import org.auscope.portal.server.web.view.JSONModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,8 +36,8 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-public class WCSController {
-    protected final Log logger = LogFactory.getLog(getClass());
+public class WCSController extends BasePortalController {
+    private final Log logger = LogFactory.getLog(getClass());
 
     private HttpServiceCaller serviceCaller;
     private IWCSGetCoverageMethodMaker getCoverageMethodMaker;
@@ -107,20 +104,7 @@ public class WCSController {
 
     private void closeZipWithError(ZipOutputStream zout,String debugQuery, Exception exceptionToPrint) {
         String message = null;
-        StringWriter sw = null;
-        PrintWriter pw = null;
-        try {
-            sw = new StringWriter();
-            pw = new PrintWriter(sw);
-            exceptionToPrint.printStackTrace(pw);
-            message = String.format("An exception occured whilst requesting/parsing your WCS download.\r\n%1$s\r\nMessage=%2$s\r\n%3$s",debugQuery, exceptionToPrint.getMessage(), sw.toString());
-        } finally {
-            try {
-                if(pw != null)  pw.close();
-                if(sw != null)  sw.close();
-            } catch (Exception ignore) {}
-        }
-
+        message=FileIOUtil.convertExceptionToString(exceptionToPrint, debugQuery);
         try {
             zout.putNextEntry(new ZipEntry("error.txt"));
 
@@ -269,14 +253,7 @@ public class WCSController {
             zout.putNextEntry(new ZipEntry(outputFileName));
 
             //Read the input in 1MB chunks and don't stop till we run out of data
-            byte[] buffer = new byte[1024 * 1024];
-            int dataRead;
-            do {
-                dataRead = inData.read(buffer, 0, buffer.length);
-                if (dataRead > 0) {
-                    zout.write(buffer, 0, dataRead);
-                }
-            } while (dataRead != -1);
+            writeInputToOutputStream(inData, zout, 1024 * 1024);
 
             zout.finish();
             zout.flush();
@@ -313,7 +290,7 @@ public class WCSController {
             method = describeCoverageMethodMaker.makeMethod(serviceUrl, layerName);
         } catch (Exception ex) {
             logger.error("Error generating method", ex);
-            return getDescribeCoverageResponse(false, "Error generating request method. Are layerName and serviceUrl specified?", null, null);
+            return generateJSONResponseMAV(false, null, "Error generating request method. Are layerName and serviceUrl specified?");
         }
 
         String xmlResponse = null;
@@ -321,7 +298,7 @@ public class WCSController {
             xmlResponse = serviceCaller.getMethodResponseAsString(method, serviceCaller.getHttpClient());
         } catch (Exception ex) {
             logger.info("Error making request", ex);
-            return getDescribeCoverageResponse(false, "Error occured whilst communicating to remote service: " + ex.getMessage(), null, null);
+            return generateJSONResponseMAV(false, null, "Error occured whilst communicating to remote service: " + ex.getMessage());
         }
 
         DescribeCoverageRecord[] records = null;
@@ -329,20 +306,9 @@ public class WCSController {
             records = DescribeCoverageRecord.parseRecords(xmlResponse);
         } catch (Exception ex) {
             logger.warn("Error parsing request", ex);
-            return getDescribeCoverageResponse(false, "Error occured whilst parsing response: " + ex.getMessage(), xmlResponse, null);
+            return generateJSONResponseMAV(false, null, "Error occured whilst parsing response: " + ex.getMessage());
         }
 
-        return getDescribeCoverageResponse(true, "No errors found",xmlResponse, records );
-    }
-
-    private JSONModelAndView getDescribeCoverageResponse(boolean success, String errorMessage, String responseXml, DescribeCoverageRecord[] records ) {
-
-        ModelMap response = new ModelMap();
-        response.put("success", success);
-        response.put("errorMsg", errorMessage);
-        response.put("rawXml", responseXml);
-        response.put("records", records);
-
-        return new JSONModelAndView(response);
+        return generateJSONResponseMAV(true, records, "");
     }
 }

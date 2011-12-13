@@ -18,32 +18,31 @@ import org.w3c.dom.Node;
 
 @Repository
 public class GSMLResponseHandler {
-	
-	protected final Log log = LogFactory.getLog(getClass());
-	
-	public int getNumberOfFeatures(String gsmlResponse) throws Exception {
+
+    private final Log log = LogFactory.getLog(getClass());
+
+    public int getNumberOfFeatures(String gsmlResponse) throws Exception {
 
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true); // never forget this!
         DocumentBuilder builder = domFactory.newDocumentBuilder();
         Document yilgarnDoc = builder.parse(new ByteArrayInputStream(gsmlResponse.getBytes("UTF-8")));
 
-        XPathFactory factory = XPathFactory.newInstance();
-        XPath xPath = factory.newXPath();
+        XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new YilgarnNamespaceContext());
-        
+
         //Do some rudimentary error testing
         OWSExceptionParser.checkForExceptionResponse(yilgarnDoc);
-        
+
         try {
             XPathExpression expr = xPath.compile("/wfs:FeatureCollection");
-            Node result = (Node)expr.evaluate(yilgarnDoc, XPathConstants.NODE);           
+            Node result = (Node)expr.evaluate(yilgarnDoc, XPathConstants.NODE);
             return Integer.parseInt(result.getAttributes().getNamedItem("numberOfFeatures").getTextContent());
         } catch (Exception e) {
-        	return 0;
-            
+            return 0;
+
         }
     }
-	
+
 
 }

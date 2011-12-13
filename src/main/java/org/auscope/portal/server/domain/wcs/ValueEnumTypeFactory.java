@@ -14,9 +14,9 @@ public class ValueEnumTypeFactory {
     public static ValueEnumType parseFromNode(Node node) throws Exception {
         XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new WCSNamespaceContext());
-        
+
         if (node.getLocalName().equals("singleValue")) {
-            return new SingleValue(node, xPath);
+            return new SingleValue(node);
         } else if (node.getLocalName().equals("interval")) {
             return new Interval(node, xPath);
         } else {

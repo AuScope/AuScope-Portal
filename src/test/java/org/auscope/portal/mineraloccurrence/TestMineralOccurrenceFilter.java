@@ -1,9 +1,8 @@
 package org.auscope.portal.mineraloccurrence;
 
 
-import org.auscope.portal.server.domain.ogc.FilterTestUtilities;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.server.domain.ogc.AbstractFilterTestUtilities;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -13,13 +12,7 @@ import org.w3c.dom.Document;
  * Date: 30/03/2009
  * Time: 3:27:26 PM
  */
-public class TestMineralOccurrenceFilter {
-    private Mockery context = new Mockery(){{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
-
-
-
+public class TestMineralOccurrenceFilter extends PortalTestClass {
 
     @Test
     public void testWithNameAndMinimumOreAmount() throws Exception {
@@ -31,10 +24,10 @@ public class TestMineralOccurrenceFilter {
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
 
         //Do some simple checks to ensure it is a) valid XML and b) referencing the values we put in
-        Document doc = FilterTestUtilities.parsefilterStringXML(filter);
+        Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
 
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal", new String[] {"1234567"}, 2);
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {commodityName, "urn:ogc:def:uom:UCUM:t"}, 4);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal", new String[] {"1234567"}, 2);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {commodityName, "urn:ogc:def:uom:UCUM:t"}, 4);
     }
 
     @Test
@@ -43,9 +36,9 @@ public class TestMineralOccurrenceFilter {
             new MineralOccurrenceFilter("", "Reserve", "2000000", "urn:ogc:def:uom:UCUM:t", "", "");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
-        Document doc = FilterTestUtilities.parsefilterStringXML(filter);
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal", new String[] {"2000000"}, 1);
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t"}, 1);
+        Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal", new String[] {"2000000"}, 1);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t"}, 1);
     }
 
     @Test
@@ -54,10 +47,10 @@ public class TestMineralOccurrenceFilter {
             new MineralOccurrenceFilter("", "Any", "1000000", "urn:ogc:def:uom:UCUM:t", "", "");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
-        Document doc = FilterTestUtilities.parsefilterStringXML(filter);
+        Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
 
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal", new String[] {"1000000"}, 2);
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t"}, 2);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal", new String[] {"1000000"}, 2);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t"}, 2);
     }
 
     @Test
@@ -66,9 +59,9 @@ public class TestMineralOccurrenceFilter {
             new MineralOccurrenceFilter("", "Resource", "", "", "6000000", "urn:ogc:def:uom:UCUM:t");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
-        Document doc = FilterTestUtilities.parsefilterStringXML(filter);
+        Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
 
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t", "6000000"}, 2);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t", "6000000"}, 2);
     }
 
 
@@ -78,22 +71,24 @@ public class TestMineralOccurrenceFilter {
             new MineralOccurrenceFilter("", "Any", "", "", "7000000", "urn:ogc:def:uom:UCUM:t");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
-        Document doc = FilterTestUtilities.parsefilterStringXML(filter);
+        Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
 
-        FilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t", "7000000"}, 4);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/ogc:Literal", new String[] {"urn:ogc:def:uom:UCUM:t", "7000000"}, 4);
     }
 
-
-    //TODO: to be reimplemented when the data model (mineraloccurrence ml) complies to this feature
-
-/*
+    /**
+     * Ensures that matchCase is always set to false
+     * @throws Exception
+     */
     @Test
-    public void testEndowmentCutOffGrade() throws IOException {
+    public void testMatchCaseDefault() throws Exception {
         MineralOccurrenceFilter mineralOccurrenceFilter =
-            new MineralOccurrenceFilter(null, "Endowment", "", "", "", "1500", "", "");
+            new MineralOccurrenceFilter("commodityName", "None", "", "", "", "");
 
-        Assert.assertEquals(Util.loadXML(
-            "src/test/resources/GetMineralOccurrencesWithSpecifiedEndowmentCutOffGrade.xml").replaceAll("\n", "").replaceAll("\\W", ""),
-            mineralOccurrenceFilter.getFilterString().replaceAll("\n", "").replaceAll("\\W", ""));
-    }*/
+        String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
+        Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
+
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/@matchCase", new String[] {"false"}, 1);
+    }
+
 }

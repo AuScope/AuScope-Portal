@@ -2,11 +2,8 @@ package org.auscope.portal.server.web;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Writer;
 
 import junit.framework.Assert;
 
@@ -16,10 +13,9 @@ import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.auscope.portal.PortalTestClass;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,13 +25,10 @@ import org.junit.Test;
  * Date: Jun 3, 2009
  * Time: 12:01:57 PM
  */
-public class TestHttpServiceCaller {
-    private Mockery context = new Mockery(){{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+public class TestHttpServiceCaller extends PortalTestClass {
     private HttpClient mockHttpClient;
     private HttpConnectionManagerParams mockParams;
-    private IWFSGetFeatureMethodMaker methodMaker;
+    private WFSGetFeatureMethodMaker methodMaker;
 
     private HttpServiceCaller httpServiceCaller;
     private static final String SERVICE_URL = "http://localhost?";
@@ -43,11 +36,11 @@ public class TestHttpServiceCaller {
     private static final String FILTER_STRING = "<filter></filter>";
 
     @Before
-    public void setup() {
+    public void setUp() {
         mockHttpClient = context.mock(HttpClient.class);
         mockParams = context.mock(HttpConnectionManagerParams.class);
         httpServiceCaller = new HttpServiceCaller();
-        methodMaker = new WFSGetFeatureMethodMakerPOST();
+        methodMaker = new WFSGetFeatureMethodMaker();
         httpServiceCaller.setClientParams(mockParams);
     }
 
@@ -110,10 +103,10 @@ public class TestHttpServiceCaller {
 
 
         context.checking(new Expectations() {{
-            oneOf (mockHttpClient).setHttpConnectionManager(with(any(HttpConnectionManager.class)));
-            oneOf (mockHttpClient).executeMethod(method); will(returnValue(HttpStatus.SC_OK));
-            oneOf (method).getResponseBodyAsStream(); will(returnValue(InputStream.class));
-            oneOf (method).releaseConnection();
+            oneOf(mockHttpClient).setHttpConnectionManager(with(any(HttpConnectionManager.class)));
+            oneOf(mockHttpClient).executeMethod(method); will(returnValue(HttpStatus.SC_OK));
+            oneOf(method).getResponseBodyAsStream(); will(returnValue(InputStream.class));
+            oneOf(method).releaseConnection();
             allowing(method).getURI();will(returnValue(null));
         }});
 
@@ -131,10 +124,10 @@ public class TestHttpServiceCaller {
         final HttpMethodBase method = context.mock(HttpMethodBase.class);
 
         context.checking(new Expectations() {{
-            oneOf (mockHttpClient).setHttpConnectionManager(with(any(HttpConnectionManager.class)));
-            oneOf (mockHttpClient).executeMethod(method); will(returnValue(HttpStatus.SC_EXPECTATION_FAILED));
-            oneOf (method).getStatusLine();//logger
-            oneOf (method).getStatusLine();//exception
+            oneOf(mockHttpClient).setHttpConnectionManager(with(any(HttpConnectionManager.class)));
+            oneOf(mockHttpClient).executeMethod(method); will(returnValue(HttpStatus.SC_EXPECTATION_FAILED));
+            oneOf(method).getStatusLine();//logger
+            oneOf(method).getStatusLine();//exception
             allowing(method).getURI();will(returnValue(null));
 
         }});

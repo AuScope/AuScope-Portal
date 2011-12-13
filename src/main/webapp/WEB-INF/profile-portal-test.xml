@@ -2,9 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
 
@@ -33,6 +33,7 @@
                 <ref bean="knownTypeHighPSiteIronLayer"/>
                 <ref bean="knownTypeHighPSitePhosLayer"/>
                 <ref bean="knownTypePortals"/>
+                <ref bean="knownTypeGeoNetworks"/>
             </list>
         </constructor-arg>
     </bean>
@@ -40,8 +41,8 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-                <ref bean="cswAuscopeTest" />
                 <ref bean="cswMDUTest" />
+                <ref bean="cswAuscopeTest" />
             </list>
         </constructor-arg>
     </bean>

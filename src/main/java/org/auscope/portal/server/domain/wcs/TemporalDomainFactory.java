@@ -15,9 +15,9 @@ public class TemporalDomainFactory {
     public static TemporalDomain parseFromNode(Node node) throws Exception {
         XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new WCSNamespaceContext());
-        
+
         if (node.getLocalName().equals("timePosition")) {
-            return new SimpleTimePosition(node, xPath);
+            return new SimpleTimePosition(node);
         } else if (node.getLocalName().equals("timePeriod")) {
             return new SimpleTimePeriod(node, xPath);
         } else {

@@ -4,11 +4,57 @@
  * @param {string} the service url for submit
  */
 
-BoreholeFilterForm = function(id) {
-	
-	this.isFormLoaded = true; //We aren't reliant on any remote downloads
-	
-	BoreholeFilterForm.superclass.constructor.call(this, {
+BoreholeFilterForm = function(id,activeLayersRecord) {
+
+    this.isFormLoaded = true; //We aren't reliant on any remote downloads
+
+    var serviceEndpoints=activeLayersRecord.getServiceEndpoints();
+    var cswRecords=activeLayersRecord.getCSWRecords();
+    var administrativeAreas=[];
+
+    if(serviceEndpoints != null  && serviceEndpoints!= undefined){
+        for(i=0;i<serviceEndpoints.length;i++){
+            for(j=0;j<cswRecords.length;j++){
+                var cswRecord=cswRecords[j].getFilteredOnlineResources(undefined,undefined,undefined,serviceEndpoints[i],false)
+                if(cswRecord.length>0){
+                    administrativeAreas.push([cswRecords[j].getAdministrativeArea(),serviceEndpoints[i]]);
+                    break;
+                }
+            }
+        }
+    };
+
+    var serviceFilterText=new Ext.form.TextField({
+        itemId     : 'serviceFilterText-field',
+        fieldLabel : 'serviceFilterText',
+        name       : 'serviceFilterText',
+        hidden     : true
+    });
+
+     // create the combo instance
+    var serviceCombo = new Ext.form.ComboBox({
+        anchor     : '95%',
+        itemId     : 'serviceFilter-field',
+        fieldLabel : 'Provider',
+        name       : 'serviceFilter',
+        typeAhead: true,
+        triggerAction: 'all',
+        lazyRender:true,
+        mode: 'local',
+        store: new Ext.data.ArrayStore({
+            id: 0,
+            fields: [
+                'displayText',
+                'serviceFilter'
+            ],
+            data: administrativeAreas
+        }),
+        valueField: 'serviceFilter',
+        displayField: 'displayText',
+        hiddenName: 'serviceFilter'
+    });
+
+    BoreholeFilterForm.superclass.constructor.call(this, {
         id          : String.format('{0}',id),
         border      : false,
         autoScroll  : true,
@@ -27,29 +73,23 @@ BoreholeFilterForm = function(id) {
             autoHeight : true,
             items      : [
             {
-            	anchor     : '95%',
-            	itemId     : 'name-field',
+                anchor     : '95%',
+                itemId     : 'name-field',
                 xtype      : 'textfield',
                 fieldLabel : 'Name',
                 name       : 'boreholeName'
             },
             {
-            	anchor     : '95%',
-            	itemId     : 'custodian-field',
-                xtype      : 'textfield',
-                fieldLabel : 'Custodian',
-                name       : 'custodian'
-            },
-            {
-            	anchor     : '95%',
-            	itemId     : 'drillingdate-field',
+                anchor     : '95%',
+                itemId     : 'drillingdate-field',
                 xtype      : 'textfield',
                 fieldLabel : 'Date',
                 name       : 'dateOfDrilling'
-            }
+            },
+            serviceCombo
             ]
         }]
-	});
+    });
     //return thePanel;
 };
 

@@ -1,8 +1,6 @@
 package org.auscope.portal.server.domain.wcs;
 
 
-import javax.xml.xpath.XPath;
-
 import org.w3c.dom.Node;
 
 /**
@@ -12,10 +10,11 @@ import org.w3c.dom.Node;
  */
 public class SingleValue implements ValueEnumType {
 
+    private static final long serialVersionUID = 1L;
     private String type;
     private String value;
 
-    public SingleValue(Node node, XPath xPath) throws Exception {
+    public SingleValue(Node node) throws Exception {
         type = node.getLocalName();
         value = node.getTextContent();
     }

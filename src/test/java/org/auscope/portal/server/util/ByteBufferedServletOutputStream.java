@@ -13,13 +13,13 @@ import javax.servlet.ServletOutputStream;
 public class ByteBufferedServletOutputStream extends ServletOutputStream {
 
     private ByteArrayOutputStream stream;
-    
+
     public ByteBufferedServletOutputStream(int length) {
         super();
-        
+
         stream = new ByteArrayOutputStream(length);
     }
-    
+
     @Override
     public void write(int b) throws IOException {
         stream.write(b);
@@ -27,5 +27,9 @@ public class ByteBufferedServletOutputStream extends ServletOutputStream {
 
     public byte[] toByteArray() {
         return stream.toByteArray();
+    }
+
+    public ByteArrayOutputStream getStream(){
+        return this.stream;
     }
 }

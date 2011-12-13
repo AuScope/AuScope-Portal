@@ -15,6 +15,7 @@ import javax.xml.xpath.XPathFactory;
 
 import junit.framework.Assert;
 
+import org.auscope.portal.PortalTestClass;
 import org.auscope.portal.Util;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,21 +28,20 @@ import org.xml.sax.SAXException;
  * Date: 30/03/2009
  * Time: 3:27:26 PM
  */
-public class TestMineralOccurrence {
+public class TestMineralOccurrence extends PortalTestClass {
 
     private static MineralOccurrence validMineralOccurrence;
     private static MineralOccurrence invalidMineralOccurrence;
 
     @BeforeClass
-    public static void setup() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
+    public static void setUp() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
         //create updateCSWRecords valid mineral occurrence
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true); // never forget this!
         DocumentBuilder builder = domFactory.newDocumentBuilder();
         Document mineralOccurrenceDocument = builder.parse(new ByteArrayInputStream(Util.loadXML("src/test/resources/mineralOccurrenceNodeValid.xml").getBytes("UTF-8")));
 
-        XPathFactory factory = XPathFactory.newInstance();
-        XPath xPath = factory.newXPath();
+        XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
         XPathExpression expr = xPath.compile("/er:MineralOccurrence");
@@ -82,12 +82,12 @@ public class TestMineralOccurrence {
                 "temperature range 50-7000C, generally below 4000C, pressure 1-3 kbar",
                 validMineralOccurrence.getMineralDepositGroup());
     }
-    
+
     @Test
     public void testGetCommodityDescriptionURNsValid() {
         ArrayList<String> URNs = new ArrayList<String>();
         URNs.add("urn:cgi:feature:PIRSA:MineralCommodity:394deposit:Au");
-        
+
         Assert.assertEquals(
                 "Commodity Description URN is: urn:cgi:feature:PIRSA:MineralCommodity:394deposit:Au",
                 URNs,

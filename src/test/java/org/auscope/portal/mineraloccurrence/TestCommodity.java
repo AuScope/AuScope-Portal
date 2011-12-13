@@ -14,6 +14,7 @@ import javax.xml.xpath.XPathFactory;
 
 import junit.framework.Assert;
 
+import org.auscope.portal.PortalTestClass;
 import org.auscope.portal.Util;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,21 +27,20 @@ import org.xml.sax.SAXException;
  * Date: 30/03/2009
  * Time: 3:14:31 PM
  */
-public class TestCommodity {
+public class TestCommodity extends PortalTestClass {
 
     private static Commodity validCommodity;
     private static Commodity invalidCommodity;
 
     @BeforeClass
-    public static void setup() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
+    public static void setUp() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
         //create updateCSWRecords valid commodity
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true); // never forget this!
         DocumentBuilder builder = domFactory.newDocumentBuilder();
         Document mineDocument = builder.parse(new ByteArrayInputStream(Util.loadXML("src/test/resources/commodityNodeValid.xml").getBytes("UTF-8")));
 
-        XPathFactory factory = XPathFactory.newInstance();
-        XPath xPath = factory.newXPath();
+        XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
         XPathExpression expr = xPath.compile("/er:Commodity");

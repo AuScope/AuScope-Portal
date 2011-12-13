@@ -11,7 +11,13 @@ import org.auscope.portal.mineraloccurrence.MineralOccurrenceFilter;
 import org.auscope.portal.mineraloccurrence.MineralOccurrencesResponseHandler;
 import org.auscope.portal.mineraloccurrence.MiningActivityFilter;
 import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.web.IWFSGetFeatureMethodMaker;
+import org.auscope.portal.server.domain.filter.IFilter;
+import org.auscope.portal.server.domain.wfs.WFSCountResponse;
+import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
+import org.auscope.portal.server.util.GmlToHtml;
+import org.auscope.portal.server.util.GmlToKml;
+import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
+import org.auscope.portal.server.web.WFSGetFeatureMethodMaker.ResultType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,184 +27,106 @@ import org.springframework.stereotype.Service;
  * @version $Id$
  */
 @Service
-public class MineralOccurrenceService {
+public class MineralOccurrenceService extends BaseWFSService {
 
     // -------------------------------------------------------------- Constants
 
-    protected final Log log = LogFactory.getLog(getClass());
+    private final Log log = LogFactory.getLog(getClass());
+    public static final String MINE_FEATURE_TYPE = "er:MiningFeatureOccurrence";
+    public static final String MINERAL_OCCURRENCE_FEATURE_TYPE = "gsml:MappedFeature";
+    public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";
 
     // ----------------------------------------------------- Instance variables
 
-    private HttpServiceCaller httpServiceCaller;
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
-    private IWFSGetFeatureMethodMaker methodMaker;
 
 
     // ----------------------------------------------------------- Constructors
 
-/*
-    public MineralOccurrenceService() {
-log.info(".......default C'tor");
-        this.httpServiceCaller = new HttpServiceCaller();
-        this.mineralOccurrencesResponseHandler = new MineralOccurrencesResponseHandler();
-        this.methodMaker = new WFSGetFeatureMethodMakerPOST();
-    }
-*/
     @Autowired
-    public MineralOccurrenceService( HttpServiceCaller httpServiceCaller,
+    public MineralOccurrenceService(HttpServiceCaller httpServiceCaller,
                                      MineralOccurrencesResponseHandler respHandler,
-                                     IWFSGetFeatureMethodMaker methodMaker ) {
-        this.httpServiceCaller = httpServiceCaller;
+                                     WFSGetFeatureMethodMaker methodMaker,
+                                     GmlToKml gmlToKml,
+                                     GmlToHtml gmlToHtml) {
+        super(httpServiceCaller, methodMaker, gmlToKml, gmlToHtml);
         this.mineralOccurrencesResponseHandler = respHandler;
-        this.methodMaker = methodMaker;
-    }
-
-
-    // ------------------------------------------- Property Setters and Getters
-
-    /**
-     * Get all the mines from a given service url and return them as Mine objects
-     *
-     * @param serviceURL - the service to get all of the mines from
-     * @return a collection (List) of mine nodes
-     * @throws Exception
-     */
-    public List<Mine> getAllMines(String serviceURL, int maxFeatures) throws Exception {
-        //get the mines
-    	HttpMethodBase method = this.getAllMinesGML(serviceURL, maxFeatures);
-        String mineResponse = this.httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-
-        //convert the response into a nice collection of Mine Nodes
-        List<Mine> mines = this.mineralOccurrencesResponseHandler.getMines(mineResponse);
-        //send it back!
-        return mines;
     }
 
     /**
-     * Get all the mines from a given service url that lie within the bounding box
-     * and return them as Mine objects. Limited to 200 response objects
-     *
-     * @param serviceURL - the service to get all of the mines from
-     * @return a collection (List) of mine nodes
-     * @throws Exception
-     */
-    public List<Mine> getAllVisibleMines(String serviceURL, FilterBoundingBox bbox, int maxFeatures) throws Exception {
-        //get the mines
-    	HttpMethodBase method = this.getAllVisibleMinesGML(serviceURL, bbox, maxFeatures);
-        String mineResponse = this.httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-
-        //convert the response into a nice collection of Mine Nodes
-        List<Mine> mines = this.mineralOccurrencesResponseHandler.getMines(mineResponse);
-        //send it back!
-        return mines;
-    }
-
-    /**
-     * Similar to getAllMinesGML this returns all mines but filters so they appear in the specified bounding box (response limited to 200 results)
-     * @param serviceURL
-     * @param bboxSrs
-     * @param lowerCornerPoints
-     * @param upperCornerPoints
+     * Utility for turning a filter and optional bounding box into a OGC filter string
+     * @param filter The filter
+     * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
-     * @throws Exception
      */
-    public HttpMethodBase getAllVisibleMinesGML(String serviceURL, FilterBoundingBox bbox, int maxFeatures) throws Exception {
-        MineFilter filter = new MineFilter("");
+    private String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
+        String filterString = null;
+        if (bbox == null) {
+            filterString = filter.getFilterStringAllRecords();
+        } else {
+            filterString = filter.getFilterStringBoundingBox(bbox);
+        }
 
-        log.debug("Mine query... url:" + serviceURL);
-        log.trace("Mine query... filter:" + filter.getFilterStringBoundingBox(bbox));
+        log.trace(filterString);
 
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", filter.getFilterStringBoundingBox(bbox), maxFeatures,  bbox.getBboxSrs());
-
-        //return httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        return filterString;
     }
 
     /**
-     * Given a specific service and a mineName, get that mine from the service
-     * @param  serviceURL - the service to get the mine from
-     * @param  mineName - the name of the mine to get
-     * @return the list collection of Mine node objects
-     */
-    public List<Mine> getMineWithSpecifiedName(String serviceURL, String mineName, int maxFeatures) throws Exception {
-        //get the mine
-    	HttpMethodBase method = this.getMineWithSpecifiedNameGML(serviceURL, mineName, maxFeatures);
-    	String mineResponse = this.httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        //convert the response into a collection of Mine Nodes
-        List<Mine> mines = this.mineralOccurrencesResponseHandler.getMines(mineResponse);
-
-        //send it back!
-        return mines;
-    }
-
-    /**
-     * Get all the mines from a given service url and return the response
-     * @param serviceURL
+     * Gets the GML/KML response for all mines matching the specified parameters
+     * @param serviceUrl a Web Feature Service URL
+     * @param mineName [Optional] The mine name to constrain the result set
+     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param maxFeatures The maximum number of features to request
      * @return
-     * @throws Exception
+     * @throws PortalServiceException
      */
-    public HttpMethodBase getAllMinesGML(String serviceURL, int maxFeatures) throws Exception {
-        MineFilter filter = new MineFilter("");
+    public WFSKMLResponse getMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException {
+        MineFilter filter = new MineFilter(mineName);
+        String filterString = generateFilterString(filter, bbox);
 
-        log.debug("Mine query... url:" + serviceURL);
-        log.trace("Mine query... filter: " + filter.getFilterStringAllRecords());
-        
-        //create a GetFeature request with an empty filter - get all
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", filter.getFilterStringAllRecords(), maxFeatures);
-
-        //call the service, and get all the mines
-       //return httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        HttpMethodBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        return getWfsResponseAsKml(serviceUrl, method);
     }
 
     /**
-     * Given a specific service and a mineName, get that mine from the service
-     *
-     * @param serviceURL
-     * @param mineName
+     * Gets the parsed Mine response for all mines matching the specified parameters
+     * @param serviceUrl a Web Feature Service URL
+     * @param mineName [Optional] The mine name to constrain the result set
+     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param maxFeatures The maximum number of features to request
      * @return
-     * @throws Exception
+     * @throws PortalServiceException
      */
-    public HttpMethodBase getMineWithSpecifiedNameGML(String serviceURL, String mineName, int maxFeatures) throws Exception {
-        //create a filter for the specified name
-        MineFilter mineFilter = new MineFilter(mineName);
+    public List<Mine> getMines(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException {
+        MineFilter filter = new MineFilter(mineName);
+        String filterString = generateFilterString(filter, bbox);
 
-        log.debug("Mine query... url:" + serviceURL);
-        log.trace("Mine query... filter:" + mineFilter.getFilterStringAllRecords());
-
-        //create a GetFeature request with filter constraints on a query
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", mineFilter.getFilterStringAllRecords(), maxFeatures);
-
-        //call the service, and get all the mines
-        //return httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        HttpMethodBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        try {
+            String response = httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
+            return mineralOccurrencesResponseHandler.getMines(response);
+        } catch (Exception ex) {
+            throw new PortalServiceException(method, ex);
+        }
     }
 
     /**
-     * Given a specific service and a mineName, get that mine from the service (that lie within the bbox)
-     *
-     * Limited to 200 results
-     *
-     * @param serviceURL
-     * @param mineName
+     * Gets the count of all mines matching the specified parameters
+     * @param serviceUrl a Web Feature Service URL
+     * @param mineName [Optional] The mine name to constrain the result set
+     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param maxFeatures The maximum number of features to request
      * @return
-     * @throws Exception
+     * @throws PortalServiceException
      */
-    public HttpMethodBase getVisibleMineWithSpecifiedNameGML(String serviceURL, String mineName, int maxFeatures, FilterBoundingBox bbox) throws Exception {
-        //create a filter for the specified name
-        MineFilter mineFilter = new MineFilter(mineName);
+    public WFSCountResponse getMinesCount(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException {
+        MineFilter filter = new MineFilter(mineName);
+        String filterString = generateFilterString(filter, bbox);
 
-        log.debug("Mine query... url:" + serviceURL);
-        log.trace("Mine query... filter:" + mineFilter.getFilterStringBoundingBox(bbox));
-
-        //create a GetFeature request with filter constraints on a query
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", mineFilter.getFilterStringBoundingBox(bbox), maxFeatures, bbox.getBboxSrs());
-
-        //call the service, and get all the mines
-        //return httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        HttpMethodBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        return getWfsFeatureCount(method);
     }
-
 
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
@@ -211,42 +139,33 @@ log.info(".......default C'tor");
      * @param minCommodityAmountUOM
      * @param cutOffGrade
      * @param cutOffGradeUOM
+     * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
      */
-    public HttpMethodBase  getMineralOccurrenceGML( String serviceURL,
+    public WFSKMLResponse getMineralOccurrenceGml(String serviceURL,
                                            String commodityName,
                                            String measureType,
                                            String minOreAmount,
                                            String minOreAmountUOM,
                                            String minCommodityAmount,
                                            String minCommodityAmountUOM,
-                                           int maxFeatures
-                                           ) throws Exception {
+                                           int maxFeatures,
+                                           FilterBoundingBox bbox) throws PortalServiceException {
 
-        MineralOccurrenceFilter mineralOccurrenceFilter
-            = new MineralOccurrenceFilter( commodityName,
+        MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,
                                            measureType,
                                            minOreAmount,
                                            minOreAmountUOM,
                                            minCommodityAmount,
-                                           minCommodityAmountUOM
-                                           );
+                                           minCommodityAmountUOM);
 
-        log.debug("Mineral Occurence query... url:" + serviceURL);
-        log.trace("Mineral Occurence query... filter:" + mineralOccurrenceFilter.getFilterStringAllRecords());
-
-        log.debug("\n" + serviceURL + "\n" + mineralOccurrenceFilter.getFilterStringAllRecords());
-
-        //create the method
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "gsml:MappedFeature", mineralOccurrenceFilter.getFilterStringAllRecords(), maxFeatures);
-
-        //return httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        String filterString = generateFilterString(filter, bbox);
+        HttpMethodBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        return getWfsResponseAsKml(serviceURL, method);
     }
 
     /**
-     * Given a list of parameters, call a service and get the Mineral Occurrence GML for
-     * all occurences that lie within the bbox (limited to 200 results)
+     * Given a list of parameters, call a service and get the count of Mineral Occurrence GML
      * @param serviceURL
      * @param commodityName
      * @param measureType
@@ -256,9 +175,10 @@ log.info(".......default C'tor");
      * @param minCommodityAmountUOM
      * @param cutOffGrade
      * @param cutOffGradeUOM
+     * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
      */
-    public HttpMethodBase getVisibleMineralOccurrenceGML( String serviceURL,
+    public WFSCountResponse getMineralOccurrenceCount(String serviceURL,
                                            String commodityName,
                                            String measureType,
                                            String minOreAmount,
@@ -266,32 +186,37 @@ log.info(".......default C'tor");
                                            String minCommodityAmount,
                                            String minCommodityAmountUOM,
                                            int maxFeatures,
-                                           FilterBoundingBox bbox
-                                           
-                                           ) throws Exception {
+                                           FilterBoundingBox bbox) throws PortalServiceException {
 
-        MineralOccurrenceFilter mineralOccurrenceFilter
-            = new MineralOccurrenceFilter( commodityName,
+        MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,
                                            measureType,
                                            minOreAmount,
                                            minOreAmountUOM,
                                            minCommodityAmount,
-                                           minCommodityAmountUOM );
+                                           minCommodityAmountUOM);
 
-        log.debug("Mineral Occurence query... url:" + serviceURL);
-        log.trace("Mineral Occurence query... filter:" + mineralOccurrenceFilter.getFilterStringBoundingBox(bbox));
-
-
-        //create the method
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "gsml:MappedFeature", mineralOccurrenceFilter.getFilterStringBoundingBox(bbox), maxFeatures, bbox.getBboxSrs());
-
-        //run the dam query
-        //return httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        String filterString = generateFilterString(filter, bbox);
+        HttpMethodBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        return getWfsFeatureCount(method);
     }
 
 
-    public HttpMethodBase getMiningActivityGML( String serviceURL,
+    /**
+     * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
+     * @param serviceURL
+     * @param mineName
+     * @param startDate
+     * @param endDate
+     * @param oreProcessed
+     * @param producedMaterial
+     * @param cutOffGrade
+     * @param production
+     * @param maxFeatures
+     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @return
+     * @throws Exception
+     */
+    public WFSKMLResponse getMiningActivityGml(String serviceURL,
                                         String mineName,
                                         String startDate,
                                         String endDate,
@@ -299,47 +224,50 @@ log.info(".......default C'tor");
                                         String producedMaterial,
                                         String cutOffGrade,
                                         String production,
-                                        int maxFeatures
+                                        int maxFeatures,
+                                        FilterBoundingBox bbox
                                         ) throws Exception {
 
         //create the filter
-        MiningActivityFilter miningActivityFilter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        String filterString = generateFilterString(filter, bbox);
 
-        log.debug("Mining Activity query... url:" + serviceURL);
-        log.trace("Mining Activity query... filter:" + miningActivityFilter.getFilterStringAllRecords());
-
-        //create the method
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", miningActivityFilter.getFilterStringAllRecords(), maxFeatures);
-        log.debug("After methodMaker.makeMethod");
-        //run dat query
-        //return this.httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        HttpMethodBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        return getWfsResponseAsKml(serviceURL, method);
     }
 
-    public HttpMethodBase getVisibleMiningActivityGML( String serviceURL,
-            String mineName,
-            String startDate,
-            String endDate,
-            String oreProcessed,
-            String producedMaterial,
-            String cutOffGrade,
-            String production,
-            int maxFeatures,
-            FilterBoundingBox bbox
-            ) throws Exception {
+    /**
+     * Given a list of parameters, call a service and get the count of Mineral Activity features
+     * @param serviceURL
+     * @param mineName
+     * @param startDate
+     * @param endDate
+     * @param oreProcessed
+     * @param producedMaterial
+     * @param cutOffGrade
+     * @param production
+     * @param maxFeatures
+     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @return
+     * @throws Exception
+     */
+    public WFSCountResponse getMiningActivityCount(String serviceURL,
+                                        String mineName,
+                                        String startDate,
+                                        String endDate,
+                                        String oreProcessed,
+                                        String producedMaterial,
+                                        String cutOffGrade,
+                                        String production,
+                                        int maxFeatures,
+                                        FilterBoundingBox bbox
+                                        ) throws Exception {
 
         //create the filter
-        MiningActivityFilter miningActivityFilter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        String filterString = generateFilterString(filter, bbox);
 
-        log.debug("Mining Activity query... url:" + serviceURL);
-        log.trace("Mining Activity query... filter:" + miningActivityFilter.getFilterStringBoundingBox(bbox));
-
-
-        //create the method
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "er:MiningFeatureOccurrence", miningActivityFilter.getFilterStringBoundingBox(bbox), maxFeatures, bbox.getBboxSrs());
-
-        //run dat query
-        //return this.httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-        return method;
+        HttpMethodBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        return getWfsFeatureCount(method);
     }
 }

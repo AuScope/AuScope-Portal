@@ -4,17 +4,17 @@
  * @param {string} the service url for submit
  */
 
-NvclFilterForm = function(id) {
-	NvclFilterForm.superclass.constructor.call(this, id);
-	
-	var fieldSet = this.getComponent('borehole-fieldset');
+NvclFilterForm = function(id,activeLayersRecord) {
+    NvclFilterForm.superclass.constructor.call(this, id, activeLayersRecord);
+
+    var fieldSet = this.getComponent('borehole-fieldset');
     fieldSet.setTitle('NVCL Filter Properties');
-	this.add({
-	    itemId     : 'hylogger-field',
+    this.add({
+        itemId     : 'hylogger-field',
         xtype      : 'hidden',
         name       : 'onlyHylogger',
         value      : true
-	});
+    });
 };
 
 Ext.extend(NvclFilterForm, BoreholeFilterForm, {

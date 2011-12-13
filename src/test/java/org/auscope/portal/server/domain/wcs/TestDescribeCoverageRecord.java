@@ -3,10 +3,11 @@ package org.auscope.portal.server.domain.wcs;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import org.auscope.portal.PortalTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestDescribeCoverageRecord {
+public class TestDescribeCoverageRecord extends PortalTestClass {
 
 
 
@@ -48,7 +49,7 @@ public class TestDescribeCoverageRecord {
         for (ValueEnumType type : axisDesc.getValues()) {
             Assert.assertEquals("singleValue", type.getType());
 
-            SingleValue sv = (SingleValue) type;;
+            SingleValue sv = (SingleValue) type;
 
             Double.parseDouble(sv.getValue());
         }

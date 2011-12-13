@@ -22,20 +22,20 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 @Controller
-public class PressureDBController extends BaseWFSToKMLController {
-    
-    protected final Log log = LogFactory.getLog(getClass());
-    
+public class PressureDBController extends BasePortalController {
+
+    private final Log log = LogFactory.getLog(getClass());
+
     private PressureDBService pressureDBService;
-    
+
     @Autowired
     public PressureDBController(PressureDBService pressureDBService) {
         this.pressureDBService = pressureDBService;
     }
-    
+
     /**
-     * Handles requests for the getAvailableOM method 
-     * 
+     * Handles requests for the getAvailableOM method
+     *
      * Will return a JSON encoded AvailableOMResponse
      * @param serviceUrl
      * @param wellID
@@ -43,30 +43,29 @@ public class PressureDBController extends BaseWFSToKMLController {
      */
     @RequestMapping("/pressuredb-getAvailableOM.do")
     public ModelAndView getAvailableOM(String serviceUrl, String wellID) {
-        
+
         try {
            AvailableOMResponse response = pressureDBService.makeGetAvailableOMRequest(wellID, serviceUrl);
-           
-           
-           return makeModelAndView(true, "", new AvailableOMResponse[] {response});
+
+           return generateJSONResponseMAV(true, new AvailableOMResponse[] {response}, "");
         } catch (Exception e) {
             log.warn("Error making pressure-db service request", e);
-            return makeModelAndView(false, "Failure communicating with Pressure DB data service", null);
+            return generateJSONResponseMAV(false, null, "Failure communicating with Pressure DB data service");
         }
     }
-    
+
     /**
-     * Handles requests for the download method 
-     * 
+     * Handles requests for the download method
+     *
      * Will return a stream directly from the service
      * @param serviceUrl
      * @param wellID
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     @RequestMapping("/pressuredb-download.do")
     public void download(String serviceUrl, String wellID, String[] feature, HttpServletResponse response) throws IOException {
-        
+
         //Make our request and get our inputstream
         InputStream inputStream = null;
         try {
@@ -76,19 +75,19 @@ public class PressureDBController extends BaseWFSToKMLController {
             response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value());
             return;
         }
-        
+
         //pipe our input into our output
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition",String.format("inline; filename=PressureDB-%1$s.zip;", wellID));
         ServletOutputStream outputStream = response.getOutputStream();
         byte[] buffer = new byte[1024 * 5];
         int numRead;
-        while ( (numRead = inputStream.read(buffer)) >= 0) {
+        while ((numRead = inputStream.read(buffer)) >= 0) {
             outputStream.write(buffer, 0, numRead);
         }
         outputStream.flush();
         outputStream.close();
     }
-    
-    
+
+
 }

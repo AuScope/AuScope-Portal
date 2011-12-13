@@ -7,12 +7,42 @@
 <!-- ...then you need the Ext itself, either debug or production version. -->
 <script type="text/javascript" src="js/external/extjs/ext-all.js"></script>
 
+<!-- XML and XPath -->
+<script type="text/javascript" src="js/external/javeline/javeline_xpath.js"></script>
+<script type="text/javascript" src="js/xml/SimpleDOM.js"></script>
+<script type="text/javascript" src="js/xml/SimpleXPath.js"></script>
+
 <!-- ExtJS extensions -->
 <script type="text/javascript" src="js/external/extjs/ux/ux-all.js"></script>
-<script type="text/javascript" src="js/external/extjs/ux/form/ClientSearchField.js"></script>
-<script type="text/javascript" src="js/external/extjs/ux/form/ClearableComboBox.js"></script>
+<script type="text/javascript" src="js/widgets/ClientSearchField.js"></script>
+<script type="text/javascript" src="js/widgets/ClearableComboBox.js"></script>
+<script type="text/javascript" src="js/widgets/LiveTextField.js"></script>
+<script type="text/javascript" src="js/widgets/LiveNumberField.js"></script>
+<script type="text/javascript" src="js/widgets/LinkLabel.js"></script>
+
+<script type="text/javascript" src="js/FileDownloader.js"></script>
+
+<script type="text/javascript" src="js/csw/CSWResourcesGrid.js"></script>
+<script type="text/javascript" src="js/csw/CSWMetadataPanel.js"></script>
+<script type="text/javascript" src="js/csw/CSWRecordMetadataWindow.js"></script>
+
+<script type="text/javascript" src="js/genericparser/knownlayerfactories/BaseFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/knownlayerfactories/NVCLFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/knownlayerfactories/PressureDBFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/factories/BaseFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/factories/GeologicUnitFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/factories/LocatedSpecimenFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/factories/BoreholeFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/factories/SamplingFeatureCollectionFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/factories/SimpleFactory.js"></script>
+<script type="text/javascript" src="js/genericparser/BaseComponent.js"></script>
+<script type="text/javascript" src="js/genericparser/KnownLayerParser.js"></script>
+<script type="text/javascript" src="js/genericparser/Parser.js"></script>
+<script type="text/javascript" src="js/genericparser/WFSParser.js"></script>
 
 <script type="text/javascript" src="js/external/extjs/epoly.js"></script>
+
+<script src="js/Clone.js" type="text/javascript"></script>
 
 <!-- Application javascript files -->
 
@@ -23,7 +53,7 @@
 <script src="js/geoscimlwfs/feature_types/location.js" type="text/javascript"></script>
 <script src="js/geoscimlwfs/feature_types/coordinates.js" type="text/javascript"></script>
 
-<!-- 
+<!--
 <script src="js/geoscimlwfs/feature_types/sampling_curve.js" type="text/javascript"></script>
 <script src="js/geoscimlwfs/feature_types/borehole.js" type="text/javascript"></script>
 -->
@@ -42,7 +72,23 @@
 <script src="js/geoscimlwfs/gzoom.js" type="text/javascript"></script>
 <script src="js/geoscimlwfs/station_group.js" type="text/javascript"></script>
 
+<!-- Bounding box selection -->
+<script src="js/external/MPolyDragControl/MPolyDragControl.js" type="text/javascript"></script>
+<script src="js/external/MPolyDragControl/MStatusControl.js" type="text/javascript"></script>
+<script src="js/external/MPolyDragControl/elabel.js" type="text/javascript"></script>
+
+<!-- CSW Theme Filter -->
+<script src="js/cswthemefilter/components/BaseComponent.js" type="text/javascript"></script>
+<script src="js/cswthemefilter/components/Keywords.js" type="text/javascript"></script>
+<script src="js/cswthemefilter/components/Spatial.js" type="text/javascript"></script>
+<script src="js/cswthemefilter/components/Text.js" type="text/javascript"></script>
+<script src="js/cswthemefilter/CSWThemeFilterForm.js" type="text/javascript"></script>
+<script src="js/cswthemefilter/CSWFilterResultsPanel.js" type="text/javascript"></script>
+<script src="js/cswthemefilter/MultiCSWFilterResultsPanel.js" type="text/javascript"></script>
+
 <!-- Page specific javascript -->
+<script src="js/FeatureDownloadManager.js" type="text/javascript"></script>
+<script src="js/AbstractRecordWrapper.js" type="text/javascript"></script>
 <script src="js/BaseFilterForm.js" type="text/javascript"></script>
 <script src="js/BoreholeFilterForm.js" type="text/javascript"></script>
 <script src="js/CSWRecord.js" type="text/javascript"></script>
@@ -76,7 +122,6 @@
 <script src="js/DebuggerData.js" type="text/javascript"></script>
 <script src="js/ReportsInfoWindow.js" type="text/javascript"></script>
 <script src="js/YilgarnGeochemistryFilterForm.js" type="text/javascript"></script>
-<script src="js/YilgarnGeoInfoWindow.js" type="text/javascript"></script>
 <script src="js/MapStateSerializer.js" type="text/javascript"></script>
 <script src="js/PermanentLinkWindow.js" type="text/javascript"></script>
 <script src="js/Base64.js" type="text/javascript"></script>
@@ -94,12 +139,6 @@
 <!-- WCS imports -->
 <script src="js/GenericOPeNDAPInfoWindow.js" type="text/javascript"></script>
 <script src="js/GenericWCSInfoWindow.js" type="text/javascript"></script>
-
-<!-- WFS imports -->
-<script src="js/wfs/nvcl/NvclInfoWindow.js" type="text/javascript"></script>
-<script src="js/wfs/PressureDbInfoWindow.js" type="text/javascript"></script>
-
-
 
 <!-- WMS imports -->
 <script src="js/wms/LegendManager.js" type="text/javascript"></script>

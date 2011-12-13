@@ -5,13 +5,15 @@ package org.auscope.portal.server.domain.opendap;
  * @author vot002
  *
  */
-public class SimpleAxis extends ViewVariable {
-    
+public class SimpleAxis extends AbstractViewVariable {
+
+    private static final long serialVersionUID = 1L;
+
     public static final String TYPE_STRING = "axis";
-    
+
     private SimpleBounds dimensionBounds;
     private SimpleBounds valueBounds;
-    
+
     public SimpleAxis(String name, String dataType, String units,
             SimpleBounds dimensionBounds, SimpleBounds valueBounds) {
         super();
@@ -54,6 +56,6 @@ public class SimpleAxis extends ViewVariable {
     public void setValueBounds(SimpleBounds valueBounds) {
         this.valueBounds = valueBounds;
     }
-    
-    
+
+
 }

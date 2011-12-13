@@ -15,7 +15,7 @@ public interface OPeNDAPGetDataMethodMaker {
         ASCII,
         DODS
     }
-    
+
     /**
      * Gets the HTTP Method that will make a get data request
      * @param opendapUrl The url to make the request to
@@ -24,5 +24,5 @@ public interface OPeNDAPGetDataMethodMaker {
      * @param constraints [Optional] The constraints to apply to the request.
      * @return
      */
-    public HttpMethodBase getMethod(String opendapUrl, OPeNDAPFormat format, NetcdfDataset ds, ViewVariable[] constraints) throws Exception;
+    public HttpMethodBase getMethod(String opendapUrl, OPeNDAPFormat format, NetcdfDataset ds, AbstractViewVariable[] constraints) throws Exception;
 }

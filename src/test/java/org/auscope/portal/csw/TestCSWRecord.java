@@ -1,109 +1,98 @@
 package org.auscope.portal.csw;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
-
-import org.auscope.portal.csw.CSWOnlineResource.OnlineResourceType;
+import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.csw.record.AbstractCSWOnlineResource;
+import org.auscope.portal.csw.record.AbstractCSWOnlineResource.OnlineResourceType;
+import org.auscope.portal.csw.record.CSWOnlineResourceImpl;
+import org.auscope.portal.csw.record.CSWRecord;
+import org.auscope.portal.server.web.service.CSWRecordsHostFilter;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
-public class TestCSWRecord {
+/**
+ * Unit tests for CSWRecord
+ * @author Josh Vote
+ *
+ */
+public class TestCSWRecord extends PortalTestClass  {
 
-    private CSWRecord[] records;
+    /**
+     * Tests that containsKeyword returns valid results
+     */
+    @Test
+    public void testContainsKeyword() {
+        CSWRecord record = new CSWRecord("serviceName", "fileId", "http://record.info", "Abstract", null, null);
 
-    @Before
-    public void setup() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        final String[] descriptiveKeywords = new String[] {"keyword1", "keyworda", "keywordX", null, "", "keyword$"};
+        record.setDescriptiveKeywords(descriptiveKeywords);
 
-        // load CSW record response document
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc =
-            builder.parse( "src/test/resources/cswRecordResponse.xml" );
-
-        CSWGetRecordResponse recResponse = new CSWGetRecordResponse(doc);
-        this.records = recResponse.getCSWRecords();
+        for (String kw : descriptiveKeywords) {
+            Assert.assertTrue(record.containsKeyword(kw));
+        }
     }
 
     @Test
-    public void testGetServiceName() throws XPathExpressionException {
+    public void testContainsAnyOnlineResource() throws MalformedURLException {
+        final AbstractCSWOnlineResource[] emptyOnlineResources = new AbstractCSWOnlineResource[] {};
+        final AbstractCSWOnlineResource[] nullOnlineResources = null;
+        final AbstractCSWOnlineResource[] fullOnlineResources = new AbstractCSWOnlineResource[] {
+                new CSWOnlineResourceImpl(new URL("http://example.com"), "wfs", "or1", "or1"),
+                new CSWOnlineResourceImpl(new URL("http://example.com"), "wfs", "or2", "or2"),
+                new CSWOnlineResourceImpl(new URL("http://example.com"), "wms", "or3", "or3"),
+                null,
+                new CSWOnlineResourceImpl(new URL("http://example.com"), "unknown", "or4", "or4"),
+        };
+        CSWRecord record = new CSWRecord("serviceName", "fileId", "http://record.info", "Abstract", null, null);
 
-        Assert.assertEquals(
-                "GSV GeologicUnit WFS",
-                this.records[0].getServiceName());
+        record.setOnlineResources(emptyOnlineResources);
+        Assert.assertFalse(record.containsAnyOnlineResource());
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WCS));
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WFS));
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WMS));
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WMS, AbstractCSWOnlineResource.OnlineResourceType.WFS, AbstractCSWOnlineResource.OnlineResourceType.WCS));
 
-        Assert.assertEquals(
-                "PIRSA EarthResource GeoServer WFS",
-                this.records[2].getServiceName());
+        record.setOnlineResources(nullOnlineResources);
+        Assert.assertFalse(record.containsAnyOnlineResource());
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WCS));
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WFS));
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WMS));
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WMS, AbstractCSWOnlineResource.OnlineResourceType.WFS, AbstractCSWOnlineResource.OnlineResourceType.WCS));
+
+        record.setOnlineResources(fullOnlineResources);
+        Assert.assertFalse(record.containsAnyOnlineResource());
+        Assert.assertFalse(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WCS));
+        Assert.assertTrue(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WFS));
+        Assert.assertTrue(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WMS));
+        Assert.assertTrue(record.containsAnyOnlineResource(AbstractCSWOnlineResource.OnlineResourceType.WMS, AbstractCSWOnlineResource.OnlineResourceType.WFS, AbstractCSWOnlineResource.OnlineResourceType.WCS));
     }
 
     @Test
-    public void testGetServiceUrl() throws XPathExpressionException {
+    public void testGetOnlineResourcesByType() throws MalformedURLException {
+        final AbstractCSWOnlineResource[] fullOnlineResources = new AbstractCSWOnlineResource[] {
+                new CSWOnlineResourceImpl(new URL("http://example.com/test2"), "wfs", "or1", "or1"),
+                new CSWOnlineResourceImpl(new URL("http://example2.com/test3"), "wfs", "or2", "or2"),
+                new CSWOnlineResourceImpl(new URL("http://example2.com/test4"), "wms", "or3", "or3"),
+                new CSWOnlineResourceImpl(new URL("http://example2.com/test4"), "wms", "or4", "or4"),
+                null,
+                new CSWOnlineResourceImpl(new URL("http://example.com"), "unknown", "or4", "or4"),
+        };
+        CSWRecord record = new CSWRecord("serviceName", "fileId", "http://record.info", "Abstract", null, null);
+        record.setOnlineResources(fullOnlineResources);
 
-        CSWOnlineResource[] resources = this.records[4].getOnlineResourcesByType(OnlineResourceType.WFS);
-        Assert.assertEquals(1, resources.length);
-        Assert.assertEquals(
-                "http://auscope-services-test.arrc.csiro.au/deegree-wfs/services?",
-                resources[0].getLinkage().toString());
+        AbstractCSWOnlineResource[]result=record.getOnlineResourcesByType(OnlineResourceType.WFS);
+        Assert.assertEquals(2, result.length);
 
-        resources = this.records[7].getOnlineResourcesByType(OnlineResourceType.WFS);
-        Assert.assertEquals(1, resources.length);
-        Assert.assertEquals(
-                "http://auscope-services-test.arrc.csiro.au:80/geodesy/wfs?",
-                resources[0].getLinkage().toString());
-    }
+        result=record.getOnlineResourcesByType(new CSWRecordsHostFilter("http://example.com"),OnlineResourceType.WFS);
+        Assert.assertEquals(1, result.length);
 
-    @Test
-    public void testMultipleOnlineResources() throws Exception {
-        CSWOnlineResource[] resources = this.records[14].getOnlineResources();
-        Assert.assertEquals(2, resources.length);
+        result=record.getOnlineResourcesByType(new CSWRecordsHostFilter("http://example2.com"),OnlineResourceType.WMS);
+        Assert.assertEquals(2, result.length);
 
-        resources = this.records[14].getOnlineResourcesByType(OnlineResourceType.WCS);
-        Assert.assertEquals(1, resources.length);
-        Assert.assertEquals("http://apacsrv6/thredds/wcs/galeon/ocean.nc", resources[0].getLinkage().toString());
-
-        resources = this.records[14].getOnlineResourcesByType(OnlineResourceType.WMS);
-        Assert.assertEquals(1, resources.length);
-        Assert.assertEquals("http://apacsrv6/thredds/wms/galeon/ocean.nc", resources[0].getLinkage().toString());
-
-        resources = this.records[14].getOnlineResourcesByType();
-        Assert.assertEquals(0, resources.length);
-        resources = this.records[14].getOnlineResourcesByType(OnlineResourceType.WCS, OnlineResourceType.WMS);
-        Assert.assertEquals(2, resources.length);
-        resources = this.records[14].getOnlineResourcesByType(OnlineResourceType.WCS, OnlineResourceType.WMS, OnlineResourceType.WFS);
-        Assert.assertEquals(2, resources.length);
-        resources = this.records[14].getOnlineResourcesByType(OnlineResourceType.Unsupported);
-        Assert.assertEquals(0, resources.length);
-
-        Assert.assertTrue(this.records[14].containsAnyOnlineResource(OnlineResourceType.WCS));
-        Assert.assertTrue(this.records[14].containsAnyOnlineResource(OnlineResourceType.WMS));
-        Assert.assertTrue(this.records[14].containsAnyOnlineResource(OnlineResourceType.WCS, OnlineResourceType.WMS));
-        Assert.assertTrue(this.records[14].containsAnyOnlineResource(OnlineResourceType.WCS, OnlineResourceType.WMS, OnlineResourceType.WFS));
-        Assert.assertFalse(this.records[14].containsAnyOnlineResource(OnlineResourceType.WFS));
-        Assert.assertFalse(this.records[14].containsAnyOnlineResource(OnlineResourceType.WFS, OnlineResourceType.Unsupported));
-    }
-
-    @Test
-    public void testGeographicBoundingBoxParsing() throws Exception {
-    	CSWGeographicElement[] geoEls = this.records[0].getCSWGeographicElements();
-
-    	Assert.assertNotNull(geoEls);
-    	Assert.assertEquals(1, geoEls.length);
-    	Assert.assertTrue(geoEls[0] instanceof CSWGeographicBoundingBox);
-
-    	CSWGeographicBoundingBox bbox = (CSWGeographicBoundingBox)geoEls[0];
-
-    	Assert.assertEquals(145.00, bbox.getEastBoundLongitude(), 0.001);
-    	Assert.assertEquals(143.00, bbox.getWestBoundLongitude(), 0.001);
-    	Assert.assertEquals(-35.00, bbox.getNorthBoundLatitude(), 0.001);
-    	Assert.assertEquals(-39.00, bbox.getSouthBoundLatitude(), 0.001);
+        result=record.getOnlineResourcesByType(new CSWRecordsHostFilter("http://example2.com"),OnlineResourceType.WFS);
+        Assert.assertEquals(1, result.length);
     }
 
 }

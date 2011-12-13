@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.csw.CSWGeographicBoundingBox;
+import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.csw.record.CSWGeographicBoundingBox;
 import org.auscope.portal.server.domain.wcs.DescribeCoverageRecord;
 import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.server.web.IWCSDescribeCoverageMethodMaker;
@@ -22,20 +23,11 @@ import org.auscope.portal.server.web.WCSDescribeCoverageMethodMakerGET;
 import org.auscope.portal.server.web.WCSGetCoverageMethodMakerGET;
 import org.auscope.portal.server.web.service.HttpServiceCaller;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-public class TestWCSController {
-
-    /**
-     * JMock context
-     */
-    private Mockery context = new Mockery() {{
-        setImposteriser(ClassImposteriser.INSTANCE);
-    }};
+public class TestWCSController extends PortalTestClass {
 
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private IWCSGetCoverageMethodMaker mockGetMethodMaker = context.mock(WCSGetCoverageMethodMakerGET.class);
@@ -84,16 +76,16 @@ public class TestWCSController {
                     with(any(String.class)),
                     with(any(CSWGeographicBoundingBox.class)),
                     with(any(String.class)),
-                    with(any(Map.class)));will(returnValue(mockMethod));
+                    with(any(Map.class))); will(returnValue(mockMethod));
 
             //There MUST be a call to release connection
             oneOf(mockMethod).releaseConnection();
 
             //This will return an input stream to our fake geotiff data
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(new ByteArrayInputStream(dataToBeReturned)));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)), with(any(HttpClient.class))); will(returnValue(new ByteArrayInputStream(dataToBeReturned)));
 
             //This is so we can inject our own fake output stream so we can inspect the result
-            oneOf(mockResponse).getOutputStream();will(returnValue(outStream));
+            oneOf(mockResponse).getOutputStream(); will(returnValue(outStream));
             oneOf(mockResponse).setContentType("application/zip");
             allowing(mockResponse).setHeader(with(any(String.class)), with(any(String.class)));
 
@@ -158,7 +150,7 @@ public class TestWCSController {
         final double southBoundLat = -0.2;
         final double eastBoundLng = 0.3;
         final double westBoundLng = -0.4;
-        final byte[] geotiffData = new byte[] {0,1,2};
+        final byte[] geotiffData = new byte[] {0, 1, 2};
         final String[] timePositions = null;
         final String timePeriodFrom = null;
         final String timePeriodTo = null;
@@ -207,12 +199,13 @@ public class TestWCSController {
         final double southBoundLat = -0.2;
         final double eastBoundLng = 0.3;
         final double westBoundLng = -0.4;
-        final byte[] geotiffData = new byte[] {0,1,2};
+        final byte[] geotiffData = new byte[] {0, 1, 2};
         final String[] timePositions = null;
         final String timePeriodFrom = null;
         final String timePeriodTo = null;
         final String timePeriodResolution = null;
         final String[] customParamValue = null;
+        final double precision = 0.00001;
 
         setupWCSDownloadAsZip(geotiffData);
 
@@ -226,10 +219,10 @@ public class TestWCSController {
                     CSWGeographicBoundingBox bbox, String timeConstraint,
                     Map<String, String> customParams) throws Exception {
 
-                Assert.assertEquals(northBoundLat, bbox.getNorthBoundLatitude(), 0.00001);
-                Assert.assertEquals(southBoundLat, bbox.getSouthBoundLatitude(), 0.00001);
-                Assert.assertEquals(eastBoundLng, bbox.getEastBoundLongitude(), 0.00001);
-                Assert.assertEquals(westBoundLng, bbox.getWestBoundLongitude(), 0.00001);
+                Assert.assertEquals(northBoundLat, bbox.getNorthBoundLatitude(), precision);
+                Assert.assertEquals(southBoundLat, bbox.getSouthBoundLatitude(), precision);
+                Assert.assertEquals(eastBoundLng, bbox.getEastBoundLongitude(), precision);
+                Assert.assertEquals(westBoundLng, bbox.getWestBoundLongitude(), precision);
 
                 return mockGetMethodMaker.makeMethod(serviceUrl, layerName,
                         format, outputCrs, outputWidth, outputHeight,
@@ -274,7 +267,7 @@ public class TestWCSController {
         final String timePeriodTo = null;
         final String timePeriodResolution = null;
         final String[] customParams = null;
-        final byte[] netCdfData = new byte[] {4,1,2};
+        final byte[] netCdfData = new byte[] {4, 1, 2};
 
         setupWCSDownloadAsZip(netCdfData);
 
@@ -322,9 +315,8 @@ public class TestWCSController {
             //Our method maker call should be passed all the correct variables
             oneOf(mockDescribeMethodMaker).makeMethod(
                     with(serviceUrl),
-                    with(layerName));will(returnValue(mockMethod));
-
-            oneOf(mockMethod).getResponseBodyAsString();will(returnValue(xmlResponse));
+                    with(layerName));
+            will(returnValue(mockMethod));
 
             oneOf(mockServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(xmlResponse));
             oneOf(mockServiceCaller).getHttpClient();
@@ -338,34 +330,34 @@ public class TestWCSController {
 
         Assert.assertEquals(true, model.get("success"));
 
-        Assert.assertNotNull(model.get("records"));
-        Assert.assertEquals(1, ((DescribeCoverageRecord[]) model.get("records")).length);
-        Assert.assertNotNull(((DescribeCoverageRecord[]) model.get("records"))[0]);
+        Assert.assertNotNull(model.get("data"));
+        Assert.assertEquals(1, ((DescribeCoverageRecord[]) model.get("data")).length);
+        Assert.assertNotNull(((DescribeCoverageRecord[]) model.get("data"))[0]);
     }
 
     private class TimeComparatorMethodInterceptor implements IWCSGetCoverageMethodMaker {
 
-    	private String expectedTimeString;
+        private String expectedTimeString;
 
-    	public TimeComparatorMethodInterceptor(String expectedTimeString) {
-    		this.expectedTimeString = expectedTimeString;
-    	}
+        public TimeComparatorMethodInterceptor(String expectedTimeString) {
+            this.expectedTimeString = expectedTimeString;
+        }
 
-		@Override
-		public HttpMethodBase makeMethod(String serviceURL, String layerName,
-				String format, String outputCrs, int outputWidth,
-				int outputHeight, double outputResX, double outputResY,
-				String inputCrs, CSWGeographicBoundingBox bbox,
-				String timeConstraint, Map<String, String> customParams)
-				throws Exception {
+        @Override
+        public HttpMethodBase makeMethod(String serviceURL, String layerName,
+                String format, String outputCrs, int outputWidth,
+                int outputHeight, double outputResX, double outputResY,
+                String inputCrs, CSWGeographicBoundingBox bbox,
+                String timeConstraint, Map<String, String> customParams)
+                throws Exception {
 
-			Assert.assertEquals(expectedTimeString, timeConstraint);
+            Assert.assertEquals(expectedTimeString, timeConstraint);
 
-			return mockGetMethodMaker.makeMethod(serviceURL, layerName,
+            return mockGetMethodMaker.makeMethod(serviceURL, layerName,
                     format, outputCrs, outputWidth, outputHeight,
                     outputResX, outputResY, inputCrs, bbox, timeConstraint,
                     customParams);
-		}
+        }
 
     }
 
@@ -390,13 +382,6 @@ public class TestWCSController {
         setupWCSDownloadAsZip(geotiffData);
         inputTimes = new String[] {"2011-05-06 11:22:33 GMT"};
         methodInterceptor = new TimeComparatorMethodInterceptor("2011-05-06T11:22:33Z");
-        controller = new WCSController(mockServiceCaller, methodInterceptor, mockDescribeMethodMaker, mockHostConfigurer);
-        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, 256, 256, 0, 0, outputCrs, 0, 0, 0, 0, inputTimes, null, null,null, null, mockResponse);
-
-        //Test we can parse another timezone
-        setupWCSDownloadAsZip(geotiffData);
-        inputTimes = new String[] {"2010-03-04 12:22:33 WST"};
-        methodInterceptor = new TimeComparatorMethodInterceptor("2010-03-04T04:22:33Z");
         controller = new WCSController(mockServiceCaller, methodInterceptor, mockDescribeMethodMaker, mockHostConfigurer);
         controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, 256, 256, 0, 0, outputCrs, 0, 0, 0, 0, inputTimes, null, null,null, null, mockResponse);
 

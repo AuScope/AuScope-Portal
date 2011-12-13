@@ -129,111 +129,45 @@
    <!-- TEMPLATE FOR TRANSLATING Mining Activity -->
    <!-- ================================================================= -->
    <xsl:template match="gml:featureMember/er:MiningFeatureOccurrence | gml:featureMembers/er:MiningFeatureOccurrence" priority="100">
+        <xsl:variable name="coordinates">
+            <xsl:value-of select="./er:location/gml:Point/gml:pos" />
+        </xsl:variable>
 
-  	  <xsl:variable name="activity">
-         <xsl:value-of select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/@gml:id"/>
-      </xsl:variable>
+        <xsl:variable name="mineName">
+            <xsl:value-of select="./er:specification/er:Mine/er:mineName/er:MineName[./er:isPreferred = true()]/er:mineName/text()" />
+        </xsl:variable>
 
-      <xsl:if test="$activity">
+        <xsl:variable name="mineNameHrefLink">
+            <xsl:call-template name="createHrefLink">
+                <xsl:with-param name="thisGmlName" select="./er:specification/er:Mine/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+                <xsl:with-param name="specification" select="./er:specification/er:Mine/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+                <xsl:with-param name="candidate1" select="''" />
+                <xsl:with-param name="candidate2">
+                    <xsl:value-of select="$serviceURL" /><![CDATA[service=WFS&version=1.1.0&request=GetFeature&typename=er:Mine&featureid=]]><xsl:value-of select="./er:specification./er:Mine/@gml:id" />
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
 
-	  <xsl:variable name="coordinates">
-	     <xsl:value-of select="./er:location/gml:Point/gml:pos"/>
-	  </xsl:variable>
+        <xsl:if test="$coordinates">
+            <Placemark>
+                <name>
+                    <xsl:value-of select="$mineName" />
+                </name>
+                <description>
+                    <xsl:call-template name="start-table"></xsl:call-template>
+                    <![CDATA[<tr><td>Name</td><td>]]><xsl:call-template name="make-wfspopup-url">
+                        <xsl:with-param name="friendly-name" select="./er:specification/er:Mine/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+                        <xsl:with-param name="real-url" select="$mineNameHrefLink" />
+                    </xsl:call-template><![CDATA[</td></tr>]]>
+                    <![CDATA[<tr><td>Preferred Name</td><td>]]><xsl:value-of select="$mineName" /><![CDATA[</td></tr>]]>
+                    <![CDATA[<tr><td>Location</td><td>]]><xsl:value-of select="$coordinates" /><![CDATA[</td></tr>]]>
+                    <![CDATA[<tr><td>Status</td><td>]]><xsl:value-of select="./er:specification/er:Mine/er:status" /><![CDATA[</td></tr>]]>
+                    <![CDATA[</table></div>]]></description>
 
-	  <xsl:if test="$coordinates">
-
-	  	  <xsl:variable name="mineNameHrefLink">
-	         <xsl:call-template name="createHrefLink">
-	            <xsl:with-param name="thisGmlName" select="gml:id"/>
-	            <xsl:with-param name="specification" select="gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-	            <xsl:with-param name="candidate1" select="''"/>
-	            <xsl:with-param name="candidate2" select="''"/>
-	         </xsl:call-template>
-	      </xsl:variable>
-
-	      <xsl:variable name="count">
-	         <xsl:value-of select="count(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity)"/>
-	      </xsl:variable>
-
-	      <xsl:variable name="minStartDate">
-	        <xsl:for-each select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin/gml:TimeInstant/gml:timePosition">
-            <xsl:sort select="." data-type="text" order="ascending"/>
-	        <xsl:if test="position()=1">
-	      	  <xsl:value-of select="."/>
-	        </xsl:if>
-	        </xsl:for-each>
-	      </xsl:variable>
-
-	      <xsl:variable name="maxEndDate">
-	        <xsl:for-each select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition">
-            <xsl:sort select="." data-type="text" order="descending"/>
-	        <xsl:if test="position()=1">
-	      	  <xsl:value-of select="."/>
-	        </xsl:if>
-	        </xsl:for-each>
-	      </xsl:variable>
-
-         <Placemark>
-            <name><xsl:value-of select="@gml:id"/></name>
-            <description>
-               <xsl:call-template name="start-table"></xsl:call-template>
-               <![CDATA[<tr><td>Id</td><td>]]>
-                   <xsl:call-template name="make-wfspopup-url">
-                      <xsl:with-param name="friendly-name" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-                      <xsl:with-param name="real-url" select="$mineNameHrefLink"/>
-                   </xsl:call-template>
-               <![CDATA[</td>]]>
-               <![CDATA[</tr><tr><td>Location</td><td>]]><xsl:value-of select="$coordinates"/><![CDATA[</td>]]>
-               <![CDATA[</tr><tr><td>Mining Activity Count</td><td>]]><xsl:value-of select="$count"/><![CDATA[</td>]]>
-               <![CDATA[</tr><tr><td>Earliest Start Date</td><td>]]><xsl:value-of select="$minStartDate"/><![CDATA[</td>]]>
-               <![CDATA[</tr><tr><td>Latest End Date</td><td>]]><xsl:value-of select="$maxEndDate"/><![CDATA[</td>]]>
-               <![CDATA[<tr><td>Product</td><td>]]>
-               <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:productName/gsml:CGI_TermValue/gsml:value" group-by=".">
-	          	   <xsl:value-of select="."/><xsl:if test="position() != last()"><![CDATA[, ]]></xsl:if>
-               </xsl:for-each-group>
-               <![CDATA[</td>]]>
-               <![CDATA[</tr><tr><td>Activity Type</td><td>]]>
-               <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:activityType" group-by=".">
-	          	   <xsl:value-of select="."/><xsl:if test="position() != last()"><![CDATA[, ]]></xsl:if>
-			   </xsl:for-each-group>
-			   <![CDATA[</td></tr>]]>
-               <![CDATA[<tr><td>Commodity(s)</td><td>]]>
-
-               <xsl:choose>
-               <xsl:when test="exists(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:sourceCommodity/er:Commodity)">
-                   <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:sourceCommodity/er:Commodity" group-by=".">
-			           <xsl:call-template name="make-wfspopup-url">
-                           <xsl:with-param name="friendly-name" select="gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-                           <xsl:with-param name="real-url" select="$mineNameHrefLink"/>
-                       </xsl:call-template><xsl:if test="position() != last()"><![CDATA[, ]]></xsl:if>
-			       </xsl:for-each-group>
-			   </xsl:when>
-			   <xsl:when test="exists(./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:sourceCommodity/@xlink:href)">
-			   <xsl:for-each-group select="./er:specification/er:Mine/er:relatedActivity/er:MiningActivity/er:producedMaterial/er:Product/er:sourceCommodity/@xlink:href" group-by=".">
-			       <xsl:choose>
-			           <xsl:when test="starts-with(., 'http')">
-		                   <xsl:call-template name="make-wfspopup-url">
-                               <xsl:with-param name="friendly-name" select="."/>
-                               <xsl:with-param name="real-url" select="."/>
-                           </xsl:call-template><xsl:if test="position() != last()"><![CDATA[, ]]></xsl:if>
-	               	   </xsl:when>
-	               	   <xsl:otherwise>
-		               	   <xsl:value-of select="."/><xsl:if test="position() != last()"><![CDATA[, ]]></xsl:if>
-	               	   </xsl:otherwise>
-               		</xsl:choose>
-			   </xsl:for-each-group>
-			   </xsl:when>
-			   </xsl:choose>
-
-			   <![CDATA[</td></tr>]]>
-	           <![CDATA[</table></div>]]>
-            </description>
-            <xsl:apply-templates select="./descendant::gml:Point"/>
-         </Placemark>
-
-      </xsl:if>
-      </xsl:if>
-   </xsl:template>
+                <xsl:apply-templates select="./descendant::gml:Point" />
+            </Placemark>
+        </xsl:if>
+    </xsl:template>
 
 
 
@@ -425,132 +359,29 @@
       </Placemark>
    </xsl:template>
 
-
-   <!-- TEMPLATE FOR TRANSLATING NVCL -->
-   <!-- ================================================================= -->
-   <xsl:template match="gml:featureMembers/gsml:Borehole" priority="100">
-
-      <xsl:variable name="coordinates">
-         <xsl:value-of select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:location/gml:Point/gml:pos"/>
-      </xsl:variable>
-
-      <xsl:variable name="rawId">
-         <xsl:value-of select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-      </xsl:variable>
-
-      <xsl:variable name="idTokens" select="tokenize($rawId, '/')"/>
-
-      <xsl:variable name="clickyName">
-            <xsl:call-template name="make-popup-url">
-                <xsl:with-param name="friendly-name" select="./gml:name[@codeSpace!='http://www.ietf.org/rfc/rfc2616']"/>
-                <xsl:with-param name="real-url" select="$rawId"/>
-            </xsl:call-template>
-      </xsl:variable>
-
-
-
-
-      <Placemark>
-         <name><xsl:value-of select="$idTokens[last()]"/></name>
-         <description>
-            <xsl:call-template name="start-table"></xsl:call-template>
-            <![CDATA[<tr><td>Borehole Name</td><td>]]><xsl:value-of select="$clickyName"/>
-            <![CDATA[</td></tr><tr><td>Location</td><td>]]><xsl:value-of select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:location/gml:Point/gml:pos"/>
-            <![CDATA[</td></tr><tr><td>Elevation (]]><xsl:value-of select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation/@uomLabels"/><![CDATA[)</td><td>]]><xsl:value-of select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation"/>
-            <![CDATA[</td></tr><tr><td>Start Depth (m)</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:coredInterval/gml:Envelope/gml:lowerCorner"/>
-            <![CDATA[</td></tr><tr><td>End Depth (m)</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:coredInterval/gml:Envelope/gml:upperCorner"/>
-            <![CDATA[</td></tr><tr><td>Core Custodian</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:coreCustodian/@xlink:title"/>
-            <![CDATA[</td></tr><tr><td>Drilling Co.</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:driller/@xlink:title"/>
-            <![CDATA[</td></tr><tr><td>Drilling Date</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"/>
-            <![CDATA[</td></tr><tr><td>Drilling Method</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:drillingMethod"/>
-            <![CDATA[</td></tr><tr><td>Inclination Type</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:inclinationType"/>
-            <![CDATA[</td></tr><tr><td>Start Point</td><td>]]><xsl:value-of select="./gsml:indexData/gsml:BoreholeDetails/gsml:startPoint"/>
-            <![CDATA[</td></tr></table></div>]]>
-         </description>
-
-         <xsl:apply-templates select="./gsml:collarLocation/gsml:BoreholeCollar/gsml:location/gml:Point"/>
-      </Placemark>
-   </xsl:template>
-
     <!--TEMPLATE FOR TRANSLATING A GENERIC INPUT-->
-	<!-- ================================================================= -->
-	<xsl:template match="gml:featureMembers/* | gml:featureMember/*" priority="1">
+    <!-- ================================================================= -->
+    <xsl:template match="gml:featureMembers/* | gml:featureMember/*" priority="1">
         <Placemark>
             <name>
                 <xsl:value-of select="@gml:id"/>
-	        </name>
+            </name>
 
-	        <!-- This is just a simple description of the node -->
-	        <description>
-	           <!--  This is to tell the JS to specifically search for this -->
-	           <xsl:text>GENERIC_PARSER:</xsl:text><xsl:value-of select="@gml:id"/>
-	        </description>
+            <!-- This is just a simple description of the node -->
+            <description>
+               <!--  This is to tell the JS to specifically search for this -->
+               <xsl:text>GENERIC_PARSER:</xsl:text><xsl:value-of select="@gml:id"/>
+            </description>
 
-	        <!-- This is so we can pickup where the node should be drawn -->
+            <!-- This is so we can pickup where the node should be drawn -->
             <MultiGeometry>
-	           <xsl:apply-templates select="./descendant::gml:Polygon"/>
-	           <xsl:apply-templates select="./descendant::gml:Multicurve"/>
-	           <xsl:apply-templates select="./descendant::gml:Point"/>
-	           <xsl:apply-templates select="./descendant::gml:MultiLineString"/>
-	        </MultiGeometry>
+               <xsl:apply-templates select="./descendant::gml:Polygon"/>
+               <xsl:apply-templates select="./descendant::gml:Multicurve"/>
+               <xsl:apply-templates select="./descendant::gml:Point"/>
+               <xsl:apply-templates select="./descendant::gml:MultiLineString"/>
+            </MultiGeometry>
         </Placemark>
-	</xsl:template>
-
-    <!-- TEMPLATE FOR TRANSLATING Yilgarn Geochemistry -->
-   <!-- ================================================================= -->
-   <xsl:template match="gml:featureMember/gsml:GeologicUnit | gml:featureMembers/gsml:GeologicUnit" priority="100">
-
-      <xsl:variable name="coordinates">
-         <xsl:value-of select="./gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point/gml:pos"/>
-      </xsl:variable>
-      <xsl:variable name="observationMethod">
-         <xsl:value-of select="./gsml:occurrence/gsml:MappedFeature/gsml:observationMethod/gsml:CGI_TermValue/gsml:value[@codeSpace='www.ietf.org/rfc/rfc1738']"/>
-      </xsl:variable>
-      <xsl:variable name="rockMaterial">
-         <xsl:value-of select="./gsml:composition/gsml:CompositionPart/gsml:material/gsml:RockMaterial/gsml:lithology/@xlink:href"/>
-      </xsl:variable>
-      <xsl:variable name="proportion">
-         <xsl:value-of select="./gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value"/>
-      </xsl:variable>
-     <Placemark>
-        <name><xsl:value-of select="@gml:id"/></name>
-        <description>
-           <xsl:text>featureId:</xsl:text><xsl:value-of select="@gml:id"/>
-           <xsl:call-template name="start-table"></xsl:call-template>
-           <![CDATA[<tr><td>Name</td><td>]]>
-           <xsl:call-template name="make-wfspopup-url">
-               <xsl:with-param name="friendly-name" select="@gml:id"/>
-               <xsl:with-param name="real-url">
-               <xsl:value-of select="$serviceURL"/><xsl:value-of select="$gsmlGeoUnitString"/><xsl:value-of select="@gml:id"/></xsl:with-param>
-           </xsl:call-template><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Location</td><td>]]>
-           <xsl:call-template name="swapLatLongCoord">
-               <xsl:with-param name="coordinates" select="./gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point"/>
-           </xsl:call-template><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Observation Method</td><td>]]>
-           <xsl:call-template name="make-popup-url">
-               <xsl:with-param name="friendly-name" select="$observationMethod"/>
-               <xsl:with-param name="real-url" select = "concat($vocab-hard-coded-lookupCGI,$observationMethod)"/>
-           </xsl:call-template><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Rock Material</td><td>]]>
-           <xsl:call-template name="make-popup-url">
-               <xsl:with-param name="friendly-name" select="$rockMaterial"/>
-               <xsl:with-param name="real-url" select = "concat($vocab-hard-coded-lookupCGI,$rockMaterial)"/>
-           </xsl:call-template><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Proportion</td><td>]]>
-           <xsl:call-template name="make-popup-url">
-               <xsl:with-param name="friendly-name" select="$proportion"/>
-               <xsl:with-param name="real-url" select = "concat($vocab-hard-coded-lookupCGI,$proportion)"/>
-           </xsl:call-template><![CDATA[</td></tr>]]>
-           <![CDATA[<tr><td>Weathering Description</td><td>]]><xsl:value-of select="./gsml:weatheringCharacter/gsml:WeatheringDescription/gsml:weatheringProduct/gsml:RockMaterial/gsml:lithology/@xlink:href"/><![CDATA[</td></tr>]]>
-           <![CDATA[</table></div>]]>
-        </description>
-
-        <xsl:apply-templates select="./gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point"/>
-     </Placemark>
-   </xsl:template>
-
-
+    </xsl:template>
 
    <!-- TEMPLATE FOR TRANSLATING GNSS -->
    <!-- ================================================================= -->
@@ -598,7 +429,7 @@
 
          <coordinates>
             <xsl:choose>
-            	<xsl:when test="starts-with(@srsName,'http://www.opengis.net/gml/srs/epsg.xml#4283')">
+                <xsl:when test="starts-with(@srsName,'http://www.opengis.net/gml/srs/epsg.xml#4283')">
                   <xsl:call-template name="parseLatLongCoord">
                      <xsl:with-param name="coordinates" select="$coordinates"/>
                   </xsl:call-template>
@@ -632,7 +463,7 @@
    <!-- ================================================================= -->
    <xsl:template match="gml:Polygon">
       <Polygon>
-		  <altitudeMode><xsl:text>clampToGround</xsl:text></altitudeMode>
+          <altitudeMode><xsl:text>clampToGround</xsl:text></altitudeMode>
          <xsl:apply-templates select="gml:exterior"/>
          <xsl:apply-templates select="gml:interior"/>
       </Polygon>
@@ -648,44 +479,44 @@
 
       <Style>
          <LineStyle>
-			   <color>ff004080</color>
-			</LineStyle>
-		</Style>
+               <color>ff004080</color>
+            </LineStyle>
+        </Style>
 
-		<LineString>
+        <LineString>
          <coordinates>
             <xsl:call-template name="parseLatLongCoord">
                <xsl:with-param name="coordinates" select="$coordinates"/>
             </xsl:call-template>
-			</coordinates>
-		</LineString>
+            </coordinates>
+        </LineString>
    </xsl:template>
 
    <xsl:template match="gml:MultiLineString">
-		<xsl:variable name="int_coordinates">
-				 <xsl:value-of select="./gml:lineStringMember/gml:LineString/gml:posList"/>
-		</xsl:variable>
+        <xsl:variable name="int_coordinates">
+                 <xsl:value-of select="./gml:lineStringMember/gml:LineString/gml:posList"/>
+        </xsl:variable>
 
-		<LineString>
-			<extrude><xsl:text>1</xsl:text></extrude>
-			<tessellate><xsl:text>1</xsl:text></tessellate>
-			<coordinates>
-				<xsl:call-template name="parseLatLongCoord">
-					<xsl:with-param name="coordinates" select="$int_coordinates"/>
-				</xsl:call-template>
-	        </coordinates>
+        <LineString>
+            <extrude><xsl:text>1</xsl:text></extrude>
+            <tessellate><xsl:text>1</xsl:text></tessellate>
+            <coordinates>
+                <xsl:call-template name="parseLatLongCoord">
+                    <xsl:with-param name="coordinates" select="$int_coordinates"/>
+                </xsl:call-template>
+            </coordinates>
 
-		</LineString>
-	</xsl:template>
+        </LineString>
+    </xsl:template>
 
    <!-- ================================================================= -->
    <xsl:template match="gml:MultiSurface//gml:PolygonPatch">
 
       <Style>
          <LineStyle>
-			   <color>ff0000ff</color>
-			</LineStyle>
-		</Style>
+               <color>ff0000ff</color>
+            </LineStyle>
+        </Style>
 
       <Polygon>
          <xsl:apply-templates select="gml:exterior"/>
@@ -866,7 +697,7 @@
    <!-- ================================================================= -->
 
    <xsl:template name="swapLatLongCoord">
-   	<xsl:param name="coordinates"/>
+       <xsl:param name="coordinates"/>
 
       <xsl:variable name="tokens" select="tokenize($coordinates, '\s+')"/>
       <xsl:variable name="start" select="true()"/>
@@ -915,7 +746,23 @@
    <xsl:template name="make-wfspopup-url">
       <xsl:param name="friendly-name"/>
       <xsl:param name="real-url"/>
-      <![CDATA[<a href="#" onclick="var w=window.open('wfsFeaturePopup.do?url=]]><xsl:value-of select="$real-url"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;">]]><xsl:value-of select="$friendly-name"/><![CDATA[</a>]]></xsl:template>
+
+      <!-- Highly simplified escaping -->
+      <xsl:variable name="escaped-url">
+        <xsl:call-template name="string-replace-all">
+            <xsl:with-param name="text">
+                <xsl:call-template name="string-replace-all">
+                    <xsl:with-param name="text" select="$real-url"/>
+                    <xsl:with-param name="replace" select="'&amp;'"/>
+                    <xsl:with-param name="by" select="'%26'"/>
+                </xsl:call-template>
+            </xsl:with-param>
+            <xsl:with-param name="replace" select="'?'"/>
+            <xsl:with-param name="by" select="'%3F'"/>
+        </xsl:call-template>
+      </xsl:variable>
+
+      <![CDATA[<a href="#" onclick="var w=window.open('wfsFeaturePopup.do?url=]]><xsl:value-of select="$escaped-url"/><![CDATA[','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820');w.focus();return false;">]]><xsl:value-of select="$friendly-name"/><![CDATA[</a>]]></xsl:template>
 
    <!-- ================================================================= -->
    <!--    This function creates the generic table cdata header           -->
@@ -924,4 +771,27 @@
    -->
    <xsl:template name="start-table"><![CDATA[<div style='min-width: 40px; max-width:650px; min-height: 40px; max-height: 350px; overflow: auto;"'><table border="1" cellpadding="4" class="auscopeTable">]]>
    </xsl:template>
+
+    <!-- Sourced from http://geekswithblogs.net/Erik/archive/2008/04/01/120915.aspx -->
+    <xsl:template name="string-replace-all">
+        <xsl:param name="text" />
+        <xsl:param name="replace" />
+        <xsl:param name="by" />
+        <xsl:choose>
+            <xsl:when test="contains($text, $replace)">
+                <xsl:value-of select="substring-before($text,$replace)" />
+                <xsl:value-of select="$by" />
+                <xsl:call-template name="string-replace-all">
+                    <xsl:with-param name="text"
+                        select="substring-after($text,$replace)" />
+                    <xsl:with-param name="replace"
+                        select="$replace" />
+                    <xsl:with-param name="by" select="$by" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$text" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 </xsl:stylesheet>
