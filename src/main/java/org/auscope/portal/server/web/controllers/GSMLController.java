@@ -63,7 +63,8 @@ public class GSMLController extends BasePortalController {
         try {
             response = wfsService.getWfsResponseAsKml(serviceUrl, featureType, filterString, maxFeatures, srs);
         } catch (Exception ex) {
-            log.warn("Unable to request/transform WFS response", ex);
+            log.warn(String.format("Exception getting '%2$s' from '%1$s': %3$s", serviceUrl, featureType, ex));
+            log.debug("Exception: ", ex);
             return generateExceptionResponse(ex, serviceUrl);
         }
 
@@ -88,7 +89,8 @@ public class GSMLController extends BasePortalController {
         try {
             response = wfsService.getWfsResponseAsKml(serviceUrl, featureType, featureId);
         } catch (Exception ex) {
-            log.warn("Unable to request/transform WFS response", ex);
+            log.warn(String.format("Exception getting '%2$s' with id '%4$s' from '%1$s': %3$s", serviceUrl, featureType, ex, featureId));
+            log.debug("Exception: ", ex);
             return generateExceptionResponse(ex, serviceUrl);
         }
 
@@ -120,9 +122,10 @@ public class GSMLController extends BasePortalController {
 
         WFSCountResponse response = null;
         try {
-            response = wfsService.getWfsFeatureCount(serviceUrl, featureType, filterString, maxFeatures);
+            response = wfsService.getWfsFeatureCount(serviceUrl, featureType, filterString, maxFeatures, null);
         } catch (Exception ex) {
-            log.warn("Unable to request/transform WFS response", ex);
+            log.warn(String.format("Exception getting '%2$s' from '%1$s': %3$s", serviceUrl, featureType, ex));
+            log.debug("Exception: ", ex);
             return generateExceptionResponse(ex, serviceUrl);
         }
 
