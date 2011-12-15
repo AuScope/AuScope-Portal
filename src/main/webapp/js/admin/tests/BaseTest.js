@@ -9,6 +9,8 @@ Admin.Tests.TestIDCounter = 0;
 Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
     _id : null,
     _status : null,
+    _cswRecordStore : null,
+    _knownLayerStore : null,
     _errors : [],
     _warnings : [],
     _details : [],
@@ -27,6 +29,8 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
         this.listeners  = cfg.listeners;
         this._id = String.format('admintest-{0}', Admin.Tests.TestIDCounter++);
         this._status = Admin.Tests.TestStatus.Initialising;
+        this._cswRecordStore = cfg.cswRecordStore;
+        this._knownLayerStore = cfg.knownLayerStore;
         Admin.Tests.BaseTest.superclass.constructor.call(this, cfg);
     },
 
@@ -51,13 +55,13 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
     getDescription : function() {
         var description = '';
         for (var i = 0; i < this._errors.length; i++) {
-            description += '<br/>[ERROR] ' + this._errors[i];
+            description += '<br/><b>[ERROR]</b> ' + this._errors[i];
         }
         for (var i = 0; i < this._warnings.length; i++) {
-            description += '<br/>[WARN] ' + this._warnings[i];
+            description += '<br/><b>[WARN]</b> ' + this._warnings[i];
         }
         for (var i = 0; i < this._details.length; i++) {
-            description += '<br/>[INFO] ' + this._details[i];
+            description += '<br/><b>[INFO]</b> ' + this._details[i];
         }
         return description;
     },
@@ -81,7 +85,8 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
     },
 
     /**
-     * [Abstract] Starts this test. Extensions should raise the 'teststarted' event befo
+     * [Abstract] Starts this test.
+     * startTest(KnownLayerStore knownLayerStore, CSWRecordStore cswRecordStore)
      */
     startTest : Ext.emptyFn,
 

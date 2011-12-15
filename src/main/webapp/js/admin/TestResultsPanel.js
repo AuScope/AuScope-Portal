@@ -10,6 +10,9 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
         //initially empty and should be populated by _initialiseTests
     },
 
+    _cswRecordStore : null,
+    _knownLayerStore : null,
+
     /**
      * Accepts all the configuration options of a Ext.grid.GridPanel with the following additions
      * {
@@ -28,6 +31,9 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
                 ]
             })
         });
+
+        this._cswRecordStore = new CSWRecordStore('getCSWRecords.do');
+        this._knownLayerStore = new KnownLayerStore('getKnownLayers.do');
 
         var rowExpander = new Ext.grid.RowExpander({
             tpl : new Ext.Template('<p>{description}</p><br>'),
@@ -137,8 +143,11 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
         };
 
         //Create new test instances
-        addTestFn(this, new Admin.Tests.ExternalConnectivity({}));
-        addTestFn(this, new Admin.Tests.RegistryConnectivity({}));
+        var cfg = {};
+        addTestFn(this, new Admin.Tests.ExternalConnectivity(cfg));
+        addTestFn(this, new Admin.Tests.RegistryConnectivity(cfg));
+        addTestFn(this, new Admin.Tests.Vocabulary(cfg));
+        addTestFn(this, new Admin.Tests.KnownLayerWFS(cfg));
     },
 
     /**
@@ -172,7 +181,7 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
     _runAllTests : function() {
         for (var testId in this._testMap) {
             var test = this._testMap[testId];
-            test.startTest();
+            test.startTest(this._knownLayerStore, this._cswRecordStore);
         }
     },
 
@@ -187,8 +196,16 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
         //Load test store
         this._loadTestStore();
 
-        //Start tests
-        this._runAllTests();
+        //As there is a relationship between these two stores,
+        //We should refresh any GUI components whose view is dependent on these stores
+        var me = this;
+        me._cswRecordStore.load({callback : function(r, options, success) {
+            me._knownLayerStore.load({callback : function() {
+                //After loading our record/known layer stores - begin testing
+                me._cswRecordStore.fireEvent('datachanged');
+                me._runAllTests();
+            }});
+        }});
     }
 });
 

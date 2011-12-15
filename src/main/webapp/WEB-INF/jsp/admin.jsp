@@ -13,11 +13,21 @@
         <script type="text/javascript" src="js/external/extjs/ext-all.js"></script>
         <script type="text/javascript" src="js/external/extjs/ux/ux-all-debug.js"></script>
 
+        <script type="text/javascript" src="js/AbstractRecordWrapper.js"></script>
+        <script type="text/javascript" src="js/CSWRecord.js"></script>
+        <script type="text/javascript" src="js/CSWRecordStore.js"></script>
+        <script type="text/javascript" src="js/KnownLayerRecord.js"></script>
+        <script type="text/javascript" src="js/KnownLayerStore.js"></script>
+        <script type="text/javascript" src="js/BBox.js"></script>
+
         <script type="text/javascript" src="js/admin/tests/TestStatus.js"></script>
         <script type="text/javascript" src="js/admin/tests/BaseTest.js"></script>
+        <script type="text/javascript" src="js/admin/tests/SingleAJAXTest.js"></script>
         <script type="text/javascript" src="js/admin/tests/TestTest.js"></script>
         <script type="text/javascript" src="js/admin/tests/ExternalConnectivity.js"></script>
         <script type="text/javascript" src="js/admin/tests/RegistryConnectivity.js"></script>
+        <script type="text/javascript" src="js/admin/tests/Vocabulary.js"></script>
+        <script type="text/javascript" src="js/admin/tests/KnownLayerWFS.js"></script>
         <script type="text/javascript" src="js/admin/TestResultsPanel.js"></script>
         <script type="text/javascript" src="js/admin/BuildInfoFieldSet.js"></script>
         <script type="text/javascript" src="js/admin/RuntimeInfoFieldSet.js"></script>
