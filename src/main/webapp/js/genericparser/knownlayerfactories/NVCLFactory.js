@@ -717,6 +717,10 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
 
         //NVCL URL's are discovered by doing some 'tricky' URL rewriting
         var baseUrl = this.getBaseUrl(parentOnlineResource.url);
+        if (baseUrl.indexOf('pir.sa.gov.au') >= 0) {
+            baseUrl += '/nvcl'; //AUS-2144 - PIRSA specific fix
+        }
+
         var nvclDataServiceUrl = baseUrl + '/NVCLDataServices/';
         var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
 
@@ -765,8 +769,16 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
                     singleSelect:true
                 }),
                 listeners : {
+                    //When our grid is rendered - load the datastore and select the first row
                     afterrender : function(grid) {
-                        grid.getStore().load();
+                        grid.getStore().load({
+                            callback : function() {
+                                var sm = grid.getSelectionModel();
+                                if (sm) {
+                                    sm.selectFirstRow();
+                                }
+                            }
+                        });
                     }
                 },
                 viewConfig : {
