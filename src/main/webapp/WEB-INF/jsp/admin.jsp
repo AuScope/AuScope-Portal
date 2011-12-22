@@ -23,11 +23,13 @@
         <script type="text/javascript" src="js/admin/tests/TestStatus.js"></script>
         <script type="text/javascript" src="js/admin/tests/BaseTest.js"></script>
         <script type="text/javascript" src="js/admin/tests/SingleAJAXTest.js"></script>
-        <script type="text/javascript" src="js/admin/tests/TestTest.js"></script>
         <script type="text/javascript" src="js/admin/tests/ExternalConnectivity.js"></script>
         <script type="text/javascript" src="js/admin/tests/RegistryConnectivity.js"></script>
         <script type="text/javascript" src="js/admin/tests/Vocabulary.js"></script>
         <script type="text/javascript" src="js/admin/tests/KnownLayerWFS.js"></script>
+        <script type="text/javascript" src="js/admin/tests/KnownLayerWMS.js"></script>
+        <script type="text/javascript" src="js/admin/tests/RegisteredLayerWFS.js"></script>
+        <script type="text/javascript" src="js/admin/tests/RegisteredLayerWMS.js"></script>
         <script type="text/javascript" src="js/admin/TestResultsPanel.js"></script>
         <script type="text/javascript" src="js/admin/BuildInfoFieldSet.js"></script>
         <script type="text/javascript" src="js/admin/RuntimeInfoFieldSet.js"></script>

@@ -18,7 +18,8 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
     /**
      * Accepts all Ext.util.Observable configuration options with the following additions
      * {
-     *
+     *  cswRecordStore : CSWRecordStore object - wont be accessed until startTest
+     *  knownLayerStore : KnownLayerRecordStore object - wont be accessed until startTest
      * }
      *
      * Adds the following events
@@ -86,7 +87,7 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
 
     /**
      * [Abstract] Starts this test.
-     * startTest(KnownLayerStore knownLayerStore, CSWRecordStore cswRecordStore)
+     * startTest()
      */
     startTest : Ext.emptyFn,
 
@@ -117,5 +118,78 @@ Admin.Tests.BaseTest = Ext.extend(Ext.util.Observable, {
         }
 
         this._changeStatus(Admin.Tests.TestStatus.Success);
+    },
+
+    /**
+     * Gets every CSWRecord OnlineResource object that matches type AND whose parent CSWRecord
+     * belongs to a known layer.
+     *
+     * The internal KnownLayerStore/CSWRecordStore is searched
+     * @param type String - a type filter to be applied to the online resources
+     */
+    _getKnownLayerOnlineResources : function(type) {
+        var onlineResources = [];
+        //Get every single resource attached to a known layer
+        for (var i = 0; i < this._knownLayerStore.getCount(); i++) {
+            var knownLayer = this._knownLayerStore.getKnownLayerAt(i);
+            if (knownLayer.getHidden()) {
+                continue;
+            }
+            var cswRecords = knownLayer.getLinkedCSWRecords(this._cswRecordStore);
+
+            for (var j = 0; j < cswRecords.length; j++) {
+                var cswRecord = cswRecords[j];
+                var filteredResources = cswRecord.getFilteredOnlineResources(type);
+
+                for (var k = 0; k < filteredResources.length; k++) {
+                    if (filteredResources[k].name && filteredResources[k].name.length > 0) {
+                        onlineResources.push(filteredResources[k])
+                    }
+                }
+            }
+        }
+
+        return onlineResources;
+    },
+
+    /**
+     * Gets every CSWRecord OnlineResource object that matches type AND whose parent CSWRecord
+     * does NOT belong to a known layer.
+     *
+     * The internal KnownLayerStore/CSWRecordStore is searched
+     * @param type String - a type filter to be applied to the online resources
+     */
+    _getRegisteredLayerOnlineResources : function(type) {
+        var knownLayerCSWRecords = {};//this will record all the known layer CSWRecord's
+        var onlineResources = [];
+
+        //Get every single record attached to a known layer
+        for (var i = 0; i < this._knownLayerStore.getCount(); i++) {
+            var knownLayer = this._knownLayerStore.getKnownLayerAt(i);
+            if (knownLayer.getHidden()) {
+                continue;
+            }
+            var cswRecords = knownLayer.getLinkedCSWRecords(this._cswRecordStore);
+
+            for (var j = 0; j < cswRecords.length; j++) {
+                var cswRecord = cswRecords[j];
+                knownLayerCSWRecords[cswRecord.getFileIdentifier()] = true;
+            }
+        }
+
+        //Now iterate the remaining CSWRecord list, skipping any records we found in the previous step
+        for (var i = 0; i < this._cswRecordStore.getCount(); i++) {
+            var cswRecord = this._cswRecordStore.getCSWRecordAt(i);
+            if (!knownLayerCSWRecords[cswRecord.getFileIdentifier]) {
+                var filteredResources = cswRecord.getFilteredOnlineResources(type);
+                for (var j = 0; j < filteredResources.length; j++) {
+                    if (filteredResources[j].name && filteredResources[j].name.length > 0) {
+                        onlineResources.push(filteredResources[j]);
+                    }
+                }
+            }
+        }
+
+        return onlineResources;
     }
 });

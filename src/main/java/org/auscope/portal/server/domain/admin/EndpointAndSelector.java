@@ -40,20 +40,38 @@ public class EndpointAndSelector {
 
     /**
      * Compares two instances of this class for equality. Only equal if endpoint AND selector match
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof EndpointAndSelector) {
+            return this.equals((EndpointAndSelector) o);
+        }
+
+        return this == o;
+    }
+
+    /**
+     * Compares two instances of this class for equality. Only equal if endpoint AND selector match
      * @param comparison the comparison object
      * @return
      */
     public boolean equals(EndpointAndSelector comparison) {
-        if (this == null && comparison == null) {
-            return true;
-        }
-
-        if (this != null && comparison == null ||
-            this == null && comparison != null) {
-            return false;
+        if (this == null || comparison == null) {
+            return this == comparison;
         }
 
         return this.endpoint.equals(comparison.endpoint) &&
                 this.selector.equals(comparison.selector);
     }
+
+    /**
+     * Prints the contents of this instance.
+     */
+    @Override
+    public String toString() {
+        return "EndpointAndSelector [endpoint=" + endpoint + ", selector="
+                + selector + "]";
+    }
+
+
 }

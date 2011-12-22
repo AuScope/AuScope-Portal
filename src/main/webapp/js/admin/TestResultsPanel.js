@@ -143,11 +143,17 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
         };
 
         //Create new test instances
-        var cfg = {};
+        var cfg = {
+            cswRecordStore : this._cswRecordStore,
+            knownLayerStore : this._knownLayerStore
+        };
         addTestFn(this, new Admin.Tests.ExternalConnectivity(cfg));
         addTestFn(this, new Admin.Tests.RegistryConnectivity(cfg));
         addTestFn(this, new Admin.Tests.Vocabulary(cfg));
         addTestFn(this, new Admin.Tests.KnownLayerWFS(cfg));
+        addTestFn(this, new Admin.Tests.KnownLayerWMS(cfg));
+        addTestFn(this, new Admin.Tests.RegisteredLayerWMS(cfg));
+        addTestFn(this, new Admin.Tests.RegisteredLayerWFS(cfg));
     },
 
     /**
@@ -181,7 +187,7 @@ Admin.TestResultsPanel = Ext.extend(Ext.grid.GridPanel, {
     _runAllTests : function() {
         for (var testId in this._testMap) {
             var test = this._testMap[testId];
-            test.startTest(this._knownLayerStore, this._cswRecordStore);
+            test.startTest();
         }
     },
 
