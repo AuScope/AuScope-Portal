@@ -43,7 +43,7 @@ Admin.Tests.KnownLayerWMS = Ext.extend(Admin.Tests.SingleAJAXTest, {
         }
 
         //Run our test
-        this._singleAjaxTest('testWMS.do', {
+        this._singleAjaxTest('testWMS.diag', {
             bbox : Ext.util.JSON.encode(bbox),
             serviceUrls : serviceUrls,
             layerNames : layerNames

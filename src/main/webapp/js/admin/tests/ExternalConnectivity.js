@@ -26,6 +26,6 @@ Admin.Tests.ExternalConnectivity = Ext.extend(Admin.Tests.SingleAJAXTest, {
      * The entirety of our test is making a request to the controller and parsing the resposne
      */
     startTest : function() {
-        this._singleAjaxTest('testExternalConnectivity.do');
+        this._singleAjaxTest('testExternalConnectivity.diag');
     }
 });

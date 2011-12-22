@@ -80,7 +80,7 @@ public class AdminController {
      * @return
      * @throws MalformedURLException Should never occur
      */
-    @RequestMapping("/testExternalConnectivity.do")
+    @RequestMapping("/testExternalConnectivity.diag")
     public ModelAndView testExternalConnectivity() throws MalformedURLException {
         URL[] urlsToTest = new URL[] {
             new URL("http://www.google.com"),
@@ -95,7 +95,7 @@ public class AdminController {
      * Performs an external connectivity test to the various CSW's through the HttpServiceCaller
      * @return
      */
-    @RequestMapping("/testCSWConnectivity.do")
+    @RequestMapping("/testCSWConnectivity.diag")
     public ModelAndView testCSWConnectivity() {
         AdminDiagnosticResponse response = adminService.cswConnectivity(cswServiceList);
         return generateTestResponse(response);
@@ -105,7 +105,7 @@ public class AdminController {
      * Tests that the Vocabulary service is up and running
      * @return
      */
-    @RequestMapping("/testVocabulary.do")
+    @RequestMapping("/testVocabulary.diag")
     public ModelAndView testVocabulary() throws Exception {
 
         //Has the user setup the portal with a valid vocabulary service?
@@ -157,7 +157,7 @@ public class AdminController {
      * This method is intentionally avoiding the WFSService to focus on the WFS request/response (ignoring the XSLT pipeline)
      * @return
      */
-    @RequestMapping("/testWFS.do")
+    @RequestMapping("/testWFS.diag")
     public ModelAndView testWFS(@RequestParam("serviceUrls") String[] serviceUrls,
                                 @RequestParam("typeNames") String[] typeNames,
                                 @RequestParam("bbox") String bboxJson) {
@@ -184,7 +184,7 @@ public class AdminController {
      * Any duplicated serviceUrl + layer name combos will be culled
      * @return
      */
-    @RequestMapping("/testWMS.do")
+    @RequestMapping("/testWMS.diag")
     public ModelAndView testWMS(@RequestParam("serviceUrls") String[] serviceUrls,
                                 @RequestParam("layerNames") String[] layerNames,
                                 @RequestParam("bbox") String bboxJson) {

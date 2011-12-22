@@ -43,7 +43,7 @@ Admin.Tests.KnownLayerWFS = Ext.extend(Admin.Tests.SingleAJAXTest, {
         }
 
         //Run our test
-        this._singleAjaxTest('testWFS.do', {
+        this._singleAjaxTest('testWFS.diag', {
             bbox : Ext.util.JSON.encode(bbox),
             serviceUrls : serviceUrls,
             typeNames : typeNames

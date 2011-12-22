@@ -26,6 +26,6 @@ Admin.Tests.RegistryConnectivity = Ext.extend(Admin.Tests.SingleAJAXTest, {
      * The entirety of our test is making a request to the controller and parsing the resposne
      */
     startTest : function() {
-        this._singleAjaxTest('testCSWConnectivity.do');
+        this._singleAjaxTest('testCSWConnectivity.diag');
     }
 });
