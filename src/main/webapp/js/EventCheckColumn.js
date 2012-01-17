@@ -2,7 +2,7 @@
 
 // Create user extensions namespace (Ext.ux)
 Ext.namespace('Ext.ux.grid');
- 
+
 /**
   * Ext.ux.EventCheckColumn Extension Class
   *
@@ -32,20 +32,20 @@ Ext.ux.grid.EventCheckColumn.prototype ={
             var index = this.grid.getView().findRowIndex(t);
             var record = this.grid.store.getAt(index);
             record.set(this.dataIndex, !record.data[this.dataIndex]);
-            
+
             this.handler(record, record.data[this.dataIndex]);
         }
     },
 
     renderer : function(v, p, record){
-        p.css += ' x-grid3-check-col-td'; 
+        p.css += ' x-grid3-check-col-td';
         return String.format('<div class="x-grid3-check-col{0} {1}">&#160;</div>', v ? '-on' : '', this.createId());
     },
-    
+
     createId : function(){
         return 'x-grid3-cc-' + this.id;
     }
 };
 
 // register ptype
-Ext.preg('checkcolumn', Ext.ux.grid.EventCheckColumn);
+Ext.preg('checkcolumn', 'Ext.ux.grid.EventCheckColumn');

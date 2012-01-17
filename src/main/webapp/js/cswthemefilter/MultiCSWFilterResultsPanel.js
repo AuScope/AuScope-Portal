@@ -60,4 +60,4 @@ MultiCSWFilterResultsPanel = Ext.extend(Ext.TabPanel, {
     }
 });
 
-Ext.reg('multicswresultspanel', MultiCSWFilterResultsPanel);
+Ext.reg('multicswresultspanel', 'MultiCSWFilterResultsPanel');

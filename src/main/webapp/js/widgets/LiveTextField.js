@@ -42,4 +42,4 @@ Ext.ux.form.LiveTextField = Ext.extend(Ext.form.TextField, {
 });
 
 
-Ext.reg('livetextfield', Ext.ux.form.LiveTextField);
+Ext.reg('livetextfield', 'Ext.ux.form.LiveTextField');

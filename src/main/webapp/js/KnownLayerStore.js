@@ -1,53 +1,52 @@
 /**
  * An extension of a normal JSON store that makes it specialize into storing and retrieving CSWRecord's
  */
-KnownLayerStore = function(url) {
-    var conn = new Ext.data.Connection({
-        url: url,
-        timeout:180000
-    });
+KnownLayerStore = Ext.extend(Ext.data.Store, {
 
-    KnownLayerStore.superclass.constructor.call(this, {
-        proxy			: new Ext.data.HttpProxy(conn),
-        storeId			: 'knownLayerRecordStore',
-        groupField      : 'group',
-        sortInfo      : {
-            field           : 'layerName',
-            direction       : 'ASC'
-        },
-        reader          : new Ext.data.JsonReader({
-            root            : 'data',
-            id              : 'id',
-            successProperty : 'success',
-            messageProperty : 'msg',
-            fields          : [
-                'featureTypeName',
-                'type',
-                'hidden',
-                'layerName',
-                'title',
-                'descriptiveKeyword',
-                'styleName',
-                'description',
-                'relatedNames',
-                'id',
-                'proxyFetchUrl',
-                'proxyCountUrl',
-                'iconUrl',
-                'serviceEndpoints',
-                'includeEndpoints',
-                'iconAnchor',
-                'infoWindowAnchor',
-                'iconSize',
-                'disableBboxFiltering',
-                'group'
-            ]
-        })
-    });
-};
+    constructor : function(url) {
+        var conn = new Ext.data.Connection({
+            url: url,
+            timeout:180000
+        });
 
-
-Ext.extend(KnownLayerStore, Ext.data.GroupingStore, {
+        KnownLayerStore.superclass.constructor.call(this, {
+            proxy           : new Ext.data.HttpProxy(conn),
+            storeId         : 'knownLayerRecordStore',
+            groupField      : 'group',
+            sortInfo      : {
+                field           : 'layerName',
+                direction       : 'ASC'
+            },
+            reader          : new Ext.data.JsonReader({
+                root            : 'data',
+                id              : 'id',
+                successProperty : 'success',
+                messageProperty : 'msg',
+                fields          : [
+                    'featureTypeName',
+                    'type',
+                    'hidden',
+                    'layerName',
+                    'title',
+                    'descriptiveKeyword',
+                    'styleName',
+                    'description',
+                    'relatedNames',
+                    'id',
+                    'proxyFetchUrl',
+                    'proxyCountUrl',
+                    'iconUrl',
+                    'serviceEndpoints',
+                    'includeEndpoints',
+                    'iconAnchor',
+                    'infoWindowAnchor',
+                    'iconSize',
+                    'disableBboxFiltering',
+                    'group'
+                ]
+            })
+        });
+    },
 
     /**
      * Clears this store and then copies all records from sourceKnownLayerStore into this store.

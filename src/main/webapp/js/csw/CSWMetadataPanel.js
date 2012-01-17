@@ -76,4 +76,4 @@ CSWMetadataPanel = Ext.extend(Ext.Panel, {
     }
 });
 
-Ext.reg('cswmetadatapanel', CSWMetadataPanel);
+Ext.reg('cswmetadatapanel', 'CSWMetadataPanel');

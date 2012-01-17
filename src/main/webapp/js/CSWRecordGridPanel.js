@@ -20,13 +20,9 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
     this.cswRecordFilter = cswRecordFilter;
     //Create our filtered datastore copy
     var dsCopy = new CSWRecordStore();
-    cswRecordStore.on('datachanged', this.internalOnDataChanged, this);
-    dsCopy.copyFrom(cswRecordStore, cswRecordFilter);
+
     //This is so we can reference our search panel
     var searchPanelId = id + '-search-panel';
-    var rowExpander = new Ext.grid.RowExpander({
-        tpl : new Ext.Template('<p>{dataIdentificationAbstract}</p><br>')
-    });
 
     /*
      * knownFeaturesPanel.on("cellclick", showRecordBoundingBox, knownFeaturesPanel.on);
@@ -38,7 +34,6 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
         id				 : id,
         stripeRows       : true,
         autoExpandColumn : 'title',
-        plugins          : [ rowExpander ],
         viewConfig       : {scrollOffset: 0, forceFit:true},
         title            : '<span qtip="' + description + '">' + title + '</span>',
         region           :'north',
@@ -47,15 +42,23 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
         autoScroll       : true,
         store            : dsCopy,
         originalStore    : cswRecordStore,
+        plugins          : [{
+            ptype : 'rowexpander',
+            tpl : new Ext.Template('<p>{dataIdentificationAbstract} </p><br>'),
+            rowBodyTpl : new Ext.Template('<p>{dataIdentificationAbstract} </p><br>')
+        }],
+        features: [Ext.create("Ext.grid.feature.Grouping", {
+            forceFit:true,
+            groupHeaderTpl: '{text} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
+            emptyGroupText : 'Unknown',
+            deferEmptyText:false
+        })],
         columns: [
-            rowExpander,
             {
-                id:'title',
                 header: "Title",
                 sortable: true,
                 dataIndex: 'serviceName'
             },{
-                id : 'recordType',
                 header : '',
                 width: 18,
                 dataIndex: 'onlineResources',
@@ -70,7 +73,6 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
                     return '<div style="text-align:center"><img src="img/picture.png" width="16" height="16" align="CENTER"/></div>';
                 }
             }, {
-                id:'search',
                 header: '',
                 width: 45,
                 dataIndex: 'geographicElements',
@@ -86,7 +88,6 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
                     }
                 }
             },{
-                id:'contactOrg',
                 header: "Provider",
                 width: 160,
                 sortable: true,
@@ -105,14 +106,6 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
                 addLayerHandler(cswRecordToAdd);
             }
         }],
-
-        view: new Ext.grid.GroupingView({
-            forceFit:true,
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})',
-            emptyText: '<font size=3px color=#ff0000> No services currently available </font>',
-            emptyGroupText : 'Unknown',
-            deferEmptyText:false
-        }),
         tbar: [
                '<span qtip="Quickly find layers by typing the name here">Search: </span>', ' ',
                new Ext.ux.form.ClientSearchField({
@@ -228,6 +221,8 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
 
     });
 
+    cswRecordStore.on('datachanged', this.internalOnDataChanged, this);
+    dsCopy.copyFrom(cswRecordStore, cswRecordFilter);
 };
 
 CSWRecordGridPanel.prototype.addLayerHandler = null;

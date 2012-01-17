@@ -52,4 +52,4 @@ Ext.ux.form.LiveNumberField = Ext.extend(Ext.form.NumberField, {
 });
 
 
-Ext.reg('livenumberfield', Ext.ux.form.LiveNumberField);
+Ext.reg('livenumberfield', 'Ext.ux.form.LiveNumberField');

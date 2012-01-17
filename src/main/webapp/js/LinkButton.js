@@ -3,8 +3,8 @@
  * @extends Ext.Button
  * A Button which encapsulates an &lt;a> element to enable navigation, or downloading of files.
  * @constructor
- * Creates a new LinkButton 
- */ 
+ * Creates a new LinkButton
+ */
 Ext.LinkButton = Ext.extend(Ext.Button, {
     template: new Ext.Template(
         '<table id="{4}" cellspacing="0" class="x-btn {3}"><tbody class="{1}">',
@@ -15,15 +15,15 @@ Ext.LinkButton = Ext.extend(Ext.Button, {
 
     buttonSelector : 'a:first',
 
-    /** 
+    /**
      * @cfg String href
      * The URL to create a link for.
      */
-    /** 
+    /**
      * @cfg String target
      * The target for the &lt;a> element.
      */
-    /** 
+    /**
      * @cfg Object
      * A set of parameters which are always passed to the URL specified in the href
      */
@@ -70,4 +70,4 @@ Ext.LinkButton = Ext.extend(Ext.Button, {
         this.el.child(this.buttonSelector, true).href = this.getHref();
     }
 });
-Ext.reg('linkbutton', Ext.LinkButton);
+Ext.reg('linkbutton', 'Ext.LinkButton');

@@ -272,4 +272,4 @@ CSWFilterResultsPanel = Ext.extend(Ext.grid.GridPanel, {
     }
 });
 
-Ext.reg('cswresultspanel', CSWFilterResultsPanel);
+Ext.reg('cswresultspanel', 'CSWFilterResultsPanel');
