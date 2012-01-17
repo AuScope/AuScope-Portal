@@ -33,7 +33,6 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
     CSWRecordGridPanel.superclass.constructor.call(this, {
         id				 : id,
         stripeRows       : true,
-        autoExpandColumn : 'title',
         viewConfig       : {scrollOffset: 0, forceFit:true},
         title            : '<span qtip="' + description + '">' + title + '</span>',
         region           :'north',
@@ -49,15 +48,15 @@ CSWRecordGridPanel = function(id, title, description, cswRecordStore, addLayerHa
         }],
         features: [Ext.create("Ext.grid.feature.Grouping", {
             forceFit:true,
-            groupHeaderTpl: '{text} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
-            emptyGroupText : 'Unknown',
+            groupHeaderTpl: '{[values.name ? values.name : "Unknown" ]} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
             deferEmptyText:false
         })],
         columns: [
             {
                 header: "Title",
                 sortable: true,
-                dataIndex: 'serviceName'
+                dataIndex: 'serviceName',
+                flex : 1
             },{
                 header : '',
                 width: 18,

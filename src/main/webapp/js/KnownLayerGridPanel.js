@@ -22,7 +22,6 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
 
     KnownLayerGridPanel.superclass.constructor.call(this, {
         stripeRows       : true,
-        autoExpandColumn : 'title',
         plugins          : [{
             ptype : 'rowexpander',
             tpl : new Ext.Template('<p>{description} </p><br>'),
@@ -45,7 +44,8 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
                 header: "Title",
                 width: 80,
                 sortable: true,
-                dataIndex: 'title'
+                dataIndex: 'title',
+                flex : 1
             },{
                 header : '',
                 width: 18,
