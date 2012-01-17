@@ -38,7 +38,7 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
         store            : dsCopy,
         originalStore    : knownFeatureTypeStore,
         features: [Ext.create("Ext.grid.feature.Grouping", {
-            groupHeaderTpl : '{[values.group ? values.group : "Others"]} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
+            groupHeaderTpl : '{[values.name ? values.name : "Others"]} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
         })],
         columns: [
             {

@@ -4,7 +4,7 @@
  * @param url The base URL used to populate this store
  * @param baseParams [Optional] An object containing parameters to be sent with every request
  */
-CSWRecordStore = Ext.extend(Ext.data.Store, {
+CSWRecordStore = Ext.extend(Ext.data.JsonStore, {
 
     constructor : function(url, baseParams) {
         var conn = new Ext.data.Connection({
@@ -34,26 +34,24 @@ CSWRecordStore = Ext.extend(Ext.data.Store, {
                 direction       : 'ASC'
             },
             baseParams      : baseParams,
-            reader          : new Ext.data.JsonReader({
-                root            : 'data',
-                id              : 'fileIdentifier',
-                successProperty : 'success',
-                messageProperty : 'msg',
-                totalProperty   : 'totalResults',
-                fields          : [
-                    'serviceName',
-                    'administrativeArea',
-                    'contactOrganisation',
-                    'resourceProvider',
-                    'fileIdentifier',
-                    'recordInfoUrl',
-                    'dataIdentificationAbstract',
-                    'onlineResources',
-                    'descriptiveKeywords',
-                    {name : 'geographicElements', convert : convertGeographicEls},
-                    'constraints'
-                ]
-            })
+            root            : 'data',
+            id              : 'fileIdentifier',
+            successProperty : 'success',
+            messageProperty : 'msg',
+            totalProperty   : 'totalResults',
+            fields          : [
+                'serviceName',
+                'administrativeArea',
+                'contactOrganisation',
+                'resourceProvider',
+                'fileIdentifier',
+                'recordInfoUrl',
+                'dataIdentificationAbstract',
+                'onlineResources',
+                'descriptiveKeywords',
+                {name : 'geographicElements', convert : convertGeographicEls},
+                'constraints'
+            ]
         });
     },
 

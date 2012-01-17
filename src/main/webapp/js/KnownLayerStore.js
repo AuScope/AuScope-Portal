@@ -1,7 +1,7 @@
 /**
  * An extension of a normal JSON store that makes it specialize into storing and retrieving CSWRecord's
  */
-KnownLayerStore = Ext.extend(Ext.data.Store, {
+KnownLayerStore = Ext.extend(Ext.data.JsonStore, {
 
     constructor : function(url) {
         var conn = new Ext.data.Connection({
@@ -17,34 +17,32 @@ KnownLayerStore = Ext.extend(Ext.data.Store, {
                 field           : 'layerName',
                 direction       : 'ASC'
             },
-            reader          : new Ext.data.JsonReader({
-                root            : 'data',
-                id              : 'id',
-                successProperty : 'success',
-                messageProperty : 'msg',
-                fields          : [
-                    'featureTypeName',
-                    'type',
-                    'hidden',
-                    'layerName',
-                    'title',
-                    'descriptiveKeyword',
-                    'styleName',
-                    'description',
-                    'relatedNames',
-                    'id',
-                    'proxyFetchUrl',
-                    'proxyCountUrl',
-                    'iconUrl',
-                    'serviceEndpoints',
-                    'includeEndpoints',
-                    'iconAnchor',
-                    'infoWindowAnchor',
-                    'iconSize',
-                    'disableBboxFiltering',
-                    'group'
-                ]
-            })
+            root            : 'data',
+            id              : 'id',
+            successProperty : 'success',
+            messageProperty : 'msg',
+            fields          : [
+                'featureTypeName',
+                'type',
+                'hidden',
+                'layerName',
+                'title',
+                'descriptiveKeyword',
+                'styleName',
+                'description',
+                'relatedNames',
+                'id',
+                'proxyFetchUrl',
+                'proxyCountUrl',
+                'iconUrl',
+                'serviceEndpoints',
+                'includeEndpoints',
+                'iconAnchor',
+                'infoWindowAnchor',
+                'iconSize',
+                'disableBboxFiltering',
+                'group'
+            ]
         });
     },
 
