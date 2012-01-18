@@ -17,6 +17,7 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
 
     //This is so we can reference our search panel
     var searchPanelId = id + '-search-panel';
+    var me = this;
 
     var dsCopy = new KnownLayerStore();
 
@@ -121,15 +122,17 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
                })
            ],
         listeners: {
-               cellclick : function (grid, rowIndex, colIndex, e) {
-                   var fieldName = grid.getColumnModel().getDataIndex(colIndex);
-                   var knownLayerRecord = grid.getStore().getKnownLayerAt(rowIndex);
+               //This event is NOT officially supported in Ext 4 - it will need to be replaced
+               //info sourced from - http://www.sencha.com/forum/showthread.php?136803-cellclick-event-in-Grid
+               cellclick : function (iView, iCellEl, iColIdx, iRecord, iRowEl, iRowIdx, iEvent) {
+                   var fieldName = iView.getGridColumns()[iColIdx].dataIndex;
+                   var knownLayerRecord = iView.getStore().getKnownLayerAt(iRowIdx);
                    if (fieldName === 'proxyUrl') {
-                       e.stopEvent();
+                       iEvent.stopEvent();
 
                        showBoundsHandler(knownLayerRecord);
                    } else if (fieldName === 'styleName') {
-                       e.stopEvent();
+                       iEvent.stopEvent();
                        var cswRecords = knownLayerRecord.getLinkedCSWRecords(cswRecordStore);
 
                        //Can show service info if there are no linked records
@@ -143,7 +146,7 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
                     }
 
                     this.onlineResourcesPopup = new CSWRecordDescriptionWindow({cswRecords : cswRecords, knownLayerRecord : knownLayerRecord});
-                    this.onlineResourcesPopup.show(e.getTarget());
+                    this.onlineResourcesPopup.show(iEvent.getTarget());
                    }
                },
 
