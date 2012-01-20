@@ -232,4 +232,4 @@ CSWResourcesGrid = Ext.extend(Ext.grid.GridPanel, {
     }
 });
 
-Ext.reg('cswresourcesgrid', 'CSWResourcesGrid');
+Ext.reg('cswresourcesgrid', CSWResourcesGrid);

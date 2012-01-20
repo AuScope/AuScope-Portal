@@ -34,4 +34,4 @@ LinkLabel = Ext.extend(Ext.BoxComponent, {
     }
 });
 
-Ext.reg('linklabel', 'LinkLabel');
+Ext.reg('linklabel', LinkLabel);

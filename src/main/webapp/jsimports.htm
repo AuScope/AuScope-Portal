@@ -1,14 +1,11 @@
 <!-- Bring in the ExtJs Libraries and CSS -->
 <script type="text/javascript" src="js/XPathFixFirefox.js"></script>
 
-<!-- ...then you need the Ext itself, either debug or production version. -->
-<script type="text/javascript" src="js/external/ext-4.0.7-gpl/bootstrap.js"></script>
-<script type="text/javascript" src="js/external/ext-4.0.7-gpl/compatibility/ext3-core-compat.js"></script>
-<script type="text/javascript" src="js/external/ext-4.0.7-gpl/compatibility/ext3-compat.js"></script>
+<!-- First of javascript includes must be an adapter... -->
+<script type="text/javascript" src="js/external/extjs/adapter/ext/ext-base.js"></script>
 
-<!-- Add Ext js UX -->
-<script type="text/javascript" src="js/external/ext-4.0.7-gpl/examples/ux/CheckColumn.js"></script>
-<script type="text/javascript" src="js/external/ext-4.0.7-gpl/examples/ux/RowExpander.js"></script>
+<!-- ...then you need the Ext itself, either debug or production version. -->
+<script type="text/javascript" src="js/external/extjs/ext-all.js"></script>
 
 <!-- XML and XPath -->
 <script type="text/javascript" src="js/external/javeline/javeline_xpath.js"></script>
@@ -16,6 +13,7 @@
 <script type="text/javascript" src="js/xml/SimpleXPath.js"></script>
 
 <!-- ExtJS extensions -->
+<script type="text/javascript" src="js/external/extjs/ux/ux-all.js"></script>
 <script type="text/javascript" src="js/widgets/ClientSearchField.js"></script>
 <script type="text/javascript" src="js/widgets/ClearableComboBox.js"></script>
 <script type="text/javascript" src="js/widgets/LiveTextField.js"></script>
@@ -41,6 +39,8 @@
 <script type="text/javascript" src="js/genericparser/KnownLayerParser.js"></script>
 <script type="text/javascript" src="js/genericparser/Parser.js"></script>
 <script type="text/javascript" src="js/genericparser/WFSParser.js"></script>
+
+<script type="text/javascript" src="js/external/extjs/epoly.js"></script>
 
 <script src="js/Clone.js" type="text/javascript"></script>
 

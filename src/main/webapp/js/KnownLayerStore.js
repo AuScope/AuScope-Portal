@@ -1,22 +1,21 @@
 /**
  * An extension of a normal JSON store that makes it specialize into storing and retrieving CSWRecord's
  */
-KnownLayerStore = Ext.extend(Ext.data.JsonStore, {
+KnownLayerStore = function(url) {
+    var conn = new Ext.data.Connection({
+        url: url,
+        timeout:180000
+    });
 
-    constructor : function(url) {
-        var conn = new Ext.data.Connection({
-            url: url,
-            timeout:180000
-        });
-
-        KnownLayerStore.superclass.constructor.call(this, {
-            proxy           : new Ext.data.HttpProxy(conn),
-            storeId         : 'knownLayerRecordStore',
-            groupField      : 'group',
-            sortInfo      : {
-                field           : 'layerName',
-                direction       : 'ASC'
-            },
+    KnownLayerStore.superclass.constructor.call(this, {
+        proxy			: new Ext.data.HttpProxy(conn),
+        storeId			: 'knownLayerRecordStore',
+        groupField      : 'group',
+        sortInfo      : {
+            field           : 'layerName',
+            direction       : 'ASC'
+        },
+        reader          : new Ext.data.JsonReader({
             root            : 'data',
             id              : 'id',
             successProperty : 'success',
@@ -43,8 +42,12 @@ KnownLayerStore = Ext.extend(Ext.data.JsonStore, {
                 'disableBboxFiltering',
                 'group'
             ]
-        });
-    },
+        })
+    });
+};
+
+
+Ext.extend(KnownLayerStore, Ext.data.GroupingStore, {
 
     /**
      * Clears this store and then copies all records from sourceKnownLayerStore into this store.

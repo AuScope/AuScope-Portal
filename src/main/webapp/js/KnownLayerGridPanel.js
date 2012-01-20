@@ -17,17 +17,19 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
 
     //This is so we can reference our search panel
     var searchPanelId = id + '-search-panel';
-    var me = this;
+
+    var rowExpander = new Ext.grid.RowExpander({
+        tpl : new Ext.Template('<p>{description} </p><br>')
+    });
 
     var dsCopy = new KnownLayerStore();
+    knownFeatureTypeStore.on('datachanged', this.internalOnDataChanged, this);
+    dsCopy.copyFrom(knownFeatureTypeStore, this.knownLayerRecordFilter);
 
     KnownLayerGridPanel.superclass.constructor.call(this, {
         stripeRows       : true,
-        plugins          : [{
-            ptype : 'rowexpander',
-            tpl : new Ext.Template('<p>{description} </p><br>'),
-            rowBodyTpl : new Ext.Template('<p>{description} </p><br>')
-        }],
+        autoExpandColumn : 'title',
+        plugins          : [ rowExpander ],
         viewConfig       : {scrollOffset: 0, forceFit:true},
         title            : '<span qtip="' + description + '">' + title + '</span>',
         region           :'north',
@@ -37,17 +39,20 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
         autoScroll       : true,
         store            : dsCopy,
         originalStore    : knownFeatureTypeStore,
-        features: [Ext.create("Ext.grid.feature.Grouping", {
-            groupHeaderTpl : '{[values.name ? values.name : "Others"]} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
-        })],
+        view: new Ext.grid.GroupingView({
+            forceFit:true,
+            groupTextTpl: '{[values.group ? values.group : "Others"]} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+        }),
         columns: [
+            rowExpander,
             {
+                id:'title',
                 header: "Title",
                 width: 80,
                 sortable: true,
-                dataIndex: 'title',
-                flex : 1
+                dataIndex: 'title'
             },{
+                id : 'knownType',
                 header : '',
                 width: 18,
                 dataIndex: 'styleName', //this isn't actually rendered in this column
@@ -73,6 +78,7 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
                     return '<div style="text-align:center"><img src="img/picture.png" width="16" height="16" align="CENTER"/></div>';
                 }
             },{
+                id:'search',
                 header: '',
                 width: 45,
                 dataIndex: 'proxyUrl', //this isn't actually rendered in this column
@@ -85,6 +91,7 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
                     return '<img src="img/magglass.gif"/>';
                 }
             },{
+                id:'groupCol',
                 width: 160,
                 sortable: true,
                 dataIndex: 'group',
@@ -122,17 +129,15 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
                })
            ],
         listeners: {
-               //This event is NOT officially supported in Ext 4 - it will need to be replaced
-               //info sourced from - http://www.sencha.com/forum/showthread.php?136803-cellclick-event-in-Grid
-               cellclick : function (iView, iCellEl, iColIdx, iRecord, iRowEl, iRowIdx, iEvent) {
-                   var fieldName = iView.getGridColumns()[iColIdx].dataIndex;
-                   var knownLayerRecord = iView.getStore().getKnownLayerAt(iRowIdx);
+               cellclick : function (grid, rowIndex, colIndex, e) {
+                   var fieldName = grid.getColumnModel().getDataIndex(colIndex);
+                   var knownLayerRecord = grid.getStore().getKnownLayerAt(rowIndex);
                    if (fieldName === 'proxyUrl') {
-                       iEvent.stopEvent();
+                       e.stopEvent();
 
                        showBoundsHandler(knownLayerRecord);
                    } else if (fieldName === 'styleName') {
-                       iEvent.stopEvent();
+                       e.stopEvent();
                        var cswRecords = knownLayerRecord.getLinkedCSWRecords(cswRecordStore);
 
                        //Can show service info if there are no linked records
@@ -146,7 +151,7 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
                     }
 
                     this.onlineResourcesPopup = new CSWRecordDescriptionWindow({cswRecords : cswRecords, knownLayerRecord : knownLayerRecord});
-                    this.onlineResourcesPopup.show(iEvent.getTarget());
+                    this.onlineResourcesPopup.show(e.getTarget());
                    }
                },
 
@@ -227,9 +232,6 @@ KnownLayerGridPanel = function(id, title, description, knownFeatureTypeStore, cs
             }
         }
     });
-
-    knownFeatureTypeStore.on('datachanged', this.internalOnDataChanged, this);
-    dsCopy.copyFrom(knownFeatureTypeStore, this.knownLayerRecordFilter);
 };
 
 KnownLayerGridPanel.prototype.addLayerHandler = null;

@@ -12,4 +12,4 @@ GenericParser.BaseComponent = Ext.extend(Ext.Panel, {
     }
 });
 
-Ext.reg('genericparsercomponent', 'GenericParser.BaseComponent');
+Ext.reg('genericparsercomponent', GenericParser.BaseComponent);

@@ -17,15 +17,15 @@
 CustomLayersGridPanel = function(id, title, description, cswRecordStore, addLayerHandler, showBoundsHandler, moveToBoundsHandler) {
     this.addLayerHandler = addLayerHandler;
 
+    var rowExpander = new Ext.grid.RowExpander({
+        tpl : new Ext.Template('<p>{dataIdentificationAbstract}</p><br>')
+    });
+
     CustomLayersGridPanel.superclass.constructor.call(this, {
         id				 : id,
         stripeRows       : true,
         autoExpandColumn : 'title',
-        plugins          : [{
-            ptype : 'rowexpander',
-            tpl : new Ext.Template('<p>{dataIdentificationAbstract} </p><br>'),
-            rowBodyTpl : new Ext.Template('<p>{dataIdentificationAbstract} </p><br>')
-        }],
+        plugins          : [ rowExpander ],
         viewConfig       : {scrollOffset: 0, forceFit:true},
         title            : '<span qtip="' + description + '">' + title + '</span>',
         region           :'north',
@@ -36,6 +36,7 @@ CustomLayersGridPanel = function(id, title, description, cswRecordStore, addLaye
         store            : cswRecordStore,
         loadMask         : true,
         columns: [
+            rowExpander,
             {
                 id:'title',
                 header: "Title",

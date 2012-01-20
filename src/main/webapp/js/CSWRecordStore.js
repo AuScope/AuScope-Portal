@@ -4,42 +4,41 @@
  * @param url The base URL used to populate this store
  * @param baseParams [Optional] An object containing parameters to be sent with every request
  */
-CSWRecordStore = Ext.extend(Ext.data.JsonStore, {
+CSWRecordStore = function(url, baseParams) {
+    var conn = new Ext.data.Connection({
+        url: url,
+        timeout:180000
+    });
 
-    constructor : function(url, baseParams) {
-        var conn = new Ext.data.Connection({
-            url: url,
-            timeout:180000
-        });
-
-        //Converts an array of BBox records into an actual BBox object array
-        var convertGeographicEls = function(v, record) {
-            for (var i = 0; i < v.length; i++) {
-                if (v[i].type === 'bbox') {
-                    v[i] = new BBox(v[i].northBoundLatitude,
-                            v[i].southBoundLatitude,
-                            v[i].eastBoundLongitude,
-                            v[i].westBoundLongitude);
-                }
+    //Converts an array of BBox records into an actual BBox object array
+    var convertGeographicEls = function(v, record) {
+        for (var i = 0; i < v.length; i++) {
+            if (v[i].type === 'bbox') {
+                v[i] = new BBox(v[i].northBoundLatitude,
+                        v[i].southBoundLatitude,
+                        v[i].eastBoundLongitude,
+                        v[i].westBoundLongitude);
             }
+        }
 
-            return v;
-        };
+        return v;
+    };
 
-        CSWRecordStore.superclass.constructor.call(this, {
-            proxy           : new Ext.data.HttpProxy(conn),
-            groupField      : 'contactOrganisation',
-            sortInfo        : {
-                field           : 'serviceName',
-                direction       : 'ASC'
-            },
-            baseParams      : baseParams,
-            root            : 'data',
-            id              : 'fileIdentifier',
-            successProperty : 'success',
+    CSWRecordStore.superclass.constructor.call(this, {
+        proxy			: new Ext.data.HttpProxy(conn),
+        groupField		: 'contactOrganisation',
+        sortInfo		: {
+            field			: 'serviceName',
+            direction		: 'ASC'
+        },
+        baseParams      : baseParams,
+        reader			: new Ext.data.JsonReader({
+            root			: 'data',
+            id				: 'fileIdentifier',
+            successProperty	: 'success',
             messageProperty : 'msg',
             totalProperty   : 'totalResults',
-            fields          : [
+            fields			: [
                 'serviceName',
                 'administrativeArea',
                 'contactOrganisation',
@@ -52,8 +51,12 @@ CSWRecordStore = Ext.extend(Ext.data.JsonStore, {
                 {name : 'geographicElements', convert : convertGeographicEls},
                 'constraints'
             ]
-        });
-    },
+        })
+    });
+};
+
+
+Ext.extend(CSWRecordStore, Ext.data.GroupingStore, {
 
     /**
      * Clears this store and then copies all records from sourceCSWRecordStore into this store.
