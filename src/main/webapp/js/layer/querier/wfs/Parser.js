@@ -5,7 +5,7 @@
 Ext.define('portal.layer.querier.wfs.Parser', {
     extend: 'Ext.util.Observable',
 
-    constructor : function(cfg) {
+    constructor : function(config) {
         //The following ordering is important as it dictates the order in which to try
         //factories for parsing a particular node
         var cfg = {

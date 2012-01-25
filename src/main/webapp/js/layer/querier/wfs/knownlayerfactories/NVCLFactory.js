@@ -22,7 +22,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
      * Note - AUS-2055 brought about the removal of the requirement for an open proxy - work still needs to be done
      *        to break this into more manageable pieces because the code is still very much a copy from the original source.
      */
-    showDetailsWindow : function(datasetId, datasetName, omUrl, nvclDataServiceUrl, featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource) {
+    showDetailsWindow : function(datasetId, datasetName, omUrl, nvclDataServiceUrl, featureId, parentKnownLayer, parentOnlineResource) {
 
         //We create an instance of our popup window but don't show it immediately
         //We need to dynamically add to its contents
@@ -426,7 +426,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
      * Note - AUS-2055 brought about the removal of the requirement for an open proxy - work still needs to be done
      *        to break this into more manageable pieces because the code is still very much a copy from the original source.
      */
-    showDownloadWindow : function(datasetId, datasetName, omUrl, nvclDownloadServiceUrl, featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource) {
+    showDownloadWindow : function(datasetId, datasetName, omUrl, nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource) {
         // Dataset download window
         var win = Ext.create('Ext.Window', {
             border          : true,
@@ -706,7 +706,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     /**
      * Overrides abstract parseKnownLayerFeature
      */
-    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource, rootCfg) {
+    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource, rootCfg) {
         var me = this;
 
         //NVCL URL's are discovered by doing some 'tricky' URL rewriting
@@ -803,7 +803,6 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     nvclDataServiceUrl,
                                     featureId,
                                     parentKnownLayer,
-                                    parentCSWRecord,
                                     parentOnlineResource);
                         }
                     }
@@ -820,7 +819,6 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     nvclDownloadServiceUrl,
                                     featureId,
                                     parentKnownLayer,
-                                    parentCSWRecord,
                                     parentOnlineResource);
                         }
                     }

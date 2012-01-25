@@ -30,11 +30,10 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.BaseFactory', {
      * This function must return an GenericParser.BaseComponent object that represents
      * ancillary information about the specified feature.
      *
-     * function(featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource, rootCfg)
+     * function(featureId, parentKnownLayer, parentOnlineResource, rootCfg)
      *
      * featureId - A string representing some form of unique ID
      * parentKnownLayer - The knownLayer that the feature belongs to (cannot be null)
-     * parentCSWRecord - The CSWRecord that is part of parentKnownLayer that 'featureId' belongs to.
      * parentOnlineResource - The online resource (belonging to parentCSWRecord) that featureId is derived from
      * rootCfg - a configuration object to be applied to the root GenericParser.BaseComponent
      */

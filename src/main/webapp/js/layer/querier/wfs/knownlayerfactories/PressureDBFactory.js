@@ -50,7 +50,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
     /**
      * Overrides abstract parseKnownLayerFeature
      */
-    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource, rootCfg) {
+    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource, rootCfg) {
         var me = this;
         var pressureDbUrl = this.getBaseUrl(parentOnlineResource.url) + '/pressuredb-dataservices'; //This is a hack - somehow this needs to make it to the registry
         var featureId = featureId.replace('gsml.borehole.', '');

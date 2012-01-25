@@ -15,7 +15,8 @@ Ext.define('portal.layer.Layer', {
 
     fields: [
         { name: 'id', type: 'string' }, //A unique ID of this layer - sourced from the original KnownLayer/CSWRecord
-        { name: 'source', type: 'string' }, //an 'enum' representing whether this Layer was constructed from a KnownLayer or CSWRecord
+        { name: 'sourceType', type: 'string' }, //an 'enum' representing whether this Layer was constructed from a KnownLayer or CSWRecord
+        { name: 'source', type: 'auto' }, //a reference to an instance of portal.knownlayer.KnownLayer or portal.csw.CSWRecord that was used to create this layer
         { name: 'name', type: 'string' }, //A human readable name/title of this layer
         { name: 'description', type: 'string' }, //A human readable description/abstract of this layer
         { name: 'renderer', type: 'auto' }, //A concrete implementation of a portal.layer.renderer.Renderer
