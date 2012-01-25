@@ -1,14 +1,14 @@
 /**
  * Abstract base class for all Generic Parser factories to inherit from.
  */
-Ext.ns('GenericParser.Factory');
-GenericParser.Factory.SimpleFactory = Ext.extend(GenericParser.Factory.BaseFactory, {
+Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory', {
+    extend : 'portal.layer.querier.wfs.factories.BaseFactory',
 
     /**
      * Accepts all GenericParser.Factory.BaseFactory configuration options
      */
     constructor : function(cfg) {
-        GenericParser.Factory.SimpleFactory.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     },
 
     /**
@@ -27,7 +27,7 @@ GenericParser.Factory.SimpleFactory = Ext.extend(GenericParser.Factory.BaseFacto
     parseNode : function(domNode, wfsUrl, rootCfg) {
         // Turn our DOM Node in an ExtJS Tree
         var rootNode = this._createTreeNode(domNode);
-        var gmlId = SimpleXPath.evaluateXPathString(domNode, '@gml:id');
+        var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var sf = this;
         this._parseXmlTree(domNode, rootNode);
         rootNode.expanded = true;
@@ -68,7 +68,7 @@ GenericParser.Factory.SimpleFactory = Ext.extend(GenericParser.Factory.BaseFacto
             }]
          });
 
-        return new GenericParser.BaseComponent(rootCfg);
+        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     },
 
     /**
@@ -78,8 +78,8 @@ GenericParser.Factory.SimpleFactory = Ext.extend(GenericParser.Factory.BaseFacto
         var treeNode = null;
 
         // We have a leaf
-        if (SimpleDOM.isLeafNode(documentNode)) {
-            var textContent = SimpleDOM.getNodeTextContent(documentNode);
+        if (portal.util.xml.SimpleDOM.isLeafNode(documentNode)) {
+            var textContent = portal.util.xml.SimpleDOM.getNodeTextContent(documentNode);
 
             treeNode = new Ext.tree.TreeNode( {
                 text : documentNode.tagName + " = " + textContent
@@ -109,7 +109,7 @@ GenericParser.Factory.SimpleFactory = Ext.extend(GenericParser.Factory.BaseFacto
     _parseXmlTree : function(xmlDocNode, treeNode) {
         var nodes = [];
         Ext.each(xmlDocNode.childNodes, function(docNodeChild) {
-            if (docNodeChild.nodeType == SimpleDOM.XML_NODE_ELEMENT) {
+            if (docNodeChild.nodeType == portal.util.xml.SimpleDOM.XML_NODE_ELEMENT) {
                 var treeChildNode = this._createTreeNode(docNodeChild);
                 treeNode.appendChild(treeChildNode);
                 nodes.push(treeNode);

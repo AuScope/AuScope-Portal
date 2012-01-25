@@ -1,19 +1,19 @@
 /**
- * A factory for parsing a gsml:GeologicUnit element.
+ * A factory for parsing a gsml:Borehole element.
  */
-Ext.ns('GenericParser.Factory');
-GenericParser.Factory.BoreholeFactory = Ext.extend(GenericParser.Factory.BaseFactory, {
+Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
+    extend : 'portal.layer.querier.wfs.factories.BaseFactory',
 
     /**
      * Accepts all GenericParser.Factory.BaseFactory configuration options
      */
     constructor : function(cfg) {
-        GenericParser.Factory.BoreholeFactory.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     },
 
     supportsNode : function(domNode) {
         return domNode.namespaceURI === this.XMLNS_GSML_2 &&
-               SimpleDOM.getNodeLocalName(domNode) === 'Borehole';
+               portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'Borehole';
     },
 
     /**
@@ -21,28 +21,28 @@ GenericParser.Factory.BoreholeFactory = Ext.extend(GenericParser.Factory.BaseFac
      */
     parseNode : function(domNode, wfsUrl, rootCfg) {
         var bf = this;
-        var gmlId = SimpleXPath.evaluateXPathString(domNode, '@gml:id');
-        var allNames = SimpleXPath.evaluateXPathNodeArray(domNode, 'gml:name');
-        var elevationUom = SimpleXPath.evaluateXPathString(domNode, 'gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation/@uomLabels');
-        var elevation = SimpleXPath.evaluateXPathString(domNode, 'gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation');
-        var startDepth = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:coredInterval/gml:Envelope/gml:lowerCorner');
-        var endDepth = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:coredInterval/gml:Envelope/gml:upperCorner');
-        var coreCustodian = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:coreCustodian/@xlink:title');
-        var drillingCo = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:driller/@xlink:title');
-        var drillingDate = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling');
-        var drillingMethod = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:drillingMethod');
-        var inclinationType = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:inclinationType');
-        var startPoint = SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:startPoint');
+        var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
+        var allNames = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'gml:name');
+        var elevationUom = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation/@uomLabels');
+        var elevation = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:collarLocation/gsml:BoreholeCollar/gsml:elevation');
+        var startDepth = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:coredInterval/gml:Envelope/gml:lowerCorner');
+        var endDepth = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:coredInterval/gml:Envelope/gml:upperCorner');
+        var coreCustodian = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:coreCustodian/@xlink:title');
+        var drillingCo = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:driller/@xlink:title');
+        var drillingDate = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling');
+        var drillingMethod = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:drillingMethod');
+        var inclinationType = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:inclinationType');
+        var startPoint = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:startPoint');
 
         //For IE we can't apply XPath predicates like gml:name[@codeSpace=\'http://www.ietf.org/rfc/rfc2616\']
         //so we do a manual loop instead over gml:name instead
         var rawId = '';
         var boreholeName = '';
         for (var i = 0; i < allNames.length; i++) {
-            if (SimpleXPath.evaluateXPathString(allNames[i], '@codeSpace') === 'http://www.ietf.org/rfc/rfc2616') {
-                rawId = SimpleDOM.getNodeTextContent(allNames[i]);
+            if (portal.util.xml.SimpleXPath.evaluateXPathString(allNames[i], '@codeSpace') === 'http://www.ietf.org/rfc/rfc2616') {
+                rawId = portal.util.xml.SimpleDOM.getNodeTextContent(allNames[i]);
             } else {
-                boreholeName = SimpleDOM.getNodeTextContent(allNames[i]);
+                boreholeName = portal.util.xml.SimpleDOM.getNodeTextContent(allNames[i]);
             }
         }
 
@@ -106,6 +106,7 @@ GenericParser.Factory.BoreholeFactory = Ext.extend(GenericParser.Factory.BaseFac
                 }
             }]
         });
-        return new GenericParser.BaseComponent(rootCfg);
+
+        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

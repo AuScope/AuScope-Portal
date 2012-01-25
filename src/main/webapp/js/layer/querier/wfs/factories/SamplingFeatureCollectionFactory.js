@@ -1,37 +1,37 @@
 /**
  * A factory for parsing a sa:LocatedSpecimen element.
  */
-Ext.ns('GenericParser.Factory');
-GenericParser.Factory.SamplingFeatureCollectionFactory = Ext.extend(GenericParser.Factory.BaseFactory, {
+Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory', {
+    extend : 'portal.layer.querier.wfs.factories.BaseFactory',
 
     /**
      * Accepts all GenericParser.Factory.BaseFactory configuration options
      */
     constructor : function(cfg) {
-        GenericParser.Factory.SamplingFeatureCollectionFactory.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     },
 
     supportsNode : function(domNode) {
         return domNode.namespaceURI === this.XMLNS_SA &&
-            SimpleDOM.getNodeLocalName(domNode) === 'SamplingFeatureCollection';
+            portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'SamplingFeatureCollection';
     },
 
     /**
      * Generates a panel containing all located specimen observations
      */
     parseNode : function(domNode, wfsUrl, rootCfg) {
-        var samplingName = SimpleXPath.evaluateXPathString(domNode, 'gml:name');
-        var samplingStart = SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:samplingTime/gml:TimePeriod/gml:beginPosition');
-        var samplingEnd = SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:samplingTime/gml:TimePeriod/gml:endPosition');
-        var location = SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:samplingLocation/gml:LineString/gml:posList');
-        var allTitles = SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:observedProperty/@xlink:title');
-        var allAmounts = SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:result');
-        var allUoms = SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:result/@uom');
+        var samplingName = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gml:name');
+        var samplingStart = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:samplingTime/gml:TimePeriod/gml:beginPosition');
+        var samplingEnd = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:samplingTime/gml:TimePeriod/gml:endPosition');
+        var location = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:samplingLocation/gml:LineString/gml:posList');
+        var allTitles = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:observedProperty/@xlink:title');
+        var allAmounts = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:result');
+        var allUoms = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:result/@uom');
 
 
         var items = [];
         for (var i = 0; i < allTitles.length; i++) {
-            var uom = SimpleDOM.getNodeTextContent(allUoms[i]);
+            var uom = portal.util.xml.SimpleDOM.getNodeTextContent(allUoms[i]);
             var prettyUom = uom;
 
             switch(uom) {
@@ -46,8 +46,8 @@ GenericParser.Factory.SamplingFeatureCollectionFactory = Ext.extend(GenericParse
 
             items.push({
                 xtype : 'label',
-                fieldLabel : SimpleDOM.getNodeTextContent(allTitles[i]),
-                html : String.format('<p qtip="Unit of Measurement: {1}">{0} {2}</p>', SimpleDOM.getNodeTextContent(allAmounts[i]), uom, prettyUom)
+                fieldLabel : portal.util.xml.SimpleDOM.getNodeTextContent(allTitles[i]),
+                html : String.format('<p qtip="Unit of Measurement: {1}">{0} {2}</p>', portal.util.xml.SimpleDOM.getNodeTextContent(allAmounts[i]), uom, prettyUom)
             });
         }
 
@@ -80,6 +80,6 @@ GenericParser.Factory.SamplingFeatureCollectionFactory = Ext.extend(GenericParse
                 }]
             }]
         });
-        return new GenericParser.BaseComponent(rootCfg);
+        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

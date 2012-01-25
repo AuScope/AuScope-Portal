@@ -1,19 +1,19 @@
 /**
  * A factory for parsing a gsml:GeologicUnit element.
  */
-Ext.ns('GenericParser.Factory');
-GenericParser.Factory.GeologicUnitFactory = Ext.extend(GenericParser.Factory.BaseFactory, {
+Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
+    extend : 'portal.layer.querier.wfs.factories.BaseFactory',
 
     /**
      * Accepts all GenericParser.Factory.BaseFactory configuration options
      */
     constructor : function(cfg) {
-        GenericParser.Factory.GeologicUnitFactory.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     },
 
     supportsNode : function(domNode) {
         return domNode.namespaceURI === this.XMLNS_GSML_2 &&
-            SimpleDOM.getNodeLocalName(domNode) === 'GeologicUnit';
+            portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'GeologicUnit';
     },
 
     /**
@@ -21,12 +21,12 @@ GenericParser.Factory.GeologicUnitFactory = Ext.extend(GenericParser.Factory.Bas
      */
     parseNode : function(domNode, wfsUrl, rootCfg) {
         //Lookup various fields via xPath
-        var gmlId = SimpleXPath.evaluateXPathString(domNode, '@gml:id');
-        var coords = SimpleXPath.evaluateXPathString(domNode, 'gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point');
-        var obsMethod = SimpleXPath.evaluateXPathString(domNode, 'gsml:occurrence/gsml:MappedFeature/gsml:observationMethod/gsml:CGI_TermValue/gsml:value[@codeSpace=\'www.ietf.org/rfc/rfc1738\']');
-        var rockMaterial = SimpleXPath.evaluateXPathString(domNode, 'gsml:composition/gsml:CompositionPart/gsml:material/gsml:RockMaterial/gsml:lithology/@xlink:href');
-        var proportion = SimpleXPath.evaluateXPathString(domNode, 'gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value');
-        var weatheringDesc = SimpleXPath.evaluateXPathString(domNode, 'gsml:weatheringCharacter/gsml:WeatheringDescription/gsml:weatheringProduct/gsml:RockMaterial/gsml:lithology/@xlink:href');
+        var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
+        var coords = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point');
+        var obsMethod = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:occurrence/gsml:MappedFeature/gsml:observationMethod/gsml:CGI_TermValue/gsml:value[@codeSpace=\'www.ietf.org/rfc/rfc1738\']');
+        var rockMaterial = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:composition/gsml:CompositionPart/gsml:material/gsml:RockMaterial/gsml:lithology/@xlink:href');
+        var proportion = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value');
+        var weatheringDesc = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:weatheringCharacter/gsml:WeatheringDescription/gsml:weatheringProduct/gsml:RockMaterial/gsml:lithology/@xlink:href');
 
         //Figure out our located specimen id
         var geoUnitPrefix = 'geologicUnit_';
@@ -104,7 +104,7 @@ GenericParser.Factory.GeologicUnitFactory = Ext.extend(GenericParser.Factory.Bas
 
                     wfsParser.makeWFSRequest(function(wfsParser, rootCmp) {
                         if (rootCmp) {
-                            var popup = new Ext.Window({
+                            var popup = Ext.create('Ext.Window', {
                                 title: 'Specimen Chemical Analyses',
                                 layout : 'fit',
                                 width : 1000,
@@ -117,6 +117,6 @@ GenericParser.Factory.GeologicUnitFactory = Ext.extend(GenericParser.Factory.Bas
                 }
             }]
         });
-        return new GenericParser.BaseComponent(rootCfg);
+        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

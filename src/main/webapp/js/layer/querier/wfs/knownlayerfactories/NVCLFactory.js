@@ -1,11 +1,11 @@
 /**
  * A factory for parsing WFS features from the National Virtual Core Library known layer.
  */
-Ext.ns('GenericParser.KnownLayerFactory');
-GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLayerFactory.BaseFactory, {
+Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
+    extend : 'portal.layer.querier.wfs.knownlayerfactories.BaseFactory',
 
     constructor : function(cfg) {
-        GenericParser.KnownLayerFactory.NVCLFactory.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     },
 
     /**
@@ -26,7 +26,7 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
 
         //We create an instance of our popup window but don't show it immediately
         //We need to dynamically add to its contents
-        var win = new Ext.Window({
+        var win = Ext.create('Ext.Window', {
             border      : true,
             layout      : 'fit',
             resizable   : false,
@@ -46,26 +46,23 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
         var tp = win.items.itemAt(0); // store a reference to our tab panel for easy access
 
         //This store is for holding log info
-        var logStore = new Ext.data.Store({
-            proxy : new Ext.data.HttpProxy(new Ext.data.Connection({
+        var logStore = Ext.create('Ext.data.Store', {
+            model : 'portal.knownlayer.nvcl.Log',
+            proxy : {
+                type : 'ajax',
                 url : 'getNVCLLogs.do',
                 extraParams : {
                     serviceUrl : nvclDataServiceUrl,
                     datasetId : datasetId,
                     mosaicService : true
+                },
+                reader : {
+                    type : 'json',
+                    root : 'data',
+                    successProperty : 'success',
+                    messageProperty : 'msg',
                 }
-            })),
-            reader : new Ext.data.JsonReader({
-                idProperty : 'logId',
-                root : 'data',
-                successProperty : 'success',
-                messageProperty : 'msg',
-                fields : [
-                    {name : 'logId'},
-                    {name : 'logName'},
-                    {name : 'sampleCount'}
-                ]
-            })
+            }
         });
 
         //Load our log store, populate our window when it finishes loading
@@ -152,24 +149,21 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
                 var CheckBox = new Ext.grid.CheckboxSelectionModel();
                 var scalarGrid = new Ext.grid.GridPanel({
                     //This store will be loaded when this component renders
-                    store           : new Ext.data.Store({
-                        proxy : new Ext.data.HttpProxy(new Ext.data.Connection({
+                    store : Ext.create('Ext.data.Store', {
+                        proxy : {
+                            type : 'ajax',
                             url : 'getNVCLLogs.do',
                             extraParams : {
                                 serviceUrl : nvclDataServiceUrl,
                                 datasetId : datasetId
+                            },
+                            reader : {
+                                type : 'json',
+                                root : 'data',
+                                successProperty : 'success',
+                                messageProperty : 'msg',
                             }
-                        })),
-                        reader : new Ext.data.JsonReader({
-                            idProperty : 'logId',
-                            root : 'data',
-                            successProperty : 'success',
-                            messageProperty : 'msg',
-                            fields : [
-                                {name : 'logId'},
-                                {name : 'logName'}
-                            ]
-                        })
+                        }
                     }),
                     sm : CheckBox,
                     autoExpandColumn : 'log-name-col',
@@ -434,7 +428,7 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
      */
     showDownloadWindow : function(datasetId, datasetName, omUrl, nvclDownloadServiceUrl, featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource) {
         // Dataset download window
-        var win = new Ext.Window({
+        var win = Ext.create('Ext.Window', {
             border          : true,
             layout          : 'fit',
             resizable       : false,
@@ -630,7 +624,7 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
                                 return;
                             } else {
                                 Ext.getCmp('tsgEmailAddress').setValue(sEmail);
-                                var winStat = new Ext.Window({
+                                var winStat = Ext.create('Ext.Window' , {
                                     autoScroll  : true,
                                     border      : true,
                                     autoLoad    : String.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
@@ -671,7 +665,7 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
                                 sUrl += '"></iframe>';
                                 //alert(sUrl);
 
-                                var winDwld = new Ext.Window({
+                                var winDwld = Ext.create('Ext.Window', {
                                     autoScroll  : true,
                                     border      : true,
                                     //autoLoad  : sUrl,
@@ -732,25 +726,22 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
                 title : 'Available Datasets',
                 border : false,
                 //This is for holding our dataset information
-                store : new Ext.data.Store({
-                    proxy : new Ext.data.HttpProxy(new Ext.data.Connection({
+                store : Ext.create('Ext.data.Store', {
+                    model : 'portal.knownlayer.nvcl.Dataset',
+                    proxy : {
+                        type : 'ajax',
                         url : 'getNVCLDatasets.do',
                         extraParams : {
                             serviceUrl : nvclDataServiceUrl,
                             holeIdentifier : featureId.replace('gsml.borehole.', '')
+                        },
+                        reader : {
+                            idProperty : 'datasetId',
+                            root : 'data',
+                            successProperty : 'success',
+                            messageProperty : 'msg'
                         }
-                    })),
-                    reader : new Ext.data.JsonReader({
-                        idProperty : 'datasetId',
-                        root : 'data',
-                        successProperty : 'success',
-                        messageProperty : 'msg',
-                        fields : [
-                            {name : 'datasetId'},
-                            {name : 'datasetName'},
-                            {name : 'omUrl'}
-                        ]
-                    })
+                    }
                 }),
                 loadMask : true,
                 hideHeaders : true,
@@ -837,6 +828,6 @@ GenericParser.KnownLayerFactory.NVCLFactory = Ext.extend(GenericParser.KnownLaye
             }]
         });
 
-        return new GenericParser.BaseComponent(rootCfg);
+        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

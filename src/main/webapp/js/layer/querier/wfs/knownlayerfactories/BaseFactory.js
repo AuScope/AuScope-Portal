@@ -1,8 +1,9 @@
 /**
  * Abstract base class for all Known Layer Parser factories to inherit from.
  */
-Ext.ns('GenericParser.KnownLayerFactory');
-GenericParser.KnownLayerFactory.BaseFactory = Ext.extend(Ext.util.Observable, {
+Ext.define('portal.layer.querier.wfs.knownlayerfactories.BaseFactory', {
+    extend : 'Ext.util.Observable',
+
     /**
      * Accepts all Ext.util.Observable configuration options with the following additions
      * {
@@ -10,32 +11,34 @@ GenericParser.KnownLayerFactory.BaseFactory = Ext.extend(Ext.util.Observable, {
      * }
      */
     constructor : function(cfg) {
-        GenericParser.KnownLayerFactory.BaseFactory.superclass.constructor.call(this, cfg);
+        this.listeners = config.listeners;
+        this.callParent(arguments);
     },
 
     /**
      * abstract - to be overridden to return a boolean indicating whether this factory can
      * generate GenericParser.BaseComponent objects representing ancillary information about
      * a particular feature in a known layer
+     *
+     * function(knownLayer)
+     *
      */
-    supportsKnownLayer : function(knownLayer) {
-        return false;
-    },
+    supportsKnownLayer : portal.util.UnimplementedFunction,
 
     /**
      * abstract - Must be overridden by extending classes
      * This function must return an GenericParser.BaseComponent object that represents
      * ancillary information about the specified feature.
      *
-     * @param featureId A string representing some form of unique ID
-     * @param parentKnownLayer The knownLayer that the feature belongs to (cannot be null)
-     * @param parentCSWRecord The CSWRecord that is part of parentKnownLayer that 'featureId' belongs to.
-     * @param parentOnlineResource The online resource (belonging to parentCSWRecord) that featureId is derived from
-     * @param rootCfg a configuration object to be applied to the root GenericParser.BaseComponent
+     * function(featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource, rootCfg)
+     *
+     * featureId - A string representing some form of unique ID
+     * parentKnownLayer - The knownLayer that the feature belongs to (cannot be null)
+     * parentCSWRecord - The CSWRecord that is part of parentKnownLayer that 'featureId' belongs to.
+     * parentOnlineResource - The online resource (belonging to parentCSWRecord) that featureId is derived from
+     * rootCfg - a configuration object to be applied to the root GenericParser.BaseComponent
      */
-    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentCSWRecord, parentOnlineResource, rootCfg) {
-        return null;
-    },
+    parseKnownLayerFeature : portal.util.UnimplementedFunction,
 
 
     /**

@@ -2,32 +2,27 @@
  * Class for transforming a W3C DOM Document into a GenericParserComponent
  * by utilising a number of 'plugin' factories.
  */
-Ext.ns('GenericParser');
-GenericParser.Parser = Ext.extend(Ext.util.Observable, {
+Ext.define('portal.layer.querier.wfs.Parser', {
+    extend: 'Ext.util.Observable',
 
-    factoryList : [],
-
-    /**
-     * Accepts all Ext.util.Observable configuration options with the following additions
-     * {
-     *
-     * }
-     */
     constructor : function(cfg) {
-        GenericParser.Parser.superclass.constructor.call(this, cfg);
-
         //The following ordering is important as it dictates the order in which to try
         //factories for parsing a particular node
         var cfg = {
             genericParser : this
         };
-        this.factoryList.push(new GenericParser.Factory.GeologicUnitFactory(cfg));
-        this.factoryList.push(new GenericParser.Factory.LocatedSpecimenFactory(cfg));
-        this.factoryList.push(new GenericParser.Factory.SamplingFeatureCollectionFactory(cfg));
-        this.factoryList.push(new GenericParser.Factory.BoreholeFactory(cfg));
-        this.factoryList.push(new GenericParser.Factory.SimpleFactory(cfg));//The simple factory should always go last
-    },
+        this.factoryList = [];
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.GeologicUnitFactory', cfg));
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', cfg));
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory', cfg));
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.BoreholeFactory', cfg));
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.SimpleFactory', cfg));//The simple factory should always go last
 
+        this.listeners = config.listeners;
+
+        // Call our superclass constructor to complete construction process.
+        this.callParent(arguments);
+    },
 
     /**
      * Iterates through all internal factories until domNode can be parsed into GenericParser.BaseComponent
@@ -39,7 +34,7 @@ GenericParser.Parser = Ext.extend(Ext.util.Observable, {
 
         //In the event of an empty node, return an empty component
         if (!domNode) {
-            return new GenericParser.BaseComponent((rootCfg ? rootCfg : {}));
+            return Ext.create('portal.layer.querier.BaseComponent', (rootCfg ? rootCfg : {}));
         }
 
         for (var i = 0; i < this.factoryList.length; i++) {

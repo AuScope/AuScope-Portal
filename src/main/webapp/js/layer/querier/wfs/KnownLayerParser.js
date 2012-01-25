@@ -7,9 +7,8 @@
  * window is handled by this class (supported by underlying factories).
  *
  */
-Ext.ns('GenericParser');
-GenericParser.KnownLayerParser = Ext.extend(Ext.util.Observable, {
-    factoryList : [],
+Ext.define('portal.layer.querier.wfs.KnownLayerParser', {
+    extend: 'Ext.util.Observable',
 
     /**
      * Accepts all Ext.util.Observable configuration options with the following additions
@@ -18,10 +17,15 @@ GenericParser.KnownLayerParser = Ext.extend(Ext.util.Observable, {
      * }
      */
     constructor : function(cfg) {
-        GenericParser.KnownLayerParser.superclass.constructor.call(this, cfg);
+        //Setup class variables
+        this.factoryList = [];
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', cfg);
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', cfg);
 
-        this.factoryList.push(new GenericParser.KnownLayerFactory.NVCLFactory(cfg));
-        this.factoryList.push(new GenericParser.KnownLayerFactory.PressureDBFactory(cfg));
+        this.listeners = config.listeners;
+
+        // Call our superclass constructor to complete construction process.
+        this.callParent(arguments);
     },
 
     /**

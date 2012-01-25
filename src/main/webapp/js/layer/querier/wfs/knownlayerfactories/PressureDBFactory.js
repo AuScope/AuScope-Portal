@@ -1,11 +1,11 @@
 /**
  * A factory for parsing WFS features from the Pressure DB known layer.
  */
-Ext.ns('GenericParser.KnownLayerFactory');
-GenericParser.KnownLayerFactory.PressureDBFactory = Ext.extend(GenericParser.KnownLayerFactory.BaseFactory, {
+Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
+    extend : 'portal.layer.querier.wfs.knownlayerfactories.BaseFactory',
 
     constructor : function(cfg) {
-        GenericParser.KnownLayerFactory.PressureDBFactory.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     },
 
     /**
@@ -152,6 +152,6 @@ GenericParser.KnownLayerFactory.PressureDBFactory = Ext.extend(GenericParser.Kno
             }]
         });
 
-        return new GenericParser.BaseComponent(rootCfg);
+        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

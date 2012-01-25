@@ -1,21 +1,22 @@
 /**
  * Abstract base class for all Generic Parser factories to inherit from.
  */
-Ext.ns('GenericParser.Factory');
-
-GenericParser.Factory.BaseFactory = Ext.extend(Ext.util.Observable, {
+Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
+    extend : 'Ext.util.Observable',
 
     //Namespace Constants
     XMLNS_GSML_2 : 'urn:cgi:xmlns:CGI:GeoSciML:2.0',
     XMLNS_GML : 'http://www.opengis.net/gml',
     XMLNS_SA : 'http://www.opengis.net/sampling/1.0',
     XMLNS_OM : 'http://www.opengis.net/om/1.0',
-    XMLNS_SWE : 'http://www.opengis.net/swe/1.0.1',
+    XMLNS_SWE : 'http://www.opengis.net/swe/1.0.1'
 
 
-    //Reference back to genericParser that spawned this factory. Use
-    //this reference to parse nodes that your factory cannot handle.
-    genericParser : null,
+    config : {
+        //Reference back to genericParser that spawned this factory. Use
+        //this reference to parse nodes that your factory cannot handle.
+        genericParser : null
+    },
 
     /**
      * Accepts all Ext.util.Observable configuration options with the following additions
@@ -25,8 +26,8 @@ GenericParser.Factory.BaseFactory = Ext.extend(Ext.util.Observable, {
      */
     constructor : function(cfg) {
         this.genericParser = cfg.genericParser;
-
-        GenericParser.Factory.BaseFactory.superclass.constructor.call(this, cfg);
+        this.listeners = cfg.listeners;
+        this.callParent(arguments);
     },
 
     /**
@@ -36,24 +37,24 @@ GenericParser.Factory.BaseFactory = Ext.extend(Ext.util.Observable, {
      *
      * Otherwise false must be returned
      *
-     * @param domNode A W3C DOM Node object
+     * function(domNode)
+     *
+     * domNode - A W3C DOM Node object
      */
-    supportsNode : function(domNode) {
-        return false;
-    },
+    supportsNode : portal.util.UnimplementedFunction,
 
     /**
      * abstract - Must be overridden by extending classes
      * This function must return a GenericParserComponent that represents
      * domNode.
      *
-     * @param domNode A W3C DOM Node object
-     * @param wfsUrl The URL of the WFS where domNode was sourced from
-     * @param rootCfg a configuration object to be applied to the root GenericParser.BaseComponent
+     * function(domNode, wfsUrl, rootCfg)
+     *
+     * domNode - A W3C DOM Node object
+     * wfsUrl - The URL of the WFS where domNode was sourced from
+     * rootCfg - a configuration object to be applied to the root GenericParser.BaseComponent
      */
-    parseNode : function(domNode, wfsUrl, rootCfg) {
-        return new GenericParser.BaseComponent(rootCfg);
-    },
+    parseNode : portal.util.UnimplementedFunction,
 
     /**
      * Makes a HTML string containing an Anchor element with the specified content.

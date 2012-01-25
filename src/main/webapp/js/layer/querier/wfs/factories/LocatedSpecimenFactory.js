@@ -1,19 +1,19 @@
 /**
  * A factory for parsing a sa:LocatedSpecimen element.
  */
-Ext.ns('GenericParser.Factory');
-GenericParser.Factory.LocatedSpecimenFactory = Ext.extend(GenericParser.Factory.BaseFactory, {
+Ext.define('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', {
+    extend : 'portal.layer.querier.wfs.factories.BaseFactory',
 
     /**
      * Accepts all GenericParser.Factory.BaseFactory configuration options
      */
     constructor : function(cfg) {
-        GenericParser.Factory.LocatedSpecimenFactory.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     },
 
     supportsNode : function(domNode) {
         return domNode.namespaceURI === this.XMLNS_SA &&
-            SimpleDOM.getNodeLocalName(domNode) === 'LocatedSpecimen';
+            portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'LocatedSpecimen';
     },
 
     /**
@@ -21,9 +21,9 @@ GenericParser.Factory.LocatedSpecimenFactory = Ext.extend(GenericParser.Factory.
      */
     parseNode : function(domNode, wfsUrl, rootCfg) {
         //Lookup various fields via xPath
-        var gmlId = SimpleXPath.evaluateXPathString(domNode, '@gml:id');
-        var allAnalyteNodes = SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:relatedObservation/om:Observation/om:result/swe:Quantity/gml:name');
-        var materialClass = SimpleXPath.evaluateXPathString(domNode, 'sa:materialClass');
+        var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
+        var allAnalyteNodes = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:relatedObservation/om:Observation/om:result/swe:Quantity/gml:name');
+        var materialClass = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'sa:materialClass');
 
         if (!materialClass) {
             materialClass = '';
@@ -31,37 +31,26 @@ GenericParser.Factory.LocatedSpecimenFactory = Ext.extend(GenericParser.Factory.
 
         var allAnalytes = [];
         for (var i = 0; i < allAnalyteNodes.length; i++) {
-            allAnalytes.push(SimpleDOM.getNodeTextContent(allAnalyteNodes[i]));
+            allAnalytes.push(portal.util.xml.SimpleDOM.getNodeTextContent(allAnalyteNodes[i]));
         }
 
         //This store will hold our parsed located specimen
-        var groupStore = new Ext.data.GroupingStore({
-            proxy           : new Ext.data.Connection({
+        var locSpecStore = Ext.create('Ext.data.Store', {
+            model : 'portal.knownlayer.yilgarngeochem.LocatedSpecimen',
+            proxy : {
+                type : 'ajax',
                 url: 'doLocatedSpecimenFeature.do',
-                timeout:180000,
-                extraParams : {
+                timeout: 180000,
+                extraParams: {
                     serviceUrl : wfsUrl,
                     featureId : gmlId
                 }
-            }),
-            autoDestroy     : true,
-            groupField      : 'analyteName',
-            sortInfo        : {
-                field           : 'analyteName',
-                direction       : 'ASC'
             },
-            reader : new Ext.data.ArrayReader({
-                fields : [
-                    'analyteName',
-                    'analyteValue',
-                    'uom',
-                    'analyticalMethod',
-                    'labDetails',
-                    'analysisDate',
-                    'preparationDetails',
-                    'recordIndex'
-                ]
-            })
+            reader: {
+                type : 'array'
+            },
+            groupField : 'analyteName',
+            sorters : ['analyteName']
         });
 
         //Build our component
@@ -110,14 +99,14 @@ GenericParser.Factory.LocatedSpecimenFactory = Ext.extend(GenericParser.Factory.
                                     ]);
                             }
 
-                            groupStore.loadData(recordItems);
+                            locSpecStore.loadData(recordItems);
                         }
                     });
                 }
             },
             items : [{
                 xtype : 'grid',
-                store : groupStore,
+                store : locSpecStore,
                 frame:true,
                 columnLines: true,
                 iconCls:'icon-grid',
@@ -171,10 +160,10 @@ GenericParser.Factory.LocatedSpecimenFactory = Ext.extend(GenericParser.Factory.
                             select : function(combo, record, index){
                                 //This will occur if our field is cleared
                                 if (record == null) {
-                                    groupStore.filter('analyteName', '', false, false);
+                                    locSpecStore.filter('analyteName', '', false, false);
                                 } else {
                                     var selectedMineral = record.get('field1'); //TODO change to a proper field name
-                                    groupStore.filter('analyteName', selectedMineral, false, false);
+                                    locSpecStore.filter('analyteName', selectedMineral, false, false);
                                 }
                             }
                         }
@@ -184,6 +173,7 @@ GenericParser.Factory.LocatedSpecimenFactory = Ext.extend(GenericParser.Factory.
                     materialClass]
             }]
         });
-        return new GenericParser.BaseComponent(rootCfg);
+
+        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });
