@@ -16,6 +16,7 @@ Ext.define('portal.knownlayer.KnownLayer', {
         { name: 'grouping', type: 'string' }, //A term in which like KnownLayers can be grouped under
         { name: 'proxyUrl', type: 'string' } //A URL of a backend controller method for fetching available data with a filter specific for this KnonwLayer
         { name: 'proxyCountUrl', type: 'string' }, //A URL of a backend controller method for fetching the count of data available (eg for WFS a URL that will set featureType=hits)
+        { name: 'iconUrl', type: 'string' } //A URL of an icon that will be used for rendering GMarkers associated with this layer
     ],
 
     hasMany: {model: 'portal.csw.CSWRecord', name: 'cswRecords'} //a set of portal.csw.CSWRecord objects that belong to this KnownLayer grouping

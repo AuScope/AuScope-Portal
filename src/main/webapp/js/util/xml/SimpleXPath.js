@@ -11,11 +11,11 @@
  * Mozilla Firefox 3+
  * Google Chrome
  */
-Ext.ns('SimpleXPath');
+Ext.ns('portal.util.xml.SimpleXPath');
 
 //Constants
-SimpleXPath.XPATH_STRING_TYPE = window.XPathResult ? XPathResult.STRING_TYPE : 0;
-SimpleXPath.XPATH_UNORDERED_NODE_ITERATOR_TYPE = window.XPathResult ? XPathResult.UNORDERED_NODE_ITERATOR_TYPE : 1;
+portal.util.xml.SimpleXPath.XPATH_STRING_TYPE = window.XPathResult ? XPathResult.STRING_TYPE : 0;
+portal.util.xml.SimpleXPath.XPATH_UNORDERED_NODE_ITERATOR_TYPE = window.XPathResult ? XPathResult.UNORDERED_NODE_ITERATOR_TYPE : 1;
 
 /**
  * A wrapper around the DOM defined Document.evaluate function
@@ -23,7 +23,7 @@ SimpleXPath.XPATH_UNORDERED_NODE_ITERATOR_TYPE = window.XPathResult ? XPathResul
  * Because not every browser supports document.evaluate we need to have a pure javascript
  * backup in place
  */
-SimpleXPath.evaluateXPath = function(document, domNode, xPath, resultType) {
+portal.util.xml.SimpleXPath.evaluateXPath = function(document, domNode, xPath, resultType) {
     if (document.evaluate) {
         return document.evaluate(xPath, domNode, document.createNSResolver(domNode), resultType, null);
     } else {
@@ -35,16 +35,16 @@ SimpleXPath.evaluateXPath = function(document, domNode, xPath, resultType) {
 
         //we need to turn that into an XPathResult object (or an emulation of one)
         switch(resultType) {
-        case SimpleXPath.XPATH_STRING_TYPE:
+        case portal.util.xml.SimpleXPath.XPATH_STRING_TYPE:
             var stringValue = null;
             if (matchingNodeArray.length > 0) {
-                stringValue = SimpleDOM.getNodeTextContent(matchingNodeArray[0]);
+                stringValue = portal.util.xml.SimpleDOM.getNodeTextContent(matchingNodeArray[0]);
             }
 
             return {
                 stringValue : stringValue
             };
-        case SimpleXPath.XPATH_UNORDERED_NODE_ITERATOR_TYPE:
+        case portal.util.xml.SimpleXPath.XPATH_UNORDERED_NODE_ITERATOR_TYPE:
             return {
                 _arr : matchingNodeArray,
                 _i : 0,
@@ -67,11 +67,11 @@ SimpleXPath.evaluateXPath = function(document, domNode, xPath, resultType) {
 /**
  * Evaluates an XPath which will return an array of W3C DOM nodes
  */
-SimpleXPath.evaluateXPathNodeArray = function(domNode, xPath) {
+portal.util.xml.SimpleXPath.evaluateXPathNodeArray = function(domNode, xPath) {
     var document = domNode.ownerDocument;
     var xpathResult = null;
     try {
-        xpathResult = SimpleXPath.evaluateXPath(document, domNode, xPath, SimpleXPath.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
+        xpathResult = portal.util.xml.SimpleXPath.evaluateXPath(document, domNode, xPath, portal.util.xml.SimpleXPath.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
     } catch(err) {
         return [];
     }
@@ -89,8 +89,8 @@ SimpleXPath.evaluateXPathNodeArray = function(domNode, xPath) {
 /**
  * Evaluates an Xpath for returning a string
  */
-SimpleXPath.evaluateXPathString = function(domNode, xPath) {
+portal.util.xml.SimpleXPath.evaluateXPathString = function(domNode, xPath) {
     var document = domNode.ownerDocument;
-    var xpathResult = SimpleXPath.evaluateXPath(document, domNode, xPath, SimpleXPath.XPATH_STRING_TYPE);
+    var xpathResult = portal.util.xml.SimpleXPath.evaluateXPath(document, domNode, xPath, portal.util.xml.SimpleXPath.XPATH_STRING_TYPE);
     return xpathResult.stringValue;
 };

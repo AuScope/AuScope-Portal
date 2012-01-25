@@ -4,23 +4,30 @@
  *
  * It supports the following events
  * clear - function(OverlayManager manager) - raised after clearOverlays is called
- * addoverlay - function(OverlayManager manager, GOverlay overlay) - raised whenever addOverlay is called
+ * addoverlay - function(OverlayManager manager, GOverlay[] overlays) - raised whenever addOverlay is called
  *                                                                   (after the overlay has been added to the map)
+ * addmarker - function(OverlayManager manager, GMarker[] markers) - raised whenever a marker is added to the map
  */
-OverlayManager = Ext.extend(Ext.util.Observable, {
-    overlayList : null,
-    markerManager : null,
-    map : null,
+Ext.define('portal.util.gmap.OverlayManager', {
+    extend: 'Ext.util.Observable',
 
     /**
-     * Expects an instance of a GMap2 object
+     * {
+     *  map : an instance of a GMap2 object (see google map API v2)
+     * }
      */
-    constructor : function(map) {
+    constructor : function(config) {
+        this.addEvents({
+            'clear' : true,
+            'addoverlay' : true
+        });
+
+        this.listeners = config.listeners;
+        this.map = config.map;
+        this.markerManager = new MarkerManager(this.map); //this is a non Ext/Portal managed class and thus requires 'new' keyword
         this.overlayList = [];
-        this.markerManager = new MarkerManager(map);
-        this.map = map;
-        OverlayManager.superclass.constructor.call(this, {});
-        this.addEvents('clear', 'addoverlay');
+
+        this.callParent(arguments);
     },
 
     /**
@@ -39,14 +46,40 @@ OverlayManager = Ext.extend(Ext.util.Observable, {
 
     /**
      * Adds a single overlay to the map and this instance
-     * @param overlay
+     * @param overlay instance of GOverlay
      * @return
      */
     addOverlay : function(overlay) {
         this.map.addOverlay(overlay);
         this.overlayList.push(overlay);
 
-        this.fireEvent('addoverlay', this, overlay);
+        this.fireEvent('addoverlay', this, [overlay]);
+    },
+
+    /**
+     * Adds an array of overlays to the map and this instance
+     * @param overlay an array of GOverlay objects
+     * @return
+     */
+    addOverlays : function(overlays) {
+        //Add layers to map
+        for (var i = 0; i < overlays.length; i++) {
+            this.map.addOverlay(overlays[i]);
+        }
+        this.overlayList = this.overlayList.concat(overlays);
+
+        this.fireEvent('addoverlay', this, overlays);
+    },
+
+    /**
+     * Adds an array of GMarker objects to this OverlayManager and internal map
+     * @param markers and array of GMarker objects
+     */
+    addMarkers : function(markers) {
+        this.markerManager.addMarkers(markers, 0);
+        this.markerManager.refresh();
+
+        this.fireEvent('addmarker', this, markers);
     },
 
     /**

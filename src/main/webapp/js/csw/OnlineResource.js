@@ -24,7 +24,52 @@ Ext.define('portal.csw.OnlineResource', {
         WFS : 'WFS', //represents a Web Feature Service
         WCS : 'WCS', //represents a Web Coverage Service
         WWW : 'WWW', //represents a regular HTTP web link
-        OPeNDAP : 'OPeNDAP' //represents an OPeNDAP service
+        OPeNDAP : 'OPeNDAP', //represents an OPeNDAP service
+
+        /**
+         * Static utility function for extracting a subset of OnlineResources from an array
+         * according to a variety of filter options
+         *
+         * name - [Set to undefined to not filter] The name to filter by
+         * description - [Set to undefined to not filter] The description to filter by
+         * url - [Set to undefined to not filter] The url to filter by
+         * strict - if set to true will filter the full url else only filter the host. Defaults to true
+         * array - An array of portal.csw.OnlineResource objects
+         */
+        getFilteredFromArray : function(array, type, name, description, url, strict) {
+            var filtered = [];
+            for (var i = 0; i < array.length; i++) {
+                var cmp = array[i];
+
+                if (onlineResourceType !== undefined && cmp.get('type') !== onlineResourceType) {
+                    continue;
+                }
+
+                if (name !== undefined && cmp.get('name') !== name) {
+                    continue;
+                }
+
+                if (description !== undefined && cmp.get('description') !== description) {
+                    continue;
+                }
+
+                if (url !== undefined && (strict === true || strict === undefined) && cmp.get('url') !== url) {
+                    continue;
+                }
+
+                if (url !== undefined && strict === false && this.getHostname(cmp.url) !== this.getHostname(url)) {
+                    var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+                    var hostName = cmp.get('url').match(re)[1].toString();
+
+                    if (url !== hostName) {
+                        continue;
+                    }
+                }
+
+                filtered.push(cmp);
+            }
+            return filtered;
+        }
     }
 
     fields: [

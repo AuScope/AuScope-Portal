@@ -6,19 +6,19 @@
  * Mozilla Firefox 3+
  * Google Chrome
  */
-Ext.ns('SimpleDOM');
+Ext.ns('portal.util.xml');
 
 //Constants
-SimpleDOM.XML_NODE_ELEMENT = 1;
-SimpleDOM.XML_NODE_ATTRIBUTE = 2;
-SimpleDOM.XML_NODE_TEXT = 3;
+portal.util.xml.SimpleDOM.XML_NODE_ELEMENT = 1;
+portal.util.xml.SimpleDOM.XML_NODE_ATTRIBUTE = 2;
+portal.util.xml.SimpleDOM.XML_NODE_TEXT = 3;
 
 /**
  * Utility for retrieving a W3C DOM Node 'localName' attribute across browsers.
  *
  * The localName is the node name without any namespace prefixes
  */
-SimpleDOM.getNodeLocalName = function(domNode) {
+portal.util.xml.SimpleDOM.getNodeLocalName = function(domNode) {
     return domNode.localName ? domNode.localName : domNode.baseName;
 };
 
@@ -26,10 +26,10 @@ SimpleDOM.getNodeLocalName = function(domNode) {
  * Figure out if domNode is a leaf or not
  * (Leaves have no nodes from XML_NODE_ELEMENT)
  */
-SimpleDOM.isLeafNode = function(domNode) {
+portal.util.xml.SimpleDOM.isLeafNode = function(domNode) {
     var isLeaf = true;
     for ( var i = 0; i < domNode.childNodes.length && isLeaf; i++) {
-        isLeaf = domNode.childNodes[i].nodeType != SimpleDOM.XML_NODE_ELEMENT;
+        isLeaf = domNode.childNodes[i].nodeType != portal.util.xml.SimpleDOM.XML_NODE_ELEMENT;
     }
 
     return isLeaf;
@@ -42,7 +42,7 @@ SimpleDOM.isLeafNode = function(domNode) {
  * @param namespaceUri [Optional] String to compare against node namespaceURI
  * @param nodeName [Optional] String to compare against the node localName
  */
-SimpleDOM.filterNodeArray = function(nodeArray, nodeType, namespaceUri, nodeName) {
+portal.util.xml.SimpleDOM.filterNodeArray = function(nodeArray, nodeType, namespaceUri, nodeName) {
     var matchingNodes = [];
     for (var i = 0; i < nodeArray.length; i++) {
         var node = nodeArray[i];
@@ -70,8 +70,8 @@ SimpleDOM.filterNodeArray = function(nodeArray, nodeType, namespaceUri, nodeName
  * @param childNamespaceURI [Optional] The URI to lookup as a String
  * @param childNodeName [Optional] The node name to lookup as a String
  */
-SimpleDOM.getMatchingChildNodes = function(domNode, childNamespaceURI, childNodeName) {
-    return SimpleDOM.filterNodeArray(domNode.childNodes, SimpleDOM.XML_NODE_ELEMENT, childNamespaceURI, childNodeName);
+portal.util.xml.SimpleDOM.getMatchingChildNodes = function(domNode, childNamespaceURI, childNodeName) {
+    return portal.util.xml.SimpleDOM.filterNodeArray(domNode.childNodes, portal.util.xml.SimpleDOM.XML_NODE_ELEMENT, childNamespaceURI, childNodeName);
 },
 
 /**
@@ -79,21 +79,21 @@ SimpleDOM.getMatchingChildNodes = function(domNode, childNamespaceURI, childNode
  * @param childNamespaceURI [Optional] The URI to lookup as a String
  * @param childNodeName [Optional] The node name to lookup as a String
  */
-SimpleDOM.getMatchingAttributes = function(domNode, attributeNamespaceURI, attributeName) {
-    return SimpleDOM._filterNodeArray(domNode.attributes, SimpleDOM.XML_NODE_ATTRIBUTE, attributeNamespaceURI, attributeName);
+portal.util.xml.SimpleDOM.getMatchingAttributes = function(domNode, attributeNamespaceURI, attributeName) {
+    return portal.util.xml.SimpleDOM._filterNodeArray(domNode.attributes, portal.util.xml.SimpleDOM.XML_NODE_ATTRIBUTE, attributeNamespaceURI, attributeName);
 };
 
 /**
  * Given a DOM node, return its text content (however the browser defines it)
  */
-SimpleDOM.getNodeTextContent = function(domNode) {
+portal.util.xml.SimpleDOM.getNodeTextContent = function(domNode) {
     return domNode.textContent ? domNode.textContent : domNode.text;
 };
 
 /**
  * Parse string to DOM
  */
-SimpleDOM.parseStringToDOM = function(xmlString){
+portal.util.xml.SimpleDOM.parseStringToDOM = function(xmlString){
     // Load our xml string into DOM
     var xmlDocument = null;
     if(window.DOMParser) {

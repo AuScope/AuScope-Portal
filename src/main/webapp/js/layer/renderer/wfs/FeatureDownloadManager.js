@@ -4,13 +4,17 @@
     A class for downloading features from a given URL. This class handles all querying for record counts, display
     of modal question's and downloading the actual records
 */
-FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
-    _proxyFetchUrl : null,
-    _proxyCountUrl : null,
-    _featureSetSizeThreshold : 200,
-    _timeout : 1000 * 60 * 20, //20 minute timeout,
-    _filterParams : {},
-    _visibleMapBounds : null,
+Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
+    extend: 'Ext.util.Observable',
+
+    config : {
+        proxyFetchUrl : null,
+        proxyCountUrl : null,
+        featureSetSizeThreshold : 200,
+        timeout : 1000 * 60 * 20, //20 minute timeout,
+        filterParams : {},
+        visibleMapBounds : null
+    },
 
     /**
      * Accepts a Ext.util.Observable configuration object with the following extensions
@@ -21,7 +25,6 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
      *  featureSetSizeThreshold : [Optional] Number - The minimum number of features that need to be returned before the user is prompted (default 200)
      *  timeout : [Optional] Number - the Ajax request timeout in milliseconds (default is 20 minutes)
      *  filterParams : [Optional] Any additional filter parameters to apply to the request
-     *
      * }
      *
      * Registers the following events
@@ -30,28 +33,13 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
      *  cancelled : function(FeatureDownloadManager this)
      */
     constructor : function(cfg) {
-        this._proxyFetchUrl = cfg.proxyFetchUrl;
-        this._proxyCountUrl = cfg.proxyCountUrl;
-        if (cfg.visibleMapBounds) {
-            this._visibleMapBounds = cfg.visibleMapBounds;
-        }
-        if (cfg.featureSetSizeThreshold !== undefined) {
-            this._featureSetSizeThreshold = cfg.featureSetSizeThreshold;
-        }
-        if (cfg.filterParams !== undefined) {
-            this._filterParams = cfg.filterParams;
-        }
-        if (cfg.timeout !== undefined) {
-            this._timeout = cfg.timeout;
-        }
-
         this.addEvents({
             'success' : true,
             'error' : true,
             'cancelled' : true
         });
         this.listeners = cfg.listeners;
-        FeatureDownloadManager.superclass.constructor.call(this, cfg);
+        this.callParent(arguments)
     },
 
     /**
@@ -59,7 +47,7 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
      */
     _buildRequestParams : function(boundingBox, maxFeatures) {
         var params = {};
-        Ext.apply(params, this._filterParams);
+        Ext.apply(params, this.filterParams);
         if (boundingBox) {
             params.bbox = Ext.util.JSON.encode(boundingBox);
         }
@@ -76,7 +64,7 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
     _doDownload : function (boundingBox, maxFeatures) {
         var params = this._buildRequestParams(boundingBox, maxFeatures);
         Ext.Ajax.request({
-            url : this._proxyFetchUrl,
+            url : this.proxyFetchUrl,
             params : params,
             callback : function(options, success, response) {
                 if (success) {
@@ -94,7 +82,7 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
                     this.fireEvent('error', this, 'AJAX feature request failed.', null);
                 }
             },
-            timeout : this._timeout,
+            timeout : this.timeout,
             scope : this
         });
     },
@@ -110,7 +98,7 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
                 return;
             }
 
-            if (jsonResponse.data > this._featureSetSizeThreshold) {
+            if (jsonResponse.data > this.featureSetSizeThreshold) {
                 var win = null;
                 var callingInstance = this;
 
@@ -131,7 +119,7 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
 
             } else {
                 //If we have an acceptable number of records, this is how we shall proceed
-                this._doDownload(this._visibleMapBounds);
+                this._doDownload(this.visibleMapBounds);
             }
         } else {
             //If the count download fails,
@@ -145,18 +133,18 @@ FeatureDownloadManager = Ext.extend(Ext.util.Observable, {
     startDownload : function() {
         //Firstly attempt to discern how many records are available, this will affect how we proceed
         //If we dont have a proxy for doing this, then just download everything
-        if (this._proxyCountUrl && this._proxyCountUrl.length > 0) {
+        if (this.proxyCountUrl && this.proxyCountUrl.length > 0) {
             Ext.Ajax.request({
-                url : this._proxyCountUrl,
-                params : this._buildRequestParams(this._visibleMapBounds),
+                url : this.proxyCountUrl,
+                params : this._buildRequestParams(this.visibleMapBounds),
                 scope : this,
-                timeout : this._timeout,
+                timeout : this.timeout,
                 callback : this._doCount
             });
         } else {
             //if we dont have a URL to proxy our count requests through then just
             //attempt to download all visible features (it's better than grabbing thousands of features)
-            this._doDownload(this._visibleMapBounds, this._featureSetSizeThreshold);
+            this._doDownload(this.visibleMapBounds, this.featureSetSizeThreshold);
         }
     }
 });
