@@ -45,14 +45,28 @@ Ext.define('portal.util.ObservableMap', {
      * and only raise a single event
      *
      * parameters - a plain old javascript object
+     * clearFirst - [Optional] if true, then the internal map will be cleared BEFORE any values are added
      */
-    setParameters : function(parameters) {
+    setParameters : function(parameters, clearFirst) {
+        //keep track of the list of keys that changed
+        //Initially only the values in parameters are the values that are changing
+        var changedParameters = Ext.apply({}, parameters);
+
+        //We can optionally wipe out all parameters during this function
+        if (clearFirst) {
+            //However, if we are clearing the map first then a lot of values will be changing
+            changedParameters = Ext.apply(changedParameters, this.parameters);
+            this.parameters = {}; //clearing first is really easy
+        }
+
+        //Apply parameter values to the internal map
         this.parameters = Ext.apply(this.parameters, parameters);
 
-        //generate the list of keys that changed
+        //Enumerate our list of changed parameters to pass the values
+        //to whatever event handlers are listening
         var key;
         var keyList = [];
-        for (key in parameters) {
+        for (key in changedParameters) {
             keyList.push(key);
         }
         this.fireEvent('change', this, keyList);

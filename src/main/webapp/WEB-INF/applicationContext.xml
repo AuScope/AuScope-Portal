@@ -60,6 +60,7 @@
         <constructor-arg name="recordInformationUrl" value="http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
     </bean>
     <bean id="knownTypeMine" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <property name="id" value="erml-mine"/>
         <constructor-arg name="featureTypeName" value="er:Mine"/>
         <constructor-arg name="title" value="Earth Resource Mine"/>
         <constructor-arg name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
@@ -93,6 +94,7 @@
         <property name="group" value="AuScope Earth Resource Services"/>
     </bean>
     <bean id="knownTypeMineralOccurrence" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <property name="id" value="erml-mineraloccurrence"/>
         <constructor-arg name="featureTypeName" value="er:MineralOccurrence"/>
         <constructor-arg name="title" value="Earth Resource Mineral Occurrence"/>
         <constructor-arg name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MineralOccurence"/>
@@ -126,6 +128,7 @@
         <property name="group" value="AuScope Earth Resource Services"/>
     </bean>
     <bean id="knownTypeMiningActivity" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <property name="id" value="erml-miningactivity"/>
         <constructor-arg name="featureTypeName" value="er:MiningActivity"/>
         <constructor-arg name="title" value="Earth Resource Mining Activity"/>
         <constructor-arg name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
@@ -159,6 +162,7 @@
         <property name="group" value="AuScope Earth Resource Services"/>
     </bean>
     <bean id="knownTypeGeodesy" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <property name="id" value="geodesy:gnssstation"/>
         <constructor-arg name="featureTypeName" value="ngcp:GnssStation"/>
         <constructor-arg name="title" value="Geodesy"/>
         <constructor-arg name="description" value="A collection of continuous operating Global Navigation Satellite Systems (GNSS) stations in Australia, its Territories and the South Pacific."/>
@@ -191,6 +195,7 @@
         </property>
     </bean>
     <bean id="knownTypeGeochron" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <property name="id" value="geochronology"/>
         <constructor-arg name="featureTypeName" value="Geochron:geochronology"/>
         <constructor-arg name="title" value="Geochronology"/>
         <constructor-arg name="description" value=""/>
@@ -217,6 +222,7 @@
         </constructor-arg>
     </bean>
     <bean id="knownTypeGeotransects" class="org.auscope.portal.server.web.KnownLayerWMS">
+        <property name="id" value="ga-geotransects"/>
         <constructor-arg name="title" value="Geotransects"/>
         <constructor-arg name="description" value="Seismic geotransect data for a strategically selected set of corridors across Australia that cross major geological features."/>
         <constructor-arg name="layerName" value="gt:AuScope_Land_Seismic_gda94"/>
@@ -230,6 +236,7 @@
         </property>
     </bean>
     <bean id="knownTypeReports" class="org.auscope.portal.server.web.KnownLayerKeywords">
+        <property name="id" value="portal-reports"/>
         <constructor-arg name="title" value="Reports"/>
         <constructor-arg name="description" value="A collection of scientific reports that have been spatially located"/>
         <constructor-arg name="descriptiveKeyword" value="Report"/>
@@ -248,6 +255,7 @@
         </constructor-arg>
     </bean>
     <bean id="knownTypeYilgarnGeochemistry" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <property name="id" value="yilgarn-geochem"/>
         <constructor-arg name="featureTypeName" value="gsml:GeologicUnit"/>
         <constructor-arg name="title" value="Yilgarn Laterite Geochemistry"/>
         <constructor-arg name="description" value="A collection of detailed information about all analytes that were detected at a specific location"/>
@@ -381,6 +389,7 @@
         <property name="group" value="Boreholes"/>
     </bean>
     <bean id="knownTypeGSMLBorehole" class="org.auscope.portal.server.web.KnownLayerWFS">
+        <property name="id" value="gsml-borehole"/>
         <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
         <constructor-arg name="title" value="All Boreholes"/>
         <constructor-arg name="description" value="A collection of services that support the GeoSciML Borehole feature type."/>
