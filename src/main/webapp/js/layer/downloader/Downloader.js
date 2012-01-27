@@ -24,12 +24,15 @@ Ext.define('portal.layer.downloader.Downloader', {
      * or some form of popup prompt).
      *
      * function(portal.csw.OnlineResource[] resources,
-     *          portal.layer.filterer.Filterer filterer)
+     *          portal.layer.filterer.Filterer renderedFilterer,
+     *          portal.layer.filterer.Filterer currentFilterer)
      *
      * returns - void (implementors should implement some form of prompt)
      *
      * resources - an array of data sources that were used to render data
-     * filterer - custom filter that was applied when rendering the specified data sources
+     * renderedFilterer - custom filter that was applied when rendering the specified data sources
+     * currentFilterer - The value of the custom filter, this may differ from renderedFilterer if the
+     *                   user has updated the form/map without causing a new render to occur
      */
     downloadData : portal.util.UnimplementedFunction
 });

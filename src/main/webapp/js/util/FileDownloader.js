@@ -1,4 +1,4 @@
-Ext.ns('FileDownloader');
+Ext.ns('portal.util.FileDownloader');
 
 /**
  * Given a URL this function will create a hidden form and post its (empty) contents
@@ -8,7 +8,7 @@ Ext.ns('FileDownloader');
  * @param url The URL to download to
  * @param parameters [Optional] a javascript object containing parameter key value pairs to be posted. The values may consist of Javascript primitives or Arrays
  */
-FileDownloader.downloadFile = function(url, parameters) {
+portal.util.FileDownloader.downloadFile = function(url, parameters) {
     //build our list of input children first
     var inputs = [];
     if (parameters) {

@@ -45,7 +45,7 @@ Ext.define('portal.layer.renderer.Renderer', {
         this.renderDebuggerData = Ext.create('portal.layer.renderer.RenderDebuggerData', {}), //for maintaining debug info about underlying requests
 
         // Call our superclass constructor to complete construction process.
-        this.callParent(arguments)
+        this.callParent(arguments);
     },
 
     /**

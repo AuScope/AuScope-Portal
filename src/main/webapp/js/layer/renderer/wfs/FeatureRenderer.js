@@ -2,7 +2,7 @@
  * An implementation of a portal.layer.renderer for rendering WFS Features
  * as transformed by the AuScope portal backend.
  */
-Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
+Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
     extend: 'portal.layer.renderer.Renderer',
 
     config : {

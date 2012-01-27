@@ -172,5 +172,17 @@ Ext.define('portal.util.BBox', {
         }
 
         return result;
+    },
+
+    /**
+     * Function for comparing 2 instances of BBox. If the internal fields are all exactly the same then
+     * true will be returned, otherwise false.
+     */
+    equals : function(bbox) {
+        return this.eastBoundLongitude === bbox.eastBoundLongitude &&
+            this.westBoundLongitude === bbox.westBoundLongitude &&
+            this.southBoundLatitude === bbox.southBoundLatitude &&
+            this.northBoundLatitude === bbox.northBoundLatitude &&
+            this.crs === bbox.crs;
     }
 });

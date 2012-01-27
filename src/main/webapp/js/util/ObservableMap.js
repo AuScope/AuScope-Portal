@@ -35,7 +35,7 @@ Ext.define('portal.util.ObservableMap', {
      */
     getParameters : function() {
         return Ext.apply({}, this.parameters); //return a copy of the internal object
-    }
+    },
 
     /**
      * Given a set of parameters as a plain old javascript object of
@@ -70,7 +70,7 @@ Ext.define('portal.util.ObservableMap', {
             keyList.push(key);
         }
         this.fireEvent('change', this, keyList);
-    }
+    },
 
     /**
      * Sets a single parameter of this map
