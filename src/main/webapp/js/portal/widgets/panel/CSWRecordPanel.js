@@ -13,7 +13,7 @@ Ext.define('portal.widgets.panel.CSWRecordPanel', {
      * Implements method - see parent class for details.
      */
     getTitleForRecord : function(record) {
-        return record.getName();
+        return record.data.name;
     },
 
     /**
@@ -28,13 +28,6 @@ Ext.define('portal.widgets.panel.CSWRecordPanel', {
      */
     getSpatialBoundsForRecord : function(record) {
         return record.data.geographicElements;
-    },
-
-    /**
-     * Implements method - see parent class for details.
-     */
-    getGroupForRecord : function(record) {
-        return record.data.adminArea;
     }
 
 });

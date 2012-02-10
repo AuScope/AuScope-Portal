@@ -42,13 +42,5 @@ Ext.define('portal.widgets.panel.KnownLayerPanel', {
         }
 
         return bboxes;
-    },
-
-    /**
-     * Implements method - see parent class for details.
-     */
-    getGroupForRecord : function(record) {
-        return record.data.group;
     }
-
 });

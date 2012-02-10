@@ -61,6 +61,9 @@ public class KnownLayerController extends BaseCSWController {
     private ModelAndView generateCSWRecordResponse(List<CSWRecord> records) {
         List<ModelMap> viewRecords = new ArrayList<ModelMap>();
         for (CSWRecord rec : records) {
+            if (rec.getServiceName() == null || rec.getServiceName().isEmpty()) {
+                continue;//dont include any records with an empty name (it looks bad)
+            }
             viewRecords.add(viewCSWRecordFactory.toView(rec));
         }
 

@@ -6,6 +6,8 @@
 Ext.define('portal.layer.downloader.Downloader', {
     extend: 'Ext.util.Observable',
 
+    requires : ['portal.util.UnimplementedFunction'],
+
     constructor: function(config){
         // Copy configured listeners into *this* object so that the base class's
         // constructor will add them.

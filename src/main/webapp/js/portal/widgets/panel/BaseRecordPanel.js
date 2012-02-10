@@ -20,25 +20,34 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
         var me = this;
 
         var groupingFeature = Ext.create('Ext.grid.feature.Grouping',{
-            groupHeaderTpl: '{[values.group ? values.group : "Others"]} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+            groupHeaderTpl: '{name} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})'
+            //groupHeaderTpl: 'Cuisine: {group} ({rows.length} Item{[values.rows.length > 1 ? "s" : ""]})'
         });
 
         Ext.apply(cfg, {
             features : [groupingFeature],
+            viewConfig : {
+                emptyText : 'No records are available, please try refreshing the page in a few moments.'
+            },
             columns : [{
                 text : 'Title',
                 dataIndex : 'title',
+                flex: 1,
                 renderer : this._titleRenderer
             },{
                 dataIndex : 'serviceInformation',
+                width: 32,
                 renderer : this._serviceInformationRenderer
             },{
                 dataIndex : 'spatialBoundsRenderer',
+                width: 32,
                 renderer : this._spatialBoundsRenderer
-            },{
-                dataIndex : 'group',
-                hidden : true,
-                renderer : this._groupRenderer
+            }],
+            plugins: [{
+                ptype: 'rowexpander',
+                rowBodyTpl : [
+                    '<p>{description}</p><br>'
+                ]
             }],
             bbar: [{
                 text:'Add Layer to Map',
@@ -47,8 +56,7 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
                 pressed:true,
                 scope:this,
                 handler: function() {
-                    var cswRecordToAdd = new CSWRecord(this.getSelectionModel().getSelected());
-                    addLayerHandler(cswRecordToAdd);
+                    alert('TODO');
                 }
             }]
         });
@@ -90,17 +98,6 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
      */
     getSpatialBoundsForRecord : portal.util.UnimplementedFunction,
 
-    /**
-     * Abstract function - Should return a string based group name
-     * for a given record. The group name will be used to group
-     * this record with other records of the same type.
-     *
-     * function(Ext.data.Model record)
-     *
-     * record - The record whose group should be extracted
-     */
-    getGroupForRecord : portal.util.UnimplementedFunction,
-
     //--------- Class Methods ---------
 
     /**
@@ -109,10 +106,15 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
      */
     _generateHTMLIconMarkup : function(imageUrl) {
         return Ext.DomHelper.markup({
-            tag : 'img',
-            width : 16,
-            height : 16,
-            src: imageUrl
+            tag : 'div',
+            style : 'text-align:center;',
+            children : [{
+                tag : 'img',
+                width : 16,
+                height : 16,
+                align: 'CENTER',
+                src: imageUrl
+            }]
         });
     },
 
@@ -139,7 +141,7 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
 
         //We classify resources as being data or image sources.
         for (var i = 0; i < onlineResources.length; i++) {
-            switch(onlineResources[i].type) {
+            switch(onlineResources[i].data.type) {
             case portal.csw.OnlineResource.WFS:
             case portal.csw.OnlineResource.WCS:
             case portal.csw.OnlineResource.OPeNDAP:
@@ -155,12 +157,12 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
         //We show an icon depending on the types
         //of online resources that are available
         if (containsDataSource) {
-            this._generateHTMLIconMarkup('img/binary.png');
+            return this._generateHTMLIconMarkup('img/binary.png');
         } else if (containsImageSource) {
-            this._generateHTMLIconMarkup('img/picture.png');
-        } else {
-            this._generateHTMLIconMarkup('img/cross.png');
+            return this._generateHTMLIconMarkup('img/picture.png');
         }
+
+        return this._generateHTMLIconMarkup('img/cross.png');
     },
 
     /**
@@ -172,19 +174,9 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
     _spatialBoundsRenderer : function(value, metaData, record, row, col, store, gridView) {
         var spatialBounds = this.getSpatialBoundsForRecord(record);
         if (spatialBounds.length > 0) {
-            this._generateHTMLIconMarkup('img/magglass.gif');
+            return this._generateHTMLIconMarkup('img/magglass.gif');
         }
 
         return '';
-    },
-
-    /**
-     * Internal method, acts as an ExtJS 4 column renderer function for rendering
-     * the group of the record.
-     *
-     * http://docs.sencha.com/ext-js/4-0/#!/api/Ext.grid.column.Column-cfg-renderer
-     */
-    _titleRenderer : function(value, metaData, record, row, col, store, gridView) {
-        return this.getGroupForRecord(record);
-    },
+    }
 });

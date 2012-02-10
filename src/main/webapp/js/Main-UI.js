@@ -1,22 +1,17 @@
-//Send these headers with every AJax request we make...
-Ext.Ajax.defaultHeaders = {
-    'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
-};
-
-
 Ext.application({
-
-    appFolder : 'portal',
-
     //Here we build our GUI from existing components - this function should only be assembling the GUI
     //Any processing logic should be managed in dedicated classes - don't let this become a
     //monolithic 'do everything' function
     launch : function() {
-        Ext.Loader.setConfig({enabled:true});
+      //Send these headers with every AJax request we make...
+        Ext.Ajax.defaultHeaders = {
+                'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
+        };
 
         //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
         var unmappedCSWRecordStore = Ext.create('Ext.data.Store', {
             model : 'portal.csw.CSWRecord',
+            groupField: 'contactOrg',
             proxy : {
                 type : 'ajax',
                 url : 'getUnmappedCSWRecords.do',
@@ -39,6 +34,7 @@ Ext.application({
         //Create our KnownLayer store
         var knownLayerStore = Ext.create('Ext.data.Store', {
             model : 'portal.knownlayer.KnownLayer',
+            groupField: 'group',
             proxy : {
                 type : 'ajax',
                 url : 'getKnownLayers.do',

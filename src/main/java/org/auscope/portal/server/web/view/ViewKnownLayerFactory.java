@@ -21,7 +21,6 @@ public class ViewKnownLayerFactory {
         obj.put("hidden", k.isHidden());
         obj.put("description",k.getDescription());
         obj.put("id", k.getId());
-        obj.put("group", k.getGroup());
         obj.put("proxyUrl", k.getProxyUrl());
         obj.put("proxyCountUrl", k.getProxyCountUrl());
 
@@ -36,6 +35,12 @@ public class ViewKnownLayerFactory {
         if (k.getIconSize() != null) {
             obj.put("iconSize", toView(k.getIconSize()));
         }
+
+        String group = "Others";
+        if (k.getGroup() != null && !k.getGroup().isEmpty()) {
+            group = k.getGroup();
+        }
+        obj.put("group", group);
 
         return obj;
     }
