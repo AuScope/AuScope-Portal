@@ -7,7 +7,7 @@ import org.auscope.portal.csw.record.CSWRecord;
 import org.auscope.portal.server.domain.auscope.KnownLayerAndRecords;
 import org.auscope.portal.server.domain.auscope.KnownLayerGrouping;
 import org.auscope.portal.server.web.service.KnownLayerService;
-import org.auscope.portal.server.web.view.JSONModelAndView;
+import org.auscope.portal.server.web.view.KnownLayer;
 import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
 import org.auscope.portal.server.web.view.ViewKnownLayerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,29 +37,34 @@ public class KnownLayerController extends BaseCSWController {
         this.viewKnownLayerFactory = viewFactory;
     }
 
-    private ModelAndView generateResponse(List<KnownLayerAndRecords> knownLayers, List<CSWRecord> unmappedRecords) {
-        List<ModelMap> viewUnmappedRecords = new ArrayList<ModelMap>();
-        for (CSWRecord rec : unmappedRecords) {
-            viewUnmappedRecords.add(viewCSWRecordFactory.toView(rec));
-        }
-
+    private ModelAndView generateKnownLayerResponse(List<KnownLayerAndRecords> knownLayers) {
         List<ModelMap> viewKnownLayers = new ArrayList<ModelMap>();
-        for (KnownLayerAndRecords kl : knownLayers) {
-            ModelMap viewKnownLayer = viewKnownLayerFactory.toView(kl.getKnownLayer());
+        for (KnownLayerAndRecords knownLayerAndRecords : knownLayers) {
+            KnownLayer kl = knownLayerAndRecords.getKnownLayer();
+            if (kl.isHidden()) {
+                continue; //any hidden layers will NOT be sent to the view
+            }
+            ModelMap viewKnownLayer = viewKnownLayerFactory.toView(knownLayerAndRecords.getKnownLayer());
 
             List<ModelMap> viewMappedRecords = new ArrayList<ModelMap>();
-            for (CSWRecord rec : kl.getBelongingRecords()) {
+            for (CSWRecord rec : knownLayerAndRecords.getBelongingRecords()) {
                 viewMappedRecords.add(viewCSWRecordFactory.toView(rec));
             }
 
-            viewKnownLayer.put("records", viewMappedRecords);
+            viewKnownLayer.put("cswRecords", viewMappedRecords);
             viewKnownLayers.add(viewKnownLayer);
         }
 
-        //Generate our response (and augment it with a list of unmapped records)
-        ModelMap responseModel = generateResponseModel(true, viewKnownLayers, null, "", null);
-        responseModel.put("unmappedRecords", viewUnmappedRecords);
-        return new JSONModelAndView(responseModel);
+        return generateJSONResponseMAV(true, viewKnownLayers, "");
+    }
+
+    private ModelAndView generateCSWRecordResponse(List<CSWRecord> records) {
+        List<ModelMap> viewRecords = new ArrayList<ModelMap>();
+        for (CSWRecord rec : records) {
+            viewRecords.add(viewCSWRecordFactory.toView(rec));
+        }
+
+        return generateJSONResponseMAV(true, viewRecords, "");
     }
 
     /**
@@ -72,6 +77,19 @@ public class KnownLayerController extends BaseCSWController {
     public ModelAndView getKnownLayers() {
         KnownLayerGrouping grouping = knownLayerService.groupKnownLayerRecords();
 
-        return generateResponse(grouping.getKnownLayers(), grouping.getUnmappedRecords());
+        return generateKnownLayerResponse(grouping.getKnownLayers());
+    }
+
+    /**
+     * Gets a JSON response which contains the representations of each and every "KnownFeatureTypeDefinition".
+     *
+     * Each KnownFeatureTypeDefinition will map [0, N] CSWRecords with display information.
+     * @return
+     */
+    @RequestMapping("getUnmappedCSWRecords.do")
+    public ModelAndView getUnmappedCSWRecords() {
+        KnownLayerGrouping grouping = knownLayerService.groupKnownLayerRecords();
+
+        return generateCSWRecordResponse(grouping.getUnmappedRecords());
     }
 }
