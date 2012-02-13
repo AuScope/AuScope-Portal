@@ -3,7 +3,9 @@ Ext.application({
     //Any processing logic should be managed in dedicated classes - don't let this become a
     //monolithic 'do everything' function
     launch : function() {
-      //Send these headers with every AJax request we make...
+        var map = null; //an instance of a GMap2 object (google map v2 API)
+
+        //Send these headers with every AJax request we make...
         Ext.Ajax.defaultHeaders = {
                 'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
@@ -53,19 +55,43 @@ Ext.application({
             data : []
         });
 
+
+        //Utility function for adding a new layer to the map
+        var handleAddRecordToMap = function(sourceGrid, record) {
+            var layerFactory = Ext.create('portal.layer.LayerFactory', {map : map});
+            var newLayer = null;
+
+            if (record instanceof portal.csw.CSWRecord) {
+                newLayer = layerFactory.generateLayerFromCSWRecord(record);
+            } else {
+                newLayer = layerFactory.generateLayerFromKnownLayer(record);
+            }
+
+            layerStore.add(newLayer);
+        };
+
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured Layers',
-            store : knownLayerStore
+            store : knownLayerStore,
+            listeners : {
+                addlayerrequest : handleAddRecordToMap
+            }
         });
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered Layers',
-            store : unmappedCSWRecordStore
+            store : unmappedCSWRecordStore,
+            listeners : {
+                addlayerrequest : handleAddRecordToMap
+            }
         });
 
         var customRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Custom Layers',
-            store : customRecordStore
+            store : customRecordStore,
+            listeners : {
+                addlayerrequest : handleAddRecordToMap
+            }
         });
 
         /**
@@ -100,7 +126,6 @@ Ext.application({
             region : 'center',
             store : layerStore
         });
-
 
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
@@ -149,7 +174,6 @@ Ext.application({
         });
 
         // Is user's browser suppported by Google Maps?
-        var map = null;
         if (GBrowserIsCompatible()) {
 
             map = new GMap2(centerPanel.body.dom);

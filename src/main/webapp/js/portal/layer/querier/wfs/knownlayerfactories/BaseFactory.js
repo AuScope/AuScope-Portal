@@ -11,7 +11,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.BaseFactory', {
      * }
      */
     constructor : function(cfg) {
-        this.listeners = config.listeners;
+        this.listeners = cfg.listeners;
         this.callParent(arguments);
     },
 

@@ -25,7 +25,7 @@ Ext.define('portal.layer.legend.Legend', {
      *
      * function(portal.csw.OnlineResource[] resources,
      *          portal.layer.filterer.Filterer filterer,
-     *          function(portal.layer.legend.Legend this, portal.csw.OnlineResource[] resources, portal.layer.filterer.Filterer filterer, bool success) callback
+     *          function(portal.layer.legend.Legend this, portal.csw.OnlineResource[] resources, portal.layer.filterer.Filterer filterer, bool success, portal.layer.legend.BaseComponent legendGui) callback
      *
      * returns - void
      *

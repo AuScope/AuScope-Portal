@@ -12,23 +12,36 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             columns : [{
                 dataIndex : 'renderer',
                 renderer : this._legendIconRenderer,
-                width : 18
+                width : 32
             },{
                 dataIndex : 'loading',
                 renderer : this._loadingRenderer,
-                width : 25
+                width: 32
             },{
+                text : 'Layer Name',
                 dataIndex : 'name',
-                width: 100
+                flex : 1,
             },{
-                xtype : 'checkcolumn',
+                text : 'Visible',
+                xtype : 'renderablecheckcolumn',
                 dataIndex : 'renderer',
-                renderer : this._visibleRenderer,
-                width : 30
+                getCustomValueBool : function(header, renderer) {
+                    return renderer.getVisible();
+                },
+                setCustomValueBool : function(header, renderer, checked) {
+                    return renderer.setVisible(checked);
+                },
+                width : 40
             },{
                 dataIndex : 'renderer',
-                renderer : this._loadingRenderer,
-                width : 20
+                renderer : this._downloadRenderer,
+                width : 32
+            }],
+            plugins: [{
+                ptype: 'rowexpander',
+                rowBodyTpl : [
+                    '<p>{description}</p><br>'
+                ]
             }],
             bbar: [{
                 text : 'Remove Layer',
@@ -52,7 +65,7 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             return '';
         }
 
-        return legend.getLegendIconHtml(record.getAllOnlineResources(), record.getFilterer());
+        return legend.getLegendIconHtml(record.getAllOnlineResources(), record.data.filterer);
     },
 
     /**
@@ -83,7 +96,7 @@ Ext.define('portal.widgets.panel.LayerPanel', {
         return value.getVisible();//value is a portal.layer.renderer.Renderer
     },
 
-    _loadingRenderer : function(value, metaData, record, row, col, store, gridView) {
+    _downloadRenderer : function(value, metaData, record, row, col, store, gridView) {
         if (value.getHasData()) { //value is a portal.layer.renderer.Renderer
             return Ext.DomHelper.markup({
                 tag : 'img',

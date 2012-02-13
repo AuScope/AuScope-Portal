@@ -20,6 +20,21 @@ Ext.define('portal.knownlayer.KnownLayer', {
         { name: 'proxyUrl', type: 'string' }, //A URL of a backend controller method for fetching available data with a filter specific for this KnonwLayer
         { name: 'proxyCountUrl', type: 'string' }, //A URL of a backend controller method for fetching the count of data available (eg for WFS a URL that will set featureType=hits)
         { name: 'iconUrl', type: 'string' }, //A URL of an icon that will be used for rendering GMarkers associated with this layer
+        { name: 'iconAnchor', type: 'auto' }, //An object containing x,y for the pixel location of where the icon get's anchored to the map
+        { name: 'iconSize', type: 'auto' }, //An object containing width,height for the pixel size of the icon
         { name: 'cswRecords', convert: portal.csw.CSWRecordType.convert} //a set of portal.csw.CSWRecord objects that belong to this KnownLayer grouping
-    ]
+
+    ],
+
+    /**
+     * Collates all portal.csw.OnlineResource objects owned by every CSWRecord instance in this known layer
+     * and returns the set as an Array.
+     */
+    getAllOnlineResources : function() {
+        var ors = [];
+        for (var i = 0; i < this.data.cswRecords.length; i++) {
+            ors = ors.concat(this.data.cswRecords[i].data.onlineResources);
+        }
+        return ors;
+    }
 });

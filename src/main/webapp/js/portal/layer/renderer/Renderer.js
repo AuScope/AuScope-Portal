@@ -39,6 +39,10 @@ Ext.define('portal.layer.renderer.Renderer', {
 
         //Setup class variables
         this.listeners = config.listeners;
+        this.visible = true;
+        this.hasData = false;
+        this.proxyUrl = '';
+        this.proxyCountUrl = '';
         this.map = config.map;
         this.overlayManager = Ext.create('portal.util.gmap.OverlayManager', {map : this.map})
         this.renderStatus = Ext.create('portal.layer.renderer.RenderStatus', {}), //for maintaining the status of rendering,

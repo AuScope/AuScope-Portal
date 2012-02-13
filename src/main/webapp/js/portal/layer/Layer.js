@@ -35,9 +35,9 @@ Ext.define('portal.layer.Layer', {
      */
     getAllOnlineResources : function() {
         var resources = [];
-        var cswRecords = this.getCSWRecords();
+        var cswRecords = this.data.cswRecords;
         for (var i = 0; i < cswRecords.length; i++) {
-            resources = resources.concat(cswRecords[i].getOnlineResources());
+            resources = resources.concat(cswRecords[i].data.onlineResources);
         }
         return resources;
     }

@@ -41,7 +41,7 @@ Ext.define('portal.csw.OnlineResource', {
             for (var i = 0; i < array.length; i++) {
                 var cmp = array[i];
 
-                if (onlineResourceType !== undefined && cmp.get('type') !== onlineResourceType) {
+                if (type !== undefined && cmp.get('type') !== type) {
                     continue;
                 }
 

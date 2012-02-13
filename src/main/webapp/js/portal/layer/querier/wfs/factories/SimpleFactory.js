@@ -1,7 +1,7 @@
 /**
  * Abstract base class for all Generic Parser factories to inherit from.
  */
-Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory', {
+Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
     extend : 'portal.layer.querier.wfs.factories.BaseFactory',
 
     /**

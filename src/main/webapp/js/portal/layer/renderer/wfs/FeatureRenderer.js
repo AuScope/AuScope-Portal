@@ -20,8 +20,13 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
         }
     },
 
+    legend : null,
+
     constructor: function(config) {
         this.currentRequestCount = 0;//how many requests are still running
+        this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
+            iconUrl : config.iconCfg ? config.iconCfg.url : ''
+        });
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
@@ -171,7 +176,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
      * filterer - (same as displayData) A custom filter that can be applied to the specified data sources
      */
     getLegend : function(resources, filterer) {
-        return null; //no legend available for WFS unless we make our own...
+        return this.legend;
     },
 
     /**

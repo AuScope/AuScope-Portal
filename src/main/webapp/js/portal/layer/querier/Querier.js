@@ -20,7 +20,7 @@ Ext.define('portal.layer.querier.Querier', {
         // Copy configured listeners into *this* object so that the base class's
         // constructor will add them.
         this.listeners = config.listeners;
-        this.rootCfg = config.rootCfg;
+        this.rootCfg = config.rootCfg ? config.rootCfg : {};
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments)

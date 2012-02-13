@@ -12,17 +12,24 @@
  * panels in the portal. Support for KnownLayers/CSWRecords and
  * other row types will be injected by implementing the abstract
  * functions of this class
+ *
+ * Adds the following events :
+ *      addlayerrequest(this, Ext.data.Model) - raised whenever the user has indicated to this panel that it wishes
+ *                                              to add a specified record to the map as a new layer
  */
 Ext.define('portal.widgets.panel.BaseRecordPanel', {
     extend : 'Ext.grid.Panel',
+    alias: 'widget.baserecordpanel',
 
     constructor : function(cfg) {
         var me = this;
 
         var groupingFeature = Ext.create('Ext.grid.feature.Grouping',{
             groupHeaderTpl: '{name} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})'
-            //groupHeaderTpl: 'Cuisine: {group} ({rows.length} Item{[values.rows.length > 1 ? "s" : ""]})'
         });
+
+        this.addEvents('addlayerrequest');
+        this.listeners = cfg.listeners;
 
         Ext.apply(cfg, {
             features : [groupingFeature],
@@ -49,14 +56,19 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
                     '<p>{description}</p><br>'
                 ]
             }],
+            buttonAlign : 'right',
             bbar: [{
                 text:'Add Layer to Map',
                 tooltip:'Add Layer to Map',
                 iconCls:'add',
-                pressed:true,
-                scope:this,
-                handler: function() {
-                    alert('TODO');
+
+                handler: function(btn) {
+                    var grid = btn.findParentByType('baserecordpanel');
+                    var sm = grid.getSelectionModel();
+                    var selectedRecords = sm.getSelection();
+                    if (selectedRecords && selectedRecords.length > 0) {
+                        grid.fireEvent('addlayerrequest', this, selectedRecords[0]); //we only support single selection
+                    }
                 }
             }]
         });
