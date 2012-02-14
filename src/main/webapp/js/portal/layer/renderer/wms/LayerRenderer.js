@@ -65,5 +65,10 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
      */
     removeData : function() {
         this.overlayManager.clearOverlays();
-    }
+    },
+
+    /**
+     * You can't abort a WMS layer from rendering as it does so via img tags
+     */
+    abortDisplay : Ext.emptyFn
 });

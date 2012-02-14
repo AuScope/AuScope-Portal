@@ -4,6 +4,7 @@
  */
 Ext.define('portal.widgets.panel.LayerPanel', {
     extend : 'Ext.grid.Panel',
+    alias: 'widget.layerpanel',
 
     constructor : function(cfg) {
         var me = this;
@@ -46,6 +47,15 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             bbar: [{
                 text : 'Remove Layer',
                 iconCls : 'remove',
+                handler : function(button) {
+                    var grid = button.findParentByType('layerpanel');
+                    var sm = grid.getSelectionModel();
+                    var selectedRecords = sm.getSelection();
+                    if (selectedRecords && selectedRecords.length > 0) {
+                        var store = grid.getStore();
+                        store.remove(selectedRecords);
+                    }
+                }
             }]
         });
 

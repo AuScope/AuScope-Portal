@@ -13,6 +13,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
     featureSetSizeThreshold : 200,
     timeout : 1000 * 60 * 20, //20 minute timeout,
     filterParams : {},
+    currentRequest : null, //the Ajax request object that is currently running (used for cancelling)
 
 
     /**
@@ -74,7 +75,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
      */
     _doDownload : function (boundingBox, maxFeatures) {
         var params = this._buildRequestParams(boundingBox, maxFeatures);
-        Ext.Ajax.request({
+        this.currentRequest = Ext.Ajax.request({
             url : this.proxyFetchUrl,
             params : params,
             callback : function(options, success, response) {
@@ -145,7 +146,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
         //Firstly attempt to discern how many records are available, this will affect how we proceed
         //If we dont have a proxy for doing this, then just download everything
         if (this.proxyCountUrl && this.proxyCountUrl.length > 0) {
-            Ext.Ajax.request({
+            this.currentRequest = Ext.Ajax.request({
                 url : this.proxyCountUrl,
                 params : this._buildRequestParams(this.visibleMapBounds),
                 scope : this,
@@ -156,6 +157,16 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
             //if we dont have a URL to proxy our count requests through then just
             //attempt to download all visible features (it's better than grabbing thousands of features)
             this._doDownload(this.visibleMapBounds, this.featureSetSizeThreshold);
+        }
+    },
+
+    /**
+     * Causees any in progress downloads to be aborted immediately. If there are no downloads,
+     * nothing will occur.
+     */
+    abortDownload : function() {
+        if (this.currentRequest) {
+            Ext.Ajax.abort(this.currentRequest);
         }
     }
 });

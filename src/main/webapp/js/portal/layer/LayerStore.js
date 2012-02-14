@@ -37,6 +37,7 @@ Ext.define('portal.layer.LayerStore', {
      */
     _onLayerRemove : function(store, record, index, eOpts) {
         var renderer = record.data.renderer;
+        renderer.abortDisplay();
         renderer.removeData();
     }
 });

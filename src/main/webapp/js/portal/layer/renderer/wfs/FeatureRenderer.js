@@ -21,12 +21,14 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
     },
 
     legend : null,
+    allDownloadManagers : null,
 
     constructor: function(config) {
         this.currentRequestCount = 0;//how many requests are still running
         this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
             iconUrl : config.iconCfg ? config.iconCfg.url : ''
         });
+        this.allDownloadManagers = [];
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
@@ -120,6 +122,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
      */
     displayData : function(resources, filterer, callback) {
         //start by removing any existing data
+        this.abortDisplay();
         this.removeData();
 
         var me = this;
@@ -142,6 +145,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
         this.currentRequestCount = wfsResources.length; //this will be decremented as requests return
 
         //Each and every WFS resource will be queried with their own seperate download manager
+
         for (var i = 0; i < wfsResources.length; i++) {
             //Build our filter params object that will make a request
             var filterParams = filterer.getParameters();
@@ -168,6 +172,8 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
             });
 
             downloadManager.startDownload();
+
+            this.allDownloadManagers.push(downloadManager);//save this manager in case we need to abort later on
         }
     },
 
@@ -197,5 +203,14 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
      */
     removeData : function() {
         this.overlayManager.clearOverlays();
+    },
+
+    /**
+     * An abstract function - see parent class for more info
+     */
+    abortDisplay : function() {
+        for (var i = 0; i < this.allDownloadManagers.length; i++) {
+            this.allDownloadManagers[i].abortDownload();
+        }
     }
 });

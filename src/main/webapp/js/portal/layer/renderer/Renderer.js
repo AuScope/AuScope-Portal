@@ -73,6 +73,20 @@ Ext.define('portal.layer.renderer.Renderer', {
     displayData : portal.util.UnimplementedFunction,
 
     /**
+     * An abstract function for aborting the display process. If this function is called any
+     * in process rendering should attempt to be halted (if possible). If no rendering is underway
+     * then this function should have no effect
+     *
+     * This function will typically be called immediately prior to a remove with the expectation
+     * that any existing data be removed from the map AND no more data be added to the map.
+     *
+     * function()
+     *
+     * returns - void
+     */
+    abortDisplay : portal.util.UnimplementedFunction,
+
+    /**
      * An abstract function for creating a legend that can describe the displayed data. If no
      * such thing exists for this renderer then null should be returned.
      *
