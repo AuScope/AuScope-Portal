@@ -7,14 +7,13 @@
 Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
     extend: 'Ext.util.Observable',
 
-    config : {
-        proxyFetchUrl : null,
-        proxyCountUrl : null,
-        featureSetSizeThreshold : 200,
-        timeout : 1000 * 60 * 20, //20 minute timeout,
-        filterParams : {},
-        visibleMapBounds : null
-    },
+    proxyFetchUrl : null,
+    proxyCountUrl : null,
+    visibleMapBounds : null,
+    featureSetSizeThreshold : 200,
+    timeout : 1000 * 60 * 20, //20 minute timeout,
+    filterParams : {},
+
 
     /**
      * Accepts a Ext.util.Observable configuration object with the following extensions
@@ -33,6 +32,18 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
      *  cancelled : function(FeatureDownloadManager this)
      */
     constructor : function(cfg) {
+        this.proxyFetchUrl = cfg.proxyFetchUrl;
+        this.proxyCountUrl = cfg.proxyCountUrl;
+        if (cfg.featureSetSizeThreshold) {
+            this.featureSetSizeThreshold = cfg.featureSetSizeThreshold;
+        }
+        if (cfg.filterParams) {
+            this.filterParams = cfg.filterParams;
+        }
+        this.visibleMapBounds = cfg.visibleMapBounds;
+        if (cfg.timeout) {
+            this.timeout = cfg.timeout;
+        }
         this.addEvents({
             'success' : true,
             'error' : true,
@@ -49,7 +60,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
         var params = {};
         Ext.apply(params, this.filterParams);
         if (boundingBox) {
-            params.bbox = Ext.util.JSON.encode(boundingBox);
+            params.bbox = Ext.JSON.encode(boundingBox);
         }
         if (maxFeatures) {
             params.maxFeatures = maxFeatures;
@@ -68,7 +79,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
             params : params,
             callback : function(options, success, response) {
                 if (success) {
-                    var jsonResponse = Ext.util.JSON.decode(response.responseText);
+                    var jsonResponse = Ext.JSON.decode(response.responseText);
                     if (jsonResponse) {
                         if (jsonResponse.success) {
                             this.fireEvent('success', this, params, jsonResponse.data, jsonResponse.debugInfo);
@@ -92,7 +103,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
      */
     _doCount : function(options, success, response, alreadyPrompted) {
         if (success) {
-            var jsonResponse = Ext.util.JSON.decode(response.responseText);
+            var jsonResponse = Ext.JSON.decode(response.responseText);
             if (!jsonResponse.success) {
                 this.fireEvent('error', this, jsonResponse.msg, jsonResponse.debugInfo);
                 return;

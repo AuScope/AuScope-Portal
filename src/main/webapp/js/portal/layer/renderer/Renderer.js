@@ -114,7 +114,7 @@ Ext.define('portal.layer.renderer.Renderer', {
         var sw = mapBounds.getSouthWest();
         var ne = mapBounds.getNorthEast();
 
-        return new BBox({
+        return Ext.create('portal.util.BBox', {
             eastBoundLongitude : ne.lng(),
             westBoundLongitude : sw.lng(),
             southBoundLatitude : sw.lat(),

@@ -81,15 +81,16 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
      * Used for handling a successful response from a request's download manaager
      */
     _handleDownloadManagerSuccess : function(dm, actualFilterParams, data, debugInfo, onlineResource, icon) {
+        var me = this;
         //Parse our KML into a set of overlays and markers
-        var parser = new KMLParser({kml : data.kml});
+        var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : data.kml});
         parser.makeMarkers(icon, function(marker) {
             marker.renderer = me;
         });
 
         //Add our single points and overlays to the overlay manager (which will add them to the map)
-        this.overlayManager.addMarkers(parser.markers);
-        this.overlayManager.addOverlays(parser.overlays)
+        this.overlayManager.addMarkers(parser.getMarkers());
+        this.overlayManager.addOverlays(parser.getOverlays())
 
         //Store some debug info
         if (debugInfo) {
@@ -97,10 +98,10 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
         }
 
         //store the status
-        this.renderStatus.updateResponse(onlineResource.url, (markers.length + overlays.length) + " record(s) retrieved.");
+        this.renderStatus.updateResponse(onlineResource.url, (parser.getMarkers().length + parser.getOverlays().length) + " record(s) retrieved.");
 
         //we are finished
-        this._finishDownloadManagerResponse(parser.markers, parser.overlays);
+        this._finishDownloadManagerResponse(parser.getMarkers(), parser.getOverlays());
     },
 
     /**
@@ -146,6 +147,10 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
             var filterParams = filterer.getParameters();
             var onlineResource = wfsResources[i];
 
+            filterParams.serviceUrl = onlineResource.data.url;
+            filterParams.typeName = onlineResource.data.name;
+            filterParams.maxFeatures = 200;
+
             //Our requesting is handled by a download manager
             var downloadManager = Ext.create('portal.layer.renderer.wfs.FeatureDownloadManager', {
                 visibleMapBounds : visibleMapBounds,
@@ -153,9 +158,12 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
                 proxyCountUrl : this.proxyCountUrl,
                 filterParams : filterParams,
                 listeners : {
-                    success : Ext.bind(this._handleDownloadManagerSuccess, this, [onlineResource, icon], true),
-                    error : Ext.bind(this._handleDownloadManagerError, this, [onlineResource], true),
-                    cancelled : Ext.bind(this._handleDownloadManagerCancelled, this, [onlineResource], true)
+                    //Please note that the following bindings override args as ExtJS events append
+                    //the listeners object to fired events (we don't want that) so we are forced to override
+                    //that parameter using the appendArgs argument in Ext.bind
+                    success : Ext.bind(this._handleDownloadManagerSuccess, this, [onlineResource, icon], 4), //Override args from the 4th argument
+                    error : Ext.bind(this._handleDownloadManagerError, this, [onlineResource], 3), //Override args from the 3rd
+                    cancelled : Ext.bind(this._handleDownloadManagerCancelled, this, [onlineResource], 1) //Override args from the 1st
                 }
             });
 

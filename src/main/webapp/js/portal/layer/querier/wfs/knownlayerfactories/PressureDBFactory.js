@@ -24,7 +24,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
             },
             scope : this,
             success : function(response) {
-                var responseObj = Ext.util.JSON.decode(response.responseText);
+                var responseObj = Ext.JSON.decode(response.responseText);
 
                 if (responseObj && responseObj.success) {
                     var availableOmResponse = responseObj.data[0];

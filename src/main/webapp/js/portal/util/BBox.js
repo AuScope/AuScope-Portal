@@ -9,12 +9,13 @@
  * }
  */
 Ext.define('portal.util.BBox', {
-    config : {
-        eastBoundLongitude : 0,
-        westBoundLongitude : 0,
-        southBoundLatitude : 0,
-        northBoundLatitude : 0,
-        crs : 'EPSG:4326'
+    constructor : function(cfg) {
+        Ext.apply(this, cfg);
+        if (!this.crs) {
+            this.crs = 'EPSG:4326';
+        }
+
+        this.callParent(arguments);
     },
 
     /**

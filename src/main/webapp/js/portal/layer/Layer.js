@@ -27,6 +27,8 @@ Ext.define('portal.layer.Layer', {
         { name: 'loading', type: 'boolean', defaultValue: false }, //Whether this layer is currently loading data or not
     ],
 
+    ////////// Class functions
+
     /**
      * Utility function for concatenating all online resources stored in all
      * CSWRecords and returning the result as an Array.
@@ -40,5 +42,28 @@ Ext.define('portal.layer.Layer', {
             resources = resources.concat(cswRecords[i].data.onlineResources);
         }
         return resources;
+    },
+
+    /////////// Event Handlers
+
+    onRenderStarted : function(renderer, onlineResources, filterer) {
+        this.set('loading', true);
+    },
+
+    onRenderFinished : function(renderer) {
+        this.set('loading', false);
+    },
+
+    /**
+     * Whenever our layer is told to update visibility - let's take the brute force approach of deleting/re-adding the layer
+     */
+    onVisibilityChanged : function(renderer, newVisibility) {
+        if (newVisibility) {
+            renderer.displayData(this.getAllOnlineResources(), this.data.filterer, Ext.emptyFn);
+        } else {
+            renderer.removeData();
+        }
     }
+
+
 });

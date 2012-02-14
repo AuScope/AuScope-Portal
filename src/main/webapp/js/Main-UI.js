@@ -50,11 +50,7 @@ Ext.application({
 
         //Create our store for holding the set of
         //layers that have been added to the map
-        var layerStore = Ext.create('Ext.data.Store', {
-            model : 'portal.layer.Layer',
-            data : []
-        });
-
+        var layerStore = Ext.create('portal.layer.LayerStore', {});
 
         //Utility function for adding a new layer to the map
         var handleAddRecordToMap = function(sourceGrid, record) {

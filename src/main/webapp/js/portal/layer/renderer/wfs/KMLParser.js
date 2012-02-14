@@ -72,20 +72,18 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
     //Given a root placemark node attempt to parse it as a single point and return it
     //Returns a single GMarker
     parsePoint : function(name, description, icon, pointNode) {
-        var coordinates = GXml.value(pointNode.getElementsByTagName("coordinates")[0]).split(',');
+        var textCoordinates = portal.util.xml.SimpleDOM.getNodeTextContent(pointNode.getElementsByTagName("coordinates")[0]);
+        var coordinates = textCoordinates.split(',');
 
         // We do not want placemarks without coordinates
-        if (coordinates === "") {
+        if (!coordinates || coordinates.length < 2) {
             return null;
         }
 
-        //iconlast = GXml.value(placemarks[i].selectSingleNode(".//*[local-name() = 'Icon']/*[local-name() = 'href']")).split(',');
         var lon = coordinates[0];
         var lat = coordinates[1];
-        var z = coordinates[2];
 
         var point = new GLatLng(parseFloat(lat), parseFloat(lon));
-
         var marker = new GMarker(point, {icon: icon, title: name});
         marker.description = description;
         marker.title = name;
@@ -95,6 +93,7 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
 
     makeMarkers : function(icon, markerHandler) {
         var markers = [];
+        var overlays = [];
 
         var placemarks = this.rootNode.getElementsByTagName("Placemark");
 
@@ -104,8 +103,9 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
                 var mapItem = null;
 
                 //Get the settings global to the placemark
-                var name = GXml.value(placemarkNode.getElementsByTagName("name")[0]);
-                var description = GXml.value(placemarkNode.getElementsByTagName("description")[0]);
+
+                var name = portal.util.xml.SimpleDOM.getNodeTextContent(placemarkNode.getElementsByTagName("name")[0]);
+                var description = portal.util.xml.SimpleDOM.getNodeTextContent(placemarkNode.getElementsByTagName("description")[0]);
 
                 //Then extract the actual geometry for the placemark
                 var polygonList = placemarkNode.getElementsByTagName("Polygon");
@@ -124,7 +124,7 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
                         markerHandler(mapItem);
                     }
 
-                    this.overlays.push(mapItem);
+                    overlays.push(mapItem);
                 }
 
                 //Parse any lineStrings
@@ -138,7 +138,7 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
                         markerHandler(mapItem);
                     }
 
-                    this.overlays.push(mapItem);
+                    overlays.push(mapItem);
                 }
 
                 //Parse any points
@@ -152,11 +152,14 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
                         markerHandler(mapItem);
                     }
 
-                    this.markers.push(mapItem);
+                    markers.push(mapItem);
                 }
 
             }
         } catch(e) {alert(e);}
+
+        this.setMarkers(markers);
+        this.setOverlays(overlays);
 
         return markers;
     }

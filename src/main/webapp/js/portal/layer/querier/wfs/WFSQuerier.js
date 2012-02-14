@@ -48,7 +48,7 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
                     return;
                 }
 
-                var jsonResponse = Ext.util.JSON.decode(response.responseText);
+                var jsonResponse = Ext.JSON.decode(response.responseText);
                 if (!jsonResponse.success) {
                     callback(me, null);
                     return;

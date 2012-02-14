@@ -48,7 +48,8 @@ Ext.define('portal.layer.LayerFactory', {
             cswRecords = [cswRecords];
         }
 
-        return Ext.create('portal.layer.Layer', {
+        //Create our instance
+        var newLayer = Ext.create('portal.layer.Layer', {
             id : id,
             sourceType : sourceType,
             source : source,
@@ -61,12 +62,19 @@ Ext.define('portal.layer.LayerFactory', {
             cswRecords : cswRecords,
             loading : false
         });
+
+        //Wire up our events so that the layer is listening for changes in its components
+        renderer.on('renderstarted', Ext.bind(newLayer.onRenderStarted, newLayer));
+        renderer.on('renderfinished', Ext.bind(newLayer.onRenderFinished, newLayer));
+        renderer.on('visibilitychanged', Ext.bind(newLayer.onVisibilityChanged, newLayer));
+
+        return newLayer;
     },
 
     /**
      * Creates a new instance of renderer based on the specified values
      */
-    _generateRenderer : function(wfsResources, wmsResources, iconUrl, iconSize, iconAnchor) {
+    _generateRenderer : function(wfsResources, wmsResources, proxyUrl, proxyCountUrl, iconUrl, iconSize, iconAnchor) {
         if (wmsResources.length > 0) {
             return Ext.create('portal.layer.renderer.wms.LayerRenderer', {map : this.map});
         } else if (wfsResources.length > 0) {
@@ -76,7 +84,9 @@ Ext.define('portal.layer.LayerFactory', {
                     url : iconUrl,
                     size : iconSize,
                     anchor : iconAnchor
-                }
+                },
+                proxyUrl : proxyUrl ? proxyUrl : 'getAllFeatures.do',
+                proxyCountUrl : proxyCountUrl
             });
         }
 
@@ -131,7 +141,8 @@ Ext.define('portal.layer.LayerFactory', {
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
         //Create our objects for interacting with this layer
-        var renderer = this._generateRenderer(wfsResources, wmsResources, knownLayer.data.iconUrl, knownLayer.data.iconSize, knownLayer.data.iconAnchor);
+        var renderer = this._generateRenderer(wfsResources, wmsResources,knownLayer.data.proxyUrl, knownLayer.data.proxyCountUrl,
+                                              knownLayer.data.iconUrl, knownLayer.data.iconSize, knownLayer.data.iconAnchor);
         var querier = this._generateQuerier(wfsResources, wmsResources);
         var filterer = this._generateFilterer();
         var downloader = this._generateDownloader(wfsResources, wmsResources, wcsResources);
@@ -159,7 +170,7 @@ Ext.define('portal.layer.LayerFactory', {
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
         //Create our objects for interacting with this layer
-        var renderer = this._generateRenderer(wfsResources, wmsResources, undefined, undefined, undefined);
+        var renderer = this._generateRenderer(wfsResources, wmsResources, undefined, undefined, undefined, undefined, undefined);
         var querier = this._generateQuerier(wfsResources, wmsResources);
         var filterer = this._generateFilterer();
         var downloader = this._generateDownloader(wfsResources, wmsResources, wcsResources);

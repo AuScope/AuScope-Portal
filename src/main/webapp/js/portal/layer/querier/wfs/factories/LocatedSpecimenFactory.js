@@ -75,7 +75,7 @@ Ext.define('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', {
                         },
                         success: function (response, options) {
                             loadMask.hide();
-                            var jsonData = Ext.util.JSON.decode(response.responseText);
+                            var jsonData = Ext.JSON.decode(response.responseText);
                             if (!jsonData.success) {
                                 Ext.Msg.alert('Error Describing LocSpecimen Records', 'There was an error whilst communicating with ' + wfsUrl);
                                 return;

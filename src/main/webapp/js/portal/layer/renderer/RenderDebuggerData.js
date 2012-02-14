@@ -24,7 +24,7 @@ Ext.define('portal.layer.renderer.RenderDebuggerData', {
      * returns void
      */
     updateResponse : function(key, debugDetail) {
-        this.setParameter(key, responseStatus);
+        this.setParameter(key, debugDetail);
     },
 
     /**
