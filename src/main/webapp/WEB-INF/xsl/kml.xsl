@@ -334,6 +334,7 @@
 
    <!-- TEMPLATE FOR TRANSLATING GEODESY -->
    <!-- ================================================================= -->
+   <!--
    <xsl:template match="gml:featureMember/ngcp:GnssStation | gml:featureMembers/ngcp:GnssStation" priority="100">
 
       <xsl:variable name="coordinates">
@@ -358,6 +359,7 @@
          <xsl:apply-templates select="./ngcp:GEOM/gml:Point"/>
       </Placemark>
    </xsl:template>
+    -->
 
     <!--TEMPLATE FOR TRANSLATING A GENERIC INPUT-->
     <!-- ================================================================= -->

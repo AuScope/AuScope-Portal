@@ -18,6 +18,19 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
         this.callParent(arguments);
     },
 
+    /**
+     * Given features run through the KML parser, we can extract our gml ID from anything
+     * running through the GENERIC PARSER workflow. Everything else gets lost
+     */
+    descriptionToGmlId : function(description) {
+        var idPrefix = 'GENERIC_PARSER:';
+        if (description.indexOf(idPrefix) === 0) {
+            return description.substring(idPrefix.length);
+        }
+
+        return '';
+    },
+
     //Given a series of space seperated CSV tuples, return a list of GLatLng
     generateCoordList : function(coordsAsString) {
         var coordinateList = coordsAsString.split(' ');
@@ -39,39 +52,31 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
         return parsedCoordList;
     },
 
-    parseLineString : function(name, description, lineStringNode) {
-
+    parseLineString : function(onlineResource, layer, name, description, lineStringNode) {
         var parsedCoordList = this.generateCoordList(portal.util.xml.SimpleDOM.getNodeTextContent(lineStringNode.getElementsByTagName("coordinates")[0]));
         if (parsedCoordList.length === 0) {
             return null;
         }
 
-        var lineString = new GPolyline(parsedCoordList, '#FF0000',3, 1, undefined);
-
-        lineString.description = description;
-        lineString.title = name;
-
-        return lineString;
+        var gmlId = this.descriptionToGmlId(description);
+        return portal.util.gmap.OverlayFactory.makePolygon(gmlId, onlineResource, layer, parsedCoordList, '#FF0000',3,1);
     },
 
     //Given a root placemark node attempt to parse it as a single point and return it
     //Returns a single GPolygon
-    parsePolygon : function(name, description, polygonNode) {
+    parsePolygon : function(onlineResource, layer, name, description, polygonNode) {
         var parsedCoordList = this.generateCoordList(portal.util.xml.SimpleDOM.getNodeTextContent(polygonNode.getElementsByTagName("coordinates")[0]));
         if (parsedCoordList.length === 0) {
             return null;
         }
 
-        var polygon = new GPolygon(parsedCoordList,undefined, undefined, 0.7,undefined, 0.6);
-        polygon.description = description;
-        polygon.title = name;
-
-        return polygon;
+        var gmlId = this.descriptionToGmlId(description);
+        return portal.util.gmap.OverlayFactory.makePolygon(gmlId, onlineResource, layer, parsedCoordList, undefined, undefined,0.7,undefined,0.6);
     },
 
     //Given a root placemark node attempt to parse it as a single point and return it
     //Returns a single GMarker
-    parsePoint : function(name, description, icon, pointNode) {
+    parsePoint : function(onlineResource, layer, name, description, icon, pointNode) {
         var textCoordinates = portal.util.xml.SimpleDOM.getNodeTextContent(pointNode.getElementsByTagName("coordinates")[0]);
         var coordinates = textCoordinates.split(',');
 
@@ -82,16 +87,12 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
 
         var lon = coordinates[0];
         var lat = coordinates[1];
-
         var point = new GLatLng(parseFloat(lat), parseFloat(lon));
-        var marker = new GMarker(point, {icon: icon, title: name});
-        marker.description = description;
-        marker.title = name;
-
-        return marker;
+        var gmlId = this.descriptionToGmlId(description);
+        return portal.util.gmap.OverlayFactory.makeMarker(gmlId, name, onlineResource, layer, point, icon);
     },
 
-    makeMarkers : function(icon, markerHandler) {
+    makeMarkers : function(icon, onlineResource, layer) {
         var markers = [];
         var overlays = [];
 
@@ -115,13 +116,9 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
                 //Now parse the geometry
                 //Parse any polygons
                 for (var j = 0; j < polygonList.length; j++) {
-                    mapItem = this.parsePolygon(name, description, polygonList[j]);
+                    mapItem = this.parsePolygon(onlineResource, layer, name, description, polygonList[j]);
                     if (mapItem === null) {
                         return;
-                    }
-
-                    if(markerHandler) {
-                        markerHandler(mapItem);
                     }
 
                     overlays.push(mapItem);
@@ -129,13 +126,9 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
 
                 //Parse any lineStrings
                 for (var j = 0; j < lineStringList.length; j++) {
-                    mapItem = this.parseLineString(name, description, lineStringList[j]);
+                    mapItem = this.parseLineString(onlineResource, layer, name, description, lineStringList[j]);
                     if (mapItem === null) {
                         return;
-                    }
-
-                    if(markerHandler) {
-                        markerHandler(mapItem);
                     }
 
                     overlays.push(mapItem);
@@ -143,13 +136,9 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
 
                 //Parse any points
                 for (var j = 0; j < pointList.length; j++) {
-                    mapItem = this.parsePoint(name, description, icon, pointList[j]);
+                    mapItem = this.parsePoint(onlineResource, layer, name, description, icon, pointList[j]);
                     if (mapItem === null) {
                         return;
-                    }
-
-                    if(markerHandler) {
-                        markerHandler(mapItem);
                     }
 
                     markers.push(mapItem);

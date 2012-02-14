@@ -21,6 +21,7 @@ Ext.define('portal.layer.renderer.Renderer', {
         hasData : false, //whether the renderer has rendered any data or not,
         proxyUrl : '',  //a url to proxy data requests through (implementation specific)
         proxyCountUrl : '', //a url to proxy data count requests through (implementation specific)
+        parentLayer : null,
     },
 
     /**
@@ -44,6 +45,7 @@ Ext.define('portal.layer.renderer.Renderer', {
         this.proxyUrl = '';
         this.proxyCountUrl = '';
         this.map = config.map;
+        this.parentLayer = config.parentLayer;
         this.overlayManager = Ext.create('portal.util.gmap.OverlayManager', {map : this.map})
         this.renderStatus = Ext.create('portal.layer.renderer.RenderStatus', {}), //for maintaining the status of rendering,
         this.renderDebuggerData = Ext.create('portal.layer.renderer.RenderDebuggerData', {}), //for maintaining debug info about underlying requests

@@ -23,34 +23,35 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
      */
     query : function(queryTarget, callback) {
         //This class can only query for specific WFS feature's
-        if (!queryTarget.id) {
-            callback(this, null);
+        if (!queryTarget.data.id) {
+            callback(this, null, queryTarget);
             return;
         }
 
         //we need to get a reference to the parent known layer (if it is a known layer)
         var knownLayer = null;
-        if (queryTarget.layer.sourceType === portal.layer.Layer.KNOWN_LAYER) {
-            knownLayer = queryTarget.layer.source;
+        if (queryTarget.data.layer.data.sourceType === portal.layer.Layer.KNOWN_LAYER) {
+            knownLayer = queryTarget.data.layer.data.source;
         }
 
         var me = this;
+        var onlineResource = queryTarget.data.onlineResource;
         Ext.Ajax.request( {
             url : 'requestFeature.do',
             params : {
-                serviceUrl : this.wfsUrl,
-                typeName : this.typeName,
-                featureId : this.featureId
+                serviceUrl : onlineResource.data.url,
+                typeName : onlineResource.data.name,
+                featureId : queryTarget.data.id
             },
             callback : function(options, success, response) {
                 if (!success) {
-                    callback(me, null);
+                    callback(me, null, queryTarget);
                     return;
                 }
 
                 var jsonResponse = Ext.JSON.decode(response.responseText);
                 if (!jsonResponse.success) {
-                    callback(me, null);
+                    callback(me, null, queryTarget);
                     return;
                 }
 
@@ -59,7 +60,7 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
                 var xmlDocument = portal.util.xml.SimpleDOM.parseStringToDOM(xmlString);
                 if(xmlDocument == null){
                     alert('Your web browser doesn\'t seem to support any form of XML to DOM parsing. Functionality will be affected');
-                    callback(me, null);
+                    callback(me, null, queryTarget);
                     return;
                 }
 
@@ -68,12 +69,12 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
 
                 //Parse our response into a number of GUI components, pass those along to the callback
                 var allComponents = [];
-                allComponents.push(me.parser.parseNode(wfsResponseRoot, queryTarget.onlineResource.url, me.rootCfg));
-                if (knownLayer && me.knownLayerParser.canParseKnownLayerFeature(queryTarget.id, knownLayer, queryTarget.onlineResource)) {
-                    allComponents.push(me.knownLayerParser.parseKnownLayerFeature(queryTarget.id, knownLayer, queryTarget.onlineResource, me.rootCfg));
+                allComponents.push(me.parser.parseNode(wfsResponseRoot, onlineResource.data.url, me.rootCfg));
+                if (knownLayer && me.knownLayerParser.canParseKnownLayerFeature(queryTarget.data.id, knownLayer, onlineResource)) {
+                    allComponents.push(me.knownLayerParser.parseKnownLayerFeature(queryTarget.data.id, knownLayer, onlineResource, me.rootCfg));
                 }
 
-                callback(wfsParser, allComponents);
+                callback(me, allComponents, queryTarget);
             }
         });
     }

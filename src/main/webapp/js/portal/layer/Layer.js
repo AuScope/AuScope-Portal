@@ -61,6 +61,7 @@ Ext.define('portal.layer.Layer', {
         if (newVisibility) {
             renderer.displayData(this.getAllOnlineResources(), this.data.filterer, Ext.emptyFn);
         } else {
+            renderer.abortDisplay();
             renderer.removeData();
         }
     }

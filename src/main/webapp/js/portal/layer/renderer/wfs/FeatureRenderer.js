@@ -55,7 +55,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
     /**
      * Used to handle the case where the download manager returns an error
      */
-    _handleDownloadManagerError : function(dm, message, debugInfo, onlineResource) {
+    _handleDownloadManagerError : function(dm, message, debugInfo, onlineResource, layer) {
         //store the status
         this.renderStatus.updateResponse(onlineResource.url, message);
         if(debugInfo) {
@@ -71,7 +71,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
     /**
      * Used for handling the case when the user cancels their download request
      */
-    _handleDownloadManagerCancelled : function(dm, onlineResource) {
+    _handleDownloadManagerCancelled : function(dm, onlineResource, layer) {
         //store the status
         this.renderStatus.updateResponse(onlineResource.url, 'Request cancelled by user.');
 
@@ -82,13 +82,11 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
     /**
      * Used for handling a successful response from a request's download manaager
      */
-    _handleDownloadManagerSuccess : function(dm, actualFilterParams, data, debugInfo, onlineResource, icon) {
+    _handleDownloadManagerSuccess : function(dm, actualFilterParams, data, debugInfo, onlineResource, layer, icon) {
         var me = this;
         //Parse our KML into a set of overlays and markers
         var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : data.kml});
-        parser.makeMarkers(icon, function(marker) {
-            marker.renderer = me;
-        });
+        parser.makeMarkers(icon, onlineResource, layer);
 
         //Add our single points and overlays to the overlay manager (which will add them to the map)
         this.overlayManager.addMarkers(parser.getMarkers());
@@ -165,9 +163,9 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
                     //Please note that the following bindings override args as ExtJS events append
                     //the listeners object to fired events (we don't want that) so we are forced to override
                     //that parameter using the appendArgs argument in Ext.bind
-                    success : Ext.bind(this._handleDownloadManagerSuccess, this, [onlineResource, icon], 4), //Override args from the 4th argument
-                    error : Ext.bind(this._handleDownloadManagerError, this, [onlineResource], 3), //Override args from the 3rd
-                    cancelled : Ext.bind(this._handleDownloadManagerCancelled, this, [onlineResource], 1) //Override args from the 1st
+                    success : Ext.bind(this._handleDownloadManagerSuccess, this, [onlineResource, this.parentLayer, icon], 4), //Override args from the 4th argument
+                    error : Ext.bind(this._handleDownloadManagerError, this, [onlineResource, this.parentLayer], 3), //Override args from the 3rd
+                    cancelled : Ext.bind(this._handleDownloadManagerCancelled, this, [onlineResource, this.parentLayer], 1) //Override args from the 1st
                 }
             });
 

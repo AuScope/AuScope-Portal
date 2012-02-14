@@ -38,7 +38,7 @@ Ext.define('portal.layer.querier.Querier', {
      * preferred sizes and styles.
      *
      * function(portal.layer.querier.QueryTarget target
-     *          function(portal.layer.querier.Querier this, portal.layer.querier.BaseComponent[] baseComponents) callback
+     *          function(portal.layer.querier.Querier this, portal.layer.querier.BaseComponent[] baseComponents, portal.layer.querier.QueryTarget target) callback
      *
      * returns - void
      *

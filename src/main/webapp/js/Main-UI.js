@@ -172,41 +172,38 @@ Ext.application({
         });
 
         // Is user's browser suppported by Google Maps?
-        if (GBrowserIsCompatible()) {
-
-            map = new GMap2(centerPanel.body.dom);
-
-            /* AUS-1526 search bar. */
-
-            map.enableGoogleBar();
-            /*
-            // Problems, find out how to
-            1. turn out advertising
-            2. Narrow down location seraches to the current map view
-                            (or Australia). Search for Albany retruns Albany, US
-            */
-
-            map.setUIToDefault();
-
-            //add google earth
-            map.addMapType(G_SATELLITE_3D_MAP);
-
-            // Large pan and zoom control
-            //map.addControl(new GLargeMapControl(),  new GControlPosition(G_ANCHOR_TOP_LEFT));
-
-            // Toggle between Map, Satellite, and Hybrid types
-            map.addControl(new GMapTypeControl());
-
-            var startZoom = 4;
-            map.setCenter(new google.maps.LatLng(-26, 133.3), startZoom);
-            map.setMapType(G_SATELLITE_MAP);
-
-            //Thumbnail map
-            var Tsize = new GSize(150, 150);
-            map.addControl(new GOverviewMapControl(Tsize));
-
-            map.addControl(new DragZoomControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(345, 7)));
+        if (!GBrowserIsCompatible()) {
+            alert('The browser you are currently using is NOT compatible with the Google Map\'s API');
+            return; //what can we really do in this situation?
         }
+
+        map = new GMap2(centerPanel.body.dom);
+
+        /* AUS-1526 search bar. */
+        map.enableGoogleBar();
+        /*
+        // Problems, find out how to
+        1. turn out advertising
+        2. Narrow down location seraches to the current map view
+                        (or Australia). Search for Albany retruns Albany, US
+        */
+        map.setUIToDefault();
+
+        //add google earth
+        map.addMapType(G_SATELLITE_3D_MAP);
+
+        // Toggle between Map, Satellite, and Hybrid types
+        map.addControl(new GMapTypeControl());
+
+        var startZoom = 4;
+        map.setCenter(new google.maps.LatLng(-26, 133.3), startZoom);
+        map.setMapType(G_SATELLITE_MAP);
+
+        //Thumbnail map
+        var Tsize = new GSize(150, 150);
+        map.addControl(new GOverviewMapControl(Tsize));
+
+        map.addControl(new DragZoomControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(345, 7)));
 
         // Fix for IE/Firefox resize problem (See issue AUS-1364 and AUS-1565 for more info)
         map.checkResize();
@@ -216,9 +213,12 @@ Ext.application({
 
         //when updateCSWRecords person clicks on updateCSWRecords marker then do something
         GEvent.addListener(map, "click", function(overlay, latlng, overlayLatlng) {
-            //gMapClickController(map, overlay, latlng, overlayLatlng, activeLayersStore);
-            alert('TODO - handle click');
+            //Figure out what we clicked and then pass that info along to appropriate layer queriers
+            var queryTargets = portal.util.gmap.ClickController.generateQueryTargets(overlay, latlng, overlayLatlng, layerStore);
+            portal.layer.querier.QueryTargetHandler.handleQueryTargets(queryTargets);
         });
+
+
 
         GEvent.addListener(map, "mousemove", function(latlng){
             var latStr = "<b>Long:</b> " + latlng.lng().toFixed(6) +
