@@ -77,7 +77,6 @@ Ext.application({
         var handleAddRecordToMap = function(sourceGrid, record) {
             var layerFactory = Ext.create('portal.layer.LayerFactory', {map : map});
             var newLayer = null;
-
             if (record instanceof portal.csw.CSWRecord) {
                 newLayer = layerFactory.generateLayerFromCSWRecord(record);
             } else {
@@ -95,6 +94,8 @@ Ext.application({
 
                 renderer.displayData(resources, filterer, Ext.emptyFn);
             }
+
+
         };
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {

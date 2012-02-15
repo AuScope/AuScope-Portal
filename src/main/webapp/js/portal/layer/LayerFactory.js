@@ -93,10 +93,16 @@ Ext.define('portal.layer.LayerFactory', {
                 proxyUrl : proxyUrl ? proxyUrl : 'getAllFeatures.do',
                 proxyCountUrl : proxyCountUrl
             });
+        }else{
+            return Ext.create('portal.layer.renderer.csw.CSWRenderer', {
+                map : this.map,
+                iconCfg : {
+                    url : iconUrl,
+                    size : iconSize,
+                    anchor : iconAnchor
+                }
+            });
         }
-
-        alert('TODO - BBox renderer');
-        return null;
     },
 
     /**
@@ -133,11 +139,11 @@ Ext.define('portal.layer.LayerFactory', {
      * @param knownLayer an instance of portal.knownlayer.KnownLayer
      */
     generateLayerFromKnownLayer : function(knownLayer) {
-        var id = knownLayer.data.id;
+        var id = knownLayer.get('id');
         var source = knownLayer;
-        var description = knownLayer.data.description;
-        var name = knownLayer.data.title;
-        var cswRecords = knownLayer.data.cswRecords;
+        var description = knownLayer.get('description');
+        var name = knownLayer.get('title');
+        var cswRecords = knownLayer.get('cswRecords');
         var allOnlineResources = knownLayer.getAllOnlineResources();
 
         //We need to know what resources this known layer has available
@@ -146,8 +152,8 @@ Ext.define('portal.layer.LayerFactory', {
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
         //Create our objects for interacting with this layer
-        var renderer = this._generateRenderer(wfsResources, wmsResources,knownLayer.data.proxyUrl, knownLayer.data.proxyCountUrl,
-                                              knownLayer.data.iconUrl, knownLayer.data.iconSize, knownLayer.data.iconAnchor);
+        var renderer = this._generateRenderer(wfsResources, wmsResources,knownLayer.get('proxyUrl'), knownLayer.get('proxyCountUrl'),
+                                              knownLayer.get('iconUrl'), knownLayer.get('iconSize'), knownLayer.get('iconAnchor'));
         var querier = this._generateQuerier(wfsResources, wmsResources);
         var filterer = this._generateFilterer();
         var downloader = this._generateDownloader(wfsResources, wmsResources, wcsResources);
