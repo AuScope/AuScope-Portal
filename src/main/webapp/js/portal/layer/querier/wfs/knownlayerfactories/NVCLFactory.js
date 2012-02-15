@@ -371,7 +371,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         for(var i = 0, len = s.length; i < len; i++){
                                             sHtml +='<img src="';
                                             sHtml += 'getNVCLPlotScalar.do?logId=';
-                                            sHtml += s[i].data.logId;
+                                            sHtml += s[i].get('logId');
                                             sHtml += '&' + scalarForm.getValues(true);
                                             sHtml += '&width=300';
                                             sHtml += '&height=600';

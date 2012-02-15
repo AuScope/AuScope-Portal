@@ -39,7 +39,7 @@ Ext.define('portal.layer.Layer', {
         var resources = [];
         var cswRecords = this.data.cswRecords;
         for (var i = 0; i < cswRecords.length; i++) {
-            resources = resources.concat(cswRecords[i].data.onlineResources);
+            resources = resources.concat(cswRecords[i].get('onlineResources'));
         }
         return resources;
     },

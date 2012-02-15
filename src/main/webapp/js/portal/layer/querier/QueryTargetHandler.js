@@ -52,7 +52,7 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
 
             var explicitTargets = []; // all QueryTarget instances with the explicit flag set
             for (var i = 0; i < queryTargets.length; i++) {
-                if (queryTargets[i].data.explicit) {
+                if (queryTargets[i].get('explicit')) {
                     explicitTargets.push(queryTargets[i]);
                 }
             }

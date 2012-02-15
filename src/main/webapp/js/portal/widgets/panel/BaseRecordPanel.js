@@ -153,7 +153,7 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
 
         //We classify resources as being data or image sources.
         for (var i = 0; i < onlineResources.length; i++) {
-            switch(onlineResources[i].data.type) {
+            switch(onlineResources[i].get('type')) {
             case portal.csw.OnlineResource.WFS:
             case portal.csw.OnlineResource.WCS:
             case portal.csw.OnlineResource.OPeNDAP:

@@ -33,7 +33,7 @@ Ext.define('portal.knownlayer.KnownLayer', {
     getAllOnlineResources : function() {
         var ors = [];
         for (var i = 0; i < this.data.cswRecords.length; i++) {
-            ors = ors.concat(this.data.cswRecords[i].data.onlineResources);
+            ors = ors.concat(this.data.cswRecords[i].get('onlineResources'));
         }
         return ors;
     }

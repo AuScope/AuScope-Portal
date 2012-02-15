@@ -33,8 +33,8 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
 
         for (var i = 0; i < wmsResources.length; i++) {
             var tileLayer = new GWMSTileLayer(this.map, new GCopyrightCollection(""), 1, 17);
-            tileLayer.baseURL = wmsResources[i].data.url;
-            tileLayer.layers = wmsResources[i].data.name;
+            tileLayer.baseURL = wmsResources[i].get('url');
+            tileLayer.layers = wmsResources[i].get('name');
             //TODO: VT: temporary workaround as filterer is not built yet. filterer.getParameter('opacity') should return non null value
             //tileLayer.opacity = filterer.getParameter('opacity');
             tileLayer.opacity=1;

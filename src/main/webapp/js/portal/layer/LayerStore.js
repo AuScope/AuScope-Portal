@@ -24,8 +24,8 @@ Ext.define('portal.layer.LayerStore', {
     _onLayerAdd : function(store, records, index, eOpts) {
         //For each layer, render it on the map
         for (var i = 0; i < records.length; i++) {
-            var renderer = records[i].data.renderer;
-            var filterer = records[i].data.filterer;
+            var renderer = records[i].get('renderer');
+            var filterer = records[i].get('filterer');
             var resources = records[i].getAllOnlineResources();
 
             renderer.displayData(resources, filterer, Ext.emptyFn);

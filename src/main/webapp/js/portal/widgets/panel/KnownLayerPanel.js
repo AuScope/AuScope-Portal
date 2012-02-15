@@ -24,7 +24,7 @@ Ext.define('portal.widgets.panel.KnownLayerPanel', {
         var cswRecords = record.data.cswRecords;
 
         for (var i = 0; i < cswRecords.length; i++) {
-            onlineResources = onlineResources.concat(cswRecords[i].data.onlineResources);
+            onlineResources = onlineResources.concat(cswRecords[i].get('onlineResources'));
         }
 
         return onlineResources;
@@ -38,7 +38,7 @@ Ext.define('portal.widgets.panel.KnownLayerPanel', {
         var cswRecords = record.data.cswRecords;
 
         for (var i = 0; i < cswRecords.length; i++) {
-            bboxes = bboxes.concat(cswRecords[i].data.geographicElements);
+            bboxes = bboxes.concat(cswRecords[i].get('geographicElements'));
         }
 
         return bboxes;
