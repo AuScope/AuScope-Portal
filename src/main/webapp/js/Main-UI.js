@@ -48,9 +48,30 @@ Ext.application({
             autoLoad : true
         });
 
+        /**
+         * Used to show extra details for querying services
+         */
+        var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
+            region: 'south',
+            split: true,
+            height: 160
+        });
+
         //Create our store for holding the set of
         //layers that have been added to the map
         var layerStore = Ext.create('portal.layer.LayerStore', {});
+
+        var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
+            title : 'Active Layers',
+            region : 'center',
+            store : layerStore,
+            listeners : {
+                //On selection, update our filter panel
+                select : function(rowModel, record, index) {
+                    filterPanel.showFilterForLayer(record);
+                }
+            }
+        });
 
         //Utility function for adding a new layer to the map
         var handleAddRecordToMap = function(sourceGrid, record) {
@@ -63,7 +84,17 @@ Ext.application({
                 newLayer = layerFactory.generateLayerFromKnownLayer(record);
             }
 
-            layerStore.add(newLayer);
+            layerStore.add(newLayer); //this adds the layer to our store
+            layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
+
+            //Only force a render if the layer has no filter
+            if (filterPanel.isFilteringDisabled()) {
+                var renderer = newLayer.get('renderer');
+                var filterer = newLayer.get('filterer');
+                var resources = newLayer.getAllOnlineResources();
+
+                renderer.displayData(resources, filterer, Ext.emptyFn);
+            }
         };
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
@@ -90,45 +121,12 @@ Ext.application({
             }
         });
 
-        /**
-         * Used to show extra details for querying services
-         */
-        var filterPanel = Ext.create('Ext.Panel', {
-            title: 'Filter Properties',
-            region: 'south',
-            split: true,
-            layout: 'card',
-            activeItem: 0,
-            height: 200,
-            autoScroll  : true,
-            layoutConfig: {
-                layoutOnCardChange: true// Important when not specifying an items array
-            },
-            items: [{
-                html: '<p id="filterpanelbox"> Filter options will be shown here for special services.</p>'
-            }],
-            buttonAlign : 'right',
-            bbar: [{
-                text :'Apply Filter >>',
-                disabled : true,
-                handler : function() {
-                    alert('TODO');
-                }
-            }]
-        });
-
-        var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
-            title : 'Active Layers',
-            region : 'center',
-            store : layerStore
-        });
-
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
             activeTab : 0,
             region : 'north',
             split : true,
-            height : 225,
+            height : 265,
             defaults: { // defaults are applied to items, not the container
                 autoScroll: true
             },
@@ -211,14 +209,18 @@ Ext.application({
             map.checkResize();
         });
 
+        //We need something to handle the clicks on the map
+        var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {
+            container : centerPanel,
+            map : map
+        });
+
         //when updateCSWRecords person clicks on updateCSWRecords marker then do something
         GEvent.addListener(map, "click", function(overlay, latlng, overlayLatlng) {
             //Figure out what we clicked and then pass that info along to appropriate layer queriers
             var queryTargets = portal.util.gmap.ClickController.generateQueryTargets(overlay, latlng, overlayLatlng, layerStore);
-            portal.layer.querier.QueryTargetHandler.handleQueryTargets(queryTargets);
+            queryTargetHandler.handleQueryTargets(queryTargets);
         });
-
-
 
         GEvent.addListener(map, "mousemove", function(latlng){
             var latStr = "<b>Long:</b> " + latlng.lng().toFixed(6) +

@@ -19,7 +19,7 @@ Ext.define('portal.layer.filterer.BaseFilterForm', {
 
     layer : null, //an instance of portal.layer.Layer
     delayedFormLoading : false, //Setting this will indicate that this form will not be immediately available for filtering after creation
-                                //due to having to load something from an external source. If this value is set
+                                //due to having to load something from an external source.
 
     /**
      * Accepts a Ext.form.Panel config as well as

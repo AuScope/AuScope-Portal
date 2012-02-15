@@ -47,7 +47,7 @@ Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory'
             items.push({
                 xtype : 'label',
                 fieldLabel : portal.util.xml.SimpleDOM.getNodeTextContent(allTitles[i]),
-                html : String.format('<p qtip="Unit of Measurement: {1}">{0} {2}</p>', portal.util.xml.SimpleDOM.getNodeTextContent(allAmounts[i]), uom, prettyUom)
+                html : Ext.util.Format.format('<p qtip="Unit of Measurement: {1}">{0} {2}</p>', portal.util.xml.SimpleDOM.getNodeTextContent(allAmounts[i]), uom, prettyUom)
             });
         }
 
@@ -58,21 +58,21 @@ Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory'
                 xtype : 'fieldset',
                 title : 'Sampling Feature Collection',
                 items : [{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Name',
-                    html : this._makeGeneralPopupHtml(samplingName, samplingName, 'Click here for the raw WFS data')
+                    value : this._makeGeneralPopupHtml(samplingName, samplingName, 'Click here for the raw WFS data')
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Location',
-                    text : location
+                    value : location
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Sampling Start',
-                    text : samplingStart
+                    value : samplingStart
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Sampling End',
-                    text : samplingEnd
+                    value : samplingEnd
                 },{
                     xtype : 'fieldset',
                     title : 'Observations',

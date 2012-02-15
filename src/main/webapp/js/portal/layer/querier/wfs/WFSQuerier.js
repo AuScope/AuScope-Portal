@@ -16,6 +16,13 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
         this.callParent(arguments)
     },
 
+
+    _generateErrorComponent : function(message) {
+        return Ext.create('portal.layer.querier.BaseComponent', {
+            html: Ext.util.Format.format('<p class="centeredlabel">{0}</p>', message)
+        });
+    },
+
     /**
      * See parent class for definition
      *
@@ -23,7 +30,8 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
      */
     query : function(queryTarget, callback) {
         //This class can only query for specific WFS feature's
-        if (!queryTarget.data.id) {
+        var id = queryTarget.get('id');
+        if (!id) {
             callback(this, null, queryTarget);
             return;
         }
@@ -58,14 +66,19 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
                 // Load our xml string into DOM
                 var xmlString = jsonResponse.data.gml;
                 var xmlDocument = portal.util.xml.SimpleDOM.parseStringToDOM(xmlString);
-                if(xmlDocument == null){
-                    alert('Your web browser doesn\'t seem to support any form of XML to DOM parsing. Functionality will be affected');
-                    callback(me, null, queryTarget);
+                if(xmlDocument == null) {
+                    callback(me, [me._generateErrorComponent('Your web browser doesn\'t seem to support any form of XML to DOM parsing.')], queryTarget);
                     return;
                 }
 
                 //Skip the opening containing elements (as they are constant for WFS)
-                var wfsResponseRoot = xmlDocument.documentElement.childNodes[0].childNodes[0];
+                var featureMembers = xmlDocument.documentElement.childNodes[0];
+                if (featureMembers.childNodes.length === 0) {
+                    //we got an empty response - likely because the feature ID DNE.
+                    callback(me, [me._generateErrorComponent(Ext.util.Format.format('The remote service returned no data for feature id \"{0}\"', id))], queryTarget);
+                    return;
+                }
+                var wfsResponseRoot = featureMembers.childNodes[0];
 
                 //Parse our response into a number of GUI components, pass those along to the callback
                 var allComponents = [];

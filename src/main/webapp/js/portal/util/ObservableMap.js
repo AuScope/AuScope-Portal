@@ -9,9 +9,7 @@
 Ext.define('portal.util.ObservableMap', {
     extend: 'Ext.util.Observable',
 
-    config : {
-        parameters : {}
-    },
+    parameters : {},
 
     constructor: function(config){
 
@@ -34,7 +32,7 @@ Ext.define('portal.util.ObservableMap', {
      * returns - a javascript object
      */
     getParameters : function() {
-        return Ext.apply({}, this.config.parameters); //return a copy of the internal object
+        return Ext.apply({}, this.parameters); //return a copy of the internal object
     },
 
     /**
@@ -56,11 +54,11 @@ Ext.define('portal.util.ObservableMap', {
         if (clearFirst) {
             //However, if we are clearing the map first then a lot of values will be changing
             changedParameters = Ext.apply(changedParameters, this.parameters);
-            this.config.parameters = {}; //clearing first is really easy
+            this.parameters = {}; //clearing first is really easy
         }
 
         //Apply parameter values to the internal map
-        this.config.parameters = Ext.apply(this.parameters, parameters);
+        this.parameters = Ext.apply(this.parameters, parameters);
 
         //Enumerate our list of changed parameters to pass the values
         //to whatever event handlers are listening
@@ -79,7 +77,7 @@ Ext.define('portal.util.ObservableMap', {
      * value - The object value to set
      */
     setParameter : function(key, value){
-        this.config.parameters[key] = value;
+        this.parameters[key] = value;
         this.fireEvent('change', this, [key]);
     },
 
@@ -91,6 +89,6 @@ Ext.define('portal.util.ObservableMap', {
      * returns - a javascript object matching key
      */
     getParameter : function(key) {
-        return this.config.parameters[key];
+        return this.parameters[key];
     }
 });

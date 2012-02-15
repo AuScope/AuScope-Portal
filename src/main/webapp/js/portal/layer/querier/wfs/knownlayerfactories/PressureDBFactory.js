@@ -59,6 +59,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
         //The user won't be able to interact with the form prior to load due to the loading mask
         Ext.apply(rootCfg, {
             border : false,
+            tabTitle : 'Details',
             items : [{
                 xtype : 'form',
                 width : 300,

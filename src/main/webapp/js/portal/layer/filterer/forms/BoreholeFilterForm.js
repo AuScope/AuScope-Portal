@@ -10,21 +10,21 @@ Ext.define('portal.layer.filterer.forms.BoreholeFilterForm', {
      * Accepts a config for portal.layer.filterer.BaseFilterForm
      */
     constructor : function(config) {
-        var cswRecords = config.layer.cswRecords;
+        var cswRecords = config.layer.get('cswRecords');
 
 
         //Set up a map of admin areas + URL's that belong to each
         var adminAreasMap = {};
         for (var i = 0; i < cswRecords.length; i++) {
-            var adminArea = cswRecords[i].adminArea;
-            var allOnlineResources = cswRecords[i].onlineResources;
+            var adminArea = cswRecords[i].get('adminArea');
+            var allOnlineResources = cswRecords[i].get('onlineResources');
             var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'gsml:Borehole');
 
             for (var j = 0; j < bhOnlineResources.length; j++) {
                 if (adminAreasMap[adminArea]) {
-                    adminAreasMap[adminArea].push(bhOnlineResources[j].url);
+                    adminAreasMap[adminArea].push(bhOnlineResources[j].get('url'));
                 } else {
-                    adminAreasMap[adminArea] = [bhOnlineResources[j].url];
+                    adminAreasMap[adminArea] = [bhOnlineResources[j].get('url')];
                 }
             }
         }

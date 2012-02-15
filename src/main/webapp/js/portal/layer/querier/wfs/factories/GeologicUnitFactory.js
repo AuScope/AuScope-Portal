@@ -37,33 +37,34 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
         //Build our component
         Ext.apply(rootCfg, {
             border : false,
+            layout : 'fit',
             items : [{
                 xtype : 'fieldset',
                 title : 'Geologic Unit',
                 items : [{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Name',
-                    html : this._makeWFSPopupHtml(wfsUrl, 'gsml:GeologicUnit', gmlId, gmlId, 'Click here to open a styled view of this feature.')
+                    value : this._makeWFSPopupHtml(wfsUrl, 'gsml:GeologicUnit', gmlId, gmlId, 'Click here to open a styled view of this feature.')
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Location',
-                    text : coords
+                    value : coords
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Observation Method',
-                    html : this._makeVocabPopupHtml('CGI/' + obsMethod, obsMethod, 'Click here to view the SISSVoc concept definition.')
+                    value : this._makeVocabPopupHtml('CGI/' + obsMethod, obsMethod, 'Click here to view the SISSVoc concept definition.')
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Rock Material',
-                    html : this._makeVocabPopupHtml('CGI/' + rockMaterial, rockMaterial, 'Click here to view the SISSVoc concept definition.')
+                    value : this._makeVocabPopupHtml('CGI/' + rockMaterial, rockMaterial, 'Click here to view the SISSVoc concept definition.')
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Proportion',
-                    html : this._makeVocabPopupHtml('CGI/' + proportion, proportion, 'Click here to view the SISSVoc concept definition.')
+                    value : this._makeVocabPopupHtml('CGI/' + proportion, proportion, 'Click here to view the SISSVoc concept definition.')
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Weathering Description',
-                    text : weatheringDesc
+                    value : weatheringDesc
                 }]
             }],
             buttonAlign : 'right',
@@ -86,7 +87,7 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
                     url += '&' + key + '=' + escape(locSpecLink);
                     url += '&' + key + '=' + escape(geoLink);
 
-                    FileDownloader.downloadFile(url);
+                    portal.util.FileDownloader.downloadFile(url);
                 }
             },{
                 xtype : 'button',

@@ -32,7 +32,7 @@ Ext.define('portal.layer.filterer.Filterer', {
      * returns - a javascript object
      */
     getParameters : function() {
-        var params = this.callParent();
+        var params = this.callParent(arguments);
 
         if (this.bbox) {
             params[portal.layer.filterer.SpatialFilterer.BBOX_FIELD] = Ext.JSON.encode(this.bbox);
@@ -82,13 +82,13 @@ Ext.define('portal.layer.filterer.Filterer', {
         //Get rid of the 'bbox' field, we treat it as a special case
         var noBboxParams = Ext.apply({}, parameters);
         var bbox = parameters.bbox;
-        noBboxParams[portal.layer.filterer.SpatialFilterer.BBOX_FIELD] = undefined;
+        noBboxParams[portal.layer.filterer.Filterer.BBOX_FIELD] = undefined;
 
         //We dont fire the event because the parent method will fire it for us
         this.setSpatialParam(bbox, true);
 
         //Proceed normally
-        this.callParent(noBboxParams, clearFirst);
+        this.callParent([noBboxParams, clearFirst]);
     },
 
     /**
@@ -98,11 +98,11 @@ Ext.define('portal.layer.filterer.Filterer', {
      * value - The object value to set
      */
     setParameter : function(key, value){
-        if (key === portal.layer.filterer.SpatialFilterer.BBOX_FIELD) {
+        if (key === portal.layer.filterer.Filterer.BBOX_FIELD) {
             this._setBboxField(value);
             this.fireEvent('change', this, [key]);
         } else {
-            this.callParent(key, value);
+            this.callParent(arguments);
         }
     },
 
@@ -114,14 +114,14 @@ Ext.define('portal.layer.filterer.Filterer', {
      * returns - a javascript object matching key
      */
     getParameter : function(key) {
-        if (key === portal.layer.filterer.SpatialFilterer.BBOX_FIELD) {
+        if (key === portal.layer.filterer.Filterer.BBOX_FIELD) {
             if (this.bbox) {
                 return Ext.JSON.encode(this.getSpatialParam());
             } else {
                 return undefined;
             }
         } else {
-            return this.callParent(key);
+            return this.callParent(arguments);
         }
     },
 
@@ -133,7 +133,7 @@ Ext.define('portal.layer.filterer.Filterer', {
         this.spatialParam = this.applySpatialParam(spatialParam);
 
         if (!suppressEvents) {
-            this.fireEvent('change', this, [portal.layer.filterer.SpatialFilterer.BBOX_FIELD]);
+            this.fireEvent('change', this, [portal.layer.filterer.Filterer.BBOX_FIELD]);
         }
     }
 });

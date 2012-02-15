@@ -6,7 +6,6 @@ Ext.define('portal.layer.filterer.FormFactory', {
     extend : 'Ext.util.Observable',
 
     constructor : function(config) {
-        this.listeners = config.listeners;
         this.callParent(arguments);
     },
 
@@ -27,6 +26,7 @@ Ext.define('portal.layer.filterer.FormFactory', {
      * {
      *    form : Ext.FormPanel - can be null - the formpanel to be displayed when this layer is selected
      *    supportsFiltering : boolean - whether this formpanel supports the usage of the filter button
+     *    layer : portal.layer.Layer that was used to generate this object
      * }
      *
      */
@@ -34,12 +34,12 @@ Ext.define('portal.layer.filterer.FormFactory', {
         var baseFilterForm = null;
         var baseFilterFormCfg = {
             layer : layer,
-            id : layer.id
+            id : layer.get('id')
         };
 
         //A number of known layer's have specific filter forms
-        if (layer.sourceType === portal.layer.Layer.KNOWN_LAYER) {
-            switch (layer.source.id) {
+        if (layer.get('sourceType') === portal.layer.Layer.KNOWN_LAYER) {
+            switch (layer.get('source').get('id')) {
             case 'pressuredb-borehole':
                 baseFilterForm = Ext.create('portal.layer.filterer.forms.PressureDBFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
@@ -68,7 +68,7 @@ Ext.define('portal.layer.filterer.FormFactory', {
         }
 
         //otherwise let's see if we can guess an appropriate filter based on layer renderer
-        if (layer.renderer instanceof portal.layer.renderer.wms.WMSRenderer) {
+        if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer) {
             baseFilterForm = Ext.create('portal.layer.filterer.forms.WMSLayerFilterForm', baseFilterFormCfg);
             return this._generateResult(baseFilterForm, true);
         }

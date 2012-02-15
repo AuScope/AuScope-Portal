@@ -32,6 +32,7 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
         this.listeners = cfg.listeners;
 
         Ext.apply(cfg, {
+            hideHeaders : true,
             features : [groupingFeature],
             viewConfig : {
                 emptyText : 'No records are available, please try refreshing the page in a few moments.'

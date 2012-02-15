@@ -15,8 +15,8 @@ Ext.define('portal.util.gmap.ClickController', {
 
             return [Ext.create('portal.layer.querier.QueryTarget', {
                 id : id,
-                lat : undefined,
-                lng : undefined,
+                lat : overlayLatLng.lat(),
+                lng : overlayLatLng.lng(),
                 onlineResource : onlineResource,
                 layer : layer,
                 explicit : true

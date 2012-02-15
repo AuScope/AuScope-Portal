@@ -49,49 +49,51 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
         //Build our component
         Ext.apply(rootCfg, {
             border : false,
+            layout : 'fit',
             items : [{
                 xtype : 'fieldset',
                 title : 'Borehole',
+                labelWidth: 75,
                 items : [{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Name',
-                    html : this._makeGeneralPopupHtml(rawId, boreholeName, 'Click here for the raw WFS data')
+                    value : this._makeGeneralPopupHtml(rawId, boreholeName, 'Click here for the raw WFS data')
                 },{
-                    xtype : 'label',
-                    fieldLabel : String.format('Elevation ({0})',elevationUom),
-                    text : elevation
+                    xtype : 'displayfield',
+                    fieldLabel : Ext.util.Format.format('Elevation ({0})',elevationUom),
+                    value : elevation
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Start Depth (m)',
-                    text : startDepth
+                    value : startDepth
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'End Depth (m)',
-                    text : endDepth
+                    value : endDepth
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Core Custodian',
-                    text : coreCustodian
+                    value : coreCustodian
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Drilling Co.',
-                    text : drillingCo
+                    value : drillingCo
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Drilling Date',
-                    text : drillingDate
+                    value : drillingDate
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Drilling Method',
-                    text : drillingMethod
+                    value : drillingMethod
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Inclination Type',
-                    text : inclinationType
+                    value : inclinationType
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Start Point',
-                    text : startPoint
+                    value : startPoint
                 }]
             }],
             buttonAlign : 'right',
@@ -102,7 +104,7 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
                 handler : function() {
                     var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, 'gsml:Borehole', gmlId);
                     var url = 'downloadGMLAsZip.do?serviceUrls=' + escape(getXmlUrl);
-                    FileDownloader.downloadFile(url);
+                    portal.util.FileDownloader.downloadFile(url);
                 }
             }]
         });

@@ -476,7 +476,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     buttons:[{
                         text : 'Download',
                         xtype: 'linkbutton',
-                        href : String.format('getNVCLCSVDownload.do?serviceUrl={0}&datasetId={1}', escape(omUrl), datasetId)
+                        href : Ext.util.Format.format('getNVCLCSVDownload.do?serviceUrl={0}&datasetId={1}', escape(omUrl), datasetId)
                     }],
                     listeners: {
                         'expand' : {
@@ -532,7 +532,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 var winStat = new Ext.Window({
                                     autoScroll  : true,
                                     border      : true,
-                                    autoLoad    : String.format('getNVCLTSGDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                    autoLoad    : Ext.util.Format.format('getNVCLTSGDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
                                     id          : 'dwldStatusWindow',
                                     layout      : 'fit',
                                     modal       : true,
@@ -627,7 +627,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 var winStat = Ext.create('Ext.Window' , {
                                     autoScroll  : true,
                                     border      : true,
-                                    autoLoad    : String.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                    autoLoad    : Ext.util.Format.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
                                     id          : 'omDwldStatusWindow',
                                     layout      : 'fit',
                                     modal       : true,
@@ -710,7 +710,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         var me = this;
 
         //NVCL URL's are discovered by doing some 'tricky' URL rewriting
-        var baseUrl = this.getBaseUrl(parentOnlineResource.url);
+        var baseUrl = this.getBaseUrl(parentOnlineResource.get('url'));
         if (baseUrl.indexOf('pir.sa.gov.au') >= 0) {
             baseUrl += '/nvcl'; //AUS-2144 - PIRSA specific fix
         }
@@ -719,7 +719,9 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
 
         Ext.apply(rootCfg, {
+            tabTitle : 'Details',
             plain : true,
+            layout : 'fit',
             //We only have a single child which is our grid
             items : [{
                 xtype : 'grid',
@@ -741,38 +743,33 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             successProperty : 'success',
                             messageProperty : 'msg'
                         }
-                    }
+                    },
+                    autoLoad : true
                 }),
-                loadMask : true,
                 hideHeaders : true,
                 //Show just the dataset names
                 columns : [{
-                    id : 'name',
                     header : 'Name',
                     dataIndex : 'datasetName',
                     width : 600,
                     renderer : function(value, p, record) {
-                        return String.format('<div><b>{0}</b></div>', value);
+                        return Ext.util.Format.format('<div><b>{0}</b></div>', value);
                     }
                 }],
-                //We only want single row selection
-                sm: new Ext.grid.RowSelectionModel({
-                    singleSelect:true
-                }),
                 listeners : {
                     //When our grid is rendered - load the datastore and select the first row
-                    afterrender : function(grid) {
+                    /*afterrender : function(grid) {
                         grid.getStore().load({
                             callback : function() {
                                 var sm = grid.getSelectionModel();
-                                if (sm) {
-                                    sm.selectFirstRow();
+                                if (sm && grid.getStore().getCount() > 0) {
+                                    sm.select(0, false);
                                 }
                             }
                         });
-                    }
+                    }*/
                 },
-                viewConfig : {
+                /*viewConfig : {
                     forceFit : true,
                     enableRowBody:true,
                     showPreview:true,
@@ -788,7 +785,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         }
                         return 'x-grid3-row-collapsed';
                     }
-                },
+                },*/
                 buttonAlign : 'right',
                 buttons : [{
                     iconCls : 'info',

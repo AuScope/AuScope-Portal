@@ -62,7 +62,7 @@ Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
      * data from the specified URL
      */
     _makeWFSPopupHtml : function(wfsUrl, typeName, featureId, content, qtip) {
-        return String.format('<a href="#" qtip="{4}" onclick="var w=window.open(\'wfsFeaturePopup.do?url={0}&typeName={1}&featureId={2}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{3}</a>',escape(wfsUrl), escape(typeName), escape(featureId), content, qtip ? qtip : '');
+        return Ext.util.Format.format('<a href="#" qtip="{4}" onclick="var w=window.open(\'wfsFeaturePopup.do?url={0}&typeName={1}&featureId={2}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{3}</a>',escape(wfsUrl), escape(typeName), escape(featureId), content, qtip ? qtip : '');
     },
 
     /**
@@ -71,7 +71,7 @@ Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
      * data from the specified URL
      */
     _makeGeneralPopupHtml : function(url, content, qtip) {
-        return String.format('<a href="#" qtip="{2}" onclick="var w=window.open(\'{0}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{1}</a>',url, content, qtip ? qtip : '');
+        return Ext.util.Format.format('<a href="#" qtip="{2}" onclick="var w=window.open(\'{0}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{1}</a>',url, content, qtip ? qtip : '');
     },
 
     /**
@@ -86,7 +86,7 @@ Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
         }
         vocabUrl += 'getConceptByURI?';
 
-        return String.format('<a href="#" qtip="{3}" onclick="var w=window.open(\'{0}{1}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{2}</a>', vocabUrl, conceptUri, content, qtip ? qtip : '');
+        return Ext.util.Format.format('<a href="#" qtip="{3}" onclick="var w=window.open(\'{0}{1}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{2}</a>', vocabUrl, conceptUri, content, qtip ? qtip : '');
     },
 
     /**

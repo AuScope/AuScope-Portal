@@ -21,7 +21,7 @@ Ext.define('portal.layer.renderer.Renderer', {
         hasData : false, //whether the renderer has rendered any data or not,
         proxyUrl : '',  //a url to proxy data requests through (implementation specific)
         proxyCountUrl : '', //a url to proxy data count requests through (implementation specific)
-        parentLayer : null,
+        parentLayer : null, // a reference to the portal.layer.Layer that owns this renderer
     },
 
     /**

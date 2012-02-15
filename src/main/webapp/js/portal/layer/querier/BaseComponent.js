@@ -4,5 +4,18 @@
  */
 Ext.define('portal.layer.querier.BaseComponent', {
     extend: 'Ext.Panel',
-    alias : 'widget.querierbasecomponent'
+    alias : 'widget.querierbasecomponent',
+
+    /**
+     * The title to be used in the event of this base component being rendered
+     * inside some form of tab control (or any other parent container requiring a title).
+     */
+    tabTitle : 'Summary',
+
+    constructor : function(cfg) {
+        if (cfg.tabTitle) {
+            this.tabTitle = cfg.tabTitle;
+        }
+        this.callParent(arguments);
+    }
 });

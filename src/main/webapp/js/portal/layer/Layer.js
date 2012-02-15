@@ -59,12 +59,19 @@ Ext.define('portal.layer.Layer', {
      */
     onVisibilityChanged : function(renderer, newVisibility) {
         if (newVisibility) {
-            renderer.displayData(this.getAllOnlineResources(), this.data.filterer, Ext.emptyFn);
+            renderer.displayData(this.getAllOnlineResources(), this.get('filterer'), Ext.emptyFn);
         } else {
             renderer.abortDisplay();
             renderer.removeData();
         }
-    }
+    },
 
+    /**
+     * Whenever our filter changes, update the rendered page
+     */
+    onFilterChanged : function(filterer, keys) {
+        var renderer = this.get('renderer');
+        renderer.displayData(this.getAllOnlineResources(), this.get('filterer'), Ext.emptyFn);
+    }
 
 });

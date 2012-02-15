@@ -70,6 +70,8 @@ Ext.define('portal.layer.LayerFactory', {
         renderer.on('renderstarted', Ext.bind(newLayer.onRenderStarted, newLayer));
         renderer.on('renderfinished', Ext.bind(newLayer.onRenderFinished, newLayer));
         renderer.on('visibilitychanged', Ext.bind(newLayer.onVisibilityChanged, newLayer));
+        filterer.on('change', Ext.bind(newLayer.onFilterChanged, newLayer));
+
 
         return newLayer;
     },

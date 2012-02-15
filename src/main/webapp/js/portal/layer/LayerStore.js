@@ -14,26 +14,12 @@ Ext.define('portal.layer.LayerStore', {
             data : []
         }]);
 
-        this.on('add', this._onLayerAdd);
         this.on('remove', this._onLayerRemove);
     },
 
     /**
-     * Raised whenever a layer is added to this store.
-     */
-    _onLayerAdd : function(store, records, index, eOpts) {
-        //For each layer, render it on the map
-        for (var i = 0; i < records.length; i++) {
-            var renderer = records[i].get('renderer');
-            var filterer = records[i].get('filterer');
-            var resources = records[i].getAllOnlineResources();
-
-            renderer.displayData(resources, filterer, Ext.emptyFn);
-        }
-    },
-
-    /**
-     * Raised whenever a layer is removed from this store
+     * Raised whenever a layer is removed from this store. Used to
+     * ensure that the layer's data is removed from the map.
      */
     _onLayerRemove : function(store, record, index, eOpts) {
         var renderer = record.data.renderer;
