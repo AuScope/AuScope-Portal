@@ -35,9 +35,7 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
             var tileLayer = new GWMSTileLayer(this.map, new GCopyrightCollection(""), 1, 17);
             tileLayer.baseURL = wmsResources[i].get('url');
             tileLayer.layers = wmsResources[i].get('name');
-            //TODO: VT: temporary workaround as filterer is not built yet. filterer.getParameter('opacity') should return non null value
-            //tileLayer.opacity = filterer.getParameter('opacity');
-            tileLayer.opacity=1;
+            tileLayer.opacity = filterer.getParameter('opacity');
             this.overlayManager.addOverlay(new GTileLayerOverlay(tileLayer));
             this.fireEvent('rendercomplete', this, wmsResources, filterer);
         }
@@ -55,7 +53,9 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
      * resources - (same as displayData) an array of data sources which should be used to render data
      * filterer - (same as displayData) A custom filter that can be applied to the specified data sources
      */
-    getLegend : portal.util.UnimplementedFunction,
+    getLegend : function(resources, filterer) {
+        return null;
+    },
 
     /**
      * An abstract function that is called when this layer needs to be permanently removed from the map.

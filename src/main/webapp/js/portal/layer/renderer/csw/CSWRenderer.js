@@ -99,7 +99,9 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
      * resources - (same as displayData) an array of data sources which should be used to render data
      * filterer - (same as displayData) A custom filter that can be applied to the specified data sources
      */
-    getLegend : portal.util.UnimplementedFunction,
+    getLegend : function(resources, filterer) {
+        return null;
+    },
 
     /**
      * An abstract function that is called when this layer needs to be permanently removed from the map.
