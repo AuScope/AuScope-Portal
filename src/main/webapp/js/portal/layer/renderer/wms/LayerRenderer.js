@@ -6,6 +6,9 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
     extend: 'portal.layer.renderer.Renderer',
 
     constructor: function(config) {
+        this.legend = Ext.create('portal.layer.legend.wfs.WMSLegend', {
+            iconUrl : config.iconCfg ? config.iconCfg.url : 'img/key.png'
+        });
         this.callParent(arguments);
     },
 
@@ -54,7 +57,7 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
      * filterer - (same as displayData) A custom filter that can be applied to the specified data sources
      */
     getLegend : function(resources, filterer) {
-        return null;
+        return this.legend;
     },
 
     /**

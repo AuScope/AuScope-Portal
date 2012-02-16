@@ -9,12 +9,12 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
      */
     constructor : function(config) {
         //First build our keyword/resource data from our list of CSWRecords
-        var cswRecords = config.layer.cswRecords;
+        var cswRecords = config.layer.get('cswRecords');;
         var keywordData = {}; //store the counts of keywords keyed by the keyword name
         var resourceData = {}; //sotre the counts of providers keyed by provider names
         for (var i = 0; i < cswRecords.length; i++) {
             //Add keywords
-            var keywordArray = cswRecords[i].keywords;
+            var keywordArray = cswRecords[i].get('keywords');
             for (var j = 0; j < keywordArray.length; j++) {
                 var keyword = keywordArray[j];
                 if (keywordData[keyword]) {
@@ -25,7 +25,7 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
             }
 
             //Add resource providers
-            var resourceProvider = cswRecords[i].resourceProvider;
+            var resourceProvider = cswRecords[i].get('resourceProvider');
             if (resourceData[resourceProvider]) {
                 resourceData[resourceProvider]++;
             } else {

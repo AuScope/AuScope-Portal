@@ -16,6 +16,7 @@ Ext.define('portal.csw.CSWRecord', {
         { name: 'contactOrg', type: 'string' }, //Who is providing this resource (organisation name)
         { name: 'keywords', type: 'auto' }, //an array of strings representing descriptive keywords for this record
         { name: 'geographicElements', convert: portal.util.BBoxType.convert}, //an array of portal.util.BBox objects representing the total spatial bounds of this record
-        { name: 'onlineResources', convert: portal.csw.OnlineResourceType.convert} //A set of portal.csw.OnlineResource objects
+        { name: 'onlineResources', convert: portal.csw.OnlineResourceType.convert}, //A set of portal.csw.OnlineResource objects
+        { name: 'resourceProvider', type: 'string'}, //A set of portal.csw.OnlineResource objects
     ]
 });

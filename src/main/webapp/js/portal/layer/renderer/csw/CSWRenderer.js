@@ -19,6 +19,9 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
         }
     },
     constructor: function(config) {
+        this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
+            iconUrl : config.iconCfg ? config.iconCfg.url : ''
+        });
         this.callParent(arguments);
     },
 
@@ -100,7 +103,7 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
      * filterer - (same as displayData) A custom filter that can be applied to the specified data sources
      */
     getLegend : function(resources, filterer) {
-        return null;
+        return this.legend;
     },
 
     /**
