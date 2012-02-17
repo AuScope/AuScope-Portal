@@ -14,7 +14,7 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
         var resourceData = {}; //sotre the counts of providers keyed by provider names
         for (var i = 0; i < cswRecords.length; i++) {
             //Add keywords
-            var keywordArray = cswRecords[i].get('keywords');
+            var keywordArray = cswRecords[i].get('descriptiveKeywords');
             for (var j = 0; j < keywordArray.length; j++) {
                 var keyword = keywordArray[j];
                 if (keywordData[keyword]) {
@@ -36,21 +36,37 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
         //Turn that keyword data into something we can plug into a store
         var keywordList = [];
         for (var keyword in keywordData) {
-            keywordList.push([keyword, keywordData[keyword]]);
+            var temp={};
+            temp.keyword=keyword;
+            temp.count=keywordData[keyword];
+            keywordList.push(temp);
         }
         var keywordStore = Ext.create('Ext.data.Store', {
-            fields   : ['keyword', 'count'],
-            data: keywordList
+            fields      : ['keyword', 'count'],
+            data        : keywordList
         });
 
         //Do the same for our resource data
         var providerList = [];
         for (var provider in resourceData) {
-            providerList.push([provider, resourceData[provider]]);
+            var temp={};
+            temp.resourceProvider=provider;
+            temp.count=resourceData[provider];
+            providerList.push(temp);
         }
         var resourceProviderStore = Ext.create('Ext.data.Store', {
-            fields   : ['resourceProvider', 'count'],
-            data: providerList
+            fields      : ['resourceProvider', 'count'],
+            data        : providerList
+        });
+     // The data store containing the list of states
+        var states = Ext.create('Ext.data.Store', {
+            fields: ['abbr', 'name'],
+            data : [
+                {"abbr":"AL", "name":"Alabama"},
+                {"abbr":"AK", "name":"Alaska"},
+                {"abbr":"AZ", "name":"Arizona"}
+                //...
+            ]
         });
 
         Ext.apply(config, {
@@ -75,14 +91,13 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
                     name: 'title'
                 },{
                     xtype: 'combo',
-                    tpl: '<tpl for="."><div style="word-wrap" ext:qtip="{keyword} - {count} record(s)" class="x-combo-list-item">{keyword}</div></tpl>',
+                    //tpl: '<tpl for="."><div style="word-wrap" ext:qtip="{keyword} - {count} record(s)" class="x-combo-list-item">{keyword}</div></tpl>',
                     anchor: '100%',
+                    queryMode: 'local',
                     name: 'keyword',
-                    hiddenName: 'keyword',
-                    fieldLabel: 'Keyword',
-                    labelAlign: 'right',
+                    fieldLabel: 'keyword',
+                    labelAlign: 'left',
                     forceSelection: true,
-                    mode: 'local',
                     store: keywordStore,
                     triggerAction: 'all',
                     typeAhead: true,
@@ -91,14 +106,13 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
                     autoScroll: true
                 },{
                     xtype: 'combo',
-                    tpl: '<tpl for="."><div style="word-wrap" ext:qtip="{resourceProvider} - {count} record(s)" class="x-combo-list-item">{resourceProvider}</div></tpl>',
+                    //tpl: '<tpl for="."><div style="word-wrap" ext:qtip="{resourceProvider} - {count} record(s)" class="x-combo-list-item">{resourceProvider}</div></tpl>',
                     anchor: '100%',
+                    queryMode: 'local',
                     name: 'resourceProvider',
-                    hiddenName: 'resourceProvider',
                     fieldLabel: 'Resource Provider',
-                    labelAlign: 'right',
+                    labelAlign: 'left',
                     forceSelection: true,
-                    mode: 'local',
                     store: resourceProviderStore,
                     triggerAction: 'all',
                     typeAhead: true,

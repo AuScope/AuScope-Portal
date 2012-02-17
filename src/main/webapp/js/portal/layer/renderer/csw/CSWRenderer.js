@@ -45,43 +45,73 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
      */
     displayData : function(resources, filterer, callback) {
         this.removeData();
-        //TODO: VT: FILTER NOT IN PLACE
+        //TODO: VT: Response tool tip not in place
+        var titleFilter = '';
+        var keywordFilter = '';
+        var resourceProviderFilter = '';
+        var filterObj=null;
+        if(filterer.getParameters()){
+            filterObj=filterer.getParameters();
+        }
+
+        var regexp = /\*/;
+        if(filterObj){
+            titleFilter = filterObj.title;
+            if(titleFilter !== '' && /^\w+/.test(titleFilter)) {
+                regexp = new RegExp(titleFilter, "i");
+            }
+        }
+
+        if(filterObj && filterObj.keyword) {
+            keywordFilter = filterObj.keyword;
+        }
+
+        if(filterObj && filterObj.resourceProvider) {
+            resourceProviderFilter = filterObj.resourceProvider;
+        }
+
+
         var cswRecords=this.parentLayer.get('cswRecords');
         var numRecords = 0;
         for (var i = 0; i < cswRecords.length; i++) {
-            var geoEls = cswRecords[i].get('geographicElements');
-            for (var j = 0; j < geoEls.length; j++) {
-                var geoEl = geoEls[j];
-                if (geoEl instanceof portal.util.BBox) {
-                    if(geoEl.eastBoundLongitude == geoEl.westBoundLongitude &&
-                        geoEl.southBoundLatitude == geoEl.northBoundLatitude) {
-                        //We only have a point
-                        var point = new GLatLng(parseFloat(geoEl.southBoundLatitude),
-                                parseFloat(geoEl.eastBoundLongitude));
+            if ((titleFilter === '' || regexp.test(cswRecords[i].get('name'))) &&
+                    (keywordFilter === '' || cswRecords[i].containsKeyword(keywordFilter)) &&
+                    (resourceProviderFilter === '' || cswRecords[i].get('resourceProvider') == resourceProviderFilter)) {
+                numRecords++;
+                var geoEls = cswRecords[i].get('geographicElements');
+                for (var j = 0; j < geoEls.length; j++) {
+                    var geoEl = geoEls[j];
+                    if (geoEl instanceof portal.util.BBox) {
+                        if(geoEl.eastBoundLongitude == geoEl.westBoundLongitude &&
+                            geoEl.southBoundLatitude == geoEl.northBoundLatitude) {
+                            //We only have a point
+                            var point = new GLatLng(parseFloat(geoEl.southBoundLatitude),
+                                    parseFloat(geoEl.eastBoundLongitude));
 
-                        var icon = new GIcon(G_DEFAULT_ICON, this.iconCfg.url);
-                        icon.shadow = null;
+                            var icon = new GIcon(G_DEFAULT_ICON, this.iconCfg.url);
+                            icon.shadow = null;
 
-                        if (this.iconCfg.size.width && this.iconCfg.size.height) {
-                            icon.iconSize = new GSize(this.iconCfg.size.width, this.iconCfg.size.height);
-                        }
-                        if (this.iconCfg.anchor.x && this.iconCfg.anchor.y) {
-                            icon.iconAnchor = new GPoint(this.iconCfg.anchor.x, this.iconCfg.anchor.y);
-                            icon.infoWindowAnchor = new GPoint(this.iconCfg.anchor.x, this.iconCfg.anchor.y);
-                        }
+                            if (this.iconCfg.size.width && this.iconCfg.size.height) {
+                                icon.iconSize = new GSize(this.iconCfg.size.width, this.iconCfg.size.height);
+                            }
+                            if (this.iconCfg.anchor.x && this.iconCfg.anchor.y) {
+                                icon.iconAnchor = new GPoint(this.iconCfg.anchor.x, this.iconCfg.anchor.y);
+                                icon.infoWindowAnchor = new GPoint(this.iconCfg.anchor.x, this.iconCfg.anchor.y);
+                            }
 
-                        var marker = portal.util.gmap.OverlayFactory.makeMarker(cswRecords[i].get('id'), cswRecords[i].get('name'),
-                                            undefined, this.parentLayer, point, icon);
+                            var marker = portal.util.gmap.OverlayFactory.makeMarker(cswRecords[i].get('id'), cswRecords[i].get('name'),
+                                                undefined, this.parentLayer, point, icon);
 
-                        //Add our single point
-                        this.overlayManager.markerManager.addMarker(marker, 0);
+                            //Add our single point
+                            this.overlayManager.markerManager.addMarker(marker, 0);
 
-                    } else { //polygon
-                        var polygonList = geoEl.toGMapPolygon(cswRecords[i].get('id'),undefined,this.parentLayer,
-                                '#0003F9', 4, 0.75,'#0055FE', 0.4);
+                        } else { //polygon
+                            var polygonList = geoEl.toGMapPolygon(cswRecords[i].get('id'),undefined,this.parentLayer,
+                                    '#0003F9', 4, 0.75,'#0055FE', 0.4);
 
-                        for (var k = 0; k < polygonList.length; k++) {
-                            this.overlayManager.addOverlay(polygonList[k]);
+                            for (var k = 0; k < polygonList.length; k++) {
+                                this.overlayManager.addOverlay(polygonList[k]);
+                            }
                         }
                     }
                 }
