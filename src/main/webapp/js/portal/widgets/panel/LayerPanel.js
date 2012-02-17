@@ -17,11 +17,13 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             },{
                 dataIndex : 'loading',
                 renderer : this._loadingRenderer,
+                hasTip : true,
+                tipRenderer : Ext.bind(this._loadingTipRenderer, this),
                 width: 32
             },{
                 text : 'Layer Name',
                 dataIndex : 'name',
-                flex : 1,
+                flex : 1
             },{
                 text : 'Visible',
                 xtype : 'renderablecheckcolumn',
@@ -43,6 +45,8 @@ Ext.define('portal.widgets.panel.LayerPanel', {
                 rowBodyTpl : [
                     '<p>{description}</p><br>'
                 ]
+            },{
+                ptype: 'celltips'
             }],
             bbar: [{
                 text : 'Remove Layer',
@@ -122,5 +126,24 @@ Ext.define('portal.widgets.panel.LayerPanel', {
                 src: 'img/page_code_disabled.png'
             });
         }
+    },
+
+    /**
+     * A renderer for generating the contents of the tooltip that shows when the
+     * layer is loading
+     */
+    _loadingTipRenderer : function(value, layer, column, tip) {
+        var renderer = layer.get('renderer');
+        var update = function(renderStatus, keys) {
+            tip.update(renderStatus.renderHtml());
+        };
+
+        //Update our tooltip as the underlying status changes
+        renderer.renderStatus.on('change', update, this);
+        tip.on('hide', function() {
+            renderer.renderStatus.un('change', update);
+        });
+
+        return renderer.renderStatus.renderHtml();
     }
 });

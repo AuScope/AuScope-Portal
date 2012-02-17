@@ -17,10 +17,12 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
     },
 
 
-    _generateErrorComponent : function(message) {
-        return Ext.create('portal.layer.querier.BaseComponent', {
+    _generateErrorComponent : function(message, rootConfig) {
+        var cfg = Ext.apply({}, rootConfig ? rootConfig : {});
+        Ext.apply(cfg, {
             html: Ext.util.Format.format('<p class="centeredlabel">{0}</p>', message)
-        });
+        })
+        return Ext.create('portal.layer.querier.BaseComponent', cfg);
     },
 
     /**
@@ -28,7 +30,7 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
      *
      * Makes a WFS request, waits for the response and then parses it passing the results to callback
      */
-    query : function(queryTarget, callback) {
+    query : function(queryTarget, rootConfig, callback) {
         //This class can only query for specific WFS feature's
         var id = queryTarget.get('id');
         if (!id) {
@@ -82,9 +84,9 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
 
                 //Parse our response into a number of GUI components, pass those along to the callback
                 var allComponents = [];
-                allComponents.push(me.parser.parseNode(wfsResponseRoot, onlineResource.data.url, me.rootCfg));
+                allComponents.push(me.parser.parseNode(wfsResponseRoot, onlineResource.data.url, rootConfig));
                 if (knownLayer && me.knownLayerParser.canParseKnownLayerFeature(queryTarget.data.id, knownLayer, onlineResource)) {
-                    allComponents.push(me.knownLayerParser.parseKnownLayerFeature(queryTarget.data.id, knownLayer, onlineResource, me.rootCfg));
+                    allComponents.push(me.knownLayerParser.parseKnownLayerFeature(queryTarget.data.id, knownLayer, onlineResource, rootConfig));
                 }
 
                 callback(me, allComponents, queryTarget);

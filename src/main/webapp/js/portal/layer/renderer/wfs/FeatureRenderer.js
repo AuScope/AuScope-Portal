@@ -57,11 +57,11 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
      */
     _handleDownloadManagerError : function(dm, message, debugInfo, onlineResource, layer) {
         //store the status
-        this.renderStatus.updateResponse(onlineResource.url, message);
+        this.renderStatus.updateResponse(onlineResource.get('url'), message);
         if(debugInfo) {
-            this.renderDebuggerData.updateResponse(onlineResource.url, message + debugInfo.info);
+            this.renderDebuggerData.updateResponse(onlineResource.get('url'), message + debugInfo.info);
         } else {
-            this.renderDebuggerData.updateResponse(onlineResource.url, message);
+            this.renderDebuggerData.updateResponse(onlineResource.get('url'), message);
         }
 
         //we are finished
@@ -73,7 +73,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
      */
     _handleDownloadManagerCancelled : function(dm, onlineResource, layer) {
         //store the status
-        this.renderStatus.updateResponse(onlineResource.url, 'Request cancelled by user.');
+        this.renderStatus.updateResponse(onlineResource.get('url'), 'Request cancelled by user.');
 
         //we are finished
         this._finishDownloadManagerResponse();
@@ -98,7 +98,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
         }
 
         //store the status
-        this.renderStatus.updateResponse(onlineResource.url, (parser.getMarkers().length + parser.getOverlays().length) + " record(s) retrieved.");
+        this.renderStatus.updateResponse(onlineResource.get('url'), (parser.getMarkers().length + parser.getOverlays().length) + " record(s) retrieved.");
 
         //we are finished
         this._finishDownloadManagerResponse(parser.getMarkers(), parser.getOverlays());
@@ -126,6 +126,13 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
         var me = this;
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.WFS);
         var visibleMapBounds = this.getVisibleMapBounds();
+
+        //Initialise our render status with every URL we will be calling (these will get updated as we go)
+        var urls = [];
+        for (var i = 0; i < wfsResources.length; i++) {
+            urls.push(wfsResources[i].get('url'));
+        }
+        this.renderStatus.initialiseResponses(urls, 'Loading...');
 
         //this icon will be shared by all features with a point based geometry
         var icon = new GIcon(G_DEFAULT_ICON, this.iconCfg.url);

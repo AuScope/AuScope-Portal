@@ -24,6 +24,10 @@ Ext.define('portal.layer.renderer.Renderer', {
         parentLayer : null, // a reference to the portal.layer.Layer that owns this renderer
     },
 
+    renderDebuggerData : null,
+    renderStatus : null,
+    overlayManager : null,
+
     /**
      * Expects a Ext.util.Observable config with the following additions
      * {

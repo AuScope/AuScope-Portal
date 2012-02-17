@@ -10,7 +10,7 @@ Ext.define('portal.layer.renderer.RenderStatus', {
 
     constructor : function(config) {
         // Call our superclass constructor to complete construction process.
-        this.callParent(arguments)
+        this.callParent(arguments);
     },
 
     /**
@@ -27,13 +27,30 @@ Ext.define('portal.layer.renderer.RenderStatus', {
     },
 
     /**
+     * Batch sets all keys with a specified status.
+     *
+     * allKeys - array of strings
+     * responseStatus - string
+     */
+    initialiseResponses : function(allKeys, responseStatus) {
+        var params = {};
+        for (var i = 0; i < allKeys.length; i++) {
+            params[allKeys[i]] = responseStatus;
+        }
+
+        this.setParameters(params, true);
+    },
+
+    /**
      * Renders this status into a HTML string consisting of a table that represents all key/status pairs
      */
     renderHtml : function() {
+        var parameterAddCount = 0;
         var htmlString = '<table border="0">' ;
 
         for(i in this.parameters) {
             if(!this.parameters[i].toString().match('function')) {
+                parameterAddCount++;
                 if(i.length >= 1) {
                     htmlString += '<tr><td>'+ i + ' - ' + this.parameters[i] +'</td></tr>';
                 } else {
@@ -41,10 +58,14 @@ Ext.define('portal.layer.renderer.RenderStatus', {
                 }
             }
         }
-
         htmlString += '</table>' ;
 
-        return htmlString;
+        if (parameterAddCount === 0) {
+            return 'No status has been recorded';
+        } else {
+            return htmlString;
+        }
+
     }
 });
 

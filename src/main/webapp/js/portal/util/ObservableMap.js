@@ -9,7 +9,7 @@
 Ext.define('portal.util.ObservableMap', {
     extend: 'Ext.util.Observable',
 
-    parameters : {},
+    parameters : null,
 
     constructor: function(config){
 
@@ -20,6 +20,7 @@ Ext.define('portal.util.ObservableMap', {
         // Copy configured listeners into *this* object so that the base class's
         // constructor will add them.
         this.listeners = config.listeners;
+        this.parameters = {};
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments)

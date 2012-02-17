@@ -128,9 +128,6 @@ Ext.application({
             region : 'north',
             split : true,
             height : 265,
-            defaults: { // defaults are applied to items, not the container
-                autoScroll: true
-            },
             enableTabScroll : true,
             items:[knownLayersPanel,
                 unmappedRecordsPanel,

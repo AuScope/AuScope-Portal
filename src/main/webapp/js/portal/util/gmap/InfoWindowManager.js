@@ -23,7 +23,7 @@ Ext.define('portal.util.gmap.InfoWindowManager', {
      * initFunctionParam - [Optional] will be passed as a parameter to initFunction
      *
      */
-    openInfoWindow : function(windowLocation, content, infoWindowOpts , initFunction, initFunctionParam) {
+    openInfoWindow : function(windowLocation, content, infoWindowOpts, initFunctionParam, initFunction) {
 
         //We listen for the open event once
         var scope = this;

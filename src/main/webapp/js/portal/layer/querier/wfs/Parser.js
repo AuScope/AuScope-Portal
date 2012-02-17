@@ -31,7 +31,7 @@ Ext.define('portal.layer.querier.wfs.Parser', {
      * @param rootCfg [Optional] An Object whose properties will be applied to the top level component parsed (a GenericParser.BaseComponent instance)
      */
     parseNode : function(domNode, wfsUrl, rootCfg) {
-
+        var editableConfig = Ext.apply({}, (rootCfg ? rootCfg : {}));
         //In the event of an empty node, return an empty component
         if (!domNode) {
             return Ext.create('portal.layer.querier.BaseComponent', (rootCfg ? rootCfg : {}));
@@ -39,7 +39,7 @@ Ext.define('portal.layer.querier.wfs.Parser', {
 
         for (var i = 0; i < this.factoryList.length; i++) {
             if (this.factoryList[i].supportsNode(domNode)) {
-                return this.factoryList[i].parseNode(domNode, wfsUrl, (rootCfg ? rootCfg : {}));
+                return this.factoryList[i].parseNode(domNode, wfsUrl, editableConfig);
             }
         }
 

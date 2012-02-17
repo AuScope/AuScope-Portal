@@ -11,7 +11,7 @@ Ext.define('portal.layer.renderer.RenderDebuggerData', {
 
     constructor : function(config) {
         // Call our superclass constructor to complete construction process.
-        this.callParent(arguments)
+        this.callParent(arguments);
     },
 
     /**
@@ -39,7 +39,6 @@ Ext.define('portal.layer.renderer.RenderDebuggerData', {
 
             htmlString += '<b>'+ i + '</b>' + '<br/> ' + escapedXml +'<br/><br/>';
         }
-
         htmlString += '<br/>' ;
         return htmlString;
     }

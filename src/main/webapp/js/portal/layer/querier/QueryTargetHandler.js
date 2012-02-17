@@ -8,14 +8,24 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
     _loadMaskCount : 0,
     _loadMask : null,
     _infoWindowManager : null,
+    _infoWindowHeight : 300,
+    _infoWindowWidth : 600,
 
     /**
      * Accepts a config with {
+     *  infoWindowHeight : [Optional] Number height of info window in pixels
+     *  infoWindowWidth : [Optional] Number width of info window in pixels
      *  container : The Ext.Container that houses the map instance
      *  map : A GMap2 instance (google map api) which will be drawn on
      * }
      */
     constructor : function(config) {
+        if (config.infoWindowHeight) {
+            this._infoWindowHeight = config.infoWindowHeight;
+        }
+        if (config.infoWindowWidth) {
+            this._infoWindowWidth = config.infoWindowWidth;
+        }
         this._infoWindowManager = Ext.create('portal.util.gmap.InfoWindowManager', {map: config.map});
         this._loadMask = new Ext.LoadMask(config.container.getEl(), {}); //For some reason LoadMask isn't designed to work with Ext.create
         this.callParent(arguments);
@@ -48,8 +58,8 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
         //to each of the tabs
 
         //Build our info window content (sans parent containers)
-        var width = 600;
-        var height = 300;
+        var width = this._infoWindowWidth;
+        var height = this._infoWindowHeight;
         var infoWindowIds = []; //this holds the unique ID's to bind to
         var infoWindowTabs = []; //this holds GInfoWindowTab instances
         for (var i = 0; i < baseComponents.length; i++) {
@@ -57,41 +67,49 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
             var html = Ext.util.Format.format('<html><body><div id="{0}" style="width: {1}px; height: {2}px;"></div></body></html>', infoWindowIds[i], width, height);
             infoWindowTabs.push(new GInfoWindowTab(baseComponents[i].tabTitle, html));
         }
+        var initFunctionParams = { //this will be passed to the info window manager callback
+            width : width,
+            height : height,
+            infoWindowIds : infoWindowIds,
+            baseComponents : baseComponents
+        };
+        var infoWindowParams = undefined; //we don't dictate any extra info window options
 
         //Show our info window - create our parent components
         var windowLocation = new GLatLng(queryTarget.get('lat'), queryTarget.get('lng'));
-        this._infoWindowManager.openInfoWindow(windowLocation, infoWindowTabs, undefined, function() {
-            for (var i = 0; i < baseComponents.length; i++) {
-                var componentToAdd = baseComponents[i];
+        this._infoWindowManager.openInfoWindow(windowLocation, infoWindowTabs, infoWindowParams, initFunctionParams, function(map, location, params) {
+            for (var i = 0; i < params.baseComponents.length; i++) {
                 Ext.create('Ext.panel.Panel', {
-                    renderTo : infoWindowIds[i],
-                    border : 3,
-                    width : width,
-                    height : height,
-                    layout : 'fit',
-                    listeners : {
-                        render : function(panel) {
-                            //TODO - figure out why these components are all coming in with width/height 0 and
-                            //not inheriting the parent containers size...
-                            panel.add(componentToAdd);
-                        }
-                    }
+                    renderTo : params.infoWindowIds[i],
+                    border : 0,
+                    width : params.width,
+                    height : params.height,
+                    items : [params.baseComponents[i]],
+                    suspendLayout : true,
+                    layout : 'fit'
                 });
             }
         });
+    },
+
+    _generateRootConfig : function() {
+        return {
+
+        };
     },
 
     /**
      * Just query everything in queryTargets
      */
     _handleWithQuery : function(queryTargets) {
+        var rootCfg = this._generateRootConfig();
         for (var i = 0; i < queryTargets.length; i++) {
             var queryTarget = queryTargets[i];
             var layer = queryTarget.get('layer');
             var querier = layer.get('querier');
 
             this._showLoadMask();
-            querier.query(queryTarget, Ext.bind(this._queryCallback, this));
+            querier.query(queryTarget, rootCfg, Ext.bind(this._queryCallback, this));
         }
     },
 

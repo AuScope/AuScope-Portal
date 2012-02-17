@@ -23,6 +23,20 @@ portal.util.xml.SimpleDOM.getNodeLocalName = function(domNode) {
 };
 
 /**
+ * Returns the set of classes this node belongs to as an array of strings
+ */
+portal.util.xml.SimpleDOM.getClassList = function(domNode) {
+    if (domNode.classList) {
+        return domNode.classList;
+    } else if (domNode['class']) {
+        return domNode['class'].split(' ');
+    } else if (domNode['className']) {
+        return domNode['className'].split(' ');
+    }
+    return [];
+}
+
+/**
  * Figure out if domNode is a leaf or not
  * (Leaves have no nodes from XML_NODE_ELEMENT)
  */
