@@ -63,6 +63,22 @@ Ext.define('portal.widgets.panel.FilterPanel', {
     },
 
     /**
+     * Internal handler for when the user clicks 'Apply Filter'.
+     *
+     * Simply updates the appropriate layer filterer. It's the responsbility
+     * of renderers/layers to listen for filterer updates.
+     */
+    _onApplyFilter : function() {
+        var baseFilterForm = this.getLayout().getActiveItem();
+        if (baseFilterForm.id === this._emptyCard.id) {
+            return;
+        }
+
+        var filterer = baseFilterForm.layer.get('filterer');
+        baseFilterForm.writeToFilterer(filterer);
+    },
+
+    /**
      * Given an instance of portal.layer.Layer - update the displayed panel
      * with an appropriate filter form (as defined by portal.layer.filterer.FormFactory).
      */
@@ -102,18 +118,14 @@ Ext.define('portal.widgets.panel.FilterPanel', {
     },
 
     /**
-     * Internal handler for when the user clicks 'Apply Filter'.
+     * Returns the instance of portal.layer.filterer.BaseFilterForm that
+     * is being used as a filter form for a particular layer.
      *
-     * Simply updates the appropriate layer filterer. It's the responsbility
-     * of renderers/layers to listen for filterer updates.
+     * If no such form exists then null will be returned
+     *
+     * @param layer An instance of portal.layer.Layer
      */
-    _onApplyFilter : function() {
-        var baseFilterForm = this.getLayout().getActiveItem();
-        if (baseFilterForm.id === this._emptyCard.id) {
-            return;
-        }
-
-        var filterer = baseFilterForm.layer.get('filterer');
-        baseFilterForm.writeToFilterer(filterer);
+    getFilterFormForLayer : function(layer) {
+        return this._getFilterForm(layer).form;
     }
 });

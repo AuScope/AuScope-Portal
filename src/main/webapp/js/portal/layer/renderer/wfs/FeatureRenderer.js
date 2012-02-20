@@ -125,7 +125,6 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
 
         var me = this;
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.WFS);
-        var visibleMapBounds = this.getVisibleMapBounds();
 
         //Initialise our render status with every URL we will be calling (these will get updated as we go)
         var urls = [];
@@ -162,7 +161,7 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
 
             //Our requesting is handled by a download manager
             var downloadManager = Ext.create('portal.layer.renderer.wfs.FeatureDownloadManager', {
-                visibleMapBounds : visibleMapBounds,
+                visibleMapBounds : filterer.getSpatialParam(),
                 proxyFetchUrl : this.proxyUrl,
                 proxyCountUrl : this.proxyCountUrl,
                 filterParams : filterParams,

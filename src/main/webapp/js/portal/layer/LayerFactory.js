@@ -13,11 +13,10 @@ Ext.define('portal.layer.LayerFactory', {
      *
      * @param cfg an object in the form
      * {
-     *  map : An instance of a google map GMap2 object
      * }
      */
     constructor : function(cfg) {
-        this.map = cfg.map;
+        this.map = portal.util.gmap.MapUtil.map; //use globally accessable map object
 
         this.callParent(arguments);
     },

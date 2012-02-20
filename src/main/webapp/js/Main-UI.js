@@ -7,7 +7,7 @@ Ext.application({
 
         //Send these headers with every AJax request we make...
         Ext.Ajax.defaultHeaders = {
-                'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
+            'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
 
         //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
@@ -65,17 +65,37 @@ Ext.application({
             title : 'Active Layers',
             region : 'center',
             store : layerStore,
+            filterPanel : filterPanel,
             listeners : {
                 //On selection, update our filter panel
                 select : function(rowModel, record, index) {
                     filterPanel.showFilterForLayer(record);
+                },
+                //Whenever the layer download is clicked
+                downloadlayer : function(panel, layer) {
+                    //We need a copy of the current filter object (in case the user
+                    //has filled out filter options but NOT hit apply filter) and
+                    //the original filter objects
+                    var renderedFilterer = layer.get('filterer').clone();
+                    var currentFilterer = Ext.create('portal.layer.filterer.Filterer', {});
+                    var currentFilterForm = filterPanel.getFilterFormForLayer(layer);
+                    if (currentFilterForm) {
+                        currentFilterForm.writeToFilterer(currentFilterer);
+                    }
+
+                    //Finally pass off the download handling to the appropriate downloader (if it exists)
+                    var downloader = layer.get('downloader');
+                    if (downloader) {
+                        var onlineResources = layer.getAllOnlineResources();
+                        downloader.downloadData(onlineResources, renderedFilterer, currentFilterer);
+                    }
                 }
             }
         });
 
         //Utility function for adding a new layer to the map
         var handleAddRecordToMap = function(sourceGrid, record) {
-            var layerFactory = Ext.create('portal.layer.LayerFactory', {map : map});
+            var layerFactory = Ext.create('portal.layer.LayerFactory', {});
             var newLayer = null;
             if (record instanceof portal.csw.CSWRecord) {
                 newLayer = layerFactory.generateLayerFromCSWRecord(record);
@@ -167,68 +187,20 @@ Ext.application({
             items:[westPanel, centerPanel]
         });
 
-        // Is user's browser suppported by Google Maps?
-        if (!GBrowserIsCompatible()) {
-            alert('The browser you are currently using is NOT compatible with the Google Map\'s API');
-            return; //what can we really do in this situation?
-        }
 
-        map = new GMap2(centerPanel.body.dom);
-
-        /* AUS-1526 search bar. */
-        map.enableGoogleBar();
-        /*
-        // Problems, find out how to
-        1. turn out advertising
-        2. Narrow down location seraches to the current map view
-                        (or Australia). Search for Albany retruns Albany, US
-        */
-        map.setUIToDefault();
-
-        //add google earth
-        map.addMapType(G_SATELLITE_3D_MAP);
-
-        // Toggle between Map, Satellite, and Hybrid types
-        map.addControl(new GMapTypeControl());
-
-        var startZoom = 4;
-        map.setCenter(new google.maps.LatLng(-26, 133.3), startZoom);
-        map.setMapType(G_SATELLITE_MAP);
-
-        //Thumbnail map
-        var Tsize = new GSize(150, 150);
-        map.addControl(new GOverviewMapControl(Tsize));
-
-        map.addControl(new DragZoomControl(), new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(345, 7)));
-
-        // Fix for IE/Firefox resize problem (See issue AUS-1364 and AUS-1565 for more info)
-        map.checkResize();
-        centerPanel.on('resize', function() {
-            map.checkResize();
-        });
+        //Initialise our google map API
+        portal.util.gmap.MapUtil.generateMap(centerPanel);
 
         //We need something to handle the clicks on the map
         var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {
-            container : centerPanel,
-            map : map
+            container : centerPanel
         });
 
         //when updateCSWRecords person clicks on updateCSWRecords marker then do something
-        GEvent.addListener(map, "click", function(overlay, latlng, overlayLatlng) {
+        portal.util.gmap.MapUtil.registerMapEvent("click", function(overlay, latlng, overlayLatlng) {
             //Figure out what we clicked and then pass that info along to appropriate layer queriers
             var queryTargets = portal.util.gmap.ClickController.generateQueryTargets(overlay, latlng, overlayLatlng, layerStore);
             queryTargetHandler.handleQueryTargets(queryTargets);
-        });
-
-        GEvent.addListener(map, "mousemove", function(latlng){
-            var latStr = "<b>Long:</b> " + latlng.lng().toFixed(6) +
-                       "&nbsp&nbsp&nbsp&nbsp" +
-                       "<b>Lat:</b> " + latlng.lat().toFixed(6);
-            document.getElementById("latlng").innerHTML = latStr;
-        });
-
-        GEvent.addListener(map, "mouseout", function(latlng){
-            document.getElementById("latlng").innerHTML = "";
         });
     }
 });

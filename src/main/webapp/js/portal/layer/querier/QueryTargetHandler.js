@@ -16,7 +16,6 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
      *  infoWindowHeight : [Optional] Number height of info window in pixels
      *  infoWindowWidth : [Optional] Number width of info window in pixels
      *  container : The Ext.Container that houses the map instance
-     *  map : A GMap2 instance (google map api) which will be drawn on
      * }
      */
     constructor : function(config) {
@@ -26,7 +25,7 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
         if (config.infoWindowWidth) {
             this._infoWindowWidth = config.infoWindowWidth;
         }
-        this._infoWindowManager = Ext.create('portal.util.gmap.InfoWindowManager', {map: config.map});
+        this._infoWindowManager = Ext.create('portal.util.gmap.InfoWindowManager', {map: portal.util.gmap.MapUtil.map});
         this._loadMask = new Ext.LoadMask(config.container.getEl(), {}); //For some reason LoadMask isn't designed to work with Ext.create
         this.callParent(arguments);
     },

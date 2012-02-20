@@ -135,5 +135,23 @@ Ext.define('portal.layer.filterer.Filterer', {
         if (!suppressEvents) {
             this.fireEvent('change', this, [portal.layer.filterer.Filterer.BBOX_FIELD]);
         }
+    },
+
+    /**
+     * Returns a shallow clone of this filterer with the exception of the spatial params,
+     * in which a true copy is returned
+     */
+    clone : function() {
+        var clonedObj = Ext.create('portal.layer.filterer.Filterer', {});
+        var thisBBox = this.getSpatialParam();
+
+        Ext.apply(clonedObj.parameters, this.parameters);
+        if (thisBBox) {
+            clonedObj.setSpatialParam(thisBBox.clone(), true);
+        } else {
+            clonedObj.setSpatialParam(thisBBox, true);
+        }
+
+        return clonedObj;
     }
 });

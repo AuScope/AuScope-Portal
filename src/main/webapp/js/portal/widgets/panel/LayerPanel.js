@@ -1,6 +1,10 @@
 /**
  * A specialised Ext.grid.Panel instance for
  * displaying a store of portal.layer.Layer objects.
+ *
+ * Adds the following events : {
+ *  downloadlayer(portal.widgets.panel.LayerPanel callingInstance, portal.layer.Layer layerToDownload) - raised whenever the user hits the 'download icon' for a layer
+ * }
  */
 Ext.define('portal.widgets.panel.LayerPanel', {
     extend : 'Ext.grid.Panel',
@@ -8,6 +12,8 @@ Ext.define('portal.widgets.panel.LayerPanel', {
 
     constructor : function(cfg) {
         var me = this;
+
+        this.filterPanel = cfg.filterPanel;
 
         Ext.apply(cfg, {
             columns : [{
@@ -25,8 +31,8 @@ Ext.define('portal.widgets.panel.LayerPanel', {
                 dataIndex : 'name',
                 flex : 1
             },{
-                text : 'Visible',
                 xtype : 'renderablecheckcolumn',
+                text : 'Visible',
                 dataIndex : 'renderer',
                 getCustomValueBool : function(header, renderer) {
                     return renderer.getVisible();
@@ -37,8 +43,8 @@ Ext.define('portal.widgets.panel.LayerPanel', {
                 width : 40
             },{
                 dataIndex : 'renderer',
-                renderer : this._downloadRenderer,
-                width : 32
+                width : 32,
+                renderer : this._downloadRenderer
             }],
             plugins: [{
                 ptype: 'rowexpander',
@@ -48,6 +54,7 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             },{
                 ptype: 'celltips'
             }],
+            selType : 'cellrowmodel',
             bbar: [{
                 text : 'Remove Layer',
                 iconCls : 'remove',
@@ -63,7 +70,11 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             }]
         });
 
+        this.addEvents('downloadlayer');
+
         this.callParent(arguments);
+
+        this.getSelectionModel().on('select', this._cellClickHandler, this);
     },
 
     /**
@@ -113,17 +124,25 @@ Ext.define('portal.widgets.panel.LayerPanel', {
     _downloadRenderer : function(value, metaData, record, row, col, store, gridView) {
         if (value.getHasData()) { //value is a portal.layer.renderer.Renderer
             return Ext.DomHelper.markup({
-                tag : 'img',
-                width : 16,
-                height : 16,
-                src: 'img/page_code.png'
+                tag : 'a',
+                href : 'javascript: void(0)',
+                children : [{
+                    tag : 'img',
+                    width : 16,
+                    height : 16,
+                    src: 'img/page_code.png'
+                }]
             });
         } else {
             return Ext.DomHelper.markup({
-                tag : 'img',
-                width : 16,
-                height : 16,
-                src: 'img/page_code_disabled.png'
+                tag : 'a',
+                href : 'javascript: void(0)',
+                children : [{
+                    tag : 'img',
+                    width : 16,
+                    height : 16,
+                    src: 'img/page_code_disabled.png'
+                }]
             });
         }
     },
@@ -141,9 +160,25 @@ Ext.define('portal.widgets.panel.LayerPanel', {
         //Update our tooltip as the underlying status changes
         renderer.renderStatus.on('change', update, this);
         tip.on('hide', function() {
-            renderer.renderStatus.un('change', update);
+            renderer.renderStatus.un('change', update); //ensure we remove the handler when the tip closes
         });
 
         return renderer.renderStatus.renderHtml();
+    },
+
+    /**
+     * Handles all clicks
+     */
+    _cellClickHandler : function(cellModel, layer, row, column) {
+        var downloadColumnIndex = 5;
+
+        switch(column) {
+        case downloadColumnIndex:
+            var downloader = layer.get('downloader');
+            if (downloader) {
+                this.fireEvent('downloadlayer', this, layer);
+            }
+            break;
+        }
     }
 });

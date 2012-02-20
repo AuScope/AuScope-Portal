@@ -55,6 +55,7 @@ Ext.define('portal.layer.filterer.BaseFilterForm', {
      */
     writeToFilterer : function(filterer) {
         var parameters = this.getForm().getValues();
+        parameters[portal.layer.filterer.Filterer.BBOX_FIELD] = portal.util.gmap.MapUtil.getVisibleMapBounds();
         filterer.setParameters(parameters, true);
     },
 

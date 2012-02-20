@@ -127,18 +127,14 @@ Ext.define('portal.layer.renderer.Renderer', {
     },
 
     /**
-     * Returns the currently visible map bounds as a BBox object.
+     * Gets a copy of the portal.layer.filterer.Filterer object that was used
+     * during the last render operation. Because the copy was made at the time
+     * of rendering the object should be the same as it was when passed into the
+     * rendering operation.
+     *
+     * This can be null/undefined
      */
-    getVisibleMapBounds : function() {
-        var mapBounds = this.map.getBounds();
-        var sw = mapBounds.getSouthWest();
-        var ne = mapBounds.getNorthEast();
-
-        return Ext.create('portal.util.BBox', {
-            eastBoundLongitude : ne.lng(),
-            westBoundLongitude : sw.lng(),
-            southBoundLatitude : sw.lat(),
-            northBoundLatitude : ne.lat(),
-        });
+    getLastRendererdFilterer : function() {
+        return this._lastRenderedFilterer;
     }
 });

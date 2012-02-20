@@ -32,13 +32,16 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
 
         originallyVisibleBBox = renderedFilterer.getSpatialParam();
         currentlyVisibleBBox = currentFilterer.getSpatialParam();
-        isDifferentBBox = !originallyVisibleBBox.equals(currentlyVisibleBBox);
+        isDifferentBBox = originallyVisibleBBox && currentlyVisibleBBox &&
+                          !originallyVisibleBBox.equals(currentlyVisibleBBox);
 
         //Create a popup showing our options
         Ext.create('Ext.Window', {
             title : 'Download Options',
             layout : 'fit',
             buttonAlign : 'right',
+            width : 550,
+            height : 200,
             buttons : [{
                text : 'Download',
                iconCls : 'download',
@@ -70,13 +73,9 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                     style : 'font-size: 12px;',
                     text : 'The portal will make a download request on your behalf and return the results in a ZIP archive. How would you like the portal to filter your download?',
                 },{
-                    xtype : 'spacer',
-                    width : 10,
-                    height : 10
-                },{
                     //Our radiogroup can see its item list vary according to the presence of bounding boxes
                     xtype : 'radiogroup',
-                    columns : [0.99, 18],
+                    //columns : [0.99, 18],
                     listeners : {
                         change : function(radioGroup, radio) {
                             switch(radio.initialConfig.inputValue) {
@@ -96,7 +95,7 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                         hidden : !isDifferentBBox,
                         checked : isDifferentBBox
 
-                    },{
+                    },/*{
                         xtype : 'box',
                         autoEl : {
                             tag : 'img',
@@ -117,13 +116,13 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                                 }, c);
                             }
                         }
-                    },{
+                    },*/{
                         boxLabel : 'Filter my download using the original bounds that were used to load the layer.',
                         name : 'wfs-download-radio',
                         inputValue : portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_ORIGINALLY_VISIBLE,
                         checked : !isDifferentBBox && originallyVisibleBBox !== null,
                         hidden : originallyVisibleBBox === null
-                    },{
+                    },/*{
                         xtype : 'box',
                         autoEl : {
                             tag : 'img',
@@ -144,7 +143,7 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                                 }, c);
                             }
                         }
-                    },{
+                    },*/{
                         boxLabel : 'Don\'t filter my download. Return all available data.',
                         name : 'wfs-download-radio',
                         inputValue : portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_ALL,
@@ -152,12 +151,11 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                     }]
                 }]
             }],
-
-        });
+        }).show();
     },
 
     /**
-     * Handles a download the specifeid set of online resources and filterer
+     * Handles a download the specified set of online resources and filterer
      *
      * filterer - a portal.layer.filterer.Filterer
      * resources - an array portal.csw.OnlineResource

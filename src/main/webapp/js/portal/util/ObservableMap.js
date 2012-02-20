@@ -91,5 +91,14 @@ Ext.define('portal.util.ObservableMap', {
      */
     getParameter : function(key) {
         return this.parameters[key];
+    },
+
+    /**
+     * Returns a shallow copy of all of this map's objects and keys.
+     */
+    clone : function() {
+        var clonedObj = Ext.create('portal.util.ObservableMap', {});
+        Ext.apply(clonedObj.parameters, this.parameters);
+        return clonedObj;
     }
 });

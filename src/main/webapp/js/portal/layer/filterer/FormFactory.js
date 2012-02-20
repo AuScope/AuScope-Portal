@@ -5,7 +5,10 @@
 Ext.define('portal.layer.filterer.FormFactory', {
     extend : 'Ext.util.Observable',
 
+    map : null,
+
     constructor : function(config) {
+        this.map = config.map;
         this.callParent(arguments);
     },
 
