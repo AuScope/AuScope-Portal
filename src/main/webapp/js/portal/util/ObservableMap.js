@@ -12,7 +12,6 @@ Ext.define('portal.util.ObservableMap', {
     parameters : null,
 
     constructor: function(config){
-
         this.addEvents({
             'change' : true
         });

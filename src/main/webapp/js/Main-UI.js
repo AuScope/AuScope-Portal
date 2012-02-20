@@ -5,6 +5,8 @@ Ext.application({
     launch : function() {
         var map = null; //an instance of a GMap2 object (google map v2 API)
 
+        Ext.QuickTips.init();
+
         //Send these headers with every AJax request we make...
         Ext.Ajax.defaultHeaders = {
             'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)

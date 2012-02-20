@@ -21,12 +21,16 @@ Ext.define('portal.layer.legend.wfs.WMSLegend', {
      * Implemented function, see parent class
      */
     getLegendComponent : function(resources, filterer, callback) {
-        callback(this, resources, filterer, false, null); //this layer cannot generate a GUI popup
+        var form=Ext.create('portal.layer.legend.wms.WMSLegendForm',{resources : resources,filterer : filterer});
+        callback(this, resources, filterer, true, form); //this layer cannot generate a GUI popup
     },
 
     /**
      * Implemented function, see parent class
      */
+
+
+
     getLegendIconHtml : function(resources, filterer) {
         if (this.iconUrl && this.iconUrl.length > 0) {
             return Ext.DomHelper.markup({
@@ -42,6 +46,33 @@ Ext.define('portal.layer.legend.wfs.WMSLegend', {
             });
         } else {
             return '';
+        }
+    },
+
+    statics : {
+
+        generateImageUrl : function(wmsURL,wmsName,styles) {
+            var url = wmsURL;
+            var last_char = url.charAt(url.length - 1);
+            if ((last_char !== "?") && (last_char !== "&")) {
+              if (url.indexOf('?') == -1) {
+                 url += "?";
+              } else {
+                 url += "&";
+              }
+            }
+            url += 'REQUEST=GetLegendGraphic';
+            url += '&SERVICE=WMS';
+            url += '&VERSION=1.1.1';
+            url += '&FORMAT=image/png';
+            url += '&BGCOLOR=0xFFFFFF';
+            url += '&LAYER=' + escape(wmsName);
+            url += '&LAYERS=' + escape(wmsName);
+            if (this.styles) {
+                url += '&STYLES=' + escape(this.styles);
+            }
+
+            return url;
         }
     }
 });

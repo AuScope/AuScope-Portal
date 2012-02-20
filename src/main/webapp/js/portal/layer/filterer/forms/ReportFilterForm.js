@@ -58,16 +58,6 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
             fields      : ['resourceProvider', 'count'],
             data        : providerList
         });
-     // The data store containing the list of states
-        var states = Ext.create('Ext.data.Store', {
-            fields: ['abbr', 'name'],
-            data : [
-                {"abbr":"AL", "name":"Alabama"},
-                {"abbr":"AK", "name":"Alaska"},
-                {"abbr":"AZ", "name":"Arizona"}
-                //...
-            ]
-        });
 
         Ext.apply(config, {
             delayedFormLoading: false,
@@ -91,7 +81,8 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
                     name: 'title'
                 },{
                     xtype: 'combo',
-                    //tpl: '<tpl for="."><div style="word-wrap" ext:qtip="{keyword} - {count} record(s)" class="x-combo-list-item">{keyword}</div></tpl>',
+                    tpl: '<tpl for="."><li style="word-wrap" data-qtip="{keyword} - {count} record(s)" class="x-boundlist-item" role="option" >{keyword}</li></tpl>',
+                    tplWriteMode: 'set',
                     anchor: '100%',
                     queryMode: 'local',
                     name: 'keyword',
@@ -106,7 +97,7 @@ Ext.define('portal.layer.filterer.forms.ReportFilterForm', {
                     autoScroll: true
                 },{
                     xtype: 'combo',
-                    //tpl: '<tpl for="."><div style="word-wrap" ext:qtip="{resourceProvider} - {count} record(s)" class="x-combo-list-item">{resourceProvider}</div></tpl>',
+                    tpl: '<tpl for="."><li style="word-wrap" data-qtip="{resourceProvider} - {count} record(s)" class="x-boundlist-item" role="option">{resourceProvider}</li></tpl>',
                     anchor: '100%',
                     queryMode: 'local',
                     name: 'resourceProvider',

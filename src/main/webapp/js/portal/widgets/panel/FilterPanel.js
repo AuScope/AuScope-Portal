@@ -33,7 +33,10 @@ Ext.define('portal.widgets.panel.FilterPanel', {
             text :'Apply Filter >>',
             disabled : true,
             handler : Ext.bind(this._onApplyFilter, this)
+
         });
+
+
 
         this._formFactory = Ext.create('portal.layer.filterer.FormFactory', {});
         Ext.apply(config, {

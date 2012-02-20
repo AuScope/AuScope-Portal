@@ -166,11 +166,23 @@ Ext.define('portal.widgets.panel.LayerPanel', {
         return renderer.renderStatus.renderHtml();
     },
 
+    _wmsLegendFormClick : function(legend, resources, filterer, success, form,layer){
+        var win = Ext.create('Ext.window.Window', {
+            title       : 'Legend: '+ layer.get('name'),
+            layout      : 'fit',
+            width       : 200,
+            height      : 300,
+            items: form
+        });
+        return win.show();
+    },
+
     /**
      * Handles all clicks
      */
     _cellClickHandler : function(cellModel, layer, row, column) {
         var downloadColumnIndex = 5;
+        var legendColumnIndex=1;
 
         switch(column) {
         case downloadColumnIndex:
@@ -179,6 +191,9 @@ Ext.define('portal.widgets.panel.LayerPanel', {
                 this.fireEvent('downloadlayer', this, layer);
             }
             break;
+        case legendColumnIndex:
+            var fn=Ext.bind(this._wmsLegendFormClick,this,[layer],true);
+            layer.get('renderer').getLegend().getLegendComponent(layer.getAllOnlineResources(), layer.get('filterer'),fn);
         }
     }
 });
