@@ -34,8 +34,9 @@ Ext.define('portal.layer.filterer.Filterer', {
     getParameters : function() {
         var params = this.callParent(arguments);
 
-        if (this.bbox) {
-            params[portal.layer.filterer.SpatialFilterer.BBOX_FIELD] = Ext.JSON.encode(this.bbox);
+        var bbox = this.getSpatialParam();
+        if (bbox) {
+            params[portal.layer.filterer.Filterer.BBOX_FIELD] = Ext.JSON.encode(bbox);
         }
 
         return params;

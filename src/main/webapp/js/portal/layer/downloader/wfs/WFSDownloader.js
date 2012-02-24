@@ -20,12 +20,14 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
     /**
      * An implementation of an abstract method, see parent method for details
      *
+     * layer - portal.layer.Layer that owns resources
      * resources - an array of data sources that were used to render data
      * renderedFilterer - custom filter that was applied when rendering the specified data sources
      * currentFilterer - The value of the custom filter, this may differ from renderedFilterer if the
      *                   user has updated the form/map without causing a new render to occur
      */
-    downloadData : function(resources, renderedFilterer, currentFilterer) {
+    downloadData : function(layer, resources, renderedFilterer, currentFilterer) {
+        var me = this;
         var isDifferentBBox = false;
         var originallyVisibleBBox = null;
         var currentlyVisibleBBox = null;
@@ -38,55 +40,53 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
         //Create a popup showing our options
         Ext.create('Ext.Window', {
             title : 'Download Options',
-            layout : 'fit',
             buttonAlign : 'right',
             width : 550,
             height : 200,
+            layout : {
+                type : 'vbox',
+                align : 'stretch'
+            },
             buttons : [{
                text : 'Download',
                iconCls : 'download',
-               handler : function() {
+               handler : function(button) {
                    var bboxJson = '';
-                   var radioGroup = me.findByType('radiogroup')[0];
+                   var popup = button.ownerCt.ownerCt;
+                   var fieldSet = popup.items.getAt(1); //our second item is the fieldset
+                   var radioGroup = fieldSet.items.getAt(0);
+                   var checkedRadio = radioGroup.getChecked()[0]; //there should always be a checked radio
 
-                   switch(radioGroup.getValue().initialConfig.inputValue) {
+                   switch(checkedRadio.inputValue) {
                    case portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_CURRENTLY_VISIBLE:
-                       me._handleDownload(currentFilterer, resources);
+                       me._doDownload(layer, currentFilterer, resources);
                        break;
                    case portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_ORIGINALLY_VISIBLE:
-                       me._handleDownload(renderedFilterer, resources);
+                       me._doDownload(layer, renderedFilterer, resources);
                        break;
                    default:
-                       me._handleDownload(renderedFilterer, resources);
+                       me._doDownload(layer, renderedFilterer, resources);
                        break;
                    }
 
-                   me.close();
-
+                   popup.close();
                }
             }],
             items : [{
+                xtype : 'label',
+                style : 'font-size: 12px;',
+                text : 'The portal will make a download request on your behalf and return the results in a ZIP archive. How would you like the portal to filter your download?'
+            },{
                 xtype : 'fieldset',
                 layout : 'fit',
+                flex : 1,
+                border : 0,
                 items : [{
-                    xtype : 'label',
-                    style : 'font-size: 12px;',
-                    text : 'The portal will make a download request on your behalf and return the results in a ZIP archive. How would you like the portal to filter your download?',
-                },{
                     //Our radiogroup can see its item list vary according to the presence of bounding boxes
                     xtype : 'radiogroup',
-                    //columns : [0.99, 18],
+                    columns : [0.99, 18],
                     listeners : {
-                        change : function(radioGroup, radio) {
-                            switch(radio.initialConfig.inputValue) {
-                            case portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_CURRENTLY_VISIBLE:
-                                alert('TODO');
-                                break;
-                            case portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_ORIGINALLY_VISIBLE:
-                                alert('TODO');
-                                break;
-                            }
-                        }
+                        change : Ext.bind(this._handleRadioChange, this, [currentlyVisibleBBox, originallyVisibleBBox], true)
                     },
                     items : [{
                         boxLabel : 'Filter my download using the current visible map bounds.',
@@ -95,7 +95,7 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                         hidden : !isDifferentBBox,
                         checked : isDifferentBBox
 
-                    },/*{
+                    },{
                         xtype : 'box',
                         autoEl : {
                             tag : 'img',
@@ -107,22 +107,15 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                         hidden : !isDifferentBBox,
                         style : 'padding:3px 0px 0px 0px;',
                         listeners : {
-                            render : function(c) {
-                                c.getEl().on('click', function(e) {
-                                    alert('TODO');
-                                }, c);
-                                c.getEl().on('dblclick', function(e) {
-                                    alert('TODO');
-                                }, c);
-                            }
+                            render : Ext.bind(this._configureImageClickHandlers, this, [currentlyVisibleBBox], true)
                         }
-                    },*/{
+                    },{
                         boxLabel : 'Filter my download using the original bounds that were used to load the layer.',
                         name : 'wfs-download-radio',
                         inputValue : portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_ORIGINALLY_VISIBLE,
                         checked : !isDifferentBBox && originallyVisibleBBox !== null,
                         hidden : originallyVisibleBBox === null
-                    },/*{
+                    },{
                         xtype : 'box',
                         autoEl : {
                             tag : 'img',
@@ -134,16 +127,9 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
                         style : 'padding:3px 0px 0px 0px;',
                         hidden : originallyVisibleBBox === null,
                         listeners : {
-                            render : function(c) {
-                                c.getEl().on('click', function(e) {
-                                    me.fireEvent('renderbbox', me, originallyVisibleBBox);
-                                }, c);
-                                c.getEl().on('dblclick', function(e) {
-                                    me.fireEvent('scrolltobbox', me, originallyVisibleBBox);
-                                }, c);
-                            }
+                            render : Ext.bind(this._configureImageClickHandlers, this, [originallyVisibleBBox], true)
                         }
-                    },*/{
+                    },{
                         boxLabel : 'Don\'t filter my download. Return all available data.',
                         name : 'wfs-download-radio',
                         inputValue : portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_ALL,
@@ -154,20 +140,44 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
         }).show();
     },
 
+    _configureImageClickHandlers : function(c, eOpts, bbox) {
+        var fireRender = function(bbox) {
+            this.map.highlightBounds(bbox);
+        };
+
+        var fireScroll = function(bbox) {
+            this.map.scrollToBounds(bbox);
+        };
+
+        c.getEl().on('click', Ext.bind(fireRender, this, [bbox], false), c);
+        c.getEl().on('dblclick', Ext.bind(fireScroll, this, [bbox], false), c);
+    },
+
+    _handleRadioChange : function(radioGroup, newValue, oldValue, eOpts, currentBounds, originalBounds) {
+        switch(newValue['wfs-download-radio']) {
+        case portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_CURRENTLY_VISIBLE:
+            this.map.scrollToBounds(currentBounds);
+            break;
+        case portal.layer.downloader.wfs.WFSDownloader.DOWNLOAD_ORIGINALLY_VISIBLE:
+            this.map.scrollToBounds(originalBounds);
+            break;
+        }
+    },
+
     /**
      * Handles a download the specified set of online resources and filterer
      *
      * filterer - a portal.layer.filterer.Filterer
      * resources - an array portal.csw.OnlineResource
      */
-    _handleDownload : function(filterer, resources) {
-        var filterParameters = filterer.getParameters();
+    _doDownload : function(layer, filterer, resources) {
+        var renderer = layer.get('renderer');
         var downloadParameters = {
             serviceUrls : []
         };
-        var proxyUrl = this.activeLayerRecord.getProxyFetchUrl() &&  this.activeLayerRecord.getProxyFetchUrl().length > 0 ? this.activeLayerRecord.getProxyFetchUrl() : 'getAllFeatures.do';
+        var proxyUrl = renderer.getProxyUrl();
+        proxyUrl = (proxyUrl && proxyUrl.length > 0) ? proxyUrl : 'getAllFeatures.do';
         var prefixUrl = window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + proxyUrl + "?";
-        var cswRecords = this.activeLayerRecord.getCSWRecordsWithType('WFS');
 
         //Iterate our WFS records and generate the array of PORTAL BACKEND requests that will be
         //used to proxy WFS requests. That array will be sent to a backend handler for making
@@ -175,15 +185,15 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.WFS);
         for (var i = 0; i < wfsResources.length; i++) {
             //Create a copy of the last set of filter parameters
-            var url = wfsOnlineResources[j].url;
-            var currentFilterParameters = {};
-            Ext.apply(currentFilterParameters, filterParameters);
+            var url = wfsResources[i].get('url');
+            var typeName = wfsResources[i].get('name');
+            var filterParameters = filterer.getParameters();
 
-            currentFilterParameters.serviceUrl = wfsOnlineResources[j].url;
-            currentFilterParameters.typeName = wfsOnlineResources[j].name;
-            currentFilterParameters.maxFeatures = 0;
+            filterParameters.serviceUrl = url;
+            filterParameters.typeName = typeName;
+            filterParameters.maxFeatures = 0;
 
-            downloadParameters.serviceUrls.push(Ext.urlEncode(currentFilterParameters, prefixUrl));
+            downloadParameters.serviceUrls.push(Ext.urlEncode(filterParameters, prefixUrl));
         }
 
         //download the service URLs through our zipping proxy

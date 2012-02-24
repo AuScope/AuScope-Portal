@@ -158,7 +158,7 @@ Ext.define('portal.util.BBox', {
      * Normally a single polygon is returned but if the polygon wraps around the antimeridian, it will be split
      * around the meridians.
      */
-    toGMapPolygon : function(id, sourceOnlineResource, sourceLayer,strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts) {
+    toGMapPolygon : function(strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts) {
         var splits = this._splitBboxes(this, []);
         var result = [];
 
@@ -169,7 +169,7 @@ Ext.define('portal.util.BBox', {
             var sw = new GLatLng(splitBbox.southBoundLatitude, splitBbox.westBoundLongitude);
             var nw = new GLatLng(splitBbox.northBoundLatitude, splitBbox.westBoundLongitude);
 
-            result.push(portal.util.gmap.GMapWrapper.makePolygon(id, sourceOnlineResource, sourceLayer,
+            result.push(portal.util.gmap.GMapWrapper.makePolygon(undefined, undefined, undefined,
                     [sw, nw, ne, se, sw], strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts));
         }
 

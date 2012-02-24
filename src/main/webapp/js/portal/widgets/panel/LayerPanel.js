@@ -187,7 +187,8 @@ Ext.define('portal.widgets.panel.LayerPanel', {
         switch(column) {
         case downloadColumnIndex:
             var downloader = layer.get('downloader');
-            if (downloader) {
+            var renderer = layer.get('renderer');
+            if (downloader && renderer.getHasData()) {
                 this.fireEvent('downloadlayer', this, layer);
             }
             break;

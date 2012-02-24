@@ -8,10 +8,10 @@ Ext.define('portal.layer.downloader.Downloader', {
 
     requires : ['portal.util.UnimplementedFunction'],
 
+    map : null, //instance of portal.util.gmap.GMapWrapper
+
     constructor: function(config){
-        // Copy configured listeners into *this* object so that the base class's
-        // constructor will add them.
-        this.listeners = config.listeners;
+        this.map = config.map;
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments)
@@ -25,12 +25,14 @@ Ext.define('portal.layer.downloader.Downloader', {
      * is prompted for a download (via an actual download
      * or some form of popup prompt).
      *
-     * function(portal.csw.OnlineResource[] resources,
+     * function(portal.layer.Layer layer,
+     *          portal.csw.OnlineResource[] resources,
      *          portal.layer.filterer.Filterer renderedFilterer,
      *          portal.layer.filterer.Filterer currentFilterer)
      *
      * returns - void (implementors should implement some form of prompt)
      *
+     * layer - A layer that owns resources
      * resources - an array of data sources that were used to render data
      * renderedFilterer - custom filter that was applied when rendering the specified data sources
      * currentFilterer - The value of the custom filter, this may differ from renderedFilterer if the

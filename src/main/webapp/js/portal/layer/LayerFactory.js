@@ -131,7 +131,7 @@ Ext.define('portal.layer.LayerFactory', {
 
     _generateDownloader : function(wfsResources, wmsResources, wcsResources) {
         if (wfsResources.length > 0) {
-            return Ext.create('portal.layer.downloader.wfs.WFSDownloader', {});
+            return Ext.create('portal.layer.downloader.wfs.WFSDownloader', {map : this.map});
         }
 
         alert('TODO - No supported downloader');

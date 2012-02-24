@@ -10,6 +10,7 @@ Ext.define('portal.util.gmap.GMapWrapper', {
     container : null, //the container that houses map,
     layerStore : null, //An instance of portal.layer.LayerStore,
     rendered : false, //whether this map wrapper has been rendered to a container
+    highlightOverlayManager : null,
 
     statics : {
         /**
@@ -231,6 +232,8 @@ Ext.define('portal.util.gmap.GMapWrapper', {
         GEvent.addListener(this.map, "mouseout", Ext.bind(this._onMouseOut, this));
         GEvent.addListener(this.map, "click", Ext.bind(this._onClick, this));
 
+        this.highlightOverlayManager = this.createOverlayManager();
+
         this.rendered = true;
     },
 
@@ -265,10 +268,8 @@ Ext.define('portal.util.gmap.GMapWrapper', {
      * infoWindowOpts - [Optional] an instance of GInfoWindowOptions that will be passed to the new window
      * initFunction - [Optional] function(map, location, initFunctionParam) a function that will be called with initFunctionParam when the window opens
      * initFunctionParam - [Optional] will be passed as a parameter to initFunction
-     *
      */
     openInfoWindow : function(windowLocation, content, infoWindowOpts, initFunctionParam, initFunction) {
-
         //We listen for the open event once
         var scope = this;
         var listenerHandler = null;
@@ -298,5 +299,53 @@ Ext.define('portal.util.gmap.GMapWrapper', {
                 windowLocation.openInfoWindowHtml(content, infoWindowOpts);
             }
         }
+    },
+
+    /**
+     * Causes the map to scroll/zoom so that the specified bounding box is visible
+     * @param bbox an instance of portal.util.BBox
+     */
+    scrollToBounds : function(bbox) {
+        var sw = new GLatLng(bbox.southBoundLatitude, bbox.westBoundLongitude);
+        var ne = new GLatLng(bbox.northBoundLatitude, bbox.eastBoundLongitude);
+        var layerBounds = new GLatLngBounds(sw,ne);
+
+        //Adjust zoom if required
+        var visibleBounds = this.map.getBounds();
+        this.map.setZoom(this.map.getBoundsZoomLevel(layerBounds));
+
+        //Pan to position
+        var layerCenter = layerBounds.getCenter();
+        this.map.panTo(layerCenter);
+    },
+
+    /**
+     * Causes the map to highlight the specified bounding box by drawing an overlay
+     * over it. The highlight will disappear after a short period of time
+     *
+     * @param bboxes an instance of portal.util.BBox or an array of portal.util.BBox objects
+     * @param delay [Optional] a delay in ms before the highlight is hidden. Defaults to 2000
+     */
+    highlightBounds : function(bboxes, delay) {
+        //Setup our inputs
+        delay = delay ? delay : 2000;
+        if (!Ext.isArray(bboxes)) {
+            bboxes = [bboxes];
+        }
+
+        for (var i = 0; i < bboxes.length; i++) {
+            var polygonList = bboxes[i].toGMapPolygon('00FF00', 0, 0.7,'#00FF00', 0.6);
+            for (var j = 0; j < polygonList.length; j++) {
+                polygonList[j].title = 'bbox';
+                this.highlightOverlayManager.addOverlay(polygonList[j]);
+            }
+        }
+
+        //Make the bbox disappear after a short while
+        var clearTask = new Ext.util.DelayedTask(Ext.bind(function(){
+            this.highlightOverlayManager.clearOverlays();
+        }, this));
+
+        clearTask.delay(delay);
     }
 });

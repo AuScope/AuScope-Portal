@@ -31,7 +31,7 @@ Ext.define('portal.util.FileDownloader', {
                 for (var i = 0; i < value.length; i++) {
                     inputs.push({
                         tag : 'input',
-                        id : String.format('portal-input-{0}-{1}', key, i),
+                        id : Ext.util.Format.format('portal-input-{0}-{1}', key, i),
                         type : 'hidden',
                         name : key,
                         value : value[i]

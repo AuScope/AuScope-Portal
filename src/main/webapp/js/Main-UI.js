@@ -89,7 +89,7 @@ Ext.application({
                     var downloader = layer.get('downloader');
                     if (downloader) {
                         var onlineResources = layer.getAllOnlineResources();
-                        downloader.downloadData(onlineResources, renderedFilterer, currentFilterer);
+                        downloader.downloadData(layer, onlineResources, renderedFilterer, currentFilterer);
                     }
                 }
             }
