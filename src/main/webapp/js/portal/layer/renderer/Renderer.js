@@ -50,7 +50,7 @@ Ext.define('portal.layer.renderer.Renderer', {
         this.proxyCountUrl = '';
         this.map = config.map;
         this.parentLayer = config.parentLayer;
-        this.overlayManager = Ext.create('portal.util.gmap.OverlayManager', {map : this.map})
+        this.overlayManager = this.map.createOverlayManager();
         this.renderStatus = Ext.create('portal.layer.renderer.RenderStatus', {}), //for maintaining the status of rendering,
         this.renderDebuggerData = Ext.create('portal.layer.renderer.RenderDebuggerData', {}), //for maintaining debug info about underlying requests
 

@@ -70,6 +70,8 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
             resourceProviderFilter = filterObj.resourceProvider;
         }
 
+        this.fireEvent('renderstarted', this, resources, filterer);
+
 
         var cswRecords=this.parentLayer.get('cswRecords');
         var numRecords = 0;
@@ -99,7 +101,7 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
                                 icon.infoWindowAnchor = new GPoint(this.iconCfg.anchor.x, this.iconCfg.anchor.y);
                             }
 
-                            var marker = portal.util.gmap.OverlayFactory.makeMarker(cswRecords[i].get('id'), cswRecords[i].get('name'),
+                            var marker = portal.util.gmap.GMapWrapper.makeMarker(cswRecords[i].get('id'), cswRecords[i].get('name'),
                                                 undefined, this.parentLayer, point, icon);
 
                             //Add our single point
@@ -118,6 +120,7 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
             }
         }
         this.overlayManager.markerManager.refresh();
+        this.fireEvent('renderfinished', this);
     },
 
     /**

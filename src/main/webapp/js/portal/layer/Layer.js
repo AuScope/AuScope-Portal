@@ -25,6 +25,8 @@ Ext.define('portal.layer.Layer', {
         { name: 'querier', type: 'auto' }, //A concrete implementation of a portal.layer.querier.Querier
         { name: 'cswRecords', type: 'auto'}, //The source of all underlying data is an array of portal.csw.CSWRecord objects
         { name: 'loading', type: 'boolean', defaultValue: false }, //Whether this layer is currently loading data or not
+        { name: 'filterForm', type: 'auto'}, //The portal.layer.filterer.BaseFilterForm that houses the GUI for editing this layer's filterer
+        { name: 'renderOnAdd', type: 'boolean', defaultValue: false }, //If true then this layer should be rendered the moment it is added to the map
     ],
 
     ////////// Class functions
@@ -71,7 +73,9 @@ Ext.define('portal.layer.Layer', {
      */
     onFilterChanged : function(filterer, keys) {
         var renderer = this.get('renderer');
-        renderer.displayData(this.getAllOnlineResources(), this.get('filterer'), Ext.emptyFn);
+        if (renderer.getVisible()) {
+            renderer.displayData(this.getAllOnlineResources(), this.get('filterer'), Ext.emptyFn);
+        }
     }
 
 });

@@ -5,9 +5,6 @@
  */
 Ext.define('portal.layer.querier.QueryTargetHandler', {
 
-    _loadMaskCount : 0,
-    _loadMask : null,
-    _infoWindowManager : null,
     _infoWindowHeight : 300,
     _infoWindowWidth : 600,
 
@@ -15,7 +12,6 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
      * Accepts a config with {
      *  infoWindowHeight : [Optional] Number height of info window in pixels
      *  infoWindowWidth : [Optional] Number width of info window in pixels
-     *  container : The Ext.Container that houses the map instance
      * }
      */
     constructor : function(config) {
@@ -25,28 +21,30 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
         if (config.infoWindowWidth) {
             this._infoWindowWidth = config.infoWindowWidth;
         }
-        this._infoWindowManager = Ext.create('portal.util.gmap.InfoWindowManager', {map: portal.util.gmap.MapUtil.map});
-        this._loadMask = new Ext.LoadMask(config.container.getEl(), {}); //For some reason LoadMask isn't designed to work with Ext.create
         this.callParent(arguments);
     },
 
-    _showLoadMask : function() {
-        if (this._loadMaskCount++ === 0) {
-            this._loadMask.show();
+    _showLoadMask : function(loadMask) {
+        if (!loadMask._showCount) {
+            loadMask._showCount = 0;
+        }
+
+        if (loadMask._showCount++ === 0) {
+            loadMask.show();
         }
     },
 
-    _hideLoadMask : function() {
-        if (--this._loadMaskCount === 0) {
-            this._loadMask.hide();
+    _hideLoadMask : function(loadMask) {
+        if (--loadMask._showCount === 0) {
+            loadMask.hide();
         }
     },
 
     /**
      * Handles a query response by opening up info windows
      */
-    _queryCallback : function(querier, baseComponents, queryTarget) {
-        this._hideLoadMask(); //ensure this gets called or we'll have a forever floating 'Loading...'
+    _queryCallback : function(querier, baseComponents, queryTarget, mapWrapper, loadMask) {
+        this._hideLoadMask(loadMask); //ensure this gets called or we'll have a forever floating 'Loading...'
         if (!baseComponents || baseComponents.length === 0) {
             return; //if the query failed, don't show a popup
         }
@@ -76,16 +74,15 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
 
         //Show our info window - create our parent components
         var windowLocation = new GLatLng(queryTarget.get('lat'), queryTarget.get('lng'));
-        this._infoWindowManager.openInfoWindow(windowLocation, infoWindowTabs, infoWindowParams, initFunctionParams, function(map, location, params) {
+        mapWrapper.openInfoWindow(windowLocation, infoWindowTabs, infoWindowParams, initFunctionParams, function(map, location, params) {
             for (var i = 0; i < params.baseComponents.length; i++) {
                 Ext.create('Ext.panel.Panel', {
                     renderTo : params.infoWindowIds[i],
                     border : 0,
                     width : params.width,
                     height : params.height,
-                    items : [params.baseComponents[i]],
-                    suspendLayout : true,
-                    layout : 'fit'
+                    layout : 'fit',
+                    items : [params.baseComponents[i]]
                 });
             }
         });
@@ -100,15 +97,16 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
     /**
      * Just query everything in queryTargets
      */
-    _handleWithQuery : function(queryTargets) {
+    _handleWithQuery : function(queryTargets, mapWrapper) {
         var rootCfg = this._generateRootConfig();
+        var loadMask = new Ext.LoadMask(mapWrapper.container.getEl(), {}); //For some reason LoadMask isn't designed to work with Ext.create
         for (var i = 0; i < queryTargets.length; i++) {
             var queryTarget = queryTargets[i];
             var layer = queryTarget.get('layer');
             var querier = layer.get('querier');
 
-            this._showLoadMask();
-            querier.query(queryTarget, rootCfg, Ext.bind(this._queryCallback, this));
+            //this._showLoadMask(loadMask);
+            querier.query(queryTarget, rootCfg, Ext.bind(this._queryCallback, this, [mapWrapper, loadMask], true));
         }
     },
 
@@ -116,7 +114,7 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
      * Show some form of selection to the user, ask them to decide
      * which query target they meant
      */
-    _handleWithSelection : function(queryTargets) {
+    _handleWithSelection : function(queryTargets, mapWrapper) {
         //TODO:
         alert('TODO - handle overlapping polygons/markers')
     },
@@ -129,9 +127,10 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
      * This function will likely open info windows on the map and
      * hide/show loading masks where appropriate.
      *
+     * @param mapWrapper An instance of portal.util.gmap.GMapWrapper
      * @param queryTargets Array of portal.layer.querier.QueryTarget objects
      */
-    handleQueryTargets : function(queryTargets) {
+    handleQueryTargets : function(mapWrapper, queryTargets) {
         if (!queryTargets || queryTargets.length === 0) {
             return;
         }
@@ -145,18 +144,17 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
 
         //If we have an ambiguous set of targets - let's just ask the user what they meant
         if (explicitTargets.length > 1) {
-            this._handleWithSelection(explicitTargets);
+            this._handleWithSelection(explicitTargets, mapWrapper);
             return;
         }
 
         //If we have a single explicit target, then our decision is really easy
         if (explicitTargets.length === 1) {
-            this._handleWithQuery(explicitTargets);
+            this._handleWithQuery(explicitTargets, mapWrapper);
             return;
         }
 
         //Otherwise query everything
-        this._handleWithQuery(queryTargets);
+        this._handleWithQuery(queryTargets, mapWrapper);
     }
-
 });

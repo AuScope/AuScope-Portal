@@ -9,9 +9,9 @@ Ext.define('portal.util.gmap.ClickController', {
          * Utility for turning a click on a feature into a single QueryTarget
          */
         _marker : function(marker, overlayLatLng) {
-            var id = portal.util.gmap.OverlayFactory.getOverlayId(marker);
-            var onlineResource = portal.util.gmap.OverlayFactory.getOverlayOnlineResource(marker);
-            var layer = portal.util.gmap.OverlayFactory.getOverlayLayer(marker);
+            var id = portal.util.gmap.GMapWrapper.getOverlayId(marker);
+            var onlineResource = portal.util.gmap.GMapWrapper.getOverlayOnlineResource(marker);
+            var layer = portal.util.gmap.GMapWrapper.getOverlayLayer(marker);
 
             return [Ext.create('portal.layer.querier.QueryTarget', {
                 id : id,
@@ -42,9 +42,9 @@ Ext.define('portal.util.gmap.ClickController', {
                     if (overlayToTest instanceof GPolygon &&
                         overlayToTest.Contains(point)) {
 
-                        var id = portal.util.gmap.OverlayFactory.getOverlayId(overlayToTest);
-                        var onlineResource = portal.util.gmap.OverlayFactory.getOverlayOnlineResource(overlayToTest);
-                        var layer = portal.util.gmap.OverlayFactory.getOverlayLayer(overlayToTest);
+                        var id = portal.util.gmap.GMapWrapper.getOverlayId(overlayToTest);
+                        var onlineResource = portal.util.gmap.GMapWrapper.getOverlayOnlineResource(overlayToTest);
+                        var layer = portal.util.gmap.GMapWrapper.getOverlayLayer(overlayToTest);
 
                         queryTargets.push(Ext.create('portal.layer.querier.QueryTarget', {
                             id : id,
@@ -57,6 +57,8 @@ Ext.define('portal.util.gmap.ClickController', {
                     }
                 }
             }
+
+            return queryTargets;
         },
 
         /**

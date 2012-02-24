@@ -17,6 +17,7 @@ Ext.define('portal.layer.filterer.BaseFilterForm', {
         isFormLoaded : false //has the 'formloaded' event fired yet?
     },
 
+    map : null, //an instance of portal.util.gmap.GMapWrapper
     layer : null, //an instance of portal.layer.Layer
     delayedFormLoading : false, //Setting this will indicate that this form will not be immediately available for filtering after creation
                                 //due to having to load something from an external source.
@@ -24,12 +25,14 @@ Ext.define('portal.layer.filterer.BaseFilterForm', {
     /**
      * Accepts a Ext.form.Panel config as well as
      * {
+     *      map : [Required] an instance of portal.util.gmap.GMapWrapper
      *      layer : [Required] an instance of portal.layer.Layer which you wish to filter
      *      delayedFormLoading : If set to false, the form will able to interact with its filterer immediately, if set
      *                           to true then the form will not be interacted with until formloaded is raised
      * }
      */
     constructor : function(config) {
+        this.map = config.map;
         this.layer = config.layer;
         this.setIsFormLoaded(false);
         this.delayedFormLoading = config.delayedFormLoading
@@ -55,7 +58,7 @@ Ext.define('portal.layer.filterer.BaseFilterForm', {
      */
     writeToFilterer : function(filterer) {
         var parameters = this.getForm().getValues();
-        parameters[portal.layer.filterer.Filterer.BBOX_FIELD] = portal.util.gmap.MapUtil.getVisibleMapBounds();
+        parameters[portal.layer.filterer.Filterer.BBOX_FIELD] = this.map.getVisibleMapBounds();
         filterer.setParameters(parameters, true);
     },
 

@@ -3,8 +3,6 @@ Ext.application({
     //Any processing logic should be managed in dedicated classes - don't let this become a
     //monolithic 'do everything' function
     launch : function() {
-        var map = null; //an instance of a GMap2 object (google map v2 API)
-
         Ext.QuickTips.init();
 
         //Send these headers with every AJax request we make...
@@ -50,18 +48,22 @@ Ext.application({
             autoLoad : true
         });
 
-        /**
-         * Used to show extra details for querying services
-         */
-        var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
-            region: 'south',
-            split: true,
-            height: 160
-        });
-
         //Create our store for holding the set of
         //layers that have been added to the map
         var layerStore = Ext.create('portal.layer.LayerStore', {});
+
+        //We need something to handle the clicks on the map
+        var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {});
+
+        var map = Ext.create('portal.util.gmap.GMapWrapper', {
+            container : null,   //We will be performing a delayed render of this map
+            layerStore : layerStore,
+            listeners : {
+                query : function(mapWrapper, queryTargets) {
+                    queryTargetHandler.handleQueryTargets(mapWrapper, queryTargets);
+                }
+            }
+        });
 
         var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
             title : 'Active Layers',
@@ -80,10 +82,8 @@ Ext.application({
                     //the original filter objects
                     var renderedFilterer = layer.get('filterer').clone();
                     var currentFilterer = Ext.create('portal.layer.filterer.Filterer', {});
-                    var currentFilterForm = filterPanel.getFilterFormForLayer(layer);
-                    if (currentFilterForm) {
-                        currentFilterForm.writeToFilterer(currentFilterer);
-                    }
+                    var currentFilterForm = layer.get('filterForm');
+                    currentFilterForm.writeToFilterer(currentFilterer);
 
                     //Finally pass off the download handling to the appropriate downloader (if it exists)
                     var downloader = layer.get('downloader');
@@ -95,9 +95,20 @@ Ext.application({
             }
         });
 
+        /**
+         * Used to show extra details for querying services
+         */
+        var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
+            region: 'south',
+            layerPanel : layersPanel,
+            split: true,
+            height: 160
+        });
+
         //Utility function for adding a new layer to the map
+        //record must be a CSWRecord or KnownLayer
         var handleAddRecordToMap = function(sourceGrid, record) {
-            var layerFactory = Ext.create('portal.layer.LayerFactory', {});
+            var layerFactory = Ext.create('portal.layer.LayerFactory', {map : map});
             var newLayer = null;
             if (record instanceof portal.csw.CSWRecord) {
                 newLayer = layerFactory.generateLayerFromCSWRecord(record);
@@ -107,17 +118,6 @@ Ext.application({
 
             layerStore.add(newLayer); //this adds the layer to our store
             layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
-
-            //Only force a render if the layer has no filter
-            if (filterPanel.isFilteringDisabled()) {
-                var renderer = newLayer.get('renderer');
-                var filterer = newLayer.get('filterer');
-                var resources = newLayer.getAllOnlineResources();
-
-                renderer.displayData(resources, filterer, Ext.emptyFn);
-            }
-
-
         };
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
@@ -189,20 +189,6 @@ Ext.application({
             items:[westPanel, centerPanel]
         });
 
-
-        //Initialise our google map API
-        portal.util.gmap.MapUtil.generateMap(centerPanel);
-
-        //We need something to handle the clicks on the map
-        var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {
-            container : centerPanel
-        });
-
-        //when updateCSWRecords person clicks on updateCSWRecords marker then do something
-        portal.util.gmap.MapUtil.registerMapEvent("click", function(overlay, latlng, overlayLatlng) {
-            //Figure out what we clicked and then pass that info along to appropriate layer queriers
-            var queryTargets = portal.util.gmap.ClickController.generateQueryTargets(overlay, latlng, overlayLatlng, layerStore);
-            queryTargetHandler.handleQueryTargets(queryTargets);
-        });
+        map.renderToContainer(centerPanel);   //After our centerPanel is displayed, render out map into it
     }
 });

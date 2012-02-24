@@ -13,17 +13,5 @@ Ext.define('portal.layer.LayerStore', {
             model : 'portal.layer.Layer',
             data : []
         }]);
-
-        this.on('remove', this._onLayerRemove);
-    },
-
-    /**
-     * Raised whenever a layer is removed from this store. Used to
-     * ensure that the layer's data is removed from the map.
-     */
-    _onLayerRemove : function(store, record, index, eOpts) {
-        var renderer = record.data.renderer;
-        renderer.abortDisplay();
-        renderer.removeData();
     }
 });

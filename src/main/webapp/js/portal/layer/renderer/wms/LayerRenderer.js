@@ -34,6 +34,8 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
         this.removeData();
         var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.WMS);
 
+        this.fireEvent('renderstarted', this, wmsResources, filterer);
+
         for (var i = 0; i < wmsResources.length; i++) {
             var tileLayer = new GWMSTileLayer(this.map, new GCopyrightCollection(""), 1, 17);
             tileLayer.baseURL = wmsResources[i].get('url');
@@ -42,6 +44,8 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
             this.overlayManager.addOverlay(new GTileLayerOverlay(tileLayer));
             this.fireEvent('rendercomplete', this, wmsResources, filterer);
         }
+
+        this.fireEvent('renderfinished', this);
     },
 
     /**

@@ -7,16 +7,19 @@
 Ext.define('portal.layer.LayerFactory', {
 
     map : null,
+    formFactory : null,
 
     /**
      * Creates a new instance of this factory.
      *
      * @param cfg an object in the form
      * {
+     *  map : an instance of portal.util.gmap.GMapWrapper
      * }
      */
     constructor : function(cfg) {
-        this.map = portal.util.gmap.MapUtil.map; //use globally accessable map object
+        this.map = cfg.map; //use globally accessable map object
+        this.formFactory = Ext.create('portal.layer.filterer.FormFactory', {map : cfg.map});
 
         this.callParent(arguments);
     },
@@ -71,6 +74,10 @@ Ext.define('portal.layer.LayerFactory', {
         renderer.on('visibilitychanged', Ext.bind(newLayer.onVisibilityChanged, newLayer));
         filterer.on('change', Ext.bind(newLayer.onFilterChanged, newLayer));
 
+        //Create our filter form
+        var formFactoryResponse = this.formFactory.getFilterForm(newLayer);
+        newLayer.set('filterForm', formFactoryResponse.form);
+        newLayer.set('renderOnAdd', !formFactoryResponse.supportsFiltering);
 
         return newLayer;
     },

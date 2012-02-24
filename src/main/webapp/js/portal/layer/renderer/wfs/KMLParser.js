@@ -7,6 +7,7 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
         overlays : []
     },
 
+
     /**
      * Must the following config
      * {
@@ -59,7 +60,7 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
         }
 
         var gmlId = this.descriptionToGmlId(description);
-        return portal.util.gmap.OverlayFactory.makePolygon(gmlId, onlineResource, layer, parsedCoordList, '#FF0000',3,1);
+        return portal.util.gmap.GMapWrapper.makePolygon(gmlId, onlineResource, layer, parsedCoordList, '#FF0000',3,1);
     },
 
     //Given a root placemark node attempt to parse it as a single point and return it
@@ -71,7 +72,7 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
         }
 
         var gmlId = this.descriptionToGmlId(description);
-        return portal.util.gmap.OverlayFactory.makePolygon(gmlId, onlineResource, layer, parsedCoordList, undefined, undefined,0.7,undefined,0.6);
+        return portal.util.gmap.GMapWrapper.makePolygon(gmlId, onlineResource, layer, parsedCoordList, undefined, undefined,0.7,undefined,0.6);
     },
 
     //Given a root placemark node attempt to parse it as a single point and return it
@@ -89,7 +90,7 @@ Ext.define('portal.layer.renderer.wfs.KMLParser', {
         var lat = coordinates[1];
         var point = new GLatLng(parseFloat(lat), parseFloat(lon));
         var gmlId = this.descriptionToGmlId(description);
-        return portal.util.gmap.OverlayFactory.makeMarker(gmlId, name, onlineResource, layer, point, icon);
+        return portal.util.gmap.GMapWrapper.makeMarker(gmlId, name, onlineResource, layer, point, icon);
     },
 
     makeMarkers : function(icon, onlineResource, layer) {

@@ -5,8 +5,11 @@
 Ext.define('portal.layer.filterer.FormFactory', {
     extend : 'Ext.util.Observable',
 
-    map : null,
+    map : null, //an instance of portal.util.gmap.GMapWrapper
 
+    /**
+     * map : [Required] an instance of portal.util.gmap.GMapWrapper
+     */
     constructor : function(config) {
         this.map = config.map;
         this.callParent(arguments);
@@ -27,7 +30,7 @@ Ext.define('portal.layer.filterer.FormFactory', {
      *
      * Returns a response in the form
      * {
-     *    form : Ext.FormPanel - can be null - the formpanel to be displayed when this layer is selected
+     *    form : Ext.FormPanel - the formpanel to be displayed when this layer is selected (can be EmptyFilterForm)
      *    supportsFiltering : boolean - whether this formpanel supports the usage of the filter button
      *    layer : portal.layer.Layer that was used to generate this object
      * }
@@ -37,7 +40,7 @@ Ext.define('portal.layer.filterer.FormFactory', {
         var baseFilterForm = null;
         var baseFilterFormCfg = {
             layer : layer,
-            id : layer.get('id')
+            map : this.map
         };
 
         //A number of known layer's have specific filter forms
@@ -78,7 +81,7 @@ Ext.define('portal.layer.filterer.FormFactory', {
             return this._generateResult(baseFilterForm, false);
         }
 
-        //And otherwise we just show no filter form
-        return this._generateResult(null, false);
+        //And otherwise we just show the empty filter form
+        return this._generateResult(Ext.create('portal.layer.filterer.forms.EmptyFilterForm', baseFilterFormCfg), false);
     }
 });
