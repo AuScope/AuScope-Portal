@@ -106,6 +106,7 @@ Ext.application({
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured Layers',
             store : knownLayerStore,
+            map : map,
             listeners : {
                 addlayerrequest : handleAddRecordToMap
             }
@@ -114,6 +115,7 @@ Ext.application({
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered Layers',
             store : unmappedCSWRecordStore,
+            map : map,
             listeners : {
                 addlayerrequest : handleAddRecordToMap
             }
@@ -122,6 +124,7 @@ Ext.application({
         var customRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Custom Layers',
             store : customRecordStore,
+            map : map,
             listeners : {
                 addlayerrequest : handleAddRecordToMap
             }

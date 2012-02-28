@@ -19,6 +19,13 @@ Ext.define('portal.widgets.panel.KnownLayerPanel', {
     /**
      * Implements method - see parent class for details.
      */
+    getCSWRecordsForRecord : function(record) {
+        return record.get('cswRecords');
+    },
+
+    /**
+     * Implements method - see parent class for details.
+     */
     getOnlineResourcesForRecord : function(record) {
         var onlineResources = [];
         var cswRecords = record.data.cswRecords;

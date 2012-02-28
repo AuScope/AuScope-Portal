@@ -28,6 +28,13 @@ Ext.define('portal.widgets.panel.CSWRecordPanel', {
      */
     getSpatialBoundsForRecord : function(record) {
         return record.data.geographicElements;
+    },
+
+    /**
+     * Implements method - see parent class for details.
+     */
+    getCSWRecordsForRecord : function(record) {
+        return [record];
     }
 
 });

@@ -23,7 +23,16 @@ Ext.define('portal.widgets.grid.column.ClickColumn', {
              * @param {Number} rowIndex The row index clicked
              * @param {Number} colIndex The column index clicked
              */
-            'columnclick'
+            'columnclick',
+            /**
+             * @event columndblclick
+             * Fires when a row is double clicked and that click lies within this column
+             * @param {portal.widgets.grid.column.ClickColumn} this
+             * @param {Ext.data.Model} The selected data record
+             * @param {Number} rowIndex The row index clicked
+             * @param {Number} colIndex The column index clicked
+             */
+            'columndblclick'
         );
         this.callParent(arguments);
     },
@@ -38,6 +47,10 @@ Ext.define('portal.widgets.grid.column.ClickColumn', {
 
             this.fireEvent('columnclick', this, record, recordIndex, cellIndex);
             // cancel selection.
+            return false;
+        } else if (type == 'dblclick') {
+            var record = view.panel.store.getAt(recordIndex);
+            this.fireEvent('columndblclick', this, record, recordIndex, cellIndex);
             return false;
         } else {
             return this.callParent(arguments);

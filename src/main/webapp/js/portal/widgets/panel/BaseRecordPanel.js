@@ -21,8 +21,11 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
     extend : 'Ext.grid.Panel',
     alias: 'widget.baserecordpanel',
 
+    map : null,
+
     constructor : function(cfg) {
         var me = this;
+        this.map = cfg.map;
 
         var groupingFeature = Ext.create('Ext.grid.feature.Grouping',{
             groupHeaderTpl: '{name} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})'
@@ -38,18 +41,30 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
                 emptyText : 'No records are available, please try refreshing the page in a few moments.'
             },
             columns : [{
+                //Title column
                 text : 'Title',
                 dataIndex : 'title',
                 flex: 1,
                 renderer : this._titleRenderer
             },{
+                //Service information column
+                xtype : 'clickcolumn',
                 dataIndex : 'serviceInformation',
                 width: 32,
-                renderer : this._serviceInformationRenderer
+                renderer : this._serviceInformationRenderer,
+                listeners : {
+                    columnclick : Ext.bind(this._serviceInformationClickHandler, this)
+                }
             },{
+                //Spatial bounds column
+                xtype : 'clickcolumn',
                 dataIndex : 'spatialBoundsRenderer',
                 width: 32,
-                renderer : this._spatialBoundsRenderer
+                renderer : this._spatialBoundsRenderer,
+                listeners : {
+                    columnclick : Ext.bind(this._spatialBoundsClickHandler, this),
+                    columndblclick : Ext.bind(this._spatialBoundsDoubleClickHandler, this)
+                }
             }],
             plugins: [{
                 ptype: 'rowexpander',
@@ -110,6 +125,16 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
      * record - The record whose spatial bounds should be extracted.
      */
     getSpatialBoundsForRecord : portal.util.UnimplementedFunction,
+
+    /**
+     * Abstract function - Should return an Array of portal.csw.CSWRecord
+     * objects that make up the specified record.
+     *
+     * function(Ext.data.Model record)
+     *
+     * record - The record whose underlying CSWRecords should be extracted.
+     */
+    getCSWRecordsForRecord : portal.util.UnimplementedFunction,
 
     //--------- Class Methods ---------
 
@@ -191,5 +216,47 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
         }
 
         return '';
+    },
+
+    /**
+     * Show a popup containing info about the services that 'power' this layer
+     */
+    _serviceInformationClickHandler : function(column, record, rowIndex, colIndex) {
+        var cswRecords = this.getCSWRecordsForRecord(record);
+        if (!cswRecords || cswRecords.length === 0) {
+            return;
+        }
+
+        var popup = Ext.create('portal.widgets.window.CSWRecordDescriptionWindow', {
+            cswRecords : cswRecords
+        });
+
+        popup.show();
+    },
+
+
+    /**
+     * On single click, show a highlight of all BBoxes
+     */
+    _spatialBoundsClickHandler : function(column, record, rowIndex, colIndex) {
+        var spatialBoundsArray = this.getSpatialBoundsForRecord(record);
+        this.map.highlightBounds(spatialBoundsArray);
+    },
+
+    /**
+     * On double click, move the map so that specified bounds are visible
+     */
+    _spatialBoundsDoubleClickHandler : function(column, record, rowIndex, colIndex) {
+        var spatialBoundsArray = this.getSpatialBoundsForRecord(record);
+
+        if (spatialBoundsArray.length > 0) {
+            var superBBox = spatialBoundsArray[0];
+
+            for (var i = 1; i < spatialBoundsArray.length; i++) {
+                superBBox = superBBox.combine(spatialBoundsArray[i]);
+            }
+
+            this.map.scrollToBounds(superBBox);
+        }
     }
 });
