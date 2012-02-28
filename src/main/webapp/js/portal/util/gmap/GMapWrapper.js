@@ -347,5 +347,16 @@ Ext.define('portal.util.gmap.GMapWrapper', {
         }, this));
 
         clearTask.delay(delay);
+    },
+
+    //delegator function to the original map function
+    getCurrentMapType : function(){
+        return this.map.getCurrentMapType();
+    },
+
+    //delegator function to the original map function
+    getZoom : function(){
+        return this.map.getZoom();
+
     }
 });

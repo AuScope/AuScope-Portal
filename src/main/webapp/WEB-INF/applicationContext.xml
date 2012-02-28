@@ -227,6 +227,9 @@
                         <value>gt:Geotransects-08GA-OM1</value>
                         <value>gt:Geotransects-09GA-SD1</value>
                         <value>gt:Geotransects-09GA-SD2</value>
+                        <value>gt:Geotranssects-10GA-CP1</value>
+                        <value>gt:Geotranssects-10GA-CP2</value>
+                        <value>gt:Geotranssects-10GA-CP3</value>
                     </list>
                 </property>
             </bean>

@@ -1,5 +1,5 @@
 /**
- * An implementation of a portal.layer.Renderer for rendering WMS Layers
+ * An implementation of a portal.layer.Renderer for rendering generic Layers
  * that belong to a set of portal.csw.CSWRecord objects.
  */
 Ext.define('portal.layer.renderer.csw.CSWRenderer', {
@@ -26,7 +26,7 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
     },
 
     /**
-     * An abstract function for displaying data from a variety of data sources. This function will
+     * A function for displaying generic data from a variety of data sources. This function will
      * raise the renderstarted and renderfinished events as appropriate. The effect of multiple calls
      * to this function (ie calling displayData again before renderfinished is raised) is undefined.
      *
@@ -45,7 +45,6 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
      */
     displayData : function(resources, filterer, callback) {
         this.removeData();
-        //TODO: VT: Response tool tip not in place
         var titleFilter = '';
         var keywordFilter = '';
         var resourceProviderFilter = '';
@@ -77,7 +76,7 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
         var numRecords = 0;
         for (var i = 0; i < cswRecords.length; i++) {
             if ((titleFilter === '' || regexp.test(cswRecords[i].get('name'))) &&
-                    (keywordFilter === '' || cswRecords[i].containsKeyword(keywordFilter)) &&
+                    (keywordFilter === '' || cswRecords[i].containsKeywords(keywordFilter)) &&
                     (resourceProviderFilter === '' || cswRecords[i].get('resourceProvider') == resourceProviderFilter)) {
                 numRecords++;
                 var geoEls = cswRecords[i].get('geographicElements');
@@ -102,7 +101,7 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
                             }
 
                             var marker = portal.util.gmap.GMapWrapper.makeMarker(cswRecords[i].get('id'), cswRecords[i].get('name'),
-                                                undefined, this.parentLayer, point, icon);
+                                    cswRecords[i],undefined, this.parentLayer, point, icon);
 
                             //Add our single point
                             this.overlayManager.markerManager.addMarker(marker, 0);

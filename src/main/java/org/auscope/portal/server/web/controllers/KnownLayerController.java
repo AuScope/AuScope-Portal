@@ -51,7 +51,13 @@ public class KnownLayerController extends BaseCSWController {
                 viewMappedRecords.add(viewCSWRecordFactory.toView(rec));
             }
 
+            List<ModelMap> viewRelatedRecords = new ArrayList<ModelMap>();
+            for (CSWRecord rec : knownLayerAndRecords.getRelatedRecords()) {
+                viewRelatedRecords.add(viewCSWRecordFactory.toView(rec));
+            }
+
             viewKnownLayer.put("cswRecords", viewMappedRecords);
+            viewKnownLayer.put("relatedRecords", viewRelatedRecords);
             viewKnownLayers.add(viewKnownLayer);
         }
 

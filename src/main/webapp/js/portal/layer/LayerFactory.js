@@ -119,6 +119,10 @@ Ext.define('portal.layer.LayerFactory', {
             return Ext.create('portal.layer.querier.wfs.WFSQuerier', {
                 rootCfg : {}
             });
+        }else{
+            return Ext.create('portal.layer.querier.wms.WMSQuerier',{
+                rootCfg: {}
+            });
         }
 
         alert('TODO - No supported querier');

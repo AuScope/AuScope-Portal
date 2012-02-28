@@ -22,8 +22,8 @@ Ext.define('portal.knownlayer.KnownLayer', {
         { name: 'iconUrl', type: 'string' }, //A URL of an icon that will be used for rendering GMarkers associated with this layer
         { name: 'iconAnchor', type: 'auto' }, //An object containing x,y for the pixel location of where the icon get's anchored to the map
         { name: 'iconSize', type: 'auto' }, //An object containing width,height for the pixel size of the icon
-        { name: 'cswRecords', convert: portal.csw.CSWRecordType.convert} //a set of portal.csw.CSWRecord objects that belong to this KnownLayer grouping
-
+        { name: 'cswRecords', convert: portal.csw.CSWRecordType.convert}, //a set of portal.csw.CSWRecord objects that belong to this KnownLayer grouping
+        { name: 'relatedRecords', convert: portal.csw.CSWRecordType.convert}// a set of portal.csw.CSWRecord objects that relates to this knownlayer
     ],
 
     /**
@@ -36,5 +36,29 @@ Ext.define('portal.knownlayer.KnownLayer', {
             ors = ors.concat(this.data.cswRecords[i].get('onlineResources'));
         }
         return ors;
+    },
+
+    getCSWRecordsByKeywords : function(keyword){
+        //Filter our results
+        var results = [];
+        var cswRecords=this.get('cswRecords');
+        for(var i=0; i < cswRecords.length;i++){
+            if(cswRecords[i].containsKeywords(keyword)){
+                results.push(cswRecords[i]);
+            }
+        }
+        return results;
+    },
+
+    getRelatedCSWRecordsByKeywords : function(keyword){
+        //Filter our results
+        var results = [];
+        var cswRecords=this.get('relatedRecords');
+        for(var i=0; i < cswRecords.length;i++){
+            if(cswRecords[i].containsKeywords(keyword)){
+                results.push(cswRecords[i]);
+            }
+        }
+        return results;
     }
 });

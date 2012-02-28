@@ -70,17 +70,24 @@ Ext.define('portal.util.gmap.ClickController', {
             //No real way around this :(
             for (var i = 0; i < layerStore.getCount(); i++) {
                 var layer = layerStore.getAt(i);
-                var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(layer.getAllOnlineResources(),
-                                                                                  portal.csw.OnlineResource.WMS);
-                for (var j = 0; j < wmsResources.length; j++) {
-                    queryTargets.push(Ext.create('portal.layer.querier.QueryTarget', {
-                        id : '',
-                        lat : latlng.lat(),
-                        lng : latlng.lng(),
-                        onlineResource : wmsResources[j],
-                        layer : layer,
-                        explicit : false
-                    }));
+
+                var cswRecords=layer.get('cswRecords');
+
+                for(var z=0; z < cswRecords.length; z++){
+
+                    var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(cswRecords[z].get('onlineResources'),
+                                                                                      portal.csw.OnlineResource.WMS);
+                    for (var j = 0; j < wmsResources.length; j++) {
+                        queryTargets.push(Ext.create('portal.layer.querier.QueryTarget', {
+                            id : '',
+                            lat : latlng.lat(),
+                            lng : latlng.lng(),
+                            cswRecord   : cswRecords[z],
+                            onlineResource : wmsResources[j],
+                            layer : layer,
+                            explicit : false
+                        }));
+                    }
                 }
             }
 

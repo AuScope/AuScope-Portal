@@ -13,7 +13,7 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
     },
 
     /**
-     * An abstract function for displaying data from a variety of data sources. This function will
+     * A function for displaying layered data from a variety of data sources. This function will
      * raise the renderstarted and renderfinished events as appropriate. The effect of multiple calls
      * to this function (ie calling displayData again before renderfinished is raised) is undefined.
      *
@@ -49,7 +49,7 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
     },
 
     /**
-     * An abstract function for creating a legend that can describe the displayed data. If no
+     * A function for creating a legend that can describe the displayed data. If no
      * such thing exists for this renderer then null should be returned.
      *
      * function(portal.csw.OnlineResource[] resources,
@@ -65,7 +65,7 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
     },
 
     /**
-     * An abstract function that is called when this layer needs to be permanently removed from the map.
+     * A function that is called when this layer needs to be permanently removed from the map.
      * In response to this function all rendered information should be removed
      *
      * function()

@@ -39,7 +39,7 @@ Ext.define('portal.layer.Layer', {
      */
     getAllOnlineResources : function() {
         var resources = [];
-        var cswRecords = this.data.cswRecords;
+        var cswRecords = this.get('cswRecords');
         for (var i = 0; i < cswRecords.length; i++) {
             resources = resources.concat(cswRecords[i].get('onlineResources'));
         }
@@ -76,6 +76,17 @@ Ext.define('portal.layer.Layer', {
         if (renderer.getVisible()) {
             renderer.displayData(this.getAllOnlineResources(), this.get('filterer'), Ext.emptyFn);
         }
-    }
+    },
 
+    getCSWRecordsByKeywords : function(keyword){
+        //Filter our results
+        var results = [];
+        var cswRecords=this.get('cswRecords');
+        for(var i=0; i < cswRecords.length;i++){
+            if(cswRecords[i].containsKeywords(keyword)){
+                results.push(cswRecords[i]);
+            }
+        }
+        return results;
+    }
 });

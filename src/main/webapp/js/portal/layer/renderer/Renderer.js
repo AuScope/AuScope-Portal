@@ -136,5 +136,12 @@ Ext.define('portal.layer.renderer.Renderer', {
      */
     getLastRendererdFilterer : function() {
         return this._lastRenderedFilterer;
+    },
+
+    /**
+     * Returns the map used by this renderer
+     */
+    getMap : function(){
+        return this.map;
     }
 });
