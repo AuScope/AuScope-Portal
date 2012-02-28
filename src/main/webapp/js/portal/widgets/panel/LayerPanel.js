@@ -2,9 +2,6 @@
  * A specialised Ext.grid.Panel instance for
  * displaying a store of portal.layer.Layer objects.
  *
- * Adds the following events : {
- *  downloadlayer(portal.widgets.panel.LayerPanel callingInstance, portal.layer.Layer layerToDownload) - raised whenever the user hits the 'download icon' for a layer
- * }
  */
 Ext.define('portal.widgets.panel.LayerPanel', {
     extend : 'Ext.grid.Panel',
@@ -17,20 +14,28 @@ Ext.define('portal.widgets.panel.LayerPanel', {
 
         Ext.apply(cfg, {
             columns : [{
+                //legend column
+                xtype : 'clickcolumn',
                 dataIndex : 'renderer',
                 renderer : this._legendIconRenderer,
-                width : 32
+                width : 32,
+                listeners : {
+                    columnclick : Ext.bind(this._legendClickHandler, this)
+                }
             },{
+                //Loading icon column
                 dataIndex : 'loading',
                 renderer : this._loadingRenderer,
                 hasTip : true,
                 tipRenderer : Ext.bind(this._loadingTipRenderer, this),
                 width: 32
             },{
+                //Layer name column
                 text : 'Layer Name',
                 dataIndex : 'name',
                 flex : 1
             },{
+                //Visibility column
                 xtype : 'renderablecheckcolumn',
                 text : 'Visible',
                 dataIndex : 'renderer',
@@ -42,9 +47,14 @@ Ext.define('portal.widgets.panel.LayerPanel', {
                 },
                 width : 40
             },{
+                //Download column
+                xtype : 'clickcolumn',
                 dataIndex : 'renderer',
                 width : 32,
-                renderer : this._downloadRenderer
+                renderer : this._downloadRenderer,
+                listeners : {
+                    columnclick : Ext.bind(this._downloadClickHandler, this)
+                }
             }],
             plugins: [{
                 ptype: 'rowexpander',
@@ -54,7 +64,6 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             },{
                 ptype: 'celltips'
             }],
-            selType : 'cellrowmodel',
             bbar: [{
                 text : 'Remove Layer',
                 iconCls : 'remove',
@@ -70,11 +79,7 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             }]
         });
 
-        this.addEvents('downloadlayer');
-
         this.callParent(arguments);
-
-        this.getSelectionModel().on('select', this._cellClickHandler, this);
     },
 
     /**
@@ -115,14 +120,11 @@ Ext.define('portal.widgets.panel.LayerPanel', {
     },
 
     /**
-     * Renderer for 'Visibility' column
+     * Renderer for download column
      */
-    _visibleRenderer : function(value, metaData, record, row, col, store, gridView) {
-        return value.getVisible();//value is a portal.layer.renderer.Renderer
-    },
-
     _downloadRenderer : function(value, metaData, record, row, col, store, gridView) {
-        if (value.getHasData()) { //value is a portal.layer.renderer.Renderer
+        var downloader = record.get('downloader');
+        if (value.getHasData() && downloader) { //value is a portal.layer.renderer.Renderer
             return Ext.DomHelper.markup({
                 tag : 'a',
                 href : 'javascript: void(0)',
@@ -166,35 +168,53 @@ Ext.define('portal.widgets.panel.LayerPanel', {
         return renderer.renderStatus.renderHtml();
     },
 
-    _wmsLegendFormClick : function(legend, resources, filterer, success, form,layer){
-        var win = Ext.create('Ext.window.Window', {
-            title       : 'Legend: '+ layer.get('name'),
-            layout      : 'fit',
-            width       : 200,
-            height      : 300,
-            items: form
-        });
-        return win.show();
+    /**
+     * Raised whenever the download column is clicked
+     */
+    _downloadClickHandler : function(column, layer, rowIndex, colIndex) {
+        var downloader = layer.get('downloader');
+        var renderer = layer.get('renderer');
+        if (downloader && renderer.getHasData()) {
+            //We need a copy of the current filter object (in case the user
+            //has filled out filter options but NOT hit apply filter) and
+            //the original filter objects
+            var renderedFilterer = layer.get('filterer').clone();
+            var currentFilterer = Ext.create('portal.layer.filterer.Filterer', {});
+            var currentFilterForm = layer.get('filterForm');
+            currentFilterForm.writeToFilterer(currentFilterer);
+
+            //Finally pass off the download handling to the appropriate downloader (if it exists)
+            var downloader = layer.get('downloader');
+            if (downloader) {
+                var onlineResources = layer.getAllOnlineResources();
+                downloader.downloadData(layer, onlineResources, renderedFilterer, currentFilterer);
+            }
+        }
     },
 
     /**
-     * Handles all clicks
+     * Raised whenever the legend column is clicked
      */
-    _cellClickHandler : function(cellModel, layer, row, column) {
-        var downloadColumnIndex = 5;
-        var legendColumnIndex=1;
-
-        switch(column) {
-        case downloadColumnIndex:
-            var downloader = layer.get('downloader');
-            var renderer = layer.get('renderer');
-            if (downloader && renderer.getHasData()) {
-                this.fireEvent('downloadlayer', this, layer);
+    _legendClickHandler : function(column, layer, rowIndex, colIndex) {
+        //The callback takes our generated component and displays it in a popup window
+        var legendCallback = function(legend, resources, filterer, success, form, layer){
+            if (success && form) {
+                var win = Ext.create('Ext.window.Window', {
+                    title       : 'Legend: '+ layer.get('name'),
+                    layout      : 'fit',
+                    width       : 200,
+                    height      : 300,
+                    items: form
+                });
+                return win.show();
             }
-            break;
-        case legendColumnIndex:
-            var fn=Ext.bind(this._wmsLegendFormClick,this,[layer],true);
-            layer.get('renderer').getLegend().getLegendComponent(layer.getAllOnlineResources(), layer.get('filterer'),fn);
-        }
+        };
+
+        var onlineResources = layer.getAllOnlineResources();
+        var filterer = layer.get('filterer');
+        var renderer = layer.get('renderer');
+        var legend = renderer.getLegend(onlineResources, filterer);
+
+        legend.getLegendComponent(onlineResources, filterer, Ext.bind(legendCallback, this, [layer], true));
     }
 });

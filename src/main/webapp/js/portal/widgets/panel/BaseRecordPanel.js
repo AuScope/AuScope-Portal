@@ -57,7 +57,6 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
                     '<p>{description}</p><br>'
                 ]
             }],
-            selType : 'cellrowmodel',
             buttonAlign : 'right',
             bbar: [{
                 text:'Add Layer to Map',

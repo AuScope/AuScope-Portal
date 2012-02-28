@@ -74,23 +74,6 @@ Ext.application({
                 //On selection, update our filter panel
                 select : function(rowModel, record, index) {
                     filterPanel.showFilterForLayer(record);
-                },
-                //Whenever the layer download is clicked
-                downloadlayer : function(panel, layer) {
-                    //We need a copy of the current filter object (in case the user
-                    //has filled out filter options but NOT hit apply filter) and
-                    //the original filter objects
-                    var renderedFilterer = layer.get('filterer').clone();
-                    var currentFilterer = Ext.create('portal.layer.filterer.Filterer', {});
-                    var currentFilterForm = layer.get('filterForm');
-                    currentFilterForm.writeToFilterer(currentFilterer);
-
-                    //Finally pass off the download handling to the appropriate downloader (if it exists)
-                    var downloader = layer.get('downloader');
-                    if (downloader) {
-                        var onlineResources = layer.getAllOnlineResources();
-                        downloader.downloadData(layer, onlineResources, renderedFilterer, currentFilterer);
-                    }
                 }
             }
         });
