@@ -107,8 +107,7 @@ Ext.define('portal.layer.renderer.csw.CSWRenderer', {
                             this.overlayManager.markerManager.addMarker(marker, 0);
 
                         } else { //polygon
-                            var polygonList = geoEl.toGMapPolygon(cswRecords[i].get('id'),undefined,this.parentLayer,
-                                    '#0003F9', 4, 0.75,'#0055FE', 0.4);
+                            var polygonList = geoEl.toGMapPolygon('#0003F9', 4, 0.75,'#0055FE', 0.4);
 
                             for (var k = 0; k < polygonList.length; k++) {
                                 this.overlayManager.addOverlay(polygonList[k]);
