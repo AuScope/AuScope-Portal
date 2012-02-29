@@ -169,7 +169,7 @@ Ext.define('portal.util.BBox', {
             var sw = new GLatLng(splitBbox.southBoundLatitude, splitBbox.westBoundLongitude);
             var nw = new GLatLng(splitBbox.northBoundLatitude, splitBbox.westBoundLongitude);
 
-            result.push(portal.util.gmap.GMapWrapper.makePolygon(undefined, undefined, undefined,
+            result.push(portal.util.gmap.GMapWrapper.makePolygon(undefined, undefined, undefined,undefined,
                     [sw, nw, ne, se, sw], strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts));
         }
 

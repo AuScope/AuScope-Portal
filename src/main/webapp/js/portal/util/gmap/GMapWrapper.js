@@ -35,6 +35,13 @@ Ext.define('portal.util.gmap.GMapWrapper', {
         },
 
         /**
+         * Given a GOverlay created by this class, return the portal.csw.OnlineResource used in it's creation
+         */
+        getCSWRecord : function(overlay) {
+            return overlay._cswRecord;
+        },
+
+        /**
          * Utility function for creating an instance of the google map GMarker class
          *
          * @param id [Optional] A string based ID that will be used as the gml:id for this marker
@@ -44,13 +51,14 @@ Ext.define('portal.util.gmap.GMapWrapper', {
          * @param point a GLatLng (gmap api) indicating where this marker should be shown
          * @param icon a GIcon (gmap api) containing display information about how the marker should look
          */
-        makeMarker : function(id, tooltip, sourceOnlineResource, sourceLayer, point, icon) {
+        makeMarker : function(id, tooltip,cswRecord, sourceOnlineResource, sourceLayer, point, icon) {
             var marker = new GMarker(point, {icon: icon, title: tooltip});
 
             //Overload marker with useful info
             marker._id = id;
             marker._layer = sourceLayer;
             marker._onlineResource = sourceOnlineResource;
+            marker._cswRecord=cswRecord;
 
             return marker;
         },
@@ -68,13 +76,14 @@ Ext.define('portal.util.gmap.GMapWrapper', {
          * @param fillOpacity [Optional] A number from 0-1 indicating the opacity of the fill
          *
          */
-        makePolygon : function(id, sourceOnlineResource, sourceLayer, points,
+        makePolygon : function(id, cswRecord,sourceOnlineResource, sourceLayer, points,
                 strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity) {
             var polygon = new GPolygon(points,strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity);
 
             polygon._id = id;
             polygon._layer = sourceLayer;
             polygon._onlineResource = sourceOnlineResource;
+            polygon._cswRecord=cswRecord;
 
             return polygon;
         },
@@ -89,12 +98,13 @@ Ext.define('portal.util.gmap.GMapWrapper', {
          * @param weight [Optional] Width of the stroke in pixels
          * @param opacity [Optional] A number from 0-1 indicating the opacity of the line
          */
-        makePolyLine : function(id, sourceOnlineResource, sourceLayer, points, color, weight, opacity) {
+        makePolyLine : function(id, cswRecord,sourceOnlineResource, sourceLayer, points, color, weight, opacity) {
             var line = new GPolyline(points, color, weight, opacity);
 
             line._id = id;
             line._layer = sourceLayer;
             line._onlineResource = sourceOnlineResource;
+            line._cswRecord=cswRecord;
 
             return line;
         }
