@@ -30,6 +30,15 @@ Ext.application({
         //custom layers panel
         var customRecordStore = Ext.create('Ext.data.Store', {
             model : 'portal.csw.CSWRecord',
+            proxy : {
+                type : 'ajax',
+                url : 'getCustomLayers.do',
+                reader : {
+                    type : 'json',
+                    root : 'data'
+                }
+            },
+            autoLoad : false,
             data : []
         });
 
@@ -121,7 +130,7 @@ Ext.application({
             }
         });
 
-        var customRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
+        var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
             title : 'Custom Layers',
             store : customRecordStore,
             map : map,
