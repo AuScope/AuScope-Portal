@@ -14,7 +14,7 @@ Ext.define('portal.knownlayer.KnownLayer', {
 
     fields: [
         { name: 'id', type: 'string' }, //a unique ID of the known layer grouping
-        { name: 'title', type: 'string'}, //A human readable name/title for this grouping
+        { name: 'name', type: 'string'}, //A human readable name/title for this grouping
         { name: 'description', type: 'string' }, //A human readable description of this KnownLayer
         { name: 'group', type: 'string' }, //A term in which like KnownLayers can be grouped under
         { name: 'proxyUrl', type: 'string' }, //A URL of a backend controller method for fetching available data with a filter specific for this KnonwLayer

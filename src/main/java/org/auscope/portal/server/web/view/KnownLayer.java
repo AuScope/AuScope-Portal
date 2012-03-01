@@ -20,8 +20,8 @@ public class KnownLayer implements Serializable {
     /** auto generated version ID */
     private static final long serialVersionUID = 236524163668910226L;
 
-    /** The title. */
-    private String title;
+    /** The name/title. */
+    private String name;
 
     /** The description. */
     private String description;
@@ -83,20 +83,20 @@ public class KnownLayer implements Serializable {
     }
 
     /**
-     * Gets the human readable title of this layer.
+     * Gets the human readable name/title of this layer.
      *
      * @return the title
      */
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the human readable title of this layer.
+     * Sets the human readable name/title of this layer.
      * @param title the title to set
      */
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**

@@ -13,7 +13,7 @@ Ext.define('portal.widgets.panel.KnownLayerPanel', {
      * Implements method - see parent class for details.
      */
     getTitleForRecord : function(record) {
-        return record.data.title;
+        return record.get('name');
     },
 
     /**

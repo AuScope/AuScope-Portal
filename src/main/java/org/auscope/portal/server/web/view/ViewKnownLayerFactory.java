@@ -17,7 +17,7 @@ public class ViewKnownLayerFactory {
     public ModelMap toView(KnownLayer k) {
         ModelMap obj = new ModelMap();
 
-        obj.put("title", k.getTitle());
+        obj.put("name", k.getName());
         obj.put("hidden", k.isHidden());
         obj.put("description",k.getDescription());
         obj.put("id", k.getId());

@@ -38,12 +38,30 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
             hideHeaders : true,
             features : [groupingFeature],
             viewConfig : {
-                emptyText : 'No records are available, please try refreshing the page in a few moments.'
+                emptyText : '<p class="centeredlabel">No records match the current filter.</p>'
             },
+            dockedItems : [{
+                xtype : 'toolbar',
+                dock : 'top',
+                portalName : 'search-bar', //used for distinguishing this toolbar
+                items : [{
+                    xtype : 'label',
+                    text : 'Search: '
+                },{
+                    xtype : 'clientsearchfield',
+                    width : 200,
+                    fieldName: 'name',
+                    store : cfg.store
+                },{
+                    xtype : 'button',
+                    text : 'Visible',
+                    handler : Ext.bind(this._handleVisibleFilterClick, this)
+                }]
+            }],
             columns : [{
                 //Title column
                 text : 'Title',
-                dataIndex : 'title',
+                dataIndex : 'name',
                 flex: 1,
                 renderer : this._titleRenderer
             },{
@@ -257,6 +275,52 @@ Ext.define('portal.widgets.panel.BaseRecordPanel', {
             }
 
             this.map.scrollToBounds(superBBox);
+        }
+    },
+
+    /**
+     * When the visible fn is clicked, ensure only the visible records pass the filter
+     */
+    _handleVisibleFilterClick : function(button) {
+        var currentBounds = this.map.getVisibleMapBounds();
+
+        //Function for testing intersection of a records's spatial bounds
+        //against the current visible bounds
+        var filterFn = function(rec) {
+            var spatialBounds = this.getSpatialBoundsForRecord(rec);
+
+            for (var i = 0; i < spatialBounds.length; i++) {
+                if (spatialBounds[i].intersects(currentBounds)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        var searchField = button.ownerCt.items.getAt(1);
+        searchField.runCustomFilter('<visible layers>', Ext.bind(filterFn, this));
+    },
+
+    /**
+     * When called, will update the visibility of any search bars
+     */
+    _updateSearchBar : function(visible) {
+        var dockedItems = this.getDockedItems();
+        var searchBar = null;
+        for (var i = 0; i < dockedItems.length; i++) {
+            if (dockedItems[i].initialConfig.portalName === 'search-bar') {
+                searchBar = dockedItems[i];
+            }
+        }
+        if (!searchBar) {
+            return;
+        }
+
+        if (visible) {
+            searchBar.show();
+        } else {
+            searchBar.hide();
         }
     }
 });

@@ -1,40 +1,55 @@
-/*!
- * Ext JS Library 3.1.0
- * Copyright(c) 2006-2009 Ext JS, LLC
- * licensing@extjs.com
- * http://www.extjs.com/license
+/**
+ * A search field that performs local filtering on a store
+ * instead of proxying external requests
  */
-Ext.ns('Ext.ux.form');
+Ext.define('portal.widgets.field.ClientSearchField', {
+    extend : 'Ext.ux.form.SearchField',
+    alias : 'widget.clientsearchfield',
 
-Ext.ux.form.ClientSearchField = Ext.extend(Ext.form.TwinTriggerField, {
-    initComponent : function(){
-        Ext.ux.form.ClientSearchField.superclass.initComponent.call(this);
-        this.on('specialkey', function(f, e){
-            if(e.getKey() == e.ENTER){
-                this.onTrigger2Click();
-            }
-        }, this);
+    initComponent : function() {
+        this.callParent(arguments);
+
+        this.on('afterrender', function(cmp) {
+            cmp.doComponentLayout();
+        });
     },
 
-    validationEvent:false,
-    validateOnBlur:false,
-    trigger1Class:'x-form-clear-trigger',
-    trigger2Class:'x-form-search-trigger',
-    hideTrigger1:true,
-    width:180,
-    hasSearch : false,
-    paramName : 'query',
-    fieldName : '',
+    /**
+     * Disables the text field, leaves any trigger buttons enabled
+     */
+    _setTextFieldDisabled : function(disabled) {
+        var inputFieldEl = Ext.get(this.getInputId());
+        inputFieldEl.dom.disabled = disabled;
+
+        //Manual styling because we cannot Ext.Element.mask an input field (it accepts
+        //no child nodes)
+        if (disabled) {
+            inputFieldEl.setStyle('background', '#E5E5E5');
+            inputFieldEl.setStyle('color', '#666666');
+        } else {
+            inputFieldEl.setStyle('background', '#FFFFFF');
+            inputFieldEl.setStyle('color', '#000000');
+        }
+    },
 
     onTrigger1Click : function(){
-        if(this.hasSearch){
-        	this.store.clearFilter(false);
-            this.triggers[0].hide();
-			this.triggers[1].show();
-            this.hasSearch = false;
-			this.setDisabled(false);
+        var me = this,
+            store = me.store,
+            proxy = store.getProxy(),
+            val;
+
+        if (this.hasSearch) {
             this.setValue('');
-            
+
+            this.store.clearFilter(false);
+
+            this.hasSearch = false;
+            this.triggerEl.item(0).setDisplayed('none');
+            this.triggerEl.item(1).setDisplayed('block');
+
+            this._setTextFieldDisabled(false);
+
+            this.doComponentLayout();
         }
     },
 
@@ -47,23 +62,29 @@ Ext.ux.form.ClientSearchField = Ext.extend(Ext.form.TwinTriggerField, {
 
         this.store.filter(this.fieldName, v, true, false);
         this.hasSearch = true;
-        this.triggers[0].show();
+        this.triggerEl.item(0).setDisplayed('block');
+        this.doComponentLayout();
     },
-    
+
     /**
      * text : The text to include in the box (to indicate that a custom filter has been run)
      * func : function(record, id) that should return true/false for each record it receives
      */
     runCustomFilter : function(text, func) {
-    	//Clear any existing filter
-    	this.onTrigger1Click();
-    	
-    	this.hasSearch = true;
-    	this.setValue(text);
-    	
-    	this.store.filterBy(func);
-    	this.triggers[0].show();
-    	this.triggers[1].hide();
-    	this.setDisabled(true);
+        //Clear any existing filter
+        this.onTrigger1Click();
+
+        this.hasSearch = true;
+        this.setValue(text);
+
+        this.store.filterBy(func);
+        this.triggerEl.item(0).setDisplayed('block');
+        this.triggerEl.item(1).setDisplayed('none');
+
+        this._setTextFieldDisabled(true);
+        //inputFieldEl.mask();
+
+
+        this.doComponentLayout();
     }
 });

@@ -152,7 +152,7 @@ Ext.define('portal.layer.LayerFactory', {
         var id = knownLayer.get('id');
         var source = knownLayer;
         var description = knownLayer.get('description');
-        var name = knownLayer.get('title');
+        var name = knownLayer.get('name');
         var cswRecords = knownLayer.get('cswRecords');
         var allOnlineResources = knownLayer.getAllOnlineResources();
 

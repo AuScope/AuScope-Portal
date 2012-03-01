@@ -177,6 +177,24 @@ Ext.define('portal.util.BBox', {
     },
 
     /**
+     * Returns true IFF both bboxes share the same CRS and that they intersect one another.
+     *
+     */
+    intersects : function(bbox) {
+        if (this.crs !== bbox.crs) {
+            return false;
+        }
+
+        //reuse the gmap intersects functionality
+        var bboxBounds = new GLatLngBounds(new GLatLng(bbox.southBoundLatitude, bbox.westBoundLongitude),
+                                           new GLatLng(bbox.northBoundLatitude, bbox.eastBoundLongitude));
+        var thisBounds = new GLatLngBounds(new GLatLng(this.southBoundLatitude, this.westBoundLongitude),
+                                           new GLatLng(this.northBoundLatitude, this.eastBoundLongitude));
+
+        return bboxBounds.intersects(thisBounds);
+    },
+
+    /**
      * Function for comparing 2 instances of BBox. If the internal fields are all exactly the same then
      * true will be returned, otherwise false.
      */
