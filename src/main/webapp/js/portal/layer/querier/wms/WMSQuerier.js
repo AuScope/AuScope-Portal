@@ -44,7 +44,14 @@ Ext.define('portal.layer.querier.wms.WMSQuerier', {
         url += '&HEIGHT=' + TileUtl.getTileHeight();
 
         if(typeName.substring(0, typeName.indexOf(":")) == "gt") {
-            portal.layer.querier.wms.type.Geotransect.handleGeotransectWmsRecord(url, wmsOnlineResource, map, latlng,queryTarget, callback);
+            var geotransect=Ext.create('portal.layer.querier.wms.type.Geotransect',
+                    {url : url,
+                     wmsOnlineResource : wmsOnlineResource,
+                     map : map,
+                     latlng : latlng,
+                     queryTarget : queryTarget
+                    });
+            geotransect.handleGeotransectWmsRecord(callback);
         } else {
            //handleGenericWmsRecord(url, typeName, map, latlng);
         }

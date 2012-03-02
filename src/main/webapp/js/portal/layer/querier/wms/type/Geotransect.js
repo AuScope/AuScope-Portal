@@ -4,8 +4,28 @@
  */
 
 Ext.define('portal.layer.querier.wms.type.Geotransect',{
+   url: null,
+   wmsOnlineResource: null,
+   map: null,
+   latlng: null,
+   queryTarget: null,
+   geoserverURL:null,
 
-    statics : {
+   GETSEISMICSECTIONS : "/geotransect-dataservices/getSeismicSections.json?",
+
+   GETSEGYDATASETS : "/geotransect-dataservices/getSEGYDatasets.json?",
+
+    constructor : function(config) {
+        this.url=config.url;
+        this.wmsOnlineResource=config.wmsOnlineResource;
+        this.map=config.map;
+        this.latlng=config.latlng;
+        this.queryTarget=config.queryTarget;
+
+        var str = this.wmsOnlineResource.get('url').slice( ("http://").length);
+        this.geoserverURL='http://' + str.slice(0,str.indexOf("/"));
+    },
+//    statics : {
         /**
          * Function to handle Geotransect record. lineId is extracted from returned result made via the ajax request
          *
@@ -15,13 +35,14 @@ Ext.define('portal.layer.querier.wms.type.Geotransect',{
          * @param queryTarget - portal.layer.querier.QueryTarget
          * @param callback - function used for callback, normally to present the data
          */
-        handleGeotransectWmsRecord : function(url,wmsOnlineResource, map, latlng, queryTarget, callback){
+        handleGeotransectWmsRecord : function(callback){
+            var me = this;
             Ext.Ajax.request({
-                url: url+"&INFO_FORMAT=application/vnd.ogc.gml",
+                url: me.url+"&INFO_FORMAT=application/vnd.ogc.gml",
                 timeout     : 180000,
                 callback    : callback,
-                wmsOnlineResource : wmsOnlineResource,
-                queryTarget : queryTarget,
+                wmsOnlineResource : me.wmsOnlineResource,
+                queryTarget : me.queryTarget,
                 success: function(response, options) {
                     if ((response.responseText).toLowerCase().indexOf('<gml:featuremember>') > 0) {
 
@@ -72,8 +93,8 @@ Ext.define('portal.layer.querier.wms.type.Geotransect',{
                                 }
 
                                 //var infoWindow = new GeotransectsInfoWindow(latlng, map, lineId, options.cswRecord, options.wmsOnlineResource, url);
-                                var allComponents=portal.layer.querier.wms.type.Geotransect._getWMSComponent(latlng, map, lineId, options.wmsOnlineResource, url,queryTarget);
-                                callback(this, allComponents, queryTarget);
+                                var allComponents=me._getWMSComponent(lineId);
+                                options.callback(this, allComponents, options.queryTarget);
                                 //infoWindow.show();
                             } else {
                                 alert("Remote server returned an unsupported response.");
@@ -93,34 +114,107 @@ Ext.define('portal.layer.querier.wms.type.Geotransect',{
          * Helper function use to return components which can be used by the
          * callback function(portal.layer.querier.QueryTargetHandler._queryCallback).
          */
-        _getWMSComponent : function(iLatlng, iMap, iLineId, iOnlineResource, iUrl,queryTarget){
-            var cswRecord=queryTarget.get('layer').get('source').getRelatedCSWRecordsByKeywords(iLineId);
+        _getWMSComponent : function(lineId){
+            var allComponents = [];
+            var tab1=this._getGeotransectTab1(lineId);
+            var tab2=this._getGeotransectTab2(lineId);
 
-            var tab1={
-                    border : false,
-                    layout : 'fit',
-                    items : [{
+            allComponents.push(tab1);
+            allComponents.push(tab2);
+            return allComponents;
+
+        },//end of getWMSComponent
+
+        _getGeotransectTab1 : function(iLineId){
+            var cswRecord=this.queryTarget.get('layer').get('source').getRelatedCSWRecordsByKeywords(iLineId);
+
+            var tab1= Ext.create('portal.layer.querier.BaseComponent',{
                         xtype : 'fieldset',
-                        title : 'GeoTransact',
+                        border : false,
+                        autoScroll:true,
                         labelWidth: 75,
+                        layout:'anchor',
+
                         items : [{
                             xtype : 'displayfield',
                             fieldLabel : 'ID',
-                            value : iLineId
+                            value : '<a href="'+ this.queryTarget.get('cswRecord').get('recordInfoUrl') +'" TARGET=_blank>' + iLineId + '</a>'
+                        },{
+                            xtype : 'textarea',
+                            fieldLabel : 'Description',
+                            readOnly : true,
+                            anchor : '100%',
+                            height : 200,
+                            value :  cswRecord[0].get('description') ,
                         },{
                             xtype : 'displayfield',
-                            fieldLabel : 'Description',
-                            value : cswRecord[0].get('description')
+                            fieldLabel : 'HighRes Service URL',
+                            value : cswRecord[0].get('onlineResources')[0].get('url')
+                        },{
+                            xtype : 'displayfield',
+                            fieldLabel : 'HighRes Layer Name',
+                            value : cswRecord[0].get('onlineResources')[0].get('name')
                         }]
-                    }]
-                };
+                    });
+            return tab1;
+        },
 
-            var allComponents = [];
-            allComponents.push(tab1);
-            return allComponents;
+        _getGeotransectTab2 : function(iLineId){
 
-        }//end of getWMSComponent
+            var gsURL = this.geoserverURL;
+            gsURL += this.GETSEISMICSECTIONS;
+            gsURL += "lineId="+iLineId;
 
-    }
+            var value = this._getGeotransectData(gsURL);
+            var test = null;
+
+        },
+
+        _getGeotransectData : function(url){
+            var me = this;
+
+            Ext.Ajax.request({
+                url: 'requestGeotransectsData.do',
+                timeout     : 180000,
+                params      : {
+                    serviceUrl      : url
+                },
+                success: function(response, options) {
+                    var responseObj;
+                    try {
+                        responseObj = Ext.JSON.decode(Ext.JSON.decode(response.responseText).json);
+                    }
+                    catch (err) {
+                        me.mask.hide();
+                        Ext.Msg.alert('Error downloading data', 'There was an error whilst communicating with the geotransects data server');
+                        return;
+                    }
+
+                    //Generate an error / success fragment to display to the user
+                    if (!responseObj.result.success) {
+                        me.mask.hide();
+                        Ext.Msg.alert('Error downloading data', 'The service returned a failure result status ' + url);
+                        return;
+                    }
+
+
+                    //Parse records and download the data
+                    var values = [responseObj.items.length];
+                    for (var i = 0; i < responseObj.items.length; i++) {
+                        values[i] = responseObj.items[i].url;
+                    }
+                    //TODO: VT - some way perhaps to return this value else might need to slightly modify this file.
+                    //me._getGeotransectTab2(values);
+
+                },
+                failure: function(response, options) {
+                    Ext.Msg.alert('Error requesting data', 'Error (' + response.status + '): ' + response.statusText);
+                    me.mask.hide();
+                }
+            });
+
+        }
+
+//    } //end of statics
 
 });
