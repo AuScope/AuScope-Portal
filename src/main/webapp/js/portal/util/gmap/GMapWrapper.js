@@ -367,6 +367,16 @@ Ext.define('portal.util.gmap.GMapWrapper', {
     //delegator function to the original map function
     getZoom : function(){
         return this.map.getZoom();
-
+    },
+    
+    /**
+     * Returns an object representing the map size in pixels in the form
+     * {
+     *  width : Number
+     *  height : Number
+     * }
+     */
+    getMapSizeInPixels : function() {
+        return this.map.getSize();
     }
 });

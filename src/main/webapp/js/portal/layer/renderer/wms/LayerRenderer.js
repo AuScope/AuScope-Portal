@@ -42,10 +42,10 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
             tileLayer.layers = wmsResources[i].get('name');
             tileLayer.opacity = filterer.getParameter('opacity');
             this.overlayManager.addOverlay(new GTileLayerOverlay(tileLayer));
-            this.fireEvent('rendercomplete', this, wmsResources, filterer);
         }
 
         this.fireEvent('renderfinished', this);
+        this.setHasData(true);
     },
 
     /**

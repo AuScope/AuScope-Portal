@@ -177,7 +177,7 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
         };
         var proxyUrl = renderer.getProxyUrl();
         proxyUrl = (proxyUrl && proxyUrl.length > 0) ? proxyUrl : 'getAllFeatures.do';
-        var prefixUrl = window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + proxyUrl + "?";
+        var prefixUrl = portal.util.URL.base + proxyUrl + "?";
 
         //Iterate our WFS records and generate the array of PORTAL BACKEND requests that will be
         //used to proxy WFS requests. That array will be sent to a backend handler for making

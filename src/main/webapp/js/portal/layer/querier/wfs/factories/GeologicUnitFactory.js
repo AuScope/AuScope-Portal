@@ -75,11 +75,11 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
                 handler : function() {
                     //Generate our URL (with params) and make the download
                     var key = 'serviceUrls';
-                    var locSpecLink=window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + "requestFeature.do" + "?" +
+                    var locSpecLink = portal.util.URL.base + "requestFeature.do" + "?" +
                     "serviceUrl=" + wfsUrl + "&typeName=" + "sa:LocatedSpecimen" +
                     "&featureId=" + locSpecimenFeatureId;
 
-                    var geoLink = window.location.protocol + "//" + window.location.host + WEB_CONTEXT + "/" + "requestFeature.do" + "?" +
+                    var geoLink = portal.util.URL.base + "requestFeature.do" + "?" +
                         "serviceUrl=" + wfsUrl + "&typeName=" + "gsml:GeologicUnit" +
                         "&featureId=" + gmlId;
 

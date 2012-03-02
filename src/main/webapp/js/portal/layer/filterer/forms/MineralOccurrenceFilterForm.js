@@ -12,8 +12,13 @@ Ext.define('portal.layer.filterer.forms.MineralOccurrenceFilterForm', {
             fields : ['urn', 'label'],
             proxy : {
                 type : 'ajax',
-                url : 'getAllCommodities.do'
-            }
+                url : 'getAllCommodities.do',
+                reader : {
+                    type : 'array',
+                    root : 'data'
+                }
+            },
+            autoLoad : true
         });
 
         Ext.apply(config, {
@@ -42,7 +47,7 @@ Ext.define('portal.layer.filterer.forms.MineralOccurrenceFilterForm', {
                     fieldLabel: '<span qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
                     labelAlign: 'right',
                     forceSelection: true,
-                    mode: 'local',
+                    queryMode: 'local',
                     store: commodityStore,
                     triggerAction: 'all',
                     typeAhead: true,

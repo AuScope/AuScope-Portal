@@ -29,8 +29,6 @@ Ext.define('portal.layer.Layer', {
         { name: 'renderOnAdd', type: 'boolean', defaultValue: false }, //If true then this layer should be rendered the moment it is added to the map
     ],
 
-    ////////// Class functions
-
     /**
      * Utility function for concatenating all online resources stored in all
      * CSWRecords and returning the result as an Array.
@@ -45,8 +43,6 @@ Ext.define('portal.layer.Layer', {
         }
         return resources;
     },
-
-    /////////// Event Handlers
 
     onRenderStarted : function(renderer, onlineResources, filterer) {
         this.set('loading', true);
