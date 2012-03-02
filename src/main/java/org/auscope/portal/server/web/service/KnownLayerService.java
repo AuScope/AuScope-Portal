@@ -45,17 +45,6 @@ public class KnownLayerService {
         this.cswCacheService = cswCacheService;
     }
 
-    /**
-     * Creates a new instance of this class from an typed list
-     * @param knownTypes A list of KnownLayer objects
-     * @param cswCacheService An instance of CSWCacheService
-     */
-    public KnownLayerService(List<KnownLayer> knownTypes,
-            CSWCacheService cswCacheService) {
-        this.knownLayers = knownTypes;
-        this.cswCacheService = cswCacheService;
-    }
-
 
     /**
      * Builds a KnownLayerGrouping by iterating the current CSW Cache Service
