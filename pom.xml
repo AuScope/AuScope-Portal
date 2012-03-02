@@ -67,11 +67,11 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.10</version>
-				<configuration>
-					<parallel>methods</parallel>
-					<threadCount>10</threadCount>
-					<redirectTestOutputToFile>true</redirectTestOutputToFile>
-				</configuration>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>10</threadCount>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -149,7 +149,7 @@
                 <configuration>
                     <excludes>
                         <!-- Exclude Ext JS -->
-                        <exclude>js/external/**</exclude>
+                        <exclude>js/ext-*/**</exclude>
                     </excludes>
                     <nosuffix>true</nosuffix>
                 </configuration>
@@ -168,15 +168,15 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<configLocation>checkstyle.xml</configLocation>
-					<cacheFile>checkstyle.cache</cacheFile>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <cacheFile>checkstyle.cache</cacheFile>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <reporting>
