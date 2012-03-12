@@ -66,7 +66,7 @@ Ext.define('portal.layer.LayerFactory', {
         });
 
         //Wire up references to our layer
-        renderer.setParentLayer(newLayer);
+        renderer.parentLayer = newLayer;
 
         //Wire up our events so that the layer is listening for changes in its components
         renderer.on('renderstarted', Ext.bind(newLayer.onRenderStarted, newLayer));

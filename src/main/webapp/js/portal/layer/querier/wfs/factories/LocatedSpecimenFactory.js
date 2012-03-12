@@ -19,7 +19,7 @@ Ext.define('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', {
     /**
      * Generates a panel containing all located specimen observations
      */
-    parseNode : function(domNode, wfsUrl, rootCfg) {
+    parseNode : function(domNode, wfsUrl) {
         //Lookup various fields via xPath
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var allAnalyteNodes = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'sa:relatedObservation/om:Observation/om:result/swe:Quantity/gml:name');
@@ -54,7 +54,7 @@ Ext.define('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', {
         });
 
         //Build our component
-        Ext.apply(rootCfg, {
+        return Ext.create('portal.layer.querier.BaseComponent', {
             layout : 'fit',
             listeners : {
                 afterrender : function(cmp) {
@@ -173,7 +173,5 @@ Ext.define('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', {
                     materialClass]
             }]
         });
-
-        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

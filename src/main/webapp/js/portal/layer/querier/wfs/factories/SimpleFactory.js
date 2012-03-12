@@ -47,7 +47,7 @@ Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
             }
         }
 
-        Ext.apply(rootCfg, {
+        return Ext.create('portal.layer.querier.BaseComponent', {
             layout : 'fit',
             height : 300,
             items : [{
@@ -67,8 +67,6 @@ Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
                 }
             }]
          });
-
-        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     },
 
     /**

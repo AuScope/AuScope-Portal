@@ -50,14 +50,14 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
     /**
      * Overrides abstract parseKnownLayerFeature
      */
-    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource, rootCfg) {
+    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
         var me = this;
         var pressureDbUrl = this.getBaseUrl(parentOnlineResource.url) + '/pressuredb-dataservices'; //This is a hack - somehow this needs to make it to the registry
         var featureId = featureId.replace('gsml.borehole.', '');
 
         //Load the form in full - when it renders we'll actually check what is available.
         //The user won't be able to interact with the form prior to load due to the loading mask
-        Ext.apply(rootCfg, {
+        return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
             tabTitle : 'Details',
             items : [{
@@ -152,7 +152,5 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                 }]
             }]
         });
-
-        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

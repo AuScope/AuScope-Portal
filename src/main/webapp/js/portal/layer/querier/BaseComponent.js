@@ -3,7 +3,7 @@
  * for all Querier components to derive from
  */
 Ext.define('portal.layer.querier.BaseComponent', {
-    extend: 'Ext.Panel',
+    extend: 'Ext.container.Container',
     alias : 'widget.querierbasecomponent',
 
     /**

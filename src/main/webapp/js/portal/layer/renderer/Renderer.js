@@ -13,17 +13,12 @@
 Ext.define('portal.layer.renderer.Renderer', {
     extend: 'Ext.util.Observable',
 
-    /**
-     * Configuration values for all renderers
-     */
-    config : {
-        visible : true, //whether the render is currently 'visible' or not,
-        hasData : false, //whether the renderer has rendered any data or not,
-        proxyUrl : '',  //a url to proxy data requests through (implementation specific)
-        proxyCountUrl : '', //a url to proxy data count requests through (implementation specific)
-        parentLayer : null, // a reference to the portal.layer.Layer that owns this renderer
-    },
-
+    map : null, //portal.util.gmap.GMapWrapper
+    visible : true, //whether the render is currently 'visible' or not,
+    hasData : false, //whether the renderer has rendered any data or not,
+    proxyUrl : '',  //a url to proxy data requests through (implementation specific)
+    proxyCountUrl : '', //a url to proxy data count requests through (implementation specific)
+    parentLayer : null, // a reference to the portal.layer.Layer that owns this renderer
     renderDebuggerData : null,
     renderStatus : null,
     overlayManager : null,
@@ -44,10 +39,6 @@ Ext.define('portal.layer.renderer.Renderer', {
 
         //Setup class variables
         this.listeners = config.listeners;
-        this.visible = true;
-        this.hasData = false;
-        this.proxyUrl = '';
-        this.proxyCountUrl = '';
         this.map = config.map;
         this.parentLayer = config.parentLayer;
         this.overlayManager = this.map.createOverlayManager();
@@ -116,6 +107,17 @@ Ext.define('portal.layer.renderer.Renderer', {
      */
     removeData : portal.util.UnimplementedFunction,
 
+    ////////////////// Getter/Setters
+
+    /**
+     * A function for setting this layer's visibility.
+     *
+     * visible - a bool
+     */
+    getVisible : function() {
+        return this.visible;
+    },
+
     /**
      * A function for setting this layer's visibility.
      *
@@ -127,21 +129,32 @@ Ext.define('portal.layer.renderer.Renderer', {
     },
 
     /**
-     * Gets a copy of the portal.layer.filterer.Filterer object that was used
-     * during the last render operation. Because the copy was made at the time
-     * of rendering the object should be the same as it was when passed into the
-     * rendering operation.
-     *
-     * This can be null/undefined
+     * Gets whether this renderer 'has data'. i.e. whether
+     * this renderer has successfully been able to render information on the map
      */
-    getLastRendererdFilterer : function() {
-        return this._lastRenderedFilterer;
+    getHasData : function() {
+        return this.hasData;
     },
 
     /**
-     * Returns the map used by this renderer
+     * Sets whether this renderer 'has data'. i.e. whether
+     * this renderer has successfully been able to render information on the map
      */
-    getMap : function(){
-        return this.map;
+    setHasData : function(hasData) {
+        this.hasData = hasData;
+    },
+
+    /**
+     * Gets the url to proxy data requests through (implementation specific)
+     */
+    getProxyUrl : function() {
+        return this.proxyUrl;
+    },
+
+    /**
+     * Gets the url to proxy data count requests through (implementation specific)
+     */
+    getProxyCountUrl : function() {
+        return this.proxyCountUrl;
     }
 });

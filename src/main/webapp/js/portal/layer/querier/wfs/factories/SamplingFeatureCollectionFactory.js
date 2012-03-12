@@ -19,7 +19,7 @@ Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory'
     /**
      * Generates a panel containing all located specimen observations
      */
-    parseNode : function(domNode, wfsUrl, rootCfg) {
+    parseNode : function(domNode, wfsUrl) {
         var samplingName = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gml:name');
         var samplingStart = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:samplingTime/gml:TimePeriod/gml:beginPosition');
         var samplingEnd = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'sa:member/sa:LocatedSpecimen/sa:relatedObservation/om:Observation/om:samplingTime/gml:TimePeriod/gml:endPosition');
@@ -52,7 +52,7 @@ Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory'
         }
 
         //Build our component
-        Ext.apply(rootCfg, {
+        return Ext.create('portal.layer.querier.BaseComponent', {
             layout : 'fit',
             items : [{
                 xtype : 'fieldset',
@@ -80,6 +80,5 @@ Ext.define('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory'
                 }]
             }]
         });
-        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

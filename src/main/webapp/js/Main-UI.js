@@ -3,7 +3,6 @@ Ext.application({
     //Any processing logic should be managed in dedicated classes - don't let this become a
     //monolithic 'do everything' function
     launch : function() {
-        Ext.QuickTips.init();
 
         //Send these headers with every AJax request we make...
         Ext.Ajax.defaultHeaders = {
@@ -94,7 +93,7 @@ Ext.application({
             region: 'south',
             layerPanel : layersPanel,
             split: true,
-            height: 160
+            height: 170
         });
 
         //Utility function for adding a new layer to the map
@@ -169,7 +168,7 @@ Ext.application({
         /**
          * This center panel will hold the google maps instance
          */
-        var centerPanel = new Ext.Panel({
+        var centerPanel = Ext.create('Ext.panel.Panel', {
             region: 'center',
             id: 'center_region',
             margins: '100 0 0 0',
@@ -179,7 +178,7 @@ Ext.application({
         /**
          * Add all the panels to the viewport
          */
-        var viewport = new Ext.Viewport({
+        var viewport = Ext.create('Ext.container.Viewport', {
             layout:'border',
             items:[westPanel, centerPanel]
         });

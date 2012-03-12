@@ -24,7 +24,13 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
         this.callParent(arguments);
     },
 
+    /**
+     * Re-entrant show function for a particular loadMask
+     */
     _showLoadMask : function(loadMask) {
+        if (!loadMask) {
+            return;
+        }
         if (!loadMask._showCount) {
             loadMask._showCount = 0;
         }
@@ -34,7 +40,13 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
         }
     },
 
+    /**
+     * Re-entrant hide function for a particular loadMask
+     */
     _hideLoadMask : function(loadMask) {
+        if (!loadMask) {
+            return;
+        }
         if (--loadMask._showCount === 0) {
             loadMask.hide();
         }
@@ -76,37 +88,64 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
         var windowLocation = new GLatLng(queryTarget.get('lat'), queryTarget.get('lng'));
         mapWrapper.openInfoWindow(windowLocation, infoWindowTabs, infoWindowParams, initFunctionParams, function(map, location, params) {
             for (var i = 0; i < params.baseComponents.length; i++) {
-                Ext.create('Ext.panel.Panel', {
+                Ext.create('Ext.container.Container', {
                     renderTo : params.infoWindowIds[i],
                     border : 0,
                     width : params.width,
                     height : params.height,
                     layout : 'fit',
-                    items : [params.baseComponents[i]]
+                    items : [params.baseComponents[i]],
+                    listeners : {
+                        //To workaround some display issues with ext JS under Google maps
+                        //We need to force a layout of the ExtJS container when the GMap tab
+                        //changes. GMap doesn't offer anyway of doing that so we instead monitor
+                        //the underlying DOM for style changes referencing the 'display' CSS attribute.
+                        //See: http://www.sencha.com/forum/showthread.php?186027-Ext-4.1-beta-3-Strange-layout-on-grids-rendered-into-elements-with-display-none&p=752916#post752916
+                        afterrender : function(container) {
+                            console.warn('Implementing a workaround for Ext 4.1.0 - beta 3');
+
+                            //Find the parent info window DOM
+                            var el = container.getEl();
+                            var parentDiv = el.findParentNode('div.gmnoprint', 10, true);
+
+                            //Get all child div's (these are our tabs).
+                            var tabElements = parentDiv.select('> div');
+                            //for (var i = 0; i < tabElements.length; i++) {
+                            tabElements.each(function(tabEl) {
+                                var id = tabEl.id;
+                                tabEl.on('DOMAttrModified', function(e, t, eOpts) {
+                                    if (e.type === "mousemove") {
+                                        return;
+                                    }
+                                    if (t.id !== tabEl.dom.id) {
+                                        return;
+                                    }
+                                    //This won't be conducive to 'good' performance but it's our only option.
+                                    for (var i = 0; i < params.baseComponents.length; i++) {
+                                        params.baseComponents[i].doLayout();
+                                    }
+                                });
+                            });
+                        }
+                    }
                 });
             }
         });
-    },
-
-    _generateRootConfig : function() {
-        return {
-
-        };
     },
 
     /**
      * Just query everything in queryTargets
      */
     _handleWithQuery : function(queryTargets, mapWrapper) {
-        var rootCfg = this._generateRootConfig();
-        var loadMask = new Ext.LoadMask(mapWrapper.container.getEl(), {}); //For some reason LoadMask isn't designed to work with Ext.create
+        //var loadMask = new Ext.LoadMask(mapWrapper.container.getEl(), {}); //For some reason LoadMask isn't designed to work with Ext.create
+        var loadMask = null; //TODO: Disabled for testing with extjs 4 beta 3
         for (var i = 0; i < queryTargets.length; i++) {
             var queryTarget = queryTargets[i];
             var layer = queryTarget.get('layer');
             var querier = layer.get('querier');
 
-            //this._showLoadMask(loadMask);
-            querier.query(queryTarget, rootCfg, Ext.bind(this._queryCallback, this, [mapWrapper, loadMask], true));
+            this._showLoadMask(loadMask);
+            querier.query(queryTarget, Ext.bind(this._queryCallback, this, [mapWrapper, loadMask], true));
         }
     },
 

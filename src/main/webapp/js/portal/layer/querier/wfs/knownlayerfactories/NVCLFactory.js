@@ -706,7 +706,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     /**
      * Overrides abstract parseKnownLayerFeature
      */
-    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource, rootCfg) {
+    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
         var me = this;
 
         //NVCL URL's are discovered by doing some 'tricky' URL rewriting
@@ -718,18 +718,17 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         var nvclDataServiceUrl = baseUrl + '/NVCLDataServices/';
         var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
 
-        Ext.apply(rootCfg, {
+        return Ext.create('portal.layer.querier.BaseComponent',{
             tabTitle : 'Details',
-            plain : true,
             layout : 'fit',
             //We only have a single child which is our grid
             items : [{
                 xtype : 'grid',
                 title : 'Available Datasets',
-                border : false,
                 //This is for holding our dataset information
                 store : Ext.create('Ext.data.Store', {
                     model : 'portal.knownlayer.nvcl.Dataset',
+                    autoLoad : true,
                     proxy : {
                         type : 'ajax',
                         url : 'getNVCLDatasets.do',
@@ -743,15 +742,14 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             successProperty : 'success',
                             messageProperty : 'msg'
                         }
-                    },
-                    autoLoad : true
+                    }
                 }),
                 hideHeaders : true,
                 //Show just the dataset names
                 columns : [{
                     header : 'Name',
                     dataIndex : 'datasetName',
-                    width : 600,
+                    flex : 1,
                     renderer : function(value, p, record) {
                         return Ext.util.Format.format('<div><b>{0}</b></div>', value);
                     }
@@ -787,7 +785,8 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     }
                 },*/
                 buttonAlign : 'right',
-                buttons : [{
+                bbar : [{
+                    xtype : 'button',
                     iconCls : 'info',
                     text : 'Display',
                     handler : function(button, e) {
@@ -804,6 +803,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         }
                     }
                 },{
+                    xtype : 'button',
                     iconCls : 'download',
                     text : 'Download',
                     handler : function(button, e) {
@@ -822,7 +822,5 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 }]
             }]
         });
-
-        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

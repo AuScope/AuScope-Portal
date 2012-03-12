@@ -72,13 +72,12 @@ Ext.define('portal.layer.querier.wfs.KnownLayerParser', {
      * @param parentOnlineResource The OnlineResource Object belonging to CSWRecord that sourced featureId
      * @param rootCfg [Optional] An Object whose properties will be applied to the top level component parsed (a GenericParser.BaseComponent instance)
      */
-    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource, rootCfg) {
-        var editableConfig = Ext.apply({}, (rootCfg ? rootCfg : {}));
+    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
         var supportingFactory = this._getSupportingFactory(featureId, parentKnownLayer, parentOnlineResource);
         if (supportingFactory) {
-            return supportingFactory.parseKnownLayerFeature(featureId, parentKnownLayer, parentOnlineResource, editableConfig);
+            return supportingFactory.parseKnownLayerFeature(featureId, parentKnownLayer, parentOnlineResource);
         }
 
-        return new GenericParser.BaseComponent({});
+        return Ext.create('portal.layer.querier.BaseComponent', {});
     }
 });

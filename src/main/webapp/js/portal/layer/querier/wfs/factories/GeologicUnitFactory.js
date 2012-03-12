@@ -19,7 +19,7 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
     /**
      * Generates a simple tree panel that represents the specified node
      */
-    parseNode : function(domNode, wfsUrl, rootCfg) {
+    parseNode : function(domNode, wfsUrl) {
         //Lookup various fields via xPath
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var coords = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:occurrence/gsml:MappedFeature/gsml:shape/gml:Point');
@@ -35,7 +35,7 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
         var geoUnitFact = this;
 
         //Build our component
-        Ext.apply(rootCfg, {
+        return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
             layout : 'fit',
             items : [{
@@ -118,6 +118,5 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
                 }
             }]
         });
-        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

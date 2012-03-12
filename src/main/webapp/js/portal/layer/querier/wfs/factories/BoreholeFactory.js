@@ -19,7 +19,7 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
     /**
      * Generates a simple tree panel that represents the specified node
      */
-    parseNode : function(domNode, wfsUrl, rootCfg) {
+    parseNode : function(domNode, wfsUrl) {
         var bf = this;
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var allNames = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'gml:name');
@@ -47,7 +47,7 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
         }
 
         //Build our component
-        Ext.apply(rootCfg, {
+        return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
             layout : 'fit',
             items : [{
@@ -108,7 +108,5 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
                 }
             }]
         });
-
-        return Ext.create('portal.layer.querier.BaseComponent', rootCfg);
     }
 });

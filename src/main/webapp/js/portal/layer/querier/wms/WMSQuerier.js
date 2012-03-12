@@ -18,7 +18,7 @@ Ext.define('portal.layer.querier.wms.WMSQuerier', {
      *
      * Makes a WFS request, waits for the response and then parses it passing the results to callback
      */
-    query : function(queryTarget, rootConfig, callback) {
+    query : function(queryTarget, callback) {
         var latlng=new GLatLng(queryTarget.get('lat'),queryTarget.get('lng'));
         var layer=queryTarget.get('layer');
         var wmsOnlineResource=queryTarget.get('onlineResource');
