@@ -102,29 +102,52 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
                         //the underlying DOM for style changes referencing the 'display' CSS attribute.
                         //See: http://www.sencha.com/forum/showthread.php?186027-Ext-4.1-beta-3-Strange-layout-on-grids-rendered-into-elements-with-display-none&p=752916#post752916
                         afterrender : function(container) {
-                            console.warn('Implementing a workaround for Ext 4.1.0 - beta 3');
-
                             //Find the parent info window DOM
                             var el = container.getEl();
                             var parentDiv = el.findParentNode('div.gmnoprint', 10, true);
 
                             //Get all child div's (these are our tabs).
                             var tabElements = parentDiv.select('> div');
-                            //for (var i = 0; i < tabElements.length; i++) {
                             tabElements.each(function(tabEl) {
-                                var id = tabEl.id;
-                                tabEl.on('DOMAttrModified', function(e, t, eOpts) {
+                                //Now the div's we get will NOT have ID's HOWEVER Ext JS will
+                                //register new ID's in the underlying DOM as part of event
+                                //registration. To get around this we pass the underlying dom
+                                //to the event handler (using Ext.bind) and use that to lookup
+                                //the appropriate Ext.Element there (tabEl is a wrapper for tabDom
+                                //whose ID will NOT be updated when the DOM ID changes).
+                                tabEl.on('DOMAttrModified', Ext.bind(function(e, t, eOpts, tabDom) {
+                                    //There will be a ton of events flying through this handler
+                                    //So we need to filter the numbers down to relevant events
                                     if (e.type === "mousemove") {
                                         return;
                                     }
-                                    if (t.id !== tabEl.dom.id) {
+                                    if (t.id !== tabDom.id) {
                                         return;
                                     }
-                                    //This won't be conducive to 'good' performance but it's our only option.
-                                    for (var i = 0; i < params.baseComponents.length; i++) {
-                                        params.baseComponents[i].doLayout();
+                                    //Don't layout if the DIV is invisible
+                                    if (t.style['display'] === 'none') {
+                                        return;
                                     }
-                                });
+
+                                    var tabElement = Ext.get(tabDom.id);
+
+                                    //Find the container which belongs to t
+                                    for (var i = 0; i < params.baseComponents.length; i++) {
+                                        var container = params.baseComponents[i];
+                                        var containerElId = container.getEl().id;
+
+                                        //Only layout the child of the element firing the event (i.e. the tab
+                                        //which is visible)
+                                        var matchingElements = tabElement.select(Ext.util.Format.format(':has(#{0})', containerElId));
+                                        if (matchingElements.getCount() > 0) {
+                                            //Only perform the layout once for performance reasons
+                                            if (!container._portalTabLayout) {
+                                                container._portalTabLayout = true;
+                                                container.doLayout();
+                                            }
+                                        }
+                                    }
+                                }, this, [tabEl.dom], true));
                             });
                         }
                     }
@@ -138,6 +161,7 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
      */
     _handleWithQuery : function(queryTargets, mapWrapper) {
         //var loadMask = new Ext.LoadMask(mapWrapper.container.getEl(), {}); //For some reason LoadMask isn't designed to work with Ext.create
+        console.warn('Loadmask disabled for ExtJS 4.1 beta 3');
         var loadMask = null; //TODO: Disabled for testing with extjs 4 beta 3
         for (var i = 0; i < queryTargets.length; i++) {
             var queryTarget = queryTargets[i];
