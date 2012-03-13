@@ -53,7 +53,8 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
             items : [{
                 xtype : 'fieldset',
                 title : 'Borehole',
-                labelWidth: 75,
+                labelWidth : 75,
+                autoScroll : true,
                 items : [{
                     xtype : 'displayfield',
                     fieldLabel : 'Name',
@@ -98,7 +99,6 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
             }],
             buttonAlign : 'right',
             buttons : [{
-                xtype : 'button',
                 text : 'Download Borehole',
                 iconCls : 'download',
                 handler : function() {

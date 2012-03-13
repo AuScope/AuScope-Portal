@@ -43,7 +43,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 items           : []
             }]
         });
-        var tp = win.items.itemAt(0); // store a reference to our tab panel for easy access
+        var tp = win.items.getAt(0); // store a reference to our tab panel for easy access
 
         //This store is for holding log info
         var logStore = Ext.create('Ext.data.Store', {
@@ -60,7 +60,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     type : 'json',
                     root : 'data',
                     successProperty : 'success',
-                    messageProperty : 'msg',
+                    messageProperty : 'msg'
                 }
             }
         });
@@ -136,20 +136,21 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             id  : 'card-prev',
                             text: '< Previous',
                             disabled: true,
-                            handler: cardNav.createDelegate(this, [-100])
+                            handler: Ext.bind(cardNav, this, [-100])
                         },{
                             id  : 'card-next',
                             text: 'Next >',
-                            handler: cardNav.createDelegate(this, [100])
+                            handler: Ext.bind(cardNav, this, [100])
                         }]
                    });
                 }
 
                 //Add our scalars tab (this always exists
-                var CheckBox = new Ext.grid.CheckboxSelectionModel();
-                var scalarGrid = new Ext.grid.GridPanel({
+                var scalarGrid = Ext.create('Ext.grid.Panel', {
                     //This store will be loaded when this component renders
                     store : Ext.create('Ext.data.Store', {
+                        autoLoad : true,
+                        model : 'portal.knownlayer.nvcl.Log',
                         proxy : {
                             type : 'ajax',
                             url : 'getNVCLLogs.do',
@@ -161,90 +162,58 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 type : 'json',
                                 root : 'data',
                                 successProperty : 'success',
-                                messageProperty : 'msg',
+                                messageProperty : 'msg'
                             }
                         }
                     }),
-                    sm : CheckBox,
-                    autoExpandColumn : 'log-name-col',
+                    selModel : Ext.create('Ext.selection.CheckboxModel', {}),
                     id : 'nvcl-scalar-grid',
-                    height : 450,
-                    width : 200,
                     loadMask : true,
-                    columns : [
-                        CheckBox,
-                    {
-                        header: "ID", width: 50, dataIndex: 'LogID',
-                        sortable: true, hidden: true
-                    },{
-                        id: 'log-name-col',
-                        header: "Scalar", width: 100, dataIndex: 'logName',
-                        sortable: true
+                    plugins : [{
+                        ptype: 'celltips'
                     }],
-                    listeners : {
-                        //Load our store on render
-                        afterrender : function(grid) {
-                            grid.getStore().load();
-                        },
-                        //Setup tool tips
-                        render : function(grid) {
-                            var view = grid.getView();    // Capture the GridView.
-
-                            var autoWidth = !Ext.isIE6 && !Ext.isIE7;
-                            var width = autoWidth ? undefined : 250;
-
-                            scalarGrid.tip = new Ext.ToolTip({
-                                target: view.mainBody,    // The overall target element.
-                                delegate: '.x-grid3-row', // Each grid row causes its own seperate show and hide.
-                                trackMouse: true,         // Moving within the row should not hide the tip.
-                                renderTo: document.body,  // Render immediately so that tip.body can be referenced prior to the first show.
-                                autoWidth: autoWidth,
-                                width: width,
-                                listeners: {              // Change content dynamically depending on which element triggered the show.
-                                    beforeshow: function updateTipBody(tip) {
-                                        var grid = Ext.getCmp('nvcl-scalar-grid');
-                                        var store = grid.getStore();  // Capture the Store.
-                                        var view = grid.getView();    // Capture the GridView.
-                                        var rowIndex = view.findRowIndex(tip.triggerElement);
-                                        var record = store.getAt(rowIndex);
-
-                                        tip.body.dom.innerHTML = "Loading...";
-
-                                        //Load our vocab string asynchronously
-                                        var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(record.get('logName').replace(' ', '_'));
-                                        Ext.Ajax.request({
-                                            url:vocabsQuery,
-                                            success: function(pData, options) {
-                                            var pResponseCode=pData.status;
-                                            if(pResponseCode != 200) {
-                                                tip.body.dom.innerHTML = "ERROR: " + pResponseCode;
-                                                return;
-                                            }
-
-                                            var response = eval('(' + pData.responseText + ')');
-                                            if (!response.success) {
-                                                tip.body.dom.innerHTML = "ERROR: server returned error";
-                                                return;
-                                            }
-
-                                            //Update tool tip
-                                            if (response.data.definition && response.data.definition.length > 0)
-                                                tip.body.dom.innerHTML = response.data.definition;
-                                            else if (response.data.scopeNote && response.data.scopeNote.length > 0)
-                                                tip.body.dom.innerHTML = response.data.scopeNote;
-                                            else
-                                                tip.body.dom.innerHTML = 'N/A';
-                                          }});
+                    columns : [{
+                        id: 'log-name-col',
+                        header: 'Scalar',
+                        flex: 1,
+                        dataIndex: 'logName',
+                        sortable: true,
+                        hasTip : true,
+                        tipRenderer : function(value, record, column, tip) {
+                            //Load our vocab string asynchronously
+                            var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(record.get('logName').replace(' ', '_'));
+                            Ext.Ajax.request({
+                                url : vocabsQuery,
+                                success : function(pData, options) {
+                                    var pResponseCode = pData.status;
+                                    var updateTipText = function(tip, text) {
+                                        tip.body.dom.innerHTML = text;
+                                        tip.doLayout();
+                                    };
+                                    if(pResponseCode !== 200) {
+                                        updateTipText(tip, 'ERROR: ' + pResponseCode);
+                                        return;
                                     }
-                                    //TODO: Commenting this out for now as it causes js errors. Still need to
-                                    // test whether there is a better solution.
-                                    //hide : function(component) {
-                                    //    component.destroy();
-                                    //}
+
+                                    var response = Ext.JSON.decode(pData.responseText);
+                                    if (!response.success) {
+                                        updateTipText(tip, 'ERROR: server returned error');
+                                        return;
+                                    }
+
+                                    //Update tool tip
+                                    if (response.data.definition && response.data.definition.length > 0) {
+                                        updateTipText(tip, response.data.definition);
+                                    } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
+                                        updateTipText(tip, response.data.scopeNote);
+                                    } else {
+                                        updateTipText(tip, 'N/A');
+                                    }
                                 }
-                            });
-                        }
-                    }
+                           });
+                           return 'Loading...';
+                       }
+                    }]
                 });
 
                 // Scalars Tab
@@ -262,7 +231,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         // these are applied to columns
                         defaults:{
                             columnWidth : 0.5,
-                            layout      : 'form',
+                            layout      : 'anchor',
                             hideLabels  : true,
                             border      : false,
                             bodyStyle   : 'padding:10px',
@@ -272,17 +241,21 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         // Columns
                         items:[{ // column 1
                             // these are applied to fieldsets
-                            defaults:{xtype:'fieldset', layout:'form', anchor:'100%', autoHeight:true},
 
                             // fieldsets
                             items:[{
+                                xtype       : 'fieldset',
                                 title       : 'List of Scalars',
-                                defaultType : 'textfield',
+                                layout      : 'anchor',
+                                anchor      : '100%',
+                                //autoHeight  : true,
+                                height      : 500,
 
                                 // these are applied to fields
                                 defaults    : {anchor:'-5', allowBlank:false},
 
                                 // fields
+                                layout      : 'fit',
                                 items       : [scalarGrid]
                             }]
                         },{ // column 2
@@ -365,22 +338,26 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     var sHtml = '';
                                     var item_count = scalarGrid.getSelectionModel().getCount();
                                     var scalarForm = Ext.getCmp('scalarsForm').getForm();
+                                    var width = 300;
+                                    var height = 600;
 
                                     if (item_count > 0) {
-                                        var s = scalarGrid.getSelectionModel().getSelections();
+                                        var s = scalarGrid.getSelectionModel().getSelection();
                                         for(var i = 0, len = s.length; i < len; i++){
                                             sHtml +='<img src="';
                                             sHtml += 'getNVCLPlotScalar.do?logId=';
                                             sHtml += s[i].get('logId');
                                             sHtml += '&' + scalarForm.getValues(true);
-                                            sHtml += '&width=300';
-                                            sHtml += '&height=600';
+                                            sHtml += '&width=' + width;
+                                            sHtml += '&height=' + height;
                                             sHtml += '&serviceUrl=';
                                             sHtml += escape(nvclDataServiceUrl)
-                                            sHtml += '"/>';
+                                            sHtml += '" ';
+                                            sHtml += 'onload="Ext.getCmp(\'plWindow\').doLayout();"';
+                                            sHtml += '/>';
                                         }
 
-                                        var winPlot = new Ext.Window({
+                                        var winPlot = Ext.create('Ext.Window', {
                                             autoScroll  : true,
                                             border      : true,
                                             html        : sHtml,
@@ -388,7 +365,6 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                             layout      : 'fit',
                                             maximizable : true,
                                             modal       : true,
-                                            plain       : false,
                                             title       : 'Plot: ',
                                             autoHeight  : true,
                                             autoWidth   : true,
@@ -433,50 +409,60 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             layout          : 'fit',
             resizable       : false,
             modal           : true,
-            plain           : false,
             title           : 'Borehole Id:  '+ datasetName,
             height          : 400,
             width           : 500,
             items:[{
                 // Bounding form
-                id      :'nvclDownloadFrm',
-                xtype   :'form',
-                layout  :'form',
+                id      : 'nvclDownloadFrm',
+                xtype   : 'form',
                 frame   : true,
-
-                // these are applied to columns
-                defaults:{
-                    xtype: 'fieldset', layout: 'form'
-                },
 
                 // fieldsets
                 items   :[{
-                    title       :'Hint',
-                    defaultType :'textfield',
+                    xtype       : 'fieldset',
+                    layout      : 'anchor',
+                    title       : 'Hint',
 
                     // fields
                     items:[{
                         xtype  : 'box',
                         autoEl : {
                             tag  : 'div',
-                            html : 'This data is best viewed in TSG Viewer. Freely available from <a href="http://www.thespectralgeologist.com/tsg_viewer.htm">here</a>.'
+                            html : 'This data is best viewed in TSG Viewer. Freely available from <a target="_blank" href="http://www.thespectralgeologist.com/tsg_viewer.htm">here</a>.'
                         }
                     }]
                 },{
-                    xtype   :'hidden',
-                    name    :'datasetId', //name of the field sent to the server
+                    xtype   : 'hidden',
+                    name    : 'datasetId', //name of the field sent to the server
                     value   : datasetId  //value of the field
                 },{
+                    xtype           : 'fieldset',
+                    layout          : 'anchor',
                     id              : 'csvFldSet',
                     title           : 'Comma-separated values (CSV) file',
                     checkboxName    : 'csv',
                     checkboxToggle  : true,
                     collapsed       : true,
-                    buttonAlign     : 'right',
-                    buttons:[{
-                        text : 'Download',
-                        xtype: 'linkbutton',
-                        href : Ext.util.Format.format('getNVCLCSVDownload.do?serviceUrl={0}&datasetId={1}', escape(omUrl), datasetId)
+                    items:[{
+                        xtype : 'toolbar',
+                        border : false,
+                        plain : true,
+                        layout : {
+                            type : 'hbox',
+                            pack : 'end'
+                        },
+                        items : {
+                            text : 'Download',
+                            xtype : 'button',
+                            iconCls : 'download',
+                            handler : function() {
+                                portal.util.FileDownloader.downloadFile('getNVCLCSVDownload.do', {
+                                    serviceUrl : omUrl,
+                                    datasetId : datasetId
+                                });
+                            }
+                        }
                     }],
                     listeners: {
                         'expand' : {
@@ -488,15 +474,15 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         }
                     }
                 },{
+                    xtype           : 'fieldset',
                     id              : 'tsgFldSet',
                     title           : 'Spectral Geologist (TSG) data file',
                     checkboxName    : 'tsg',
                     checkboxToggle  : true,
-                    defaultType     : 'textfield',
                     bodyStyle       : 'padding: 0 0 0 50px',
                     items:[{
-                        id              : 'tsgEmailAddress',
                         xtype           : 'textfield',
+                        id              : 'tsgEmailAddress',
                         fieldLabel      : 'Email Address*',
                         value           : 'Your.Name@csiro.au',
                         name            : 'email',
@@ -516,76 +502,86 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             {boxLabel: 'mospic', name: 'mosaicPics', inputValue: 'true', checked: true},
                             {boxLabel: 'mappics', name: 'mapPics', inputValue: 'true', checked: true}
                         ]
-                    }],
-                    buttonAlign:'right',
-                    buttons:[{
-                        text: 'Check Status',
-                        handler: function() {
-                            var sEmail = Ext.getCmp('tsgEmailAddress').getValue();
-                            if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
-                                Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
-                                Ext.getCmp('tsgEmailAddress').markInvalid();
-                                return;
-                            } else {
-                                Ext.getCmp('omEmailAddress').setValue(sEmail);
-
-                                var winStat = new Ext.Window({
-                                    autoScroll  : true,
-                                    border      : true,
-                                    autoLoad    : Ext.util.Format.format('getNVCLTSGDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
-                                    id          : 'dwldStatusWindow',
-                                    layout      : 'fit',
-                                    modal       : true,
-                                    plain       : false,
-                                    title       : 'Download status: ',
-                                    height      : 400,
-                                    width       : 1200
-                                  });
-
-                                winStat.on('show',function(){
-                                    winStat.center();
-                                });
-                                winStat.show();
-                            }
-                        }
                     },{
-                        text: 'Download',
-                        handler: function(button) {
-                            var sUrl = '';
-                            var sEmail = Ext.getCmp('tsgEmailAddress').getValue();
-                            if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
-                                Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
-                                Ext.getCmp('tsgEmailAddress').markInvalid();
-                                return;
-                            } else {
-                                Ext.getCmp('omEmailAddress').setValue(sEmail);
-                                var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
-                                sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
-                                sUrl += 'getNVCLTSGDownload.do?';
-                                sUrl += downloadForm.getValues(true);
-                                sUrl += '&serviceUrl=' + escape(nvclDownloadServiceUrl);
-                                sUrl += '"></iframe>';
+                        xtype : 'toolbar',
+                        border : false,
+                        layout : {
+                            type : 'hbox',
+                            pack : 'end'
+                        },
+                        items : [{
+                            xtype : 'button',
+                            text: 'Check Status',
+                            iconCls : 'info',
+                            handler: function() {
+                                var sEmail = Ext.getCmp('tsgEmailAddress').getValue();
+                                if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
+                                    Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
+                                    Ext.getCmp('tsgEmailAddress').markInvalid();
+                                    return;
+                                } else {
+                                    Ext.getCmp('omEmailAddress').setValue(sEmail);
 
-                                var winDwld = new Ext.Window({
-                                    autoScroll  : true,
-                                    border      : true,
-                                    html        : sUrl,
-                                    id          : 'dwldWindow',
-                                    layout      : 'fit',
-                                    maximizable : true,
-                                    modal       : true,
-                                    plain       : false,
-                                    title       : 'Download confirmation: ',
-                                    height      : 200,
-                                    width       : 840
-                                  });
+                                    var winStat = new Ext.Window({
+                                        autoScroll  : true,
+                                        border      : true,
+                                        autoLoad    : Ext.util.Format.format('getNVCLTSGDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                        id          : 'dwldStatusWindow',
+                                        layout      : 'fit',
+                                        modal       : true,
+                                        plain       : false,
+                                        title       : 'Download status: ',
+                                        height      : 400,
+                                        width       : 1200
+                                      });
 
-                                winDwld.on('show',function(){
-                                    winDwld.center();
-                                });
-                                winDwld.show();
+                                    winStat.on('show',function(){
+                                        winStat.center();
+                                    });
+                                    winStat.show();
+                                }
                             }
-                        }
+                        },{
+                            xtype : 'button',
+                            iconCls : 'download',
+                            text: 'Download',
+                            handler: function(button) {
+                                var sUrl = '';
+                                var sEmail = Ext.getCmp('tsgEmailAddress').getValue();
+                                if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
+                                    Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
+                                    Ext.getCmp('tsgEmailAddress').markInvalid();
+                                    return;
+                                } else {
+                                    Ext.getCmp('omEmailAddress').setValue(sEmail);
+                                    var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
+                                    sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
+                                    sUrl += 'getNVCLTSGDownload.do?';
+                                    sUrl += downloadForm.getValues(true);
+                                    sUrl += '&serviceUrl=' + escape(nvclDownloadServiceUrl);
+                                    sUrl += '"></iframe>';
+
+                                    var winDwld = new Ext.Window({
+                                        autoScroll  : true,
+                                        border      : true,
+                                        html        : sUrl,
+                                        id          : 'dwldWindow',
+                                        layout      : 'fit',
+                                        maximizable : true,
+                                        modal       : true,
+                                        plain       : false,
+                                        title       : 'Download confirmation: ',
+                                        height      : 200,
+                                        width       : 840
+                                      });
+
+                                    winDwld.on('show',function(){
+                                        winDwld.center();
+                                    });
+                                    winDwld.show();
+                                }
+                            }
+                        }]
                     }],
                     listeners: {
                         'expand' : {
@@ -597,6 +593,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         }
                     }
                 },{
+                    xtype           : 'fieldset',
                     id              : 'omFldSet',
                     title           : 'Observations and Measurements',
                     checkboxName    : 'om',
@@ -612,80 +609,90 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         selectOnFocus : true,
                         allowBlank    : false,
                         anchor        : '-50'
-                    }],
-                    buttonAlign     : 'right',
-                    buttons:[{
-                        text    : 'Check Status',
-                        handler : function() {
-                            var sEmail = Ext.getCmp('omEmailAddress').getValue();
-                            if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
-                                Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
-                                Ext.getCmp('omEmailAddress').markInvalid();
-                                return;
-                            } else {
-                                Ext.getCmp('tsgEmailAddress').setValue(sEmail);
-                                var winStat = Ext.create('Ext.Window' , {
-                                    autoScroll  : true,
-                                    border      : true,
-                                    autoLoad    : Ext.util.Format.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
-                                    id          : 'omDwldStatusWindow',
-                                    layout      : 'fit',
-                                    modal       : true,
-                                    plain       : false,
-                                    title       : 'Download status: ',
-                                    height      : 400,
-                                    width       : 1200
-                                  });
-
-                                winStat.on('show',function(){
-                                    winStat.center();
-                                });
-                                winStat.show();
-                            }
-                        }
                     },{
-                        text : 'Download',
-                        handler: function(button) {
-                            var sUrl = '';
-                            var sEmail = Ext.getCmp('omEmailAddress').getValue();
-                            if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
-                                Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
-                                Ext.getCmp('omEmailAddress').markInvalid();
-                                return;
-                            } else {
-                                Ext.getCmp('tsgEmailAddress').setValue(sEmail);
-                                var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
-                                sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
-                                sUrl += 'getNVCLWFSDownload.do?';
-                                sUrl += 'boreholeId=sa.samplingfeaturecollection.' + datasetId;
-                                sUrl += '&omUrl=' + escape(omUrl);
-                                sUrl += '&serviceUrl=' + escape(nvclDownloadServiceUrl);
-                                sUrl += '&typeName=sa:SamplingFeatureCollection';
-                                sUrl += '&email=' + escape(sEmail);
-                                sUrl += '"></iframe>';
-                                //alert(sUrl);
+                        xtype : 'toolbar',
+                        border : false,
+                        layout : {
+                            type : 'hbox',
+                            pack : 'end'
+                        },
+                        items : [{
+                            xtype : 'button',
+                            text    : 'Check Status',
+                            iconCls : 'info',
+                            handler : function() {
+                                var sEmail = Ext.getCmp('omEmailAddress').getValue();
+                                if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
+                                    Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
+                                    Ext.getCmp('omEmailAddress').markInvalid();
+                                    return;
+                                } else {
+                                    Ext.getCmp('tsgEmailAddress').setValue(sEmail);
+                                    var winStat = Ext.create('Ext.Window' , {
+                                        autoScroll  : true,
+                                        border      : true,
+                                        autoLoad    : Ext.util.Format.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                        id          : 'omDwldStatusWindow',
+                                        layout      : 'fit',
+                                        modal       : true,
+                                        plain       : false,
+                                        title       : 'Download status: ',
+                                        height      : 400,
+                                        width       : 1200
+                                      });
 
-                                var winDwld = Ext.create('Ext.Window', {
-                                    autoScroll  : true,
-                                    border      : true,
-                                    //autoLoad  : sUrl,
-                                    html        : sUrl,
-                                    id          : 'dwldWindow',
-                                    layout      : 'fit',
-                                    maximizable : true,
-                                    modal       : true,
-                                    plain       : false,
-                                    title       : 'Download confirmation: ',
-                                    height      : 200,
-                                    width       : 840
-                                  });
-
-                                winDwld.on('show',function(){
-                                    winDwld.center();
-                                });
-                                winDwld.show();
+                                    winStat.on('show',function(){
+                                        winStat.center();
+                                    });
+                                    winStat.show();
+                                }
                             }
-                        }
+                        },{
+                            xtype : 'button',
+                            iconCls : 'download',
+                            text : 'Download',
+                            handler: function(button) {
+                                var sUrl = '';
+                                var sEmail = Ext.getCmp('omEmailAddress').getValue();
+                                if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
+                                    Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
+                                    Ext.getCmp('omEmailAddress').markInvalid();
+                                    return;
+                                } else {
+                                    Ext.getCmp('tsgEmailAddress').setValue(sEmail);
+                                    var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
+                                    sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
+                                    sUrl += 'getNVCLWFSDownload.do?';
+                                    sUrl += 'boreholeId=sa.samplingfeaturecollection.' + datasetId;
+                                    sUrl += '&omUrl=' + escape(omUrl);
+                                    sUrl += '&serviceUrl=' + escape(nvclDownloadServiceUrl);
+                                    sUrl += '&typeName=sa:SamplingFeatureCollection';
+                                    sUrl += '&email=' + escape(sEmail);
+                                    sUrl += '"></iframe>';
+                                    //alert(sUrl);
+
+                                    var winDwld = Ext.create('Ext.Window', {
+                                        autoScroll  : true,
+                                        border      : true,
+                                        //autoLoad  : sUrl,
+                                        html        : sUrl,
+                                        id          : 'dwldWindow',
+                                        layout      : 'fit',
+                                        maximizable : true,
+                                        modal       : true,
+                                        plain       : false,
+                                        title       : 'Download confirmation: ',
+                                        height      : 200,
+                                        width       : 840
+                                      });
+
+                                    winDwld.on('show',function(){
+                                        winDwld.center();
+                                    });
+                                    winDwld.show();
+                                }
+                            }
+                        }]
                     }],
                     listeners: {
                         'expand' : {
@@ -724,11 +731,11 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             //We only have a single child which is our grid
             items : [{
                 xtype : 'grid',
+                border : false,
                 title : 'Available Datasets',
                 //This is for holding our dataset information
                 store : Ext.create('Ext.data.Store', {
                     model : 'portal.knownlayer.nvcl.Dataset',
-                    autoLoad : true,
                     proxy : {
                         type : 'ajax',
                         url : 'getNVCLDatasets.do',
@@ -751,12 +758,12 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     dataIndex : 'datasetName',
                     flex : 1,
                     renderer : function(value, p, record) {
-                        return Ext.util.Format.format('<div><b>{0}</b></div>', value);
+                        return Ext.util.Format.format('<div class="x-selectable"><b>{0}</b><br/><span style="color:#555;">{1}</span></div>', value, record.get('datasetId'));
                     }
                 }],
                 listeners : {
                     //When our grid is rendered - load the datastore and select the first row
-                    /*afterrender : function(grid) {
+                    afterrender : function(grid) {
                         grid.getStore().load({
                             callback : function() {
                                 var sm = grid.getSelectionModel();
@@ -765,33 +772,17 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 }
                             }
                         });
-                    }*/
-                },
-                /*viewConfig : {
-                    forceFit : true,
-                    enableRowBody:true,
-                    showPreview:true,
-                    getRowClass : function(record, rowIndex, p, ds){
-                        if(this.showPreview){
-                            var description = record.data.datasetId;
-                            var maxLength = 190;
-                            if (description.length > maxLength) {
-                                description = description.substring(0, maxLength) + '...';
-                            }
-                            p.body = '<p style="margin:5px 10px 10px 25px;color:#555;">'+description+'</p>';
-                            return 'x-grid3-row-expanded';
-                        }
-                        return 'x-grid3-row-collapsed';
                     }
-                },*/
+                },
                 buttonAlign : 'right',
-                bbar : [{
+                buttons : [{
                     xtype : 'button',
                     iconCls : 'info',
                     text : 'Display',
                     handler : function(button, e) {
                         var grid = button.ownerCt.ownerCt;
-                        var selectedRec = grid.getSelectionModel().getSelected();
+                        var selection = grid.getSelectionModel().getSelection();
+                        var selectedRec = (selection && (selection.length > 0)) ? selection[0] : null;
                         if (selectedRec) {
                             me.showDetailsWindow(selectedRec.get('datasetId'),
                                     selectedRec.get('datasetName'),
@@ -808,7 +799,8 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     text : 'Download',
                     handler : function(button, e) {
                         var grid = button.ownerCt.ownerCt;
-                        var selectedRec = grid.getSelectionModel().getSelected();
+                        var selection = grid.getSelectionModel().getSelection();
+                        var selectedRec = (selection && (selection.length > 0)) ? selection[0] : null;
                         if (selectedRec) {
                             me.showDownloadWindow(selectedRec.get('datasetId'),
                                     selectedRec.get('datasetName'),
