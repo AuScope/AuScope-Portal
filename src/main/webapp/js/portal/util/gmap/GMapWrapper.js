@@ -132,7 +132,13 @@ Ext.define('portal.util.gmap.GMapWrapper', {
             this.renderToContainer(this.container);
         }
 
-        this.layerStore.on('add', this._onLayerStoreAdd, this);
+        console.warn('Artificial delay to overcome Ext JS 4.1 beta 3 issues');
+        this.layerStore.on('add', this._onLayerStoreAdd, this, {
+            delay : 1   //There is an issue with grids adding responding to
+                        //data store change events before the constructed row is
+                        //ready for use (hence this artificial delay)
+        });
+
         this.layerStore.on('remove', this._onLayerStoreRemove, this);
     },
 
@@ -378,5 +384,47 @@ Ext.define('portal.util.gmap.GMapWrapper', {
      */
     getMapSizeInPixels : function() {
         return this.map.getSize();
+    },
+
+    /**
+     * Returns a portal.util.gmap.TileInformation representing information about a particular
+     * point on the map (based on the current map port)
+     *
+     * @param latitude Number
+     * @param longitude Number
+     */
+    getTileInformation : function(latitude, longitude) {
+        var info = Ext.create('portal.util.gmap.TileInformation');
+
+        var zoom = this.map.getZoom();
+        var mapType = this.map.getCurrentMapType();
+
+        var tileSize = mapType.getTileSize();
+        info.setWidth(tileSize);
+        info.setHeight(tileSize);
+
+        var currentProj = mapType.getProjection();
+        var point = currentProj.fromLatLngToPixel(new GLatLng(latitude, longitude),zoom);
+        var tile = {
+            x : Math.floor(point.x / tileSize),
+            y : Math.floor(point.y / tileSize)
+        };
+
+        var sw = currentProj.fromPixelToLatLng(new GPoint(tile.x*tileSize, (tile.y+1)*tileSize), zoom);
+        var ne = currentProj.fromPixelToLatLng(new GPoint((tile.x+1)*tileSize, tile.y*tileSize), zoom);
+
+        info.setTileBounds(Ext.create('portal.util.BBox', {
+            northBoundLatitude : ne.lat(),
+            southBoundLatitude : sw.lat(),
+            eastBoundLongitude : ne.lng(),
+            westBoundLongitude : sw.lng()
+        }));
+
+        info.setOffset({
+            x : point.x % tileSize,
+            y : point.y % tileSize
+        });
+
+        return info;
     }
 });

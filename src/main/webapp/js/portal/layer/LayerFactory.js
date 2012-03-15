@@ -117,11 +117,21 @@ Ext.define('portal.layer.LayerFactory', {
     _generateQuerier : function(wfsResources, wmsResources) {
         if (wfsResources.length > 0) {
             return Ext.create('portal.layer.querier.wfs.WFSQuerier', {
-                rootCfg : {}
+                map : this.map
             });
-        }else{
+        } else {
+            //WMS may mean Geotransects
+            for (var i = 0; i < wmsResources.length; i++) {
+                if (wmsResources[i].get('name') === 'gt:AuScope_Land_Seismic_gda94') {
+                    return Ext.create('portal.layer.querier.wms.GeotransectQuerier', {
+                        map : this.map
+                    });
+                }
+            }
+
+            //Or just the plain old WMS querier
             return Ext.create('portal.layer.querier.wms.WMSQuerier',{
-                rootCfg: {}
+                map : this.map
             });
         }
 

@@ -31,14 +31,14 @@ Ext.define('portal.csw.CSWRecord', {
      */
     containsKeywords : function(str) {
 
-        var keywords=str;
-        if(!(str instanceof Array)){
-           keywords=[str];
+        var keywords = str;
+        if(!Ext.isArray(str)) {
+           keywords = [str];
         }
 
-        for(var j=0;j<keywords.length;j++){
+        for (var j=0;j<keywords.length; j++) {
             var descriptiveKeywords = this.get('descriptiveKeywords');
-            for(var i=0; i<descriptiveKeywords.length; i++) {
+            for (var i=0; i<descriptiveKeywords.length; i++) {
                 if(descriptiveKeywords[i] == keywords[j]) {
                     return true;
                 }

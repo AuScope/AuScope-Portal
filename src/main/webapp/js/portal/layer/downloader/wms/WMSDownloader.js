@@ -85,7 +85,7 @@ Ext.define('portal.layer.downloader.wms.WMSDownloader', {
                    });
 
                    //This is the WMS request URL (we will be proxying it through our local zipping proxy)
-                   var wmsRequest = portal.util.URL.join(wmsResource.get('url'), queryString);
+                   var wmsRequest = Ext.urlAppend(wmsResource.get('url'), queryString);
 
                    //Pass the WMS request to our zipping proxy
                    portal.util.FileDownloader.downloadFile('downloadDataAsZip.do', {

@@ -42,8 +42,8 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
     _finishDownloadManagerResponse : function(markerList, overlayList) {
         //If we haven't had any data come back yet from another response (and we have data now)
         //update the boolean indicating that we've had data
-        if (markerList && overlayList && !this.getHasData()) {
-            this.setHasData((markerList.length > 0) || (overlayList.length > 0));
+        if (markerList || overlayList) {
+            this.hasData = (markerList.length > 0) || (overlayList.length > 0);
         }
 
         this.currentRequestCount--;

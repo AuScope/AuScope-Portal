@@ -11,12 +11,11 @@
 Ext.define('portal.layer.querier.Querier', {
     extend: 'Ext.util.Observable',
 
+    map : null, //instance of portal.util.gmap.GMapWrapper for use by subclasses
 
     constructor: function(config){
 
-        // Copy configured listeners into *this* object so that the base class's
-        // constructor will add them.
-        this.listeners = config.listeners;
+        this.map = config.map;
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments)

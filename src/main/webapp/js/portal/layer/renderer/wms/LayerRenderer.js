@@ -44,8 +44,8 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
             this.overlayManager.addOverlay(new GTileLayerOverlay(tileLayer));
         }
 
+        this.hasData = true;
         this.fireEvent('renderfinished', this);
-        this.setHasData(true);
     },
 
     /**

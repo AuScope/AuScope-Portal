@@ -38,24 +38,34 @@ Ext.define('portal.knownlayer.KnownLayer', {
         return ors;
     },
 
+    /**
+     * Given a keyword, search through every portal.csw.CSWRecord contained by this KnownLayer and return
+     * an Array of portal.csw.CSWRecord objects that have the specified keyword
+     * @param keyword String keyword or an Array of strings
+     */
     getCSWRecordsByKeywords : function(keyword){
         //Filter our results
         var results = [];
-        var cswRecords=this.get('cswRecords');
-        for(var i=0; i < cswRecords.length;i++){
-            if(cswRecords[i].containsKeywords(keyword)){
+        var cswRecords = this.get('cswRecords');
+        for (var i = 0; i < cswRecords.length; i++){
+            if (cswRecords[i].containsKeywords(keyword)) {
                 results.push(cswRecords[i]);
             }
         }
         return results;
     },
 
+    /**
+     * Similar to getCSWRecordsByKeywords but instead sources portal.csw.CSWRecord objects
+     * from the 'relatedRecords' property of this known layer
+     * @param keyword String keyword or an Array of strings
+     */
     getRelatedCSWRecordsByKeywords : function(keyword){
         //Filter our results
         var results = [];
-        var cswRecords=this.get('relatedRecords');
-        for(var i=0; i < cswRecords.length;i++){
-            if(cswRecords[i].containsKeywords(keyword)){
+        var cswRecords = this.get('relatedRecords');
+        for (var i = 0; i < cswRecords.length; i++){
+            if (cswRecords[i].containsKeywords(keyword)) {
                 results.push(cswRecords[i]);
             }
         }
