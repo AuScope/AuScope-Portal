@@ -5,6 +5,7 @@ Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
     extend : 'Ext.util.Observable',
 
     //Namespace Constants
+    XMLNS_ER : 'urn:cgi:xmlns:GGIC:EarthResource:1.1',
     XMLNS_GSML_2 : 'urn:cgi:xmlns:CGI:GeoSciML:2.0',
     XMLNS_GML : 'http://www.opengis.net/gml',
     XMLNS_SA : 'http://www.opengis.net/sampling/1.0',
@@ -56,13 +57,40 @@ Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
      */
     parseNode : portal.util.UnimplementedFunction,
 
+
+    /**
+     * Filters an array of DOM nodes based on the value of an xPath for each node
+     * @param nodeList an array of DOM nodes
+     * @param xPath String based xPath expression
+     * @param value String based comparison value
+     */
+    _filterNodesWithXPath : function(nodeList, xPath, value) {
+        var filteredNodes = [];
+        for (var i = 0; i < nodeList.length; i++) {
+            if (portal.util.xml.SimpleXPath.evaluateXPathString(nodeList[i], xPath) === value) {
+                filteredNodes.push(nodeList[i]);
+            }
+        }
+        return filteredNodes;
+    },
+
+    /**
+     * Makes a HTML string containing an Anchor element with the specified content.
+     * The anchor element will be configured to open a WFS Popup window on click that gets
+     * data from the specified URL
+     */
+    _makeWfsUriPopupHtml : function(uri, content, qtip) {
+        return Ext.util.Format.format('<a href="#" qtip="{2}" onclick="var w=window.open(\'wfsFeaturePopup.do?url={0}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{1}</a>', uri, content, qtip ? qtip : '');
+    },
+
     /**
      * Makes a HTML string containing an Anchor element with the specified content.
      * The anchor element will be configured to open a WFS Popup window on click that gets
      * data from the specified URL
      */
     _makeWFSPopupHtml : function(wfsUrl, typeName, featureId, content, qtip) {
-        return Ext.util.Format.format('<a href="#" qtip="{4}" onclick="var w=window.open(\'wfsFeaturePopup.do?url={0}&typeName={1}&featureId={2}\',\'AboutWin\',\'toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=820\');w.focus();return false;">{3}</a>',escape(wfsUrl), escape(typeName), escape(featureId), content, qtip ? qtip : '');
+        var url = Ext.util.Format.format('{0}&typeName={1}&featureId={2}', wfsUrl, typeName, featureId);
+        return this._makeWfsUriPopupHtml(wfsUrl, url, content, qtip);
     },
 
     /**

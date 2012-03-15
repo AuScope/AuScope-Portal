@@ -16,6 +16,8 @@ Ext.define('portal.layer.querier.wfs.Parser', {
         this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', cfg));
         this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.SamplingFeatureCollectionFactory', cfg));
         this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.BoreholeFactory', cfg));
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.MappedFeatureFactory', cfg));
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory', cfg));
         this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.SimpleFactory', cfg));//The simple factory should always go last
 
         this.listeners = config.listeners;

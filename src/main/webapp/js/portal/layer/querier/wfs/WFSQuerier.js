@@ -63,22 +63,23 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
                     return;
                 }
 
-                // Load our xml string into DOM
-                var xmlString = jsonResponse.data.gml;
-                var xmlDocument = portal.util.xml.SimpleDOM.parseStringToDOM(xmlString);
-                if(xmlDocument == null) {
+                // Load our xml string into DOM, extract the first feature
+                var xmlDocument = portal.util.xml.SimpleDOM.parseStringToDOM(jsonResponse.data.gml);
+                if (!xmlDocument) {
                     callback(me, [me._generateErrorComponent('Your web browser doesn\'t seem to support any form of XML to DOM parsing.')], queryTarget);
                     return;
                 }
-
-                //Skip the opening containing elements (as they are constant for WFS)
-                var featureMembers = xmlDocument.documentElement.childNodes[0];
-                if (featureMembers.childNodes.length === 0) {
+                var featureMemberNodes = portal.util.xml.SimpleDOM.getMatchingChildNodes(xmlDocument.documentElement, 'http://www.opengis.net/gml', 'featureMember');
+                if (featureMemberNodes.length === 0) {
+                    featureMemberNodes = portal.util.xml.SimpleDOM.getMatchingChildNodes(xmlDocument.documentElement, 'http://www.opengis.net/gml', 'featureMembers');
+                }
+                if (featureMemberNodes.length === 0 || featureMemberNodes[0].childNodes.length === 0) {
                     //we got an empty response - likely because the feature ID DNE.
                     callback(me, [me._generateErrorComponent(Ext.util.Format.format('The remote service returned no data for feature id \"{0}\"', id))], queryTarget);
                     return;
                 }
-                var wfsResponseRoot = featureMembers.childNodes[0];
+                var wfsResponseRoot = featureMemberNodes[0].childNodes[0];
+
 
                 //Parse our response into a number of GUI components, pass those along to the callback
                 var allComponents = [];

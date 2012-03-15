@@ -63,10 +63,10 @@
         <constructor-arg name="id" value="erml-mine"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.server.web.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="er:Mine"/>
+                <constructor-arg name="featureTypeName" value="er:MiningFeatureOccurrence"/>
                 <property name="relatedFeatureTypeNames">
                     <list>
-                        <value>er:MiningFeatureOccurrence</value>
+                        <value>er:Mine</value>
                         <value>gsml:MappedFeature</value>
                     </list>
                 </property>
@@ -96,11 +96,11 @@
         <constructor-arg name="id" value="erml-mineraloccurrence"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.server.web.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="er:MineralOccurrence"/>
+                <constructor-arg name="featureTypeName" value="gsml:MappedFeature"/>
                 <property name="relatedFeatureTypeNames">
                     <list>
                         <value>er:Commodity</value>
-                        <value>gsml:MappedFeature</value>
+                        <value>er:MineralOccurrence</value>
                     </list>
                 </property>
             </bean>
@@ -129,10 +129,10 @@
         <constructor-arg name="id" value="erml-miningactivity"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.server.web.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="er:MiningActivity"/>
+                <constructor-arg name="featureTypeName" value="er:MiningFeatureOccurrence"/>
                 <property name="relatedFeatureTypeNames">
                     <list>
-                        <value>er:MiningFeatureOccurence</value>
+                        <value>er:MiningActivity</value>
                         <value>gsml:MappedFeature</value>
                     </list>
                 </property>
