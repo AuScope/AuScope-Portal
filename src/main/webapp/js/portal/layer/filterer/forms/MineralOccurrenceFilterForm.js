@@ -40,7 +40,6 @@ Ext.define('portal.layer.filterer.forms.MineralOccurrenceFilterForm', {
                 bodyStyle: 'padding:0px',
                 items :[{
                     xtype : 'combo',
-                    tpl: '<tpl for="."><div ext:qtip="{label}" class="x-combo-list-item">{label}</div></tpl>',
                     anchor: '100%',
                     name: 'commodityNameDisplayed', /* this just returns the values from displayField! */
                     hiddenName: 'commodityName',    /* this returns the values from valueField! */

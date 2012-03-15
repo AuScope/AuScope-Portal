@@ -12,8 +12,13 @@ Ext.define('portal.layer.filterer.forms.MiningActivityFilterForm', {
             fields : ['urn', 'label'],
             proxy : {
                 type : 'ajax',
-                url : 'getAllCommodities.do'
-            }
+                url : 'getAllCommodities.do',
+                reader : {
+                    type : 'array',
+                    root : 'data'
+                }
+            },
+            autoLoad : true
         });
 
         Ext.apply(config, {
@@ -38,20 +43,20 @@ Ext.define('portal.layer.filterer.forms.MiningActivityFilterForm', {
                                 '</span>',
                     name: 'mineName'
                 },{
-                    xtype: 'combo',
-                    tpl: '<tpl for="."><div ext:qtip="{label}" class="x-combo-list-item">{label}</div></tpl>',
+                    xtype : 'combo',
                     anchor: '100%',
                     name: 'producedMaterialDisplayed', /* this just returns the values from displayField! */
-                    hiddenName: 'producedMaterial',         /* this returns the values from valueField! */
+                    hiddenName: 'producedMaterial',    /* this returns the values from valueField! */
                     fieldLabel: 'Produced Material',
                     labelAlign: 'right',
                     forceSelection: true,
-                    mode: 'local',
+                    queryMode: 'local',
                     store: commodityStore,
                     triggerAction: 'all',
                     typeAhead: true,
+                    typeAheadDelay: 500,
                     displayField:'label',   /* change tpl field to this value as well! */
-                    valueField:'label'
+                    valueField:'urn'
                 },{
                     xtype: 'datefield',
                     fieldLabel: '<span qtip="Activity which start AFTER this date">' +
