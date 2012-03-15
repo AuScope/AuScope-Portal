@@ -65,6 +65,8 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
         }
         if (maxFeatures) {
             params.maxFeatures = maxFeatures;
+        } else {
+            params.maxFeatures = 0;
         }
         return params;
     },
@@ -111,24 +113,50 @@ Ext.define('portal.layer.renderer.wfs.FeatureDownloadManager', {
             }
 
             if (jsonResponse.data > this.featureSetSizeThreshold) {
-                var win = null;
                 var callingInstance = this;
 
                 //If we have too many features, tell the user
-                Ext.MessageBox.show({
-                    buttons:{yes: String.format('Display {0} features', jsonResponse.data), no:'Abort operation'},
-                    fn:function (buttonId) {
-                        if (buttonId == 'yes') {
-                            callingInstance._doDownload(callingInstance._visibleMapBounds);
-                        } else if (buttonId == 'no') {
-                            callingInstance.fireEvent('cancelled', callingInstance);
-                        }
-                    },
+                var win = Ext.create('Ext.window.Window', {
+                    width : 600,
+                    height : 150,
+                    closable : false,
                     modal : true,
-                    msg : String.format('<p>You are about to display <b>{0}</b> features, doing so could make the portal run extremely slowly. Would you still like to continue?</p><br/><p>Alternatively you can abort this operation, adjust your zoom/filter and then try again.</p>', jsonResponse.data),
-                    title : 'Warning: Large feature set'
+                    title : 'Warning: Large feature set',
+                    layout : 'fit',
+                    items : [{
+                        xtype : 'component',
+                        autoEl : {
+                            tag: 'span',
+                            html : Ext.util.Format.format('<p>You are about to display <b>{0}</b> features, doing so could make the portal run extremely slowly. Would you still like to continue?</p><br/><p>Alternatively you can abort this operation, adjust your zoom/filter and then try again.</p>', jsonResponse.data)
+                        },
+                        cls : 'ext-mb-text'
+                    }],
+                    dockedItems : [{
+                        xtype : 'toolbar',
+                        dock : 'bottom',
+                        ui : 'footer',
+                        layout : {
+                            type : 'hbox',
+                            pack : 'center'
+                        },
+                        items : [{
+                            xtype : 'button',
+                            text : Ext.util.Format.format('Display {0} features', jsonResponse.data),
+                            handler : function(button) {
+                                callingInstance._doDownload(callingInstance._visibleMapBounds);
+                                button.ownerCt.ownerCt.close();
+                            }
+                        },{
+                            xtype : 'button',
+                            text : 'Abort operation',
+                            handler : function(button) {
+                                callingInstance.fireEvent('cancelled', callingInstance);
+                                button.ownerCt.ownerCt.close();
+                            }
+                        }]
+                    }]
                 });
-
+                win.show();
             } else {
                 //If we have an acceptable number of records, this is how we shall proceed
                 this._doDownload(this.visibleMapBounds);

@@ -33,16 +33,16 @@ Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
         rootNode.expanded = true;
 
         // Continuously expand child nodes until we hit a node with
-        // something "interesting"
-        if (rootNode.childNodes.length == 1) {
-            var childNode = rootNode.childNodes[0];
+        // something "interesting" defined as a node with more than 1 child
+        if (rootNode.children.length == 1) {
+            var childNode = rootNode.children[0];
             while (childNode) {
                 childNode.expanded = true;
 
-                if (childNode.childNodes.length > 1) {
+                if (childNode.children.length > 1) {
                     break;
                 } else {
-                    childNode = childNode.childNodes[0];
+                    childNode = childNode.children[0];
                 }
             }
         }
@@ -62,15 +62,20 @@ Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
                 iconCls : 'download',
                 handler : function() {
                     var getXmlUrl = sf._makeFeatureRequestUrl(wfsUrl, domNode.nodeName, gmlId);
-                    var url = 'downloadGMLAsZip.do?serviceUrls=' + escape(getXmlUrl);
-                    FileDownloader.downloadFile(url);
+                    portal.util.FileDownloader.downloadFile('downloadGMLAsZip.do',{
+                        serviceUrls : getXmlUrl
+                    });
                 }
             }]
          });
     },
 
     /**
-     * This is for creating a Ext.tree.TreeNode from a DOM Node
+     * This is for creating a Node Objects from a DOM Node in the form
+     * {
+     *  text : String
+     *  leaf : Boolean
+     * }
      */
     _createTreeNode : function(documentNode) {
         var treeNode = null;
@@ -79,9 +84,11 @@ Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
         if (portal.util.xml.SimpleDOM.isLeafNode(documentNode)) {
             var textContent = portal.util.xml.SimpleDOM.getNodeTextContent(documentNode);
 
-            treeNode = new Ext.tree.TreeNode( {
-                text : documentNode.tagName + " = " + textContent
-            });
+            treeNode = {
+                text : documentNode.tagName + " = " + textContent,
+                children : [],
+                leaf: true
+            };
         } else { // we have a parent node
             var parentName = documentNode.tagName;
             if (documentNode.attributes.length > 0) {
@@ -92,9 +99,11 @@ Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
                 }
                 parentName += ')';
             }
-            treeNode = new Ext.tree.TreeNode( {
-                text : parentName
-            });
+            treeNode = {
+                text : parentName,
+                children : [],
+                leaf: true
+            };
         }
 
         return treeNode;
@@ -109,7 +118,8 @@ Ext.define('portal.layer.querier.wfs.factories.SimpleFactory', {
         Ext.each(xmlDocNode.childNodes, function(docNodeChild) {
             if (docNodeChild.nodeType == portal.util.xml.SimpleDOM.XML_NODE_ELEMENT) {
                 var treeChildNode = this._createTreeNode(docNodeChild);
-                treeNode.appendChild(treeChildNode);
+                treeNode.leaf = false;
+                treeNode.children.push(treeChildNode);
                 nodes.push(treeNode);
                 this._parseXmlTree(docNodeChild, treeChildNode);
             }

@@ -44,8 +44,8 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
             width : 550,
             height : 200,
             layout : {
-                type : 'vbox',
-                align : 'stretch'
+                type : 'anchor'
+                //align : 'stretch'
             },
             buttons : [{
                text : 'Download',
@@ -74,17 +74,21 @@ Ext.define('portal.layer.downloader.wfs.WFSDownloader', {
             }],
             items : [{
                 xtype : 'label',
+                anchor : '100%',
                 style : 'font-size: 12px;',
                 text : 'The portal will make a download request on your behalf and return the results in a ZIP archive. How would you like the portal to filter your download?'
             },{
                 xtype : 'fieldset',
+                anchor : '100%',
                 layout : 'fit',
-                flex : 1,
                 border : 0,
                 items : [{
                     //Our radiogroup can see its item list vary according to the presence of bounding boxes
                     xtype : 'radiogroup',
-                    columns : [0.99, 18],
+                    //Forced to use fixed width columns
+                    //see: http://www.sencha.com/forum/showthread.php?187933-Ext-4.1-beta-3-Incorrect-layout-on-Radiogroup-with-columns
+                    //columns : [0.99, 18],
+                    columns : [500, 18],
                     listeners : {
                         change : Ext.bind(this._handleRadioChange, this, [currentlyVisibleBBox, originallyVisibleBBox], true)
                     },
