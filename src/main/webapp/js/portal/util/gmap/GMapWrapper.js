@@ -426,5 +426,35 @@ Ext.define('portal.util.gmap.GMapWrapper', {
         });
 
         return info;
+    },
+
+    /**
+     * Converts a latitude/longitude into a pixel coordinate based on the
+     * on the current viewport
+     *
+     * returns an object in the form
+     * {
+     *  x : number - offset in x direction
+     *  y : number - offset in y direction
+     * }
+     *
+     * @param latitude Number
+     * @param longitude Number
+     */
+    getPixelFromLatLng : function(latitude, longitude) {
+        var latLng = new GLatLng(latitude, longitude);
+        return this.map.fromLatLngToContainerPixel(latLng);
+    },
+
+    /**
+     * Opens a context menu on the map at the specified coordinates
+     *
+     * @param latitude Number
+     * @param longitude Number
+     * @param menu Ext.menu.Menu that will be shown
+     */
+    showContextMenuAtLatLng : function(latitude, longitude, menu) {
+        var pixel = this.getPixelFromLatLng(latitude, longitude);
+        menu.showAt(this.container.x + pixel.x, this.container.y + pixel.y);
     }
 });

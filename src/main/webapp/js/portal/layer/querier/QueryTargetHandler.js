@@ -178,8 +178,54 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
      * which query target they meant
      */
     _handleWithSelection : function(queryTargets, mapWrapper) {
-        //TODO:
-        alert('TODO - handle overlapping polygons/markers')
+        //Build a list of menu item objects from our query targets
+        var items = [];
+        var lat = 0;
+        var lng = 0;
+        for (var i = 0; i < queryTargets.length; i++) {
+            var cswRecord = queryTargets[i].get('cswRecord');
+            var onlineResource = queryTargets[i].get('onlineResource');
+            if (!cswRecord) {
+                continue;
+            }
+
+            lat = queryTargets[i].get('lat');
+            lng = queryTargets[i].get('lng');
+
+            var shortTitle = cswRecord.get('name');
+            var maxTitleLength = 90;
+            if (onlineResource && onlineResource.get('name')) {
+                shortTitle += ' - ' + onlineResource.get('name');
+            }
+            if(shortTitle.length > maxTitleLength) {
+                shortTitle = shortTitle.substr(0, maxTitleLength) + "...";
+            }
+
+            items.push({
+                text : shortTitle,
+                queryTarget : queryTargets[i],
+                listeners : {
+                    click : Ext.bind(function(queryTarget, mapWrapper) {
+                        this._handleWithQuery([queryTarget], mapWrapper);
+                    }, this, [queryTargets[i], mapWrapper])
+                }
+            });
+        }
+
+        //If we couldn't make any menu items, no point in proceeding
+        if (items.length === 0) {
+            return;
+        }
+
+        var menu = Ext.create('Ext.menu.Menu', {
+            id : 'querytargethandler-selection-menu',
+            autoWidth : true,
+            margin: '0 0 10 0',
+            enableScrolling: true,
+            items : items
+        });
+
+        mapWrapper.showContextMenuAtLatLng(lat, lng, menu);
     },
 
     /**
@@ -194,6 +240,12 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
      * @param queryTargets Array of portal.layer.querier.QueryTarget objects
      */
     handleQueryTargets : function(mapWrapper, queryTargets) {
+        //Ensure subsequent clicks destroy the popup menu
+        var menu = Ext.getCmp('querytargethandler-selection-menu');
+        if (menu) {
+            menu.destroy();
+        }
+
         if (!queryTargets || queryTargets.length === 0) {
             return;
         }
