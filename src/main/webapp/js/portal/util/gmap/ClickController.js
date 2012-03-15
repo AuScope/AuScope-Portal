@@ -12,6 +12,7 @@ Ext.define('portal.util.gmap.ClickController', {
             var id = portal.util.gmap.GMapWrapper.getOverlayId(marker);
             var onlineResource = portal.util.gmap.GMapWrapper.getOverlayOnlineResource(marker);
             var layer = portal.util.gmap.GMapWrapper.getOverlayLayer(marker);
+            var cswRecord = portal.util.gmap.GMapWrapper.getOverlayCSWRecord(marker);
 
             return [Ext.create('portal.layer.querier.QueryTarget', {
                 id : id,
@@ -19,6 +20,7 @@ Ext.define('portal.util.gmap.ClickController', {
                 lng : overlayLatLng.lng(),
                 onlineResource : onlineResource,
                 layer : layer,
+                cswRecord : cswRecord,
                 explicit : true
             })];
         },
@@ -45,6 +47,7 @@ Ext.define('portal.util.gmap.ClickController', {
                         var id = portal.util.gmap.GMapWrapper.getOverlayId(overlayToTest);
                         var onlineResource = portal.util.gmap.GMapWrapper.getOverlayOnlineResource(overlayToTest);
                         var layer = portal.util.gmap.GMapWrapper.getOverlayLayer(overlayToTest);
+                        var cswRecord = portal.util.gmap.GMapWrapper.getOverlayCSWRecord(overlayToTest);
 
                         queryTargets.push(Ext.create('portal.layer.querier.QueryTarget', {
                             id : id,
@@ -52,6 +55,7 @@ Ext.define('portal.util.gmap.ClickController', {
                             lng : point.lng(),
                             onlineResource : onlineResource,
                             layer : layer,
+                            cswRecord : cswRecord,
                             explicit : true
                         }));
                     }
@@ -84,6 +88,7 @@ Ext.define('portal.util.gmap.ClickController', {
                             lng : latlng.lng(),
                             cswRecord   : cswRecords[z],
                             onlineResource : wmsResources[j],
+                            cswRecord : cswRecords[z],
                             layer : layer,
                             explicit : false
                         }));

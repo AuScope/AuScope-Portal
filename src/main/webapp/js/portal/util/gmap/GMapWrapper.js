@@ -37,7 +37,7 @@ Ext.define('portal.util.gmap.GMapWrapper', {
         /**
          * Given a GOverlay created by this class, return the portal.csw.OnlineResource used in it's creation
          */
-        getCSWRecord : function(overlay) {
+        getOverlayCSWRecord : function(overlay) {
             return overlay._cswRecord;
         },
 
@@ -51,7 +51,7 @@ Ext.define('portal.util.gmap.GMapWrapper', {
          * @param point a GLatLng (gmap api) indicating where this marker should be shown
          * @param icon a GIcon (gmap api) containing display information about how the marker should look
          */
-        makeMarker : function(id, tooltip,cswRecord, sourceOnlineResource, sourceLayer, point, icon) {
+        makeMarker : function(id, tooltip, cswRecord, sourceOnlineResource, sourceLayer, point, icon) {
             var marker = new GMarker(point, {icon: icon, title: tooltip});
 
             //Overload marker with useful info
@@ -76,7 +76,7 @@ Ext.define('portal.util.gmap.GMapWrapper', {
          * @param fillOpacity [Optional] A number from 0-1 indicating the opacity of the fill
          *
          */
-        makePolygon : function(id, cswRecord,sourceOnlineResource, sourceLayer, points,
+        makePolygon : function(id, cswRecord, sourceOnlineResource, sourceLayer, points,
                 strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity) {
             var polygon = new GPolygon(points,strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity);
 

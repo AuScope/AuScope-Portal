@@ -115,28 +115,24 @@ Ext.define('portal.layer.LayerFactory', {
      * Creates a new instance of a Querier based on the specified values
      */
     _generateQuerier : function(wfsResources, wmsResources) {
+        var cfg = {map : this.map};
+
         if (wfsResources.length > 0) {
-            return Ext.create('portal.layer.querier.wfs.WFSQuerier', {
-                map : this.map
-            });
-        } else {
+            return Ext.create('portal.layer.querier.wfs.WFSQuerier', cfg);
+        } else if (wmsResources.length > 0) {
             //WMS may mean Geotransects
             for (var i = 0; i < wmsResources.length; i++) {
                 if (wmsResources[i].get('name') === 'gt:AuScope_Land_Seismic_gda94') {
-                    return Ext.create('portal.layer.querier.wms.GeotransectQuerier', {
-                        map : this.map
-                    });
+                    return Ext.create('portal.layer.querier.wms.GeotransectQuerier', cfg);
                 }
             }
 
             //Or just the plain old WMS querier
-            return Ext.create('portal.layer.querier.wms.WMSQuerier',{
-                map : this.map
-            });
+            return Ext.create('portal.layer.querier.wms.WMSQuerier', cfg);
+        } else {
+            //Worst case scenario, we render the source CSW record
+            return Ext.create('portal.layer.querier.csw.CSWQuerier', cfg);
         }
-
-        alert('TODO - No supported querier');
-        return null;
     },
 
     _generateFilterer : function() {

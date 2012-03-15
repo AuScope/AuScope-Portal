@@ -157,8 +157,20 @@ Ext.define('portal.util.BBox', {
      *
      * Normally a single polygon is returned but if the polygon wraps around the antimeridian, it will be split
      * around the meridians.
+     *
+     * @param strokeColor String The color of the vertices (CSS color string)
+     * @param strokeWeight Number The width of the vertices
+     * @param strokeOpacity Number The transparency of the vertices [0, 1]
+     * @param fillColor String The color of the fill (CSS color string)
+     * @param fillOpacity Number The transparency of the fill [0, 1]
+     * @param opts Object - additional GMap config options
+     * @param id [Optional] String ID of generated polygons
+     * @param cswRecord [Optional] portal.csw.CSWRecord parent of these polygons
+     * @param sourceOnlineResource [Optional] portal.csw.OnlineResource parent of these polygons
+     * @param sourceLayer [Optional] portal.layer.Layer parent of these polygons
      */
-    toGMapPolygon : function(strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts) {
+    toGMapPolygon : function(strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts,
+                             id, cswRecord, sourceOnlineResource, sourceLayer) {
         var splits = this._splitBboxes(this, []);
         var result = [];
 
@@ -169,7 +181,7 @@ Ext.define('portal.util.BBox', {
             var sw = new GLatLng(splitBbox.southBoundLatitude, splitBbox.westBoundLongitude);
             var nw = new GLatLng(splitBbox.northBoundLatitude, splitBbox.westBoundLongitude);
 
-            result.push(portal.util.gmap.GMapWrapper.makePolygon(undefined, undefined, undefined,undefined,
+            result.push(portal.util.gmap.GMapWrapper.makePolygon(id, cswRecord, sourceOnlineResource, sourceLayer,
                     [sw, nw, ne, se, sw], strokeColor, strokeWeight, strokeOpacity, fillColor, fillOpacity, opts));
         }
 

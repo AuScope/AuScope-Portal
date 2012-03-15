@@ -1,5 +1,5 @@
 /**
- * Class for making and then parsing a WFS request/response using a GenericParser.Parser class
+ * Class for making and then parsing a WMS request/response
  */
 Ext.define('portal.layer.querier.wms.WMSQuerier', {
     extend: 'portal.layer.querier.Querier',

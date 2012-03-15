@@ -2,7 +2,9 @@
  * A Ext.Panel specialisation for allowing the user to browse
  * through the metadata within a single CSWRecord
  */
-CSWMetadataPanel = Ext.extend(Ext.Panel, {
+Ext.define('portal.widgets.panel.CSWMetadataPanel', {
+    extend : 'Ext.form.Panel',
+    alias : 'widget.cswmetadatapanel',
 
     cswRecord : null,
 
@@ -18,7 +20,7 @@ CSWMetadataPanel = Ext.extend(Ext.Panel, {
         this.cswRecord = cfg.cswRecord;
 
         var keywordsString = "";
-        var keywords = this.cswRecord.getDescriptiveKeywords();
+        var keywords = this.cswRecord.get('descriptiveKeywords');
         for (var i = 0; i < keywords.length; i++) {
             keywordsString += keywords[i];
             if (i < (keywords.length - 1)) {
@@ -28,52 +30,42 @@ CSWMetadataPanel = Ext.extend(Ext.Panel, {
 
         //Build our configuration object
         Ext.apply(cfg, {
-            layout : 'auto',
-            autoHeight : true,
+            layout : 'fit',
             items : [{
                 xtype : 'fieldset',
-                hideBorders : true,
-                autoHeight : true,
-                region : 'north',
                 items : [{
-                    xtype : 'linklabel',
+                    xtype : 'displayfield',
                     fieldLabel : 'Source',
-                    qtip : 'This is a link back to the registry of origin for this record.',
-                    href : this.cswRecord.getRecordInfoUrl(),
-                    text : 'Link back to registry'
+                    value : Ext.util.Format.format('<a target="_blank" href="{0}">Link back to registry</a>', this.cswRecord.get('recordInfoUrl'))
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Title',
                     anchor : '100%',
-                    text : this.cswRecord.getServiceName()
+                    value : this.cswRecord.get('name')
                 }, {
                     xtype : 'textarea',
                     fieldLabel : 'Abstract',
                     anchor : '100%',
-                    value : this.cswRecord.getDataIdentificationAbstract(),
+                    value : this.cswRecord.get('description'),
                     readOnly : true
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Keywords',
                     anchor : '100%',
-                    text : keywordsString
+                    value : keywordsString
                 },{
-                    xtype : 'label',
+                    xtype : 'displayfield',
                     fieldLabel : 'Contact Org',
                     anchor : '100%',
-                    text : this.cswRecord.getContactOrganisation()
+                    value : this.cswRecord.get('contactOrg')
                 },{
                     fieldLabel : 'Resources',
-                    region : 'center',
-                    xtype : 'cswresourcesgrid',
+                    xtype : 'onlineresourcepanel',
                     cswRecords : this.cswRecord
                 }]
             }]
         });
 
-        //Call parent constructor
-        CSWMetadataPanel.superclass.constructor.call(this, cfg);
+        this.callParent(arguments);
     }
 });
-
-Ext.reg('cswmetadatapanel', CSWMetadataPanel);
