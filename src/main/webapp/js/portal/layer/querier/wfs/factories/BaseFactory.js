@@ -129,5 +129,14 @@ Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
         return portal.util.URL.base + "requestFeature.do" + "?" +
             "serviceUrl=" + wfsUrl + "&typeName=" + typeName +
             "&featureId=" + featureTypeId;
+    },
+
+    /**
+     * Decomposes a 'normal' URL in the form http://url.com/long/path/name to just its prefix + hostname http://url.com
+     * @param url The url to decompose
+     */
+    _getBaseUrl : function(url) {
+        var splitUrl = url.split('://'); //this should split us into 2 parts
+        return splitUrl[0] + '://' + splitUrl[1].slice(0, splitUrl[1].indexOf('/'));
     }
 });

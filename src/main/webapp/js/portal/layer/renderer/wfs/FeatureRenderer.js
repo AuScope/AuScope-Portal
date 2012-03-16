@@ -136,10 +136,10 @@ Ext.define('portal.layer.renderer.wfs.FeatureRenderer', {
         //this icon will be shared by all features with a point based geometry
         var icon = new GIcon(G_DEFAULT_ICON, this.iconCfg.url);
         icon.shadow = null;
-        if (this.iconCfg.size.width && this.iconCfg.size.height) {
+        if (this.iconCfg.size && this.iconCfg.size.width && this.iconCfg.size.height) {
             icon.iconSize = new GSize(this.iconCfg.size.width, this.iconCfg.size.height);
         }
-        if (this.iconCfg.anchor.x && this.iconCfg.anchor.y) {
+        if (this.iconCfg.anchor && this.iconCfg.anchor.x && this.iconCfg.anchor.y) {
             icon.iconAnchor = new GPoint(this.iconCfg.anchor.x, this.iconCfg.anchor.y);
             icon.infoWindowAnchor = new GPoint(this.iconCfg.anchor.x, this.iconCfg.anchor.y);
         }

@@ -17,7 +17,7 @@ Ext.define('portal.layer.querier.wfs.factories.BoreholeFactory', {
     },
 
     /**
-     * Generates a simple tree panel that represents the specified node
+     * Generates a simple panel that represents the specified borehole node
      */
     parseNode : function(domNode, wfsUrl) {
         var bf = this;
