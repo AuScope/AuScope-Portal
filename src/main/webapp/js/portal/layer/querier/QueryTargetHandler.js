@@ -199,9 +199,24 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
                 shortTitle = shortTitle.substr(0, maxTitleLength) + "...";
             }
 
+            //Figure out our icon class
+            var type = onlineResource ? onlineResource.get('type') : '';
+            var iconCls = undefined;
+            switch(type) {
+            case portal.csw.OnlineResource.WFS:
+            case portal.csw.OnlineResource.WCS:
+            case portal.csw.OnlineResource.OPeNDAP:
+                iconCls = 'data';
+                break;
+            default:
+                iconCls = 'portrayal';
+                break;
+            }
+
             items.push({
                 text : shortTitle,
                 queryTarget : queryTargets[i],
+                iconCls : iconCls,
                 listeners : {
                     click : Ext.bind(function(queryTarget, mapWrapper) {
                         this._handleWithQuery([queryTarget], mapWrapper);
