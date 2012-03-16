@@ -9,9 +9,9 @@ Ext.define('portal.widgets.field.ClientSearchField', {
     initComponent : function() {
         this.callParent(arguments);
 
-        this.on('afterrender', function(cmp) {
+        /*this.on('afterrender', function(cmp) {
             cmp.doComponentLayout();
-        });
+        });*/
     },
 
     /**
@@ -44,8 +44,8 @@ Ext.define('portal.widgets.field.ClientSearchField', {
             this.store.clearFilter(false);
 
             this.hasSearch = false;
-            this.triggerEl.item(0).setDisplayed('none');
-            this.triggerEl.item(1).setDisplayed('block');
+            me.triggerCell.item(0).setDisplayed(false);
+            me.triggerCell.item(1).setDisplayed(true);
 
             this._setTextFieldDisabled(false);
 
@@ -62,9 +62,10 @@ Ext.define('portal.widgets.field.ClientSearchField', {
 
         this.store.filter(this.fieldName, v, true, false);
         this.hasSearch = true;
-        this.triggerEl.item(0).setDisplayed('block');
+        this.triggerCell.item(0).setDisplayed(true);
         this.doComponentLayout();
     },
+
 
     /**
      * text : The text to include in the box (to indicate that a custom filter has been run)
@@ -78,8 +79,8 @@ Ext.define('portal.widgets.field.ClientSearchField', {
         this.setValue(text);
 
         this.store.filterBy(func);
-        this.triggerEl.item(0).setDisplayed('block');
-        this.triggerEl.item(1).setDisplayed('none');
+        this.triggerCell.item(0).setDisplayed(true);
+        this.triggerCell.item(1).setDisplayed(false);
 
         this._setTextFieldDisabled(true);
         //inputFieldEl.mask();
