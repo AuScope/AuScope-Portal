@@ -132,7 +132,7 @@ Ext.define('portal.util.gmap.GMapWrapper', {
             this.renderToContainer(this.container);
         }
 
-        console.warn('Artificial delay to overcome Ext JS 4.1 beta 3 issues');
+        console.warn('Artificial delay to overcome Ext JS 4.1 rc1 issues');
         this.layerStore.on('add', this._onLayerStoreAdd, this, {
             delay : 1   //There is an issue with grids adding responding to
                         //data store change events before the constructed row is

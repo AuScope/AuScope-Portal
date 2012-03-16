@@ -1,5 +1,5 @@
 /**
- * A factory for parsing a gsml:Borehole element.
+ * A factory for parsing a geophysics:Anomalies element.
  */
 Ext.define('portal.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
     extend : 'portal.layer.querier.wfs.factories.BaseFactory',
@@ -17,7 +17,7 @@ Ext.define('portal.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
     },
 
     /**
-     * Generates a simple tree panel that represents the specified node
+     * Generates a simple panel that represents the specified node
      */
     parseNode : function(domNode, wfsUrl) {
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
