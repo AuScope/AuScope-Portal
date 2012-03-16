@@ -67,31 +67,64 @@ Ext.define('portal.util.gmap.ClickController', {
 
         /**
          * Utility for turning a raw point on the map into a series of QueryTargets
+         * for all WMS/WCS layers.
+         *
+         * They are not explicit clicks because they occur based on the bounding box of the
+         * WMS
          */
-        _wms : function(latlng, layerStore) {
+        _nonExplicit : function(latlng, layerStore) {
             var queryTargets = [];
-            //Every WMS layer needs to be queried for WMS clicks
-            //No real way around this :(
+            //Iterate everything with WMS/WCS - no way around this :(
             for (var i = 0; i < layerStore.getCount(); i++) {
                 var layer = layerStore.getAt(i);
 
-                var cswRecords=layer.get('cswRecords');
+                var cswRecords = layer.get('cswRecords');
+                for(var j = 0; j < cswRecords.length; j++){
+                    var cswRecord = cswRecords[j];
 
-                for(var z=0; z < cswRecords.length; z++){
+                    //ensure this click lies within this CSW record
+                    var containsPoint = false;
+                    var geoEls = cswRecord.get('geographicElements');
+                    for (var k = 0; k < geoEls.length; k++) {
+                        if (geoEls[k] instanceof portal.util.BBox &&
+                            geoEls[k].contains(latlng.lat(), latlng.lng())) {
+                            containsPoint = true;
+                            break;
+                        }
+                    }
 
-                    var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(cswRecords[z].get('onlineResources'),
-                                                                                      portal.csw.OnlineResource.WMS);
-                    for (var j = 0; j < wmsResources.length; j++) {
-                        queryTargets.push(Ext.create('portal.layer.querier.QueryTarget', {
-                            id : '',
-                            lat : latlng.lat(),
-                            lng : latlng.lng(),
-                            cswRecord   : cswRecords[z],
-                            onlineResource : wmsResources[j],
-                            cswRecord : cswRecords[z],
-                            layer : layer,
-                            explicit : false
-                        }));
+                    //If it doesn't, don't consider this point for examination
+                    if (!containsPoint) {
+                        continue;
+                    }
+
+                    //Finally we don't include WMS query targets if we
+                    //have WCS queries for the same record
+                    var allResources = cswRecord.get('onlineResources');
+                    var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(allResources, portal.csw.OnlineResource.WMS);
+                    var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allResources, portal.csw.OnlineResource.WCS);
+                    var resourcesToIterate = [];
+                    if (wcsResources.length > 0) {
+                        resourcesToIterate = wcsResources;
+                    } else {
+                        resourcesToIterate = wmsResources;
+                    }
+
+                    //Generate our query targets for WMS/WCS layers
+                    for (var k = 0; k < resourcesToIterate.length; k++) {
+                        var type = resourcesToIterate[k].get('type');
+                        if (type === portal.csw.OnlineResource.WMS ||
+                            type === portal.csw.OnlineResource.WCS) {
+                            queryTargets.push(Ext.create('portal.layer.querier.QueryTarget', {
+                                id : '',
+                                lat : latlng.lat(),
+                                lng : latlng.lng(),
+                                cswRecord   : cswRecord,
+                                onlineResource : resourcesToIterate[k],
+                                layer : layer,
+                                explicit : true
+                            }));
+                        }
                     }
                 }
             }
@@ -113,7 +146,7 @@ Ext.define('portal.util.gmap.ClickController', {
          */
         generateQueryTargets : function(overlay, latlng, overlayLatlng, layerStore) {
             if (!overlay) {
-                return portal.util.gmap.ClickController._wms(latlng, layerStore);
+                return portal.util.gmap.ClickController._nonExplicit(latlng, layerStore);
             } else if (overlay instanceof GMarker) {
                 return portal.util.gmap.ClickController._marker(overlay, overlayLatlng);
             } else if (overlay instanceof GPolygon) {

@@ -207,6 +207,16 @@ Ext.define('portal.util.BBox', {
     },
 
     /**
+     * Returns true of the specified lat/long is contained by this BBox
+     */
+    contains : function(latitude, longitude) {
+        return this.westBoundLongitude <= longitude &&
+                this.eastBoundLongitude >= longitude &&
+                this.southBoundLatitude <= latitude &&
+                this.northBoundLatitude >= latitude;
+    },
+
+    /**
      * Function for comparing 2 instances of BBox. If the internal fields are all exactly the same then
      * true will be returned, otherwise false.
      */
