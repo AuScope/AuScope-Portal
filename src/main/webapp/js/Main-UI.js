@@ -183,6 +183,24 @@ Ext.application({
             items:[westPanel, centerPanel]
         });
 
-        map.renderToContainer(centerPanel);   //After our centerPanel is displayed, render out map into it
+        map.renderToContainer(centerPanel);   //After our centerPanel is displayed, render our map into it
+
+        //Create our permalink handler
+        var permalinkHandler = function() {
+            var mss = Ext.create('portal.util.permalink.MapStateSerializer');
+
+            mss.addMapState(map);
+            mss.addLayers(layerStore);
+
+            var stateString = mss.serialize();
+
+            var popup = Ext.create('portal.widgets.window.PermanentLinkWindow', {
+                state : stateString
+            });
+
+            popup.show();
+        };
+        Ext.get('permalink').on('click', permalinkHandler);
+        Ext.get('permalinkicon').on('click', permalinkHandler);
     }
 });

@@ -376,6 +376,21 @@ Ext.define('portal.util.gmap.GMapWrapper', {
     },
 
     /**
+     * Function for returning the center of the map as an Object
+     * {
+     *  latitude : Number,
+     *  longitude : Number
+     * }
+     */
+    getCenter : function() {
+        var c = this.map.getCenter();
+        return {
+            latitude : c.lat(),
+            longitude : c.lng()
+        };
+    },
+
+    /**
      * Returns an object representing the map size in pixels in the form
      * {
      *  width : Number
