@@ -148,12 +148,22 @@ Ext.define('portal.util.gmap.GMapWrapper', {
     _onLayerStoreAdd : function(store, layers) {
         for (var i = 0; i < layers.length; i++) {
             var newLayer = layers[i];
-            //Some layer types should be rendered immediately
+
+            //Some layer types should be rendered immediately, others will require the 'Apply Filter' button
+            //We trigger the rendering by forcing a write to the filterer object
             if (newLayer.get('renderOnAdd')) {
-                //We trigger the rendering by forcing a write to the filterer object
+                //Some layers should be
                 var filterForm = newLayer.get('filterForm');
                 var filterer = newLayer.get('filterer');
+
+                //Update the filter with the current map bounds
+                filterer.setSpatialParam(this.getVisibleMapBounds(), true);
+
                 filterForm.writeToFilterer(filterer);
+            } else if (newLayer.get('deserialized')) {
+                var filterer = newLayer.get('filterer');
+
+                filterer.setParameters({}); //Trigger an update without chang
             }
         }
     },
@@ -371,8 +381,20 @@ Ext.define('portal.util.gmap.GMapWrapper', {
     },
 
     //delegator function to the original map function
-    getZoom : function(){
+    getZoom : function() {
         return this.map.getZoom();
+    },
+
+    //delegator function to the original map function
+    setZoom : function(zoom) {
+        return this.map.setZoom(zoom);
+    },
+
+    /**
+     * Pans the map until the specified point is in the center
+     */
+    setCenter : function(latitude, longitude) {
+        this.map.panTo(new GLatLng(latitude, longitude));
     },
 
     /**

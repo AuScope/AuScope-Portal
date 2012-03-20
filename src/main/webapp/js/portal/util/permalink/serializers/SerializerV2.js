@@ -76,7 +76,7 @@ Ext.define('portal.util.permalink.serializers.SerializerV2', {
                 }
             }
 
-            this.serializedLayers.push({
+            serializedLayers.push({
                 source : minifiedLayers[i].s,
                 filter : minifiedLayers[i].f,
                 visible : minifiedLayers[i].v,

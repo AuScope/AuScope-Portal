@@ -77,6 +77,7 @@ Ext.application({
             title : 'Active Layers',
             region : 'center',
             store : layerStore,
+            map : map,
             filterPanel : filterPanel,
             listeners : {
                 //On selection, update our filter panel
@@ -92,6 +93,7 @@ Ext.application({
         var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
             region: 'south',
             layerPanel : layersPanel,
+            map : map,
             split: true,
             height: 170
         });
@@ -185,7 +187,7 @@ Ext.application({
 
         map.renderToContainer(centerPanel);   //After our centerPanel is displayed, render our map into it
 
-        //Create our permalink handler
+        //Create our permalink generation handler
         var permalinkHandler = function() {
             var mss = Ext.create('portal.util.permalink.MapStateSerializer');
 
@@ -202,5 +204,13 @@ Ext.application({
         };
         Ext.get('permalink').on('click', permalinkHandler);
         Ext.get('permalinkicon').on('click', permalinkHandler);
+
+        //Handle deserialisation
+        var deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
+            knownLayerStore : knownLayerStore,
+            cswRecordStore : unmappedCSWRecordStore,
+            layerStore : layerStore,
+            map : map,
+        });
     }
 });

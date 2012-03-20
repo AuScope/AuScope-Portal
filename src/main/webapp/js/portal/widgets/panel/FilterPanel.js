@@ -27,6 +27,8 @@ Ext.define('portal.widgets.panel.FilterPanel', {
      */
     constructor : function(config) {
         this._layerPanel = config.layerPanel;
+        this._map = config.map;
+
         var emptyCard = Ext.create('portal.layer.filterer.forms.EmptyFilterForm', {}); //show this
         this._filterButton = Ext.create('Ext.button.Button', {
             text :'Apply Filter >>',
@@ -60,6 +62,10 @@ Ext.define('portal.widgets.panel.FilterPanel', {
     _onApplyFilter : function() {
         var baseFilterForm = this.getLayout().getActiveItem();
         var filterer = baseFilterForm.layer.get('filterer');
+
+        //Before applying filter, update the spatial bounds (silently)
+        filterer.setSpatialParam(this._map.getVisibleMapBounds(), true);
+
         baseFilterForm.writeToFilterer(filterer);
     },
 

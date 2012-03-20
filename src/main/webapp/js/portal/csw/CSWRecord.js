@@ -45,6 +45,33 @@ Ext.define('portal.csw.CSWRecord', {
 
         }
         return false;
+    },
+
+    /**
+     * Function for checking whether this record contains the specified portal.csw.OnlineResource
+     *
+     * Comparisons are made on a field/field basis
+     *
+     * @param onlineResource A portal.csw.OnlineResource
+     *
+     * returns boolean indicating
+     */
+    containsOnlineResource : function(onlineResource) {
+        var comparator = function(or1, or2) {
+            return ((or1.get('url') === or2.get('url')) &&
+                   (or1.get('type') === or2.get('type')) &&
+                   (or1.get('name') === or2.get('name')) &&
+                   (or1.get('description') === or2.get('description')));
+        };
+
+        var resourcesToMatch = this.get('onlineResources');
+        for (var i = 0; i < resourcesToMatch.length; i++) {
+            if (comparator(resourcesToMatch[i], onlineResource)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 });

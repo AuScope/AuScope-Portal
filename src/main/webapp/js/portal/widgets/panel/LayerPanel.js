@@ -7,9 +7,12 @@ Ext.define('portal.widgets.panel.LayerPanel', {
     extend : 'Ext.grid.Panel',
     alias: 'widget.layerpanel',
 
+    map : null, //instance of portal.util.gmap.GMapWrapper
+
     constructor : function(cfg) {
         var me = this;
 
+        this.map = cfg.map;
         this.filterPanel = cfg.filterPanel;
 
         Ext.apply(cfg, {
@@ -39,10 +42,16 @@ Ext.define('portal.widgets.panel.LayerPanel', {
                 xtype : 'renderablecheckcolumn',
                 text : 'Visible',
                 dataIndex : 'renderer',
-                getCustomValueBool : function(header, renderer) {
+                getCustomValueBool : function(header, renderer, layer) {
                     return renderer.getVisible();
                 },
-                setCustomValueBool : function(header, renderer, checked) {
+                setCustomValueBool : function(header, renderer, checked, layer) {
+                    //update our bbox silently before updating visibility
+                    if (checked) {
+                        var filterer = layer.get('filterer');
+                        filterer.setSpatialParam(me.map.getVisibleMapBounds(), true);
+                    }
+
                     return renderer.setVisible(checked);
                 },
                 width : 40
@@ -181,6 +190,8 @@ Ext.define('portal.widgets.panel.LayerPanel', {
             var renderedFilterer = layer.get('filterer').clone();
             var currentFilterer = Ext.create('portal.layer.filterer.Filterer', {});
             var currentFilterForm = layer.get('filterForm');
+
+            currentFilterer.setSpatialParam(this.map.getVisibleMapBounds(), true);
             currentFilterForm.writeToFilterer(currentFilterer);
 
             //Finally pass off the download handling to the appropriate downloader (if it exists)

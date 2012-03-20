@@ -58,7 +58,12 @@ Ext.define('portal.layer.filterer.BaseFilterForm', {
      */
     writeToFilterer : function(filterer) {
         var parameters = this.getForm().getValues();
-        parameters[portal.layer.filterer.Filterer.BBOX_FIELD] = this.map.getVisibleMapBounds();
+
+        //Ensure we preserve the spatial filter (if any).
+        var bbox = filterer.getSpatialParam();
+        parameters[portal.layer.filterer.Filterer.BBOX_FIELD] = bbox;
+
+        //All other filter params should be overwritten
         filterer.setParameters(parameters, true);
     },
 

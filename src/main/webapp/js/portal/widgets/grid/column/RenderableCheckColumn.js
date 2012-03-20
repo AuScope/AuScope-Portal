@@ -17,13 +17,13 @@ Ext.define('portal.widgets.grid.column.RenderableCheckColumn', {
      * A function that will be called when the column needs
      * to get the custom value for this column for the particular value
      *
-     * function(portal.widgets.grid.column.RenderableCheckColumn, value)
+     * function(portal.widgets.grid.column.RenderableCheckColumn, value, Ext.data.Model)
      */
     getCustomValueBool : portal.util.UnimplementedFunction,
     /**
      * A function that will be called to update the custom value of field
      *
-     * function(portal.widgets.grid.column.RenderableCheckColumn, value, checked)
+     * function(portal.widgets.grid.column.RenderableCheckColumn, value, checked, Ext.data.Model)
      */
     setCustomValueBool : portal.util.UnimplementedFunction,
 
@@ -46,10 +46,10 @@ Ext.define('portal.widgets.grid.column.RenderableCheckColumn', {
             var record = view.panel.store.getAt(recordIndex),
                 dataIndex = this.dataIndex,
                 value = record.get(dataIndex),
-                checked = !this.getCustomValueBool(this, value);
+                checked = !this.getCustomValueBool(this, value, record);
 
-            this.setCustomValueBool(this, value, checked);
-            record.set(dataIndex, value); //trick record into triggering an update
+            this.setCustomValueBool(this, value, checked, record);
+            record.afterEdit(dataIndex);//trick record into triggering an update
             this.fireEvent('checkchange', this, recordIndex, checked);
             // cancel selection.
             return false;
