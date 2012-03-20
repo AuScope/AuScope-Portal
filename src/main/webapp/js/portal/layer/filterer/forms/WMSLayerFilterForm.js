@@ -10,16 +10,16 @@ Ext.define('portal.layer.filterer.forms.WMSLayerFilterForm', {
      */
     constructor : function(config) {
 
-    var filterer=config.layer.get('filterer');
+        var filterer=config.layer.get('filterer');
 
-    var sliderHandler = function(caller, newValue) {
-        var newOpacity = (newValue / 100);
-        filterer.setParameter('opacity',newOpacity);
-    };
+        var sliderHandler = function(caller, newValue) {
+            var newOpacity = (newValue / 100);
+            filterer.setParameter('opacity',newOpacity);
+        };
 
-    if(!filterer.getParameter('opacity')){
-        filterer.setParameter('opacity',100);
-    }
+        if(!filterer.getParameter('opacity')){
+            filterer.setParameter('opacity',100);
+        }
 
         Ext.apply(config, {
 
@@ -39,6 +39,7 @@ Ext.define('portal.layer.filterer.forms.WMSLayerFilterForm', {
                 items      : [{
                         xtype       : 'slider',
                         fieldLabel  : 'Opacity',
+                        name        : 'opacity',
                         minValue    : 0,
                         maxValue    : 100,
                         value       : (config.layer.get('filterer').getParameter('opacity') * 100),

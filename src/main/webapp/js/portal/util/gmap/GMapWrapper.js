@@ -151,8 +151,13 @@ Ext.define('portal.util.gmap.GMapWrapper', {
 
             //Some layer types should be rendered immediately, others will require the 'Apply Filter' button
             //We trigger the rendering by forcing a write to the filterer object
-            if (newLayer.get('renderOnAdd')) {
-                //Some layers should be
+            if (newLayer.get('deserialized')) {
+                //Deserialized layers (read from permalink) will have their
+                //filterer already fully configured.
+                var filterer = newLayer.get('filterer');
+                filterer.setParameters({}); //Trigger an update without chang
+            } else if (newLayer.get('renderOnAdd')) {
+                //Otherwise we will need to append the filterer with the current visible bounds
                 var filterForm = newLayer.get('filterForm');
                 var filterer = newLayer.get('filterer');
 
@@ -160,10 +165,6 @@ Ext.define('portal.util.gmap.GMapWrapper', {
                 filterer.setSpatialParam(this.getVisibleMapBounds(), true);
 
                 filterForm.writeToFilterer(filterer);
-            } else if (newLayer.get('deserialized')) {
-                var filterer = newLayer.get('filterer');
-
-                filterer.setParameters({}); //Trigger an update without chang
             }
         }
     },
