@@ -85,8 +85,15 @@ Ext.define('portal.layer.filterer.Filterer', {
         var bbox = parameters.bbox;
         noBboxParams[portal.layer.filterer.Filterer.BBOX_FIELD] = undefined;
 
-        //We dont fire the event because the parent method will fire it for us
-        this.setSpatialParam(bbox, true);
+        //Only apply the bbox value (undefined, null or otherwise) if
+        //    a) we are explicitly clearing values - it doesn't matter what bbox's value is
+        //       it will overwrite the internal BBOX_FIELD
+        //    b) the bbox value has been explicitly included in parameters
+        //In the event that an empty object is passed to parameters '{}' we don't wan't to be assigning
+        //'undefined' to bbox as it is inconsistent with the behaviour of other parameters
+        if (portal.layer.filterer.Filterer.BBOX_FIELD in parameters || clearFirst) {
+            this.setSpatialParam(bbox, true);
+        }
 
         //Proceed normally
         this.callParent([noBboxParams, clearFirst]);
