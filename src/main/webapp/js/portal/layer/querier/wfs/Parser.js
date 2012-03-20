@@ -9,7 +9,7 @@ Ext.define('portal.layer.querier.wfs.Parser', {
         //The following ordering is important as it dictates the order in which to try
         //factories for parsing a particular node
         var cfg = {
-            genericParser : this
+            parser : this
         };
         this.factoryList = [];
         this.factoryList.push(Ext.create('portal.layer.querier.wfs.factories.GeologicUnitFactory', cfg));

@@ -94,17 +94,10 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
                 text : 'Chemistry Details',
                 iconCls : 'info',
                 handler : function() {
-                    var wfsParser = new GenericParser.WFSParser({
-                        wfsUrl : wfsUrl,
-                        typeName : 'sa:LocatedSpecimen',
-                        featureId : locSpecimenFeatureId,
-                        rootCfg : {
-                            autoScroll : true
-                        }
-                    });
-
-                    wfsParser.makeWFSRequest(function(wfsParser, rootCmp) {
-                        if (rootCmp) {
+                    var featureSource = Ext.create('portal.layer.querier.wfs.featuresources.WFSFeatureSource');
+                    featureSource.getFeature(locSpecimenFeatureId, 'sa:LocatedSpecimen', wfsUrl, function(featureDom, featureId, featureType, wfsUrl) {
+                        if (featureDom) {
+                            var rootCmp = geoUnitFact.parser.parseNode(featureDom, wfsUrl);
                             var popup = Ext.create('Ext.Window', {
                                 title: 'Specimen Chemical Analyses',
                                 layout : 'fit',
@@ -113,6 +106,14 @@ Ext.define('portal.layer.querier.wfs.factories.GeologicUnitFactory', {
                                 items : [rootCmp]
                             });
                             popup.show();
+                        } else {
+                            Ext.MessageBox.show({
+                                title : 'Unable to get feature',
+                                icon : Ext.MessageBox.WARNING,
+                                buttons : Ext.MessageBox.OK,
+                                msg : Ext.util.Format.format('There was a problem when fetching the {0} with ID {1}', featureType, featureId),
+                                multiline : false
+                            });
                         }
                     });
                 }

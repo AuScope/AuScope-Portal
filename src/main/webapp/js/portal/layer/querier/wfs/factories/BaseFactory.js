@@ -16,7 +16,7 @@ Ext.define('portal.layer.querier.wfs.factories.BaseFactory', {
     config : {
         //Reference back to genericParser that spawned this factory. Use
         //this reference to parse nodes that your factory cannot handle.
-        genericParser : null
+        parser : null
     },
 
     /**

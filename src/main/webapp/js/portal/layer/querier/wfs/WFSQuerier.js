@@ -4,11 +4,21 @@
 Ext.define('portal.layer.querier.wfs.WFSQuerier', {
     extend: 'portal.layer.querier.Querier',
 
+    featureSource : null,
+
+    /**
+     * {
+     *  featureSource : [Optional] An portal.layer.querier.wfs.FeatureSource implementation. If omitted WFSFeatureSource will be used
+     * }
+     */
     constructor: function(config){
 
-        // Copy configured listeners into *this* object so that the base class's
-        // constructor will add them.
-        this.listeners = config.listeners;
+        if (config.featureSource) {
+            this.featureSource = config.featureSource;
+        } else {
+            this.featureSource = Ext.create('portal.layer.querier.wfs.featuresources.WFSFeatureSource', {});
+        }
+
         this.parser = Ext.create('portal.layer.querier.wfs.Parser', {});
         this.knownLayerParser = Ext.create('portal.layer.querier.wfs.KnownLayerParser', {});
 
@@ -31,10 +41,9 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
     query : function(queryTarget, callback) {
         //This class can only query for specific WFS feature's
         var id = queryTarget.get('id');
-        if (!id) {
-            callback(this, null, queryTarget);
-            return;
-        }
+        var onlineResource = queryTarget.data.onlineResource;
+        var typeName = onlineResource.get('name');
+        var wfsUrl = onlineResource.get('url');
 
         //we need to get a reference to the parent known layer (if it is a known layer)
         var knownLayer = null;
@@ -42,54 +51,22 @@ Ext.define('portal.layer.querier.wfs.WFSQuerier', {
             knownLayer = queryTarget.data.layer.data.source;
         }
 
+        //Download the DOM of the feature we are interested in
         var me = this;
-        var onlineResource = queryTarget.data.onlineResource;
-        Ext.Ajax.request( {
-            url : 'requestFeature.do',
-            params : {
-                serviceUrl : onlineResource.data.url,
-                typeName : onlineResource.data.name,
-                featureId : queryTarget.data.id
-            },
-            callback : function(options, success, response) {
-                if (!success) {
-                    callback(me, null, queryTarget);
-                    return;
-                }
-
-                var jsonResponse = Ext.JSON.decode(response.responseText);
-                if (!jsonResponse.success) {
-                    callback(me, null, queryTarget);
-                    return;
-                }
-
-                // Load our xml string into DOM, extract the first feature
-                var xmlDocument = portal.util.xml.SimpleDOM.parseStringToDOM(jsonResponse.data.gml);
-                if (!xmlDocument) {
-                    callback(me, [me._generateErrorComponent('Your web browser doesn\'t seem to support any form of XML to DOM parsing.')], queryTarget);
-                    return;
-                }
-                var featureMemberNodes = portal.util.xml.SimpleDOM.getMatchingChildNodes(xmlDocument.documentElement, 'http://www.opengis.net/gml', 'featureMember');
-                if (featureMemberNodes.length === 0) {
-                    featureMemberNodes = portal.util.xml.SimpleDOM.getMatchingChildNodes(xmlDocument.documentElement, 'http://www.opengis.net/gml', 'featureMembers');
-                }
-                if (featureMemberNodes.length === 0 || featureMemberNodes[0].childNodes.length === 0) {
-                    //we got an empty response - likely because the feature ID DNE.
-                    callback(me, [me._generateErrorComponent(Ext.util.Format.format('The remote service returned no data for feature id \"{0}\"', id))], queryTarget);
-                    return;
-                }
-                var wfsResponseRoot = featureMemberNodes[0].childNodes[0];
-
-
-                //Parse our response into a number of GUI components, pass those along to the callback
-                var allComponents = [];
-                allComponents.push(me.parser.parseNode(wfsResponseRoot, onlineResource.data.url));
-                if (knownLayer && me.knownLayerParser.canParseKnownLayerFeature(queryTarget.data.id, knownLayer, onlineResource)) {
-                    allComponents.push(me.knownLayerParser.parseKnownLayerFeature(queryTarget.data.id, knownLayer, onlineResource));
-                }
-
-                callback(me, allComponents, queryTarget);
+        this.featureSource.getFeature(id, typeName, wfsUrl, function(wfsResponseRoot, id, typeName, wfsUrl) {
+            if (!wfsResponseRoot) {
+                callback(me, [me._generateErrorComponent(Ext.util.Format.format('There was a problem when looking up the feature with id \"{0}\"', id))], queryTarget);
+                return;
             }
+
+            //Parse our response into a number of GUI components, pass those along to the callback
+            var allComponents = [];
+            allComponents.push(me.parser.parseNode(wfsResponseRoot, onlineResource.data.url));
+            if (knownLayer && me.knownLayerParser.canParseKnownLayerFeature(queryTarget.get('id'), knownLayer, onlineResource)) {
+                allComponents.push(me.knownLayerParser.parseKnownLayerFeature(queryTarget.get('id'), knownLayer, onlineResource));
+            }
+
+            callback(me, allComponents, queryTarget);
         });
     }
 });

@@ -53,6 +53,10 @@ Ext.define('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', {
             sorters : ['analyteName']
         });
 
+        var groupingFeature = Ext.create('Ext.grid.feature.Grouping',{
+            groupHeaderTpl: '{name} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})'
+        });
+
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
             layout : 'fit',
@@ -107,70 +111,65 @@ Ext.define('portal.layer.querier.wfs.factories.LocatedSpecimenFactory', {
             items : [{
                 xtype : 'grid',
                 store : locSpecStore,
-                frame:true,
-                columnLines: true,
-                iconCls:'icon-grid',
-                colModel:new Ext.grid.ColumnModel({
-                    defaults: {
-                        sortable: true // columns are not sortable by default
-                    },
-                    columns: [{
-                        id: 'analyteName',
-                        header: 'Analyte',
-                        dataIndex: 'analyteName',
-                        width: 100
+                features : [groupingFeature],
+                frame : true,
+                columnLines : true,
+                iconCls : 'icon-grid',
+                columns: [{
+                    id: 'analyteName',
+                    header: 'Analyte',
+                    dataIndex: 'analyteName',
+                    flex : 1
+                },{
+                    header: 'Value',
+                    dataIndex: 'analyteValue',
+                    width: 100
+                },{
+                    header: 'Unit Of Measure',
+                    dataIndex: 'uom',
+                    width: 100
+                },{
+                    header: 'Analytical Method',
+                    dataIndex: 'analyticalMethod',
+                    width: 100
+                },{
+                    header: 'Lab Details',
+                    dataIndex: 'labDetails',
+                    width: 100
+                },{
+                    header: 'Analysis Date',
+                    dataIndex: 'analysisDate',
+                    width: 100
+                },{
+                    header: 'Preparation Details',
+                    dataIndex: 'preparationDetails',
+                    width: 200
+                }],
+                dockedItems : [{
+                    xtype : 'toolbar',
+                    dock : 'top',
+                    items : [{
+                        xtype : 'label',
+                        text : 'Select Analyte: '
                     },{
-                        header: 'Value',
-                        dataIndex: 'analyteValue',
-                        width: 100
-                    },{
-                        header: 'Unit Of Measure',
-                        dataIndex: 'uom',
-                        width: 100
-                    },{
-                        header: 'Analytical Method',
-                        dataIndex: 'analyticalMethod',
-                        width: 100
-                    },{
-                        header: 'Lab Details',
-                        dataIndex: 'labDetails',
-                        width: 100
-                    },{
-                        header: 'Analysis Date',
-                        dataIndex: 'analysisDate',
-                        width: 100
-                    },{
-                        header: 'Preparation Details',
-                        dataIndex: 'preparationDetails',
-                        width: 200
-                    }]
-                }),
-                view: new Ext.grid.GroupingView({
-                    forceFit: true,
-                    groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-                }),
-                tbar: [
-                    'Select Analyte: ',
-                    new Ext.ux.form.ClearableComboBox({
+                        xtype : 'xcombo',
                         store: allAnalytes,
-                        width:200,
                         typeAhead: true,
                         forceSelection: true,
-                        listeners:{
-                            select : function(combo, record, index){
-                                //This will occur if our field is cleared
-                                if (record == null) {
-                                    locSpecStore.filter('analyteName', '', false, false);
-                                } else {
-                                    var selectedMineral = record.get('field1'); //TODO change to a proper field name
+                        listeners: {
+                            select : function(combo, records) {
+                                locSpecStore.clearFilter();
+                                if (records.length > 0) {
+                                    var selectedMineral = records[0].get('field1'); //TODO change to a proper field name
                                     locSpecStore.filter('analyteName', selectedMineral, false, false);
                                 }
                             }
                         }
-                    }),
-                    {xtype: 'tbfill'},
-                    'Material Description: ',
-                    materialClass]
+                    },{
+                        xtype : 'label',
+                        text : 'Material Description: ' + materialClass
+                    }]
+                }]
             }]
         });
     }

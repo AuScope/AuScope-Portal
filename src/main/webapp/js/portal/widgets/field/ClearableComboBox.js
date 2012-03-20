@@ -1,53 +1,63 @@
-// --- A ComboBox with a secondary trigger button that clears the contents of the ComboBox
-// --- http://www.sencha.com/forum/showthread.php?9619-Yet-another-ComboBox-with-clear-button
-Ext.ns('Ext.ux.form');
-Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
-    initComponent : function(){
-		Ext.ux.form.ClearableComboBox.superclass.initComponent.call(this);
+/**
+ * Sourced from http://www.learnsomethings.com/2011/09/30/extjs-4-clearable-combobox-ala-twintriggers-example/
+ */
+Ext.define('portal.widgets.field.ClearableComboBox', {
+    extend : 'Ext.form.field.ComboBox',
+    alias : 'widget.xcombo',
+    triggerTip : 'Click to clear selection.',
+    spObj : '',
+    spForm : '',
+    spExtraParam : '',
+    qtip : 'Clearable Combo Box',
+    trigger1Class : 'x-form-select-trigger',
+    trigger2Class : 'x-form-clear-trigger',
+    onRender : function(ct, position) {
+        this.callParent(arguments);
 
+        var id = this.getId();
         this.triggerConfig = {
-            tag:'span', cls:'x-form-twin-triggers', style:'padding-right:2px',  // padding needed to prevent IE from clipping 2nd trigger button
-            cn:[
-                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger"},
-                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-clear-trigger"}
-               ]
-           };
-    },
+            tag : 'div',
+            cls : 'x-form-twin-triggers',
+            style : 'display:block;width:46px;',
+            cn : [ {
+                tag : "img",
+                style : Ext.isIE ? 'margin-left:-3;height:19px' : '',
+                src : Ext.BLANK_IMAGE_URL,
+                id : "trigger1" + id,
+                name : "trigger1" + id,
+                cls : "x-form-trigger " + this.trigger1Class
+            }, {
+                tag : "img",
+                style : Ext.isIE ? 'margin-left:-6;height:19px' : '',
+                src : Ext.BLANK_IMAGE_URL,
+                id : "trigger2" + id,
+                name : "trigger2" + id,
+                cls : "x-form-trigger " + this.trigger2Class
+            } ]
+        };
+        this.triggerEl.replaceWith(this.triggerConfig);
+        this.triggerEl.on('mouseup', function(e) {
 
-    getTrigger : function(index){
-        return this.triggers[index];
-    },
+            if (e.target.name == "trigger1" + id) {
+                this.onTriggerClick();
+            } else if (e.target.name == "trigger2" + id) {
+                this.reset();
+                if (this.spObj !== '' && this.spExtraParam !== '') {
+                    Ext.getCmp(this.spObj).store.setExtraParam(
+                            this.spExtraParam, '');
+                    Ext.getCmp(this.spObj).store.load()
+                }
+                if (this.spForm !== '') {
+                    Ext.getCmp(this.spForm).getForm().reset();
+                }
 
-    initTrigger : function(){
-        var ts = this.trigger.select('.x-form-trigger', true);
-        this.wrap.setStyle('overflow', 'hidden');
-        var triggerField = this;
-        ts.each(function(t, all, index){
-            t.hide = function(){
-                var w = triggerField.wrap.getWidth();
-                this.dom.style.display = 'none';
-                triggerField.el.setWidth(w-triggerField.trigger.getWidth());
-            };
-            t.show = function(){
-                var w = triggerField.wrap.getWidth();
-                this.dom.style.display = '';
-                triggerField.el.setWidth(w-triggerField.trigger.getWidth());
-            };
-            var triggerIndex = 'Trigger'+(index+1);
-
-            if(this['hide'+triggerIndex]){
-                t.dom.style.display = 'none';
+                //Raise select event on clear
+                this.fireEvent('select', this, []);
             }
-            t.on("click", this['on'+triggerIndex+'Click'], this, {preventDefault:true});
-            t.addClassOnOver('x-form-trigger-over');
-            t.addClassOnClick('x-form-trigger-click');
         }, this);
-        this.triggers = ts.elements;
-    },
-
-    onTrigger1Click : function() {this.onTriggerClick();},   // pass to original combobox trigger handler
-    onTrigger2Click : function() {
-    	this.reset();
-    	this.fireEvent('select', this, null, -1);
-    }             // clear contents of combobox
+        var trigger1 = Ext.get("trigger1" + id);
+        var trigger2 = Ext.get("trigger2" + id);
+        trigger1.addClsOnOver('x-form-trigger-over');
+        trigger2.addClsOnOver('x-form-trigger-over');
+    }
 });
