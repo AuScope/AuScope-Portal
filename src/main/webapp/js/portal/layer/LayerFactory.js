@@ -114,11 +114,13 @@ Ext.define('portal.layer.LayerFactory', {
     /**
      * Creates a new instance of a Querier based on the specified values
      */
-    _generateQuerier : function(wfsResources, wmsResources) {
+    _generateQuerier : function(wfsResources, wmsResources, wcsResources) {
         var cfg = {map : this.map};
 
         if (wfsResources.length > 0) {
             return Ext.create('portal.layer.querier.wfs.WFSQuerier', cfg);
+        } else if (wcsResources.length > 0) {
+            return Ext.create('portal.layer.querier.coverage.WCSQuerier',cfg);
         } else if (wmsResources.length > 0) {
             //WMS may mean Geotransects
             for (var i = 0; i < wmsResources.length; i++) {
@@ -174,7 +176,7 @@ Ext.define('portal.layer.LayerFactory', {
         //Create our objects for interacting with this layer
         var renderer = this._generateRenderer(wfsResources, wmsResources,knownLayer.get('proxyUrl'), knownLayer.get('proxyCountUrl'),
                                               knownLayer.get('iconUrl'), knownLayer.get('iconSize'), knownLayer.get('iconAnchor'));
-        var querier = this._generateQuerier(wfsResources, wmsResources);
+        var querier = this._generateQuerier(wfsResources, wmsResources,wcsResources);
         var filterer = this._generateFilterer();
         var downloader = this._generateDownloader(wfsResources, wmsResources, wcsResources);
 
@@ -202,7 +204,7 @@ Ext.define('portal.layer.LayerFactory', {
 
         //Create our objects for interacting with this layer
         var renderer = this._generateRenderer(wfsResources, wmsResources, undefined, undefined, undefined, undefined, undefined);
-        var querier = this._generateQuerier(wfsResources, wmsResources);
+        var querier = this._generateQuerier(wfsResources, wmsResources,wcsResources);
         var filterer = this._generateFilterer();
         var downloader = this._generateDownloader(wfsResources, wmsResources, wcsResources);
 
