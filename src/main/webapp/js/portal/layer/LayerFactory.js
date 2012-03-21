@@ -156,6 +156,10 @@ Ext.define('portal.layer.LayerFactory', {
             return Ext.create('portal.layer.downloader.wfs.WFSDownloader', {map : this.map});
         }
 
+        if (wcsResources.length > 0) {
+            return Ext.create('portal.layer.downloader.coverage.WCSDownloader', {map : this.map});
+        }
+
         if (wmsResources.length > 0) {
             return Ext.create('portal.layer.downloader.wms.WMSDownloader', {map : this.map});
         }
