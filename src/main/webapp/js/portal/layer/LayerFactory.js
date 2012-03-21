@@ -113,9 +113,19 @@ Ext.define('portal.layer.LayerFactory', {
 
     /**
      * Creates a new instance of a Querier based on the specified values
+     *
+     * knownLayer can be null
      */
-    _generateQuerier : function(wfsResources, wmsResources, wcsResources) {
+    _generateQuerier : function(knownLayer, wfsResources, wmsResources, wcsResources) {
         var cfg = {map : this.map};
+
+        //Geodesy features don't allow gml:Id lookups </rant>
+        //To workaround this we have a custom feature source that looks up via the gps site id.
+        if (knownLayer && knownLayer.get('id') === 'geodesy:gnssstation') {
+            cfg.featureSource = Ext.create('portal.layer.querier.wfs.featuresources.WFSFeatureByPropertySource', {
+                property : 'GPSSITEID'
+            });
+        }
 
         if (wfsResources.length > 0) {
             return Ext.create('portal.layer.querier.wfs.WFSQuerier', cfg);
@@ -176,7 +186,7 @@ Ext.define('portal.layer.LayerFactory', {
         //Create our objects for interacting with this layer
         var renderer = this._generateRenderer(wfsResources, wmsResources,knownLayer.get('proxyUrl'), knownLayer.get('proxyCountUrl'),
                                               knownLayer.get('iconUrl'), knownLayer.get('iconSize'), knownLayer.get('iconAnchor'));
-        var querier = this._generateQuerier(wfsResources, wmsResources,wcsResources);
+        var querier = this._generateQuerier(knownLayer, wfsResources, wmsResources,wcsResources);
         var filterer = this._generateFilterer();
         var downloader = this._generateDownloader(wfsResources, wmsResources, wcsResources);
 
@@ -204,7 +214,7 @@ Ext.define('portal.layer.LayerFactory', {
 
         //Create our objects for interacting with this layer
         var renderer = this._generateRenderer(wfsResources, wmsResources, undefined, undefined, undefined, undefined, undefined);
-        var querier = this._generateQuerier(wfsResources, wmsResources,wcsResources);
+        var querier = this._generateQuerier(null, wfsResources, wmsResources,wcsResources);
         var filterer = this._generateFilterer();
         var downloader = this._generateDownloader(wfsResources, wmsResources, wcsResources);
 

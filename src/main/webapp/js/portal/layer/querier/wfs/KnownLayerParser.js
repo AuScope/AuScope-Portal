@@ -21,6 +21,7 @@ Ext.define('portal.layer.querier.wfs.KnownLayerParser', {
         this.factoryList = [];
         this.factoryList.push(Ext.create('portal.layer.querier.wfs.knownlayerfactories.NVCLFactory', config));
         this.factoryList.push(Ext.create('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', config));
+        this.factoryList.push(Ext.create('portal.layer.querier.wfs.knownlayerfactories.GeodesyFactory', config));
 
         this.listeners = config.listeners;
 

@@ -1,26 +1,43 @@
 /**
- * Feature source extensions for pulling features directly from a WFS
- * using the 'feature id' parameter.
+ * Feature source extension for pulling features directly from a WFS
+ * using the a filter on a single property.
+ *
+ * Only the first feature matching a particular filter will be returned
  */
-Ext.define('portal.layer.querier.wfs.featuresources.WFSFeatureSource', {
+Ext.define('portal.layer.querier.wfs.featuresources.WFSFeatureByPropertySource', {
     extend : 'portal.layer.querier.wfs.FeatureSource',
+
+    property : null,
+    value : null,
+
+    /**
+     * Accepts a config in the form
+     * {
+     *  property : String - the property name to filter against
+     *  value : [Optional] String - the value of the property to be used as a comparison match. If omitted, the featureId will be used
+     * }
+     */
+    constructor : function(config) {
+        this.property = config.property;
+        this.value = config.value;
+
+        this.callParent(arguments);
+    },
 
     /**
      * See parent class for definition
      */
     getFeature : function(featureId, featureType, wfsUrl, callback) {
-        if (!featureId || !featureType || !wfsUrl) {
-            callback(null, featureId, featureType, wfsUrl);
-            return;
-        }
+        var value = this.value ? this.value : featureId;
 
         var me = this;
         Ext.Ajax.request({
-            url : 'requestFeature.do',
+            url : 'requestFeatureByProperty.do',
             params : {
                 serviceUrl : wfsUrl,
                 typeName : featureType,
-                featureId : featureId
+                property : this.property,
+                value : value
             },
             callback : function(options, success, response) {
                 if (!success) {

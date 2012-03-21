@@ -81,6 +81,26 @@
       </kml>
    </xsl:template>
 
+    <!-- Geodesy SF doesn't use the gmlId to identify its features -->
+    <xsl:template match="gml:featureMembers/ngcp:GnssStation | gml:featureMember/ngcp:GnssStation" priority="10">
+        <Placemark>
+            <name>
+                <xsl:value-of select="ngcp:GPSSITEID"/>
+            </name>
+
+            <description>
+               <xsl:text>GENERIC_PARSER:</xsl:text><xsl:value-of select="ngcp:GPSSITEID"/>
+            </description>
+
+            <MultiGeometry>
+               <xsl:apply-templates select="./descendant::gml:Polygon"/>
+               <xsl:apply-templates select="./descendant::gml:Multicurve"/>
+               <xsl:apply-templates select="./descendant::gml:Point"/>
+               <xsl:apply-templates select="./descendant::gml:MultiLineString"/>
+            </MultiGeometry>
+        </Placemark>
+    </xsl:template>
+
     <!--TEMPLATE FOR TRANSLATING A GENERIC INPUT-->
     <!-- ================================================================= -->
     <xsl:template match="gml:featureMembers/* | gml:featureMember/*" priority="1">
