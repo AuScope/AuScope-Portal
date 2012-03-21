@@ -104,33 +104,32 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
                         afterrender : function(container) {
                             //Find the parent info window DOM
                             var el = container.getEl();
-                            var parentDiv = el.findParentNode('div.gmnoprint', 10, true);
+                            var tabParentDiv = el.findParentNode('div.gmnoprint', 10, true);
+                            var headerParentDiv = tabParentDiv.findParentNode('div.gmnoprint', 10, true);
 
-                            //Get all child div's (these are our tabs).
-                            var tabElements = parentDiv.select('> div');
-                            tabElements.each(function(tabEl) {
-                                //Now the div's we get will NOT have ID's HOWEVER Ext JS will
-                                //register new ID's in the underlying DOM as part of event
-                                //registration. To get around this we pass the underlying dom
-                                //to the event handler (using Ext.bind) and use that to lookup
-                                //the appropriate Ext.Element there (tabEl is a wrapper for tabDom
-                                //whose ID will NOT be updated when the DOM ID changes).
-                                tabEl.on('DOMAttrModified', Ext.bind(function(e, t, eOpts, tabDom) {
-                                    //There will be a ton of events flying through this handler
-                                    //So we need to filter the numbers down to relevant events
-                                    if (e.type === "mousemove") {
-                                        return;
-                                    }
-                                    if (t.id !== tabDom.id) {
-                                        return;
-                                    }
-                                    //Don't layout if the DIV is invisible
-                                    if (t.style['display'] === 'none') {
-                                        return;
-                                    }
+                            //Firstly get all child div's (these are our tabs).
+                            //This tells us how many headers there should be (one for each tab)
+                            var tabElements = tabParentDiv.select('> div');
+                            var tabElementsArr = [];
+                            tabElements.each(function(div) {
+                                tabElementsArr.push(div.dom);   //don't store a reference to div, it's the Ext.flyWeight el. Use div.dom
+                            });
 
-                                    var tabElement = Ext.get(tabDom.id);
+                            //Now there are a lot of divs under the header parent, we are interested
+                            //in the last N (which represent the N headers of the above tabs)
+                            var allParentDivs = headerParentDiv.select('> div');
+                            var allParentDivsArr = [];
+                            allParentDivs.each(function(div) {
+                                allParentDivsArr.push(div.dom); //don't store a reference to div, it's the Ext.flyWeight el. Use div.dom
+                            });
+                            var headerDivsArr = allParentDivsArr.slice(allParentDivsArr.length - tabElementsArr.length);
 
+                            //Start iterating from the second index - the first tab will never need a forced layout
+                            for (var i = 1; i < headerDivsArr.length; i++) {
+                                var headerDiv = new Ext.Element(headerDivsArr[i]);
+                                var tabDiv = new Ext.Element(tabElementsArr[i]);
+
+                                headerDiv.on('click', Ext.bind(function(e, t, eOpts, headerElement, tabElement) {
                                     //Find the container which belongs to t
                                     for (var i = 0; i < params.baseComponents.length; i++) {
                                         var container = params.baseComponents[i];
@@ -142,13 +141,14 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
                                         if (matchingElements.getCount() > 0) {
                                             //Only perform the layout once for performance reasons
                                             if (!container._portalTabLayout) {
+                                                console.log('Layout for tab ', containerElId);
                                                 container._portalTabLayout = true;
                                                 container.doLayout();
                                             }
                                         }
                                     }
-                                }, this, [tabEl.dom], true));
-                            });
+                                }, this, [headerDiv, tabDiv], true));
+                            }
                         }
                     }
                 });
