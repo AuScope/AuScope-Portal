@@ -18,9 +18,26 @@ Ext.define('portal.csw.CSWRecord', {
         { name: 'geographicElements', convert: portal.util.BBoxType.convert}, //an array of portal.util.BBox objects representing the total spatial bounds of this record
         { name: 'onlineResources', convert: portal.csw.OnlineResourceType.convert}, //A set of portal.csw.OnlineResource objects
         { name: 'resourceProvider', type: 'string'}, //A set of portal.csw.OnlineResource objects
-        { name: 'recordInfoUrl' , type:'string'}
+        { name: 'recordInfoUrl' , type:'string'},
+        { name: 'constraints' , type:'auto'} //An array of strings representing access constraints that will be shown to a user before this layer is used
     ],
 
+    /**
+     * Returns a boolean indicating whether or not this record has any access constraints associated with it.
+     *
+     * Empty access constraints will not be counted
+     */
+    hasConstraints : function() {
+        var constraints = this.get('constraints');
+        for (var i = 0; i < constraints.length; i++) {
+            var constraint = constraints[i].replace(/^\s\s*/, '').replace(/\s\s*$/, ''); //trim the string
+            if (constraint.length > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    },
 
     /**
      * Function to return true if the keywords matches any of the filter parameter

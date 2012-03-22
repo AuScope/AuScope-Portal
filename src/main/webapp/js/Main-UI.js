@@ -111,10 +111,22 @@ Ext.application({
                 return;
             }
 
+            //Turn our KnownLayer/CSWRecord into an actual Layer
             if (record instanceof portal.csw.CSWRecord) {
                 newLayer = layerFactory.generateLayerFromCSWRecord(record);
             } else {
                 newLayer = layerFactory.generateLayerFromKnownLayer(record);
+            }
+
+            //We may need to show a popup window with copyright info
+            var cswRecords = newLayer.get('cswRecords');
+            for (var i = 0; i < cswRecords.length; i++) {
+                if (cswRecords[i].hasConstraints()) {
+                    Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
+                        cswRecords : cswRecords
+                    }).show();
+                    break;
+                }
             }
 
             layerStore.add(newLayer); //this adds the layer to our store
