@@ -141,7 +141,6 @@ Ext.define('portal.layer.querier.QueryTargetHandler', {
                                         if (matchingElements.getCount() > 0) {
                                             //Only perform the layout once for performance reasons
                                             if (!container._portalTabLayout) {
-                                                console.log('Layout for tab ', containerElId);
                                                 container._portalTabLayout = true;
                                                 container.doLayout();
                                             }
