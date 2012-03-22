@@ -103,6 +103,14 @@ Ext.application({
         var handleAddRecordToMap = function(sourceGrid, record) {
             var layerFactory = Ext.create('portal.layer.LayerFactory', {map : map});
             var newLayer = null;
+
+            //Ensure the layer DNE first
+            var existingRecord = layerStore.getById(record.get('id'));
+            if (existingRecord) {
+                layersPanel.getSelectionModel().select([existingRecord], false);
+                return;
+            }
+
             if (record instanceof portal.csw.CSWRecord) {
                 newLayer = layerFactory.generateLayerFromCSWRecord(record);
             } else {
