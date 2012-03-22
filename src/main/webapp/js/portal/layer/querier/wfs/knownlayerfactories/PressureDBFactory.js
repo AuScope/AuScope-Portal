@@ -30,16 +30,19 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                     var availableOmResponse = responseObj.data[0];
 
                     //Update our form based on our response
-                    var checkBoxGroups = form.findByType('checkboxgroup');
-                    checkBoxGroups[0].items.items[0].setDisabled(!availableOmResponse.temperatureT);
+                    var temperatureCbGroup = form.getComponent('temperature');
+                    var salinityCbGroup = form.getComponent('salinity');
+                    var pressureCbGroup = form.getComponent('pressure');
 
-                    checkBoxGroups[1].items.items[0].setDisabled(!availableOmResponse.salinityTds);
-                    checkBoxGroups[1].items.items[1].setDisabled(!availableOmResponse.salinityNacl);
-                    checkBoxGroups[1].items.items[2].setDisabled(!availableOmResponse.salinityCl);
+                    temperatureCbGroup.getComponent('temperature').setDisabled(!availableOmResponse.temperatureT);
 
-                    checkBoxGroups[2].items.items[0].setDisabled(!availableOmResponse.pressureRft);
-                    checkBoxGroups[2].items.items[1].setDisabled(!availableOmResponse.pressureDst);
-                    checkBoxGroups[2].items.items[2].setDisabled(!availableOmResponse.pressureFitp);
+                    salinityCbGroup.getComponent('total-dissolved-solids').setDisabled(!availableOmResponse.salinityTds);
+                    salinityCbGroup.getComponent('nacl-concentration').setDisabled(!availableOmResponse.salinityNacl);
+                    salinityCbGroup.getComponent('cl-concentration').setDisabled(!availableOmResponse.salinityCl);
+
+                    pressureCbGroup.getComponent('rock-formation-test').setDisabled(!availableOmResponse.pressureRft);
+                    pressureCbGroup.getComponent('drill-stem-test').setDisabled(!availableOmResponse.pressureDst);
+                    pressureCbGroup.getComponent('formation-interval-test-pressure').setDisabled(!availableOmResponse.pressureFitp);
                 }
 
                 form.loadMask.hide();
@@ -52,7 +55,7 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
      */
     parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
         var me = this;
-        var pressureDbUrl = this.getBaseUrl(parentOnlineResource.url) + '/pressuredb-dataservices'; //This is a hack - somehow this needs to make it to the registry
+        var pressureDbUrl = this.getBaseUrl(parentOnlineResource.get('url')) + '/pressuredb-dataservices'; //This is a hack - somehow this needs to make it to the registry
         var featureId = featureId.replace('gsml.borehole.', '');
 
         //Load the form in full - when it renders we'll actually check what is available.
@@ -73,44 +76,54 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                 },
                 items : [{
                     xtype : 'checkboxgroup',
+                    itemId : 'temperature',
                     fieldLabel: '<b>Temperature</b>',
                     columns : 1,
                     items : [{
                         boxLabel : 'Temperature',
+                        itemId : 'temperature',
                         name : 't',
                         disabled : true
                     }]
                 },{
                     xtype : 'checkboxgroup',
+                    itemId : 'salinity',
                     fieldLabel: '<b>Salinity</b>',
                     columns : 1,
                     items : [{
                         boxLabel : 'Total Dissolved Solids',
+                        itemId : 'total-dissolved-solids',
                         name : 'tds',
                         disabled : true
                     },{
                         boxLabel : 'NaCl concentration',
+                        itemId : 'nacl-concentration',
                         name : 'nacl',
                         disabled : true
                     },{
                         boxLabel : 'Cl concentration',
+                        itemId : 'cl-concentration',
                         name : 'cl',
                         disabled : true
                     }]
                 },{
                     xtype : 'checkboxgroup',
+                    itemId : 'pressure',
                     fieldLabel: '<b>Pressure</b>',
                     columns : 1,
                     items : [{
                         boxLabel : 'Rock Formation Test',
+                        itemId : 'rock-formation-test',
                         name : 'rft',
                         disabled : true
                     },{
                         boxLabel : 'Drill Stem Test',
+                        itemId : 'drill-stem-test',
                         name : 'dst',
                         disabled : true
                     },{
                         boxLabel : 'Formation Interval Test Pressure',
+                        itemId : 'formation-interval-test-pressure',
                         name : 'fitp',
                         disabled : true
                     }]
@@ -128,19 +141,23 @@ Ext.define('portal.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                     text : 'Download selected observations',
                     handler : function() {
                         //We need to generate our download URL
-                        var url = Ext.urlAppend('pressuredb-download.do', Ext.urlEncode({wellID : featureId}));
-                        url = Ext.urlAppend(url, Ext.urlEncode({serviceUrl : pressureDbUrl}));
+                        var url = 'pressuredb-download.do';
+                        var params = {
+                            wellID : featureId,
+                            serviceUrl : pressureDbUrl,
+                            feature : []
+                        };
 
                         //Find the parent form - iterate the selected values
                         var parentForm = this.findParentByType('form');
                         var featuresAdded = 0;
                         for (feature in parentForm.getForm().getValues()) {
-                            url = Ext.urlAppend(url, Ext.urlEncode({feature : feature}));
+                            params.feature.push(feature);
                             featuresAdded++;
                         }
 
                         if (featuresAdded > 0) {
-                            FileDownloader.downloadFile(url);
+                            portal.util.FileDownloader.downloadFile(url, params);
                         } else {
                             Ext.Msg.show({
                                 title:'No selection',
