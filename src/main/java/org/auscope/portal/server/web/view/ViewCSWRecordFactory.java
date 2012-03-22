@@ -38,7 +38,9 @@ public class ViewCSWRecordFactory {
         String adminArea = null;
         String contactOrg = "Unknown";
         if (rp != null) {
-            contactOrg = rp.getOrganisationName();
+            if (rp.getOrganisationName() != null && !rp.getOrganisationName().isEmpty()) {
+                contactOrg = rp.getOrganisationName();
+            }
             adminArea = (rp.getContactInfo() == null ? null : rp.getContactInfo().getAddressAdministrativeArea());
         }
         obj.put("adminArea", adminArea);
