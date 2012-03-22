@@ -32,7 +32,12 @@ Ext.define('portal.layer.querier.coverage.WCSQuerier', {
         }
     },
 
+
+
     query : function(queryTarget, callback) {
+        var allOnlineResources = queryTarget.get('cswRecord').get('onlineResources');
+        var opendapResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.OPeNDAP);
+
         Ext.Ajax.request({
             url: 'describeCoverage.do',
             timeout : 180000,
@@ -41,6 +46,7 @@ Ext.define('portal.layer.querier.coverage.WCSQuerier', {
                 layerName       : queryTarget.get('onlineResource').get('name')
                 //cswRecord       : queryTarget.get('cswRecord')
             },
+            scope : this,
             callback : function(options, success, response) {
                 if(success){
                     var responseObj = Ext.JSON.decode(response.responseText);
@@ -118,6 +124,14 @@ Ext.define('portal.layer.querier.coverage.WCSQuerier', {
                                 var downloader=layer.get('downloader');
                                 var renderedFilterer = layer.get('filterer').clone();
                                 downloader.downloadData(layer, layer.getAllOnlineResources(), renderedFilterer, undefined);
+                            }
+                        },{
+                            text : 'Download OPeNDAP',
+                            iconCls : 'download',
+                            hidden : opendapResources.length === 0,
+                            handler : function() {
+                                var opendapDownloader = Ext.create('portal.layer.downloader.coverage.OPeNDAPDownloader', {map : this.map});
+                                opendapDownloader.downloadData(queryTarget.get('layer'), allOnlineResources, null, null);
                             }
                         }]
                     });
