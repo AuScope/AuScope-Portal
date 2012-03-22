@@ -7,7 +7,7 @@ Ext.define('portal.layer.legend.wms.WMSLegendForm', {
 
     constructor : function(config) {
         var html='';
-        var wmsOnlineResources=config.resources;
+        var wmsOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(config.resources, portal.csw.OnlineResource.WMS);
 
         for (var j = 0; j < wmsOnlineResources.length; j++) {
             var url = portal.layer.legend.wfs.WMSLegend.generateImageUrl(wmsOnlineResources[j].get('url'), wmsOnlineResources[j].get('name'));

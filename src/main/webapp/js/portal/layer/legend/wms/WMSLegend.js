@@ -21,16 +21,13 @@ Ext.define('portal.layer.legend.wfs.WMSLegend', {
      * Implemented function, see parent class
      */
     getLegendComponent : function(resources, filterer, callback) {
-        var form=Ext.create('portal.layer.legend.wms.WMSLegendForm',{resources : resources,filterer : filterer});
+        var form = Ext.create('portal.layer.legend.wms.WMSLegendForm',{resources : resources,filterer : filterer});
         callback(this, resources, filterer, true, form); //this layer cannot generate a GUI popup
     },
 
     /**
      * Implemented function, see parent class
      */
-
-
-
     getLegendIconHtml : function(resources, filterer) {
         if (this.iconUrl && this.iconUrl.length > 0) {
             return Ext.DomHelper.markup({
