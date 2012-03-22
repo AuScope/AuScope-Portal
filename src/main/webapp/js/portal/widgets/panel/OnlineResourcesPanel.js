@@ -43,6 +43,9 @@ Ext.define('portal.widgets.panel.OnlineResourcePanel', {
                 case portal.csw.OnlineResource.WCS:
                     group = 'OGC Web Coverage Service 1.0.0';
                     break;
+                case portal.csw.OnlineResource.OPeNDAP:
+                    group = 'OPeNDAP Service';
+                    break;
                 default:
                     continue;//don't include anything else
                 }
@@ -79,17 +82,6 @@ Ext.define('portal.widgets.panel.OnlineResourcePanel', {
                         '</td>'
                     )
             },
-            /*view : new Ext.grid.GroupingView({
-                groupTextTpl: '{text}',
-                showGroupName: false,
-                templates: {
-                    cell: new Ext.Template(
-                        '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} x-selectable {css}" style="{style}" tabIndex="0" {cellAttr}>',
-                        '<div class="x-grid3-cell-inner x-grid3-col-{id}" {attr}>{value}</div>',
-                        '</td>'
-                    )
-                }
-            }),*/
             columns: [{
                 //Title column
                 dataIndex: 'onlineResource',
@@ -144,10 +136,28 @@ Ext.define('portal.widgets.panel.OnlineResourcePanel', {
         switch(onlineRes.get('type')) {
         case portal.csw.OnlineResource.WFS:
             var getFeatureUrl = url + this.internalURLSeperator(url) + 'SERVICE=WFS&REQUEST=GetFeature&VERSION=1.1.0&maxFeatures=5&typeName=' + name;
-            return '<a target="_blank" href="' + getFeatureUrl + '"><p>First 5 features</p></a>';
+            return Ext.DomHelper.markup({
+                tag : 'a',
+                target : '_blank',
+                href : getFeatureUrl,
+                html : 'First 5 features'
+            });
         case portal.csw.OnlineResource.WCS:
             var describeCoverageUrl = url + this.internalURLSeperator(url) + 'SERVICE=WCS&REQUEST=DescribeCoverage&VERSION=1.0.0&coverage=' + name;
-            return '<a target="_blank" href="' + describeCoverageUrl + '"><p>DescribeCoverage response</p></a>';
+            return Ext.DomHelper.markup({
+                tag : 'a',
+                target : '_blank',
+                href : describeCoverageUrl,
+                html : 'DescribeCoverage response'
+            });
+        case portal.csw.OnlineResource.OPeNDAP:
+            return Ext.DomHelper.markup({
+                tag : 'a',
+                target : '_blank',
+                href : url + '.html',
+                html : 'OPeNDAP Data access form'
+            });
+            break;
         case portal.csw.OnlineResource.WMS:
             //Form the WMS url
             var getMapUrl = url + this.internalURLSeperator(url) + 'SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=' + name;
@@ -186,7 +196,18 @@ Ext.define('portal.widgets.panel.OnlineResourcePanel', {
                     thumbHeight = thumbWidth * heightRatio;
                 }
 
-                return '<a target="_blank" href="' + getMapUrl + '"><img width="' + thumbWidth + '" height="' + thumbHeight + '" alt="Loading preview..." src="' + getMapUrl + '"/></a>';
+                return Ext.DomHelper.markup({
+                    tag : 'a',
+                    target : '_blank',
+                    href : getMapUrl,
+                    children : [{
+                        tag : 'img',
+                        width : thumbWidth,
+                        height : thumbHeight,
+                        alt : 'Loading preview...',
+                        src : getMapUrl
+                    }]
+                });
             }
             return 'Unable to preview WMS';
         default :
