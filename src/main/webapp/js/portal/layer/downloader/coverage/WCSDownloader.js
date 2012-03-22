@@ -615,9 +615,9 @@ Ext.define('portal.layer.downloader.coverage.WCSDownloader', {
                           text: 'Download',
                           handler: function() {
 
-//                              if (!validateWCSInfoWindow()) {
-//                                  return;
-//                              }
+                              if (!me.validateWCSInfoWindow()) {
+                                  return;
+                              }
 
                               var downloadUrl = './downloadWCSAsZip.do?' + me.getWCSInfoWindowDownloadParameters();
                               downloadFile(downloadUrl);
@@ -687,6 +687,37 @@ Ext.define('portal.layer.downloader.coverage.WCSDownloader', {
       }
 
       return params + customParams;
+  },
+
+
+  validateWCSInfoWindow : function () {
+      var win = Ext.getCmp('wcsDownloadFrm');
+      var form = win.getForm();
+      var timePositionFieldSet = Ext.getCmp('timePositionFldSet');
+      var timePeriodFieldSet = Ext.getCmp('timePeriodFldSet');
+      var bboxFieldSet = Ext.getCmp('bboxFldSet');
+
+      if (!form.isValid()) {
+          Ext.Msg.alert('Invalid Fields','One or more fields are invalid');
+          return false;
+      }
+
+      var usingTimePosition = timePositionFieldSet && !timePositionFieldSet.collapsed;
+      var usingTimePeriod = timePeriodFieldSet && !timePeriodFieldSet.collapsed;
+      var usingBbox = bboxFieldSet && !bboxFieldSet.collapsed;
+
+      if (!usingBbox && !(usingTimePosition || usingTimePeriod)) {
+          Ext.Msg.alert('No Constraints', 'You must specify at least one spatial or temporal constraint');
+          return false;
+      }
+
+      if (usingTimePosition && usingTimePeriod) {
+          Ext.Msg.alert('Too many temporal', 'You may only specify a single temporal constraint');
+          return false;
+      }
+
+      return true;
   }
+
 
 });

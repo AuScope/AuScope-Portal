@@ -117,9 +117,7 @@ Ext.define('portal.layer.querier.coverage.WCSQuerier', {
                                 var layer=queryTarget.get('layer');
                                 var downloader=layer.get('downloader');
                                 var renderedFilterer = layer.get('filterer').clone();
-                                var currentFilterer = Ext.create('portal.layer.filterer.Filterer', {});
-                                //currentFilterer.setSpatialParam(this.map.getVisibleMapBounds(), true);
-                                downloader.downloadData(layer, layer.getAllOnlineResources(), renderedFilterer, currentFilterer);
+                                downloader.downloadData(layer, layer.getAllOnlineResources(), renderedFilterer, undefined);
                             }
                         }]
                     });
