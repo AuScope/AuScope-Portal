@@ -246,7 +246,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<StyledLayerDescriptor version=\"1.0.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
                 "<NamedLayer>" +
-                "<Name>portal-style</Name>" +
+                "<Name>er:MiningFeatureOccurrence</Name>" +
                 "<UserStyle>" +
                 "<Name>portal-style</Name>" +
                 "<Title>portal-style</Title>" +
