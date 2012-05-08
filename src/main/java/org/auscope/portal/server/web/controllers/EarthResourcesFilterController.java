@@ -269,6 +269,21 @@ public class EarthResourcesFilterController extends BasePortalController {
                 "</Graphic>" +
                 "</PointSymbolizer>" +
                 "</Rule>" +
+                "<Rule>" +
+                "<Name>portal-style-2</Name>" +
+                "<Abstract>portal-style-2</Abstract>" +
+                "<PointSymbolizer>" +
+                "<Graphic>" +
+                "<Mark>" +
+                "<WellKnownName>square</WellKnownName>" +
+                "<Fill>" +
+                "<CssParameter name=\"fill\">#00FF00</CssParameter>" +
+                "</Fill>" +
+                "</Mark>" +
+                "<Size>2</Size>" +
+                "</Graphic>" +
+                "</PointSymbolizer>" +
+                "</Rule>" +
                 "</FeatureTypeStyle>" +
                 "</UserStyle>" +
                 "</NamedLayer>" +
