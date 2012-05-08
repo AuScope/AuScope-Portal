@@ -123,4 +123,9 @@ public class MenuController {
    public ModelAndView about(HttpServletRequest request) {
        return generateViewFromManifest(request, "about");
    }
+
+   @RequestMapping("/bacon.html")
+   public ModelAndView bacon(HttpServletRequest request) {
+       return generateViewFromManifest(request, "bacon");
+   }
 }

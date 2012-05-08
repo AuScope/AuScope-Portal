@@ -36,13 +36,19 @@ Ext.define('portal.layer.renderer.wms.LayerRenderer', {
 
         this.fireEvent('renderstarted', this, wmsResources, filterer);
 
+
+        var styleUrl = escape(Ext.urlAppend(portal.util.URL.base + 'doMiningActivityFilterStyle.do', Ext.Object.toQueryString(filterer.getParameters())));
+        console.log('styleUrl', styleUrl);
+
         var primitives = [];
         for (var i = 0; i < wmsResources.length; i++) {
             var wmsUrl = wmsResources[i].get('url');
             var wmsLayer = wmsResources[i].get('name');
             var wmsOpacity = filterer.getParameter('opacity');
 
-            primitives.push(this.map.makeWms(undefined, undefined, wmsResources[i], this.parentLayer, wmsUrl, wmsLayer, wmsOpacity));
+            var newWmsUrl = Ext.urlAppend(wmsUrl, 'SLD=' + styleUrl);
+            console.log('newWmsUrl', newWmsUrl);
+            primitives.push(this.map.makeWms(undefined, undefined, wmsResources[i], this.parentLayer, newWmsUrl, wmsLayer, wmsOpacity));
 
         }
 

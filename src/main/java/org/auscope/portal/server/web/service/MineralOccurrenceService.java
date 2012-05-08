@@ -201,6 +201,21 @@ public class MineralOccurrenceService extends BaseWFSService {
     }
 
 
+    public String getMiningActivityFilter(
+            String mineName,
+            String startDate,
+            String endDate,
+            String oreProcessed,
+            String producedMaterial,
+            String cutOffGrade,
+            String production,
+            int maxFeatures,
+            FilterBoundingBox bbox
+            ) throws Exception {
+        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        return generateFilterString(filter, bbox);
+    }
+
     /**
      * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
      * @param serviceURL
