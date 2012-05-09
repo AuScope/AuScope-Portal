@@ -16,3 +16,5 @@ GOTO END
 :BUILD_RUN
 call mvn jetty:run
 :END
+
+echo test
