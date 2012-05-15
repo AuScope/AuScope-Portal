@@ -15,8 +15,8 @@ import javax.xml.xpath.XPathFactory;
 
 import junit.framework.Assert;
 
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.Util;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.Util;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

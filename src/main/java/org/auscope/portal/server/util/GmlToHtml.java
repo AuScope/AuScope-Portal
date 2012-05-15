@@ -1,16 +1,13 @@
 package org.auscope.portal.server.util;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Properties;
 
-import javax.servlet.ServletContext;
+import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.auscope.portal.core.xslt.PortalXSLTTransformer;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.support.ServletContextResource;
 
 /**
  * Utility class for converting Gml to a 'pretty' HTML representation
@@ -18,41 +15,44 @@ import org.springframework.web.context.support.ServletContextResource;
  *
  */
 @Component
-public class GmlToHtml {
-    /** The location of the WFS response -> HTML XSLT */
-    public static final String GML_TO_HTML_XSLT = "/WEB-INF/xsl/WfsToHtml.xsl";
+public class GmlToHtml extends PortalXSLTTransformer {
 
-    private final Log log = LogFactory.getLog(this.getClass());
-    private PortalXSLTTransformer transformer;
-    private ServletContext servletContext;
-
-    @Autowired
-    public GmlToHtml(PortalXSLTTransformer transformer, ServletContext servletContext) {
-        this.transformer = transformer;
-        this.servletContext = servletContext;
+    public GmlToHtml() {
+        super("/org/auscope/portal/xslt/GeoSciMLtoHTML.xsl");
     }
 
     /**
-     * Utility method to transform xml file. It is kml.xsl specific as the
-     * stylesheet needs serviceURL parameter.
+     * Utility method to transform a WFS response into HTML
      *
-     * @param geoXML file to be converted in kml format
-     * @param serviceUrl URL of the service providing data
+     * @param wfs WFS response to be transformed
+     * @param serviceUrl The WFS URL where the response came from
+     * @return Kml output string
+     */
+    public String convert(String wfs, String serviceUrl) {
+        return convert(new StreamSource(new StringReader(wfs)), serviceUrl);
+    }
+
+    /**
+     * Utility method to transform a WFS response into HTML
+     *
+     * @param wfs WFS response to be transformed
+     * @param serviceUrl The WFS URL where the response came from
      * @return Xml output string
      */
-    public String convert(String geoXML, String serviceUrl) {
+    public String convert(InputStream wfs, String serviceUrl) {
+        return convert(new StreamSource(wfs), serviceUrl);
+    }
 
-        InputStream inXSLT;
-        try {
-            inXSLT = new ServletContextResource(servletContext, GML_TO_HTML_XSLT).getInputStream();
-        } catch (IOException ex) {
-            log.error("Couldn't find source GML->HTML XSLT at " + GML_TO_HTML_XSLT, ex);
-            return "";
-        }
-
-        Properties properties = new Properties();
-        properties.setProperty("serviceURL", serviceUrl);
-
-        return transformer.convert(geoXML, inXSLT, properties);
+    /**
+     * Utility method to transform a WFS response into HTML
+     *
+     * @param wfs WFS response to be transformed
+     * @param serviceUrl The WFS URL where the response came from
+     * @return Xml output string
+     */
+    public String convert(StreamSource wfs, String serviceUrl) {
+        Properties stylesheetParams = new Properties();
+        stylesheetParams.setProperty("serviceURL", serviceUrl);
+        return convert(wfs, stylesheetParams);
     }
 }

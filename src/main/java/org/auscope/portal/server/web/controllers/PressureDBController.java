@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.pressuredb.AvailableOMResponse;
 import org.auscope.portal.server.web.service.PressureDBService;
 import org.springframework.beans.factory.annotation.Autowired;

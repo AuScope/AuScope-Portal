@@ -1,7 +1,7 @@
 package org.auscope.portal.mineraloccurrence;
 
 
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.domain.ogc.AbstractFilterTestUtilities;
 import org.junit.Test;
 import org.w3c.dom.Document;

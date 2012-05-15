@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.auscope.portal.core.services.methodmakers.AbstractMethodMaker;
 import org.springframework.stereotype.Repository;
 
 /**

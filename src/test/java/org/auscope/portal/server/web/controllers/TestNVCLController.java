@@ -12,8 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.URI;
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.csw.CSWRecordsFilterVisitor;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
@@ -23,12 +27,8 @@ import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGStatusResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
-import org.auscope.portal.server.util.ByteBufferedServletOutputStream;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.auscope.portal.server.web.service.BoreholeService;
-import org.auscope.portal.server.web.service.CSWCacheService;
-import org.auscope.portal.server.web.service.CSWRecordsFilterVisitor;
 import org.auscope.portal.server.web.service.NVCLDataService;
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -92,7 +92,7 @@ public class TestNVCLController extends PortalTestClass {
 
         context.checking(new Expectations() {{
             oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, null);
-            will(returnValue(new WFSKMLResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
+            will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
             allowing(mockHttpMethodBase).getURI();
             will(returnValue(httpMethodURI));
@@ -133,7 +133,7 @@ public class TestNVCLController extends PortalTestClass {
             will(returnValue(restrictedIds));
 
             oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, restrictedIds);
-            will(returnValue(new WFSKMLResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
+            will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
             allowing(mockHttpMethodBase).getURI();
             will(returnValue(httpMethodURI));
@@ -614,7 +614,7 @@ public class TestNVCLController extends PortalTestClass {
 
         context.checking(new Expectations() {{
             oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, null, null);
-            will(returnValue(new WFSKMLResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
+            will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
             allowing(mockHttpMethodBase).getURI();
             will(returnValue(httpMethodURI));

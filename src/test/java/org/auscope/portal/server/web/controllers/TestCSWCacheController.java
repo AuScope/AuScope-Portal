@@ -15,11 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.csw.record.CSWRecord;
-import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
-import org.auscope.portal.server.web.service.CSWCacheService;
-import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
+import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
+import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.responses.csw.CSWRecord;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.view.ViewCSWRecordFactory;
+import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -53,6 +54,9 @@ public class TestCSWCacheController extends PortalTestClass {
     /** The mock view csw record factory. */
     private ViewCSWRecordFactory mockViewCSWRecordFactory = context.mock(ViewCSWRecordFactory.class);
 
+    /** The mock view known layer factory. */
+    private ViewKnownLayerFactory mockViewKnownLayerFactory = context.mock(ViewKnownLayerFactory.class);
+
     /** The mock csw record1. */
     private CSWRecord mockCSWRecord1 = context.mock(CSWRecord.class, "mockCSWRecord1");
 
@@ -75,7 +79,7 @@ public class TestCSWCacheController extends PortalTestClass {
             oneOf(mockCSWService).updateCache();
         }});
 
-        cswController = new CSWCacheController(mockCSWService, mockViewCSWRecordFactory, mockPropertyConfigurer);
+        cswController = new CSWCacheController(mockCSWService, mockViewCSWRecordFactory, mockViewKnownLayerFactory, mockPropertyConfigurer);
     }
 
     /**

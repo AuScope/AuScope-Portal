@@ -4,11 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.pressuredb.AvailableOMResponse;
-import org.auscope.portal.pressuredb.PressureDBException;
 import org.auscope.portal.server.web.PressureDBMethodMaker;
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -19,7 +19,6 @@ public class TestPressureDBService extends PortalTestClass {
     private PressureDBService service;
     private PressureDBMethodMaker mockMethodMaker = context.mock(PressureDBMethodMaker.class);
     private HttpServiceCaller mockHttpServiceCaller = context.mock(HttpServiceCaller.class);
-    private HttpClient mockHttpClient = context.mock(HttpClient.class);
     private HttpMethodBase mockHttpMethod = context.mock(HttpMethodBase.class);
     private InputStream mockStream = context.mock(InputStream.class);
 
@@ -37,8 +36,7 @@ public class TestPressureDBService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod, mockHttpClient);will(returnValue(responseStream));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(responseStream));
         }});
 
         //Make our response and have it parsed
@@ -63,7 +61,7 @@ public class TestPressureDBService extends PortalTestClass {
         Assert.assertEquals(true, response.isTemperatureT());
     }
 
-    @Test(expected=PressureDBException.class)
+    @Test(expected=PortalServiceException.class)
     public void testMakeOMRequestParserError() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
@@ -72,8 +70,7 @@ public class TestPressureDBService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod, mockHttpClient);will(returnValue(responseStream));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(responseStream));
         }});
 
         //Make our response and have it parsed - it should result in a parser exception
@@ -89,8 +86,7 @@ public class TestPressureDBService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod, mockHttpClient);will(throwException(exception));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(throwException(exception));
         }});
 
         //make the request - it should throw an exception
@@ -106,8 +102,7 @@ public class TestPressureDBService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeDownloadMethod(serviceUrl, wellID, features);will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod, mockHttpClient);will(returnValue(mockStream));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(mockStream));
         }});
 
         //make the request - it should return a stream
@@ -125,8 +120,7 @@ public class TestPressureDBService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeDownloadMethod(serviceUrl, wellID, features);will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod, mockHttpClient);will(throwException(exception));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(throwException(exception));
         }});
 
         //make the request - it should throw an exception

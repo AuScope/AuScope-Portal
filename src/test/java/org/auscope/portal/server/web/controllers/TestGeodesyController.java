@@ -3,10 +3,10 @@ package org.auscope.portal.server.web.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservation;
 import org.auscope.portal.server.web.service.GeodesyService;
-import org.auscope.portal.server.web.service.PortalServiceException;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;

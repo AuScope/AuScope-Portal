@@ -1,7 +1,8 @@
 package org.auscope.portal.mineraloccurrence;
 
-import org.auscope.portal.server.domain.filter.AbstractFilter;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+
 
 /**
  * Class that represents ogc:Filter markup for er:mine queries

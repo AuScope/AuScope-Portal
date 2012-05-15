@@ -7,7 +7,7 @@ import javax.xml.namespace.NamespaceContext;
 
 import junit.framework.Assert;
 
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.junit.Test;
 
 

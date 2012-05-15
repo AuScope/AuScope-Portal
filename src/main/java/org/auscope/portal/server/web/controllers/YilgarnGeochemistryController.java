@@ -5,12 +5,13 @@ import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.gsml.YilgarnGeochemistryFilter;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.domain.wfs.WFSCountResponse;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
 import org.auscope.portal.server.web.service.WFSService;
 import org.auscope.portal.server.web.service.YilgarnGeochemistryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,7 +149,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
         String filterString = generateGeologicUnitFilter(geologicName, bboxJson);
 
         //Make our request and get it transformed
-        WFSKMLResponse response = null;
+        WFSTransformedResponse response = null;
         try {
             response = wfsService.getWfsResponseAsKml(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures, null);
         } catch (Exception ex) {
@@ -157,7 +158,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
             return generateExceptionResponse(ex, serviceUrl);
         }
 
-        return generateJSONResponseMAV(true, response.getGml(), response.getKml(), response.getMethod());
+        return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
     }
 
     /**

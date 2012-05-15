@@ -4,19 +4,20 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.ConnectException;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.Util;
-import org.auscope.portal.server.domain.ows.OWSException;
-import org.auscope.portal.server.domain.wfs.WFSCountResponse;
-import org.auscope.portal.server.domain.wfs.WFSHTMLResponse;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.BaseWFSService;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
+import org.auscope.portal.core.services.responses.ows.OWSException;
+import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.server.util.GmlToHtml;
-import org.auscope.portal.server.util.GmlToKml;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker.ResultType;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,12 +29,11 @@ import org.junit.Test;
  *
  */
 public class TestWFSService extends PortalTestClass {
-    private GmlToKml mockGmlToKml = context.mock(GmlToKml.class);
+    private WfsToKmlTransformer mockGmlToKml = context.mock(WfsToKmlTransformer.class);
     private GmlToHtml mockGmlToHtml = context.mock(GmlToHtml.class);
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private WFSGetFeatureMethodMaker mockMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
     private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
-    private HttpClient mockClient = context.mock(HttpClient.class);
     private WFSService service;
 
     @Before
@@ -53,8 +53,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
 
@@ -62,10 +61,10 @@ public class TestWFSService extends PortalTestClass {
 
         }});
 
-        WFSKMLResponse response = service.getWfsResponseAsKml(serviceUrl, typeName, featureId);
+        WFSTransformedResponse response = service.getWfsResponseAsKml(serviceUrl, typeName, featureId);
         Assert.assertNotNull(response);
         Assert.assertEquals(responseString, response.getGml());
-        Assert.assertEquals(responseKml, response.getKml());
+        Assert.assertEquals(responseKml, response.getTransformed());
     }
 
     /**
@@ -79,8 +78,7 @@ public class TestWFSService extends PortalTestClass {
         final ConnectException exceptionThrown = new ConnectException();
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(throwException(exceptionThrown));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(throwException(exceptionThrown));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
 
@@ -106,8 +104,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
         }});
 
@@ -134,8 +131,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results);will(returnValue(mockMethod));
 
@@ -143,10 +139,10 @@ public class TestWFSService extends PortalTestClass {
 
         }});
 
-        WFSKMLResponse response = service.getWfsResponseAsKml(serviceUrl, typeName, filterString, maxFeatures, srsName);
+        WFSTransformedResponse response = service.getWfsResponseAsKml(serviceUrl, typeName, filterString, maxFeatures, srsName);
         Assert.assertNotNull(response);
         Assert.assertEquals(responseString, response.getGml());
-        Assert.assertEquals(responseKml, response.getKml());
+        Assert.assertEquals(responseKml, response.getTransformed());
     }
 
     /**
@@ -162,8 +158,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            allowing(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            allowing(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(returnValue(responseString));
+            allowing(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
             allowing(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, BaseWFSService.DEFAULT_SRS, ResultType.Results);will(returnValue(mockMethod));
 
@@ -189,8 +184,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(throwException(exceptionThrown));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(throwException(exceptionThrown));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results);will(returnValue(mockMethod));
         }});
@@ -218,8 +212,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results);will(returnValue(mockMethod));
         }});
@@ -245,8 +238,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
 
@@ -254,10 +246,10 @@ public class TestWFSService extends PortalTestClass {
 
         }});
 
-        WFSHTMLResponse response = service.getWfsResponseAsHtml(serviceUrl, typeName, featureId);
+        WFSTransformedResponse response = service.getWfsResponseAsHtml(serviceUrl, typeName, featureId);
         Assert.assertNotNull(response);
         Assert.assertEquals(responseString, response.getGml());
-        Assert.assertEquals(responseHtml, response.getHtml());
+        Assert.assertEquals(responseHtml, response.getTransformed());
     }
 
     /**
@@ -271,8 +263,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(throwException(exceptionThrown));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(throwException(exceptionThrown));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
         }});
@@ -297,8 +288,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod, mockClient);will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
         }});
 
@@ -321,17 +311,16 @@ public class TestWFSService extends PortalTestClass {
         final String serviceUrl = "http://service/wfs?request=GetFeature";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)), with(any(HttpClient.class)));will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(returnValue(responseString));
 
             oneOf(mockGmlToHtml).convert(responseString, serviceUrl);will(returnValue(responseKml));
 
         }});
 
-        WFSHTMLResponse response = service.getWfsResponseAsHtml(serviceUrl);
+        WFSTransformedResponse response = service.getWfsResponseAsHtml(serviceUrl);
         Assert.assertNotNull(response);
         Assert.assertEquals(responseString, response.getGml());
-        Assert.assertEquals(responseKml, response.getHtml());
+        Assert.assertEquals(responseKml, response.getTransformed());
     }
 
     /**
@@ -343,8 +332,7 @@ public class TestWFSService extends PortalTestClass {
         final String serviceUrl = "http://service/wfs?request=GetFeature";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)), with(any(HttpClient.class)));will(throwException(exceptionThrown));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(throwException(exceptionThrown));
         }});
 
         try {
@@ -365,8 +353,7 @@ public class TestWFSService extends PortalTestClass {
         final String responseString = Util.loadXML("src/test/resources/OWSExceptionSample1.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)), with(any(HttpClient.class)));will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(returnValue(responseString));
         }});
 
 
@@ -393,8 +380,7 @@ public class TestWFSService extends PortalTestClass {
         final int expectedCount = 161;
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockClient);will(returnValue(responseStream));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits);will(returnValue(mockMethod));
 
@@ -418,8 +404,7 @@ public class TestWFSService extends PortalTestClass {
         final String typeName = "type:Name";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockClient);will(throwException(exceptionThrown));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(exceptionThrown));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits);will(returnValue(mockMethod));
 
@@ -447,8 +432,7 @@ public class TestWFSService extends PortalTestClass {
         final InputStream responseStream = getClass().getResourceAsStream("/OWSExceptionSample1.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockClient);will(returnValue(responseStream));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits);will(returnValue(mockMethod));
         }});

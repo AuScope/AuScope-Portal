@@ -2,18 +2,16 @@ package org.auscope.portal.server.web.service;
 
 import java.io.InputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.pressuredb.AvailableOMResponse;
-import org.auscope.portal.pressuredb.PressureDBException;
 import org.auscope.portal.pressuredb.PressureDBExceptionParser;
 import org.auscope.portal.server.web.PressureDBMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,9 +76,7 @@ public class PressureDBService {
      * @throws XPathExpressionException
      */
     private boolean extractBooleanXPath(String xPathString, Node node) throws XPathExpressionException {
-        XPath xPath = XPathFactory.newInstance().newXPath();
-
-        return attemptParseBoolean(xPath.evaluate(xPathString, node, XPathConstants.STRING));
+        return attemptParseBoolean(DOMUtil.compileXPathExpr(xPathString).evaluate(node, XPathConstants.STRING));
     }
 
     /**
@@ -91,20 +87,21 @@ public class PressureDBService {
      * @return
      * @throws Exception
      */
-    public AvailableOMResponse makeGetAvailableOMRequest(String wellID, String serviceUrl) throws Exception {
+    public AvailableOMResponse makeGetAvailableOMRequest(String wellID, String serviceUrl) throws PortalServiceException {
 
         //Generate and then make the request
-        HttpMethodBase method = methodMaker.makeGetAvailableOMMethod(serviceUrl, wellID);
-        InputStream stream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
-
-        //Parse our resulting stream into an XML document
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        HttpMethodBase method = null;
         Document doc = null;
         try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            doc = builder.parse(stream);
+            method = methodMaker.makeGetAvailableOMMethod(serviceUrl, wellID);
+            InputStream stream = httpServiceCaller.getMethodResponseAsStream(method);
+            doc = DOMUtil.buildDomFromStream(stream, false);
         } catch (Exception ex) {
-            throw new PressureDBException("Unable to parse response into XML", ex);
+            throw new PortalServiceException(method, "Unable to make/parse response", ex);
+        } finally {
+            if (method != null) {
+                method.releaseConnection();
+            }
         }
 
         //ensure we don't have an error response
@@ -112,10 +109,11 @@ public class PressureDBService {
 
         //Parse the XML document into a AvailableOMResponse
         AvailableOMResponse response = new AvailableOMResponse();
-        XPath xPath = XPathFactory.newInstance().newXPath();
         try {
-            response.setWellID((String) xPath.evaluate("AvailableOM/Observations/@Well__Id", doc, XPathConstants.STRING));
-            response.setOmUrl((String) xPath.evaluate("AvailableOM/Observations/omUrl", doc, XPathConstants.STRING));
+
+
+            response.setWellID((String) DOMUtil.compileXPathExpr("AvailableOM/Observations/@Well__Id").evaluate(doc, XPathConstants.STRING));
+            response.setOmUrl((String) DOMUtil.compileXPathExpr("AvailableOM/Observations/omUrl").evaluate(doc, XPathConstants.STRING));
             response.setObsTemperature(extractBooleanXPath("AvailableOM/Observations/temperature", doc));
             response.setObsPressureData(extractBooleanXPath("AvailableOM/Observations/pressureData", doc));
             response.setObsSalinity(extractBooleanXPath("AvailableOM/Observations/salinity", doc));
@@ -129,8 +127,8 @@ public class PressureDBService {
             response.setSalinityCl(extractBooleanXPath("AvailableOM/SalinityFeature/cl", doc));
 
             response.setTemperatureT(extractBooleanXPath("AvailableOM/TemperatureFeature/t", doc));
-        } catch (XPathExpressionException e) {
-            throw new PressureDBException("Unable to parse <AvailableOM> XML response", e);
+        } catch (Exception e) {
+            throw new PortalServiceException(method, "Unable to parse <AvailableOM> XML response", e);
         }
         return response;
     }
@@ -146,6 +144,6 @@ public class PressureDBService {
      */
     public InputStream makeDownloadRequest(String wellID, String serviceUrl, String[] features) throws Exception {
         HttpMethodBase method = methodMaker.makeDownloadMethod(serviceUrl, wellID, features);
-        return httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        return httpServiceCaller.getMethodResponseAsStream(method);
     }
 }

@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.auscope.portal.csw.record.CSWRecord;
-import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
-import org.auscope.portal.server.web.service.CSWCacheService;
-import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
+import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
+import org.auscope.portal.core.server.controllers.BaseCSWController;
+import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.responses.csw.CSWRecord;
+import org.auscope.portal.core.view.ViewCSWRecordFactory;
+import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,10 +25,6 @@ public class CSWCacheController extends BaseCSWController {
 
     private CSWCacheService cswService;
 
-    public CSWCacheController(ViewCSWRecordFactory viewCSWRecordFactory) {
-        super(viewCSWRecordFactory);
-    }
-
     /**
      * Constructor
      * @param
@@ -34,15 +32,13 @@ public class CSWCacheController extends BaseCSWController {
     @Autowired
     public CSWCacheController(CSWCacheService cswService,
                          ViewCSWRecordFactory viewCSWRecordFactory,
+                         ViewKnownLayerFactory viewKnownLayerFactory,
                          PortalPropertyPlaceholderConfigurer propertyResolver) {
 
-        super(viewCSWRecordFactory);
+        super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswService = cswService;
-        try {
-            cswService.updateCache();
-        } catch (Exception e) {
-            log.error("Error whilst starting initial cache update",e);
-        }
+
+        cswService.updateCache();
     }
 
     /**

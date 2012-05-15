@@ -3,7 +3,7 @@ package org.auscope.portal.server.domain.admin;
 import java.util.Arrays;
 import java.util.List;
 
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 

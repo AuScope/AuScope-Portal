@@ -8,11 +8,15 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
 import org.apache.commons.httpclient.HttpMethodBase;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.BaseWFSService;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
+import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.server.domain.geodesy.GeodesyNamespaceContext;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservation;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservationsFilter;
-import org.auscope.portal.server.util.DOMUtil;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -24,9 +28,7 @@ import org.w3c.dom.NodeList;
  * @author Josh Vote
  */
 @Service
-public class GeodesyService {
-    private HttpServiceCaller httpServiceCaller;
-    private WFSGetFeatureMethodMaker wfsMethodMaker;
+public class GeodesyService extends BaseWFSService {
 
     /**
      * Creates a new instance of this class
@@ -36,8 +38,8 @@ public class GeodesyService {
     @Autowired
     public GeodesyService(HttpServiceCaller httpServiceCaller,
             WFSGetFeatureMethodMaker wfsMethodMaker) {
-        this.httpServiceCaller = httpServiceCaller;
-        this.wfsMethodMaker = wfsMethodMaker;
+        super(httpServiceCaller, wfsMethodMaker);
+
     }
 
     /**
@@ -53,8 +55,8 @@ public class GeodesyService {
         List<GeodesyObservation> allObservations = new ArrayList<GeodesyObservation>();
         try {
             //Make our request
-            method = wfsMethodMaker.makeMethod(wfsUrl, "geodesy:station_observations", filter.getFilterStringAllRecords(), null);
-            InputStream response = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+            method = this.generateWFSRequest(wfsUrl, "geodesy:station_observations", null, filter.getFilterStringAllRecords(), null, null, ResultType.Results);
+            InputStream response = httpServiceCaller.getMethodResponseAsStream(method);
 
             //Parse it into a DOM doc
             GeodesyNamespaceContext nc = new GeodesyNamespaceContext();
@@ -77,6 +79,10 @@ public class GeodesyService {
 
         } catch (Exception ex) {
             throw new PortalServiceException(method);
+        } finally {
+            if (method != null) {
+                method.releaseConnection();
+            }
         }
 
         return allObservations;

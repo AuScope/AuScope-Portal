@@ -4,19 +4,22 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.csw.record.AbstractCSWOnlineResource;
-import org.auscope.portal.csw.record.AbstractCSWOnlineResource.OnlineResourceType;
-import org.auscope.portal.csw.record.CSWOnlineResourceImpl;
-import org.auscope.portal.csw.record.CSWRecord;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
+import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
+import org.auscope.portal.core.services.responses.csw.CSWOnlineResourceImpl;
+import org.auscope.portal.core.services.responses.csw.CSWRecord;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.mineraloccurrence.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
-import org.auscope.portal.server.util.GmlToKml;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +43,7 @@ public class TestBoreholeService extends PortalTestClass {
     private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
 
     /** The mock GML transformer*/
-    private GmlToKml mockGmlToKml = context.mock(GmlToKml.class);
+    private WfsToKmlTransformer mockGmlToKml = context.mock(WfsToKmlTransformer.class);
 
     /** The Constant GETSCANNEDBOREHOLEXML. */
     private static final String GETSCANNEDBOREHOLEXML = "src/test/resources/GetScannedBorehole.xml";
@@ -55,10 +58,7 @@ public class TestBoreholeService extends PortalTestClass {
      */
     @Before
     public void setUp() throws Exception {
-        service = new BoreholeService();
-        service.setHttpServiceCaller(mockHttpServiceCaller);
-        service.setWFSGetFeatureMethodMakerPOST(mockMethodMaker);
-        service.setGmlToKml(mockGmlToKml);
+        service = new BoreholeService(mockHttpServiceCaller, mockMethodMaker, mockGmlToKml);
     }
 
     /**
@@ -82,16 +82,15 @@ public class TestBoreholeService extends PortalTestClass {
 
             oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)));will(returnValue(mockMethod));
 
-            oneOf(mockHttpServiceCaller).getHttpClient();
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(gmlString));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
         }});
 
-        WFSKMLResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, restrictedIds);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, restrictedIds);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
-        Assert.assertEquals(kmlString, result.getKml());
+        Assert.assertEquals(kmlString, result.getTransformed());
         Assert.assertSame(mockMethod, result.getMethod());
     }
 
@@ -115,16 +114,15 @@ public class TestBoreholeService extends PortalTestClass {
         context.checking(new Expectations() {{
 
             oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)));will(returnValue(mockMethod));
-            oneOf(mockHttpServiceCaller).getHttpClient();
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(gmlString));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
         }});
 
-        WFSKMLResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, restrictedIds);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, restrictedIds);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
-        Assert.assertEquals(kmlString, result.getKml());
+        Assert.assertEquals(kmlString, result.getTransformed());
         Assert.assertSame(mockMethod, result.getMethod());
     }
 
@@ -147,16 +145,15 @@ public class TestBoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeMethod(serviceURL, "gsml:Borehole", filterString, maxFeatures);will(returnValue(mockMethod));
-            oneOf(mockHttpServiceCaller).getHttpClient();
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));will(returnValue(gmlString));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
         }});
 
-        WFSKMLResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, null, restrictedIds);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, null, restrictedIds);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
-        Assert.assertEquals(kmlString, result.getKml());
+        Assert.assertEquals(kmlString, result.getTransformed());
         Assert.assertSame(mockMethod, result.getMethod());
     }
 
@@ -177,7 +174,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", "dne", "description");
 
-        final String successResponse = org.auscope.portal.Util.loadXML(GETSCANNEDBOREHOLEXML);
+        final String successResponse = Util.loadXML(GETSCANNEDBOREHOLEXML);
 
         context.checking(new Expectations() {{
             oneOf(mockCSWService).getWFSRecords();
@@ -193,8 +190,7 @@ public class TestBoreholeService extends PortalTestClass {
             will(returnValue(new AbstractCSWOnlineResource[] {}));
 
             oneOf(mockMethodMaker).makeMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), "", 0);
-            oneOf(mockHttpServiceCaller).getHttpClient();
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
             will(returnValue(successResponse));
         }});
 
@@ -213,14 +209,13 @@ public class TestBoreholeService extends PortalTestClass {
         final CSWRecord mockRecord1 = context.mock(CSWRecord.class, "mockRecord1"); //will return failure
         final CSWRecord mockRecord2 = context.mock(CSWRecord.class, "mockRecord2"); //good record
         final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
-        final HttpClient mockHttpClient = context.mock(HttpClient.class);
         final HttpMethodBase mockRecord1Method = context.mock(HttpMethodBase.class, "rec1method");
         final HttpMethodBase mockRecord2Method = context.mock(HttpMethodBase.class, "rec2method");
         final CSWRecordsHostFilter hostFilter=new CSWRecordsHostFilter("");
         final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
         final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
 
-        final String successResponse = org.auscope.portal.Util.loadXML(GETSCANNEDBOREHOLEXML);
+        final String successResponse = Util.loadXML(GETSCANNEDBOREHOLEXML);
 
         context.checking(new Expectations() {{
             oneOf(mockCSWService).getWFSRecords();
@@ -238,13 +233,10 @@ public class TestBoreholeService extends PortalTestClass {
             oneOf(mockMethodMaker).makeMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), "", 0);
             will(returnValue(mockRecord2Method));
 
-            allowing(mockHttpServiceCaller).getHttpClient();
-            will(returnValue(mockHttpClient));
-
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord1Method, mockHttpClient);
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord1Method);
             will(throwException(new Exception("I'm an exception!")));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord2Method, mockHttpClient);
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord2Method);
             will(returnValue(successResponse));
         }});
 

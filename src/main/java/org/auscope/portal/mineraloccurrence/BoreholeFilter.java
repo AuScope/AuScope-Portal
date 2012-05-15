@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.server.domain.filter.AbstractFilter;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 
 /**
  * @author Tannu Gupta
@@ -14,7 +14,7 @@ import org.auscope.portal.server.domain.filter.FilterBoundingBox;
  * @version $Id: YilgarnGeochemistryFilter.java 1233 2010-10-20   $
  */
 
-public class BoreholeFilter extends AbstractFilter{
+public class BoreholeFilter extends AbstractFilter {
 
 
         private String boreholeName;
