@@ -149,9 +149,7 @@
                 <configuration>
                     <excludes>
                         <!-- Exclude some base frameworks -->
-                        <exclude>js/OpenLayers-*/**</exclude>
-                        <exclude>js/ext-*/**</exclude>
-                        <exclude>js/extjs-*/**</exclude>
+                        <exclude>portal-core/**</exclude>
                     </excludes>
                     <nosuffix>true</nosuffix>
                 </configuration>
@@ -202,6 +200,12 @@
             <name>Geo Toolkit Repository</name>
             <url>http://maven.geotoolkit.org/</url>
         </repository>
+        <repository>
+            <id>auscope-jenkins-repo</id>
+            <name>AuScope Jenkins Repository</name>
+            <url>https://cgsrv8.arrc.csiro.au/jenkins/plugin/repository/everything</url>
+        </repository>
+        
     </repositories>
     <!-- Dependencies -->
     <dependencies>
