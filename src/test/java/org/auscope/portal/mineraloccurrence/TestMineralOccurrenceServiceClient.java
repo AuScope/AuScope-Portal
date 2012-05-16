@@ -245,6 +245,8 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
             oneOf(methodMaker).makeMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
             oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
+            
+            oneOf(mockMethod).releaseConnection();
         }});
 
         WFSCountResponse count = mineralOccurrenceService.getMinesCount(wfsUrl, mineName, bbox, maxFeatures);
@@ -275,6 +277,8 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
             oneOf(methodMaker).makeMethod(with(wfsUrl), with("gsml:MappedFeature"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
             oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
+            
+            oneOf(mockMethod).releaseConnection();
         }});
 
         WFSCountResponse count = mineralOccurrenceService.getMineralOccurrenceCount(wfsUrl, commodityName, measureType, minOreAmount, minOreAmountUOM, minCommodityAmount, minCommodityAmountUOM, maxFeatures, bbox);
@@ -306,6 +310,8 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
             oneOf(methodMaker).makeMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
             oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
+            
+            oneOf(mockMethod).releaseConnection();
         }});
 
         WFSCountResponse count = mineralOccurrenceService.getMiningActivityCount(wfsUrl, mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production, maxFeatures, bbox);

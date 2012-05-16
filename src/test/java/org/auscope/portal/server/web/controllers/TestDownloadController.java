@@ -278,9 +278,6 @@ public class TestDownloadController extends PortalTestClass {
         ZipInputStream zipInputStream = servletOutputStream.getZipInputStream();
         ZipEntry ze = null;
         while ((ze = zipInputStream.getNextEntry()) != null) {
-            // name of the file should end in .xml
-            Assert.assertTrue(ze.getName().endsWith(".xml"));
-
             ByteArrayOutputStream fout = new ByteArrayOutputStream();
             for (int c = zipInputStream.read(); c != -1; c = zipInputStream
                     .read()) {
@@ -333,8 +330,6 @@ public class TestDownloadController extends PortalTestClass {
         ZipInputStream zipInputStream = servletOutputStream.getZipInputStream();
         ZipEntry ze = null;
         while ((ze = zipInputStream.getNextEntry()) != null) {
-            // name of the file should end in .xml
-            Assert.assertTrue(ze.getName().endsWith(".png"));
 
             ByteArrayOutputStream fout = new ByteArrayOutputStream();
             for (int c = zipInputStream.read(); c != -1; c = zipInputStream

@@ -9,6 +9,7 @@ import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservation;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservationsFilter;
@@ -42,9 +43,11 @@ public class TestGeodesyService extends PortalTestClass {
         final InputStream is = this.getClass().getResourceAsStream("/GeodesyStationObservationsResponse.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, "geodesy:station_observations", filterString, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(is));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         List<GeodesyObservation> result = gs.getObservationsForStation(serviceUrl, stationId, startDate, endDate);
@@ -77,9 +80,10 @@ public class TestGeodesyService extends PortalTestClass {
         final String filterString = new GeodesyObservationsFilter(stationId, startDate, endDate).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, "geodesy:station_observations", filterString, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             allowing(mockMethod).getURI();
+            oneOf(mockMethod).releaseConnection();
 
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(new ConnectException()));
         }});

@@ -164,7 +164,10 @@ public class DownloadController extends BasePortalController {
             Header contentType = method.getResponseHeader("Content-Type");
 
             //create a new entry in the zip file with a timestamped name
-            String mime = contentType.getValue();
+            String mime = null;
+            if (contentType != null) {
+                mime = contentType.getValue();
+            }
             String fileExtension = MimeUtil.mimeToFileExtension(mime);
             if (fileExtension != null && !fileExtension.isEmpty()) {
                 fileExtension = "." + fileExtension;

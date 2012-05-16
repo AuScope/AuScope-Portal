@@ -384,6 +384,7 @@ public class TestWFSService extends PortalTestClass {
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits);will(returnValue(mockMethod));
 
+            oneOf(mockMethod).releaseConnection();
         }});
 
         WFSCountResponse response = service.getWfsFeatureCount(serviceUrl, typeName, filterString, maxFeatures, srsName);
@@ -408,6 +409,7 @@ public class TestWFSService extends PortalTestClass {
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits);will(returnValue(mockMethod));
 
+            oneOf(mockMethod).releaseConnection();
         }});
 
         try {
@@ -435,6 +437,8 @@ public class TestWFSService extends PortalTestClass {
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits);will(returnValue(mockMethod));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         try {

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.auscope.portal.core.services.WMSService;
+import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.services.responses.wms.GetCapabilitiesRecord;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
@@ -41,6 +42,8 @@ public class TestGetCapabilitiesController extends PortalTestClass {
 
             context.checking(new Expectations() {{
                 oneOf(service).getWmsCapabilities(serviceUrl);will(returnValue(record));
+
+                exactly(21).of(viewCswFactory).toView(with(any(CSWRecord.class)));will(returnValue(new ModelMap()));
             }});
 
             Assert.assertNotNull(is);
@@ -48,8 +51,6 @@ public class TestGetCapabilitiesController extends PortalTestClass {
             Assert.assertNotNull(mv);
             List ls=(List) mv.getModelMap().get("data");
             Assert.assertEquals(21,ls.size());
-            ModelMap mm=(ModelMap) ls.get(0);
-            Assert.assertTrue(mm.get("contactOrg").equals("Test organization"));
         }finally{
             try{
                 is.close();

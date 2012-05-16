@@ -37,6 +37,8 @@ public class TestPressureDBService extends PortalTestClass {
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(responseStream));
+
+            oneOf(mockHttpMethod).releaseConnection();
         }});
 
         //Make our response and have it parsed
@@ -71,13 +73,15 @@ public class TestPressureDBService extends PortalTestClass {
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(responseStream));
+
+            oneOf(mockHttpMethod).releaseConnection();
         }});
 
         //Make our response and have it parsed - it should result in a parser exception
         service.makeGetAvailableOMRequest(wellID, serviceUrl);
     }
 
-    @Test(expected=IOException.class)
+    @Test(expected=PortalServiceException.class)
     public void testMakeOMRequestIOError() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
@@ -87,6 +91,8 @@ public class TestPressureDBService extends PortalTestClass {
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(throwException(exception));
+
+            oneOf(mockHttpMethod).releaseConnection();
         }});
 
         //make the request - it should throw an exception

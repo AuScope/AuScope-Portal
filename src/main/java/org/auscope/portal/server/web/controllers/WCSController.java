@@ -226,15 +226,14 @@ public class WCSController extends BasePortalController {
         logger.debug(String.format("serviceUrl='%1$s' bbox='%2$s' timeString='%3$s' layerName='%4$s'", serviceUrl, bbox, timeConstraint, layerName));
 
         InputStream dataStream = null;
-        ZipOutputStream zout = null;
+
+        //Pipe the request into a zip
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition","inline; filename=WCSDownload.zip;");
+        ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
         try {
             //Make our request
             dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams);
-
-            //Pipe the request into a zip
-            response.setContentType("application/zip");
-            response.setHeader("Content-Disposition","inline; filename=WCSDownload.zip;");
-            zout = new ZipOutputStream(response.getOutputStream());
             zout.putNextEntry(new ZipEntry(outFileName));
             writeInputToOutputStream(dataStream, zout, 1024 * 1024, false);
         } catch (Exception ex) {

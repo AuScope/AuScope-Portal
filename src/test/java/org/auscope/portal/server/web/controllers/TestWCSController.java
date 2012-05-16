@@ -27,7 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class TestWCSController extends PortalTestClass {
 
     private WCSService wcsService = context.mock(WCSService.class);
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
     private MyServletOutputStream outStream;
 
     private HttpServletResponse mockResponse = context.mock(HttpServletResponse.class);
@@ -99,8 +98,8 @@ public class TestWCSController extends PortalTestClass {
         final String inputCrs = "inputCrs";
         final int outputWidth = 2;
         final int outputHeight = 1;
-        final double outputResX = 0;
-        final double outputResY = 0;
+        final Double outputResX = null;
+        final Double outputResY = null;
         final double northBoundLat = 0.1;
         final double southBoundLat = -0.2;
         final double eastBoundLng = 0.3;
@@ -129,9 +128,6 @@ public class TestWCSController extends PortalTestClass {
                     with(aMap(new String[] {"param1", "param2"}, new String[] {"1/2/3,5", "4"})));
             will(returnValue(new ByteArrayInputStream(geotiffData)));
 
-            //There MUST be a call to release connection
-            oneOf(mockMethod).releaseConnection();
-
             //This is so we can inject our own fake output stream so we can inspect the result
             oneOf(mockResponse).getOutputStream(); will(returnValue(outStream));
             oneOf(mockResponse).setContentType("application/zip");
@@ -149,8 +145,8 @@ public class TestWCSController extends PortalTestClass {
         final String format = "NetCDF";
         final String outputCrs = "outputCrs";
         final String inputCrs = "inputCrs";
-        final int outputWidth = 0;
-        final int outputHeight = 0;
+        final Integer outputWidth = null;
+        final Integer outputHeight = null;
         final double outputResX = 2.9;
         final double outputResY = 2.2;
         final double northBoundLat = 0.1;
@@ -165,22 +161,24 @@ public class TestWCSController extends PortalTestClass {
         final String[] customParams = null;
         final byte[] netCdfData = new byte[] {4, 1, 2};
 
+        outStream = new MyServletOutputStream();
+
         context.checking(new Expectations() {{
             //Our method maker call should be passed all the correct variables
             oneOf(wcsService).getCoverage(with(serviceUrl),
-                    with(layerName),
-                    with(format),
-                    with(equal(new Dimension(outputWidth, outputHeight))),
-                    with((Resolution) null),
-                    with(outputCrs),
-                    with(inputCrs),
+                    with(equal(layerName)),
+                    with(equal(format)),
+                    with(equal((Dimension) null)),
+                    //with(any(Dimension.class)),
+                    with(equal(new Resolution(outputResX, outputResY))),
+                    //with(any(Resolution.class)),
+                    with(equal(outputCrs)),
+                    with(equal(inputCrs)),
                     with(any(CSWGeographicBoundingBox.class)),
                     with(equal(wcsTime)),
-                    with(aMap(new String[] {"param1", "param2"}, new String[] {"1/2/3,5", "4"})));
+                    //with(any(TimeConstraint.class)),
+                    with(any(Map.class)));
             will(returnValue(new ByteArrayInputStream(netCdfData)));
-
-            //There MUST be a call to release connection
-            oneOf(mockMethod).releaseConnection();
 
             //This is so we can inject our own fake output stream so we can inspect the result
             oneOf(mockResponse).getOutputStream(); will(returnValue(outStream));

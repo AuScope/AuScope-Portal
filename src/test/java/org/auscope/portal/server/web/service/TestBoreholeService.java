@@ -9,6 +9,7 @@ import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
@@ -80,7 +81,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
@@ -113,7 +114,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
@@ -144,7 +145,8 @@ public class TestBoreholeService extends PortalTestClass {
         final String filterString = (new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictedIds)).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(serviceURL, "gsml:Borehole", filterString, maxFeatures);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
+
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));

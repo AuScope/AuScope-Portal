@@ -38,8 +38,6 @@ public class YilgarnGeochemistryService extends BaseWFSService {
     public final static String LOCATED_SPECIMEN_TYPENAME = "sa:LocatedSpecimen";
 
     private final Log log = LogFactory.getLog(getClass());
-    private HttpServiceCaller httpServiceCaller;
-    private WFSGetFeatureMethodMaker methodMaker;
 
     /**
      * Creates a new instance of this class with the specified dependencies
@@ -79,7 +77,7 @@ public class YilgarnGeochemistryService extends BaseWFSService {
         Document wfsResponseDoc = null;
 
         try {
-            method = methodMaker.makeMethod(serviceUrl, LOCATED_SPECIMEN_TYPENAME, locSpecimenId);
+            method = wfsMethodMaker.makeMethod(serviceUrl, LOCATED_SPECIMEN_TYPENAME, locSpecimenId);
             InputStream wfsResponse = httpServiceCaller.getMethodResponseAsStream(method);
             wfsResponseDoc = DOMUtil.buildDomFromStream(wfsResponse);
 
