@@ -17,7 +17,7 @@ import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.Util;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
-import org.auscope.portal.server.util.GmlToHtml;
+import org.auscope.portal.xslt.GmlToHtml;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;

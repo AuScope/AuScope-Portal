@@ -11,7 +11,7 @@ import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
-import org.auscope.portal.server.util.GmlToHtml;
+import org.auscope.portal.xslt.GmlToHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

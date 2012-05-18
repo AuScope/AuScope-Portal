@@ -1,4 +1,4 @@
-package org.auscope.portal.server.util;
+package org.auscope.portal.xslt;
 
 import java.io.InputStream;
 import java.io.StringReader;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class GmlToHtml extends PortalXSLTTransformer {
 
     public GmlToHtml() {
-        super("/org/auscope/portal/xslt/GeoSciMLtoHTML.xsl");
+        super("/org/auscope/portal/xslt/WfsToHtml.xsl");
     }
 
     /**
