@@ -201,9 +201,9 @@
             <url>http://maven.geotoolkit.org/</url>
         </repository>
         <repository>
-            <id>auscope-jenkins-repo</id>
-            <name>AuScope Jenkins Repository</name>
-            <url>https://cgsrv8.arrc.csiro.au/jenkins/plugin/repository/everything</url>
+            <id>cgsrv8.arrc.csiro.au</id>
+            <name>AuScope Artifactory - PortalRepo</name>
+            <url>https://cgsrv8.arrc.csiro.au/artifactory/PortalRepo</url>
         </repository>
         
     </repositories>
