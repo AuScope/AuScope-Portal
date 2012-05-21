@@ -10,7 +10,7 @@ import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
@@ -48,7 +48,7 @@ public class TestNVCLDataService extends PortalTestClass {
     public void testGetDatasetCollection() throws Exception {
         final String serviceUrl = "http://example/url";
         final String holeIdentifier = "holeIdentifier";
-        final String responseString = Util.loadXML("src/test/resources/NVCL_GetDatasetCollectionResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetDatasetCollectionResponse.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
 
 
@@ -97,7 +97,7 @@ public class TestNVCLDataService extends PortalTestClass {
         final String serviceUrl = "http://example/url";
         final String datasetId = "datasetId";
         final boolean forMosaicService = true;
-        final String responseString = Util.loadXML("src/test/resources/NVCL_GetLogCollectionResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetLogCollectionResponse.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
 
 
@@ -128,7 +128,7 @@ public class TestNVCLDataService extends PortalTestClass {
     public void testGetLogCollection_LogNameCase() throws Exception {
         final String serviceUrl = "http://example/url";
         final String datasetId = "datasetId";
-        final String responseString = Util.loadXML("src/test/resources/NVCL_GetLogCollectionResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetLogCollectionResponse.xml");
         final ByteArrayInputStream is1 = new ByteArrayInputStream(responseString.getBytes());
         final ByteArrayInputStream is2 = new ByteArrayInputStream(responseString.getBytes());
 

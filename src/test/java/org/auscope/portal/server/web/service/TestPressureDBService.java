@@ -8,6 +8,7 @@ import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.pressuredb.AvailableOMResponse;
 import org.auscope.portal.server.web.PressureDBMethodMaker;
 import org.jmock.Expectations;
@@ -31,7 +32,7 @@ public class TestPressureDBService extends PortalTestClass {
     public void testMakeOMRequest() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
-        final InputStream responseStream = new FileInputStream("src/test/resources/PressureDB-getAvailableOMResponse.xml");
+        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/pressuredb/PressureDB-getAvailableOMResponse.xml");
 
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
@@ -67,7 +68,7 @@ public class TestPressureDBService extends PortalTestClass {
     public void testMakeOMRequestParserError() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
-        final InputStream responseStream = new FileInputStream("src/test/resources/PressureDB-errorResponse.xml");
+        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/pressuredb/PressureDB-errorResponse.xml");
 
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));

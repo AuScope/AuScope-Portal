@@ -3,14 +3,12 @@ package org.auscope.portal.server.web.service;
 import java.io.ByteArrayInputStream;
 import java.net.ConnectException;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
-import org.auscope.portal.core.services.responses.ows.OWSException;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
 import org.jmock.Expectations;
@@ -46,7 +44,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
      */
     @Test
     public void testLocatedSpecimenParsing() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/YilgarnLocSpecimenResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/yilgarn/YilgarnLocSpecimenResponse.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
@@ -83,7 +81,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
      */
     @Test
     public void testLocatedSpecimenParsingEmpty() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/EmptyWFSResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/wfs/EmptyWFSResponse.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         final String serviceUrl = "http://service/wfs";
         final String featureId = "doesnt-match-anything";
@@ -126,7 +124,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
      */
     @Test(expected=PortalServiceException.class)
     public void testLocatedSpecimenParsingOWSException() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/OWSExceptionSample1.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";

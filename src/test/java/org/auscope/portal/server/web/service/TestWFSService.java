@@ -15,7 +15,7 @@ import org.auscope.portal.core.services.responses.ows.OWSException;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.xslt.GmlToHtml;
 import org.jmock.Expectations;
@@ -46,7 +46,7 @@ public class TestWFSService extends PortalTestClass {
      */
     @Test
     public void testGetWfsResponseAsKmlSingleFeature() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/EmptyWFSResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/wfs/EmptyWFSResponse.xml");
         final String responseKml = "<kml:response/>"; //we aren't testing the validity of this
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
@@ -98,7 +98,7 @@ public class TestWFSService extends PortalTestClass {
      */
     @Test
     public void testGetWfsResponseAsKmlOWSException() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/OWSExceptionSample1.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
         final String typeName = "type:Name";
@@ -122,7 +122,7 @@ public class TestWFSService extends PortalTestClass {
      */
     @Test
     public void testGetWfsResponseAsKmlMultiFeature() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/EmptyWFSResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/wfs/EmptyWFSResponse.xml");
         final String responseKml = "<kml:response/>"; //we aren't testing the validity of this
         final String filterString = "<ogc:filter/>"; //we aren't testing the validity of this
         final String serviceUrl = "http://service/wfs";
@@ -150,7 +150,7 @@ public class TestWFSService extends PortalTestClass {
      */
     @Test
     public void testGetWfsResponseAsKmlDefaultSRS() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/EmptyWFSResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/wfs/EmptyWFSResponse.xml");
         final String responseKml = "<kml:response/>"; //we aren't testing the validity of this
         final String filterString = "<ogc:filter/>"; //we aren't testing the validity of this
         final String serviceUrl = "http://service/wfs";
@@ -207,7 +207,7 @@ public class TestWFSService extends PortalTestClass {
         final String filterString = "<ogc:filter/>"; //we aren't testing the validity of this
         final String serviceUrl = "http://service/wfs";
         final String srsName = "srsName";
-        final String responseString = Util.loadXML("src/test/resources/OWSExceptionSample1.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
         final int maxFeatures = 12321;
         final String typeName = "type:Name";
 
@@ -231,7 +231,7 @@ public class TestWFSService extends PortalTestClass {
      */
     @Test
     public void testGetWfsResponseAsHtmlSingleFeature() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/EmptyWFSResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/wfs/EmptyWFSResponse.xml");
         final String responseHtml = "<html/>"; //we aren't testing the validity of this
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
@@ -282,7 +282,7 @@ public class TestWFSService extends PortalTestClass {
      */
     @Test
     public void testGetWfsResponseAsHtmlOWSException() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/OWSExceptionSample1.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
         final String typeName = "type:Name";
@@ -306,7 +306,7 @@ public class TestWFSService extends PortalTestClass {
      */
     @Test
     public void testGetWfsResponseAsHtmlUrl() throws Exception {
-        final String responseString = Util.loadXML("src/test/resources/EmptyWFSResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/wfs/EmptyWFSResponse.xml");
         final String responseKml = "<kml:response/>"; //we aren't testing the validity of this
         final String serviceUrl = "http://service/wfs?request=GetFeature";
 
@@ -350,7 +350,7 @@ public class TestWFSService extends PortalTestClass {
     @Test
     public void testGetWfsResponseAsHtmlUrlOWSException() throws Exception {
         final String serviceUrl = "http://service/wfs";
-        final String responseString = Util.loadXML("src/test/resources/OWSExceptionSample1.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
 
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(returnValue(responseString));
@@ -376,7 +376,7 @@ public class TestWFSService extends PortalTestClass {
         final String srsName = "srsName";
         final int maxFeatures = 12321;
         final String typeName = "type:Name";
-        final InputStream responseStream = new ByteArrayInputStream(Util.loadXML("src/test/resources/GetWFSFeatureCount.xml").getBytes());
+        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/wfs/GetWFSFeatureCount.xml");
         final int expectedCount = 161;
 
         context.checking(new Expectations() {{
@@ -431,7 +431,7 @@ public class TestWFSService extends PortalTestClass {
         final String srsName = "srsName";
         final int maxFeatures = 12321;
         final String typeName = "type:Name";
-        final InputStream responseStream = getClass().getResourceAsStream("/OWSExceptionSample1.xml");
+        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
 
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));

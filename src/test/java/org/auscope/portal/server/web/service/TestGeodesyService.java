@@ -11,6 +11,7 @@ import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservation;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservationsFilter;
 import org.jmock.Expectations;
@@ -40,7 +41,7 @@ public class TestGeodesyService extends PortalTestClass {
         final String startDate = "1986-10-09";
         final String endDate = "1990-12-13";
         final String filterString = new GeodesyObservationsFilter(stationId, startDate, endDate).getFilterStringAllRecords();
-        final InputStream is = this.getClass().getResourceAsStream("/GeodesyStationObservationsResponse.xml");
+        final InputStream is = ResourceUtil.loadResourceAsStream("org/auscope/portal/geodesy/GeodesyStationObservationsResponse.xml");
 
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makeMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));

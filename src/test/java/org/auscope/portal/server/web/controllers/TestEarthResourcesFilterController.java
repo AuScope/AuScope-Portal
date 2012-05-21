@@ -6,7 +6,7 @@ import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -99,7 +99,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         final String expectedKML = "";
         final String mineName = "mineName";
         final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
-        final String xmlErrorResponse = Util.loadXML("src/test/resources/GetMineError.xml");
+        final String xmlErrorResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
 
         context.checking(new Expectations() {{
             oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);will(returnValue(new WFSTransformedResponse(xmlErrorResponse, expectedKML, mockMethod)));

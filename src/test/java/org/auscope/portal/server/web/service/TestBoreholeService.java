@@ -17,7 +17,7 @@ import org.auscope.portal.core.services.responses.csw.CSWOnlineResourceImpl;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.mineraloccurrence.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
@@ -47,7 +47,7 @@ public class TestBoreholeService extends PortalTestClass {
     private WfsToKmlTransformer mockGmlToKml = context.mock(WfsToKmlTransformer.class);
 
     /** The Constant GETSCANNEDBOREHOLEXML. */
-    private static final String GETSCANNEDBOREHOLEXML = "src/test/resources/GetScannedBorehole.xml";
+    private static final String GETSCANNEDBOREHOLEXML = "org/auscope/portal/nvcl/GetScannedBorehole.xml";
 
     /** The Constant HOLEIDS. */
     private static final String[] HOLEIDS =  new String[] {"http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/WTB5", "http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/GSDD006", "http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/GDDH7"};
@@ -176,7 +176,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", "dne", "description");
 
-        final String successResponse = Util.loadXML(GETSCANNEDBOREHOLEXML);
+        final String successResponse = ResourceUtil.loadResourceAsString(GETSCANNEDBOREHOLEXML);
 
         context.checking(new Expectations() {{
             oneOf(mockCSWService).getWFSRecords();
@@ -217,7 +217,7 @@ public class TestBoreholeService extends PortalTestClass {
         final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
         final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
 
-        final String successResponse = Util.loadXML(GETSCANNEDBOREHOLEXML);
+        final String successResponse = ResourceUtil.loadResourceAsString(GETSCANNEDBOREHOLEXML);
 
         context.checking(new Expectations() {{
             oneOf(mockCSWService).getWFSRecords();

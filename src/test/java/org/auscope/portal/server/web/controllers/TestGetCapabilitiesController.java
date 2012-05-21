@@ -9,6 +9,7 @@ import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.services.responses.wms.GetCapabilitiesRecord;
 import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.jmock.Expectations;
@@ -36,7 +37,7 @@ public class TestGetCapabilitiesController extends PortalTestClass {
     public void testGetCustomLayers() throws Exception{
         //GetCapabilititesControllerWMSResponse.xml
         final String serviceUrl="http://example.com";
-        InputStream is=this.getClass().getResourceAsStream("/GetCapabilitiesControllerWMSResponse_1_1_1.xml");
+        InputStream is= ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/wms/GetCapabilitiesControllerWMSResponse_1_1_1.xml");
         try{
             final GetCapabilitiesRecord record = new GetCapabilitiesRecord(is);
 

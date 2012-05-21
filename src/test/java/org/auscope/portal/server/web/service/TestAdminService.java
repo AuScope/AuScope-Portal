@@ -12,13 +12,12 @@ import org.auscope.portal.core.services.csw.CSWServiceItem;
 import org.auscope.portal.core.services.methodmakers.SISSVocMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.Util;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.test.jmock.HttpMethodBaseMatcher.HttpMethodType;
 import org.auscope.portal.server.domain.admin.AdminDiagnosticResponse;
 import org.auscope.portal.server.domain.admin.EndpointAndSelector;
 import org.auscope.portal.server.web.controllers.VocabController;
 import org.jmock.Expectations;
-import org.jmock.Sequence;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -98,9 +97,9 @@ public class TestAdminService extends PortalTestClass {
             new CSWServiceItem("id-2", "http://example2.fake/thisWillReturnInvalidCount"),
             new CSWServiceItem("id-3", "http://example3.fake/thieWillReturnOWSError"),
             new CSWServiceItem("id-4", "http://example4.fake/thisWillFailToConnect"));
-        final InputStream owsError = getClass().getResourceAsStream("/OWSExceptionSample1.xml");
-        final InputStream cswBadCountResponse = getClass().getResourceAsStream("/cswRecordResponse.xml");
-        final InputStream cswResponse = getClass().getResourceAsStream("/cswRecordResponse_SingleRecord.xml");
+        final InputStream owsError = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
+        final InputStream cswBadCountResponse = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/csw/cswRecordResponse.xml");
+        final InputStream cswResponse = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/csw/cswRecordResponse_SingleRecord.xml");
 
         //We have 4 requests, 1 will fail, 1 will return error, 1 returns an invalid count and 1 succeeds
         context.checking(new Expectations() {{
@@ -131,8 +130,8 @@ public class TestAdminService extends PortalTestClass {
     @Test
     public void testVocab() throws Exception {
         final String vocabUrl = "http://fake.vocab/url";
-        final String vocabResponse = Util.loadXML("src/test/resources/SISSVocResponse.xml");
-        final String repoInfoResponse = Util.loadXML("src/test/resources/SISSVocRepositoryInfoResponse.xml");
+        final String vocabResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocResponse.xml");
+        final String repoInfoResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocRepositoryInfoResponse.xml");
         final SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
 
 
@@ -255,15 +254,15 @@ public class TestAdminService extends PortalTestClass {
 
             //Return OWS error
             oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(2).getEndpoint() + ".*"), null)));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/OWSExceptionSample1.xml")));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml")));
             oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(2).getEndpoint() + ".*"), null)));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/OWSExceptionSample1.xml")));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml")));
 
             //Return success
             oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(3).getEndpoint() + ".*"), null)));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/YilgarnGeochemGetFeatureResponse.xml")));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/yilgarn/YilgarnGeochemGetFeatureResponse.xml")));
             oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(3).getEndpoint() + ".*"), null)));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/YilgarnGeochemGetFeatureResponse.xml")));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/yilgarn/YilgarnGeochemGetFeatureResponse.xml")));
         }});
 
         AdminDiagnosticResponse response = adminService.wfsConnectivity(endpoints, bbox);
