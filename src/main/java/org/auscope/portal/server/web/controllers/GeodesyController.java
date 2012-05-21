@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.util.List;
 
+import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservation;
 import org.auscope.portal.server.web.service.GeodesyService;
 import org.springframework.beans.factory.annotation.Autowired;

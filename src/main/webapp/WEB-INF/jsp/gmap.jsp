@@ -16,8 +16,8 @@
              type="text/javascript"></script>
 
       <%-- Open Layers Imports --%>
-      <link rel="stylesheet" href="js/OpenLayers-2.11/theme/default/style.css" type="text/css">
-      <script src="js/OpenLayers-2.11/OpenLayers.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="portal-core/js/OpenLayers-2.11/theme/default/style.css" type="text/css">
+      <script src="portal-core/js/OpenLayers-2.11/OpenLayers.js" type="text/javascript"></script>
 
 
       <script type="text/javascript">
@@ -28,14 +28,17 @@
 
       </script>
 
-      <%-- Framework imports - relative paths back to the webapp directory --%>
-      <jsp:include page="../../frameworkimports.htm"/>
       <%-- CSS imports - relative paths back to the webapp directory--%>
-      <jsp:include page="../../cssimports.htm"/>
+      <jsp:include page="../../portal-core/cssimports.htm"/>
+
       <%-- JS imports - relative paths back to the webapp directory --%>
+      <jsp:include page="../../portal-core/jsimports.htm"/>
       <jsp:include page="../../jsimports.htm"/>
 
-      <script src="js/portal/Main-UI.js" type="text/javascript"></script>
+
+
+
+      <script src="js/auscope/Main-UI.js" type="text/javascript"></script>
 
       <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
    </head>

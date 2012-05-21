@@ -1,5 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.awt.Dimension;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,13 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.csw.record.CSWGeographicBoundingBox;
-import org.auscope.portal.server.domain.wcs.DescribeCoverageRecord;
-import org.auscope.portal.server.util.FileIOUtil;
-import org.auscope.portal.server.util.PortalPropertyPlaceholderConfigurer;
-import org.auscope.portal.server.web.IWCSDescribeCoverageMethodMaker;
-import org.auscope.portal.server.web.IWCSGetCoverageMethodMaker;
-import org.auscope.portal.server.web.service.HttpServiceCaller;
+import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.WCSService;
+import org.auscope.portal.core.services.responses.csw.CSWGeographicBoundingBox;
+import org.auscope.portal.core.services.responses.wcs.DescribeCoverageRecord;
+import org.auscope.portal.core.services.responses.wcs.Resolution;
+import org.auscope.portal.core.services.responses.wcs.TimeConstraint;
+import org.auscope.portal.core.util.FileIOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,25 +33,21 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * A controller that attempts to provide functions for use by the generic WCS use case.
  *
- * @author vot002
+ * @author Josh Vote
  *
  */
 @Controller
 public class WCSController extends BasePortalController {
     private final Log logger = LogFactory.getLog(getClass());
 
-    private HttpServiceCaller serviceCaller;
-    private IWCSGetCoverageMethodMaker getCoverageMethodMaker;
-    private IWCSDescribeCoverageMethodMaker describeCoverageMethodMaker;
+    /** The format string view's are expected to use when working with this controller*/
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss z";
 
-    private PortalPropertyPlaceholderConfigurer hostConfigurer;
+    private WCSService wcsService;
 
     @Autowired
-    public WCSController(HttpServiceCaller serviceCaller, IWCSGetCoverageMethodMaker methodMaker, IWCSDescribeCoverageMethodMaker describeCoverageMethodMaker, PortalPropertyPlaceholderConfigurer hostConfigurer) {
-        this.serviceCaller = serviceCaller;
-        this.getCoverageMethodMaker = methodMaker;
-        this.describeCoverageMethodMaker = describeCoverageMethodMaker;
-        this.hostConfigurer = hostConfigurer;
+    public WCSController(WCSService wcsService) {
+        this.wcsService = wcsService;
     }
 
     private String generateOutputFilename(String layerName, String format) throws IllegalArgumentException {
@@ -62,60 +59,51 @@ public class WCSController extends BasePortalController {
             return String.format("%1$s.%2$s", layerName, format);
     }
 
-    private String parseTimeConstraint(final String[] timePositions,
+    /**
+     * Parses an array of date strings that are conforming to DATE_FORMAT
+     * into date objects
+     * @param dateStrings
+     * @return
+     * @throws ParseException
+     */
+    private Date[] parseDates(final String[] dateStrings) throws ParseException {
+        Date[] dates = new Date[dateStrings.length];
+        DateFormat format = new SimpleDateFormat(DATE_FORMAT);
+
+        for (int i = 0; i < dateStrings.length; i++) {
+            dates[i] = format.parse(dateStrings[i]);
+        }
+
+        return dates;
+    }
+
+    /**
+     * Attempts to parse a time constraint from the listed time information.
+     * Returns null if no constraint can be generated
+     * @param timePositions
+     * @param timePeriodFrom
+     * @param timePeriodTo
+     * @param timePeriodResolution
+     * @return
+     * @throws ParseException
+     */
+    private TimeConstraint parseTimeConstraint(final String[] timePositions,
                                  final String timePeriodFrom,
                                  final String timePeriodTo,
                                  final String timePeriodResolution) throws ParseException {
-        String timeString = null;
-        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-        DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-        outputFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-
         //We will receive a list of time positions
         if (timePositions != null && timePositions.length > 0) {
-            StringBuilder sb = new StringBuilder();
-
-            for (String s : timePositions) {
-                if (s != null && !s.isEmpty()) {
-
-                    Date d = inputFormat.parse(s);
-                    if (sb.length() > 0)
-                        sb.append(",");
-                    sb.append(outputFormat.format(d));
-                }
-            }
-
-            timeString = sb.toString();
+            return TimeConstraint.parseTimeConstraint(parseDates(timePositions));
         //or an actual time period
         } else if (timePeriodFrom != null && timePeriodTo != null && !timePeriodFrom.isEmpty() && !timePeriodTo.isEmpty()) {
-
+            DateFormat inputFormat = new SimpleDateFormat(DATE_FORMAT);
             Date from = inputFormat.parse(timePeriodFrom);
             Date to = inputFormat.parse(timePeriodTo);
 
-            timeString = String.format("%1$s/%2$s", outputFormat.format(from), outputFormat.format(to));
-            if (timePeriodResolution != null && !timePeriodResolution.isEmpty())  {
-                timeString += String.format("/%1$s", timePeriodResolution);
-            }
+            return TimeConstraint.parseTimeConstraint(from, to, timePeriodResolution);
         }
 
-        return timeString;
-    }
-
-    private void closeZipWithError(ZipOutputStream zout,String debugQuery, Exception exceptionToPrint) {
-        String message = null;
-        message=FileIOUtil.convertExceptionToString(exceptionToPrint, debugQuery);
-        try {
-            zout.putNextEntry(new ZipEntry("error.txt"));
-
-            zout.write(message.getBytes());
-        } catch (Exception ex) {
-            logger.error("Couldnt create debug error.txt in output", ex);
-        } finally {
-            try {
-                zout.close();
-            } catch (Exception ex) {}
-        }
+        return null;
     }
 
     /**
@@ -193,10 +181,10 @@ public class WCSController extends BasePortalController {
                                  @RequestParam("layerName") final String layerName,
                                  @RequestParam("downloadFormat") final String downloadFormat,
                                  @RequestParam("inputCrs") final String inputCrs,
-                                 @RequestParam(required=false, defaultValue="0", value="outputWidth") final int outputWidth,
-                                 @RequestParam(required=false, defaultValue="0", value="outputHeight") final int outputHeight,
-                                 @RequestParam(required=false, defaultValue="0", value="outputResX") final double outputResX,
-                                 @RequestParam(required=false, defaultValue="0", value="outputResY") final double outputResY,
+                                 @RequestParam(required=false, value="outputWidth") final Integer outputWidth,
+                                 @RequestParam(required=false, value="outputHeight") final Integer outputHeight,
+                                 @RequestParam(required=false, value="outputResX") final Double outputResX,
+                                 @RequestParam(required=false, value="outputResY") final Double outputResY,
                                  @RequestParam(required=false, value="outputCrs") final String outputCrs,
                                  @RequestParam(required=false, defaultValue="0",  value="northBoundLatitude") final double northBoundLatitude,
                                  @RequestParam(required=false, defaultValue="0", value="southBoundLatitude") final double southBoundLatitude,
@@ -210,9 +198,18 @@ public class WCSController extends BasePortalController {
                                 HttpServletResponse response) throws Exception {
 
         String outFileName = generateOutputFilename(layerName, downloadFormat);
-        String timeString = parseTimeConstraint(timePositions, timePeriodFrom, timePeriodTo, timePeriodResolution);
-
+        TimeConstraint timeConstraint = parseTimeConstraint(timePositions, timePeriodFrom, timePeriodTo, timePeriodResolution);
         Map<String, String> customParams = generateCustomParamMap(customParamValues);
+        Dimension outputSize = null;
+        Resolution outputResolution = null;
+
+        if (outputWidth != null && outputHeight != null) {
+            outputSize = new Dimension(outputWidth.intValue(), outputHeight.intValue());
+        }
+
+        if (outputResX != null && outputResY != null) {
+            outputResolution = new Resolution(outputResX.doubleValue(), outputResY.doubleValue());
+        }
 
         CSWGeographicBoundingBox bbox = null;
         if (!(eastBoundLongitude == 0 &&
@@ -226,43 +223,24 @@ public class WCSController extends BasePortalController {
             bbox.setWestBoundLongitude(westBoundLongitude);
         }
 
-        logger.debug(String.format("serviceUrl='%1$s' bbox='%2$s' timeString='%3$s' layerName='%4$s'", serviceUrl, bbox, timeString, layerName));
+        logger.debug(String.format("serviceUrl='%1$s' bbox='%2$s' timeString='%3$s' layerName='%4$s'", serviceUrl, bbox, timeConstraint, layerName));
 
-        HttpMethodBase method = getCoverageMethodMaker.makeMethod(serviceUrl, layerName, downloadFormat,
-                outputCrs, outputWidth, outputHeight, outputResX, outputResY, inputCrs, bbox, timeString, customParams);
+        InputStream dataStream = null;
 
-        downloadWCSAsZip(outFileName, method, response);
-    }
-
-    /**
-     * An internal function that handles using a HttpMethodBase and calling a remote service for the raw binary data that we zip and return to the user.
-     * @param outputFileName The name of the file (in the zip output) that we will use
-     * @param method the method used to make the request for data
-     * @param response the servlet response that will receive the output binary data
-     */
-    protected void downloadWCSAsZip(String outputFileName,HttpMethodBase method, HttpServletResponse response) throws Exception {
-
-        //Lets make the request and zip up the response before passing it back to the user
+        //Pipe the request into a zip
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition","inline; filename=WCSDownload.zip;");
-
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
-        try{
-            InputStream inData = serviceCaller.getMethodResponseAsStream(method, serviceCaller.getHttpClient());
-
-            zout.putNextEntry(new ZipEntry(outputFileName));
-
-            //Read the input in 1MB chunks and don't stop till we run out of data
-            writeInputToOutputStream(inData, zout, 1024 * 1024);
-
-            zout.finish();
-            zout.flush();
-            zout.close();
+        try {
+            //Make our request
+            dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams);
+            zout.putNextEntry(new ZipEntry(outFileName));
+            writeInputToOutputStream(dataStream, zout, 1024 * 1024, false);
         } catch (Exception ex) {
-            logger.error("Failure downloading WCS - returning error message in ZIP response", ex);
-            closeZipWithError(zout,method.getURI().toString(), ex);
+            writeErrorToZip(zout, "", ex, "error.txt");
         } finally {
-            method.releaseConnection(); //Ensure this gets called otherwise we leak connections
+            FileIOUtil.closeQuietly(dataStream);
+            FileIOUtil.closeQuietly(zout);
         }
     }
 
@@ -282,31 +260,12 @@ public class WCSController extends BasePortalController {
      */
     @RequestMapping("/describeCoverage.do")
     public ModelAndView describeCoverage(String serviceUrl, String layerName) {
-
-
-        HttpMethodBase method = null;
-
-        try {
-            method = describeCoverageMethodMaker.makeMethod(serviceUrl, layerName);
-        } catch (Exception ex) {
-            logger.error("Error generating method", ex);
-            return generateJSONResponseMAV(false, null, "Error generating request method. Are layerName and serviceUrl specified?");
-        }
-
-        String xmlResponse = null;
-        try {
-            xmlResponse = serviceCaller.getMethodResponseAsString(method, serviceCaller.getHttpClient());
-        } catch (Exception ex) {
-            logger.info("Error making request", ex);
-            return generateJSONResponseMAV(false, null, "Error occured whilst communicating to remote service: " + ex.getMessage());
-        }
-
         DescribeCoverageRecord[] records = null;
         try {
-            records = DescribeCoverageRecord.parseRecords(xmlResponse);
+            records = wcsService.describeCoverage(serviceUrl, layerName);
         } catch (Exception ex) {
-            logger.warn("Error parsing request", ex);
-            return generateJSONResponseMAV(false, null, "Error occured whilst parsing response: " + ex.getMessage());
+            logger.error("Error describing coverage", ex);
+            return generateJSONResponseMAV(false, null, "Error occured whilst communicating to remote service: " + ex.getMessage());
         }
 
         return generateJSONResponseMAV(true, records, "");

@@ -15,8 +15,9 @@ import javax.xml.xpath.XPathFactory;
 
 import junit.framework.Assert;
 
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.Util;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.DOMUtil;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -33,36 +34,24 @@ import org.xml.sax.SAXException;
  */
 public class TestMine extends PortalTestClass {
     /** The Document  */
-    private static final String MINEDOCUMENT = "src/test/resources/mineNode.xml";
+    private static final String MINEDOCUMENT = "org/auscope/portal/erml/mine/mineNode.xml";
 
     @Test
     public void testGetPrefferedName() throws XPathExpressionException, ParserConfigurationException, UnsupportedEncodingException, SAXException, IOException {
+        Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream(MINEDOCUMENT));
 
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true); // never forget this!
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document mineDocument = builder.parse(new ByteArrayInputStream(Util.loadXML(MINEDOCUMENT).getBytes("UTF-8")));
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
-
-        XPathExpression expr = xPath.compile("/er:Mine");
+        XPathExpression expr = DOMUtil.compileXPathExpr("/er:Mine", new MineralOccurrenceNamespaceContext());
         Node mineNode = (Node)expr.evaluate(mineDocument, XPathConstants.NODE);
         Mine mine = new Mine(mineNode);
 
-        Assert.assertEquals("Preffered mine name is Good Hope", "Good Hope", mine.getMineNamePreffered());
+        Assert.assertEquals("Preferred mine name is Good Hope", "Good Hope", mine.getMineNamePreffered());
     }
 
     @Test
     public void testGetURI() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException, IOException {
+        Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream(MINEDOCUMENT));
+        XPathExpression expr = DOMUtil.compileXPathExpr("/er:Mine", new MineralOccurrenceNamespaceContext());
 
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true); // never forget this!
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document mineDocument = builder.parse(new ByteArrayInputStream(Util.loadXML(MINEDOCUMENT).getBytes("UTF-8")));
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
-
-        XPathExpression expr = xPath.compile("/er:Mine");
         Node mineNode = (Node) expr.evaluate(mineDocument, XPathConstants.NODE);
         Mine mine = new Mine(mineNode);
 

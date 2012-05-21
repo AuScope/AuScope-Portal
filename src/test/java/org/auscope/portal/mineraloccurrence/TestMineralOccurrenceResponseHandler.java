@@ -7,7 +7,8 @@ import java.util.Collection;
 
 import junit.framework.Assert;
 
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.junit.Test;
 
 /**
@@ -20,17 +21,8 @@ public class TestMineralOccurrenceResponseHandler extends PortalTestClass {
 
     @Test
     public void testHandleMineResponse() throws Exception {
-        File mineGetFeatureResponse = new File("src/test/resources/mineGetFeatureResponse.xml");
-        BufferedReader reader = new BufferedReader(new FileReader(mineGetFeatureResponse) );
-        StringBuffer mineGetFeatureResponseXML = new StringBuffer();
-
-        String str;
-        while ((str = reader.readLine()) != null) {
-            mineGetFeatureResponseXML.append(str);
-        }
-        reader.close();
-
-        Collection<Mine> mines = mineralOccurrencesResponseHandler.getMines(mineGetFeatureResponseXML.toString());
+        String mineGetFeatureResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/erml/mine/mineGetFeatureResponse.xml");
+        Collection<Mine> mines = mineralOccurrencesResponseHandler.getMines(mineGetFeatureResponse);
 
         Assert.assertEquals("There are 2 mines", 2, mines.size());
         Assert.assertEquals("The first mine is WOOLDRIDGE CREEK WORKINGS", "WOOLDRIDGE CREEK WORKINGS", ((Mine) mines.toArray()[0]).getMineNamePreffered());
@@ -39,18 +31,9 @@ public class TestMineralOccurrenceResponseHandler extends PortalTestClass {
 
     @Test
     public void testHandleCommodityResponse() throws Exception {
-        File commodityGetFeatureResponse = new File("src/test/resources/commodityGetFeatureResponse.xml");
-        BufferedReader reader = new BufferedReader(new FileReader(commodityGetFeatureResponse) );
-        StringBuffer commodityGetFeatureResponseXML = new StringBuffer();
+        String commodityGetFeatureResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/erml/commodity/commodityGetFeatureResponse.xml");
 
-        String str;
-        while ((str = reader.readLine()) != null) {
-            commodityGetFeatureResponseXML.append(str);
-        }
-        reader.close();
-
-        Collection<Commodity> commodities =
-            mineralOccurrencesResponseHandler.getCommodities(commodityGetFeatureResponseXML.toString());
+        Collection<Commodity> commodities = mineralOccurrencesResponseHandler.getCommodities(commodityGetFeatureResponse);
 
         Assert.assertEquals("There are 2 commodities", 2, commodities.size());
         Assert.assertEquals("The first one's name is Gold", "Gold", ((Commodity) commodities.toArray()[0]).getCommodityName());
@@ -59,36 +42,18 @@ public class TestMineralOccurrenceResponseHandler extends PortalTestClass {
 
     @Test
     public void testGetNumberOfFeaturesTwo() throws Exception {
-        File commodityGetFeatureResponse = new File("src/test/resources/commodityGetFeatureResponse.xml");
-        BufferedReader reader = new BufferedReader(new FileReader(commodityGetFeatureResponse) );
-        StringBuffer commodityGetFeatureResponseXML = new StringBuffer();
-
-        String str;
-        while ((str = reader.readLine()) != null) {
-            commodityGetFeatureResponseXML.append(str);
-        }
-        reader.close();
-
-        int numberOfFeatures =
-            mineralOccurrencesResponseHandler.getNumberOfFeatures(commodityGetFeatureResponseXML.toString());
+        String commodityGetFeatureResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/erml/commodity/commodityGetFeatureResponse.xml");
+        int numberOfFeatures = mineralOccurrencesResponseHandler.getNumberOfFeatures(commodityGetFeatureResponse);
 
         Assert.assertEquals("There are 2 features", 2, numberOfFeatures);
     }
 
     @Test
     public void testGetNumberOfFeaturesZero() throws Exception {
-        File getFeatureResponse = new File("src/test/resources/mineralOccurrenceNoFeaturesResponse.xml");
-        BufferedReader reader = new BufferedReader(new FileReader(getFeatureResponse) );
-        StringBuffer getFeatureResponseXML = new StringBuffer();
-
-        String str;
-        while ((str = reader.readLine()) != null) {
-            getFeatureResponseXML.append(str);
-        }
-        reader.close();
+        String getFeatureResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/erml/minocc/mineralOccurrenceNoFeaturesResponse.xml");
 
         int numberOfFeatures =
-            mineralOccurrencesResponseHandler.getNumberOfFeatures(getFeatureResponseXML.toString());
+            mineralOccurrencesResponseHandler.getNumberOfFeatures(getFeatureResponse);
 
         Assert.assertEquals("There are 0 features", 0, numberOfFeatures);
     }

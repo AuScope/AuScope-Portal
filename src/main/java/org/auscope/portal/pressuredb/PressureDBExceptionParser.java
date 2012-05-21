@@ -7,7 +7,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.server.domain.ows.OWSExceptionParser;
+import org.auscope.portal.core.services.PortalServiceException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -19,7 +19,7 @@ import org.w3c.dom.NodeList;
  */
 public class PressureDBExceptionParser {
 
-    private static final Log log = LogFactory.getLog(OWSExceptionParser.class);
+    private static final Log log = LogFactory.getLog(PressureDBExceptionParser.class);
 
     /**
      * Will attempt to parse an <DataServiceError> element
@@ -28,7 +28,7 @@ public class PressureDBExceptionParser {
      * @param doc
      * @throws PressureDBException
      */
-    public static void checkForExceptionResponse(Document doc) throws PressureDBException {
+    public static void checkForExceptionResponse(Document doc) throws PortalServiceException {
         XPath xPath = XPathFactory.newInstance().newXPath();
 
         try {
@@ -37,7 +37,7 @@ public class PressureDBExceptionParser {
             if (exceptionNodes.getLength() > 0) {
                 Node exceptionNode = exceptionNodes.item(0);
 
-                throw new PressureDBException(exceptionNode.getTextContent());
+                throw new PortalServiceException(null, exceptionNode.getTextContent());
             }
         } catch (XPathExpressionException ex) {
             //This should *hopefully* never occur

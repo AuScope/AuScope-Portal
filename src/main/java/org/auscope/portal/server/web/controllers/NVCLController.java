@@ -5,13 +5,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
+import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.server.domain.nvcldataservice.AbstractStreamResponse;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
@@ -22,12 +25,9 @@ import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGStatusResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.auscope.portal.server.web.service.BoreholeService;
-import org.auscope.portal.server.web.service.CSWCacheService;
-import org.auscope.portal.server.web.service.CSWRecordsHostFilter;
 import org.auscope.portal.server.web.service.NVCLDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -136,8 +136,8 @@ public class NVCLController extends BasePortalController {
         }
 
         try {
-            WFSKMLResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
-            return generateJSONResponseMAV(true, response.getGml(), response.getKml(), response.getMethod());
+            WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
+            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             return this.generateExceptionResponse(e, serviceUrl);
         }
@@ -198,11 +198,8 @@ public class NVCLController extends BasePortalController {
             servletResponse.setContentType(serviceResponse.getContentType());
             responseOutput = servletResponse.getOutputStream();
 
-            writeInputToOutputStream(serviceInputStream, responseOutput, 1024 * 1024);
+            writeInputToOutputStream(serviceInputStream, responseOutput, 1024 * 1024, true);
         } finally {
-            if (serviceInputStream != null) {
-                serviceInputStream.close();
-            }
             if (responseOutput != null) {
                 responseOutput.close();
             }

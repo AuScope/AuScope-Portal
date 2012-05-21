@@ -6,7 +6,8 @@ import java.io.FileReader;
 
 import junit.framework.Assert;
 
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.junit.Test;
 
 public class TestGSMLResponseHandler extends PortalTestClass  {
@@ -15,35 +16,15 @@ public class TestGSMLResponseHandler extends PortalTestClass  {
 
     @Test
     public void testGetNumberOfFeaturesZero() throws Exception {
-        File getFeatureResponse = new File("src/test/resources/YilgarnGeochemistryNoFeatureResponse.xml");
-        BufferedReader reader = new BufferedReader(new FileReader(getFeatureResponse) );
-        StringBuffer getFeatureResponseXML = new StringBuffer();
-
-        String str;
-        while ((str = reader.readLine()) != null) {
-            getFeatureResponseXML.append(str);
-        }
-        reader.close();
-
-        int numberOfFeatures = gsmlResponseHandler.getNumberOfFeatures(getFeatureResponseXML.toString());
+        String getFeatureResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/yilgarn/YilgarnGeochemistryNoFeatureResponse.xml");
+        int numberOfFeatures = gsmlResponseHandler.getNumberOfFeatures(getFeatureResponse);
         Assert.assertEquals("There are 0 features", 0, numberOfFeatures);
     }
 
     @Test
     public void testGetNumberOfFeaturesTwo() throws Exception {
-        File geochemistryGetFeatureResponse = new File("src/test/resources/YilgarnGeochemGetFeatureResponse.xml");
-        BufferedReader reader = new BufferedReader(new FileReader(geochemistryGetFeatureResponse) );
-        StringBuffer geochemGetFeatureResponseXML = new StringBuffer();
-
-        String str;
-        while ((str = reader.readLine()) != null) {
-            geochemGetFeatureResponseXML.append(str);
-        }
-        reader.close();
-
-        int numberOfFeatures =
-            gsmlResponseHandler.getNumberOfFeatures(geochemGetFeatureResponseXML.toString());
-
+        String geochemistryGetFeatureResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/yilgarn/YilgarnGeochemGetFeatureResponse.xml");
+        int numberOfFeatures = gsmlResponseHandler.getNumberOfFeatures(geochemistryGetFeatureResponse);
         Assert.assertEquals("There are 2 features", 2, numberOfFeatures);
     }
 

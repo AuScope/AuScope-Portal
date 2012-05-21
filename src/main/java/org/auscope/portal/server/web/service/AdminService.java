@@ -11,24 +11,26 @@ import javax.xml.xpath.XPathExpression;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.auscope.portal.csw.CSWGetRecordResponse;
-import org.auscope.portal.csw.CSWMethodMakerGetDataRecords;
-import org.auscope.portal.csw.CSWMethodMakerGetDataRecords.ResultType;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.methodmakers.CSWMethodMakerGetDataRecords;
+import org.auscope.portal.core.services.methodmakers.CSWMethodMakerGetDataRecords.ResultType;
+import org.auscope.portal.core.services.methodmakers.SISSVocMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WMSMethodMaker;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.filter.IFilter;
+import org.auscope.portal.core.services.methodmakers.filter.SimpleBBoxFilter;
+import org.auscope.portal.core.services.namespaces.VocabNamespaceContext;
+import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
+import org.auscope.portal.core.services.responses.ows.OWSException;
+import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
+import org.auscope.portal.core.services.responses.vocab.Description;
+import org.auscope.portal.core.services.responses.vocab.DescriptionFactory;
+import org.auscope.portal.core.util.DOMUtil;
+import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.domain.admin.AdminDiagnosticResponse;
 import org.auscope.portal.server.domain.admin.EndpointAndSelector;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.domain.filter.IFilter;
-import org.auscope.portal.server.domain.filter.SimpleBBoxFilter;
-import org.auscope.portal.server.domain.ows.OWSException;
-import org.auscope.portal.server.domain.ows.OWSExceptionParser;
-import org.auscope.portal.server.domain.vocab.Description;
-import org.auscope.portal.server.domain.vocab.DescriptionFactory;
-import org.auscope.portal.server.domain.vocab.VocabNamespaceContext;
-import org.auscope.portal.server.util.DOMUtil;
-import org.auscope.portal.server.util.FileIOUtil;
-import org.auscope.portal.server.web.SISSVocMethodMaker;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
-import org.auscope.portal.server.web.WMSMethodMaker;
 import org.auscope.portal.server.web.controllers.VocabController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,7 +75,7 @@ public class AdminService {
 
             try {
                 GetMethod method = new GetMethod(urlString);
-                serviceCaller.getMethodResponseAsString(method, serviceCaller.getHttpClient()); //we dont care about the response
+                serviceCaller.getMethodResponseAsString(method); //we dont care about the response
                 response.addDetail(String.format("Succesfully connected to %1$s via '%2$s'.", urlString, protocol));
             } catch (Exception ex) {
                 //We treat HTTP errors as critical, non http as warnings (such as https)
@@ -101,9 +103,9 @@ public class AdminService {
         for (CSWServiceItem item : serviceItems) {
             InputStream responseStream = null;
             try {
-                CSWMethodMakerGetDataRecords methodMaker = new CSWMethodMakerGetDataRecords(item.getServiceUrl());
-                HttpMethodBase method = methodMaker.makeMethod(null, ResultType.Results, numRecordsToRequest);
-                responseStream = serviceCaller.getMethodResponseAsStream(method, serviceCaller.getHttpClient());
+                CSWMethodMakerGetDataRecords methodMaker = new CSWMethodMakerGetDataRecords();
+                HttpMethodBase method = methodMaker.makeMethod(item.getServiceUrl(), null, ResultType.Results, numRecordsToRequest);
+                responseStream = serviceCaller.getMethodResponseAsStream(method);
             } catch (Exception ex) {
                 response.addError(String.format("Unable to request a CSW record from '%1$s': %2$s", item.getServiceUrl(), ex));
                 continue; //dont parse the response if we don't have one
@@ -142,7 +144,7 @@ public class AdminService {
         SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
         HttpMethodBase method = methodMaker.getRepositoryInfoMethod(vocabServiceUrl);
         try {
-            String serviceResponse = serviceCaller.getMethodResponseAsString(method, serviceCaller.getHttpClient());
+            String serviceResponse = serviceCaller.getMethodResponseAsString(method);
             try {
                 DOMUtil.buildDomFromString(serviceResponse);
             } catch (Exception ex) {
@@ -161,7 +163,7 @@ public class AdminService {
             diagnosticResponse.addDetail(String.format("Test commodities URL has been resolved as UNRESOLVABLE - '%1$s'", ex));
         }
         try {
-            String serviceResponse = serviceCaller.getMethodResponseAsString(method, serviceCaller.getHttpClient());
+            String serviceResponse = serviceCaller.getMethodResponseAsString(method);
             Document doc = null;
             try {
                 doc = DOMUtil.buildDomFromString(serviceResponse);
@@ -240,7 +242,7 @@ public class AdminService {
             //HTTP error, skip that endpoint for the rest of this test
             InputStream response = null;
             try {
-                response = serviceCaller.getMethodResponseAsStream(method, serviceCaller.getHttpClient());
+                response = serviceCaller.getMethodResponseAsStream(method);
                 validator.validateResponse(response, method, endpoint, diagnosticResponse);
             } catch (Exception ex) {
                 blacklistedUrls.add(endpoint.getEndpoint());
@@ -323,14 +325,14 @@ public class AdminService {
         //Build our request methods
         for(EndpointAndSelector endpoint : wmsEndpoints) {
 
-            WMSMethodMaker methodMaker = new WMSMethodMaker(endpoint.getEndpoint());
+            WMSMethodMaker methodMaker = new WMSMethodMaker();
 
             //Make a GetMap request
-            methodsToTest.add(methodMaker.getMapMethod(endpoint.getSelector(), imageMimeType, bbox.getBboxSrs(), west, south, east, north, width, height, null, null));
+            methodsToTest.add(methodMaker.getMapMethod(endpoint.getEndpoint(), endpoint.getSelector(), imageMimeType, bbox.getBboxSrs(), west, south, east, north, width, height, null, null));
             endpointsToTest.add(endpoint);
 
             //Make a GetFeatureInfo request
-            methodsToTest.add(methodMaker.getFeatureInfo(infoMimeType, endpoint.getSelector(), bbox.getBboxSrs(), west, south, east, north, width, height, west, north, 0, 0, null));
+            methodsToTest.add(methodMaker.getFeatureInfo(endpoint.getEndpoint(), infoMimeType, endpoint.getSelector(), bbox.getBboxSrs(), west, south, east, north, width, height, west, north, 0, 0, null));
             endpointsToTest.add(endpoint);
         }
 

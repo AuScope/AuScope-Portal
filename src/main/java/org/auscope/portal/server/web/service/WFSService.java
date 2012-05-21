@@ -2,13 +2,16 @@ package org.auscope.portal.server.web.service;
 
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.auscope.portal.server.domain.wfs.WFSCountResponse;
-import org.auscope.portal.server.domain.wfs.WFSHTMLResponse;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
-import org.auscope.portal.server.util.GmlToHtml;
-import org.auscope.portal.server.util.GmlToKml;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker.ResultType;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.BaseWFSService;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
+import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
+import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.xslt.WfsToKmlTransformer;
+import org.auscope.portal.xslt.GmlToHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class WFSService extends BaseWFSService {
 
+    private WfsToKmlTransformer wfsToKml;
+    private GmlToHtml gmlToHtml;
+
     /**
      * Creates a new instance of this class with the specified dependencies
      * @param httpServiceCaller Will be used for making requests
@@ -30,8 +36,34 @@ public class WFSService extends BaseWFSService {
     @Autowired
     public WFSService(HttpServiceCaller httpServiceCaller,
             WFSGetFeatureMethodMaker wfsMethodMaker,
-            GmlToKml gmlToKml, GmlToHtml gmlToHtml) {
-        super(httpServiceCaller, wfsMethodMaker, gmlToKml, gmlToHtml);
+            WfsToKmlTransformer wfsToKml, GmlToHtml gmlToHtml) {
+        super(httpServiceCaller, wfsMethodMaker);
+        this.wfsToKml = wfsToKml;
+        this.gmlToHtml = gmlToHtml;
+    }
+
+    private WFSTransformedResponse doRequestAndKmlTransform(HttpMethodBase method, String serviceUrl) throws PortalServiceException {
+        try {
+            String wfs = httpServiceCaller.getMethodResponseAsString(method);
+            OWSExceptionParser.checkForExceptionResponse(wfs);
+            String kml = wfsToKml.convert(wfs, serviceUrl);
+
+            return new WFSTransformedResponse(wfs, kml, method);
+        } catch (Exception ex) {
+            throw new PortalServiceException(method, ex);
+        }
+    }
+
+    private WFSTransformedResponse doRequestAndHtmlTransform(HttpMethodBase method, String serviceUrl) throws PortalServiceException {
+        try {
+            String wfs = httpServiceCaller.getMethodResponseAsString(method);
+            OWSExceptionParser.checkForExceptionResponse(wfs);
+            String kml = gmlToHtml.convert(wfs, serviceUrl);
+
+            return new WFSTransformedResponse(wfs, kml, method);
+        } catch (Exception ex) {
+            throw new PortalServiceException(method, ex);
+        }
     }
 
     /**
@@ -44,9 +76,9 @@ public class WFSService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSKMLResponse getWfsResponseAsKml(String wfsUrl, String featureType, String featureId) throws PortalServiceException {
+    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String featureId) throws PortalServiceException {
         HttpMethodBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
-        return getWfsResponseAsKml(wfsUrl, method);
+        return doRequestAndKmlTransform(method, wfsUrl);
     }
 
     /**
@@ -61,9 +93,9 @@ public class WFSService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSKMLResponse getWfsResponseAsKml(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srs) throws PortalServiceException {
+    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srs) throws PortalServiceException {
         HttpMethodBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srs, ResultType.Results);
-        return getWfsResponseAsKml(wfsUrl, method);
+        return doRequestAndKmlTransform(method, wfsUrl);
     }
 
     /**
@@ -93,9 +125,9 @@ public class WFSService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSHTMLResponse getWfsResponseAsHtml(String wfsUrl, String featureType, String featureId) throws PortalServiceException {
+    public WFSTransformedResponse getWfsResponseAsHtml(String wfsUrl, String featureType, String featureId) throws PortalServiceException {
         HttpMethodBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
-        return getWfsResponseAsHtml(wfsUrl, method);
+        return doRequestAndHtmlTransform(method, wfsUrl);
     }
 
     /**
@@ -108,8 +140,8 @@ public class WFSService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSHTMLResponse getWfsResponseAsHtml(String wfsUrl) throws PortalServiceException {
+    public WFSTransformedResponse getWfsResponseAsHtml(String wfsUrl) throws PortalServiceException {
         HttpMethodBase method = new GetMethod(wfsUrl);
-        return getWfsResponseAsHtml(wfsUrl, method);
+        return doRequestAndHtmlTransform(method, wfsUrl);
     }
 }

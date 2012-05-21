@@ -10,12 +10,15 @@ import javax.xml.xpath.XPathExpression;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.BaseWFSService;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
+import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnNamespaceContext;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
-import org.auscope.portal.server.domain.ows.OWSExceptionParser;
-import org.auscope.portal.server.util.DOMUtil;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -30,13 +33,11 @@ import org.w3c.dom.NodeList;
  *
  */
 @Service
-public class YilgarnGeochemistryService {
+public class YilgarnGeochemistryService extends BaseWFSService {
 
     public final static String LOCATED_SPECIMEN_TYPENAME = "sa:LocatedSpecimen";
 
     private final Log log = LogFactory.getLog(getClass());
-    private HttpServiceCaller httpServiceCaller;
-    private WFSGetFeatureMethodMaker methodMaker;
 
     /**
      * Creates a new instance of this class with the specified dependencies
@@ -45,8 +46,7 @@ public class YilgarnGeochemistryService {
      */
     @Autowired
     public YilgarnGeochemistryService(HttpServiceCaller httpServiceCaller, WFSGetFeatureMethodMaker methodMaker) {
-        this.httpServiceCaller = httpServiceCaller;
-        this.methodMaker = methodMaker;
+        super(httpServiceCaller, methodMaker);
     }
 
     /**
@@ -71,56 +71,71 @@ public class YilgarnGeochemistryService {
      * @param locSpecimenId a gml id for serviceUrl that references a sa:LocatedSpecimen
      * @return
      */
-    public YilgarnLocatedSpecimenRecord getLocatedSpecimens(String serviceUrl, String locSpecimenId) throws Exception {
+    public YilgarnLocatedSpecimenRecord getLocatedSpecimens(String serviceUrl, String locSpecimenId) throws PortalServiceException {
         //Make our request
-        HttpMethodBase method = methodMaker.makeMethod(serviceUrl, LOCATED_SPECIMEN_TYPENAME, locSpecimenId);
-        InputStream wfsResponse = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        HttpMethodBase method = null;
+        Document wfsResponseDoc = null;
 
-        //Make a response document
-        Document wfsResponseDoc = DOMUtil.buildDomFromStream(wfsResponse);
-        OWSExceptionParser.checkForExceptionResponse(wfsResponseDoc);
+        try {
+            method = wfsMethodMaker.makeMethod(serviceUrl, LOCATED_SPECIMEN_TYPENAME, locSpecimenId);
+            InputStream wfsResponse = httpServiceCaller.getMethodResponseAsStream(method);
+            wfsResponseDoc = DOMUtil.buildDomFromStream(wfsResponse);
+
+            OWSExceptionParser.checkForExceptionResponse(wfsResponseDoc);
+        } catch (Exception ex) {
+            throw new PortalServiceException(method,"Error requesting/building DOM", ex);
+        } finally {
+            if (method != null) {
+                method.releaseConnection();
+            }
+        }
+
 
         //Parse our top level feature
-        YilgarnNamespaceContext nc = new YilgarnNamespaceContext();
-        XPathExpression xPathLocSpecs = DOMUtil.compileXPathExpr(String.format("/wfs:FeatureCollection/gml:featureMembers/%1$s | /wfs:FeatureCollection/gml:featureMember/%1$s", LOCATED_SPECIMEN_TYPENAME), nc);
-        Node locSpecNode = (Node)xPathLocSpecs.evaluate(wfsResponseDoc, XPathConstants.NODE);
-        if (locSpecNode == null) {
-            log.debug("No matching results");
-            return null;
-        }
-        String materialClass = xPathEvalString("sa:materialClass",locSpecNode,  nc);
+        try {
+            YilgarnNamespaceContext nc = new YilgarnNamespaceContext();
+            XPathExpression xPathLocSpecs = DOMUtil.compileXPathExpr(String.format("/wfs:FeatureCollection/gml:featureMembers/%1$s | /wfs:FeatureCollection/gml:featureMember/%1$s", LOCATED_SPECIMEN_TYPENAME), nc);
+            Node locSpecNode = (Node)xPathLocSpecs.evaluate(wfsResponseDoc, XPathConstants.NODE);
+            if (locSpecNode == null) {
+                log.debug("No matching results");
+                return null;
+            }
+            String materialClass = xPathEvalString("sa:materialClass",locSpecNode,  nc);
 
-        //Parse our the list of observations
-        XPathExpression xPathObs = DOMUtil.compileXPathExpr("sa:relatedObservation/om:Observation", nc);
-        NodeList observationNodes = (NodeList)xPathObs.evaluate(locSpecNode, XPathConstants.NODESET);
-        List<YilgarnObservationRecord> observations = new ArrayList<YilgarnObservationRecord>();
-        for (int i = 0; i < observationNodes.getLength(); i++) {
-            Node observationNode = observationNodes.item(i);
+            //Parse our the list of observations
+            XPathExpression xPathObs = DOMUtil.compileXPathExpr("sa:relatedObservation/om:Observation", nc);
+            NodeList observationNodes = (NodeList)xPathObs.evaluate(locSpecNode, XPathConstants.NODESET);
+            List<YilgarnObservationRecord> observations = new ArrayList<YilgarnObservationRecord>();
+            for (int i = 0; i < observationNodes.getLength(); i++) {
+                Node observationNode = observationNodes.item(i);
 
-            String serviceName = xPathEvalString("@gml:id",observationNode,  nc);
-            String dateAndTime = xPathEvalString("om:samplingTime/gml:TimeInstant/gml:timePosition", observationNode,  nc);
-            String date = dateAndTime.split(" ")[0];
-            String observedMineralName = xPathEvalString("om:procedure/omx:ObservationProcess/@gml:id", observationNode,  nc);
-            String preparationDetails = xPathEvalString("om:procedure/omx:ObservationProcess/gml:description", observationNode,  nc);
-            String labDetails = xPathEvalString("om:procedure/omx:ObservationProcess/sml:contact/@xlink:title", observationNode,  nc);
-            String analyticalMethod = xPathEvalString("om:procedure/omx:ObservationProcess/omx:method", observationNode,  nc);
-            String observedProperty = xPathEvalString("om:observedProperty/@xlink:href", observationNode,  nc);
-            String analyteName = xPathEvalString("om:result/swe:Quantity/gml:name", observationNode,  nc);
-            String analyteValue = xPathEvalString("om:result/swe:Quantity/swe:value", observationNode,  nc);
-            String urnUOM = xPathEvalString("om:result/swe:Quantity/swe:uom/@xlink:href", observationNode,  nc);
-            String uom = "null";
-            if (urnUOM.contains("ppm")) {
-                uom = "ppm";
-            } else if (urnUOM.contains("ppb")) {
-                uom = "ppb";
-            } else if (urnUOM.contains("%")) {
-                uom = "%";
+                String serviceName = xPathEvalString("@gml:id",observationNode,  nc);
+                String dateAndTime = xPathEvalString("om:samplingTime/gml:TimeInstant/gml:timePosition", observationNode,  nc);
+                String date = dateAndTime.split(" ")[0];
+                String observedMineralName = xPathEvalString("om:procedure/omx:ObservationProcess/@gml:id", observationNode,  nc);
+                String preparationDetails = xPathEvalString("om:procedure/omx:ObservationProcess/gml:description", observationNode,  nc);
+                String labDetails = xPathEvalString("om:procedure/omx:ObservationProcess/sml:contact/@xlink:title", observationNode,  nc);
+                String analyticalMethod = xPathEvalString("om:procedure/omx:ObservationProcess/omx:method", observationNode,  nc);
+                String observedProperty = xPathEvalString("om:observedProperty/@xlink:href", observationNode,  nc);
+                String analyteName = xPathEvalString("om:result/swe:Quantity/gml:name", observationNode,  nc);
+                String analyteValue = xPathEvalString("om:result/swe:Quantity/swe:value", observationNode,  nc);
+                String urnUOM = xPathEvalString("om:result/swe:Quantity/swe:uom/@xlink:href", observationNode,  nc);
+                String uom = "null";
+                if (urnUOM.contains("ppm")) {
+                    uom = "ppm";
+                } else if (urnUOM.contains("ppb")) {
+                    uom = "ppb";
+                } else if (urnUOM.contains("%")) {
+                    uom = "%";
+                }
+
+                observations.add(new YilgarnObservationRecord(serviceName, date, observedMineralName, preparationDetails,
+                            labDetails, analyticalMethod, observedProperty, analyteName, analyteValue, uom));
             }
 
-            observations.add(new YilgarnObservationRecord(serviceName, date, observedMineralName, preparationDetails,
-                        labDetails, analyticalMethod, observedProperty, analyteName, analyteValue, uom));
+            return new YilgarnLocatedSpecimenRecord(observations.toArray(new YilgarnObservationRecord[observations.size()]), materialClass);
+        } catch (Exception ex) {
+            throw new PortalServiceException(method, "Error parsing response", ex);
         }
-
-        return new YilgarnLocatedSpecimenRecord(observations.toArray(new YilgarnObservationRecord[observations.size()]), materialClass);
     }
 }

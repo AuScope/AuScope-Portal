@@ -1,8 +1,9 @@
 package org.auscope.portal.server.web.controllers;
 
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.domain.wfs.WFSCountResponse;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
+import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,9 +65,9 @@ public class EarthResourcesFilterController extends BasePortalController {
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
         try {
-            WFSKMLResponse response = this.mineralOccurrenceService.getMinesGml(serviceUrl, mineName, bbox, maxFeatures);
+            WFSTransformedResponse response = this.mineralOccurrenceService.getMinesGml(serviceUrl, mineName, bbox, maxFeatures);
 
-            return generateJSONResponseMAV(true, response.getGml(), response.getKml(), response.getMethod());
+            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);
@@ -138,7 +139,7 @@ public class EarthResourcesFilterController extends BasePortalController {
 
         try {
             //get the mineral occurrences
-            WFSKMLResponse response = this.mineralOccurrenceService.getMineralOccurrenceGml(
+            WFSTransformedResponse response = this.mineralOccurrenceService.getMineralOccurrenceGml(
                     serviceUrl,
                     commodityName,
                     measureType,
@@ -149,7 +150,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                     maxFeatures,
                     bbox);
 
-            return generateJSONResponseMAV(true, response.getGml(), response.getKml(), response.getMethod());
+            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);
@@ -247,7 +248,7 @@ public class EarthResourcesFilterController extends BasePortalController {
 
         try {
             // Get the mining activities
-            WFSKMLResponse response = this.mineralOccurrenceService.getMiningActivityGml(serviceUrl
+            WFSTransformedResponse response = this.mineralOccurrenceService.getMiningActivityGml(serviceUrl
                     , mineName
                     , startDate
                     , endDate
@@ -258,7 +259,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                     , maxFeatures
                     , bbox);
 
-            return generateJSONResponseMAV(true, response.getGml(), response.getKml(), response.getMethod());
+            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);

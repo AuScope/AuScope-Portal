@@ -1,22 +1,18 @@
 package org.auscope.portal.mineraloccurrence;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import junit.framework.Assert;
 
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.Util;
-import org.junit.BeforeClass;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.DOMUtil;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -32,32 +28,19 @@ public class TestCommodity extends PortalTestClass {
     private static Commodity validCommodity;
     private static Commodity invalidCommodity;
 
-    @BeforeClass
-    public static void setUp() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
+    @Before
+    public void setUp() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
         //create updateCSWRecords valid commodity
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true); // never forget this!
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document mineDocument = builder.parse(new ByteArrayInputStream(Util.loadXML("src/test/resources/commodityNodeValid.xml").getBytes("UTF-8")));
+        Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/commodity/commodityNodeValid.xml"));
 
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
-
-        XPathExpression expr = xPath.compile("/er:Commodity");
+        XPathExpression expr = DOMUtil.compileXPathExpr("/er:Commodity", new MineralOccurrenceNamespaceContext());
         Node commodityNode = (Node)expr.evaluate(mineDocument, XPathConstants.NODE);
         validCommodity = new Commodity(commodityNode);
 
         //create an invalid commodity
-        DocumentBuilderFactory domFactory2 = DocumentBuilderFactory.newInstance();
-        domFactory2.setNamespaceAware(true); // never forget this!
-        DocumentBuilder builder2 = domFactory2.newDocumentBuilder();
-        Document mineDocument2 = builder2.parse(new ByteArrayInputStream(Util.loadXML("src/test/resources/commodityNodeInvalid.xml").getBytes("UTF-8")));
+        Document mineDocument2 = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/commodity/commodityNodeInvalid.xml"));
 
-        XPathFactory factory2 = XPathFactory.newInstance();
-        XPath xPath2 = factory2.newXPath();
-        xPath2.setNamespaceContext(new MineralOccurrenceNamespaceContext());
-
-        XPathExpression expr2 = xPath2.compile("/er:Commodity");
+        XPathExpression expr2 = DOMUtil.compileXPathExpr("/er:Commodity", new MineralOccurrenceNamespaceContext());
         Node commodityNode2 = (Node)expr2.evaluate(mineDocument2, XPathConstants.NODE);
         invalidCommodity = new Commodity(commodityNode2);
 

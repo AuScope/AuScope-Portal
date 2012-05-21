@@ -11,6 +11,9 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
@@ -20,10 +23,8 @@ import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGStatusResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
-import org.auscope.portal.server.util.DOMUtil;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -67,7 +68,7 @@ public class NVCLDataService {
         HttpMethodBase method = methodMaker.getDatasetCollectionMethod(serviceUrl, holeIdentifier);
 
         //Make our request, parse it into a DOM document
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Document responseDoc = DOMUtil.buildDomFromStream(responseStream);
 
         //Get our dataset nodes
@@ -102,7 +103,7 @@ public class NVCLDataService {
         HttpMethodBase method = methodMaker.getLogCollectionMethod(serviceUrl, datasetId, forMosaicService);
 
         //Make our request, parse it into a DOM document
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Document responseDoc = DOMUtil.buildDomFromStream(responseStream);
 
         //Get our dataset nodes
@@ -149,7 +150,7 @@ public class NVCLDataService {
     public MosaicResponse getMosaic(String serviceUrl, String logId, Integer width, Integer startSampleNo, Integer endSampleNo) throws Exception {
         HttpMethodBase method = methodMaker.getMosaicMethod(serviceUrl, logId, width, startSampleNo, endSampleNo);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getResponseHeader("Content-Type");
 
         return new MosaicResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
@@ -171,7 +172,7 @@ public class NVCLDataService {
     public PlotScalarResponse getPlotScalar(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType) throws Exception {
         HttpMethodBase method = methodMaker.getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getResponseHeader("Content-Type");
 
         return new PlotScalarResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
@@ -204,7 +205,7 @@ public class NVCLDataService {
         String newQueryString = method.getQueryString() + String.format("&CQL_FILTER=(DATASET_ID='%1$s')&outputformat=csv", datasetId);
         method.setQueryString(newQueryString);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getResponseHeader("Content-Type");
 
         return new CSVDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
@@ -230,7 +231,7 @@ public class NVCLDataService {
     public TSGDownloadResponse getTSGDownload(String serviceUrl, String email, String datasetId, String matchString, Boolean lineScan, Boolean spectra, Boolean profilometer, Boolean trayPics, Boolean mosaicPics, Boolean mapPics) throws Exception {
         HttpMethodBase method = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getResponseHeader("Content-Type");
 
         return new TSGDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
@@ -249,7 +250,7 @@ public class NVCLDataService {
     public TSGStatusResponse checkTSGStatus(String serviceUrl, String email) throws Exception {
         HttpMethodBase method = methodMaker.getCheckTSGStatusMethod(serviceUrl, email);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getResponseHeader("Content-Type");
 
         return new TSGStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
@@ -271,7 +272,7 @@ public class NVCLDataService {
     public WFSDownloadResponse getWFSDownload(String serviceUrl, String email, String boreholeId, String omUrl, String typeName) throws Exception {
         HttpMethodBase method = methodMaker.getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getResponseHeader("Content-Type");
 
         return new WFSDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
@@ -290,7 +291,7 @@ public class NVCLDataService {
     public WFSStatusResponse checkWFSStatus(String serviceUrl, String email) throws Exception {
         HttpMethodBase method = methodMaker.getCheckWFSStatusMethod(serviceUrl, email);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method, httpServiceCaller.getHttpClient());
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getResponseHeader("Content-Type");
 
         return new WFSStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());

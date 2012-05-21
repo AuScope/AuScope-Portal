@@ -3,8 +3,8 @@ package org.auscope.portal.server.web.controllers;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.server.web.service.HttpServiceCaller;
-import org.auscope.portal.server.web.view.JSONModelAndView;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.view.JSONModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,7 +36,7 @@ public class GeotransectsController {
         ModelMap model = new ModelMap();
 
         try {
-            response = serviceCaller.getMethodResponseAsString(httpMethod, serviceCaller.getHttpClient());
+            response = serviceCaller.getMethodResponseAsString(httpMethod);
 
             model.put("success", true);
             model.put("errorMsg", "");

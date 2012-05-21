@@ -7,18 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.auscope.portal.HttpMethodBaseMatcher;
-import org.auscope.portal.HttpMethodBaseMatcher.HttpMethodType;
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.Util;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.methodmakers.SISSVocMethodMaker;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.test.jmock.HttpMethodBaseMatcher.HttpMethodType;
 import org.auscope.portal.server.domain.admin.AdminDiagnosticResponse;
 import org.auscope.portal.server.domain.admin.EndpointAndSelector;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.web.SISSVocMethodMaker;
 import org.auscope.portal.server.web.controllers.VocabController;
 import org.jmock.Expectations;
-import org.jmock.Sequence;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,7 +28,6 @@ import org.junit.Test;
  */
 public class TestAdminService extends PortalTestClass {
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
-    private HttpClient mockClient = context.mock(HttpClient.class);
     private AdminService adminService = new AdminService(mockServiceCaller);
 
     /**
@@ -46,10 +44,7 @@ public class TestAdminService extends PortalTestClass {
         //Ensure all of our requests get called once
         context.checking(new Expectations() {{
             for (int i = 0; i < urls.length; i++) {
-                oneOf(mockServiceCaller).getHttpClient();
-                will(returnValue(mockClient));
-
-                oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(HttpMethodType.GET, urls[i].toString(), null)), with(mockClient));
+                oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(HttpMethodType.GET, urls[i].toString(), null)));
                 will(returnValue(""));
             }
         }});
@@ -76,10 +71,8 @@ public class TestAdminService extends PortalTestClass {
         //Ensure all of our requests get called once and fail
         context.checking(new Expectations() {{
             for (int i = 0; i < urls.length; i++) {
-                oneOf(mockServiceCaller).getHttpClient();
-                will(returnValue(mockClient));
 
-                oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(HttpMethodType.GET, urls[i].toString(), null)), with(mockClient));
+                oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(HttpMethodType.GET, urls[i].toString(), null)));
                 will(throwException(new ConnectException()));
             }
         }});
@@ -104,25 +97,22 @@ public class TestAdminService extends PortalTestClass {
             new CSWServiceItem("id-2", "http://example2.fake/thisWillReturnInvalidCount"),
             new CSWServiceItem("id-3", "http://example3.fake/thieWillReturnOWSError"),
             new CSWServiceItem("id-4", "http://example4.fake/thisWillFailToConnect"));
-        final InputStream owsError = getClass().getResourceAsStream("/OWSExceptionSample1.xml");
-        final InputStream cswBadCountResponse = getClass().getResourceAsStream("/cswRecordResponse.xml");
-        final InputStream cswResponse = getClass().getResourceAsStream("/cswRecordResponse_SingleRecord.xml");
+        final InputStream owsError = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
+        final InputStream cswBadCountResponse = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/csw/cswRecordResponse.xml");
+        final InputStream cswResponse = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/csw/cswRecordResponse_SingleRecord.xml");
 
         //We have 4 requests, 1 will fail, 1 will return error, 1 returns an invalid count and 1 succeeds
         context.checking(new Expectations() {{
-            exactly(items.size()).of(mockServiceCaller).getHttpClient();
-            will(returnValue(mockClient));
-
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(0).getServiceUrl(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(0).getServiceUrl(), null)));
             will(returnValue(cswResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(1).getServiceUrl(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(1).getServiceUrl(), null)));
             will(returnValue(cswBadCountResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(2).getServiceUrl(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(2).getServiceUrl(), null)));
             will(returnValue(owsError));
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(3).getServiceUrl(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, items.get(3).getServiceUrl(), null)));
             will(throwException(new ConnectException()));
         }});
 
@@ -140,20 +130,18 @@ public class TestAdminService extends PortalTestClass {
     @Test
     public void testVocab() throws Exception {
         final String vocabUrl = "http://fake.vocab/url";
-        final String vocabResponse = Util.loadXML("src/test/resources/SISSVocResponse.xml");
-        final String repoInfoResponse = Util.loadXML("src/test/resources/SISSVocRepositoryInfoResponse.xml");
+        final String vocabResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocResponse.xml");
+        final String repoInfoResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocRepositoryInfoResponse.xml");
         final SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
 
 
         //Our vocab test fires off 2 requests
         context.checking(new Expectations() {{
-            exactly(2).of(mockServiceCaller).getHttpClient();
-            will(returnValue(mockClient));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
             will(returnValue(vocabResponse));
         }});
 
@@ -178,13 +166,10 @@ public class TestAdminService extends PortalTestClass {
 
         //Our vocab test fires off 2 requests
         context.checking(new Expectations() {{
-            exactly(2).of(mockServiceCaller).getHttpClient();
-            will(returnValue(mockClient));
-
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
             will(returnValue(vocabResponse));
         }});
 
@@ -209,13 +194,10 @@ public class TestAdminService extends PortalTestClass {
 
         //Our vocab test fires off 2 requests
         context.checking(new Expectations() {{
-            exactly(2).of(mockServiceCaller).getHttpClient();
-            will(returnValue(mockClient));
-
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
             will(returnValue(vocabResponse));
         }});
 
@@ -238,13 +220,10 @@ public class TestAdminService extends PortalTestClass {
 
         //Our vocab test fires off 2 requests
         context.checking(new Expectations() {{
-            exactly(2).of(mockServiceCaller).getHttpClient();
-            will(returnValue(mockClient));
-
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(throwException(new ConnectException()));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
             will(throwException(new ConnectException()));
         }});
 
@@ -269,24 +248,21 @@ public class TestAdminService extends PortalTestClass {
         final FilterBoundingBox bbox = new FilterBoundingBox("srs", new double[] {1,2}, new double[] {3,4});
 
         context.checking(new Expectations() {{
-            exactly(5).of(mockServiceCaller).getHttpClient();
-            will(returnValue(mockClient));
-
             //This will fail to connect and cause the second request AND other endpoint to be skipped
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(0).getEndpoint() + ".*"), null)), with(mockClient));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(0).getEndpoint() + ".*"), null)));
             will(throwException(new ConnectException()));
 
             //Return OWS error
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(2).getEndpoint() + ".*"), null)), with(mockClient));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/OWSExceptionSample1.xml")));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(2).getEndpoint() + ".*"), null)), with(mockClient));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/OWSExceptionSample1.xml")));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(2).getEndpoint() + ".*"), null)));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml")));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(2).getEndpoint() + ".*"), null)));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml")));
 
             //Return success
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(3).getEndpoint() + ".*"), null)), with(mockClient));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/YilgarnGeochemGetFeatureResponse.xml")));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(3).getEndpoint() + ".*"), null)), with(mockClient));
-            will(returnValue(TestAdminService.class.getResourceAsStream("/YilgarnGeochemGetFeatureResponse.xml")));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(3).getEndpoint() + ".*"), null)));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/yilgarn/YilgarnGeochemGetFeatureResponse.xml")));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, Pattern.compile(endpoints.get(3).getEndpoint() + ".*"), null)));
+            will(returnValue(ResourceUtil.loadResourceAsStream("org/auscope/portal/yilgarn/YilgarnGeochemGetFeatureResponse.xml")));
         }});
 
         AdminDiagnosticResponse response = adminService.wfsConnectivity(endpoints, bbox);

@@ -11,11 +11,10 @@ import java.util.zip.ZipInputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.server.util.ByteBufferedServletOutputStream;
-import org.auscope.portal.server.web.service.HttpServiceCaller;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,8 +29,7 @@ public class TestDownloadController extends PortalTestClass {
     /**
      * Mock httpService caller
      */
-    private HttpServiceCaller httpServiceCaller = context
-            .mock(HttpServiceCaller.class);
+    private HttpServiceCaller httpServiceCaller = context.mock(HttpServiceCaller.class);
 
     /**
      * The controller to test
@@ -93,8 +91,7 @@ public class TestDownloadController extends PortalTestClass {
                 oneOf(mockHttpResponse).getOutputStream();will(returnValue(servletOutputStream));
 
                 // calling the service
-                oneOf(httpServiceCaller).getHttpClient();
-                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)),with(any(HttpClient.class)));
+                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)));
                     will(returnValue(dummyJSONResponseIS));
             }
         });
@@ -150,10 +147,9 @@ public class TestDownloadController extends PortalTestClass {
                 oneOf(mockHttpResponse).getOutputStream();will(returnValue(servletOutputStream));
 
                 // calling the service
-                exactly(2).of(httpServiceCaller).getHttpClient();
-                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)),with(any(HttpClient.class)));
+                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)));
                 will(returnValue(dummyJSONResponseIS));
-                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)), with(any(HttpClient.class)));
+                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)));
                 will(delayReturnValue(300,dummyJSONResponseNoMsgIS));
             }
         });
@@ -210,10 +206,9 @@ public class TestDownloadController extends PortalTestClass {
                 oneOf(mockHttpResponse).getOutputStream();will(returnValue(servletOutputStream));
 
                 // calling the service
-                exactly(2).of(httpServiceCaller).getHttpClient();
-                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)),with(any(HttpClient.class)));
+                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)));
                 will(throwException(new Exception("Exception test")));
-                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)),with(any(HttpClient.class)));
+                oneOf(httpServiceCaller).getMethodResponseAsStream(with(any(HttpMethodBase.class)));
                 will(delayReturnValue(100,dummyJSONResponseIS2));
             }
         });
@@ -270,18 +265,9 @@ public class TestDownloadController extends PortalTestClass {
                 will(returnValue(servletOutputStream));
 
                 // calling the service
-                oneOf(httpServiceCaller).getHttpClient();
-                oneOf(httpServiceCaller).getMethodResponseInBytes(
-                        with(any(HttpMethodBase.class)),
-                        with(any(HttpClient.class)));
+                oneOf(httpServiceCaller).getMethodResponseAsBytes(
+                        with(any(HttpMethodBase.class)));
                 will(returnValue(dummyData.getBytes()));
-
-                // return a string containing xml, which will denote some form
-                // of error from a WMS call
-                oneOf(httpServiceCaller).getResponseHeader(
-                        with(any(HttpMethodBase.class)),
-                        with(any(String.class)));
-                will(returnValue(header));
             }
         });
 
@@ -292,9 +278,6 @@ public class TestDownloadController extends PortalTestClass {
         ZipInputStream zipInputStream = servletOutputStream.getZipInputStream();
         ZipEntry ze = null;
         while ((ze = zipInputStream.getNextEntry()) != null) {
-            // name of the file should end in .xml
-            Assert.assertTrue(ze.getName().endsWith(".xml"));
-
             ByteArrayOutputStream fout = new ByteArrayOutputStream();
             for (int c = zipInputStream.read(); c != -1; c = zipInputStream
                     .read()) {
@@ -333,18 +316,10 @@ public class TestDownloadController extends PortalTestClass {
                 will(returnValue(servletOutputStream));
 
                 // calling the service
-                oneOf(httpServiceCaller).getHttpClient();
-                oneOf(httpServiceCaller).getMethodResponseInBytes(
-                        with(any(HttpMethodBase.class)),
-                        with(any(HttpClient.class)));
+                oneOf(httpServiceCaller).getMethodResponseAsBytes(
+                        with(any(HttpMethodBase.class)));
                 will(returnValue(dummyData.getBytes()));
 
-                // return a string containing xml, which will denote some form
-                // of error from a WMS call
-                oneOf(httpServiceCaller).getResponseHeader(
-                        with(any(HttpMethodBase.class)),
-                        with(any(String.class)));
-                will(returnValue(header));
             }
         });
 
@@ -355,8 +330,6 @@ public class TestDownloadController extends PortalTestClass {
         ZipInputStream zipInputStream = servletOutputStream.getZipInputStream();
         ZipEntry ze = null;
         while ((ze = zipInputStream.getNextEntry()) != null) {
-            // name of the file should end in .xml
-            Assert.assertTrue(ze.getName().endsWith(".png"));
 
             ByteArrayOutputStream fout = new ByteArrayOutputStream();
             for (int c = zipInputStream.read(); c != -1; c = zipInputStream

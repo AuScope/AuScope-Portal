@@ -9,7 +9,8 @@ import javax.xml.xpath.XPathFactory;
 
 import junit.framework.Assert;
 
-import org.auscope.portal.server.util.DOMUtil;
+import org.auscope.portal.core.services.namespaces.OGCNamespaceContext;
+import org.auscope.portal.core.util.DOMUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -32,7 +33,7 @@ public abstract class AbstractFilterTestUtilities {
         NamespaceContext nsc = new OGCNamespaceContext();
         xmlString = String.format("<test xmlns:ogc=\"%1$s\">%2$s</test>",nsc.getNamespaceURI("ogc"), xmlString);
 
-        return new DOMUtil().buildDomFromString(xmlString);
+        return DOMUtil.buildDomFromString(xmlString);
     }
 
 

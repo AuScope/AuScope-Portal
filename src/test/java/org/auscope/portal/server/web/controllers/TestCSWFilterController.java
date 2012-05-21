@@ -4,15 +4,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.auscope.portal.CSWGetDataRecordsFilterMatcher;
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.csw.CSWGetDataRecordsFilter.KeywordMatchType;
-import org.auscope.portal.csw.CSWGetRecordResponse;
-import org.auscope.portal.csw.record.CSWRecord;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.web.service.CSWFilterService;
-import org.auscope.portal.server.web.service.CSWServiceItem;
-import org.auscope.portal.server.web.view.ViewCSWRecordFactory;
+import org.auscope.portal.core.services.CSWFilterService;
+import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
+import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
+import org.auscope.portal.core.services.responses.csw.CSWRecord;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.jmock.CSWGetDataRecordsFilterMatcher;
+import org.auscope.portal.core.view.ViewCSWRecordFactory;
+import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,6 +31,7 @@ public class TestCSWFilterController extends PortalTestClass {
     private ViewCSWRecordFactory mockViewRecordFactory;
     private CSWFilterService mockService;
     private CSWFilterController controller;
+    private ViewKnownLayerFactory mockKnownLayerFactory;
 
     /**
      * Initialise our unit tests
@@ -37,8 +39,9 @@ public class TestCSWFilterController extends PortalTestClass {
     @Before
     public void init() {
         mockViewRecordFactory = context.mock(ViewCSWRecordFactory.class);
+        mockKnownLayerFactory = context.mock(ViewKnownLayerFactory.class);
         mockService = context.mock(CSWFilterService.class);
-        controller = new CSWFilterController(mockService, mockViewRecordFactory);
+        controller = new CSWFilterController(mockService, mockViewRecordFactory, mockKnownLayerFactory);
     }
 
     private static CSWGetDataRecordsFilterMatcher aCSWFilter(FilterBoundingBox spatialBounds,

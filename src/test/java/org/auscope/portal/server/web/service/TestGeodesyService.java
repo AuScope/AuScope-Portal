@@ -6,17 +6,20 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservation;
 import org.auscope.portal.server.domain.geodesy.GeodesyObservationsFilter;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestGeodesyService extends PortalTestClass {
-    private HttpClient mockHttpClient = context.mock(HttpClient.class);
     private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private WFSGetFeatureMethodMaker mockMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
@@ -38,13 +41,14 @@ public class TestGeodesyService extends PortalTestClass {
         final String startDate = "1986-10-09";
         final String endDate = "1990-12-13";
         final String filterString = new GeodesyObservationsFilter(stationId, startDate, endDate).getFilterStringAllRecords();
-        final InputStream is = this.getClass().getResourceAsStream("/GeodesyStationObservationsResponse.xml");
+        final InputStream is = ResourceUtil.loadResourceAsStream("org/auscope/portal/geodesy/GeodesyStationObservationsResponse.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, "geodesy:station_observations", filterString, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockHttpClient);will(returnValue(is));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(is));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         List<GeodesyObservation> result = gs.getObservationsForStation(serviceUrl, stationId, startDate, endDate);
@@ -77,12 +81,12 @@ public class TestGeodesyService extends PortalTestClass {
         final String filterString = new GeodesyObservationsFilter(stationId, startDate, endDate).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, "geodesy:station_observations", filterString, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             allowing(mockMethod).getURI();
+            oneOf(mockMethod).releaseConnection();
 
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockHttpClient);will(throwException(new ConnectException()));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(new ConnectException()));
         }});
 
         gs.getObservationsForStation(serviceUrl, stationId, startDate, endDate);

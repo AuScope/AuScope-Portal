@@ -3,13 +3,14 @@ package org.auscope.portal.server.web.service;
 import java.io.ByteArrayInputStream;
 import java.net.ConnectException;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
-import org.auscope.portal.server.domain.ows.OWSException;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,7 +23,6 @@ import org.junit.Test;
  */
 public class TestYilgarnGeochemistryService extends PortalTestClass {
 
-    private HttpClient mockClient = context.mock(HttpClient.class);
     private WFSGetFeatureMethodMaker mockMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
     private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
@@ -44,16 +44,17 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
      */
     @Test
     public void testLocatedSpecimenParsing() throws Exception {
-        final String responseString = org.auscope.portal.Util.loadXML("src/test/resources/YilgarnLocSpecimenResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/yilgarn/YilgarnLocSpecimenResponse.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockClient);will(returnValue(responseStream));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         YilgarnLocatedSpecimenRecord response = service.getLocatedSpecimens(serviceUrl, featureId);
@@ -80,16 +81,17 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
      */
     @Test
     public void testLocatedSpecimenParsingEmpty() throws Exception {
-        final String responseString = org.auscope.portal.Util.loadXML("src/test/resources/EmptyWFSResponse.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/wfs/EmptyWFSResponse.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         final String serviceUrl = "http://service/wfs";
         final String featureId = "doesnt-match-anything";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockClient);will(returnValue(responseStream));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         YilgarnLocatedSpecimenRecord response = service.getLocatedSpecimens(serviceUrl, featureId);
@@ -100,16 +102,17 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
      * Tests that parsing fails if the service cant be connected to
      * @throws Exception
      */
-    @Test(expected=ConnectException.class)
+    @Test(expected=PortalServiceException.class)
     public void testLocatedSpecimenConnectError() throws Exception {
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockClient);will(throwException(new ConnectException()));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(new ConnectException()));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         service.getLocatedSpecimens(serviceUrl, featureId);
@@ -119,18 +122,19 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
      * Tests that parsing fails when there is an OWSException
      * @throws Exception
      */
-    @Test(expected=OWSException.class)
+    @Test(expected=PortalServiceException.class)
     public void testLocatedSpecimenParsingOWSException() throws Exception {
-        final String responseString = org.auscope.portal.Util.loadXML("src/test/resources/OWSExceptionSample1.xml");
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
         final ByteArrayInputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         final String serviceUrl = "http://service/wfs";
         final String featureId = "feature-Id-string";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getHttpClient();will(returnValue(mockClient));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod, mockClient);will(returnValue(responseStream));
+            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
             oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         service.getLocatedSpecimens(serviceUrl, featureId);

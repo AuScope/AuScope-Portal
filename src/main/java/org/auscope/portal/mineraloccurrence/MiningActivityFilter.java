@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.server.domain.filter.AbstractFilter;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 
 /**
  * @author Mathew Wyatt

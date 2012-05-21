@@ -19,9 +19,11 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.manager.download.DownloadResponse;
-import org.auscope.portal.manager.download.ServiceDownloadManager;
-import org.auscope.portal.server.web.service.HttpServiceCaller;
+import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.server.http.download.DownloadResponse;
+import org.auscope.portal.core.server.http.download.ServiceDownloadManager;
+import org.auscope.portal.core.util.MimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 
 @Controller
-public class DownloadController {
+public class DownloadController extends BasePortalController {
     private final Log logger = LogFactory.getLog(getClass());
     private HttpServiceCaller serviceCaller;
 
@@ -73,8 +75,7 @@ public class DownloadController {
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
 
         logger.trace("No. of serviceUrls: " + serviceUrls.length);
-        ServiceDownloadManager downloadManager = new ServiceDownloadManager(
-                serviceUrls, serviceCaller,threadpool);
+        ServiceDownloadManager downloadManager = new ServiceDownloadManager(serviceUrls, serviceCaller,threadpool);
         //VT: threadpool is closed within downloadAll();
         ArrayList<DownloadResponse> gmlDownloads=downloadManager.downloadAll();
         writeResponseToZip(gmlDownloads,zout);
@@ -134,28 +135,6 @@ public class DownloadController {
     }
 
     /**
-     * Converts a mime type to a 'well known' file extension. If the
-     * mime type is unknown then an empty string will be returned
-     * @param mime The mime to examine
-     * @return
-     */
-    private String mimeTypeToFileExtension(String mime) {
-        if (mime.startsWith("image/")) {
-            String suffix = mime.substring("image/".length());
-            return suffix.split("\\+")[0];
-        } else if (mime.startsWith("text/")) {
-            String suffix = mime.substring("text/".length());
-            return suffix.split("\\+")[0];
-        } else if (mime.contains("kml")) {
-            return "kml";
-        } else if (mime.contains("xml")) {
-            return "xml";
-        }
-
-        return "";
-    }
-
-    /**
      * Given a list of WMS URL's, this function will collate the responses
      * into a zip file and send the response back to the browser.
      *
@@ -181,15 +160,15 @@ public class DownloadController {
         for(int i=0; i<serviceUrls.length; i++) {
 
             GetMethod method = new GetMethod(serviceUrls[i]);
-            HttpClient client = serviceCaller.getHttpClient();
-
-            byte[] responseBytes = serviceCaller.getMethodResponseInBytes(method, client);
-
-            Header contentType = serviceCaller.getResponseHeader(method, "Content-Type");
+            byte[] responseBytes = serviceCaller.getMethodResponseAsBytes(method);
+            Header contentType = method.getResponseHeader("Content-Type");
 
             //create a new entry in the zip file with a timestamped name
-            String mime = contentType.getValue();
-            String fileExtension = mimeTypeToFileExtension(mime);
+            String mime = null;
+            if (contentType != null) {
+                mime = contentType.getValue();
+            }
+            String fileExtension = MimeUtil.mimeToFileExtension(mime);
             if (fileExtension != null && !fileExtension.isEmpty()) {
                 fileExtension = "." + fileExtension;
             }

@@ -10,16 +10,22 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.csw.record.AbstractCSWOnlineResource;
-import org.auscope.portal.csw.record.AbstractCSWOnlineResource.OnlineResourceType;
-import org.auscope.portal.csw.record.CSWRecord;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.BaseWFSService;
+import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.services.csw.CSWRecordsFilterVisitor;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
+import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
+import org.auscope.portal.core.services.responses.csw.CSWRecord;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.util.DOMUtil;
+import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.mineraloccurrence.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.domain.wfs.WFSKMLResponse;
-import org.auscope.portal.server.util.DOMUtil;
-import org.auscope.portal.server.util.GmlToKml;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -33,34 +39,21 @@ import org.w3c.dom.NodeList;
  *
  */
 @Service
-public class BoreholeService {
+public class BoreholeService extends BaseWFSService {
 
     // -------------------------------------------------------------- Constants
 
     private final Log log = LogFactory.getLog(getClass());
 
     // ----------------------------------------------------- Instance variables
-    private HttpServiceCaller httpServiceCaller;
-    private WFSGetFeatureMethodMaker methodMaker;
-    private GmlToKml gmlToKml;
+    private WfsToKmlTransformer wfsToKml;
 
     // ----------------------------------------------------------- Constructors
 
-    // ------------------------------------------ Attribute Setters and Getters
-
     @Autowired
-    public void setHttpServiceCaller(HttpServiceCaller httpServiceCaller) {
-        this.httpServiceCaller = httpServiceCaller;
-    }
-
-    @Autowired
-    public void setWFSGetFeatureMethodMakerPOST(WFSGetFeatureMethodMaker iwfsGetFeatureMethodMaker) {
-        this.methodMaker = iwfsGetFeatureMethodMaker;
-    }
-
-    @Autowired
-    public void setGmlToKml(GmlToKml gmlToKml) {
-        this.gmlToKml = gmlToKml;
+    public BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker, WfsToKmlTransformer wfsToKml) {
+        super(serviceCaller, methodMaker);
+        this.wfsToKml = wfsToKml;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -75,7 +68,7 @@ public class BoreholeService {
      * @return
      * @throws Exception
      */
-    public WFSKMLResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian, String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList) throws Exception {
+    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian, String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList) throws Exception {
         String filterString;
         BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictToIDList);
         if (bbox == null) {
@@ -84,14 +77,17 @@ public class BoreholeService {
             filterString = nvclFilter.getFilterStringBoundingBox(bbox);
         }
 
-        // Create a GetFeature request with an empty filter - get all
-        HttpMethodBase method = methodMaker.makeMethod(serviceURL, "gsml:Borehole", filterString, maxFeatures);
-        try {
-            // Call the service, and get all the boreholes
-            String responseGml = httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
-            String responseKml = gmlToKml.convert(responseGml, serviceURL);
 
-            return new WFSKMLResponse(responseGml, responseKml, method);
+
+        HttpMethodBase method = null;
+        try {
+            // Create a GetFeature request with an empty filter - get all
+            method = this.generateWFSRequest(serviceURL, "gsml:Borehole", null, filterString, maxFeatures, null, ResultType.Results);
+            String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
+            String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
+
+
+            return new WFSTransformedResponse(responseGml, responseKml, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }
@@ -100,8 +96,8 @@ public class BoreholeService {
 
     private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList) throws Exception {
         //Make request
-        HttpMethodBase method = methodMaker.makeMethod(url, typeName, "", 0);
-        String wfsResponse = httpServiceCaller.getMethodResponseAsString(method, httpServiceCaller.getHttpClient());
+        HttpMethodBase method = wfsMethodMaker.makeMethod(url, typeName, "", 0);
+        String wfsResponse = httpServiceCaller.getMethodResponseAsString(method);
 
         //Parse response
         Document doc = DOMUtil.buildDomFromString(wfsResponse);

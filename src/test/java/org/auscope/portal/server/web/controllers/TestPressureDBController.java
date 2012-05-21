@@ -6,10 +6,10 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.auscope.portal.PortalTestClass;
+import org.auscope.portal.core.services.PortalServiceException;
+import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
+import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.pressuredb.AvailableOMResponse;
-import org.auscope.portal.pressuredb.PressureDBException;
-import org.auscope.portal.server.util.ByteBufferedServletOutputStream;
 import org.auscope.portal.server.web.service.PressureDBService;
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -32,7 +32,7 @@ public class TestPressureDBController extends PortalTestClass {
     public void testGetOMError() throws Exception {
         final String wellID = "1234";
         final String serviceUrl = "http://example.com";
-        final PressureDBException exception = new PressureDBException();
+        final PortalServiceException exception = new PortalServiceException(null);
 
         context.checking(new Expectations() {{
             oneOf(mockService).makeGetAvailableOMRequest(wellID, serviceUrl);will(throwException(exception));

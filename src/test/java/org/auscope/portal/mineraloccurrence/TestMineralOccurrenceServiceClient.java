@@ -2,23 +2,20 @@ package org.auscope.portal.mineraloccurrence;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.auscope.portal.PortalTestClass;
-import org.auscope.portal.Util;
-import org.auscope.portal.server.domain.filter.FilterBoundingBox;
-import org.auscope.portal.server.domain.wfs.WFSCountResponse;
-import org.auscope.portal.server.util.GmlToHtml;
-import org.auscope.portal.server.util.GmlToKml;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker;
-import org.auscope.portal.server.web.WFSGetFeatureMethodMaker.ResultType;
-import org.auscope.portal.server.web.service.BaseWFSService;
-import org.auscope.portal.server.web.service.HttpServiceCaller;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.BaseWFSService;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -34,9 +31,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
     private MineralOccurrenceService mineralOccurrenceService;
     private HttpServiceCaller httpServiceCaller;
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
-    private HttpClient mockHttpClient;
-    private GmlToKml mockGmlToKml;
-    private GmlToHtml mockGmlToHtml;
+    private WfsToKmlTransformer mockGmlToKml;
 
     private WFSGetFeatureMethodMaker methodMaker;
 
@@ -46,10 +41,8 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         this.methodMaker = context.mock(WFSGetFeatureMethodMaker.class);
         this.mineralOccurrencesResponseHandler = context.mock(MineralOccurrencesResponseHandler.class);
         this.httpServiceCaller = context.mock(HttpServiceCaller.class);
-        this.mockGmlToKml = context.mock(GmlToKml.class);
-        this.mockGmlToHtml = context.mock(GmlToHtml.class);
-        this.mineralOccurrenceService = new MineralOccurrenceService(this.httpServiceCaller, this.mineralOccurrencesResponseHandler, this.methodMaker, this.mockGmlToKml, this.mockGmlToHtml);
-        this.mockHttpClient = context.mock(HttpClient.class);
+        this.mockGmlToKml = context.mock(WfsToKmlTransformer.class);
+        this.mineralOccurrenceService = new MineralOccurrenceService(this.httpServiceCaller, this.mineralOccurrencesResponseHandler, this.methodMaker, this.mockGmlToKml);
         //this.commodityService = context.mock(CommodityService.class);
     }
 
@@ -73,10 +66,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
                     with(any(String.class)), with(any(Integer.class)), with(BaseWFSService.DEFAULT_SRS), with(equal(ResultType.Results)));
             will(returnValue(mockMethod));
 
-            oneOf(httpServiceCaller).getHttpClient();
-            will(returnValue(mockHttpClient));
-
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod, mockHttpClient);
+            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
             will(returnValue(mockMineResponse));
 
             oneOf(mineralOccurrencesResponseHandler).getMines(mockMineResponse);
@@ -106,10 +96,8 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
         context.checking(new Expectations() {{
             oneOf(methodMaker).makeMethod(serviceURL, "er:MiningFeatureOccurrence", mineFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results); will(returnValue(mockMethod));
-            oneOf(httpServiceCaller).getHttpClient();
-            will(returnValue(mockHttpClient));
 
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod, mockHttpClient);
+            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
             will(returnValue(mockMineResponse));
 
             oneOf(mineralOccurrencesResponseHandler).getMines(mockMineResponse);
@@ -188,7 +176,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final String minCommodityAmountUOM = "";
         final FilterBoundingBox bbox = null;
         final GetMethod mockMethod = context.mock(GetMethod.class);
-        final String mockCommodityResponse = Util.loadXML("src/test/resources/commodityGetFeatureResponse.xml");
+        final String mockCommodityResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/erml/commodity/commodityGetFeatureResponse.xml");
 
         final MineralOccurrenceFilter mineralOccurrenceFilter
             = new MineralOccurrenceFilter(commodityName,
@@ -201,9 +189,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         context.checking(new Expectations() {{
             //the mineral occurrence query part
             oneOf(methodMaker).makeMethod(serviceURL, "gsml:MappedFeature", mineralOccurrenceFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results); will(returnValue(mockMethod));
-
-            allowing(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod, mockHttpClient);will(returnValue(mockCommodityResponse));
+            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(mockCommodityResponse));
 
             oneOf(mockGmlToKml).convert(mockCommodityResponse, serviceURL);
         }});
@@ -225,16 +211,14 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final GetMethod mockMethod = context.mock(GetMethod.class);
         final FilterBoundingBox bbox = null;
         final String serviceUrl = "http://service/url";
-        final String mockActivityResponse = Util.loadXML("src/test/resources/commodityGetFeatureResponse.xml"); //any wfs response is fine - we aren't testing contents of node
+        final String mockActivityResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/erml/commodity/commodityGetFeatureResponse.xml"); //any wfs response is fine - we aren't testing contents of node
 
         context.checking(new Expectations() {{
             ignoring(mockMine);
             oneOf(methodMaker).makeMethod(with(serviceUrl), with("er:MiningFeatureOccurrence"),
                     with(any(String.class)), with(any(Integer.class)), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Results));
             will(returnValue(mockMethod));
-            oneOf(httpServiceCaller).getHttpClient();
-            will(returnValue(mockHttpClient));
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod, mockHttpClient);
+            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
             will(returnValue(mockActivityResponse));
 
             oneOf(mockGmlToKml).convert(mockActivityResponse, serviceUrl);
@@ -254,14 +238,15 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final FilterBoundingBox bbox = new FilterBoundingBox("bboxSrs", new double[] {1.2}, new double[] {3.4});
         final GetMethod mockMethod = context.mock(GetMethod.class);
         final int maxFeatures = 1214;
-        final InputStream getCountResponse = new FileInputStream("src/test/resources/GetWFSFeatureCount.xml");
+        final InputStream getCountResponse = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/wfs/GetWFSFeatureCount.xml");
 
 
         context.checking(new Expectations() {{
             oneOf(methodMaker).makeMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
-            allowing(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod, mockHttpClient);will(returnValue(getCountResponse));
+            oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         WFSCountResponse count = mineralOccurrenceService.getMinesCount(wfsUrl, mineName, bbox, maxFeatures);
@@ -285,14 +270,15 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final String minCommodityAmount = "3";
         final String minCommodityAmountUOM = "4";
         final int maxFeatures = 1214;
-        final InputStream getCountResponse = new FileInputStream("src/test/resources/GetWFSFeatureCount.xml");
+        final InputStream getCountResponse = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/wfs/GetWFSFeatureCount.xml");
 
 
         context.checking(new Expectations() {{
             oneOf(methodMaker).makeMethod(with(wfsUrl), with("gsml:MappedFeature"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
-            allowing(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod, mockHttpClient);will(returnValue(getCountResponse));
+            oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         WFSCountResponse count = mineralOccurrenceService.getMineralOccurrenceCount(wfsUrl, commodityName, measureType, minOreAmount, minOreAmountUOM, minCommodityAmount, minCommodityAmountUOM, maxFeatures, bbox);
@@ -317,14 +303,15 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final String cutOffGrade = "12314";
         final String production = "production";
         final int maxFeatures = 1214;
-        final InputStream getCountResponse = new FileInputStream("src/test/resources/GetWFSFeatureCount.xml");
+        final InputStream getCountResponse = ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/wfs/GetWFSFeatureCount.xml");
 
 
         context.checking(new Expectations() {{
             oneOf(methodMaker).makeMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
-            allowing(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
-            oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod, mockHttpClient);will(returnValue(getCountResponse));
+            oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
+
+            oneOf(mockMethod).releaseConnection();
         }});
 
         WFSCountResponse count = mineralOccurrenceService.getMiningActivityCount(wfsUrl, mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production, maxFeatures, bbox);
