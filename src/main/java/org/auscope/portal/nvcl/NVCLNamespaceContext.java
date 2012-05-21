@@ -1,21 +1,16 @@
 package org.auscope.portal.nvcl;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.xml.namespace.NamespaceContext;
+import org.auscope.portal.core.services.namespaces.IterableNamespace;
 
 /**
  * Namespace context for NVCL feature types
  * @author Josh Vote
  *
  */
-public class NVCLNamespaceContext implements NamespaceContext {
+public class NVCLNamespaceContext extends IterableNamespace {
 
     public static final String PUBLISHED_DATASETS_TYPENAME = "nvcl:ScannedBoreholeCollection";
 
-    private Map<String, String> map = new HashMap<String, String>();
 
     public NVCLNamespaceContext() {
         map.put("ogc", "http://www.opengis.net/ogc");
@@ -28,18 +23,5 @@ public class NVCLNamespaceContext implements NamespaceContext {
         map.put("gml", "http://www.opengis.net/gml");
         map.put("ows", "http://www.opengis.net/ows");
         map.put("nvcl", "http://www.auscope.org/nvcl");
-};
-
-    public String getNamespaceURI(String s) {
-        return map.get(s);
     }
-
-    public String getPrefix(String s) {
-        return null;
-    }
-
-    public Iterator<String> getPrefixes(String s) {
-        return null;
-    }
-
 }

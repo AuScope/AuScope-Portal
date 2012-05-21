@@ -25,28 +25,6 @@ public class TestYilgarnNamespaceContext extends PortalTestClass  {
     /** The namespace uri. */
     private static final String TESTNAMESPACEURI = "http://www.opengis.net/ogc";
 
-    /**
-     * Test constructor.
-     */
-    @Test
-    public void testConstructor() {
-        String s = "";
-        try {
-            final Field[] fields = YilgarnNamespaceContext.class.getDeclaredFields();
-
-            for (int i = 0; i < fields.length; ++i) {
-                if ("map".equals(fields[i].getName())) {
-                    fields[i].setAccessible(true);
-                    s = (fields[i].get(new YilgarnNamespaceContext())).toString();
-                    break;
-                }
-            }
-            Assert.assertTrue("Expected \"map\" to be pre-populated with some prefixes/URIs in the constructor",s.length() > 2);
-        } catch (Exception ex) {
-            Assert.fail(ex.getMessage());
-        }
-    }
-
 
     /**
      * Test context.

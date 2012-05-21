@@ -1,19 +1,11 @@
 package org.auscope.portal.gsml;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
+import org.auscope.portal.core.services.namespaces.IterableNamespace;
 
 /**
  * The Class YilgarnNamespaceContext.
  */
-public class YilgarnNamespaceContext implements NamespaceContext {
-
-/** The map. */
-private Map<String, String> map = new HashMap<String, String>();
+public class YilgarnNamespaceContext extends IterableNamespace {
 
     /**
      * Instantiates a new yilgarn namespace context.
@@ -36,34 +28,5 @@ private Map<String, String> map = new HashMap<String, String>();
         map.put("ows", "http://www.opengis.net/ows");
         map.put("gml", "http://www.opengis.net/gml");
         map.put("xlink", "http://www.w3.org/1999/xlink");
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.namespace.NamespaceContext#getNamespaceURI(java.lang.String)
-     */
-    public String getNamespaceURI(final String prefix) {
-        if (prefix == null) {
-            throw new IllegalArgumentException("No prefix provided!");
-        }
-
-        if (map.containsKey(prefix)) {
-            return map.get(prefix);
-        } else {
-            return XMLConstants.NULL_NS_URI;
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.namespace.NamespaceContext#getPrefix(java.lang.String)
-     */
-    public String getPrefix(String namespaceURI) {
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see javax.xml.namespace.NamespaceContext#getPrefixes(java.lang.String)
-     */
-    public Iterator<String> getPrefixes(String namespaceURI) {
-        return null;
     }
 }
