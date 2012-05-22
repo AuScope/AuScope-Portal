@@ -301,7 +301,7 @@ public class TestNVCLDataService extends PortalTestClass {
         context.checking(new Expectations() {{
 
 
-            oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null);will(returnValue(mockMethod));
+            oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);will(returnValue(mockMethod));
 
             //We aren't testing the query string additions
             allowing(mockMethod).getQueryString();will(returnValue(""));
@@ -335,7 +335,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            allowing(mockWFSMethodMaker).makeGetMethod(actualWFSEndpoint, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null);will(returnValue(mockMethod));
+            allowing(mockWFSMethodMaker).makeGetMethod(actualWFSEndpoint, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);will(returnValue(mockMethod));
 
             //We aren't testing the query string additions
             allowing(mockMethod).getQueryString();will(returnValue(""));
@@ -369,7 +369,7 @@ public class TestNVCLDataService extends PortalTestClass {
         context.checking(new Expectations() {{
 
 
-            oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null);will(returnValue(mockMethod));
+            oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);will(returnValue(mockMethod));
 
             //We aren't testing the query string additions
             allowing(mockMethod).getQueryString();will(returnValue(""));

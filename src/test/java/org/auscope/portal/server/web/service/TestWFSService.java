@@ -55,7 +55,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
-            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId, BaseWFSService.DEFAULT_SRS);will(returnValue(mockMethod));
 
             oneOf(mockGmlToKml).convert(responseString, serviceUrl);will(returnValue(responseKml));
 
@@ -80,7 +80,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(throwException(exceptionThrown));
 
-            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId, BaseWFSService.DEFAULT_SRS);will(returnValue(mockMethod));
 
         }});
 
@@ -105,7 +105,7 @@ public class TestWFSService extends PortalTestClass {
 
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
-            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId, BaseWFSService.DEFAULT_SRS);will(returnValue(mockMethod));
         }});
 
         try {
@@ -240,7 +240,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
-            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId, BaseWFSService.DEFAULT_SRS);will(returnValue(mockMethod));
 
             oneOf(mockGmlToHtml).convert(responseString, serviceUrl);will(returnValue(responseHtml));
 
@@ -265,7 +265,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(throwException(exceptionThrown));
 
-            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId, BaseWFSService.DEFAULT_SRS);will(returnValue(mockMethod));
         }});
 
         try {
@@ -289,7 +289,7 @@ public class TestWFSService extends PortalTestClass {
 
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
-            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, typeName, featureId, BaseWFSService.DEFAULT_SRS);will(returnValue(mockMethod));
         }});
 
         try {

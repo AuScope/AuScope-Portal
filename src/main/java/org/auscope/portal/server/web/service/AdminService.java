@@ -273,7 +273,7 @@ public class AdminService {
             String typeName = endpoint.getSelector();
 
             //Make a request for a single feature, no filter
-            methodsToTest.add(methodMaker.makeGetMethod(serviceUrl, typeName, 1));
+            methodsToTest.add(methodMaker.makeGetMethod(serviceUrl, typeName, 1, null));
             endpointsToTest.add(endpoint);
 
             //Next make a slightly more complex BBOX filter (to ensure we have a spatial field set at the WFS)

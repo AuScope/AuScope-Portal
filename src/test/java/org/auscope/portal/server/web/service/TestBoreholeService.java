@@ -191,7 +191,7 @@ public class TestBoreholeService extends PortalTestClass {
             oneOf(mockRecord3).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
             will(returnValue(new AbstractCSWOnlineResource[] {}));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), "", 0);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), "", 0, null);
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
             will(returnValue(successResponse));
         }});
@@ -229,10 +229,10 @@ public class TestBoreholeService extends PortalTestClass {
             oneOf(mockRecord2).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
             will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource1.getLinkage().toString(), mockRecord1Resource1.getName(), "", 0);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource1.getLinkage().toString(), mockRecord1Resource1.getName(), "", 0, null);
             will(returnValue(mockRecord1Method));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), "", 0);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), "", 0, null);
             will(returnValue(mockRecord2Method));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord1Method);

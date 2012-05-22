@@ -201,7 +201,7 @@ public class NVCLDataService {
         }
 
         //We need to make a normal WFS request with some simple modifications
-        HttpMethodBase method = wfsMethodMaker.makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer)null);
+        HttpMethodBase method = wfsMethodMaker.makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer)null, null);
         String newQueryString = method.getQueryString() + String.format("&CQL_FILTER=(DATASET_ID='%1$s')&outputformat=csv", datasetId);
         method.setQueryString(newQueryString);
 

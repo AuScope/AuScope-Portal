@@ -77,7 +77,7 @@ public class YilgarnGeochemistryService extends BaseWFSService {
         Document wfsResponseDoc = null;
 
         try {
-            method = wfsMethodMaker.makeGetMethod(serviceUrl, LOCATED_SPECIMEN_TYPENAME, locSpecimenId);
+            method = wfsMethodMaker.makeGetMethod(serviceUrl, LOCATED_SPECIMEN_TYPENAME, locSpecimenId, null);
             InputStream wfsResponse = httpServiceCaller.getMethodResponseAsStream(method);
             wfsResponseDoc = DOMUtil.buildDomFromStream(wfsResponse);
 

@@ -96,7 +96,7 @@ public class BoreholeService extends BaseWFSService {
 
     private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList) throws Exception {
         //Make request
-        HttpMethodBase method = wfsMethodMaker.makeGetMethod(url, typeName, "", 0);
+        HttpMethodBase method = wfsMethodMaker.makeGetMethod(url, typeName, "", 0, null);
         String wfsResponse = httpServiceCaller.getMethodResponseAsString(method);
 
         //Parse response

@@ -6,7 +6,7 @@ import org.auscope.portal.core.server.PortalProfileXmlWebApplicationContext;
 
 /**
  * A Web Application Context that extends the PortalProfileXmlWebApplicationContext
- * with a new config location "auscope-services.xml"
+ * with new config locations
  * @author Josh Vote
  *
  */
