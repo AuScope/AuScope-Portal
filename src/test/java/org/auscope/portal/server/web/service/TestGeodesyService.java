@@ -44,7 +44,7 @@ public class TestGeodesyService extends PortalTestClass {
         final InputStream is = ResourceUtil.loadResourceAsStream("org/auscope/portal/geodesy/GeodesyStationObservationsResponse.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(is));
 
@@ -81,7 +81,7 @@ public class TestGeodesyService extends PortalTestClass {
         final String filterString = new GeodesyObservationsFilter(stationId, startDate, endDate).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceUrl)), with(equal("geodesy:station_observations")), with(equal(filterString)), with(any(Integer.class)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             allowing(mockMethod).getURI();
             oneOf(mockMethod).releaseConnection();

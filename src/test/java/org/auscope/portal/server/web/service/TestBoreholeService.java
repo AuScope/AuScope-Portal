@@ -81,7 +81,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
@@ -114,7 +114,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
@@ -145,7 +145,7 @@ public class TestBoreholeService extends PortalTestClass {
         final String filterString = (new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictedIds)).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)));will(returnValue(mockMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
 
@@ -191,7 +191,7 @@ public class TestBoreholeService extends PortalTestClass {
             oneOf(mockRecord3).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
             will(returnValue(new AbstractCSWOnlineResource[] {}));
 
-            oneOf(mockMethodMaker).makeMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), "", 0);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), "", 0);
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
             will(returnValue(successResponse));
         }});
@@ -229,10 +229,10 @@ public class TestBoreholeService extends PortalTestClass {
             oneOf(mockRecord2).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
             will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
 
-            oneOf(mockMethodMaker).makeMethod(mockRecord1Resource1.getLinkage().toString(), mockRecord1Resource1.getName(), "", 0);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource1.getLinkage().toString(), mockRecord1Resource1.getName(), "", 0);
             will(returnValue(mockRecord1Method));
 
-            oneOf(mockMethodMaker).makeMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), "", 0);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), "", 0);
             will(returnValue(mockRecord2Method));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord1Method);

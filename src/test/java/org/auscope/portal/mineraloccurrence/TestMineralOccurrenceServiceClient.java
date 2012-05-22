@@ -62,7 +62,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final List<Mine> mockMines = context.mock(List.class);
 
         context.checking(new Expectations() {{
-            oneOf(methodMaker).makeMethod(with(serviceURL), with("er:MiningFeatureOccurrence"),
+            oneOf(methodMaker).makePostMethod(with(serviceURL), with("er:MiningFeatureOccurrence"),
                     with(any(String.class)), with(any(Integer.class)), with(BaseWFSService.DEFAULT_SRS), with(equal(ResultType.Results)));
             will(returnValue(mockMethod));
 
@@ -95,7 +95,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final List<Mine> mockMines = context.mock(List.class);
 
         context.checking(new Expectations() {{
-            oneOf(methodMaker).makeMethod(serviceURL, "er:MiningFeatureOccurrence", mineFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results); will(returnValue(mockMethod));
+            oneOf(methodMaker).makePostMethod(serviceURL, "er:MiningFeatureOccurrence", mineFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results); will(returnValue(mockMethod));
 
             oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
             will(returnValue(mockMineResponse));
@@ -188,7 +188,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
         context.checking(new Expectations() {{
             //the mineral occurrence query part
-            oneOf(methodMaker).makeMethod(serviceURL, "gsml:MappedFeature", mineralOccurrenceFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results); will(returnValue(mockMethod));
+            oneOf(methodMaker).makePostMethod(serviceURL, "gsml:MappedFeature", mineralOccurrenceFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results); will(returnValue(mockMethod));
             oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(mockCommodityResponse));
 
             oneOf(mockGmlToKml).convert(mockCommodityResponse, serviceURL);
@@ -215,7 +215,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
         context.checking(new Expectations() {{
             ignoring(mockMine);
-            oneOf(methodMaker).makeMethod(with(serviceUrl), with("er:MiningFeatureOccurrence"),
+            oneOf(methodMaker).makePostMethod(with(serviceUrl), with("er:MiningFeatureOccurrence"),
                     with(any(String.class)), with(any(Integer.class)), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Results));
             will(returnValue(mockMethod));
             oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
@@ -242,7 +242,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
 
         context.checking(new Expectations() {{
-            oneOf(methodMaker).makeMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
+            oneOf(methodMaker).makePostMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
             oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
 
@@ -274,7 +274,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
 
         context.checking(new Expectations() {{
-            oneOf(methodMaker).makeMethod(with(wfsUrl), with("gsml:MappedFeature"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
+            oneOf(methodMaker).makePostMethod(with(wfsUrl), with("gsml:MappedFeature"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
             oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
 
@@ -307,7 +307,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
 
         context.checking(new Expectations() {{
-            oneOf(methodMaker).makeMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
+            oneOf(methodMaker).makePostMethod(with(wfsUrl), with("er:MiningFeatureOccurrence"), with(any(String.class)), with(maxFeatures), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Hits)); will(returnValue(mockMethod));
 
             oneOf(httpServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(getCountResponse));
 

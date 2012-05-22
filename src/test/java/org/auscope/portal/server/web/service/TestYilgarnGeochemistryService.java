@@ -52,7 +52,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
 
             oneOf(mockMethod).releaseConnection();
         }});
@@ -89,7 +89,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
 
             oneOf(mockMethod).releaseConnection();
         }});
@@ -110,7 +110,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(new ConnectException()));
 
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
 
             oneOf(mockMethod).releaseConnection();
         }});
@@ -132,7 +132,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
-            oneOf(mockMethodMaker).makeMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makeGetMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME, featureId);will(returnValue(mockMethod));
 
             oneOf(mockMethod).releaseConnection();
         }});
