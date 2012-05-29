@@ -115,16 +115,17 @@ Ext.application({
             height: 170
         });
 
+        var layerFactory = Ext.create('portal.layer.LayerFactory', {
+            map : map,
+            formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
+            downloaderFactory : Ext.create('auscope.layer.AuScopeDownloaderFactory', {map: map}),
+            querierFactory : Ext.create('auscope.layer.AuScopeQuerierFactory', {map: map}),
+            rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
+        });
+
         //Utility function for adding a new layer to the map
         //record must be a CSWRecord or KnownLayer
         var handleAddRecordToMap = function(sourceGrid, record) {
-            var layerFactory = Ext.create('portal.layer.LayerFactory', {
-                map : map,
-                formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
-                downloaderFactory : Ext.create('auscope.layer.AuScopeDownloaderFactory', {map: map}),
-                querierFactory : Ext.create('auscope.layer.AuScopeQuerierFactory', {map: map}),
-                rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
-            });
             var newLayer = null;
 
             //Ensure the layer DNE first
@@ -252,6 +253,7 @@ Ext.application({
         var deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
             knownLayerStore : knownLayerStore,
             cswRecordStore : unmappedCSWRecordStore,
+            layerFactory : layerFactory,
             layerStore : layerStore,
             map : map
         });
