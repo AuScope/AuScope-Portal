@@ -9,7 +9,6 @@ import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.SISSVocService;
-import org.auscope.portal.core.services.methodmakers.SISSVocMethodMaker;
 import org.auscope.portal.core.services.responses.vocab.Concept;
 import org.auscope.portal.core.services.responses.vocab.ConceptFactory;
 import org.auscope.portal.core.test.PortalTestClass;

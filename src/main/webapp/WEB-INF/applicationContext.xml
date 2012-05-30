@@ -75,7 +75,7 @@
             </bean>
         </constructor-arg>
         <constructor-arg name="sissVocMethodMaker">
-            <bean class="org.auscope.portal.core.services.methodmakers.SISSVocMethodMaker">
+            <bean class="org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc2MethodMaker">
             </bean>
         </constructor-arg>
     </bean>

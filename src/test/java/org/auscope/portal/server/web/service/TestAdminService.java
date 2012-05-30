@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
-import org.auscope.portal.core.services.methodmakers.SISSVocMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc2MethodMaker;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.test.jmock.HttpMethodBaseMatcher.HttpMethodType;
@@ -132,7 +132,7 @@ public class TestAdminService extends PortalTestClass {
         final String vocabUrl = "http://fake.vocab/url";
         final String vocabResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocResponse.xml");
         final String repoInfoResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocRepositoryInfoResponse.xml");
-        final SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
+        final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
 
         //Our vocab test fires off 2 requests
@@ -161,7 +161,7 @@ public class TestAdminService extends PortalTestClass {
         final String vocabUrl = "http://fake.vocab/url";
         final String vocabResponse = "<invalid></xml>";
         final String repoInfoResponse = "<invalid></xml>";
-        final SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
+        final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
 
         //Our vocab test fires off 2 requests
@@ -189,7 +189,7 @@ public class TestAdminService extends PortalTestClass {
         final String vocabUrl = "http://fake.vocab/url";
         final String vocabResponse = "<validButUnknownXml/>";
         final String repoInfoResponse = "<validButUnknownXml/>";
-        final SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
+        final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
 
         //Our vocab test fires off 2 requests
@@ -215,7 +215,7 @@ public class TestAdminService extends PortalTestClass {
     @Test
     public void testVocabConnectionErrors() throws Exception {
         final String vocabUrl = "http://fake.vocab/url";
-        final SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
+        final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
 
         //Our vocab test fires off 2 requests

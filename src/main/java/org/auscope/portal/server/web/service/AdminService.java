@@ -15,12 +15,12 @@ import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
 import org.auscope.portal.core.services.methodmakers.CSWMethodMakerGetDataRecords;
 import org.auscope.portal.core.services.methodmakers.CSWMethodMakerGetDataRecords.ResultType;
-import org.auscope.portal.core.services.methodmakers.SISSVocMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WMSMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.services.methodmakers.filter.SimpleBBoxFilter;
+import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc2MethodMaker;
 import org.auscope.portal.core.services.namespaces.VocabNamespaceContext;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.ows.OWSException;
@@ -141,7 +141,7 @@ public class AdminService {
         AdminDiagnosticResponse diagnosticResponse = new AdminDiagnosticResponse();
 
         //Is the repository info request returning valid XML?
-        SISSVocMethodMaker methodMaker = new SISSVocMethodMaker();
+        SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
         HttpMethodBase method = methodMaker.getRepositoryInfoMethod(vocabServiceUrl);
         try {
             String serviceResponse = serviceCaller.getMethodResponseAsString(method);
