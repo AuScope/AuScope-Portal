@@ -21,6 +21,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
+import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
@@ -94,23 +95,30 @@ public class BoreholeService extends BaseWFSService {
     }
 
 
-    private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList) throws Exception {
+    private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList) throws PortalServiceException {
         //Make request
-        HttpMethodBase method = wfsMethodMaker.makeGetMethod(url, typeName, "", 0, null);
-        String wfsResponse = httpServiceCaller.getMethodResponseAsString(method);
+        HttpMethodBase method = wfsMethodMaker.makeGetMethod(url, typeName, (Integer)null, null);
+        try {
+            String wfsResponse = httpServiceCaller.getMethodResponseAsString(method);
 
-        //Parse response
-        Document doc = DOMUtil.buildDomFromString(wfsResponse);
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        xPath.setNamespaceContext(new NVCLNamespaceContext());
+            //Parse response
+            Document doc = DOMUtil.buildDomFromString(wfsResponse);
 
-        //Get our ID's
-        NodeList publishedDatasets = (NodeList)xPath.evaluate("/wfs:FeatureCollection/gml:featureMembers/" + NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME + "/nvcl:scannedBorehole", doc, XPathConstants.NODESET);
-        for (int i = 0; i < publishedDatasets.getLength(); i++) {
-            Node holeIdentifier = (Node)xPath.evaluate("@xlink:href", publishedDatasets.item(i), XPathConstants.NODE);
-            if (holeIdentifier != null) {
-                idList.add(holeIdentifier.getTextContent());
+            OWSExceptionParser.checkForExceptionResponse(doc);
+
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            xPath.setNamespaceContext(new NVCLNamespaceContext());
+
+            //Get our ID's
+            NodeList publishedDatasets = (NodeList)xPath.evaluate("/wfs:FeatureCollection/gml:featureMembers/" + NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME + "/nvcl:scannedBorehole", doc, XPathConstants.NODESET);
+            for (int i = 0; i < publishedDatasets.getLength(); i++) {
+                Node holeIdentifier = (Node)xPath.evaluate("@xlink:href", publishedDatasets.item(i), XPathConstants.NODE);
+                if (holeIdentifier != null) {
+                    idList.add(holeIdentifier.getTextContent());
+                }
             }
+        } catch (Exception ex) {
+            throw new PortalServiceException(method, ex);
         }
     }
 
@@ -124,7 +132,7 @@ public class BoreholeService extends BaseWFSService {
      * @param CSWRecordsFilterVisitor A filter visitor used to perform filter operation on the online resource. Use null if not required
      * @throws Exception
      */
-    public List<String> discoverHyloggerBoreholeIDs(CSWCacheService cswService,CSWRecordsFilterVisitor visitor) throws Exception {
+    public List<String> discoverHyloggerBoreholeIDs(CSWCacheService cswService,CSWRecordsFilterVisitor visitor) {
         List<String> ids = new ArrayList<String>();
 
         for (CSWRecord record : cswService.getWFSRecords()) {

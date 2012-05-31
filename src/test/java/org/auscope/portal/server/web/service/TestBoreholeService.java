@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
@@ -191,7 +192,7 @@ public class TestBoreholeService extends PortalTestClass {
             oneOf(mockRecord3).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
             will(returnValue(new AbstractCSWOnlineResource[] {}));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), "", 0, null);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), (Integer) null, null);
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
             will(returnValue(successResponse));
         }});
@@ -229,10 +230,10 @@ public class TestBoreholeService extends PortalTestClass {
             oneOf(mockRecord2).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
             will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource1.getLinkage().toString(), mockRecord1Resource1.getName(), "", 0, null);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource1.getLinkage().toString(), mockRecord1Resource1.getName(), (Integer) null, null);
             will(returnValue(mockRecord1Method));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), "", 0, null);
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), (Integer) null, null);
             will(returnValue(mockRecord2Method));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord1Method);
@@ -245,6 +246,48 @@ public class TestBoreholeService extends PortalTestClass {
         List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService,hostFilter);
         Assert.assertNotNull(restrictedIDs);
         Assert.assertArrayEquals(HOLEIDS, restrictedIDs.toArray(new String[restrictedIDs.size()]));
+    }
+
+    /**
+     * Tests that the service correctly parses a response from an NVCL WFS.
+     *
+     * @throws Exception the exception
+     */
+    @Test
+    public void testGetHyloggerWithOWSError() throws Exception {
+        final CSWRecord mockRecord1 = context.mock(CSWRecord.class, "mockRecord1"); //good record
+        final CSWRecord mockRecord2 = context.mock(CSWRecord.class, "mockRecord2"); //has the wrong wfs
+        final CSWRecord mockRecord3 = context.mock(CSWRecord.class, "mockRecord3"); //has no wfs
+        final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
+        final CSWRecordsHostFilter hostFilter=new CSWRecordsHostFilter("");
+        final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", "dne", "description");
+        final AbstractCSWOnlineResource mockRecord1Resource2 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.2"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
+
+        final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", "dne", "description");
+
+        final String owsErrorResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
+
+        context.checking(new Expectations() {{
+            oneOf(mockCSWService).getWFSRecords();
+            will(returnValue(Arrays.asList(mockRecord1, mockRecord2, mockRecord3)));
+
+            oneOf(mockRecord1).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
+            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord1Resource1, mockRecord1Resource2}));
+
+            oneOf(mockRecord2).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
+            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
+
+            oneOf(mockRecord3).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
+            will(returnValue(new AbstractCSWOnlineResource[] {}));
+
+            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), (Integer) null, null);
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
+            will(returnValue(owsErrorResponse));
+        }});
+
+        List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService,hostFilter);
+        Assert.assertNotNull(restrictedIDs);
+        Assert.assertEquals(0, restrictedIDs.size());
     }
 
 }
