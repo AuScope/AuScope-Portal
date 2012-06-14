@@ -174,7 +174,7 @@ public class TestWfsController extends PortalTestClass {
         final int maxFeatures = 12315;
 
         context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsFeatureCount(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal((String)null)));will(throwException(new PortalServiceException(null)));
+            oneOf(mockWfsService).getWfsFeatureCount(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal((String)null)));will(throwException(new PortalServiceException("")));
         }});
         ModelAndView modelAndView = wfsController.requestFeatureCount(wfsUrl, featureType, bboxJsonString, maxFeatures);
         Assert.assertFalse((Boolean) modelAndView.getModel().get("success"));

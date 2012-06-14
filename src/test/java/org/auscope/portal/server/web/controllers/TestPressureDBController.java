@@ -32,7 +32,7 @@ public class TestPressureDBController extends PortalTestClass {
     public void testGetOMError() throws Exception {
         final String wellID = "1234";
         final String serviceUrl = "http://example.com";
-        final PortalServiceException exception = new PortalServiceException(null);
+        final PortalServiceException exception = new PortalServiceException("");
 
         context.checking(new Expectations() {{
             oneOf(mockService).makeGetAvailableOMRequest(wellID, serviceUrl);will(throwException(exception));

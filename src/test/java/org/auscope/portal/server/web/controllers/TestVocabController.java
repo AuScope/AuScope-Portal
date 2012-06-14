@@ -86,7 +86,7 @@ public class TestVocabController extends PortalTestClass {
 
         context.checking(new Expectations() {{
             oneOf(propertyConfigurer).resolvePlaceholder("HOST.vocabService.url");will(returnValue(url));
-            oneOf(mockService).getConceptByLabel(url, repository, label);will(throwException(new PortalServiceException(null)));
+            oneOf(mockService).getConceptByLabel(url, repository, label);will(throwException(new PortalServiceException("")));
         }});
 
         ModelAndView mav = vocabController.getScalarQuery(repository, label);

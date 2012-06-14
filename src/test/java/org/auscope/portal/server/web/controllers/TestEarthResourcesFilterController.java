@@ -165,7 +165,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         final String mineName = "mineName"; //to get all mines
 
         context.checking(new Expectations() {{
-            oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);will(throwException(new PortalServiceException(null)));
+            oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);will(throwException(new PortalServiceException("")));
         }});
 
         //call with updateCSWRecords dud url

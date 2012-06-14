@@ -57,7 +57,7 @@ public class TestGeodesyController extends PortalTestClass {
         final List<GeodesyObservation> result = new ArrayList<GeodesyObservation>();
 
         context.checking(new Expectations() {{
-            oneOf(mockGeodesyService).getObservationsForStation(serviceUrl, stationId, startDate, endDate);will(throwException(new PortalServiceException(null)));
+            oneOf(mockGeodesyService).getObservationsForStation(serviceUrl, stationId, startDate, endDate);will(throwException(new PortalServiceException("")));
         }});
 
         ModelAndView mav = controller.getGeodesyObservations(stationId, startDate, endDate, serviceUrl);
