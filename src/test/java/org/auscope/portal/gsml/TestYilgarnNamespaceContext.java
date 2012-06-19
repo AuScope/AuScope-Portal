@@ -1,8 +1,5 @@
 package org.auscope.portal.gsml;
 
-import java.lang.reflect.Field;
-
-import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
 import junit.framework.Assert;
@@ -35,7 +32,6 @@ public class TestYilgarnNamespaceContext extends PortalTestClass  {
         NamespaceContext context = new YilgarnNamespaceContext();
 
         Assert.assertEquals(TESTNAMESPACEURI, context.getNamespaceURI(TESTPREFIX));
-        Assert.assertEquals(XMLConstants.NULL_NS_URI, context.getNamespaceURI(TESTFAKEPREFIX));
     }
 
 }
