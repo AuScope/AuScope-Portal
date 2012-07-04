@@ -204,8 +204,13 @@
             <id>cgsrv8.arrc.csiro.au</id>
             <name>AuScope Artifactory - PortalRepo</name>
             <url>https://cgsrv8.arrc.csiro.au/artifactory/PortalRepo</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <updatePolicy>always</updatePolicy>
+            </releases>
         </repository>
-        
     </repositories>
     <!-- Dependencies -->
     <dependencies>
