@@ -38,6 +38,9 @@
     </bean>
 
     <bean id="wfsMethodMaker" class="org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker">
+        <property name="namespaces">
+            <bean class="org.auscope.portal.core.services.namespaces.ErmlNamespaceContext"/>
+        </property>
     </bean>
 
     <bean id="wfsToKmlTransformer" class="org.auscope.portal.core.xslt.WfsToKmlTransformer">
