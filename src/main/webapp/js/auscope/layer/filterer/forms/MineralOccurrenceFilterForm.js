@@ -41,8 +41,7 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
                 items :[{
                     xtype : 'combo',
                     anchor: '100%',
-                    name: 'commodityNameDisplayed', /* this just returns the values from displayField! */
-                    hiddenName: 'commodityName',    /* this returns the values from valueField! */
+                    name: 'commodityName',
                     fieldLabel: '<span qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
                     labelAlign: 'right',
                     forceSelection: true,

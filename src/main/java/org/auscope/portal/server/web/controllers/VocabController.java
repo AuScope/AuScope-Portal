@@ -115,6 +115,8 @@ public class VocabController extends BasePortalController {
 
                 tableRow.add(concept.getUrn());
                 tableRow.add(concept.getLabel());
+
+                dataItems.add(tableRow);
             }
 
             return new JSONModelAndView(dataItems);
