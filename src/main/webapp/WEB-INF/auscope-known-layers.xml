@@ -186,8 +186,8 @@
     <bean id="knownTypeReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="portal-reports"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWKeywordSelector">
-                <constructor-arg name="descriptiveKeyword" value="Report"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="descriptiveKeyword" value="Report"/>
             </bean>
         </constructor-arg>
 
@@ -364,6 +364,224 @@
             </bean>
         </property>
     </bean>
+
+    <bean id="knownTypeAster" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-main"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="E6029ED0-636B-4F91-A6A1-535EBA4B5AD1"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map of Australia"/>
+        <property name="description" value="This is the parent datafile of a datset that comprises a set of 14+ geoscience products made up of mosaiced ASTER scenes across Australia."/>
+        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="hidden" value="true"/>
+    </bean>
+
+    <bean id="knownTypeAsterAloh" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-aloh"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="1c3f5e49-4241-4511-a3cc-60314ea09414"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map AlOH group composition"/>
+        <property name="description" value="1. Band ratio: B5/B7Blue is well ordered kaolinite, Al-rich muscovite/illite, paragonite, pyrophyllite Red is Al-poor (Si-rich) muscovite (phengite)"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeAsterFerrous" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-ferrous"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="02e4fa4c-cbd0-429f-b487-381282debb8f"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map Ferrous iron index"/>
+        <property name="description" value="1. Band ratio: B5/B4Blue is low abundance, Red is high abundance"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeAsterOpaque" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-opaque"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="ab9e636a-86f8-4366-acec-c24db7b72ff5"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map Opaque index"/>
+        <property name="description" value="1. Band ratio: B1/B4Blue is low abundance, Red is high abundance(potentially includes  carbon black (e.g. ash), magnetite, Mn oxides, and sulphides in unoxidised envornments"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeAsterFerricOxideContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-ferric-oxide-content"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="7bc66a7a-5ba0-447e-9a00-bf1ccd84e4f3"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map Ferric oxide content"/>
+        <property name="description" value="1. Band ratio: B4/B3Blue is low abundance, Red is high abundance"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeAsterFeoh" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-feoh"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="f938456a-926d-4547-b111-093844f8fc5d"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map FeOH group content"/>
+        <property name="description" value="1. Band ratio: (B6+B8)/B7Blue is low content, Red is high content(potentially includes: chlorite, epidote, jarosite, nontronite, gibbsite, gypsum, opal-chalcedony)"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeFerricOxideComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-ferric-oxide-comp"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="aa27099f-13dd-4294-8558-595661eeba01"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map Ferric oxide composition"/>
+        <property name="description" value="1. Band ratio: B2/B1Blue-cyan is goethite rich, Green is hematite-goethite, Red-yellow is hematite-rich"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeGroupIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-group-index"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="ea755cf7-eb59-41d1-86bd-4d1954c93bfe"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map Kaolin group index"/>
+        <property name="description" value="B6/B5(potential includes: pyrophyllite, alunite, well-ordered kaolinite)Blue is low content, Red is high content"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeQuartzIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-quartz-index"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="137a4e7e-9633-40d8-9b2f-2d2d1eb15c08"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map TIR Quartz index"/>
+        <property name="description" value="1. Band ratio: B11/(B10+B12)Blue is low quartz contentRed is high quartz content"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeMgohContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-mgoh-content"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="a101fef8-2c52-4d62-9b43-0914487af197"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map MgOH group content"/>
+        <property name="description" value="1. Band ratio: (B6+B9/(B7+B8)Blue is low content, Red is high content(potentially includes: calcite, dolomite, magnesite, chlorite, epidote, amphibole, talc, serpentine)"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeGreenVeg" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-green-veg"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="2bd17d05-22f8-4b0d-a318-3eaabc1b5c2a"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map green vegetation content"/>
+        <property name="description" value="Band ratio: B3/B2 Blue is low contentRed is high content"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeFerrCarb" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-ferr-carb"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="8601612e-3f3e-4334-9d31-3c6ec30f092a"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map Ferrous iron content in MgOH/carbonate"/>
+        <property name="description" value="1. Band ratio: B5/B4Blue is low ferrous iron content in carbonate and MgOH minerals like talc and tremolite.Red is high ferrous iron content in carbonate and MgOH minerals like chlorite and actinolite."/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeMgohGroupComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-mgoh-group-comp"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="8348fe99-0d50-45cd-8a0a-5439e82da833"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map MgOH group composition"/>
+        <property name="description" value="1. Band ratio: B7/B8Blue-cyan is magnesite-dolomite, amphibole, chlorite\tRed is calcite, epidote, amphibole"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeFalseColor" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-false-color"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="bfd6b137-7227-47f4-82f0-9e7fb788c507"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map false colour mosaic"/>
+        <property name="description" value="1. False colour RGB composite Red: B3Green: B2Blue: B1(red = green vegetation)"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeRegolithRatios" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-reg-ratio"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="768dcbde-ae8a-440e-9b4b-44624ba4c836"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map Regolith Ratios"/>
+        <property name="description" value="1. 3 band RGB composite Red: B3/B2Green: B3/B7Blue: B4/B7(white = green vegetation)"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeAlohGroupContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-aloh-group-content"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="b070d1d4-6420-4770-8ca6-3bf4b6682c3d"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map AlOH group content"/>
+        <property name="description" value="1. Band ratio: (B5+B7)/B6Blue is low abundance, Red is high abundance potentially includes: phengite, muscovite, paragonite, lepidolite, illite, brammalite, montmorillonite, beidellite, kaolinite, dickite"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeGypsumContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-gypsum-content"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="EB574238-BCB9-4A98-B1C1-71D1D1B0A946"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map TIR Gypsum index"/>
+        <property name="description" value="1. Band ratio: (B10+B12)/B11Blue is low gypsum contentRed is high gypsum content"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeSilicaContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="aster-silica-content"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="cca633fe-5cdc-4fea-b77f-71b81c701c47"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="National ASTER Map TIR Silica index"/>
+        <property name="description" value="1. Band ratio: B13/B10Blue is low silica contentRed is high silica content(potentially includes Si-rich minerals, such as quartz, feldspars, Al-clays)"/>
+        <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
     <!-- This layer is NOT selectable, it is only used for hiding these features -->
     <bean id="knownTypeSamplingPoint" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="notused-samplingpoint"/>
@@ -458,8 +676,8 @@
     <bean id="knownTypePortals" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="notused-portals"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWKeywordSelector">
-                <constructor-arg name="descriptiveKeyword" value="Portal"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="descriptiveKeyword" value="Portal"/>
             </bean>
         </constructor-arg>
         <property name="hidden" value="true"/>
@@ -468,8 +686,8 @@
     <bean id="knownTypeGeoNetworks" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="notused-geonetwork"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWKeywordSelector">
-                <constructor-arg name="descriptiveKeyword" value="GeoNetwork"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="descriptiveKeyword" value="GeoNetwork"/>
             </bean>
         </constructor-arg>
         <property name="hidden" value="true"/>

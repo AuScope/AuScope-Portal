@@ -146,9 +146,21 @@ Ext.application({
             var cswRecords = newLayer.get('cswRecords');
             for (var i = 0; i < cswRecords.length; i++) {
                 if (cswRecords[i].hasConstraints()) {
-                    Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
-                        cswRecords : cswRecords
-                    }).show();
+                    var popup = Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
+                        width : 900,
+                        height : 400,
+                        cswRecords : cswRecords,
+                        autoHeight : false
+                    });
+                    popup.show()
+
+                    //HTML images may take a moment to load which stuffs up our layout
+                    //This is a horrible, horrible workaround.
+                    var task = new Ext.util.DelayedTask(function(){
+                        popup.doLayout();
+                    });
+                    task.delay(1000);
+
                     break;
                 }
             }

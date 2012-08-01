@@ -49,4 +49,12 @@
         <constructor-arg name="serviceUrl" value="http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/en/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
     </bean>
+    <bean id="cswAsterProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswAsterProduction"/>
+        <constructor-arg name="title" value="ASTER Geonetwork"/>
+        <constructor-arg name="serviceUrl" value="http://aster.nci.org.au/geonetwork/srv/en/csw"/>
+        <constructor-arg name="recordInformationUrl" value="http://aster.nci.org.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
+    </bean>
+
+
 </beans>
