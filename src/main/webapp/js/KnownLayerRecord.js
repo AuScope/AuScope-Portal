@@ -96,6 +96,13 @@ KnownLayerRecord = Ext.extend(AbstractRecordWrapper, {
     },
 
     /**
+     * Gets the Record id as a String. Only valid if type=='KnownLayerId'
+     */
+    getRecordId : function() {
+        return this.getStringField('recordId');
+    },
+
+    /**
      * Gets the list of service endpoints to be included/excluded from the layer
      */
     getServiceEndpoints : function() {
@@ -201,6 +208,15 @@ KnownLayerRecord = Ext.extend(AbstractRecordWrapper, {
         case 'KnownLayerKeywords':
             var keyword = this.getDescriptiveKeyword();
             this.internalRecord.cachedLinkedRecords = cswRecordStore.getCSWRecordsByKeywords(keyword);
+            return this.internalRecord.cachedLinkedRecords;
+        case 'KnownLayerId':
+            var matchedRecords = [];
+            var rec = cswRecordStore.getCSWRecordById(this.getRecordId());
+            if (rec) {
+                matchedRecords.push(rec);
+            }
+
+            this.internalRecord.cachedLinkedRecords = matchedRecords;
             return this.internalRecord.cachedLinkedRecords;
         }
 

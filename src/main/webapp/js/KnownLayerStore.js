@@ -40,7 +40,8 @@ KnownLayerStore = function(url) {
                 'infoWindowAnchor',
                 'iconSize',
                 'disableBboxFiltering',
-                'group'
+                'group',
+                'recordId'
             ]
         })
     });

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import org.auscope.portal.server.web.AbstractKnownLayer;
+import org.auscope.portal.server.web.KnownLayerId;
 import org.auscope.portal.server.web.KnownLayerKeywords;
 import org.auscope.portal.server.web.KnownLayerWFS;
 import org.auscope.portal.server.web.KnownLayerWMS;
@@ -54,6 +55,26 @@ public class ViewKnownLayerFactory {
 
         obj.put("type", "KnownLayerKeywords");
         obj.put("descriptiveKeyword", k.getDescriptiveKeyword());
+        obj.put("iconUrl", k.getIconUrl());
+
+        Point iconAnchor =  k.getIconAnchor();
+        if (iconAnchor != null) {
+            obj.put("iconAnchor", toView(iconAnchor));
+        }
+
+        Dimension iconSize = k.getIconSize();
+        if (iconSize != null) {
+            obj.put("iconSize", toView(iconSize));
+        }
+
+        return obj;
+    }
+
+    public ModelMap toView(KnownLayerId k) {
+        ModelMap obj = baseToView(k);
+
+        obj.put("type", "KnownLayerId");
+        obj.put("recordId", k.getRecordId());
         obj.put("iconUrl", k.getIconUrl());
 
         Point iconAnchor =  k.getIconAnchor();
@@ -125,7 +146,9 @@ public class ViewKnownLayerFactory {
             return toView((KnownLayerWMS) k);
         } else if (k instanceof KnownLayerKeywords) {
             return toView((KnownLayerKeywords) k);
-        } else {
+        } else if (k instanceof KnownLayerId) {
+            return toView((KnownLayerId) k);
+        }else {
             return baseToView(k);
         }
     }

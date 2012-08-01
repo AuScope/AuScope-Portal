@@ -132,8 +132,9 @@ Ext.onReady(function() {
                 win = new Ext.Window({
                     title		: 'Copyright Information',
                     layout		: 'fit',
-                    width		: 500,
-                    autoHeight:    true,
+                    width		: 900,
+                    height      : 450,
+                    autoHeight:    false,
                     items: [{
                         xtype 	: 'panel',
                         html	: html,
@@ -144,6 +145,12 @@ Ext.onReady(function() {
                 });
 
                 win.show(this);
+
+                var task = new Ext.util.DelayedTask(function() {
+                    win.doLayout();
+                });
+                task.delay(1000);
+
             }
         }
     };
