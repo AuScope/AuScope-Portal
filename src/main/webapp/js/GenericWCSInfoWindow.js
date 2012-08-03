@@ -930,6 +930,8 @@ GenericWCSInfoWindow.prototype.showInfoWindow = function() {
         location = this.overlay;
     } else if (this.overlay instanceof GPolygon) {
         location = this.overlay.getBounds().getCenter();
+    } else if (this.overlay instanceof GLatLng) {
+        location = this.overlay;
     }
 
     var opts = {

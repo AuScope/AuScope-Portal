@@ -214,7 +214,7 @@ var gMapClickController = function(map, overlay, latlng, overlayLatlng, activeLa
         cswRecords = parentActiveLayerRecord.getCSWRecordsWithType('WCS');
         if (cswRecords.length !== 0) {
 
-            var infoWindow = new GenericWCSInfoWindow(map, overlay, parentOnlineResource.url, parentOnlineResource.name, parentCSWRecord);
+            var infoWindow = new GenericWCSInfoWindow(map, overlayLatlng, parentOnlineResource.url, parentOnlineResource.name, parentCSWRecord, latlng);
             infoWindow.showInfoWindow();
             return;
         }

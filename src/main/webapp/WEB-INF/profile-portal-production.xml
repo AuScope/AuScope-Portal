@@ -33,23 +33,23 @@
                 <ref bean="knownTypePortals"/>
                 <ref bean="knownTypeGeoNetworks"/>
                 <ref bean="knownTypeAster" />
-                <ref bean="knownTypeAsterAloh" />
-                <ref bean="knownTypeAsterFerrous" />
-                <ref bean="knownTypeAsterOpaque" />
-                <ref bean="knownTypeAsterFerricOxideContent" />
-                <ref bean="knownTypeAsterFeoh" />
-                <ref bean="knownTypeFerricOxideComp" />
-                <ref bean="knownTypeGroupIndex" />
-                <ref bean="knownTypeQuartzIndex" />
-                <ref bean="knownTypeMgohContent" />
-                <ref bean="knownTypeGreenVeg" />
-                <ref bean="knownTypeFerrCarb" />
-                <ref bean="knownTypeMgohGroupComp" />
                 <ref bean="knownTypeFalseColor" />
                 <ref bean="knownTypeRegolithRatios" />
+                <ref bean="knownTypeGreenVeg" />
+                <ref bean="knownTypeAsterFerricOxideContent" />
+                <ref bean="knownTypeFerricOxideComp" />
+                <ref bean="knownTypeAsterFerrous" />
+                <ref bean="knownTypeAsterOpaque" />
                 <ref bean="knownTypeAlohGroupContent" />
-                <ref bean="knownTypeGypsumContent" />
+                <ref bean="knownTypeAsterAloh" />
+                <ref bean="knownTypeGroupIndex" />
+                <ref bean="knownTypeAsterFeoh" />
+                <ref bean="knownTypeMgohContent" />
+                <ref bean="knownTypeMgohGroupComp" />
+                <ref bean="knownTypeFerrCarb" />
                 <ref bean="knownTypeSilicaContent" />
+                <ref bean="knownTypeQuartzIndex" />
+                <ref bean="knownTypeGypsumContent" />
             </list>
         </constructor-arg>
     </bean>

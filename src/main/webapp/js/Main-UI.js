@@ -133,7 +133,7 @@ Ext.onReady(function() {
                     title		: 'Copyright Information',
                     layout		: 'fit',
                     width		: 900,
-                    height      : 450,
+                    height      : 610,
                     autoHeight:    false,
                     items: [{
                         xtype 	: 'panel',
