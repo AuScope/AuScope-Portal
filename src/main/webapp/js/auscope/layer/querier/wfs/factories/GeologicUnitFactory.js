@@ -94,7 +94,7 @@ Ext.define('auscope.layer.querier.wfs.factories.GeologicUnitFactory', {
                 text : 'Chemistry Details',
                 iconCls : 'info',
                 handler : function() {
-                    var featureSource = Ext.create('portal.layer.querier.wfs.featuresources.WFSFeatureSource');
+                    var featureSource = Ext.create('portal.layer.querier.wfs.featuresources.WFSFeatureSource',{});
                     featureSource.getFeature(locSpecimenFeatureId, 'sa:LocatedSpecimen', wfsUrl, function(featureDom, featureId, featureType, wfsUrl) {
                         if (featureDom) {
                             var rootCmp = geoUnitFact.parser.parseNode(featureDom, wfsUrl);
