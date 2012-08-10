@@ -43,7 +43,26 @@ Ext.application({
                 }
             },
             autoLoad : false,
-            data : []
+            data : [],
+            listeners : {
+                load  :  function(store, records, successful, eopts){
+                    if(!successful){
+                        Ext.Msg.show({
+                            title:'Error!',
+                            msg: 'Either the URL is not valid or it does not conform to EPSG:4326 WMS layers standard',
+                            buttons: Ext.Msg.OK
+                        });
+                    }else{
+                        if(records.length === 0){
+                            Ext.Msg.show({
+                                title:'No WMS Layers!',
+                                msg: 'There are no WMS Layers in the given URL',
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                    }
+                }
+            }
         });
 
         //Create our KnownLayer store
