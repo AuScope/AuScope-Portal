@@ -100,7 +100,7 @@ public class OPeNDAPController extends BasePortalController {
      * @param response the response
      * @throws Exception the exception
      */
-    @RequestMapping("/opendapMakeRequest")
+    @RequestMapping("/opendapMakeRequest.do")
     public void makeRequest(@RequestParam("opendapUrl") final String opendapUrl,
             @RequestParam("downloadFormat") final String downloadFormat,
             @RequestParam(required=false, value="constraints") final String constraintsJson,
@@ -137,6 +137,11 @@ public class OPeNDAPController extends BasePortalController {
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
         InputStream dataStream = null;
         try {
+
+            String query=opendapService.getQueryDetails(opendapUrl, format, constraints);
+            zout.putNextEntry(new ZipEntry("query.txt"));
+            zout.write(query.getBytes());
+
             zout.putNextEntry(new ZipEntry(outputFileName));
 
             dataStream = opendapService.getData(opendapUrl, format, constraints);
