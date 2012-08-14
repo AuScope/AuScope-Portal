@@ -41,8 +41,10 @@ Ext.define('auscope.layer.querier.wfs.factories.BoreholeFactory', {
         for (var i = 0; i < allNames.length; i++) {
             if (portal.util.xml.SimpleXPath.evaluateXPathString(allNames[i], '@codeSpace') === 'http://www.ietf.org/rfc/rfc2616') {
                 rawId = portal.util.xml.SimpleDOM.getNodeTextContent(allNames[i]);
-            } else {
-                boreholeName = portal.util.xml.SimpleDOM.getNodeTextContent(allNames[i]);
+            } else {//VT: taking the first gml:name that comes or we can commas seperate the names eg, "foresteque, 12343"
+                if(boreholeName===''){
+                    boreholeName = portal.util.xml.SimpleDOM.getNodeTextContent(allNames[i]);
+                }
             }
         }
 
