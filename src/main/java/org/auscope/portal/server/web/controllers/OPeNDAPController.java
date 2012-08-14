@@ -137,8 +137,8 @@ public class OPeNDAPController extends BasePortalController {
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
         InputStream dataStream = null;
         try {
-
-            String query=opendapService.getQueryDetails(opendapUrl, format, constraints);
+		
+			String query =  opendapService.getQueryDetails(opendapUrl,format, constraints);
             zout.putNextEntry(new ZipEntry("query.txt"));
             zout.write(query.getBytes());
 
