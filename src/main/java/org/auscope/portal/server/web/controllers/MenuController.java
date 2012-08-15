@@ -40,15 +40,21 @@ public class MenuController {
          = hostConfigurer.resolvePlaceholder("HOST.vocabService.url");
       String maxFeatureValue
            = hostConfigurer.resolvePlaceholder("HOST.maxFeatures.value");
+      String analyticKey
+          = hostConfigurer.resolvePlaceholder("HOST.google.analytics.key");
 
       logger.debug("googleKey: " + googleKey);
       logger.debug("vocabServiceUrl: " + vocabServiceUrl);
       logger.debug("maxFeatureValue: " + maxFeatureValue);
+      logger.debug("analyticKey: " + analyticKey);
 
       ModelAndView mav = new ModelAndView("gmap");
       mav.addObject("googleKey", googleKey);
       mav.addObject("vocabServiceUrl", vocabServiceUrl);
       mav.addObject("maxFeatureValue", maxFeatureValue);
+      if(analyticKey != null && !analyticKey.isEmpty()){
+          mav.addObject("analyticKey", analyticKey);
+      }
       return mav;
    }
 
