@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -41,6 +42,21 @@
       <script src="js/auscope/Main-UI.js" type="text/javascript"></script>
 
       <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+      <c:if test="${not empty analyticKey}">
+          <script type="text/javascript">
+
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', '${analyticKey}']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl&#39; : 'http://www&#39;) + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+          </script>
+      </c:if>
    </head>
 
    <body onunload="GUnload()">
