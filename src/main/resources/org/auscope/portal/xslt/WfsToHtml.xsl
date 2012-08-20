@@ -539,8 +539,9 @@
         <xsl:if test="gml:description">
                 <tr>
                     <td class="row header" rowspan="1">Description</td>
-                    <td class="row" rowspan="2" colspan="4"><xsl:value-of select="."/></td>
+                    <td class="row" rowspan="2" colspan="4"><xsl:value-of select="./gml:description"/></td>
                 </tr>
+                <tr></tr><!-- VT: workaround to fix a spacing bug in the output-->
         </xsl:if>
                 <!-- Commodity -->
         <xsl:for-each select="./er:commodityDescription">
