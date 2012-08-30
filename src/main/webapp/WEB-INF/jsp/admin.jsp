@@ -8,12 +8,17 @@
 
         <%-- Google Maps imports --%>
         <script src="http://maps.google.com/maps?file=api&amp;v=2.X&amp;key=${googleKey}" type="text/javascript"></script>
+        <script src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js" type="text/javascript"></script>
 
-        <%-- Framework imports - relative paths back to the webapp directory --%>
-        <jsp:include page="../../frameworkimports.htm"/>
+        <%-- Open Layers Imports --%>
+        <link rel="stylesheet" href="portal-core/js/OpenLayers-2.11/theme/default/style.css" type="text/css">
+        <script src="portal-core/js/OpenLayers-2.11/OpenLayers.js" type="text/javascript"></script>
+
         <%-- CSS imports - relative paths back to the webapp directory--%>
-        <jsp:include page="../../cssimports.htm"/>
+        <jsp:include page="../../portal-core/cssimports.htm"/>
+
         <%-- JS imports - relative paths back to the webapp directory --%>
+        <jsp:include page="../../portal-core/jsimports.htm"/>
         <jsp:include page="../../jsimports.htm"/>
 
         <script type="text/javascript" src="js/admin/tests/TestStatus.js"></script>
