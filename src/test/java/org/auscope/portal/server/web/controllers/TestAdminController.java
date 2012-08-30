@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
+import org.auscope.portal.core.services.admin.AdminDiagnosticResponse;
+import org.auscope.portal.core.services.admin.EndpointAndSelector;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.server.domain.admin.AdminDiagnosticResponse;
-import org.auscope.portal.server.domain.admin.EndpointAndSelector;
-import org.auscope.portal.server.web.service.AdminService;
+import org.auscope.portal.server.web.service.AuScopeAdminService;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class TestAdminController extends PortalTestClass {
 
-    private AdminService mockService;
+    private AuScopeAdminService mockService;
     private CSWServiceItem mockServiceItem;
     private ArrayList cswServiceList;
     private PortalPropertyPlaceholderConfigurer mockProperties;
@@ -32,7 +32,7 @@ public class TestAdminController extends PortalTestClass {
 
     @Before
     public void setup() {
-        mockService = context.mock(AdminService.class);
+        mockService = context.mock(AuScopeAdminService.class);
         mockServiceItem = context.mock(CSWServiceItem.class);
         mockProperties = context.mock(PortalPropertyPlaceholderConfigurer.class);
         cswServiceList = new ArrayList();

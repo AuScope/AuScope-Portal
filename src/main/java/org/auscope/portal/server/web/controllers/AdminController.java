@@ -8,12 +8,12 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
+import org.auscope.portal.core.services.admin.AdminDiagnosticResponse;
+import org.auscope.portal.core.services.admin.EndpointAndSelector;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.view.JSONView;
-import org.auscope.portal.server.domain.admin.AdminDiagnosticResponse;
-import org.auscope.portal.server.domain.admin.EndpointAndSelector;
-import org.auscope.portal.server.web.service.AdminService;
+import org.auscope.portal.server.web.service.AuScopeAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -37,7 +37,7 @@ public class AdminController {
     /** for checking config options*/
     private PortalPropertyPlaceholderConfigurer portalProperties;
     /** for actually performing diagnostics*/
-    private AdminService adminService;
+    private AuScopeAdminService adminService;
 
 
 
@@ -48,7 +48,7 @@ public class AdminController {
     @Autowired
     public AdminController(@Qualifier(value = "cswServiceList") ArrayList cswServiceList,
             PortalPropertyPlaceholderConfigurer portalProperties,
-            AdminService adminService) {
+            AuScopeAdminService adminService) {
         this.portalProperties = portalProperties;
         this.adminService = adminService;
         this.cswServiceList = new ArrayList<CSWServiceItem>();
