@@ -46,6 +46,8 @@ public class NVCLController extends BasePortalController {
     private BoreholeService boreholeService;
     private NVCLDataService dataService;
     private CSWCacheService cswService;
+	
+	private int BUFFERSIZE = 1024 * 1024;
 
     @Autowired
     public NVCLController(BoreholeService boreholeService,
@@ -69,13 +71,13 @@ public class NVCLController extends BasePortalController {
      */
     @RequestMapping("/doBoreholeFilter.do")
     public ModelAndView doBoreholeFilter(@RequestParam("serviceUrl") String serviceUrl,
-                                      @RequestParam(required=false, value="boreholeName", defaultValue="")     String boreholeName,
-                                      @RequestParam(required=false, value="custodian", defaultValue="")        String custodian,
-                                      @RequestParam(required=false, value="dateOfDrilling", defaultValue="")   String dateOfDrilling,
-                                      @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures,
-                                      @RequestParam(required=false, value="bbox") String bboxJson,
-                                      @RequestParam(required=false, value="onlyHylogger") String onlyHyloggerString,
-                                      @RequestParam(required=false, value="serviceFilter", defaultValue="") String serviceFilter) throws Exception {
+                                      @RequestParam(required = false, value = "boreholeName", defaultValue="")     String boreholeName,
+                                      @RequestParam(required = false, value = "custodian", defaultValue="")        String custodian,
+                                      @RequestParam(required = false, value = "dateOfDrilling", defaultValue="")   String dateOfDrilling,
+                                      @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures,
+                                      @RequestParam(required = false, value = "bbox") String bboxJson,
+                                      @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
+                                      @RequestParam(required = false, value = "serviceFilter", defaultValue="") String serviceFilter) throws Exception {
 
         String [] serviceFilterArray=serviceFilter.split(",");
 
@@ -173,7 +175,7 @@ public class NVCLController extends BasePortalController {
     @RequestMapping("getNVCLLogs.do")
     public ModelAndView getNVCLLogs(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("datasetId") String datasetId,
-            @RequestParam(required=false, value="mosaicService") Boolean forMosaicService) {
+            @RequestParam(required = false, value = "mosaicService") Boolean forMosaicService) {
         List<GetLogCollectionResponse> responseObjs = null;
         try {
             responseObjs = dataService.getLogCollection(serviceUrl, datasetId, forMosaicService);
@@ -198,7 +200,7 @@ public class NVCLController extends BasePortalController {
             servletResponse.setContentType(serviceResponse.getContentType());
             responseOutput = servletResponse.getOutputStream();
 
-            writeInputToOutputStream(serviceInputStream, responseOutput, 1024 * 1024, true);
+            writeInputToOutputStream(serviceInputStream, responseOutput, BUFFERSIZE, true);
         } finally {
             if (responseOutput != null) {
                 responseOutput.close();
@@ -331,14 +333,14 @@ public class NVCLController extends BasePortalController {
     @RequestMapping("getNVCLTSGDownload.do")
     public void getNVCLTSGDownload(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("email") String email,
-            @RequestParam(required=false, value="datasetId") String datasetId,
-            @RequestParam(required=false, value="matchString") String matchString,
-            @RequestParam(required=false, value="lineScan") Boolean lineScan,
-            @RequestParam(required=false, value="spectra") Boolean spectra,
-            @RequestParam(required=false, value="profilometer") Boolean profilometer,
-            @RequestParam(required=false, value="trayPics") Boolean trayPics,
-            @RequestParam(required=false, value="mosaicPics") Boolean mosaicPics,
-            @RequestParam(required=false, value="mapPics") Boolean mapPics,
+            @RequestParam(required = false, value = "datasetId") String datasetId,
+            @RequestParam(required = false, value = "matchString") String matchString,
+            @RequestParam(required = false, value = "lineScan") Boolean lineScan,
+            @RequestParam(required = false, value = "spectra") Boolean spectra,
+            @RequestParam(required = false, value = "profilometer") Boolean profilometer,
+            @RequestParam(required = false, value = "trayPics") Boolean trayPics,
+            @RequestParam(required = false, value = "mosaicPics") Boolean mosaicPics,
+            @RequestParam(required = false, value = "mapPics") Boolean mapPics,
             HttpServletResponse response) throws Exception {
 
         //It's likely that the GUI (due to its construction) may send multiple email parameters

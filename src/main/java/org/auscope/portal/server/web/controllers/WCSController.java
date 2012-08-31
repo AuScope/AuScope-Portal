@@ -45,6 +45,9 @@ public class WCSController extends BasePortalController {
 
     private WCSService wcsService;
 
+    private int BUFFERSIZE = 1024 * 1024;
+
+	
     @Autowired
     public WCSController(WCSService wcsService) {
         this.wcsService = wcsService;
@@ -181,20 +184,20 @@ public class WCSController extends BasePortalController {
                                  @RequestParam("layerName") final String layerName,
                                  @RequestParam("downloadFormat") final String downloadFormat,
                                  @RequestParam("inputCrs") final String inputCrs,
-                                 @RequestParam(required=false, value="outputWidth") final Integer outputWidth,
-                                 @RequestParam(required=false, value="outputHeight") final Integer outputHeight,
-                                 @RequestParam(required=false, value="outputResX") final Double outputResX,
-                                 @RequestParam(required=false, value="outputResY") final Double outputResY,
-                                 @RequestParam(required=false, value="outputCrs") final String outputCrs,
+                                 @RequestParam(required = false, value = "outputWidth") final Integer outputWidth,
+                                 @RequestParam(required = false, value = "outputHeight") final Integer outputHeight,
+                                 @RequestParam(required = false, value = "outputResX") final Double outputResX,
+                                 @RequestParam(required = false, value = "outputResY") final Double outputResY,
+                                 @RequestParam(required = false, value = "outputCrs") final String outputCrs,
                                  @RequestParam(required=false, defaultValue="0",  value="northBoundLatitude") final double northBoundLatitude,
                                  @RequestParam(required=false, defaultValue="0", value="southBoundLatitude") final double southBoundLatitude,
                                  @RequestParam(required=false, defaultValue="0", value="eastBoundLongitude") final double eastBoundLongitude,
                                  @RequestParam(required=false, defaultValue="0", value="westBoundLongitude") final double westBoundLongitude,
-                                 @RequestParam(required=false, value="timePosition") final String[] timePositions,
-                                 @RequestParam(required=false, value="timePeriodFrom") final String timePeriodFrom,
-                                 @RequestParam(required=false, value="timePeriodTo") final String timePeriodTo,
-                                 @RequestParam(required=false, value="timePeriodResolution") final String timePeriodResolution,
-                                 @RequestParam(required=false, value="customParamValue") final String[] customParamValues,
+                                 @RequestParam(required = false, value = "timePosition") final String[] timePositions,
+                                 @RequestParam(required = false, value = "timePeriodFrom") final String timePeriodFrom,
+                                 @RequestParam(required = false, value = "timePeriodTo") final String timePeriodTo,
+                                 @RequestParam(required = false, value = "timePeriodResolution") final String timePeriodResolution,
+                                 @RequestParam(required = false, value = "customParamValue") final String[] customParamValues,
                                 HttpServletResponse response) throws Exception {
 
         String outFileName = generateOutputFilename(layerName, downloadFormat);
@@ -235,7 +238,7 @@ public class WCSController extends BasePortalController {
             //Make our request
             dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams);
             zout.putNextEntry(new ZipEntry(outFileName));
-            writeInputToOutputStream(dataStream, zout, 1024 * 1024, false);
+            writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
         } catch (Exception ex) {
             writeErrorToZip(zout, "", ex, "error.txt");
         } finally {

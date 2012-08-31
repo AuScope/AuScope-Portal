@@ -98,21 +98,21 @@ public class CSWFilterController extends BaseCSWController {
      */
     @RequestMapping("/getFilteredCSWRecords.do")
     public ModelAndView getFilteredCSWRecords(
-            @RequestParam(value="cswServiceId", required=false) String cswServiceId,
-            @RequestParam(value="anyText", required=false) String anyText,
-            @RequestParam(value="westBoundLongitude", required=false) Double westBoundLongitude,
-            @RequestParam(value="eastBoundLongitude", required=false) Double eastBoundLongitude,
-            @RequestParam(value="northBoundLatitude", required=false) Double northBoundLatitude,
-            @RequestParam(value="southBoundLatitude", required=false) Double southBoundLatitude,
-            @RequestParam(value="keyword", required=false) String[] keywords,
-            @RequestParam(value="keywordMatchType", required=false) KeywordMatchType keywordMatchType,
-            @RequestParam(value="capturePlatform", required=false) String capturePlatform,
-            @RequestParam(value="sensor", required=false) String sensor,
-            @RequestParam(value="limit", required=false) Integer maxRecords,
-            @RequestParam(value="start", required=false, defaultValue="1") Integer startPosition) {
+            @RequestParam(value = "cswServiceId", required = false) String cswServiceId,
+            @RequestParam(value = "anyText", required = false) String anyText,
+            @RequestParam(value = "westBoundLongitude", required = false) Double westBoundLongitude,
+            @RequestParam(value = "eastBoundLongitude", required = false) Double eastBoundLongitude,
+            @RequestParam(value = "northBoundLatitude", required = false) Double northBoundLatitude,
+            @RequestParam(value = "southBoundLatitude", required = false) Double southBoundLatitude,
+            @RequestParam(value = "keyword", required = false) String[] keywords,
+            @RequestParam(value = "keywordMatchType", required = false) KeywordMatchType keywordMatchType,
+            @RequestParam(value = "capturePlatform", required = false) String capturePlatform,
+            @RequestParam(value = "sensor", required = false) String sensor,
+            @RequestParam(value = "limit", required = false) Integer maxRecords,
+            @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition) {
 
         //CSW uses a 1 based index
-        if (startPosition == null) {
+        if (startPosition ==  null) {
             startPosition = 1;
         } else {
             startPosition = startPosition + 1;
@@ -165,17 +165,17 @@ public class CSWFilterController extends BaseCSWController {
      */
     @RequestMapping("/getFilteredCSWRecordsCount.do")
     public ModelAndView getFilteredCSWRecordsCount(
-            @RequestParam(value="cswServiceId", required=true) String cswServiceId,
-            @RequestParam(value="anyText", required=false) String anyText,
-            @RequestParam(value="westBoundLongitude", required=false) Double westBoundLongitude,
-            @RequestParam(value="eastBoundLongitude", required=false) Double eastBoundLongitude,
-            @RequestParam(value="northBoundLatitude", required=false) Double northBoundLatitude,
-            @RequestParam(value="southBoundLatitude", required=false) Double southBoundLatitude,
-            @RequestParam(value="keyword", required=false) String[] keywords,
-            @RequestParam(value="keywordMatchType", required=false) KeywordMatchType keywordMatchType,
-            @RequestParam(value="capturePlatform", required=false) String capturePlatform,
-            @RequestParam(value="sensor", required=false) String sensor,
-            @RequestParam(value="maxRecords", required=false) Integer maxRecords) {
+            @RequestParam(value = "cswServiceId", required = true) String cswServiceId,
+            @RequestParam(value = "anyText", required = false) String anyText,
+            @RequestParam(value = "westBoundLongitude", required = false) Double westBoundLongitude,
+            @RequestParam(value = "eastBoundLongitude", required = false) Double eastBoundLongitude,
+            @RequestParam(value = "northBoundLatitude", required = false) Double northBoundLatitude,
+            @RequestParam(value = "southBoundLatitude", required = false) Double southBoundLatitude,
+            @RequestParam(value = "keyword", required = false) String[] keywords,
+            @RequestParam(value = "keywordMatchType", required = false) KeywordMatchType keywordMatchType,
+            @RequestParam(value = "capturePlatform", required = false) String capturePlatform,
+            @RequestParam(value = "sensor", required = false) String sensor,
+            @RequestParam(value = "maxRecords", required = false) Integer maxRecords) {
 
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,

@@ -140,10 +140,10 @@ public class YilgarnGeochemistryController extends BasePortalController {
      */
     @RequestMapping("/doYilgarnGeochemistry.do")
     public ModelAndView doYilgarnGeochemistryFilter(
-            @RequestParam(required=false, value="serviceUrl") String serviceUrl,
-            @RequestParam(required=false, value="geologicName") String geologicName,
-            @RequestParam(required=false, value="bbox") String bboxJson,
-            @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception  {
+            @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "geologicName") String geologicName,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception  {
 
         //Build our filter details
         String filterString = generateGeologicUnitFilter(geologicName, bboxJson);
@@ -173,10 +173,10 @@ public class YilgarnGeochemistryController extends BasePortalController {
      */
     @RequestMapping("/doYilgarnGeochemistryCount.do")
     public ModelAndView doYilgarnGeochemistryCount(
-            @RequestParam(required=false, value="serviceUrl") String serviceUrl,
-            @RequestParam(required=false, value="geologicName") String geologicName,
-            @RequestParam(required=false, value="bbox") String bboxJson,
-            @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception  {
+            @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "geologicName") String geologicName,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception  {
 
         //Build our filter details
         String filterString = generateGeologicUnitFilter(geologicName, bboxJson);

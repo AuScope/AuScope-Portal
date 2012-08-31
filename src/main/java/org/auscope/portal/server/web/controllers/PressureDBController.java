@@ -29,6 +29,9 @@ public class PressureDBController extends BasePortalController {
 
     private PressureDBService pressureDBService;
 
+    private int BUFFERSIZE = 1024 * 32;
+
+	
     @Autowired
     public PressureDBController(PressureDBService pressureDBService) {
         this.pressureDBService = pressureDBService;
@@ -83,7 +86,7 @@ public class PressureDBController extends BasePortalController {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition",String.format("inline; filename=PressureDB-%1$s.zip;", wellID));
         ServletOutputStream outputStream = response.getOutputStream();
-        byte[] buffer = new byte[1024 * 5];
+        byte[] buffer = new byte[BUFFERSIZE];
         int numRead;
         while ((numRead = inputStream.read(buffer)) >= 0) {
             outputStream.write(buffer, 0, numRead);

@@ -57,8 +57,8 @@ public class EarthResourcesFilterController extends BasePortalController {
     public ModelAndView doMineFilter(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("mineName") String mineName,
-            @RequestParam(required=false, value="bbox") String bboxJson,
-            @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -89,8 +89,8 @@ public class EarthResourcesFilterController extends BasePortalController {
     public ModelAndView doMineFilterCount(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("mineName") String mineName,
-            @RequestParam(required=false, value="bbox") String bboxJson,
-            @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -131,8 +131,8 @@ public class EarthResourcesFilterController extends BasePortalController {
         @RequestParam(value="minOreAmountUOM",       required=false) String minOreAmountUOM,
         @RequestParam(value="minCommodityAmount",    required=false) String minCommodityAmount,
         @RequestParam(value="minCommodityAmountUOM", required=false) String minCommodityAmountUOM,
-        @RequestParam(required=false, value="bbox") String bboxJson,
-        @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
+        @RequestParam(required = false, value = "bbox") String bboxJson,
+        @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
         //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -183,8 +183,8 @@ public class EarthResourcesFilterController extends BasePortalController {
         @RequestParam(value="minOreAmountUOM",       required=false) String minOreAmountUOM,
         @RequestParam(value="minCommodityAmount",    required=false) String minCommodityAmount,
         @RequestParam(value="minCommodityAmountUOM", required=false) String minCommodityAmountUOM,
-        @RequestParam(required=false, value="bbox") String bboxJson,
-        @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
+        @RequestParam(required = false, value = "bbox") String bboxJson,
+        @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
         //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -231,15 +231,15 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMiningActivityFilter.do")
     public ModelAndView doMiningActivityFilter(
             @RequestParam("serviceUrl")       String serviceUrl,
-            @RequestParam(required=false, value="mineName", defaultValue="")         String mineName,
-            @RequestParam(required=false, value="startDate", defaultValue="")        String startDate,
-            @RequestParam(required=false, value="endDate", defaultValue="")          String endDate,
-            @RequestParam(required=false, value="oreProcessed", defaultValue="")     String oreProcessed,
-            @RequestParam(required=false, value="producedMaterial", defaultValue="") String producedMaterial,
-            @RequestParam(required=false, value="cutOffGrade", defaultValue="")      String cutOffGrade,
-            @RequestParam(required=false, value="production", defaultValue="")       String production,
-            @RequestParam(required=false, value="bbox", defaultValue="")             String bboxJson,
-            @RequestParam(required=false, value="maxFeatures", defaultValue="0")     int maxFeatures)
+            @RequestParam(required = false, value = "mineName", defaultValue="")         String mineName,
+            @RequestParam(required = false, value = "startDate", defaultValue="")        String startDate,
+            @RequestParam(required = false, value = "endDate", defaultValue="")          String endDate,
+            @RequestParam(required = false, value = "oreProcessed", defaultValue="")     String oreProcessed,
+            @RequestParam(required = false, value = "producedMaterial", defaultValue="") String producedMaterial,
+            @RequestParam(required = false, value = "cutOffGrade", defaultValue="")      String cutOffGrade,
+            @RequestParam(required = false, value = "production", defaultValue="")       String production,
+            @RequestParam(required = false, value = "bbox", defaultValue="")             String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue="0")     int maxFeatures)
     throws Exception
     {
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
@@ -286,15 +286,15 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMiningActivityFilterCount.do")
     public ModelAndView doMiningActivityFilterCount(
             @RequestParam("serviceUrl")       String serviceUrl,
-            @RequestParam(required=false, value="mineName", defaultValue="")         String mineName,
-            @RequestParam(required=false, value="startDate", defaultValue="")        String startDate,
-            @RequestParam(required=false, value="endDate", defaultValue="")          String endDate,
-            @RequestParam(required=false, value="oreProcessed", defaultValue="")     String oreProcessed,
-            @RequestParam(required=false, value="producedMaterial", defaultValue="") String producedMaterial,
-            @RequestParam(required=false, value="cutOffGrade", defaultValue="")      String cutOffGrade,
-            @RequestParam(required=false, value="production", defaultValue="")       String production,
-            @RequestParam(required=false, value="bbox")                              String bboxJson,
-            @RequestParam(required=false, value="maxFeatures", defaultValue="0")     int maxFeatures) throws Exception {
+            @RequestParam(required = false, value = "mineName", defaultValue="")         String mineName,
+            @RequestParam(required = false, value = "startDate", defaultValue="")        String startDate,
+            @RequestParam(required = false, value = "endDate", defaultValue="")          String endDate,
+            @RequestParam(required = false, value = "oreProcessed", defaultValue="")     String oreProcessed,
+            @RequestParam(required = false, value = "producedMaterial", defaultValue="") String producedMaterial,
+            @RequestParam(required = false, value = "cutOffGrade", defaultValue="")      String cutOffGrade,
+            @RequestParam(required = false, value = "production", defaultValue="")       String production,
+            @RequestParam(required = false, value = "bbox")                              String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue="0")     int maxFeatures) throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200

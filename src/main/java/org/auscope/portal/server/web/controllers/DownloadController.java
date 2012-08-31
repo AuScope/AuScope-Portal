@@ -77,7 +77,7 @@ public class DownloadController extends BasePortalController {
         logger.trace("No. of serviceUrls: " + serviceUrls.length);
         ServiceDownloadManager downloadManager = new ServiceDownloadManager(serviceUrls, serviceCaller,threadpool);
         //VT: threadpool is closed within downloadAll();
-        ArrayList<DownloadResponse> gmlDownloads=downloadManager.downloadAll();
+        ArrayList<DownloadResponse> gmlDownloads = downloadManager.downloadAll();
         writeResponseToZip(gmlDownloads,zout);
 
         zout.finish();
@@ -86,9 +86,9 @@ public class DownloadController extends BasePortalController {
     }
 
     private void writeResponseToZip(ArrayList<DownloadResponse> gmlDownloads,ZipOutputStream zout) throws IOException{
-        StringBuilder errorMsg=new StringBuilder();
+        StringBuilder errorMsg = new StringBuilder();
 
-        for(int i=0;i<gmlDownloads.size();i++){
+        for(int i = 0; i<gmlDownloads.size(); i++){
             DownloadResponse download=gmlDownloads.get(i);
             //Check that attempt to request is successful
             if(!download.hasException()){
@@ -157,7 +157,7 @@ public class DownloadController extends BasePortalController {
         //create the output stream
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
 
-        for(int i=0; i<serviceUrls.length; i++) {
+        for(int i = 0; i<serviceUrls.length; i++) {
 
             GetMethod method = new GetMethod(serviceUrls[i]);
             byte[] responseBytes = serviceCaller.getMethodResponseAsBytes(method);

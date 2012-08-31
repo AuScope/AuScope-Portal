@@ -39,6 +39,9 @@ public class OPeNDAPController extends BasePortalController {
     /** The opendap service. */
     private OpendapService opendapService;
 
+    private int BUFFERSIZE = 1024 * 1024;
+
+	
     /**
      * Instantiates a new opendap controller.
      *
@@ -79,7 +82,7 @@ public class OPeNDAPController extends BasePortalController {
      */
     @RequestMapping("/opendapGetVariables.do")
     public ModelAndView getVariables(@RequestParam("opendapUrl") final String opendapUrl,
-                                     @RequestParam(required=false, value="variableName") final String variableName) throws Exception {
+                                     @RequestParam(required = false, value = "variableName") final String variableName) throws Exception {
 
         //Attempt to parse our response
         try {
@@ -103,7 +106,7 @@ public class OPeNDAPController extends BasePortalController {
     @RequestMapping("/opendapMakeRequest.do")
     public void makeRequest(@RequestParam("opendapUrl") final String opendapUrl,
             @RequestParam("downloadFormat") final String downloadFormat,
-            @RequestParam(required=false, value="constraints") final String constraintsJson,
+            @RequestParam(required = false, value = "constraints") final String constraintsJson,
             HttpServletResponse response) throws Exception {
 
         log.trace(String.format("opendapUrl='%1$s'", opendapUrl));
@@ -146,7 +149,7 @@ public class OPeNDAPController extends BasePortalController {
 
             dataStream = opendapService.getData(opendapUrl, format, constraints);
 
-            writeInputToOutputStream(dataStream, zout, 1024 * 1024, false);
+            writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
         } catch (Exception ex) {
             log.info(String.format("Error requesting data from '%1$s'", opendapUrl));
             log.debug("Exception...", ex);

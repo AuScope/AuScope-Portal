@@ -51,8 +51,8 @@ public class WFSController extends BasePortalController {
     @RequestMapping("/getAllFeatures.do")
     public ModelAndView requestAllFeatures(@RequestParam("serviceUrl") final String serviceUrl,
                                            @RequestParam("typeName") final String featureType,
-                                           @RequestParam(required=false, value="bbox") final String bboxJSONString,
-                                           @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
+                                           @RequestParam(required = false, value = "bbox") final String bboxJSONString,
+                                           @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
 
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJSONString);
@@ -146,8 +146,8 @@ public class WFSController extends BasePortalController {
     @RequestMapping("/getFeatureCount.do")
     public ModelAndView requestFeatureCount(@RequestParam("serviceUrl") final String serviceUrl,
                                            @RequestParam("typeName") final String featureType,
-                                           @RequestParam(required=false, value="bbox") final String bboxJSONString,
-                                           @RequestParam(required=false, value="maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
+                                           @RequestParam(required = false, value = "bbox") final String bboxJSONString,
+                                           @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJSONString);
         SimpleBBoxFilter filter = new SimpleBBoxFilter();
@@ -182,8 +182,8 @@ public class WFSController extends BasePortalController {
     @RequestMapping("wfsFeaturePopup.do")
     public void wfsFeaturePopup(HttpServletResponse response,
                                  @RequestParam("url") String serviceUrl,
-                                 @RequestParam(required=false, value="typeName") String typeName,
-                                 @RequestParam(required=false, value="featureId") String featureId) throws IOException {
+                                 @RequestParam(required = false, value = "typeName") String typeName,
+                                 @RequestParam(required = false, value = "featureId") String featureId) throws IOException {
 
 
         response.setContentType("text/html; charset=utf-8");
