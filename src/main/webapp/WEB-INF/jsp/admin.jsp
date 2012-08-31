@@ -19,21 +19,25 @@
 
         <%-- JS imports - relative paths back to the webapp directory --%>
         <jsp:include page="../../portal-core/jsimports.htm"/>
-        <jsp:include page="../../jsimports.htm"/>
 
-        <script type="text/javascript" src="js/admin/tests/TestStatus.js"></script>
-        <script type="text/javascript" src="js/admin/tests/BaseTest.js"></script>
-        <script type="text/javascript" src="js/admin/tests/SingleAJAXTest.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/tests/TestStatus.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/tests/BaseTest.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/tests/SingleAJAXTest.js"></script>
         <script type="text/javascript" src="js/admin/tests/ExternalConnectivity.js"></script>
         <script type="text/javascript" src="js/admin/tests/RegistryConnectivity.js"></script>
-        <script type="text/javascript" src="js/admin/tests/Vocabulary.js"></script>
         <script type="text/javascript" src="js/admin/tests/KnownLayerWFS.js"></script>
         <script type="text/javascript" src="js/admin/tests/KnownLayerWMS.js"></script>
         <script type="text/javascript" src="js/admin/tests/RegisteredLayerWFS.js"></script>
         <script type="text/javascript" src="js/admin/tests/RegisteredLayerWMS.js"></script>
-        <script type="text/javascript" src="js/admin/TestResultsPanel.js"></script>
-        <script type="text/javascript" src="js/admin/BuildInfoFieldSet.js"></script>
-        <script type="text/javascript" src="js/admin/RuntimeInfoFieldSet.js"></script>
+        <script type="text/javascript" src="js/admin/tests/Vocabulary.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/tests/TestStatus.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/TestResultsPanel.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/DiagnosticFunction.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/DiagnosticFunctionsPanel.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/BuildInfoFieldSet.js"></script>
+        <script type="text/javascript" src="portal-core/js/admin/RuntimeInfoFieldSet.js"></script>
+        <script type="text/javascript" src="js/admin/AuScopeDiagnosticFunctions.js"></script>
+
    </head>
 
    <body>
@@ -85,9 +89,24 @@
                     region : 'center',
                     title : 'Diagnostic Tests',
                     autoScroll : true,
-                    layout : 'fit',
+                    layout : 'border',
                     items : [{
-                        xtype : 'testresultspanel'
+                        xtype : 'testresultspanel',
+                        tests : ['admin.tests.ExternalConnectivity',
+                                 'admin.tests.RegistryConnectivity',
+                                 'admin.tests.KnownLayerWFS',
+                                 'admin.tests.KnownLayerWMS',
+                                 'admin.tests.RegisteredLayerWFS',
+                                 'admin.tests.RegisteredLayerWMS',
+                                 'admin.tests.Vocabulary'],
+                        region : 'center'
+                    },{
+                        xtype : 'diagnosticfunctionpanel',
+                        region : 'south',
+                        title : 'Diagnostic Functions',
+                        split : true,
+                        diagnosticFunctions : [admin.AuScopeDiagnosticFunctions.ClearCswCache],
+                        autoScroll : true
                     }]
                 }]
             });

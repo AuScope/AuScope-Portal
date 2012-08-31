@@ -116,23 +116,6 @@
         return x.appCodeName;
     }
 
-    function updateCSWCache() {
-        Ext.Ajax.request({
-            url : 'updateCSWCache.do',
-            callback : function(opt, success, response) {
-                if (success) {
-                    var responseObj = Ext.JSON.decode(response.responseText);
-                    if (responseObj && responseObj.success) {
-                        alert('The internal cache has started its refresh. Please wait a few moments before refreshing the page');
-                        return;
-                    }
-                }
-
-                alert('There has been a problem telling the portal to update its internal cache. Please try again later.');
-            }
-        });
-    }
-
     //]]>
     </script>
   </head>
@@ -226,8 +209,8 @@
           <th scope="col"></th>
         </tr>
         <tr>
-           <th scope="row" class="specalt">Clear CSW Cache</th>
-           <td class="alt"><a href="javascript:updateCSWCache()">click here</a></td>
+           <th scope="row" class="specalt">Admin Page</th>
+           <td class="alt"><a href="admin.html">click here</a></td>
         </tr>
       </table>
     </div>
