@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.URI;
 import org.auscope.portal.core.services.PortalServiceException;

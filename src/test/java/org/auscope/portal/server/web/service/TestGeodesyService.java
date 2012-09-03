@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.net.ConnectException;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;

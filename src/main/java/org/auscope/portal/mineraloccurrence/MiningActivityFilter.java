@@ -3,8 +3,6 @@ package org.auscope.portal.mineraloccurrence;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 
@@ -23,10 +21,6 @@ public class MiningActivityFilter extends AbstractFilter {
     private String production;
 
     // -------------------------------------------------------------- Constants
-
-    /** Log object for this class. */
-    private final Log log = LogFactory.getLog(getClass());
-
 
     // ----------------------------------------------------------- Constructors
 
@@ -95,6 +89,4 @@ public class MiningActivityFilter extends AbstractFilter {
                 this.generateOrComparisonFragment(mineFragments.toArray(new String[mineFragments.size()])),
                 this.generateAndComparisonFragment(parameterFragments.toArray(new String[parameterFragments.size()])));
     }
-
-
 }

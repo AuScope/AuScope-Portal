@@ -8,6 +8,8 @@ import java.io.Serializable;
  *
  */
 public class GetLogCollectionResponse implements Serializable {
+
+    private static final long serialVersionUID = 5493786197732213017L;
     String logId;
     String logName;
     int sampleCount;

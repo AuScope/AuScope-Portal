@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWCacheService;
-import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;

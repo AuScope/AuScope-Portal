@@ -3,8 +3,6 @@ package org.auscope.portal.gsml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 
@@ -17,10 +15,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 public class YilgarnGeochemistryFilter extends AbstractFilter {
     private String geologicName;
 
-// -------------------------------------------------------------- Constants
-
-    /** Log object for this class. */
-    private final Log log = LogFactory.getLog(getClass());
+    // -------------------------------------------------------------- Constants
 
 
     // ----------------------------------------------------------- Constructors
@@ -56,6 +51,4 @@ public class YilgarnGeochemistryFilter extends AbstractFilter {
         return this.generateAndComparisonFragment(
                 this.generateAndComparisonFragment(parameterFragments.toArray(new String[parameterFragments.size()])));
     }
-
-
 }

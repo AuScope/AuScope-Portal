@@ -81,7 +81,7 @@ public class NVCLController extends BasePortalController {
 
         String [] serviceFilterArray=serviceFilter.split(",");
 
-        if(!serviceFilter.equals("") && !(containHost(serviceUrl,serviceFilterArray))){
+        if (!serviceFilter.equals("") && !(containHost(serviceUrl,serviceFilterArray))) {
             return this.generateJSONResponseMAV(false,null,"Not Queried");
         }
 
@@ -100,9 +100,9 @@ public class NVCLController extends BasePortalController {
 
     private boolean containHost(String url,String[]filterUrls) throws MalformedURLException{
        String urlHost=new URL(url).getHost();
-       for(String filterUrl:filterUrls){
+       for (String filterUrl:filterUrls) {
            String filterHost=new URL(filterUrl).getHost();
-           if(urlHost.equalsIgnoreCase(filterHost)){
+           if (urlHost.equalsIgnoreCase(filterHost)) {
                return true;
            }
        }

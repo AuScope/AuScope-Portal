@@ -193,11 +193,15 @@ public class NVCLDataService {
         //This is to workaround some erroneous behaviour from the dataservice
         //Where the logged omUrl points to a geoserver instance RATHER than the actual WFS service endpoint
         if (!serviceUrl.endsWith("wfs") && !serviceUrl.endsWith("wfs/")) {
+        	log.warn("altering ServiceURL:" + serviceUrl);
+        	
             if (serviceUrl.endsWith("/")) {
                 serviceUrl += "wfs";
             } else {
                 serviceUrl += "/wfs";
             }
+            
+            log.warn("altered ServiceURL:" + serviceUrl);
         }
 
         //We need to make a normal WFS request with some simple modifications

@@ -110,7 +110,7 @@ public class VocabController extends BasePortalController {
 
             Concept[] concepts = service.getCommodityConcepts(url, COMMODITY_REPOSITORY, "urn:cgi:classifierScheme:GA:commodity");
 
-            for(Concept concept : concepts) {
+            for (Concept concept : concepts) {
                 JSONArray tableRow = new JSONArray();
 
                 tableRow.add(concept.getUrn());

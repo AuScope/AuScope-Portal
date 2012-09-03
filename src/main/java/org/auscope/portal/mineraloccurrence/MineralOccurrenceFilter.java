@@ -130,7 +130,7 @@ public class MineralOccurrenceFilter extends AbstractFilter {
                 List<String> fragments = new ArrayList<String>();
                 if (this.paramsCount == 0) {
                     for (MeasureTypes measure : EnumSet.range(MeasureTypes.RESERVE, MeasureTypes.RESOURCE)) {
-                        fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+getMeasureTypeTag(measure)+"/er:measureDetails/er:CommodityMeasure/er:commodityOfInterest/er:Commodity/er:commodityName", commodityName));
+                        fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+getMeasureTypeTag(measure) +"/er:measureDetails/er:CommodityMeasure/er:commodityOfInterest/er:Commodity/er:commodityName", commodityName));
                     }
                 } else if (this.paramsCount > 0) {
                     for (MeasureTypes measure : EnumSet.range(MeasureTypes.RESERVE, MeasureTypes.RESOURCE)) {

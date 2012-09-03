@@ -8,6 +8,10 @@ import java.io.Serializable;
  *
  */
 public class GetDatasetCollectionResponse implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -8460076587704921980L;
     String datasetId;
     String datasetName;
     String omUrl;

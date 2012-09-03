@@ -1,8 +1,5 @@
 package org.auscope.portal.mineraloccurrence;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.Collection;
 
 import junit.framework.Assert;

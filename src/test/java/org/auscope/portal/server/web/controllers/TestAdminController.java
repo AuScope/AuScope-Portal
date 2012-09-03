@@ -26,7 +26,7 @@ public class TestAdminController extends PortalTestClass {
 
     private AuScopeAdminService mockService;
     private CSWServiceItem mockServiceItem;
-    private ArrayList cswServiceList;
+    private ArrayList<CSWServiceItem> cswServiceList;
     private PortalPropertyPlaceholderConfigurer mockProperties;
     private AdminController controller;
 
@@ -35,7 +35,7 @@ public class TestAdminController extends PortalTestClass {
         mockService = context.mock(AuScopeAdminService.class);
         mockServiceItem = context.mock(CSWServiceItem.class);
         mockProperties = context.mock(PortalPropertyPlaceholderConfigurer.class);
-        cswServiceList = new ArrayList();
+        cswServiceList = new ArrayList<CSWServiceItem>();
         cswServiceList.add(mockServiceItem);
 
         controller = new AdminController(cswServiceList, mockProperties, mockService);

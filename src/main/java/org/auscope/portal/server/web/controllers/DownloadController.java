@@ -15,7 +15,6 @@ import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -88,22 +87,22 @@ public class DownloadController extends BasePortalController {
     private void writeResponseToZip(ArrayList<DownloadResponse> gmlDownloads,ZipOutputStream zout) throws IOException{
         StringBuilder errorMsg = new StringBuilder();
 
-        for(int i = 0; i<gmlDownloads.size(); i++){
+        for (int i = 0; i<gmlDownloads.size(); i++) {
             DownloadResponse download=gmlDownloads.get(i);
             //Check that attempt to request is successful
-            if(!download.hasException()){
+            if (!download.hasException()) {
                 JSONObject jsonObject = JSONObject.fromObject(download.getResponseAsString());
                 //check that JSON reply is successful
                 if (jsonObject.get("success").toString().equals("false")) {
                     errorMsg.append("Unsuccessful JSON reply from: " + download.getRequestURL() + "\n");
 
                     Object messageObject = jsonObject.get("msg");
-                    if(messageObject==null || messageObject.toString().length()==0){
+                    if (messageObject==null || messageObject.toString().length()==0) {
                         errorMsg.append("No error message\n\n");
-                    }else{
+                    } else {
                         errorMsg.append(messageObject.toString() + "\n\n");
                     }
-                }else{
+                } else {
                     byte[] gmlBytes = new byte[] {};
                     Object dataObject = jsonObject.get("data");
                     if (dataObject != null && !JSONNull.getInstance().equals(dataObject)) {
@@ -122,12 +121,12 @@ public class DownloadController extends BasePortalController {
                     zout.closeEntry();
                 }
 
-            }else{
+            } else {
                 errorMsg.append("Exception thrown while attempting to download from: " + download.getRequestURL() + "\n");
-                errorMsg.append(download.getExceptionAsString()+ "\n\n");
+                errorMsg.append(download.getExceptionAsString() + "\n\n");
             }
         }
-        if(errorMsg.length()!=0){
+        if (errorMsg.length()!=0) {
             zout.putNextEntry(new ZipEntry("downloadInfo.txt"));
             zout.write(errorMsg.toString().getBytes());
             zout.closeEntry();
@@ -157,7 +156,7 @@ public class DownloadController extends BasePortalController {
         //create the output stream
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
 
-        for(int i = 0; i<serviceUrls.length; i++) {
+        for (int i = 0; i<serviceUrls.length; i++) {
 
             GetMethod method = new GetMethod(serviceUrls[i]);
             byte[] responseBytes = serviceCaller.getMethodResponseAsBytes(method);

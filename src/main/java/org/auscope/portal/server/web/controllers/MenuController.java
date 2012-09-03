@@ -52,7 +52,7 @@ public class MenuController {
       mav.addObject("googleKey", googleKey);
       mav.addObject("vocabServiceUrl", vocabServiceUrl);
       mav.addObject("maxFeatureValue", maxFeatureValue);
-      if(analyticKey != null && !analyticKey.isEmpty()){
+      if (analyticKey != null && !analyticKey.isEmpty()) {
           mav.addObject("analyticKey", analyticKey);
       }
       return mav;

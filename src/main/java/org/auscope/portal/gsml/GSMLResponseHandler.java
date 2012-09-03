@@ -19,7 +19,7 @@ import org.w3c.dom.Node;
 @Repository
 public class GSMLResponseHandler {
 
-    private final Log log = LogFactory.getLog(getClass());
+    private final Log logger = LogFactory.getLog(getClass());
 
     public int getNumberOfFeatures(String gsmlResponse) throws Exception {
 
@@ -39,10 +39,8 @@ public class GSMLResponseHandler {
             Node result = (Node)expr.evaluate(yilgarnDoc, XPathConstants.NODE);
             return Integer.parseInt(result.getAttributes().getNamedItem("numberOfFeatures").getTextContent());
         } catch (Exception e) {
+        	logger.warn(e.getMessage());
             return 0;
-
         }
     }
-
-
 }

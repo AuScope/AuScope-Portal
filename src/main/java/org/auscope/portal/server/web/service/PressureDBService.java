@@ -65,6 +65,7 @@ public class PressureDBService {
         }
 
         //The default catch all
+        log.debug("parseBoolean failed again: " + s);
         return false;
     }
 

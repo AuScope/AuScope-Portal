@@ -2,7 +2,6 @@ package org.auscope.portal.xslt;
 
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
-import org.auscope.portal.xslt.GmlToHtml;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

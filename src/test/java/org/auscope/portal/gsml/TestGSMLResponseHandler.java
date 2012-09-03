@@ -1,9 +1,5 @@
 package org.auscope.portal.gsml;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-
 import junit.framework.Assert;
 
 import org.auscope.portal.core.test.PortalTestClass;

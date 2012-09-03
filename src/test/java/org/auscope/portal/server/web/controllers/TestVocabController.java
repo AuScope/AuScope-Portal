@@ -1,16 +1,9 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
-import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.SISSVocService;
 import org.auscope.portal.core.services.responses.vocab.Concept;
-import org.auscope.portal.core.services.responses.vocab.ConceptFactory;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -18,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Node;
 
 
 /**
