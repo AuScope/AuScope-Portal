@@ -23,7 +23,8 @@ Ext.define('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {
             factoryNames : [
                 'auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory',
                 'auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory',
-                'auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory'
+                'auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory',
+                'auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory'
             ]
         });
         this.callParent(arguments);

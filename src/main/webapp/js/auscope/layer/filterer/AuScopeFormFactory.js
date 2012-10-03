@@ -51,6 +51,7 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.YilgarnGeochemistryFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
             case 'gsml-borehole':
+            case 'mscl-borehole':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.BoreholeFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
             case 'portal-reports':

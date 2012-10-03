@@ -48,8 +48,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory', {
      * Overrides abstract parseKnownLayerFeature
      */
     parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
-        var me = this;
-
         var store = Ext.create('Ext.data.Store', {
             model : 'auscope.knownlayer.geodesy.Observation',
             autoLoad : false,

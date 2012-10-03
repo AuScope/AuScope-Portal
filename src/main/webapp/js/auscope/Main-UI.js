@@ -79,6 +79,21 @@ Ext.application({
             },
             autoLoad : true
         });
+        
+        // Create the ResearchDataLayer store
+        var researchDataLayerStore = Ext.create('Ext.data.Store', {
+            model : 'portal.knownlayer.KnownLayer',
+            groupField: 'group',
+            proxy : {
+                type : 'ajax',
+                url : 'getResearchDataLayers.do',
+                reader : {
+                    type : 'json',
+                    root : 'data'
+                }
+            },
+            autoLoad : true
+        });
 
         //Create our store for holding the set of
         //layers that have been added to the map
@@ -86,7 +101,6 @@ Ext.application({
 
         //We need something to handle the clicks on the map
         var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {});
-
 
         //Create our map implementations
         var mapCfg = {
@@ -214,6 +228,15 @@ Ext.application({
                 addlayerrequest : handleAddRecordToMap
             }
         });
+        
+        var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
+            title : 'Research Data Layers',
+            store : researchDataLayerStore,
+            map : map,
+            listeners : {
+                addlayerrequest : handleAddRecordToMap
+            }
+        });
 
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
@@ -224,7 +247,8 @@ Ext.application({
             enableTabScroll : true,
             items:[knownLayersPanel,
                 unmappedRecordsPanel,
-                customRecordsPanel
+                customRecordsPanel,
+                researchDataPanel
             ]
         });
 

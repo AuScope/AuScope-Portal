@@ -50,6 +50,7 @@
                 <ref bean="knownTypeAlohGroupContent" />
                 <ref bean="knownTypeGypsumContent" />
                 <ref bean="knownTypeSilicaContent" />
+                <ref bean="knownTypeBoreholeMSCL" />
             </list>
         </constructor-arg>
     </bean>

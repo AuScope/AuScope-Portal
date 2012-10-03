@@ -290,6 +290,45 @@
             </bean>
         </property>
     </bean>
+    
+    <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">
+        <constructor-arg name="id" value="mscl-borehole"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://sisstest.arrc.csiro.au:8080/agos/wfs</value>
+                    </list>
+                </constructor-arg>
+                <property name="relatedFeatureTypeNames">
+                    <list>
+                        <value>sa:SamplingFeatureCollection</value>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="University of Melbourne - MSCL"/>
+        <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
+        <property name="group" value="NVCL Research Data"/>
+        <property name="proxyUrl" value="doBoreholeFilter.do"/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+    </bean>
+        
     <bean id="knownTypeBoreholePressureDB" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="pressuredb-borehole"/>
         <constructor-arg name="knownLayerSelector">
