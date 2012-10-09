@@ -5,6 +5,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.services.PortalServiceException;
@@ -37,7 +38,7 @@ public class PressureDBExceptionParser {
             if (exceptionNodes.getLength() > 0) {
                 Node exceptionNode = exceptionNodes.item(0);
 
-                throw new PortalServiceException(null, exceptionNode.getTextContent());
+                throw new PortalServiceException((HttpMethodBase)null, exceptionNode.getTextContent());
             }
         } catch (XPathExpressionException ex) {
             //This should *hopefully* never occur
