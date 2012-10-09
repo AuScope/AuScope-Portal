@@ -54,7 +54,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                     // TODO: this seems a bit crap; is there a better way of doing this than hard-coding a WFS query string here?
                     // Should you allow users to control MaxFeatures too?
                     // How should all this be rendered?
-                    href : parentOnlineResource.get('url') + '?request=GetFeature&version=1.1.0&typename=sa:SamplingFeatureCollection&featureId=' + featureId
+                    //href : parentOnlineResource.get('url') + '?request=GetFeature&version=1.1.0&typename=sa:SamplingFeatureCollection&featureId=' + featureId
+                    href : parentOnlineResource.get('url') + '?request=GetFeature&version=1.1.0&typename=sa:SamplingFeatureCollection&featureId=sampling_feature_collection.' + featureId
                 }]
             }]
         });
