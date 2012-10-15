@@ -19,45 +19,60 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
      * Overrides abstract parseKnownLayerFeature
      */
     parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
-        // I want to return the data that's located here:
-        // http://sisstest.arrc.csiro.au:8080/agos/wfs?request=GetFeature&version=1.1.0&typename=sa:SamplingFeatureCollection&maxfeatures=20&featureId=borehole_header.1
-
-        
-//        var store = Ext.create('Ext.data.Store', {
-//            model : 'auscope.knownlayer.geodesy.Observation',
-//            autoLoad : false,
-//            proxy : {
-//                type : 'ajax',
-//                url : 'getGeodesyObservations.do',
-//                extraParams : {
-//                    serviceUrl : parentOnlineResource.get('url'),
-//                    stationId : featureId
-//                },
-//                reader : {
-//                    type : 'json',
-//                    root : 'data'
-//                }
-//            }
-//        });
-
-        //Load the form in full - when it renders we'll actually check what is available.
-        //The user won't be able to interact with the form prior to load due to the loading mask
-        return Ext.create('portal.layer.querier.BaseComponent', {
+    	// This is of the format: http://$domain:$port/$some_path/wfs
+    	var wfsUrl = parentOnlineResource.get('url');
+    	
+    	return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
             tabTitle : 'MSCL Data',
             items : [{
+            	itemId : 'msclDataPanel',
                 xtype : 'fieldset',
-                title : 'Petrophysical Observations',
-                items : [{
-                    xtype : 'button',
-                    text : 'Get the data',
-                    // TODO: this seems a bit crap; is there a better way of doing this than hard-coding a WFS query string here?
-                    // Should you allow users to control MaxFeatures too?
-                    // How should all this be rendered?
-                    //href : parentOnlineResource.get('url') + '?request=GetFeature&version=1.1.0&typename=sa:SamplingFeatureCollection&featureId=' + featureId
-                    href : parentOnlineResource.get('url') + '?request=GetFeature&version=1.1.0&typename=sa:SamplingFeatureCollection&featureId=sampling_feature_collection.' + featureId
-                }]
-            }]
-        });
+                title : 'Petrophysical Observations'
+            }],
+            listeners : {
+            	render : function(panel, eOpts) {
+            		Ext.Ajax.request({
+                		url : 'getMsclObservations.do',
+                		params : {
+                			serviceUrl : wfsUrl,
+                			typeName : 'sa:SamplingFeatureCollection',
+                			featureId : 'sampling_feature_collection.' + featureId
+                		},
+                		success : function(response) {
+                			var jsonResponse = Ext.JSON.decode(response.responseText);
+                			var xmlDocument = portal.util.xml.SimpleDOM.parseStringToDOM(jsonResponse.data.gml);
+                			var samplingFeatureCollection = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(
+                	    			xmlDocument.documentElement,
+                	    			'/wfs:FeatureCollection/gml:featureMembers/sa:SamplingFeatureCollection')[0];
+                			var simpleFactory = Ext.create('portal.layer.querier.wfs.factories.SimpleFactory', {});
+                			var xmlTreeComponentWithDownloadButton = simpleFactory.parseNode(samplingFeatureCollection, wfsUrl);
+                			var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(samplingFeatureCollection, '@gml:id');
+                			
+                			// TODO: This isn't good. I'm modifying the behaviour of the button that simpleFactory has 
+                			// added to the XML Tree view. The modification is to change its target from requestFeature.do to
+                			// getMsclObservations.do which works-around an assumption made by requestFeature.do that it can
+                			// assign a default SRS where one isn't present.
+                			// Since I'm expecting the behaviour and the presentation of this SA data to be completely changed
+                			// anyway I'm just using this heavy-handed and unglamourous approach as a temporary measure.
+                			var button = xmlTreeComponentWithDownloadButton.getDockedItems()[0].items.items[0];
+                			button.handler = function() 
+                			{
+                                portal.util.FileDownloader.downloadFile('downloadGMLAsZip.do', {
+                                    serviceUrls : 
+                                    	portal.util.URL.base + 
+                                    	"getMsclObservations.do" +
+                        				"?serviceUrl=" + wfsUrl + 
+                        				"&typeName=sa:SamplingFeatureCollection" +
+                        				"&featureId=" + gmlId
+                                });
+                			};
+                			panel.getComponent('msclDataPanel').add(xmlTreeComponentWithDownloadButton);
+                			panel.doLayout();
+                		}
+                	});
+            	}
+            }
+    	});
     }
 });

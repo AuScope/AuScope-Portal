@@ -1,0 +1,108 @@
+package org.auscope.portal.mscl;
+
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+
+import org.apache.commons.httpclient.ConnectTimeoutException;
+import org.apache.commons.httpclient.HttpMethodBase;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.BaseWFSService;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * This class is a specialisation of BaseWFSService. Its purpose is to allow access to MSCL's
+ * observations WFS. It circumvents an issue with the BaseWFSService's generateWFSRequest(...) 
+ * implementation by allowing a null or blank SRS. The other implementation converted such SRSs
+ * to a default value which causes a reprojection to occur later on which would always fail.
+ * @author bro879
+ */
+@Service
+public class MSCLWFSService extends BaseWFSService {
+	/**
+     * Creates a new instance of this class with the specified dependencies
+     * @param httpServiceCaller Will be used for making requests
+     * @param wfsMethodMaker Will be used for generating WFS methods
+     */
+	@Autowired
+	public MSCLWFSService(
+			HttpServiceCaller httpServiceCaller,
+			WFSGetFeatureMethodMaker wfsMethodMaker) {
+		super(httpServiceCaller, wfsMethodMaker);
+	}
+
+	/**
+	 * @param serviceUrl
+	 * 		The URL of the WFS's endpoint. It should be of the form: http://{domain}:{port}/{path}/wfs
+	 * @param featureType
+	 * 		The name of the feature type you wish to request (including its prefix if necessary).
+	 * @param featureId
+	 * 		The ID of the feature you want to return.
+	 * @return
+	 * 		The response of a WFS query as a string of XML.
+	 * @throws ConnectException
+	 * @throws ConnectTimeoutException
+	 * @throws UnknownHostException
+	 * @throws Exception
+	 */
+	public String getWFSReponse(
+			String serviceUrl, 
+			String featureType,
+			String featureId) throws ConnectException, ConnectTimeoutException, UnknownHostException, Exception {
+		
+		HttpMethodBase method = this.generateWFSRequest(
+				serviceUrl,
+				featureType,
+				featureId,
+				"",
+				null,
+				null,
+				WFSGetFeatureMethodMaker.ResultType.Results,
+				"");
+		
+		return httpServiceCaller.getMethodResponseAsString(method);
+	}
+	
+	/**
+	 * Generates a WFS request based on the arguments provided.
+	 * @param wfsUrl
+	 * 		The URL of the WFS's endpoint. It should be of the form: http://{domain}:{port}/{path}/wfs
+	 * @param featureType
+	 * 		The name of the feature type you wish to request (including its prefix if necessary).
+	 * @param featureId
+	 * 		The ID of the feature you want to return.
+	 * @param filterString
+	 * 		A filter string, if required.
+	 * @param maxFeatures
+	 * 		The maximum number of features to return.
+	 * @param srs
+	 * 		The SRS.
+	 * @param resultType
+	 * 		The desired result type.
+	 * @param outputFormat
+	 * 		The desired output format.
+	 * @return
+	 * 		A HttpMethodBase object that encodes the request arguments as an HTTP request.
+	 */
+	@Override
+	protected HttpMethodBase generateWFSRequest(
+			String wfsUrl, 
+			String featureType, 
+			String featureId, 
+			String filterString, 
+			Integer maxFeatures, 
+			String srs, 
+			ResultType resultType,
+			String outputFormat) {
+
+		int max = maxFeatures == null ? 0 : maxFeatures.intValue();
+
+        if (featureId == null) {
+            return wfsMethodMaker.makePostMethod(wfsUrl, featureType, filterString, max, srs, resultType, outputFormat);
+        } else {
+            return wfsMethodMaker.makeGetMethod(wfsUrl, featureType, featureId, srs, outputFormat);
+        }
+    }
+}
