@@ -46,7 +46,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                 	    			xmlDocument.documentElement,
                 	    			'/wfs:FeatureCollection/gml:featureMembers/sa:SamplingFeatureCollection')[0];
                 			var simpleFactory = Ext.create('portal.layer.querier.wfs.factories.SimpleFactory', {});
-                			var xmlTreeComponentWithDownloadButton = simpleFactory.parseNode(samplingFeatureCollection, wfsUrl);
+                			var xmlTreeComponentWithDownloadButton = simpleFactory.parseNode(samplingFeatureCollection, wfsUrl, { height : 250 });
                 			var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(samplingFeatureCollection, '@gml:id');
                 			
                 			// TODO: This isn't good. I'm modifying the behaviour of the button that simpleFactory has 
