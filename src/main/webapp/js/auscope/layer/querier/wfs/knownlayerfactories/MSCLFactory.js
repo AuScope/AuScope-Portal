@@ -37,7 +37,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                 		params : {
                 			serviceUrl : wfsUrl,
                 			typeName : 'sa:SamplingFeatureCollection',
-                			featureId : 'sampling_feature_collection.' + featureId
+                			featureId : 'sampling_feature_collection.borehole_header.' + featureId
                 		},
                 		success : function(response) {
                 			var jsonResponse = Ext.JSON.decode(response.responseText);
