@@ -141,6 +141,7 @@ Ext.application({
          * Used to show extra details for querying services
          */
         var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
+        	title : 'Filter',
             region: 'south',
             layerPanel : layersPanel,
             map : map,
