@@ -314,7 +314,7 @@
         <property name="group" value="NVCL Research Data"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
                 <constructor-arg index="0" value="16"/>
