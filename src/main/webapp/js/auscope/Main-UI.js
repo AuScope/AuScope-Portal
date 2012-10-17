@@ -203,7 +203,7 @@ Ext.application({
         };
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Featured Layers',
+            title : 'Featured',
             store : knownLayerStore,
             map : map,
             listeners : {
@@ -212,7 +212,7 @@ Ext.application({
         });
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
-            title : 'Registered Layers',
+            title : 'Registered',
             store : unmappedCSWRecordStore,
             map : map,
             listeners : {
@@ -221,7 +221,7 @@ Ext.application({
         });
 
         var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
-            title : 'Custom Layers',
+            title : 'Custom',
             store : customRecordStore,
             map : map,
             listeners : {
@@ -230,7 +230,7 @@ Ext.application({
         });
         
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Research Data Layers',
+            title : 'Research Data',
             store : researchDataLayerStore,
             map : map,
             listeners : {
@@ -240,6 +240,7 @@ Ext.application({
 
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
+        	title : 'Layers',
             activeTab : 0,
             region : 'north',
             split : true,
