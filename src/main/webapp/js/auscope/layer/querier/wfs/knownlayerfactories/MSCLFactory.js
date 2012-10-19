@@ -44,7 +44,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                 			var xmlDocument = portal.util.xml.SimpleDOM.parseStringToDOM(jsonResponse.data.gml);
                 			var samplingFeatureCollection = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(
                 	    			xmlDocument.documentElement,
-                	    			'/wfs:FeatureCollection/gml:featureMembers/sa:SamplingFeatureCollection')[0];
+                	    			'gml:featureMembers/sa:SamplingFeatureCollection')[0];
                 			var simpleFactory = Ext.create('portal.layer.querier.wfs.factories.SimpleFactory', {});
                 			var xmlTreeComponentWithDownloadButton = simpleFactory.parseNode(samplingFeatureCollection, wfsUrl, { height : 250 });
                 			var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(samplingFeatureCollection, '@gml:id');
@@ -56,8 +56,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                 			// Since I'm expecting the behaviour and the presentation of this SA data to be completely changed
                 			// anyway I'm just using this heavy-handed and unglamourous approach as a temporary measure.
                 			var button = xmlTreeComponentWithDownloadButton.getDockedItems()[0].items.items[0];
-                			button.handler = function() 
-                			{
+                			button.handler = function() {
                                 portal.util.FileDownloader.downloadFile('downloadGMLAsZip.do', {
                                     serviceUrls : 
                                     	portal.util.URL.base + 
