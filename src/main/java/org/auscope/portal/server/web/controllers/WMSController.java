@@ -46,7 +46,7 @@ public class WMSController extends BaseCSWController {
 
     private WMSService wmsService;
     private final Log log = LogFactory.getLog(getClass());
-	private int BUFFERSIZE = 1024 * 1024;
+    private int BUFFERSIZE = 1024 * 1024;
 
     // ----------------------------------------------------------- Constructors
 

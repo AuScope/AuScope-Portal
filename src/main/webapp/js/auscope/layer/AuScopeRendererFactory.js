@@ -17,7 +17,14 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
             anchorOffsetY : iconAnchor ? iconAnchor.y : 0
         });
 
-        if (wmsResources.length > 0) {
+        if(wmsResources.length > 0 && wfsResources.length > 0){
+            return Ext.create('portal.layer.renderer.wfs.FeatureWithMapRenderer', {
+                map : this.map,
+                icon : icon,
+                proxyUrl : proxyUrl ? proxyUrl : 'getAllFeatures.do',
+                proxyCountUrl : proxyCountUrl
+            });
+        } else if (wmsResources.length > 0) {
             return Ext.create('portal.layer.renderer.wms.LayerRenderer', {map : this.map});
         } else if (wfsResources.length > 0) {
             return Ext.create('portal.layer.renderer.wfs.FeatureRenderer', {

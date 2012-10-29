@@ -21,8 +21,11 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
                 property : 'GPSSITEID'
             });
         }
-
-        if (wfsResources.length > 0) {
+        if(wfsResources.length > 0 && wmsResources.length > 0){
+            cfg.parser = Ext.create('auscope.layer.querier.wfs.AuScopeParser', {});
+            cfg.knownLayerParser = Ext.create('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {});
+            return Ext.create('portal.layer.querier.wfs.WFSWithMapQuerier', cfg);
+        } else if (wfsResources.length > 0) {
             cfg.parser = Ext.create('auscope.layer.querier.wfs.AuScopeParser', {});
             cfg.knownLayerParser = Ext.create('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {});
 
