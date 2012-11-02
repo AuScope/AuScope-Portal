@@ -1,5 +1,10 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
@@ -319,5 +324,171 @@ public class EarthResourcesFilterController extends BasePortalController {
             log.debug("Exception: ", e);
             return this.generateExceptionResponse(e, serviceUrl);
         }
+    }
+
+
+    /**
+     * Handles Mining Activity Style request queries
+     * Returns WFS response converted into KML.
+     *
+     * @param mineName
+     * @param startDate
+     * @param endDate
+     * @param oreProcessed
+     * @param producedMaterial
+     * @param cutOffGrade
+     * @param production
+     * @param bbox
+     * @param maxFeatures
+     */
+    @RequestMapping("/doMiningActivityFilterStyle.do")
+    public void doMiningActivityFilterStyle(
+            HttpServletResponse response,
+            @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
+            @RequestParam(required = false, value = "startDate", defaultValue = "") String startDate,
+            @RequestParam(required = false, value = "endDate", defaultValue = "") String endDate,
+            @RequestParam(required = false, value = "oreProcessed", defaultValue = "") String oreProcessed,
+            @RequestParam(required = false, value = "producedMaterial", defaultValue = "") String producedMaterial,
+            @RequestParam(required = false, value = "cutOffGrade", defaultValue = "") String cutOffGrade,
+            @RequestParam(required = false, value = "production", defaultValue = "") String production,
+            @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
+        FilterBoundingBox bbox = null;
+
+        // Get the mining activities
+        String filter = this.mineralOccurrenceService.getMiningActivityFilter(
+                mineName, startDate, endDate, oreProcessed, producedMaterial,
+                cutOffGrade, production, maxFeatures, bbox);
+
+        String style=this.getStyle(filter, "er:MiningFeatureOccurrence", "#FF9900");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        this.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+
+    /**
+     * Handles getting the style of the Earth Resource Mine filter queries.
+     * (If the bbox elements are specified, they will limit the output response to 200 records implicitly)
+     *
+     * @param mineName   the name of the mine to query for
+     * @param bbox
+     * @param maxFeatures
+     * @throws Exception
+     */
+    @RequestMapping("/doMineFilterStyle.do")
+    public void doMineFilterStyle(
+            HttpServletResponse response,
+            @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
+            @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
+        FilterBoundingBox bbox = null;
+
+        // Get the mining activities
+        String filter = this.mineralOccurrenceService.getMineFilter(mineName,
+                bbox);
+
+        String style=this.getStyle(filter, "er:MiningFeatureOccurrence", "#AA0078");
+
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        this.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+
+    /**
+     * Handles counting the results of a Earth Resource MineralOccerrence style request query.
+     *
+     * @param commodityName
+     * @param bbox
+     * @param maxFeatures
+     *
+     * @throws Exception
+     */
+    @RequestMapping("/doMineralOccurrenceFilterStyle.do")
+    public void doMineralOccurrenceFilterStyle(
+            HttpServletResponse response,
+            @RequestParam(value="commodityName",         required=false) String commodityName,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
+        FilterBoundingBox bbox = null;
+
+        // Get the mining activities
+        String filter = this.mineralOccurrenceService.getMineFilter(commodityName,
+                bbox);
+
+        String style=this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        this.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+
+
+    public String getStyle(String filter, String name, String color){
+        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>" + name + "</Name>"
+                + "<UserStyle>" + "<Name>portal-style</Name>"
+                + "<Title>portal-style</Title>"
+                + "<Abstract>portal-style</Abstract>"
+                + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>" + "<Rule>"
+                + "<Name>portal-style</Name>"
+                + "<Abstract>portal-style</Abstract>"
+                //+ filter
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">" + color + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>6</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "<Rule>"
+                + "<Name>portal-style-2</Name>"
+                + "<Abstract>portal-style-2</Abstract>"
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">#00FF00</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>2</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+        return style;
     }
 }

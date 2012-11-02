@@ -293,4 +293,28 @@ public class MineralOccurrenceService extends BaseWFSService {
         HttpMethodBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
+
+
+
+    public String getMiningActivityFilter(String mineName, String startDate,
+            String endDate, String oreProcessed, String producedMaterial,
+            String cutOffGrade, String production, int maxFeatures,
+            FilterBoundingBox bbox) throws Exception {
+        MiningActivityFilter filter = new MiningActivityFilter(mineName,
+                startDate, endDate, oreProcessed, producedMaterial,
+                cutOffGrade, production);
+        return generateFilterString(filter, bbox);
+    }
+
+    public String getMineFilter(String mineName, FilterBoundingBox bbox)
+            throws Exception {
+        MineFilter filter = new MineFilter(mineName);
+        return generateFilterString(filter, bbox);
+    }
+
+    public String getMineralOccurrenceFilter(String commodityName, FilterBoundingBox bbox)
+            throws Exception {
+        MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,"","","","","");
+        return generateFilterString(filter, bbox);
+    }
 }

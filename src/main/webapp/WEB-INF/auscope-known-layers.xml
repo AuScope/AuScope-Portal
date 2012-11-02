@@ -22,6 +22,7 @@
         <property name="group" value="AuScope Earth Resource Services"/>
         <property name="proxyUrl" value="doMineFilter.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -55,6 +56,7 @@
         <property name="group" value="AuScope Earth Resource Services"/>
         <property name="proxyUrl" value="doMineralOccurrenceFilter.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -88,6 +90,7 @@
         <property name="group" value="AuScope Earth Resource Services"/>
         <property name="proxyUrl" value="doMiningActivityFilter.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -120,6 +123,7 @@
         <property name="description" value="A collection of continuous operating Global Navigation Satellite Systems (GNSS) stations in Australia, its Territories and the South Pacific."/>
         <property name="proxyUrl" value="getAllFeatures.do"/>
         <property name="proxyCountUrl" value="getFeatureCount.do"/>
+        <property name="proxyStyleUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -146,6 +150,7 @@
         <property name="description" value=""/>
         <property name="proxyUrl" value="getAllFeatures.do"/>
         <property name="proxyCountUrl" value="getFeatureCount.do"/>
+        <property name="proxyStyleUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -226,6 +231,7 @@
         <property name="description" value="A collection of detailed information about all analytes that were detected at a specific location"/>
         <property name="proxyUrl" value="doYilgarnGeochemistry.do"/>
         <property name="proxyCountUrl" value="doYilgarnGeochemistryCount.do"/>
+        <property name="proxyStyleUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -276,6 +282,7 @@
         <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -290,7 +297,7 @@
             </bean>
         </property>
     </bean>
-    
+
     <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">
         <constructor-arg name="id" value="mscl-borehole"/>
         <constructor-arg name="knownLayerSelector">
@@ -328,7 +335,7 @@
             </bean>
         </property>
     </bean>
-        
+
     <bean id="knownTypeBoreholePressureDB" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="pressuredb-borehole"/>
         <constructor-arg name="knownLayerSelector">
@@ -362,6 +369,7 @@
         <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -389,6 +397,7 @@
         <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
