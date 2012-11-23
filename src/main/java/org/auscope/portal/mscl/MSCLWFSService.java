@@ -85,15 +85,14 @@ public class MSCLWFSService extends BaseWFSService {
 	
 	public String getObservations(
 	        final String serviceUrl,
-	        final String boreholeName,
+	        final String boreholeHeaderId,
 	        final String startDepth,
 	        final String endDepth) throws ConnectException, ConnectTimeoutException, UnknownHostException, Exception {
-	    // .../wfs?request=GetFeature&typename=mscl:scanned_data&filter=%3CFilter%3E%0D%0A%09%3CPropertyIs%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Aborehole%3C%2FPropertyName%3E%0D%0A%09%09%3CLiteral%3EPRC-5%3C%2FLiteral%3E%0D%0A%09%3C%2FPropertyIs%3E%0D%0A%09%3CPropertyIsBetween%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Adepth%3C%2FPropertyName%3E%0D%0A%09%09%3CLowerBoundary%3E%0D%0A%09%09%09%3CLiteral%3E66.9%3C%2FLiteral%3E%0D%0A%09%09%3C%2FLowerBoundary%3E%0D%0A%09%09%3CUpperBoundary%3E%0D%0A%09%09%09%3CLiteral%3E89%3C%2FLiteral%3E%0D%0A%09%09%3C%2FUpperBoundary%3E%0D%0A%09%3C%2FPropertyIsBetween%3E%0D%0A%3C%2FFilter%3E
 
         String filterString = String.format( 
             "<Filter>" +
             "   <PropertyIs>" +
-            "       <PropertyName>mscl:borehole</PropertyName>" +
+            "       <PropertyName>mscl:borehole_header_id</PropertyName>" +
             "       <Literal>%s</Literal>" +
             "   </PropertyIs>" +
             "   <PropertyIsBetween>" +
@@ -106,7 +105,7 @@ public class MSCLWFSService extends BaseWFSService {
             "       </UpperBoundary>" +
             "   </PropertyIsBetween>" +
             "</Filter>", 
-            boreholeName,
+            boreholeHeaderId,
             startDepth,
             endDepth);
 

@@ -6,15 +6,15 @@ Ext.require(['Ext.Window', 'Ext.fx.target.Sprite', 'Ext.layout.container.Fit', '
 
 function drawGraph(
         serviceUrl,
-        boreholeName,
+        boreholeHeaderId,
         startDepth,
         endDepth,
-        observationsToReturn) {
+        observationToReturn) {
     
     // Define the model:
     Ext.define('DynamicModel', {
         extend: 'Ext.data.Model',
-        fields: ['depth', 'diameter']
+        fields: ['depth', observationToReturn]
     });
     
     // Create the datastore:
@@ -29,10 +29,10 @@ function drawGraph(
             extraParams : {
                 // .../wfs?request=GetFeature&typename=mscl:scanned_data&filter=%3CFilter%3E%0D%0A%09%3CPropertyIs%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Aborehole%3C%2FPropertyName%3E%0D%0A%09%09%3CLiteral%3EPRC-5%3C%2FLiteral%3E%0D%0A%09%3C%2FPropertyIs%3E%0D%0A%09%3CPropertyIsBetween%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Adepth%3C%2FPropertyName%3E%0D%0A%09%09%3CLowerBoundary%3E%0D%0A%09%09%09%3CLiteral%3E66.9%3C%2FLiteral%3E%0D%0A%09%09%3C%2FLowerBoundary%3E%0D%0A%09%09%3CUpperBoundary%3E%0D%0A%09%09%09%3CLiteral%3E89%3C%2FLiteral%3E%0D%0A%09%09%3C%2FUpperBoundary%3E%0D%0A%09%3C%2FPropertyIsBetween%3E%0D%0A%3C%2FFilter%3E
                 serviceUrl : serviceUrl,
-                boreholeName : boreholeName,
+                boreholeHeaderId : boreholeHeaderId,
                 startDepth : startDepth,
                 endDepth : endDepth,
-                observationsToReturn : observationsToReturn
+                observationToReturn : observationToReturn
             },
             reader : {
                 type : 'json',
@@ -43,6 +43,16 @@ function drawGraph(
     });
     
     store.load();
+
+    xAxisTitle = 
+    	observationToReturn == 'diameter' ? 'Diameter (cm)' :
+    	observationToReturn == 'p_wave_amplitude' ? 'P-Wave amp (dB)' :
+    	observationToReturn == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
+    	observationToReturn == 'density' ? 'Density (gm/cc)' :
+    	observationToReturn == 'magnetic_susceptibility' ? 'Mag. Sus. (cgs)' :
+    	observationToReturn == 'impedance' ? 'Impedance (Ohm)' :
+    	observationToReturn == 'natural_gamma' ? 'Natural gamma (Hz)' :
+    	observationToReturn == 'resistivity' ? 'Resistivity (Ohm/m)' : undefined;
     
     Ext.create('Ext.Window', {
         border      : true,
@@ -50,40 +60,41 @@ function drawGraph(
         resizable   : false,
         modal       : true,
         plain       : false,
-        title       : 'Title', // TODO: Make dynamic
-
+        title       : 'Changes to ' + xAxisTitle + ' over depth',
         items       : [
             Ext.create('Ext.chart.Chart', {
-                height      : 700, // TODO: Fix up dimensions
+                height      : 700,
                 width       : 400,
                 shadow: false,
                 store: store,
-                axes: [  // TODO: Make dynamic
+                axes: [ // TODO: Make dynamic
                     {
                         title: 'Depth (m)',
                         type: 'Numeric',
                         position: 'left',
                         fields: ['depth'],
-                        minimum: 60,
-                        maximum: 200,
-                        majorTickSteps: 10,
+                        //minimum: Math.floor(startDepth / 50) * 50, // Round down to a multiple of 50
+                        //maximum: Math.ceil(endDepth / 50) * 50, // Round up to a multiple of 50
+//                        minimum: 60,
+//                        maximum: 200,
+//                        majorTickSteps: 10,
                         minorTickSteps: 1
                     },
                     {
-                        title: 'Diameter (cm)',
+                        title: xAxisTitle,
                         type: 'Numeric',
                         position: 'top',
-                        fields: ['diameter'],
-                        minimum: 4,
-                        maximum: 7,
-                        majorTickSteps: 5,
+                        fields: [observationToReturn],
+//                        minimum: 4,
+//                        maximum: 7,
+//                        majorTickSteps: 5,
                         minorTickSteps: 1
                     }
                 ],
                 series: [
                     {
                         type: 'line',
-                        xField: 'diameter',
+                        xField: observationToReturn,
                         yField: 'depth',
                         showMarkers: false,
                         style: {
@@ -114,7 +125,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
      * Overrides abstract parseKnownLayerFeature
      */
     parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
-    	
 		return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
             tabTitle : 'MSCL Data',
@@ -123,25 +133,9 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
 	            xtype : 'fieldset',
 	            title : 'Petrophysical Observations',
 	            items: [
-	            {
-	            	xtype : 'button',
-	            	text : 'Submit',
-	            	listeners : {
-		            	click : function (e, eOpts) {
-		            		drawGraph(
-		            		        parentOnlineResource.get('url'),
-		            		        'PRC-5', // TODO: Make dynamic
-		                            66, // TODO: Make dynamic
-		                            200, // TODO: Make dynamic
-		                            'ct' // TODO: Make dynamic
-		                            );
-		        		}
-	            	}
-	           	},
 	           	{
 	           	    xtype: 'form',
-	           	    height: 400,
-	           	    width: 400,
+	           	    border: 0,
 	           	    items: 
 	           	    [
            	            {
@@ -164,15 +158,34 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                             // Arrange radio buttons into two columns, distributed vertically
                             columns: 2,
                             vertical: true,
+                            
                             items: [
-                                { boxLabel: 'Mag sus', name: 'rb', inputValue: 'msus1' },
-                                { boxLabel: 'P-Wav vel', name: 'rb', inputValue: 'pvel' },
-                                { boxLabel: 'P-Wav amp', name: 'rb', inputValue: 'pamp' },
-                                { boxLabel: 'Diameter', name: 'rb', inputValue: 'ct' },
-                                { boxLabel: 'Natural Gamma', name: 'rb', inputValue: 'ngam' },
-                                { boxLabel: 'Density', name: 'rb', inputValue: 'den1' }
+								{ boxLabel: 'Diameter', name: 'observationToReturn', inputValue: 'diameter' },
+								{ boxLabel: 'P-Wav amp', name: 'observationToReturn', inputValue: 'p_wave_amplitude' },
+								{ boxLabel: 'P-Wav vel', name: 'observationToReturn', inputValue: 'p_wave_velocity' },
+								{ boxLabel: 'Density', name: 'observationToReturn', inputValue: 'density' },
+								{ boxLabel: 'Mag sus', name: 'observationToReturn', inputValue: 'magnetic_susceptibility' },
+								{ boxLabel: 'Impedence', name: 'observationToReturn', inputValue: 'impedance' },
+								{ boxLabel: 'Natural Gamma', name: 'observationToReturn', inputValue: 'natural_gamma' },
+								{ boxLabel: 'Resistivity', name: 'observationToReturn', inputValue: 'resistivity' }
                             ]
                         }
+                    ],
+                    buttons:
+                    [
+                     	{
+                     		text: 'Submit',
+                            formBind: true, //only enabled once the form is valid
+                            handler: function() {
+                            	var formValues = this.up('form').getForm().getValues();
+                            	drawGraph(
+		            		        parentOnlineResource.get('url'),
+		            		        featureId,
+		            		        formValues.startDepth,
+		            		        formValues.endDepth,
+		            		        formValues.observationToReturn);
+                            }
+                     	}
                     ]
 	           	}]
 	    	}]
