@@ -2,7 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.services.PortalServiceException;
-import org.auscope.portal.core.services.SISSVocService;
+import org.auscope.portal.core.services.SISSVoc2Service;
 import org.auscope.portal.core.services.responses.vocab.Concept;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.jmock.Expectations;
@@ -31,7 +31,7 @@ public class TestVocabController extends PortalTestClass {
      */
     private PortalPropertyPlaceholderConfigurer propertyConfigurer = context.mock(PortalPropertyPlaceholderConfigurer.class);
 
-    private SISSVocService mockService = context.mock(SISSVocService.class);
+    private SISSVoc2Service mockService = context.mock(SISSVoc2Service.class);
 
     /**
      * Setup.

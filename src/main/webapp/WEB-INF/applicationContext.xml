@@ -71,7 +71,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="sissVocService" class="org.auscope.portal.core.services.SISSVocService">
+    <bean id="sissVocService" class="org.auscope.portal.core.services.SISSVoc2Service">
         <constructor-arg name="httpServiceCaller" ref="httpServiceCaller"/>
         <constructor-arg name="conceptFactory">
             <bean class="org.auscope.portal.core.services.responses.vocab.ConceptFactory">

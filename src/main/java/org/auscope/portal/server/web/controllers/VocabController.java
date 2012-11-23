@@ -6,7 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.server.controllers.BasePortalController;
-import org.auscope.portal.core.services.SISSVocService;
+import org.auscope.portal.core.services.SISSVoc2Service;
 import org.auscope.portal.core.services.responses.vocab.Concept;
 import org.auscope.portal.core.view.JSONModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class VocabController extends BasePortalController {
 
 
     private PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer;
-    private SISSVocService service;
+    private SISSVoc2Service service;
 
     /**
      * Construct
@@ -38,7 +38,7 @@ public class VocabController extends BasePortalController {
      */
     @Autowired
     public VocabController(PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer,
-                           SISSVocService service) {
+                           SISSVoc2Service service) {
         super();
         this.service = service;
         this.portalPropertyPlaceholderConfigurer = portalPropertyPlaceholderConfigurer;
