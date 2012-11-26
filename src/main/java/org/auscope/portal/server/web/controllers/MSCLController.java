@@ -3,6 +3,7 @@ package org.auscope.portal.server.web.controllers;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -125,7 +126,6 @@ public class MSCLController extends BasePortalController {
             OWSExceptionParser.checkForExceptionResponse(msclDoc);
 
             ModelMap data = new ModelMap();
-
             XPathExpression expr = xPath.compile("//mscl:scanned_data/mscl:depth | //mscl:scanned_data/mscl:" + observationToReturn);
             NodeList results = (NodeList) expr.evaluate(msclDoc, XPathConstants.NODESET);
             ArrayList<ModelMap> series = new ArrayList<ModelMap>();
@@ -157,17 +157,15 @@ public class MSCLController extends BasePortalController {
                 pair.put(resultNeighbour.getLocalName(), Float.parseFloat(resultNeighbour.getTextContent()));
                 series.add(pair);
             }
-
-            ModelMap[] seriesArray = new ModelMap[series.size()];
-            series.toArray(seriesArray);
-            Arrays.<ModelMap> sort(seriesArray, new Comparator<ModelMap>() {
+            
+            Collections.<ModelMap>sort(series, new Comparator<ModelMap>() {
                 public int compare(ModelMap o1, ModelMap o2) {
                     // Just use float's comparison implementation:
                     return ((Float) o1.get("depth")).compareTo((Float) o2.get("depth"));
                 }
             });
 
-            data.put("series", seriesArray);
+            data.put("series", series);
             return generateJSONResponseMAV(true, data, null);
         } catch (Exception e) {
             return generateJSONResponseMAV(false, null, e.getMessage());
