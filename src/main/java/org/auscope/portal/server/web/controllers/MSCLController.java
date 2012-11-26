@@ -110,7 +110,22 @@ public class MSCLController extends BasePortalController {
                     new ByteArrayInputStream(wfsResponse.getBytes("UTF-8")));
 
             XPath xPath = XPathFactory.newInstance().newXPath();
-            xPath.setNamespaceContext(new MSCLNamespaceContext());
+//            xPath.setNamespaceContext(new MSCLNamespaceContext());
+  
+            xPath.setNamespaceContext(new IterableNamespace() {
+                {
+                    map.put("mscl", "http://example.org/mscl");
+                    map.put("ogc", "http://www.opengis.net/ogc");
+                    map.put("sa", "http://www.opengis.net/sampling/1.0");
+                    map.put("om", "http://www.opengis.net/om/1.0");
+                    map.put("wfs", "http://www.opengis.net/wfs");
+                    map.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                    map.put("gsml", "urn:cgi:xmlns:CGI:GeoSciML:2.0");
+                    map.put("ows", "http://www.opengis.net/ows");
+                    map.put("gml", "http://www.opengis.net/gml");
+                    map.put("xlink", "http://www.w3.org/1999/xlink");
+                }
+            });
 
             // Do some rudimentary error testing:
             OWSExceptionParser.checkForExceptionResponse(msclDoc);
@@ -148,39 +163,18 @@ public class MSCLController extends BasePortalController {
             
             ModelMap[] seriesArray = new ModelMap[series.size()]; 
             series.toArray(seriesArray);
-            Arrays.<ModelMap>sort(seriesArray, new ModelMapComparator());
+            Arrays.<ModelMap>sort(seriesArray, new Comparator<ModelMap>() {
+                public int compare(ModelMap o1, ModelMap o2) {
+                    // Just use float's comparison implementation:
+                    return ((Float)o1.get("depth")).compareTo((Float)o2.get("depth"));
+                }
+            });
+            
             data.put("series", seriesArray);
             return generateJSONResponseMAV(true, data, null);
         }
         catch (Exception e) {
             return generateJSONResponseMAV(false, null, e.getMessage());
         }
-	}
-	
-	public class ModelMapComparator implements Comparator<ModelMap> {
-
-        @Override
-        public int compare(ModelMap o1, ModelMap o2) {
-            // Just use float's comparison implementation:
-            return ((Float)o1.get("depth")).compareTo((Float)o2.get("depth"));
-        }
-	}
-
-	public class MSCLNamespaceContext extends IterableNamespace {
-        /**
-         * Instantiates a new MSCL namespace context.
-         */
-        public MSCLNamespaceContext() {
-            map.put("mscl", "http://example.org/mscl");
-            map.put("ogc", "http://www.opengis.net/ogc");
-            map.put("sa", "http://www.opengis.net/sampling/1.0");
-            map.put("om", "http://www.opengis.net/om/1.0");
-            map.put("wfs", "http://www.opengis.net/wfs");
-            map.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            map.put("gsml", "urn:cgi:xmlns:CGI:GeoSciML:2.0");
-            map.put("ows", "http://www.opengis.net/ows");
-            map.put("gml", "http://www.opengis.net/gml");
-            map.put("xlink", "http://www.w3.org/1999/xlink");
-        }
-    }
+	} 
 }
