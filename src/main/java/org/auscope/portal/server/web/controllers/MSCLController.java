@@ -106,7 +106,6 @@ public class MSCLController extends BasePortalController {
             Document msclDoc = builder.parse(new ByteArrayInputStream(wfsResponse.getBytes("UTF-8")));
 
             XPath xPath = XPathFactory.newInstance().newXPath();
-
             xPath.setNamespaceContext(new IterableNamespace() {
                 {
                     map.put("mscl", "http://example.org/mscl");
@@ -137,10 +136,9 @@ public class MSCLController extends BasePortalController {
                 Node result = results.item(i);
                 Node resultNeighbour = results.item(i + 1);
 
-                if (!result.getParentNode().equals(
-                        resultNeighbour.getParentNode())) {
+                if (!result.getParentNode().equals(resultNeighbour.getParentNode())) {
                     // If they're not the same then we need not go any further,
-                    // it means that the observation being sought 
+                    // it means that the observation being sought
                     // is missing at this particular depth
                     continue;
                 }

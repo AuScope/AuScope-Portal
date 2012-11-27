@@ -42,9 +42,8 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth,
                 single : true,
                 fn : function(sender, records, successful, eOpts) {
                     // This loop just keeps looking for the chart component
-                    // until it gets a proper
-                    // result. It prevents a race condition in which the store's
-                    // load callback is
+                    // until it gets a proper result. It prevents a race 
+                    // condition in which the store's load callback is
                     // called before the chart has been instantiated.
                     var chart;
                     do {
@@ -161,21 +160,20 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                     }, {
                         xtype : 'radiogroup',
                         fieldLabel : 'Observation',
-                        // Arrange radio buttons into two columns, distributed
-                        // vertically
+                        // Arrange radio buttons into two columns, distributed vertically
                         columns : 2,
                         vertical : true,
-
                         items : [ {
                             boxLabel : 'Diameter',
                             name : 'observationToReturn',
-                            inputValue : 'diameter'
+                            inputValue : 'diameter',
+                            checked : true // I've had to do this because allowBlank:false at the group level didn't seem to work...
                         }, {
-                            boxLabel : 'P-Wav amp',
+                            boxLabel : 'P-Wave amplitude',
                             name : 'observationToReturn',
                             inputValue : 'p_wave_amplitude'
                         }, {
-                            boxLabel : 'P-Wav vel',
+                            boxLabel : 'P-Wave velocity',
                             name : 'observationToReturn',
                             inputValue : 'p_wave_velocity'
                         }, {
@@ -202,8 +200,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                     } ],
                     buttons : [ {
                         text : 'Submit',
-                        formBind : true, // only enabled once the form is
-                                            // valid
+                        formBind : true, // only enabled once the form is valid
                         handler : function() {
                             var formValues = this.up('form').getForm()
                                     .getValues();
