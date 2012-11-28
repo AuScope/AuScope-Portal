@@ -1,6 +1,8 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
@@ -11,6 +13,7 @@ import org.auscope.portal.core.services.SISSVoc2Service;
 import org.auscope.portal.core.services.responses.vocab.Concept;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.web.service.ErmlVocabService;
+import org.auscope.portal.server.web.service.NvclVocabService;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,13 +34,7 @@ public class TestVocabController extends PortalTestClass {
      */
     private VocabController vocabController;
 
-
-    /**
-     * Mock property configure-er.
-     */
-    private PortalPropertyPlaceholderConfigurer propertyConfigurer = context.mock(PortalPropertyPlaceholderConfigurer.class);
-
-    private SISSVoc2Service mockService = context.mock(SISSVoc2Service.class);
+    private NvclVocabService mockNvclVocabService = context.mock(NvclVocabService.class);
     private ErmlVocabService mockErmlVocabService = context.mock(ErmlVocabService.class);
 
     /**
@@ -47,7 +44,7 @@ public class TestVocabController extends PortalTestClass {
      */
     @Before
     public void setUp() throws Exception {
-        this.vocabController = new VocabController(propertyConfigurer, mockService, mockErmlVocabService);
+        this.vocabController = new VocabController(mockNvclVocabService, mockErmlVocabService);
     }
 
     @Test
@@ -55,16 +52,10 @@ public class TestVocabController extends PortalTestClass {
         final String url = "http://example.org";
         final String repository = "repo";
         final String label = "label";
-
-        final Concept concept = new Concept("urn:value");
-        final Concept[] concepts = new Concept[] {concept};
-
-        concept.setPreferredLabel("pref-label");
-        concept.setDefinition("defn");
+        final List<String> defns = Arrays.asList("defn");
 
         context.checking(new Expectations() {{
-            oneOf(propertyConfigurer).resolvePlaceholder("HOST.vocabService.url");will(returnValue(url));
-            oneOf(mockService).getConceptByLabel(url, repository, label);will(returnValue(concepts));
+            oneOf(mockNvclVocabService).getScalarDefinitionsByLabel(label);will(returnValue(defns));
         }});
 
         ModelAndView mav = vocabController.getScalarQuery(repository, label);
@@ -72,9 +63,9 @@ public class TestVocabController extends PortalTestClass {
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         ModelMap data = (ModelMap)mav.getModel().get("data");
         Assert.assertNotNull(data);
-        Assert.assertEquals(concept.getPreferredLabel(), data.get("label"));
-        Assert.assertEquals(concept.getDefinition(), data.get("definition"));
-        Assert.assertEquals(concept.getDefinition(), data.get("scopeNote"));
+        Assert.assertEquals(label, data.get("label"));
+        Assert.assertEquals(defns.get(0), data.get("definition"));
+        Assert.assertEquals(defns.get(0), data.get("scopeNote"));
     }
 
     @Test
@@ -84,8 +75,7 @@ public class TestVocabController extends PortalTestClass {
         final String label = "label";
 
         context.checking(new Expectations() {{
-            oneOf(propertyConfigurer).resolvePlaceholder("HOST.vocabService.url");will(returnValue(url));
-            oneOf(mockService).getConceptByLabel(url, repository, label);will(throwException(new PortalServiceException("")));
+            oneOf(mockNvclVocabService).getScalarDefinitionsByLabel(label);will(throwException(new PortalServiceException("")));
         }});
 
         ModelAndView mav = vocabController.getScalarQuery(repository, label);

@@ -1,16 +1,15 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.server.controllers.BasePortalController;
-import org.auscope.portal.core.services.SISSVoc2Service;
-import org.auscope.portal.core.services.responses.vocab.Concept;
 import org.auscope.portal.server.web.service.ErmlVocabService;
+import org.auscope.portal.server.web.service.NvclVocabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,9 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class VocabController extends BasePortalController {
     private final Log log = LogFactory.getLog(getClass());
 
-
-    private PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer;
-    private SISSVoc2Service sissVoc2Service;
+    private NvclVocabService nvclVocabService;
     private ErmlVocabService ermlVocabService;
 
     /**
@@ -35,12 +32,10 @@ public class VocabController extends BasePortalController {
      * @param
      */
     @Autowired
-    public VocabController(PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer,
-                           SISSVoc2Service sissVoc2Service, ErmlVocabService ermlVocabService) {
+    public VocabController(NvclVocabService nvclVocabService, ErmlVocabService ermlVocabService) {
         super();
-        this.sissVoc2Service = sissVoc2Service;
+        this.nvclVocabService = nvclVocabService;
         this.ermlVocabService = ermlVocabService;
-        this.portalPropertyPlaceholderConfigurer = portalPropertyPlaceholderConfigurer;
     }
 
     /**
@@ -62,17 +57,15 @@ public class VocabController extends BasePortalController {
         //Attempt to request and parse our response
         try {
             //Do the request
-            String url = portalPropertyPlaceholderConfigurer.resolvePlaceholder("HOST.vocabService.url");
-            Concept[] concepts = sissVoc2Service.getConceptByLabel(url, repository, label);
+            List<String> definitions = nvclVocabService.getScalarDefinitionsByLabel(label);
 
-            //Extract our strings
-            String labelString = "";
-            String scopeNoteString = "";
-            String definitionString = "";
-            if (concepts != null && concepts.length > 0) {
-                labelString = concepts[0].getPreferredLabel();
-                scopeNoteString = concepts[0].getDefinition();  //this is for legacy support
-                definitionString = concepts[0].getDefinition();
+            String labelString = null;
+            String scopeNoteString = null;
+            String definitionString = null;
+            if (definitions != null && definitions.size() > 0) {
+                labelString = label;
+                scopeNoteString = definitions.get(0);  //this is for legacy support
+                definitionString = definitions.get(0);
             }
 
             return generateJSONResponseMAV(true, createScalarQueryModel(scopeNoteString, labelString, definitionString), "");
