@@ -39,12 +39,12 @@ public class TestAuScopeAdminService extends PortalTestClass {
             oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
             will(returnValue(vocabResponse));
         }});
 
         //Our only restriction is asserting no errors
-        AdminDiagnosticResponse response = adminService.vocabConnectivity(vocabUrl);
+        AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);
         Assert.assertNotNull(response);
         Assert.assertEquals(0, response.getWarnings().size());
         Assert.assertEquals(0, response.getErrors().size());
@@ -67,12 +67,12 @@ public class TestAuScopeAdminService extends PortalTestClass {
             oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
             will(returnValue(vocabResponse));
         }});
 
         //Our only restriction is asserting errors
-        AdminDiagnosticResponse response = adminService.vocabConnectivity(vocabUrl);
+        AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);
         Assert.assertNotNull(response);
         Assert.assertEquals(0, response.getWarnings().size());
         Assert.assertEquals(2, response.getErrors().size());
@@ -95,12 +95,12 @@ public class TestAuScopeAdminService extends PortalTestClass {
             oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
             will(returnValue(vocabResponse));
         }});
 
         //Our only restriction is asserting errors (the first test will succeed because we don't test its validity)
-        AdminDiagnosticResponse response = adminService.vocabConnectivity(vocabUrl);
+        AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);
         Assert.assertNotNull(response);
         Assert.assertEquals(0, response.getWarnings().size());
         Assert.assertEquals(1, response.getErrors().size());
@@ -121,12 +121,12 @@ public class TestAuScopeAdminService extends PortalTestClass {
             oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
             will(throwException(new ConnectException()));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, VocabController.COMMODITY_REPOSITORY, "*").getURI().toString(), null)));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
             will(throwException(new ConnectException()));
         }});
 
         //Our only restriction is asserting errors
-        AdminDiagnosticResponse response = adminService.vocabConnectivity(vocabUrl);
+        AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);
         Assert.assertNotNull(response);
         Assert.assertEquals(0, response.getWarnings().size());
         Assert.assertEquals(2, response.getErrors().size());

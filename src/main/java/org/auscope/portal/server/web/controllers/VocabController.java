@@ -1,5 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.Map;
+
 import net.sf.json.JSONArray;
 
 import org.apache.commons.logging.Log;
@@ -8,7 +10,7 @@ import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.SISSVoc2Service;
 import org.auscope.portal.core.services.responses.vocab.Concept;
-import org.auscope.portal.core.view.JSONModelAndView;
+import org.auscope.portal.server.web.service.ErmlVocabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,16 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class VocabController extends BasePortalController {
-    /** The name of the SISSVoc repository for ERML commodities */
-    public static final String COMMODITY_REPOSITORY = "commodity_vocab";
-    /** repository name for the Geoscience Australia darwin theme vocabulary*/
-    public static final String DARWIN_REPOSITORY = "ga-darwin";
-
     private final Log log = LogFactory.getLog(getClass());
 
 
     private PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer;
-    private SISSVoc2Service service;
+    private SISSVoc2Service sissVoc2Service;
+    private ErmlVocabService ermlVocabService;
 
     /**
      * Construct
@@ -38,9 +36,10 @@ public class VocabController extends BasePortalController {
      */
     @Autowired
     public VocabController(PortalPropertyPlaceholderConfigurer portalPropertyPlaceholderConfigurer,
-                           SISSVoc2Service service) {
+                           SISSVoc2Service sissVoc2Service, ErmlVocabService ermlVocabService) {
         super();
-        this.service = service;
+        this.sissVoc2Service = sissVoc2Service;
+        this.ermlVocabService = ermlVocabService;
         this.portalPropertyPlaceholderConfigurer = portalPropertyPlaceholderConfigurer;
     }
 
@@ -64,7 +63,7 @@ public class VocabController extends BasePortalController {
         try {
             //Do the request
             String url = portalPropertyPlaceholderConfigurer.resolvePlaceholder("HOST.vocabService.url");
-            Concept[] concepts = service.getConceptByLabel(url, repository, label);
+            Concept[] concepts = sissVoc2Service.getConceptByLabel(url, repository, label);
 
             //Extract our strings
             String labelString = "";
@@ -102,30 +101,28 @@ public class VocabController extends BasePortalController {
     @RequestMapping("getAllCommodities.do")
     public ModelAndView getAllCommodities() throws Exception {
         JSONArray dataItems = new JSONArray();
+        Map<String, String> urnLabelMappings = null;
 
         //Attempt to request and parse our response
         try {
-            //Do the request
-            String url = portalPropertyPlaceholderConfigurer.resolvePlaceholder("HOST.vocabService.url");
-
-            Concept[] concepts = service.getCommodityConcepts(url, COMMODITY_REPOSITORY, "urn:cgi:classifierScheme:GA:commodity");
-
-            for (Concept concept : concepts) {
-                JSONArray tableRow = new JSONArray();
-
-                tableRow.add(concept.getUrn());
-                tableRow.add(concept.getLabel());
-
-                dataItems.add(tableRow);
-            }
-
-            return new JSONModelAndView(dataItems);
-
+            urnLabelMappings = ermlVocabService.getGaCommodityConcepts("en");
         } catch (Exception ex) {
             //On error, just return failure JSON (and the response string if any)
-            log.error("getAllCommodities Exception: " + ex.getMessage());
-
-            return new JSONModelAndView(dataItems);
+            log.error("Error accessing commodity mappings: " + ex.getMessage());
+            log.debug("Exception: ", ex);
+            return generateJSONResponseMAV(false);
         }
+
+        //Turn our map of urns -> labels into an array of arrays for the view
+        for (String urn : urnLabelMappings.keySet()) {
+            String label = urnLabelMappings.get(urn);
+
+            JSONArray tableRow = new JSONArray();
+            tableRow.add(urn);
+            tableRow.add(label);
+            dataItems.add(tableRow);
+        }
+
+        return generateJSONResponseMAV(true, dataItems, "");
     }
 }

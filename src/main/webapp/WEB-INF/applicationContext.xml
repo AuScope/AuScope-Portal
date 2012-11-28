@@ -99,4 +99,12 @@
         </constructor-arg>
     </bean>
 
+    <bean id="ermlVocabService" class="org.auscope.portal.server.web.service.ErmlVocabService">
+        <constructor-arg name="httpServiceCaller" ref="httpServiceCaller"/>
+        <constructor-arg name="commodityVocabMethodMaker">
+            <bean class="org.auscope.portal.mineraloccurrence.CommodityVocabMethodMaker">
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="baseUrl" value="${HOST.vocabService.url}"/>
+    </bean>
 </beans>

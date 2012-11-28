@@ -12,7 +12,6 @@ import org.auscope.portal.core.services.namespaces.VocabNamespaceContext;
 import org.auscope.portal.core.services.responses.vocab.Description;
 import org.auscope.portal.core.services.responses.vocab.DescriptionFactory;
 import org.auscope.portal.core.util.DOMUtil;
-import org.auscope.portal.server.web.controllers.VocabController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -43,7 +42,7 @@ public class AuScopeAdminService extends AdminService {
      * @param vocabServiceUrl The SISSVoc endpoint
      * @return
      */
-    public AdminDiagnosticResponse vocabConnectivity(String vocabServiceUrl) {
+    public AdminDiagnosticResponse sissVoc2Connectivity(String vocabServiceUrl) {
         AdminDiagnosticResponse diagnosticResponse = new AdminDiagnosticResponse();
 
         //Is the repository info request returning valid XML?
@@ -62,7 +61,7 @@ public class AuScopeAdminService extends AdminService {
 
         //Is the commodity vocab up and running (does it have any concepts?)
         //We want a pretty good level of error granularity here (hence the nested try-catch blocks)
-        method = methodMaker.getConceptByLabelMethod(vocabServiceUrl, VocabController.COMMODITY_REPOSITORY, "*");
+        method = methodMaker.getConceptByLabelMethod(vocabServiceUrl, "commodity_vocab", "*");
         try {
             diagnosticResponse.addDetail(String.format("Test commodities URL has been resolved as '%1$s'", method.getURI()));
         } catch (Exception ex) {

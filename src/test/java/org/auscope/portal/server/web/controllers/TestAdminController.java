@@ -54,7 +54,7 @@ public class TestAdminController extends PortalTestClass {
             oneOf(mockProperties).resolvePlaceholder("HOST.vocabService.url");
             will(returnValue(vocabUrl));
 
-            oneOf(mockService).vocabConnectivity(vocabUrl);
+            oneOf(mockService).sissVoc2Connectivity(vocabUrl);
             will(returnValue(response));
         }});
 

@@ -118,7 +118,7 @@ public class AdminController {
             return generateTestResponse(error); // no point proceeding in this case
         }
 
-        AdminDiagnosticResponse response = adminService.vocabConnectivity(vocabServiceUrl);
+        AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabServiceUrl);
         return generateTestResponse(response);
     }
 

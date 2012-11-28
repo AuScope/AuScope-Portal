@@ -1,10 +1,16 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.sf.json.JSONArray;
+
 import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.SISSVoc2Service;
 import org.auscope.portal.core.services.responses.vocab.Concept;
 import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.server.web.service.ErmlVocabService;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,6 +38,7 @@ public class TestVocabController extends PortalTestClass {
     private PortalPropertyPlaceholderConfigurer propertyConfigurer = context.mock(PortalPropertyPlaceholderConfigurer.class);
 
     private SISSVoc2Service mockService = context.mock(SISSVoc2Service.class);
+    private ErmlVocabService mockErmlVocabService = context.mock(ErmlVocabService.class);
 
     /**
      * Setup.
@@ -40,7 +47,7 @@ public class TestVocabController extends PortalTestClass {
      */
     @Before
     public void setUp() throws Exception {
-        this.vocabController = new VocabController(propertyConfigurer, mockService);
+        this.vocabController = new VocabController(propertyConfigurer, mockService, mockErmlVocabService);
     }
 
     @Test
@@ -82,6 +89,51 @@ public class TestVocabController extends PortalTestClass {
         }});
 
         ModelAndView mav = vocabController.getScalarQuery(repository, label);
+        Assert.assertNotNull(mav);
+        Assert.assertFalse((Boolean) mav.getModel().get("success"));
+    }
+
+    @Test
+    public void testGetErmlCommoditues() throws Exception {
+        final Map<String, String> serviceResult = new HashMap<String, String>();
+
+        serviceResult.put("urn:1", "label1");
+        serviceResult.put("urn:2", "label2");
+
+
+        context.checking(new Expectations() {{
+            oneOf(mockErmlVocabService).getGaCommodityConcepts("en");will(returnValue(serviceResult));
+        }});
+
+        ModelAndView mav = vocabController.getAllCommodities();
+        Assert.assertNotNull(mav);
+        Assert.assertTrue((Boolean) mav.getModel().get("success"));
+
+        JSONArray data = (JSONArray) mav.getModel().get("data");
+        Assert.assertNotNull(data);
+        Assert.assertEquals(serviceResult.size(), data.size());
+
+        //We want to make sure each of our map items are included in the list
+        //We do this by removing items from serviceResult as they appear in the response
+        //Success will be measured by an empty serviceResult
+        for (Object obj : data) {
+            String urn = ((JSONArray) obj).getString(0);
+            String label = ((JSONArray) obj).getString(1);
+
+            Assert.assertEquals(serviceResult.get(urn), label);
+            serviceResult.remove(urn);
+        }
+
+        Assert.assertEquals("Service result contains items that were NOT included in the JSON array response", 0, serviceResult.size());
+    }
+
+    @Test
+    public void testGetErmlCommodituesError() throws Exception {
+        context.checking(new Expectations() {{
+            oneOf(mockErmlVocabService).getGaCommodityConcepts("en");will(throwException(new PortalServiceException("")));
+        }});
+
+        ModelAndView mav = vocabController.getAllCommodities();
         Assert.assertNotNull(mav);
         Assert.assertFalse((Boolean) mav.getModel().get("success"));
     }
