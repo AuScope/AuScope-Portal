@@ -18,7 +18,10 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
                     root : 'data'
                 }
             },
-            autoLoad : true
+            sorters : [{
+                property : 'label',
+                direction : 'ASC'
+            }]
         });
 
         Ext.apply(config, {
