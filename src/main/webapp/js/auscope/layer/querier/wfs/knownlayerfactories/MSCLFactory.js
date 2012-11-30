@@ -2,118 +2,106 @@
  * A factory for creating an MSCL presentation pane.
  */
 Ext.require('Ext.chart.*');
-Ext.require([ 'Ext.Window', 'Ext.fx.target.Sprite', 'Ext.layout.container.Fit',
-        'Ext.window.MessageBox' ]);
+Ext.require([ 'Ext.Window', 'Ext.fx.target.Sprite', 'Ext.layout.container.Fit', 'Ext.window.MessageBox' ]);
 
-function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth,
-        observationToReturn) {
-
+function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observationsToReturn, maskedElement) {
+    // I want this to always be an array, even if only has one element.
+    observationsToReturn = [].concat(observationsToReturn);
+    
     // Define the model:
     Ext.define('DynamicModel', {
         extend : 'Ext.data.Model',
-        fields : [ 'depth', observationToReturn ]
+        fields : observationsToReturn.concat('depth')
     });
 
-    // Create the datastore:
-    var store = Ext.create('Ext.data.Store', {
-        model : 'DynamicModel',
-        proxy : {
-            type : 'ajax',
-            url : 'getMsclObservationsForGraph.do',
-            pageParam : undefined,
-            startParam : undefined,
-            limitParam : undefined,
-            extraParams : {
-                // .../wfs?request=GetFeature&typename=mscl:scanned_data&filter=%3CFilter%3E%0D%0A%09%3CPropertyIs%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Aborehole%3C%2FPropertyName%3E%0D%0A%09%09%3CLiteral%3EPRC-5%3C%2FLiteral%3E%0D%0A%09%3C%2FPropertyIs%3E%0D%0A%09%3CPropertyIsBetween%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Adepth%3C%2FPropertyName%3E%0D%0A%09%09%3CLowerBoundary%3E%0D%0A%09%09%09%3CLiteral%3E66.9%3C%2FLiteral%3E%0D%0A%09%09%3C%2FLowerBoundary%3E%0D%0A%09%09%3CUpperBoundary%3E%0D%0A%09%09%09%3CLiteral%3E89%3C%2FLiteral%3E%0D%0A%09%09%3C%2FUpperBoundary%3E%0D%0A%09%3C%2FPropertyIsBetween%3E%0D%0A%3C%2FFilter%3E
-                serviceUrl : serviceUrl,
-                boreholeHeaderId : boreholeHeaderId,
-                startDepth : startDepth,
-                endDepth : endDepth,
-                observationToReturn : observationToReturn
-            },
-            reader : {
-                type : 'json',
-                root : 'data.series'
-            },
-            noCache : false
+    Ext.Ajax.request({
+        url : 'getMsclObservationsForGraph.do',
+        params: {
+            // .../wfs?request=GetFeature&typename=mscl:scanned_data&filter=%3CFilter%3E%0D%0A%09%3CPropertyIs%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Aborehole%3C%2FPropertyName%3E%0D%0A%09%09%3CLiteral%3EPRC-5%3C%2FLiteral%3E%0D%0A%09%3C%2FPropertyIs%3E%0D%0A%09%3CPropertyIsBetween%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Adepth%3C%2FPropertyName%3E%0D%0A%09%09%3CLowerBoundary%3E%0D%0A%09%09%09%3CLiteral%3E66.9%3C%2FLiteral%3E%0D%0A%09%09%3C%2FLowerBoundary%3E%0D%0A%09%09%3CUpperBoundary%3E%0D%0A%09%09%09%3CLiteral%3E89%3C%2FLiteral%3E%0D%0A%09%09%3C%2FUpperBoundary%3E%0D%0A%09%3C%2FPropertyIsBetween%3E%0D%0A%3C%2FFilter%3E
+            serviceUrl : serviceUrl,
+            boreholeHeaderId : boreholeHeaderId,
+            startDepth : startDepth,
+            endDepth : endDepth,
+            observationsToReturn : observationsToReturn
         },
-        listeners : {
-            load : {
-                single : true,
-                fn : function(sender, records, successful, eOpts) {
-                    // This loop just keeps looking for the chart component
-                    // until it gets a proper result. It prevents a race 
-                    // condition in which the store's load callback is
-                    // called before the chart has been instantiated.
-                    var chart;
-                    do {
-                        chart = Ext.getCmp('chart');
-                    } while (chart == undefined);
-                    chart.getEl().unmask();
-                }
-            }
-        }
-
-    });
-
-    store.load();
-
-    xAxisTitle = 
-        observationToReturn == 'diameter' ? 'Diameter (cm)' :
-        observationToReturn == 'p_wave_amplitude' ? 'P-Wave amp (dB)' :
-        observationToReturn == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
-        observationToReturn == 'density' ? 'Density (gm/cc)' :
-        observationToReturn == 'magnetic_susceptibility' ? 'Mag. Sus. (cgs)' :
-        observationToReturn == 'impedance' ? 'Impedance (Ohm)' :
-        observationToReturn == 'natural_gamma' ? 'Natural gamma (Hz)' :
-        observationToReturn == 'resistivity' ? 'Resistivity (Ohm/m)' :
-        undefined;
-
-    Ext.create('Ext.Window', {
-        border : true,
-        layout : 'fit',
-        resizable : false,
-        modal : true,
-        plain : false,
-        title : 'Changes to ' + xAxisTitle + ' over depth',
-        items : [ Ext.create('Ext.chart.Chart', {
-            id : 'chart',
-            height : 700,
-            width : 400,
-            shadow : false,
-            store : store,
-            axes : [ {
-                title : 'Depth (m)',
-                type : 'Numeric',
-                position : 'left',
-                fields : [ 'depth' ],
-                minorTickSteps : 1
-            }, {
-                title : xAxisTitle,
-                type : 'Numeric',
-                position : 'top',
-                fields : [ observationToReturn ],
-                minorTickSteps : 1
-            } ],
-            series : [ {
-                type : 'line',
-                xField : observationToReturn,
-                yField : 'depth',
-                showMarkers : false,
-                style : {
-                    'stroke-width' : 2
-                }
-            } ],
-            listeners : {
-                afterrender : {
-                    single : true,
-                    fn : function(chart) {
-                        chart.getEl().mask("Loading...");
+        success: function(response) {
+            var responseObject = Ext.decode(response.responseText);
+            var windowTitle = '';
+            var charts = [];
+            for (var i = 0; i < observationsToReturn.length; i++) {
+                var first = i == 0;
+                var xAxisTitle = 
+                    observationsToReturn[i] == 'diameter' ? 'Diameter (cm)' :
+                    observationsToReturn[i] == 'p_wave_amplitude' ? 'P-Wave amp (dB)' :
+                    observationsToReturn[i] == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
+                    observationsToReturn[i] == 'density' ? 'Density (gm/cc)' :
+                    observationsToReturn[i] == 'magnetic_susceptibility' ? 'Mag. Sus. (cgs)' :
+                    observationsToReturn[i] == 'impedance' ? 'Impedance (Ohm)' :
+                    observationsToReturn[i] == 'natural_gamma' ? 'Natural gamma (Hz)' :
+                    observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ohm/m)' : 
+                    undefined;
+                
+                // Add the comma if needed:
+                windowTitle += (windowTitle === '' ? '' : ', ') + xAxisTitle;
+                
+                var store = Ext.create('Ext.data.Store', {
+                    model : 'DynamicModel',
+                    data : responseObject.data.series
+                });
+                
+                store.filter({ 
+                    fn: function (item) {
+                        // Only use items that actually have a value for the 
+                        // desired observation:
+                        return item.data[observationsToReturn[i]] != '';
                     }
-                }
+                });
+
+                // Create the array of charts
+                charts[i] = Ext.create('Ext.chart.Chart', {
+                    height : 700,
+                    width : first ? 400 : 369, // The first chart is slightly wider to accommodate its yAxis label.
+                    shadow : false,
+                    store : store,
+                    axes : [ {
+                        title : first ? 'Depth (m)' : false, // Only the first chart will have a depth label.
+                        type : 'Numeric',
+                        position : 'left',
+                        fields : [ 'depth' ],
+                        minorTickSteps : 1
+                    }, {
+                        title : xAxisTitle,
+                        type : 'Numeric',
+                        position : 'top',
+                        fields : [ observationsToReturn[i] ],
+                        minorTickSteps : 1
+                    } ],
+                    series : [ {
+                        type : 'line',
+                        xField : observationsToReturn[i],
+                        yField : 'depth',
+                        showMarkers : false,
+                        style : {
+                            'stroke-width' : 1
+                        }
+                    } ]
+                })
             }
-        }) ]
-    }).show();
+
+            Ext.create('Ext.Window', {
+                border : true,
+                layout : 'hbox',
+                resizable : false,
+                modal : true,
+                plain : false,
+                title : 'Changes to ' + windowTitle + ' over Depth (m)',
+                items : charts
+            }).show();
+            
+            // Remove the load mask once the window has been rendered:
+            maskedElement.setLoading(false);
+        }
+    });
 }
 
 Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
@@ -139,7 +127,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
             border : false,
             tabTitle : 'MSCL Data',
             items : [ {
-                itemId : 'msclDataPanel',
                 xtype : 'fieldset',
                 title : 'Petrophysical Observations',
                 items : [ {
@@ -158,7 +145,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                         allowBlank : false,
                         minValue : 0
                     }, {
-                        xtype : 'radiogroup',
+                        xtype : 'checkboxgroup',
                         fieldLabel : 'Observation',
                         // Arrange radio buttons into two columns, distributed vertically
                         columns : 2,
@@ -167,7 +154,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                             boxLabel : 'Diameter',
                             name : 'observationToReturn',
                             inputValue : 'diameter',
-                            checked : true // I've had to do this because allowBlank:false at the group level didn't seem to work...
                         }, {
                             boxLabel : 'P-Wave amplitude',
                             name : 'observationToReturn',
@@ -202,12 +188,14 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                         text : 'Submit',
                         formBind : true, // only enabled once the form is valid
                         handler : function() {
-                            var formValues = this.up('form').getForm()
-                                    .getValues();
+                            var formValues = this.up('form').getForm().getValues();
+                            var fieldset = this.up('fieldset');
+                            fieldset.setLoading("Loading...");
                             drawGraph(parentOnlineResource.get('url'),
                                     featureId, formValues.startDepth,
                                     formValues.endDepth,
-                                    formValues.observationToReturn);
+                                    formValues.observationToReturn,
+                                    fieldset);
                         }
                     } ]
                 } ]

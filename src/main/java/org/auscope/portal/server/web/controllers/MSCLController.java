@@ -2,7 +2,6 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -16,7 +15,6 @@ import javax.xml.xpath.XPathFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.namespaces.IterableNamespace;
 import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
-import org.auscope.portal.gsml.YilgarnNamespaceContext;
 import org.auscope.portal.mscl.MSCLWFSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -95,8 +93,8 @@ public class MSCLController extends BasePortalController {
             @RequestParam("boreholeHeaderId") final String boreholeHeaderId,
             @RequestParam("startDepth") final String startDepth,
             @RequestParam("endDepth") final String endDepth,
-            @RequestParam("observationToReturn") final String observationToReturn) {
-
+            @RequestParam("observationsToReturn") final String[] observationsToReturn) {
+        
         try {
             String wfsResponse = msclWfsService.getObservations(serviceUrl, boreholeHeaderId, startDepth, endDepth);
 
@@ -123,37 +121,37 @@ public class MSCLController extends BasePortalController {
 
             // Do some rudimentary error testing:
             OWSExceptionParser.checkForExceptionResponse(msclDoc);
-
             ModelMap data = new ModelMap();
-            XPathExpression expr = xPath.compile("//mscl:scanned_data/mscl:depth | //mscl:scanned_data/mscl:" + observationToReturn);
+            
+            // Build the XPath, always including depth:
+            StringBuilder xPathString = new StringBuilder("//mscl:scanned_data/mscl:depth");
+            for (int i = 0; i < observationsToReturn.length; i++) {
+                xPathString.append(" | //mscl:scanned_data/mscl:" + observationsToReturn[i]);
+            }
+            
+            XPathExpression expr = xPath.compile(xPathString.toString());
             NodeList results = (NodeList) expr.evaluate(msclDoc, XPathConstants.NODESET);
             ArrayList<ModelMap> series = new ArrayList<ModelMap>();
-
-            // We check against length-1 because we look ahead +1 in the loop.
-            for (int i = 0; i < results.getLength() - 1; i++) {
-                // Look at i and its neighbour, i+1, to see if they belong to
-                // the same scanned data object:
+            
+            ModelMap relatedValues = null;
+            Node targetParentNode = null;
+            
+            for (int i = 0; i < results.getLength(); i++) {
                 Node result = results.item(i);
-                Node resultNeighbour = results.item(i + 1);
-
-                if (!result.getParentNode().equals(resultNeighbour.getParentNode())) {
-                    // If they're not the same then we need not go any further,
-                    // it means that the observation being sought
-                    // is missing at this particular depth
-                    continue;
+                Node currentParentNode = result.getParentNode(); 
+                if (!currentParentNode.equals(targetParentNode)) {
+                    targetParentNode = currentParentNode;
+                    
+                    // relatedValues will be null on the first entry so we don't add it.
+                    // We also don't want to add it if it only has one value; if this has
+                    // occurred it basically means that we have a depth but no observations.
+                    if (relatedValues != null && relatedValues.size() > 1) {
+                        series.add(relatedValues);
+                    }
+                    relatedValues = new ModelMap();
                 }
 
-                // If the results' parents match then it means that the
-                // observation relates to this depth.
-
-                // Because we've processed the neighbour we must increment i so
-                // that we don't try to handle it again:
-                i++;
-
-                ModelMap pair = new ModelMap();
-                pair.put(result.getLocalName(), Float.parseFloat(result.getTextContent()));
-                pair.put(resultNeighbour.getLocalName(), Float.parseFloat(resultNeighbour.getTextContent()));
-                series.add(pair);
+                relatedValues.put(result.getLocalName(), Float.parseFloat(result.getTextContent()));
             }
             
             Collections.<ModelMap>sort(series, new Comparator<ModelMap>() {
