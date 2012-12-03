@@ -431,7 +431,8 @@ public class EarthResourcesFilterController extends BasePortalController {
         FilterBoundingBox bbox = null;
 
         // Get the mining activities
-        String filter = this.mineralOccurrenceService.getMineFilter(commodityName,
+
+        String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(commodityName,
                 bbox);
 
         String style=this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
@@ -459,7 +460,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>" + "<Rule>"
                 + "<Name>portal-style</Name>"
                 + "<Abstract>portal-style</Abstract>"
-                //+ filter
+                + filter
                 + "<PointSymbolizer>"
                 + "<Graphic>"
                 + "<Mark>"
@@ -472,23 +473,20 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "</Graphic>"
                 + "</PointSymbolizer>"
                 + "</Rule>"
-                + "<Rule>"
-                + "<Name>portal-style-2</Name>"
-                + "<Abstract>portal-style-2</Abstract>"
-                + "<PointSymbolizer>"
-                + "<Graphic>"
-                + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
-                + "<Fill>"
-                + "<CssParameter name=\"fill\">#00FF00</CssParameter>"
-                + "</Fill>"
-                + "</Mark>"
-                + "<Size>2</Size>"
-                + "</Graphic>"
-                + "</PointSymbolizer>"
-                + "</Rule>"
                 + "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
         return style;
     }
+// VT: Keeping this temporily  whilst vocab is getting fixed. To be deleted.
+//    public String myFilter(){
+//        String  result="<ogc:Filter>" +
+//        "<ogc:PropertyIsEqualTo >" +
+//        "<ogc:PropertyName>gsml:specification/er:MineralOccurrence/er:commodityDescription/er:Commodity/er:commodityName</ogc:PropertyName> " +
+//        "<ogc:Literal>urn:cgi:classifier:GA:commodity:Cu</ogc:Literal>" +
+//        "</ogc:PropertyIsEqualTo>" +
+//        "</ogc:Filter>";
+//        return result;
+//
+//    }
+
 }
