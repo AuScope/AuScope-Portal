@@ -51,6 +51,24 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 
                 store.filter({ 
                     fn: function (item) {
+                        // TODO ReverseAxisIssue: This code is here to workaround a
+                        // limitation of ExtJS 4.1.1a; it doesn't have any option to
+                        // 'reverse' the order of the y axis's values. We want to show
+                        // the y values ascending as you read from top to bottom since
+                        // this results in a plot which is more intuitive, i.e: as you
+                        // look DOWN the line, you're seeing points that indicate the
+                        // values of observations from cores further DOWN the borehole.
+                        // The workaround is to invert the depth so that it becomes
+                        // negative, and then manipulate the label renderer so that it
+                        // doesn't display the negative sign.
+                        // Look at the other TODO named 'ReverseAxisIssue', below,
+                        // and see http://stackoverflow.com/questions/6133676/create-numericaxis-with-config-param-reverse-in-ext4
+                        // for more info.
+                        // This workaround can be removed if a new version of ExtJS
+                        // reintroduces a 'reverse' option for the axis object.
+                        item.data['depth'] = -item.data['depth'];
+                        // End ReverseAxisIssue.
+                        
                         // Only use items that actually have a value for the 
                         // desired observation:
                         return item.data[observationsToReturn[i]] != '';
@@ -69,6 +87,16 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         position : 'left',
                         fields : [ 'depth' ],
                         minorTickSteps : 1
+                        // TODO ReverseAxisIssue: See other TODO with this name,
+                        // above, for more information.
+                        // This code is here to modify the label's value so that
+                        // it doesn't include the negative sign.                        
+                        ,label : {
+                            renderer: function(v) {
+                                return Ext.util.Format.number(Math.abs(v), '0.0');
+                            }
+                        }
+                        // End ReverseAxisIssue.
                     }, {
                         title : xAxisTitle,
                         type : 'Numeric',
