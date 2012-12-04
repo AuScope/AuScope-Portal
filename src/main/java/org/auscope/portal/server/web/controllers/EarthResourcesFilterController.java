@@ -2,9 +2,9 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletResponse;
-
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
@@ -431,8 +431,8 @@ public class EarthResourcesFilterController extends BasePortalController {
         FilterBoundingBox bbox = null;
 
         // Get the mining activities
-
-        String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(commodityName,
+        String unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
+        String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(unescapeCommodityName,
                 bbox);
 
         String style=this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
