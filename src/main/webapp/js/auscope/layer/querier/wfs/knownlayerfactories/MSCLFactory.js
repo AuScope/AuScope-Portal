@@ -29,7 +29,9 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
             var windowTitle = '';
             var charts = [];
             for (var i = 0; i < observationsToReturn.length; i++) {
-                var first = i == 0;
+                var first = i === 0;
+                var last = i === observationsToReturn.length - 1;
+
                 var xAxisTitle = 
                     observationsToReturn[i] == 'diameter' ? 'Diameter (cm)' :
                     observationsToReturn[i] == 'p_wave_amplitude' ? 'P-Wave amp (dB)' :
@@ -41,8 +43,11 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ohm/m)' : 
                     undefined;
                 
-                // Add the comma if needed:
-                windowTitle += (windowTitle === '' ? '' : ', ') + xAxisTitle;
+                windowTitle +=
+                    // Add a comma or ampersand if needed:
+                    (first ? '' : (last ? ' & ' : ', ')) +
+                    // Remove the unit of measure:
+                    new RegExp('^(.+?) \\(').exec(xAxisTitle)[1];
                 
                 var store = Ext.create('Ext.data.Store', {
                     model : 'DynamicModel',
@@ -122,7 +127,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 resizable : false,
                 modal : true,
                 plain : false,
-                title : 'Changes to ' + windowTitle + ' over Depth (m)',
+                title : 'Changes to ' + windowTitle + ' over Depth',
                 items : charts
             }).show();
             
