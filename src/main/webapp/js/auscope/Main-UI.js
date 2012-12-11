@@ -79,7 +79,7 @@ Ext.application({
             },
             autoLoad : true
         });
-        
+
         // Create the ResearchDataLayer store
         var researchDataLayerStore = Ext.create('Ext.data.Store', {
             model : 'portal.knownlayer.KnownLayer',
@@ -141,7 +141,7 @@ Ext.application({
          * Used to show extra details for querying services
          */
         var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
-        	title : 'Filter',
+            title : 'Filter',
             region: 'south',
             layerPanel : layersPanel,
             map : map,
@@ -207,6 +207,14 @@ Ext.application({
             title : 'Featured',
             store : knownLayerStore,
             map : map,
+            tooltip : {
+                anchor : 'top',
+                title : 'Featured Layers',
+                text : '<p1>This is where the portal groups like data services under a common heading. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p1>',
+                showDelay : 100,
+                icon : 'img/information.png',
+                dismissDelay : 30000
+            },
             listeners : {
                 addlayerrequest : handleAddRecordToMap
             }
@@ -215,6 +223,12 @@ Ext.application({
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered',
             store : unmappedCSWRecordStore,
+            tooltip : {
+                title : 'Registered Layers',
+                text : 'The layers that appear here are the data services that were discovered in a remote registry but don\'t belong to any of the Featured Layer groupings.',
+                showDelay : 100,
+                dismissDelay : 30000
+            },
             map : map,
             listeners : {
                 addlayerrequest : handleAddRecordToMap
@@ -224,16 +238,28 @@ Ext.application({
         var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
             title : 'Custom',
             store : customRecordStore,
+            tooltip : {
+                title : 'Custom Data Layers',
+                text : 'This tab allows you to create your own layers from remote data service.',
+                showDelay : 100,
+                dismissDelay : 30000
+            },
             map : map,
             listeners : {
                 addlayerrequest : handleAddRecordToMap
             }
         });
-        
+
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Research Data',
             store : researchDataLayerStore,
             map : map,
+            tooltip : {
+                title : 'Research Data Layers',
+                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incorrect information.</p1>',
+                showDelay : 100,
+                dismissDelay : 30000
+            },
             listeners : {
                 addlayerrequest : handleAddRecordToMap
             }
@@ -241,7 +267,7 @@ Ext.application({
 
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
-        	title : 'Layers',
+            title : 'Layers',
             activeTab : 0,
             region : 'north',
             split : true,
