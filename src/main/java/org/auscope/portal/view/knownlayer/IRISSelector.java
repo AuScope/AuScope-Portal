@@ -21,7 +21,7 @@ public class IRISSelector implements KnownLayerSelector {
     
     @Override
     public RelationType isRelatedRecord(CSWRecord record) {
-        AbstractCSWOnlineResource[] onlineResources = record.getOnlineResourcesByType(OnlineResourceType.Unsupported);
+        AbstractCSWOnlineResource[] onlineResources = record.getOnlineResourcesByType(OnlineResourceType.IRIS);
 
         if (onlineResources.length > 0) {
             for (AbstractCSWOnlineResource onlineResource : onlineResources) {
