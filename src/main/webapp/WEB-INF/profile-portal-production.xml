@@ -51,6 +51,7 @@
                 <ref bean="knownTypeGypsumContent" />
                 <ref bean="knownTypeSilicaContent" />
                 <ref bean="knownTypeBoreholeMSCL" />
+                <ref bean="knownTypeSeismologyInSchool" />
             </list>
         </constructor-arg>
     </bean>
