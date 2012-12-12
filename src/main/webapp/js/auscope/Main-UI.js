@@ -210,7 +210,7 @@ Ext.application({
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
-                text : '<p1>This is where the portal groups like data services under a common heading. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p1>',
+                text : '<p1>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p1>',
                 showDelay : 100,
                 icon : 'img/information.png',
                 dismissDelay : 30000
@@ -225,7 +225,7 @@ Ext.application({
             store : unmappedCSWRecordStore,
             tooltip : {
                 title : 'Registered Layers',
-                text : 'The layers that appear here are the data services that were discovered in a remote registry but don\'t belong to any of the Featured Layer groupings.',
+                text : 'The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.',
                 showDelay : 100,
                 dismissDelay : 30000
             },
@@ -240,7 +240,7 @@ Ext.application({
             store : customRecordStore,
             tooltip : {
                 title : 'Custom Data Layers',
-                text : 'This tab allows you to create your own layers from remote data service.',
+                text : 'This tab allows you to create your own layers from remote data services.',
                 showDelay : 100,
                 dismissDelay : 30000
             },
@@ -256,7 +256,7 @@ Ext.application({
             map : map,
             tooltip : {
                 title : 'Research Data Layers',
-                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incorrect information.</p1>',
+                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or inaccurate information.</p1>',
                 showDelay : 100,
                 dismissDelay : 30000
             },
