@@ -4,7 +4,7 @@
     <groupId>org.auscope.portal</groupId>
     <artifactId>AuScope-Portal</artifactId>
     <packaging>war</packaging>
-    <version>2.10.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>AuScope-Portal</name>
     <description>AuScopes flagship demonstration tool</description>
     <url>http://portal.auscope.org</url>
@@ -219,7 +219,7 @@
         <dependency>
             <groupId>org.auscope.portal</groupId>
             <artifactId>portal-core</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
