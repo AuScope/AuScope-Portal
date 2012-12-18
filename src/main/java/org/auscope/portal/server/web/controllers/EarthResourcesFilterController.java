@@ -357,6 +357,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         FilterBoundingBox bbox = null;
 
         // Get the mining activities
+        // VT: Currently not working as GeoServer is returning strange error for this filer
         String filter = this.mineralOccurrenceService.getMiningActivityFilter(
                 mineName, startDate, endDate, oreProcessed, producedMaterial,
                 cutOffGrade, production, maxFeatures, bbox);
@@ -431,7 +432,10 @@ public class EarthResourcesFilterController extends BasePortalController {
         FilterBoundingBox bbox = null;
 
         // Get the mining activities
-        String unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
+        String unescapeCommodityName="";
+        if(commodityName!=null){
+            unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
+        }
         String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(unescapeCommodityName,
                 bbox);
 
