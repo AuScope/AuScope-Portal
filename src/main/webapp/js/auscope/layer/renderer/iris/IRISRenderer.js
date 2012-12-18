@@ -20,6 +20,8 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
     },
+    
+    _ajaxRequest : null,
 
     /**
      * Must be called whenever a download manager returns a response (success or failure)
@@ -73,7 +75,8 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
         var onlineResource = irisResources[0];
         var layer = me.parentLayer;
         
-        Ext.Ajax.request({
+        // Keep track of the _ajaxRequest handle so that we can abort it if need be:
+        _ajaxRequest = Ext.Ajax.request({
             url : 'getIRISStations.do',
             params : {
                 serviceUrl : serviceUrl,
@@ -87,11 +90,12 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
                 // namespace because to me it seems like they shouldn't be coupled...
                 var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : jsonReponse.data.kml, map : me.map});
                 var primitives = parser.makePrimitives(me.icon, onlineResource, layer);
-
+                
                 // Add our single points and overlays to the overlay manager (which will add them to the map)
                 me.primitiveManager.addPrimitives(primitives);
                 
-                me.renderStatus.updateResponse(serviceUrl, "xxx record(s) retrieved.");
+                var s = primitives.length == 1 ? '' : 's';
+                me.renderStatus.updateResponse(serviceUrl, primitives.length + " record" + s + " retrieved.");
             }
         });
     },
@@ -121,13 +125,13 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
      * returns - void
      */
     removeData : function() {
-        console.log('TODO removeData');
+        this.primitiveManager.clearPrimitives();
     },
 
     /**
      * An abstract function - see parent class for more info
      */
     abortDisplay : function() {
-        console.log('TODO abortDisplay');
+        Ext.Ajax.abort(_ajaxRequest);
     }
 });
