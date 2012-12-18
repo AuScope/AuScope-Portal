@@ -24,36 +24,6 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
     _ajaxRequest : null,
 
     /**
-     * Must be called whenever a download manager returns a response (success or failure)
-     *
-     * You can optionally pass in an array of markers/overlays that were rendered
-     */
-    _finishDownloadManagerResponse : function(primitiveList) {
-        console.log('TODO _finishDownloadManagerResponse');
-    },
-
-    /**
-     * Used to handle the case where the download manager returns an error
-     */
-    _handleDownloadManagerError : function(dm, message, debugInfo, onlineResource, layer) {
-        console.log('TODO _handleDownloadManagerError');
-    },
-
-    /**
-     * Used for handling the case when the user cancels their download request
-     */
-    _handleDownloadManagerCancelled : function(dm, onlineResource, layer) {
-        console.log('TODO _handleDownloadManagerCancelled');
-    },
-
-    /**
-     * Used for handling a successful response from a request's download manager
-     */
-    _handleDownloadManagerSuccess : function(dm, actualFilterParams, data, debugInfo, onlineResource, layer, icon) {
-        console.log('TODO _handleDownloadManagerSuccess');
-    },
-
-    /**
      * An implementation of the abstract base function. See comments in superclass
      * for more information.
      *
