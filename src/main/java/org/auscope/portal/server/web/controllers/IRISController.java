@@ -24,15 +24,10 @@ import javax.xml.xpath.XPathFactory;
 
 @Controller
 public class IRISController extends BasePortalController {
-    // TODO: This is being called by FeatureDownloadManager.js but it isn't
-    // really suitable: the FDM is specifically for WFS whereas the
-    // IRIS service doesn't use that interface, it has its own.
-    // typeName is being passed in which doesn't do anything....
     @RequestMapping("/getIRISStations.do")
     public ModelAndView getIRISStations(
         @RequestParam("serviceUrl") String serviceUrl,
-        @RequestParam("networkCode") String networkCode,
-        @RequestParam(required = false, value = "bbox") String bboxJson) {
+        @RequestParam("networkCode") String networkCode) {
         // Make sure the trailing separator is in place:
         serviceUrl = serviceUrl.endsWith("/") ? serviceUrl : serviceUrl + "/";
 
@@ -63,7 +58,8 @@ public class IRISController extends BasePortalController {
                 Node stationEpoch = stationEpochs.item(i);
                 kml.append(
                         String.format(
-                                "<Placemark><name>%s</name><description><![CDATA[GENERIC_PARSER:%s]]></description><MultiGeometry><Point><Style><IconStyle><Icon><href>http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png</href></Icon></IconStyle></Style><coordinates>%s,%s,0</coordinates></Point></MultiGeometry></Placemark>",
+                                "<Placemark><name>%s</name><description><![CDATA[GENERIC_PARSER:%s]]></description>" +
+                                "<MultiGeometry><Point><coordinates>%s,%s,0</coordinates></Point></MultiGeometry></Placemark>",
                                 nameExpression.evaluate(stationEpoch, XPathConstants.STRING),
                                 i,
                                 lonExpression.evaluate(stationEpoch, XPathConstants.STRING),

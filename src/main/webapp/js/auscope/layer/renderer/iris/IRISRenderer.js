@@ -13,7 +13,6 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
     },
 
     constructor: function(config) {
-        // TODO: Adam: is this bad? I'm just borrowing the WFS one... it gets the little paddle icon in the 'Active Layers' list:
         this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
             iconUrl : config.icon ? config.icon.getUrl() : ''
         });
