@@ -21,6 +21,11 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
         this.callParent(arguments);
     },
     
+    /**
+     * A handle to the currently executed ajax request. It's kept so
+     * that we can abort the request if the user tries to remove the layer
+     * before it's completed.
+     */
     _ajaxRequest : null,
 
     /**
@@ -44,7 +49,7 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
         var irisResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.IRIS);
         var onlineResource = irisResources[0];
         var layer = me.parentLayer;
-        
+
         // Keep track of the _ajaxRequest handle so that we can abort it if need be:
         _ajaxRequest = Ext.Ajax.request({
             url : 'getIRISStations.do',
