@@ -256,7 +256,7 @@ Ext.application({
             map : map,
             tooltip : {
                 title : 'Research Data Layers',
-                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or inaccurate information.</p1>',
+                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p1>',
                 showDelay : 100,
                 dismissDelay : 30000
             },
