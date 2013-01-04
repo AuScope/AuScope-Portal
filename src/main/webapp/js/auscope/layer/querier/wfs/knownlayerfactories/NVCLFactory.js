@@ -290,29 +290,29 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
                                 // fields
                                 items:[{
-                                    xtype       : 'spinnerfield',
+                                    xtype       : 'numberfield',
                                     fieldLabel  : 'Start Depth (m)',
                                     name        : 'startDepth',
                                     minValue    : 0,
                                     value       : 0,
                                     accelerate  : true
                                 },{
-                                    xtype       : 'spinnerfield',
+                                    xtype       : 'numberfield',
                                     fieldLabel  : 'End Depth (m)',
                                     name        : 'endDepth',
                                     minValue    : 0,
                                     value       : 99999,
                                     accelerate  : true
                                 },{
-                                    xtype                   : 'spinnerfield',
+                                    xtype                   : 'numberfield',
                                     fieldLabel              : 'Interval (m)',
                                     name                    : 'samplingInterval',
                                     minValue                : 0,
                                     value                   : 1.0,
                                     allowDecimals           : true,
                                     decimalPrecision        : 1,
-                                    incrementValue          : 0.1,
-                                    alternateIncrementValue : 2.1,
+                                    step                    : 0.1,
+                                    //alternateIncrementValue : 2.1,
                                     accelerate              : true
                                 }]
                             },{

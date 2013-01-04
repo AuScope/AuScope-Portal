@@ -7,7 +7,7 @@ Ext.require([ 'Ext.Window', 'Ext.fx.target.Sprite', 'Ext.layout.container.Fit', 
 function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observationsToReturn, maskedElement) {
     // I want this to always be an array, even if only has one element.
     observationsToReturn = [].concat(observationsToReturn);
-    
+
     // Define the model:
     Ext.define('DynamicModel', {
         extend : 'Ext.data.Model',
@@ -32,7 +32,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 var first = i === 0;
                 var last = i === observationsToReturn.length - 1;
 
-                var xAxisTitle = 
+                var xAxisTitle =
                     observationsToReturn[i] == 'diameter' ? 'Diameter (cm)' :
                     observationsToReturn[i] == 'p_wave_amplitude' ? 'P-Wave amp (dB)' :
                     observationsToReturn[i] == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
@@ -40,21 +40,21 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     observationsToReturn[i] == 'magnetic_susceptibility' ? 'Mag. Sus. (cgs)' :
                     observationsToReturn[i] == 'impedance' ? 'Impedance (Ohm)' :
                     observationsToReturn[i] == 'natural_gamma' ? 'Natural gamma (Hz)' :
-                    observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ohm/m)' : 
+                    observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ohm/m)' :
                     undefined;
-                
+
                 windowTitle +=
                     // Add a comma or ampersand if needed:
                     (first ? '' : (last ? ' & ' : ', ')) +
                     // Remove the unit of measure:
                     new RegExp('^(.+?) \\(').exec(xAxisTitle)[1];
-                
+
                 var store = Ext.create('Ext.data.Store', {
                     model : 'DynamicModel',
                     data : responseObject.data.series
                 });
-                
-                store.filter({ 
+
+                store.filter({
                     fn: function (item) {
                         // TODO ReverseAxisIssue: This code is here to workaround a
                         // limitation of ExtJS 4.1.1a; it doesn't have any option to
@@ -73,8 +73,8 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         // reintroduces a 'reverse' option for the axis object.
                         item.data['depth'] = -item.data['depth'];
                         // End ReverseAxisIssue.
-                        
-                        // Only use items that actually have a value for the 
+
+                        // Only use items that actually have a value for the
                         // desired observation:
                         return item.data[observationsToReturn[i]] != '';
                     }
@@ -95,7 +95,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         // TODO ReverseAxisIssue: See other TODO with this name,
                         // above, for more information.
                         // This code is here to modify the label's value so that
-                        // it doesn't include the negative sign.                        
+                        // it doesn't include the negative sign.
                         ,label : {
                             renderer: function(v) {
                                 return Ext.util.Format.number(Math.abs(v), '0.0');
@@ -130,7 +130,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 title : 'Changes to ' + windowTitle + ' over Depth',
                 items : charts
             }).show();
-            
+
             // Remove the load mask once the window has been rendered:
             maskedElement.setLoading(false);
         }
@@ -170,12 +170,16 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                         fieldLabel : 'Start depth (m)',
                         name : 'startDepth',
                         allowBlank : false,
+                        repeatTriggerClick : false,
+                        value : 0,
                         minValue : 0
                     }, {
                         xtype : 'numberfield',
                         fieldLabel : 'End depth (m)',
                         name : 'endDepth',
                         allowBlank : false,
+                        repeatTriggerClick : false,
+                        value : 2000,
                         minValue : 0
                     }, {
                         xtype : 'checkboxgroup',

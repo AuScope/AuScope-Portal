@@ -35,7 +35,7 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
             layout: 'anchor',
             items: [{
                 xtype: 'fieldset',
-                title: '<span qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
+                title: '<span data-qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
                           'Mineral Occurrence Filter Properties' +
                        '</span>',
                 autoHeight: true,
@@ -45,7 +45,7 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
                     xtype : 'combo',
                     anchor: '100%',
                     name: 'commodityName',
-                    fieldLabel: '<span qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
+                    fieldLabel: '<span data-qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
                     labelAlign: 'right',
                     forceSelection: true,
                     queryMode: 'local',
