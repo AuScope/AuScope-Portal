@@ -52,15 +52,15 @@ Ext.define('auscope.layer.querier.wfs.factories.GeologicUnitFactory', {
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Observation Method',
-                    value : this._makeVocabPopupHtml('CGI/' + obsMethod, obsMethod, 'Click here to view the SISSVoc concept definition.')
+                    value : this._makeGeneralPopupHtml(obsMethod, obsMethod, 'Click here to view the SISSVoc concept definition.')
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Rock Material',
-                    value : this._makeVocabPopupHtml('CGI/' + rockMaterial, rockMaterial, 'Click here to view the SISSVoc concept definition.')
+                    value : this._makeGeneralPopupHtml(rockMaterial, rockMaterial, 'Click here to view the SISSVoc concept definition.')
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Proportion',
-                    value : this._makeVocabPopupHtml('CGI/' + proportion, proportion, 'Click here to view the SISSVoc concept definition.')
+                    value : this._makeGeneralPopupHtml(proportion, proportion, 'Click here to view the SISSVoc concept definition.')
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Weathering Description',

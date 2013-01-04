@@ -22,14 +22,14 @@ Ext.define('auscope.layer.filterer.forms.MineFilterForm', {
             autoHeight: true,
             items: [{
                 xtype:'fieldset',
-                title: '<span qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
+                title: '<span data-qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
                            'Mine Filter Properties' +
                        '</span>',
                 autoHeight: true,
                 items: [{
                     anchor: '100%',
                     xtype: 'textfield',
-                    fieldLabel: '<span qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
+                    fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
                                     'Mine Name' +
                                 '</span>',
                     name: 'mineName'
@@ -37,6 +37,7 @@ Ext.define('auscope.layer.filterer.forms.MineFilterForm', {
             }]
         });
 
+        Ext.tip.QuickTipManager.init();
         this.callParent(arguments);
     }
 });
