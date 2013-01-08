@@ -55,29 +55,66 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                         tabTitle : 'IRIS Data',
                         layout : 'fit',
                         items : [{
-                            xtype : 'fieldset',
-                            title : 'IRIS Data Query for station: ' + network + ':' + station,
-                            autoScroll : true,
+                            xtype : 'form',
                             items : [{
-                                xtype : 'radiogroup',
-                                fieldLabel : 'Channel',
-                                columns : 1,
-                                vertical : true,
-                                items : channelRadioButtons
-                            }, {
-                                xtype : 'datefield',
-                                fieldLabel : 'From',
-                                name : 'from_date',
-                                value : channel_info.start_date,
-                                minValue : channel_info.start_date,
-                                maxValue : channel_info.end_date
-                            }, {
-                                xtype : 'datefield',
-                                fieldLabel : 'To',
-                                name : 'to_date',
-                                value : channel_info.end_date,
-                                minValue : channel_info.start_date,
-                                maxValue : channel_info.end_date
+                                xtype : 'fieldset',
+                                title : 'IRIS Data Query for station: ' + network + ':' + station,
+                                autoScroll : true,
+                                items : [{
+                                    xtype : 'radiogroup',
+                                    fieldLabel : 'Channel',
+                                    allowBlank : false,
+                                    columns : 1,
+                                    vertical : true,
+                                    items : channelRadioButtons
+                                }, {
+                                    xtype : 'datefield',
+                                    fieldLabel : 'From',
+                                    name : 'from_date',
+                                    allowBlank : false,
+                                    value : channel_info.start_date,
+                                    minValue : channel_info.start_date,
+                                    maxValue : channel_info.end_date,
+                                    format : 'd/m/Y'
+                                }, {
+                                    xtype : 'datefield',
+                                    fieldLabel : 'To',
+                                    name : 'to_date',
+                                    allowBlank : false,
+                                    value : channel_info.end_date,
+                                    minValue : channel_info.start_date,
+                                    maxValue : channel_info.end_date,
+                                    format : 'd/m/Y'
+                                }]
+                            }],
+                            buttons: [{
+                                text: 'Submit',
+                                formBind: true, //only enabled once the form is valid
+                                handler: function() {
+                                    // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&duration=10000&output=saca&ref=direct
+                                    var formValues = this.up('form').getForm().getValues();
+                                    
+                                    var addLeadingZero = function(value) {
+                                        return value < 10 ? '0' + value : value; 
+                                    };
+                                    
+                                    var convertDateToIrisFormat = function(date_dmY, time_component) {
+                                        var components = date_dmY.split('/');
+                                        var day = components[0];
+                                        var month = components[1];
+                                        var year = components[2];
+                                        
+                                        var date = new Date(year, month, day);
+                                        return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
+                                    }
+                                   
+                                    window.location = irisUrl + '/timeseries/query?net=' + network + 
+                                            '&sta=' + station + 
+                                            '&cha=' + formValues.channel +
+                                            '&start=' + convertDateToIrisFormat(formValues.from_date, 'T00:00:00') +
+                                            '&end=' + convertDateToIrisFormat(formValues.to_date, 'T23:59:59')  +
+                                            '&loc=--&ref=direct&output=saca';
+                                }
                             }]
                         }]                        
                     })
