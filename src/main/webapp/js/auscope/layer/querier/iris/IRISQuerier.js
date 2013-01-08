@@ -8,13 +8,10 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
 
     constructor: function(config){
         this.irisFeatureSource = config.irisFeatureSource || Ext.create('auscope.layer.querier.iris.IRISFeatureSource', {});
-//        this.parser = config.parser || Ext.create('portal.layer.querier.wfs.Parser', {});
-//        this.knownLayerParser = config.knownLayerParser || Ext.create('portal.layer.querier.wfs.KnownLayerParser', {});
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
     },
-
 
     _generateErrorComponent : function(message) {
         return Ext.create('portal.layer.querier.BaseComponent', {
@@ -30,30 +27,26 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
         var network = onlineResource.get('name'); // TODO: I'm using 'name' to store the network code... is that bad?
         var station = queryTarget.get('id');
        
-//        /* TODO What's this stuff for? */
-//        var layer = queryTarget.get('layer');
-//        var knownLayer = null;
-//        if (layer.get('sourceType') === portal.layer.Layer.KNOWN_LAYER) {
-//            knownLayer = layer.get('source');
-//        }
-//        /* —————————————————————— */
-
         var me = this;
         this.irisFeatureSource.getStationInfo(
             irisUrl, 
             network, 
             station, 
-            function (success, channels) {
-                channels = [].concat(channels);
+            function (success, channel_info) {
+                // Make sure this is an array:
+                channel_info.channel_codes = [].concat(channel_info.channel_codes);
                 
                 var channelRadioButtons = [];
-                for(var i = 0; i < channels.length; i++) {
+                for(var i = 0; i < channel_info.channel_codes.length; i++) {
                     channelRadioButtons.push({
-                        boxLabel : channels[i],
+                        boxLabel : channel_info.channel_codes[i],
                         name : 'channel',
-                        inputValue : channels[i] 
+                        inputValue : channel_info.channel_codes[i], 
                     });
                 }
+                
+                channel_info.start_date = new Date(channel_info.start_date);
+                channel_info.end_date = new Date(channel_info.end_date);
                 
                 var allComponents = [];
                 allComponents.push(
@@ -64,7 +57,6 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                         items : [{
                             xtype : 'fieldset',
                             title : 'IRIS Data Query for station: ' + network + ':' + station,
-//                            labelWidth : 75,
                             autoScroll : true,
                             items : [{
                                 xtype : 'radiogroup',
@@ -76,12 +68,16 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                 xtype : 'datefield',
                                 fieldLabel : 'From',
                                 name : 'from_date',
-                                value : new Date()
+                                value : channel_info.start_date,
+                                minValue : channel_info.start_date,
+                                maxValue : channel_info.end_date
                             }, {
                                 xtype : 'datefield',
                                 fieldLabel : 'To',
                                 name : 'to_date',
-                                value : new Date()
+                                value : channel_info.end_date,
+                                minValue : channel_info.start_date,
+                                maxValue : channel_info.end_date
                             }]
                         }]                        
                     })

@@ -2,8 +2,11 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.namespaces.IterableNamespace;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -87,8 +91,14 @@ public class IRISController extends BasePortalController {
         @RequestParam("stationCode") String stationCode) {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
         try {
-            String irisResponse = new Scanner(new URL(serviceUrl + "station/query?net=" + networkCode + "&station=" + stationCode + "&level=chan").openStream(), "ISO-8859-1").useDelimiter("\\A").next();
-                        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+            // TODO: validate input!
+            InputStream inputStream = new URL(serviceUrl + "station/query?net=" + networkCode + "&station=" + stationCode + "&level=chan").openStream();
+            Scanner scanner = new Scanner(inputStream, "ISO-8859-1");
+            String irisResponse = scanner.useDelimiter("\\A").next();
+            scanner.close();
+            inputStream.close();
+            
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true); // never forget this!
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document irisDoc = builder.parse(new ByteArrayInputStream(irisResponse.getBytes("ISO-8859-1")));
@@ -101,6 +111,7 @@ public class IRISController extends BasePortalController {
             });
             
             NodeList channels = irisDoc.getDocumentElement().getElementsByTagName("Channel");
+            
             String[] channelCodes = new String[channels.getLength()];
             
             // For each station:
@@ -108,13 +119,18 @@ public class IRISController extends BasePortalController {
                 Node channel = channels.item(i);
                 channelCodes[i] = channel.getAttributes().getNamedItem("chan_code").getTextContent();
             }
+                
+            String startDate = xPath.compile("//default:Station[@sta_code='" + stationCode + "']/default:StationEpoch/default:StartDate").evaluate(irisDoc, XPathConstants.STRING).toString();
+            String endDate = xPath.compile("//default:Station[@sta_code='" + stationCode + "']/default:StationEpoch/default:EndDate").evaluate(irisDoc, XPathConstants.STRING).toString();
             
-            return generateJSONResponseMAV(true, channelCodes, "OK");
+            ModelMap channelInfo = new ModelMap();
+            channelInfo.put("start_date", startDate);
+            channelInfo.put("end_date", endDate);
+            channelInfo.put("channel_codes", channelCodes);
+            
+            return generateJSONResponseMAV(true, channelInfo, "OK");
         } catch (Exception e) {
             return generateJSONResponseMAV(false, e, "Failed.");
         }
     }
 }
-
-
-
