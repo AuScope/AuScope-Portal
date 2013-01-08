@@ -12,7 +12,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.IRISFactory', {
         
         console.log('supportsKnownLayer');
         console.log(knownLayer.getId());
-        
+        // TODO: Why does this say mscl??
         return knownLayer.getId() === 'mscl-borehole';
     },
 

@@ -43,8 +43,9 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
             //Or just the plain old WMS querier
             return Ext.create('portal.layer.querier.wms.WMSQuerier', cfg);
         } else if (irisResources.length > 0) {
-            cfg.parser = Ext.create('auscope.layer.querier.wfs.AuScopeParser', {});
-            cfg.knownLayerParser = Ext.create('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {});
+//            cfg.parser = Ext.create('auscope.layer.querier.wfs.AuScopeParser', {});
+//            cfg.knownLayerParser = Ext.create('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {});
+            return Ext.create('auscope.layer.querier.iris.IRISQuerier', cfg);
         } else {
             //Worst case scenario, we render the source CSW record
             return Ext.create('portal.layer.querier.csw.CSWQuerier', cfg);
