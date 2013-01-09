@@ -108,12 +108,13 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     }
                                    
-                                    window.location = irisUrl + '/timeseries/query?net=' + network + 
+                                    window.open(irisUrl + '/timeseries/query?net=' + network + 
                                             '&sta=' + station + 
                                             '&cha=' + formValues.channel +
                                             '&start=' + convertDateToIrisFormat(formValues.from_date, 'T00:00:00') +
                                             '&end=' + convertDateToIrisFormat(formValues.to_date, 'T23:59:59')  +
-                                            '&loc=--&ref=direct&output=saca';
+                                            '&loc=--&ref=direct&output=saca',
+                                            '_blank');
                                 }
                             }]
                         }]                        
