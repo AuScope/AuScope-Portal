@@ -11,7 +11,7 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
      *
      * knownLayer can be null
      */
-    _generateQuerier : function(knownLayer, wfsResources, wmsResources, wcsResources) {
+    _generateQuerier : function(knownLayer, wfsResources, wmsResources, wcsResources, irisResources) {
         var cfg = {map : this.map};
 
         //Geodesy features don't allow gml:Id lookups </rant>
@@ -42,6 +42,10 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
 
             //Or just the plain old WMS querier
             return Ext.create('portal.layer.querier.wms.WMSQuerier', cfg);
+        } else if (irisResources.length > 0) {
+//            cfg.parser = Ext.create('auscope.layer.querier.wfs.AuScopeParser', {});
+//            cfg.knownLayerParser = Ext.create('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {});
+            return Ext.create('auscope.layer.querier.iris.IRISQuerier', cfg);
         } else {
             //Worst case scenario, we render the source CSW record
             return Ext.create('portal.layer.querier.csw.CSWQuerier', cfg);
@@ -57,8 +61,9 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
         var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WMS);
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
+        var irisResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.IRIS);
 
-        return this._generateQuerier(knownLayer, wfsResources, wmsResources, wcsResources);
+        return this._generateQuerier(knownLayer, wfsResources, wmsResources, wcsResources, irisResources);
     },
 
     /**
@@ -71,6 +76,6 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
-        return this._generateQuerier(null, wfsResources, wmsResources, wcsResources);
+        return this._generateQuerier(null, wfsResources, wmsResources, wcsResources, []);
     }
 });
