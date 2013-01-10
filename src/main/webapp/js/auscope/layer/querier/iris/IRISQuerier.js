@@ -45,6 +45,22 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                     });
                 }
                 
+                var valueField = 'valueField';
+                var displayField = 'displayField';
+                var outputFormats = Ext.create('Ext.data.Store', {
+                    fields : [valueField, displayField],
+                    data : [
+                        {valueField : 'miniseed', displayField : 'IRIS miniSEED'},
+                        {valueField : 'ascii1', displayField : 'ASCII: value'},
+                        {valueField : 'ascii2', displayField : 'ASCII: time, value'},
+                        {valueField : 'audio', displayField : 'Audio (.wav)'},
+                        {valueField : 'plot', displayField : 'Plot (.png)'},
+                        {valueField : 'saca', displayField : 'SAC - ASCII'},
+                        {valueField : 'sacbb', displayField : 'SAC - binary big-endian'},
+                        {valueField : 'sacbl', displayField : 'SAC - binary little-endian'}
+                    ]
+                });
+                
                 channel_info.start_date = new Date(channel_info.start_date);
                 channel_info.end_date = new Date(channel_info.end_date);
                 
@@ -85,6 +101,15 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                     minValue : channel_info.start_date,
                                     maxValue : channel_info.end_date,
                                     format : 'd/m/Y'
+                                }, {
+                                    xtype : 'combobox',
+                                    fieldLabel : 'Output',
+                                    name : 'output',
+                                    allowBlank : false,
+                                    store : outputFormats,
+                                    queryMode : 'local',
+                                    displayField : displayField,
+                                    valueField : valueField
                                 }]
                             }],
                             buttons: [{
@@ -107,13 +132,14 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         var date = new Date(year, month, day);
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     }
-                                   
+                                    
+                                    // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&duration=1000&output=saca&ref=direct                                   
                                     window.open(irisUrl + '/timeseries/query?net=' + network + 
                                             '&sta=' + station + 
                                             '&cha=' + formValues.channel +
                                             '&start=' + convertDateToIrisFormat(formValues.from_date, 'T00:00:00') +
                                             '&end=' + convertDateToIrisFormat(formValues.to_date, 'T23:59:59')  +
-                                            '&loc=--&ref=direct&output=saca',
+                                            '&loc=--&ref=direct&output=' + formValues.output,
                                             '_blank');
                                 }
                             }]
