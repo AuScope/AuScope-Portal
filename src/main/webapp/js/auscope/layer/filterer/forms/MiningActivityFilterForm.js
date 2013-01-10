@@ -32,13 +32,13 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
             bodyStyle: 'padding:5px',
             items: [{
                 xtype:'fieldset',
-                title: '<span qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
+                title: '<span data-qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
                        'Mining Activity Filter Properties' +
                        '</span>',
                 defaultType: 'textfield',
                 defaults: {anchor: '100%'},
                 items :[{
-                    fieldLabel: '<span qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
+                    fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
                                 'Associated Mine' +
                                 '</span>',
                     name: 'mineName'
@@ -59,7 +59,7 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
                     valueField:'urn'
                 },{
                     xtype: 'datefield',
-                    fieldLabel: '<span qtip="Activity which start AFTER this date">' +
+                    fieldLabel: '<span data-qtip="Activity which start AFTER this date">' +
                                 'Activity Start Date' +
                                 '</span>',
                     name: 'startDate',
@@ -67,7 +67,7 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
                     value: ''
                 },{
                     xtype: 'datefield',
-                    fieldLabel: '<span qtip="Activity which end BEFORE this date">' +
+                    fieldLabel: '<span data-qtip="Activity which end BEFORE this date">' +
                                 'Activity End Date' +
                                 '</span>',
 
@@ -75,12 +75,12 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
                     format: "Y-m-d",
                     value: ''
                 },{
-                    fieldLabel: '<span qtip="Minimum Amount of Ore Processed">' +
+                    fieldLabel: '<span data-qtip="Minimum Amount of Ore Processed">' +
                                 'Min. Ore Processed' +
                                 '</span>',
                     name: 'oreProcessed'
                 },{
-                    fieldLabel: '<span qtip="Minimum Amount of Product Produced">' +
+                    fieldLabel: '<span data-qtip="Minimum Amount of Product Produced">' +
                                 'Min. Prod. Amount' +
                                 '</span>',
                     name: 'production'
