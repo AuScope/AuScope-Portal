@@ -19,6 +19,7 @@
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeGeodesy" />
                 <ref bean="knownTypeReports" />
+                <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
@@ -62,6 +63,7 @@
                 <ref bean="cswAuscopeProduction" />
                 <ref bean="cswMDUProduction" />
                 <ref bean="cswAsterProduction" />
+                <ref bean="cswInSarProduction" />
             </list>
         </constructor-arg>
     </bean>

@@ -21,6 +21,7 @@
                 <ref bean="knownTypeGeodesy" />
                 <ref bean="knownTypeGeochron" />
                 <ref bean="knownTypeReports" />
+                <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
@@ -64,6 +65,7 @@
                 <ref bean="cswMDUTest" />
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswAsterProduction" />
+                <ref bean="cswInSarTest" />
             </list>
         </constructor-arg>
     </bean>

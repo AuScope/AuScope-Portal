@@ -212,6 +212,30 @@
             </bean>
         </property>
     </bean>
+    <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="portal-InSar-reports"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWTitleFilterRecordSelector">
+                <property name="title" value="SAR"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="InSar Reports"/>
+        <property name="description" value="A collection of InSar scientific reports that have been spatially located"/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-stars.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+    </bean>
     <bean id="knownTypeYilgarnGeochemistry" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="yilgarn-geochem"/>
         <constructor-arg name="knownLayerSelector">
