@@ -12,13 +12,11 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
     },
-
-    _generateErrorComponent : function(message) {
-        return Ext.create('portal.layer.querier.BaseComponent', {
-            html: Ext.util.Format.format('<p class="centeredlabel">{0}</p>', message)
-        });
-    },
-
+    
+    /**
+     * Defines a form which, once filled out, can be submitted to instigate a 
+     * request for some of IRIS's timeseries data.
+     * */
     query : function(queryTarget, callback) {
         // This should make a request to get the available channels on the particular station, e.g.:
         // http://www.iris.edu/ws/station/query?net=S&station=AUDAR&level=chan
