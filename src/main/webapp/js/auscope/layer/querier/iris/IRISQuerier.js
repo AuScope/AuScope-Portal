@@ -133,7 +133,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     }
                                     
-                                    // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&duration=1000&output=saca&ref=direct                                   
+                                    // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&end=2012-10-05T00:00:00&output=saca&ref=direct                                   
                                     window.open(irisUrl + '/timeseries/query?net=' + network + 
                                             '&sta=' + station + 
                                             '&cha=' + formValues.channel +

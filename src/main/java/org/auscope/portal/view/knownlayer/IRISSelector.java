@@ -9,13 +9,10 @@ import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.view.knownlayer.KnownLayerSelector;
 
 public class IRISSelector implements KnownLayerSelector {
-
-    private String networkCode;
     
     private URL serviceEndpoint;
     
-    public IRISSelector(String networkCode, String serviceEndpoint) throws MalformedURLException {
-        this.networkCode = networkCode;
+    public IRISSelector(String serviceEndpoint) throws MalformedURLException {
         this.serviceEndpoint = new URL(serviceEndpoint);
     }
     
