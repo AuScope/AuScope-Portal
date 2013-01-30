@@ -343,7 +343,7 @@
         </constructor-arg>
         <property name="name" value="University of Melbourne - MSCL"/>
         <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
-        <property name="group" value="NVCL Research Data"/>
+        <property name="group" value="Borehole Research Data"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
