@@ -212,7 +212,7 @@
             </bean>
         </property>
     </bean>
-     <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="portal-InSar-reports"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.CSWTitleFilterRecordSelector">
