@@ -332,6 +332,7 @@
                 <constructor-arg name="serviceEndpoints">
                     <list>
                         <value>http://sisstest.arrc.csiro.au:8080/agos/wfs</value>
+                        <value>http://auscope-services.arrc.csiro.au:80/agos/wfs</value>
                     </list>
                 </constructor-arg>
                 <property name="relatedFeatureTypeNames">
