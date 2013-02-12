@@ -220,8 +220,8 @@
             </bean>
         </constructor-arg>
 
-        <property name="name" value="InSar data"/>
-        <property name="description" value="A collection of InSar scientific reports that have been spatially located"/>
+        <property name="name" value="InSAR data"/>
+        <property name="description" value="A collection of InSAR scientific reports that have been spatially located"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-stars.png"/>
          <property name="polygonColor" value="#FE2A00,#FF694C" />
         <property name="iconAnchor">
