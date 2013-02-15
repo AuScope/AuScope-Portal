@@ -54,8 +54,10 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             case 'mscl-borehole':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.BoreholeFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
-            case 'portal-reports':
             case 'portal-InSar-reports':
+                baseFilterForm = Ext.create('auscope.layer.filterer.forms.CSWFilterForm', baseFilterFormCfg);
+                return this._generateResult(baseFilterForm, true);
+            case 'portal-reports':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.ReportFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
             }
