@@ -97,7 +97,7 @@ public class TestDownloadController extends PortalTestClass {
         });
 
         downloadController.downloadGMLAsZip(serviceUrls, mockHttpResponse,
-                threadPool);
+                threadPool,null);
         Thread.sleep(100);
         dummyJSONResponseIS.close();
 
@@ -155,7 +155,7 @@ public class TestDownloadController extends PortalTestClass {
         });
 
         downloadController.downloadGMLAsZip(serviceUrls, mockHttpResponse,
-                threadPool);
+                threadPool,null);
         Thread.sleep(500);
         dummyJSONResponseNoMsgIS.close();
         dummyJSONResponseIS.close();
@@ -214,7 +214,7 @@ public class TestDownloadController extends PortalTestClass {
         });
 
         downloadController.downloadGMLAsZip(serviceUrls, mockHttpResponse,
-                threadPool);
+                threadPool,null);
         Thread.sleep(500);
 
         dummyJSONResponseIS2.close();

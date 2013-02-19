@@ -1,19 +1,17 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONNull;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
@@ -21,7 +19,10 @@ import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.server.http.download.DownloadResponse;
+import org.auscope.portal.core.server.http.download.DownloadTracker;
+import org.auscope.portal.core.server.http.download.Progression;
 import org.auscope.portal.core.server.http.download.ServiceDownloadManager;
+import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.MimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,14 +40,54 @@ public class DownloadController extends BasePortalController {
     private final Log logger = LogFactory.getLog(getClass());
     private HttpServiceCaller serviceCaller;
 
+
     @Autowired
     public DownloadController(HttpServiceCaller serviceCaller) {
         this.serviceCaller = serviceCaller;
     }
 
+    @RequestMapping("/getGmlDownload.do")
+    public void getGmlDownload(
+            @RequestParam("email") final String email,
+            HttpServletResponse response) throws Exception {
+        DownloadTracker downloadTracker=DownloadTracker.getTracker(email);
+        Progression progress= downloadTracker.getProgress();
+        if(progress==Progression.COMPLETED){
+            this.writeInputToOutputStream( downloadTracker.getFile(), response.getOutputStream(), 1024, true);
+        }
+
+    }
+
+    @RequestMapping("/checkGMLDownloadStatus.do")
+    public void checkGMLDownloadStatus(
+            @RequestParam("email") final String email,
+            HttpServletResponse response,
+            HttpServletRequest request) throws Exception {
+
+        DownloadTracker downloadTracker=DownloadTracker.getTracker(email);
+        Progression progress= downloadTracker.getProgress();
+        String htmlResponse="";
+        response.setContentType("text/html");
+
+        if(progress==Progression.INPROGRESS){
+            htmlResponse="<html>Download currently still in progress</html>";
+        }else if(progress==Progression.NOT_STARTED){
+            htmlResponse="<html>No download request found..</html>";
+        }else if(progress==Progression.COMPLETED){
+            htmlResponse="<html><a href='getGmlDownload.do?email="+ email +"'>Click on this link to download</a></html>";
+        }else{
+            htmlResponse="<html>Serious error has occured, Please contact our Administrator on cg-admin@csiro.au</html>";
+        }
+
+        response.getOutputStream().write(htmlResponse.getBytes());
+    }
+
     /**
      * Given a list of URls, this function will collate the responses
      * into a zip file and send the response back to the browser.
+     * if no email is provided, a zip is written to the response output
+     * If email address is provided, a html response is returned to the user informing
+     * his request has been processed and to check back again later.
      *
      * @param serviceUrls
      * @param response
@@ -55,83 +96,56 @@ public class DownloadController extends BasePortalController {
     @RequestMapping("/downloadGMLAsZip.do")
     public void downloadGMLAsZip(
             @RequestParam("serviceUrls") final String[] serviceUrls,
+            @RequestParam("email") final String email,
             HttpServletResponse response) throws Exception {
         ExecutorService pool = Executors.newCachedThreadPool();
-        downloadGMLAsZip(serviceUrls,response,pool);
+        downloadGMLAsZip(serviceUrls,response,pool,email);
     }
 
 
-    public void downloadGMLAsZip(
-            @RequestParam("serviceUrls") final String[] serviceUrls,
-            HttpServletResponse response,ExecutorService threadpool) throws Exception {
-
-        // set the content type for zip files
-        response.setContentType("application/zip");
-        response.setHeader("Content-Disposition",
-                "inline; filename=GMLDownload.zip;");
-
-        // create the output stream
-        ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+    public void downloadGMLAsZip(String[] serviceUrls,HttpServletResponse response,ExecutorService threadpool,String email) throws Exception {
 
         logger.trace("No. of serviceUrls: " + serviceUrls.length);
         ServiceDownloadManager downloadManager = new ServiceDownloadManager(serviceUrls, serviceCaller,threadpool);
-        //VT: threadpool is closed within downloadAll();
-        ArrayList<DownloadResponse> gmlDownloads = downloadManager.downloadAll();
-        writeResponseToZip(gmlDownloads,zout);
 
-        zout.finish();
-        zout.flush();
-        zout.close();
-    }
+        if(email != null && email.length() > 0){
 
-    private void writeResponseToZip(ArrayList<DownloadResponse> gmlDownloads,ZipOutputStream zout) throws IOException{
-        StringBuilder errorMsg = new StringBuilder();
-
-        for (int i = 0; i<gmlDownloads.size(); i++) {
-            DownloadResponse download=gmlDownloads.get(i);
-            //Check that attempt to request is successful
-            if (!download.hasException()) {
-                JSONObject jsonObject = JSONObject.fromObject(download.getResponseAsString());
-                //check that JSON reply is successful
-                if (jsonObject.get("success").toString().equals("false")) {
-                    errorMsg.append("Unsuccessful JSON reply from: " + download.getRequestURL() + "\n");
-
-                    Object messageObject = jsonObject.get("msg");
-                    if (messageObject==null || messageObject.toString().length()==0) {
-                        errorMsg.append("No error message\n\n");
-                    } else {
-                        errorMsg.append(messageObject.toString() + "\n\n");
-                    }
-                } else {
-                    byte[] gmlBytes = new byte[] {};
-                    Object dataObject = jsonObject.get("data");
-                    if (dataObject != null && !JSONNull.getInstance().equals(dataObject)) {
-                        Object gmlResponseObject = JSONObject.fromObject(dataObject)
-                                .get("gml");
-
-                        if (gmlResponseObject != null) {
-                            gmlBytes = gmlResponseObject.toString().getBytes();
-                        }
-                    }
-
-                    zout.putNextEntry(new ZipEntry(new SimpleDateFormat(
-                            (i + 1) + "_yyyyMMdd_HHmmss").format(new Date())
-                            + ".xml"));
-                    zout.write(gmlBytes);
-                    zout.closeEntry();
-                }
-
-            } else {
-                errorMsg.append("Exception thrown while attempting to download from: " + download.getRequestURL() + "\n");
-                errorMsg.append(download.getExceptionAsString() + "\n\n");
+            DownloadTracker downloadTracker=DownloadTracker.getTracker(email);
+            Progression progress= downloadTracker.getProgress();
+            String htmlResponse="";
+            response.setContentType("text/html");
+            if(progress==Progression.INPROGRESS){
+                 htmlResponse="<html>You are not allowed to start a new download when another download is in progress</html>";
+                 response.getOutputStream().write(htmlResponse.getBytes());
+                 return;
             }
+
+            downloadTracker.startTrack(downloadManager);
+
+            htmlResponse="<html>Download in progress</html>";
+
+            response.getOutputStream().write(htmlResponse.getBytes());
+
+
+
+        }else{
+            // set the content type for zip files
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition",
+                    "inline; filename=GMLDownload.zip;");
+            ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+            //VT: threadpool is closed within downloadAll();
+            ArrayList<DownloadResponse> gmlDownloads = downloadManager.downloadAll();
+            FileIOUtil.writeResponseToZip(gmlDownloads,zout);
+            zout.finish();
+            zout.flush();
+            zout.close();
         }
-        if (errorMsg.length()!=0) {
-            zout.putNextEntry(new ZipEntry("downloadInfo.txt"));
-            zout.write(errorMsg.toString().getBytes());
-            zout.closeEntry();
-        }
+
+
     }
+
+
 
     /**
      * Given a list of WMS URL's, this function will collate the responses

@@ -6,8 +6,12 @@ Ext.define('auscope.layer.AuScopeDownloaderFactory', {
     extend : 'portal.layer.downloader.DownloaderFactory',
 
 
-    _generateDownloader : function(wfsResources, wmsResources, wcsResources) {
-        if (wfsResources.length > 0) {
+    _generateDownloader : function(wfsResources, wmsResources, wcsResources,useDownloadTracker) {
+        if (wfsResources.length > 0 && useDownloadTracker) {
+            return Ext.create('portal.layer.downloader.wfs.KLWFSDownloader', {map : this.map});
+        }
+
+        if (wfsResources.length > 0 && !useDownloadTracker) {
             return Ext.create('portal.layer.downloader.wfs.WFSDownloader', {map : this.map});
         }
 
@@ -33,7 +37,7 @@ Ext.define('auscope.layer.AuScopeDownloaderFactory', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
-        return this._generateDownloader(wfsResources, wmsResources, wcsResources);
+        return this._generateDownloader(wfsResources, wmsResources, wcsResources,true);
     },
 
     /**
@@ -46,6 +50,6 @@ Ext.define('auscope.layer.AuScopeDownloaderFactory', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
-        return this._generateDownloader(wfsResources, wmsResources, wcsResources);
+        return this._generateDownloader(wfsResources, wmsResources, wcsResources,false);
     }
 });
