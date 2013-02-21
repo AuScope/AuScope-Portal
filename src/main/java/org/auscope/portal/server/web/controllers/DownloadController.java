@@ -70,13 +70,13 @@ public class DownloadController extends BasePortalController {
         response.setContentType("text/html");
 
         if(progress==Progression.INPROGRESS){
-            htmlResponse="<html>Download currently still in progress</html>";
+            htmlResponse="<html><p>Download currently still in progress</p></html>";
         }else if(progress==Progression.NOT_STARTED){
-            htmlResponse="<html>No download request found..</html>";
+            htmlResponse="<html><p>No download request found..</p></html>";
         }else if(progress==Progression.COMPLETED){
-            htmlResponse="<html><a href='getGmlDownload.do?email="+ email +"'>Click on this link to download</a></html>";
+            htmlResponse="<html><p>Your download has successfully completed.</p><p><a href='getGmlDownload.do?email="+ email +"'>Click on this link to download</a></p></html>";
         }else{
-            htmlResponse="<html>Serious error has occured, Please contact our Administrator on cg-admin@csiro.au</html>";
+            htmlResponse="<html><p>Serious error has occured, Please contact our Administrator on cg-admin@csiro.au</p></html>";
         }
 
         response.getOutputStream().write(htmlResponse.getBytes());
@@ -115,14 +115,18 @@ public class DownloadController extends BasePortalController {
             String htmlResponse="";
             response.setContentType("text/html");
             if(progress==Progression.INPROGRESS){
-                 htmlResponse="<html>You are not allowed to start a new download when another download is in progress</html>";
+                 htmlResponse="<html><p>You are not allowed to start a new download when another download is in progress Please wait for your previous download to complete.</p>" +
+                         " <p>To check the progress of your download, enter your email address on the download popup and click on 'Check Status'</p>" +
+                         " <p>Please contact the administrator if you encounter any issues</p></html>";
                  response.getOutputStream().write(htmlResponse.getBytes());
                  return;
             }
 
             downloadTracker.startTrack(downloadManager);
 
-            htmlResponse="<html>Download in progress</html>";
+            htmlResponse="<html><p>Your request has been submitted. The download process may take sometime depending on the size of the dataset</p>" +
+                    " <p>To check the progress of your download, enter your email address on the download popup and click on 'Check Status'</p>" +
+                    " <p>Please contact the administrator if you encounter any issues</p></html>";
 
             response.getOutputStream().write(htmlResponse.getBytes());
 
