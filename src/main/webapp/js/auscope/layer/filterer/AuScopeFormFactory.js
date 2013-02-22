@@ -54,21 +54,32 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             case 'mscl-borehole':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.BoreholeFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
-            case 'portal-InSar-reports':
-                baseFilterForm = Ext.create('auscope.layer.filterer.forms.CSWFilterForm', baseFilterFormCfg);
-                return this._generateResult(baseFilterForm, true);
             case 'portal-reports':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.ReportFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
             }
         }
-
+        
         //otherwise let's see if we can guess an appropriate filter based on layer renderer
         if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer) {
             baseFilterForm = Ext.create('portal.layer.filterer.forms.WMSLayerFilterForm', baseFilterFormCfg);
             //VT: Filtering is support but for WMS, we want the image to be displayed immediately after it has been added and
             //the opacity can be adjusted from there on
             return this._generateResult(baseFilterForm, false);
+        }
+        
+        // TODO: ADAM: Is there a tidier way of doing this?
+        // See if the layer contains a single CSWRecord with a single CSWOnlineResource of a CSWService type
+        // This is a general case for non-cached CSWServices
+        var cswRecords = layer.get('cswRecords');
+        if (cswRecords.length == 1) {
+            var onlineResources = cswRecords[0].get('onlineResources');
+            if (onlineResources.length == 1) {
+                if (onlineResources[0].get('type') == portal.csw.OnlineResource.CSWService) {
+                    baseFilterForm = Ext.create('auscope.layer.filterer.forms.CSWServiceFilterForm', baseFilterFormCfg);
+                    return this._generateResult(baseFilterForm, true);
+                }
+            }
         }
 
         //And otherwise we just show the empty filter form

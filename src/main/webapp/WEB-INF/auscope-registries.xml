@@ -62,6 +62,11 @@
         <constructor-arg name="recordInformationUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/en/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
         <property name="cqlText" value="AnyText like '%SAR%'"/>
         <property name="noCache" value="true"/>
+        <property name="defaultConstraints">
+		    <list>
+		        <value>&lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation data.&lt;/a&gt;</value>
+		    </list>
+		</property>
     </bean>
     <bean id="cswInSarProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswInSarProduction"/>
@@ -70,5 +75,10 @@
         <constructor-arg name="recordInformationUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/en/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
         <property name="cqlText" value="AnyText like '%SAR%'"/>
         <property name="noCache" value="true"/>
+		<property name="defaultConstraints">
+		    <list>
+		        <value>&lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation data.&lt;/a&gt;</value>
+		    </list>
+		</property>        
     </bean>
 </beans>

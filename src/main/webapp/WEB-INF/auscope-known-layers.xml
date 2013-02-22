@@ -216,7 +216,7 @@
         <constructor-arg name="id" value="portal-InSar-reports"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.CSWTitleFilterRecordSelector">
-                <property name="title" value="SAR"/>
+                <property name="title" value="InSAR Geonetwork"/><!-- This matches the title in auscope-registries.xml -->
             </bean>
         </constructor-arg>
 
