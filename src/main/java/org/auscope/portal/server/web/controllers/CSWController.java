@@ -9,6 +9,7 @@ import org.apache.commons.httpclient.HttpMethodBase;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.CSWService;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
 import org.auscope.portal.core.services.methodmakers.CSWMethodMakerGetDataRecords;
@@ -36,8 +37,6 @@ public class CSWController extends BaseCSWController {
             HttpServiceCaller serviceCaller,
             ViewCSWRecordFactory viewCSWRecordFactory,
             ViewKnownLayerFactory viewKnownLayerFactory,
-            
-            
             CSWCacheService cswCacheService) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.serviceCaller = serviceCaller;
@@ -45,42 +44,72 @@ public class CSWController extends BaseCSWController {
     }
     
     @RequestMapping("/getCSWRecordsNoCache.do")
-    public ModelAndView getCSWRecordsNoCache(String cswServiceUrl) {
+    public ModelAndView getCSWRecordsNoCache(
+            String id,
+            String cswServiceUrl,
+            String cqlText,
+            int startPoint,
+            int maxRecords) {
         System.out.println(cswCacheService.toString());
-        
         
         List<CSWRecord> records = null;
         
         CSWServiceItem endpoint = new CSWServiceItem(
-                /* TODO: ADAM: I DON'T KNOW WHAT ID SHOULD BE? */"",
+                id,
                 cswServiceUrl);
+        endpoint.setCqlText(cqlText);
         
-//        endpoint.setCqlText(cqlText);
-        
-        
-        CSWMethodMakerGetDataRecords methodMaker = new CSWMethodMakerGetDataRecords();
+        CSWService cswService = new CSWService(
+                endpoint,
+                this.serviceCaller,
+                false);
+
         try {
-            HttpMethodBase method = methodMaker.makeMethod(
-                    endpoint.getServiceUrl(), 
-                    null, 
-                    ResultType.Results, 
-                    /*MAX_QUERY_LENGTH*/ 10, 
-                    1,
-                    endpoint.getCqlText());
+            CSWGetRecordResponse response = cswService.queryCSWEndpoint(1, 1);
             
-            InputStream responseStream = serviceCaller.getMethodResponseAsStream(method);
-            Document responseDocument = DOMUtil.buildDomFromStream(responseStream);
-            OWSExceptionParser.checkForExceptionResponse(responseDocument);
-            CSWGetRecordResponse response = new CSWGetRecordResponse(endpoint, responseDocument);
+            System.out.println(response.getRecordsMatched());
             
             records = response.getRecords();
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+//        CSWServiceClient cswServiceClient = 
+//                new CSWServiceClient(
+//                        /*CSWServiceItem*/);
+//        
+        
+//        CSWServiceItem endpoint = new CSWServiceItem(
+//                /* TODO: ADAM: I DON'T KNOW WHAT ID SHOULD BE? */"",
+//                cswServiceUrl);
+//        
+////        endpoint.setCqlText(cqlText);
+//        
+//        
+//        CSWMethodMakerGetDataRecords methodMaker = new CSWMethodMakerGetDataRecords();
+//        try {
+//            HttpMethodBase method = methodMaker.makeMethod(
+//                    endpoint.getServiceUrl(), 
+//                    null, 
+//                    ResultType.Results, 
+//                    /*MAX_QUERY_LENGTH*/ 10, 
+//                    1,
+//                    endpoint.getCqlText());
+//            
+//            InputStream responseStream = serviceCaller.getMethodResponseAsStream(method);
+//            Document responseDocument = DOMUtil.buildDomFromStream(responseStream);
+//            OWSExceptionParser.checkForExceptionResponse(responseDocument);
+//            CSWGetRecordResponse response = new CSWGetRecordResponse(endpoint, responseDocument);
+//            
+//            records = response.getRecords();
+//        } catch (UnsupportedEncodingException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
         
         return generateJSONResponseMAV(records.toArray(new CSWRecord[records.size()]));
     }

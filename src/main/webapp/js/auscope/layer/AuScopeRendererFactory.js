@@ -8,7 +8,23 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
     /**
      * Creates a new instance of renderer based on the specified values
      */
-    _generateRenderer : function(wfsResources, wmsResources, irisResources, proxyUrl, proxyCountUrl, iconUrl, iconSize, iconAnchor,polygonColor) {
+    _generateRenderer : function(wfsResources, wmsResources, irisResources, knownLayer) {
+        var proxyUrl; 
+        var proxyCountUrl; 
+        var iconUrl;
+        var iconSize; 
+        var iconAnchor;
+        var polygonColor;
+        
+        if (knownLayer != undefined) {
+            proxyUrl = knownLayer.get('proxyUrl');
+            proxyCountUrl = knownLayer.get('proxyCountUrl');
+            iconUrl = knownLayer.get('iconUrl');
+            iconSize = knownLayer.get('iconSize');
+            iconAnchor = knownLayer.get('iconAnchor');
+            polygonColor = knownLayer.get('polygonColor');
+        }
+        
         var icon = Ext.create('portal.map.Icon', {
             url : iconUrl,
             width : iconSize ? iconSize.width : 16,
@@ -40,7 +56,15 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
                 proxyUrl : proxyUrl,
                 proxyCountUrl : proxyCountUrl
             });
-        } else {
+        } else if (knownLayer.containsCSWService()) {
+            // TODO: ADAM: I'm not sure what parameters I need to send in...
+            return Ext.create('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
+                map : this.map,
+                icon : icon,
+                polygonColor: polygonColor
+            });
+        }
+        else {
             return Ext.create('portal.layer.renderer.csw.CSWRenderer', {
                 map : this.map,
                 icon : icon,
@@ -59,8 +83,7 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var irisResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.IRIS);
 
-        return this._generateRenderer(wfsResources, wmsResources, irisResources, knownLayer.get('proxyUrl'), knownLayer.get('proxyCountUrl'),
-                knownLayer.get('iconUrl'), knownLayer.get('iconSize'), knownLayer.get('iconAnchor'),knownLayer.get('polygonColor'));
+        return this._generateRenderer(wfsResources, wmsResources, irisResources, knownLayer);
     },
 
     /**
@@ -73,6 +96,6 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var irisResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.IRIS);
 
-        return this._generateRenderer(wfsResources, wmsResources, irisResources, undefined, undefined, undefined, undefined, undefined,undefined);
+        return this._generateRenderer(wfsResources, wmsResources, irisResources, undefined);
     }
 });

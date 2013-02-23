@@ -67,20 +67,16 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             //the opacity can be adjusted from there on
             return this._generateResult(baseFilterForm, false);
         }
-        
-        // TODO: ADAM: Is there a tidier way of doing this?
-        // See if the layer contains a single CSWRecord with a single CSWOnlineResource of a CSWService type
-        // This is a general case for non-cached CSWServices
-        var cswRecords = layer.get('cswRecords');
-        if (cswRecords.length == 1) {
-            var onlineResources = cswRecords[0].get('onlineResources');
-            if (onlineResources.length == 1) {
-                if (onlineResources[0].get('type') == portal.csw.OnlineResource.CSWService) {
-                    baseFilterForm = Ext.create('auscope.layer.filterer.forms.CSWServiceFilterForm', baseFilterFormCfg);
-                    return this._generateResult(baseFilterForm, true);
-                }
-            }
+
+        // TODO: Can I get rid of containsCSWService and make this check the renderer like the example above?
+        // don't forget this method is used in AuScopeRendererFactory.js, too.
+        // Once you work out what the renderer will be called you CAN change this to make it like the one above
+        // and then remove the containsCSWService method from Layer.js
+        if (layer.containsCSWService()) {
+            baseFilterForm = Ext.create('auscope.layer.filterer.forms.CSWServiceFilterForm', baseFilterFormCfg);
+            return this._generateResult(baseFilterForm, true);
         }
+        
 
         //And otherwise we just show the empty filter form
         return this._generateResult(Ext.create('portal.layer.filterer.forms.EmptyFilterForm', baseFilterFormCfg), false);
