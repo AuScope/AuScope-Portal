@@ -58,21 +58,18 @@
     <bean id="cswInSarTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswInSarTest"/>
         <constructor-arg name="title" value="InSAR Geonetwork"/>
-        <!--
-        TODO: Temporarily blocking this because my home PC can't access eos-test.
+        
+        <!-- This will only work if your machine's IP has been granted access to eos-test -->
         <constructor-arg name="serviceUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/en/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/en/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
-        -->
+        <property name="cqlText" value="AnyText like '%SAR%'"/>
         
-        <!-- TODO: Delete or comment out these two lines if you're on a machine with access to eos-test. -->
+        <!-- TODO: This was just used for testing because my home PC couldn't access eos-test: 
         <constructor-arg name="serviceUrl" value="http://aster.nci.org.au/geonetwork/srv/en/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://aster.nci.org.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
-        
-        
-        <!-- 
-		TODO: open this back up, I just obscured it because aster doesn't have any matches on SAR so it made it hard to test.        
-         <property name="cqlText" value="AnyText like '%SAR%'"/> -->
-         <property name="cqlText" value="AnyText like '%'"/>
+        <property name="cqlText" value="AnyText like '%'"/>
+		-->
+         
         <property name="noCache" value="true"/>
         <property name="defaultConstraints">
 		    <list>
