@@ -60,7 +60,7 @@ public class MineralOccurrenceService extends BaseWFSService {
         client=new HttpClient();
         HttpClientParams clientParams=new HttpClientParams();
         clientParams.setSoTimeout(DEFAULT_TIMEOUT);//VT 2 hours
-        clientParams.setConnectionManagerTimeout(DEFAULT_TIMEOUT);
+
         client.setParams(clientParams);
     }
 
