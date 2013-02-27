@@ -9,7 +9,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     
     _cswRenderer : null,
     
-    _ajaxRequest : null,
+    _ajaxRequests : [],
 
     config : {
         /**
@@ -67,6 +67,44 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         // CSW endpoint itself.
         this.parentLayer.set('cswRecords', tempCSWRecords);
     },
+    
+    _getCSWRecords : function(resources, filterer, maximumRecords, callback) {
+        var cswRecord = this.parentLayer.data.cswRecords[0].data;
+        var recordInfoUrl = cswRecord.recordInfoUrl;
+        var cswServiceUrl = resources[0].data.url;
+
+        var cqlText = cswRecord.descriptiveKeywords[0];
+        
+        var bboxFilter = filterer.spatialParam;
+        var anyTextFilter = filterer.parameters.anyText;
+        var titleFilter = filterer.parameters.title;
+        var abstractFilter = filterer.parameters.abstract;
+        var metadataDateFilterFrom = filterer.parameters.metadata_change_date_from;
+        var metadataDateFilterTo = filterer.parameters.metadata_change_date_to;
+        var temporalExtentFilterFrom = filterer.parameters.temporal_extent_date_from;
+        var temporalExtentFilterTo = filterer.parameters.temporal_extent_date_to;
+        
+        this._ajaxRequests.push(Ext.Ajax.request({
+            url : 'getUncachedCSWRecords.do',
+            params : {
+                cswServiceUrl : cswServiceUrl,
+                recordInfoUrl : recordInfoUrl,
+                cqlText : cqlText,
+                startPoint : 1,
+                maxRecords : maximumRecords,
+                //bbox : Ext.JSON.encode(bboxFilter),
+                anyText : anyTextFilter,
+                title : titleFilter,
+                abstract_ : abstractFilter,
+                metadataDateFrom : metadataDateFilterFrom, 
+                metadataDateTo : metadataDateFilterTo,
+                temporalExtentFrom : temporalExtentFilterFrom,
+                temporalExtentTo : temporalExtentFilterTo
+            },
+            scope: this,
+            success : callback
+        }));
+    },
 
     /**
      * An implementation of the abstract base function. See comments in
@@ -101,79 +139,104 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         // 4. Render the responses as CSWRecords.
         // to determine which specialised renderer to use?
         this.removeData();
-        var cswRecord = this.parentLayer.data.cswRecords[0].data;
-        var recordInfoUrl = cswRecord.recordInfoUrl;
-        var cswServiceUrl = resources[0].data.url;
-
-        var cqlText = cswRecord.descriptiveKeywords[0];
         
-        var bboxFilter = filterer.spatialParam;
-        var anyTextFilter = filterer.parameters.anyText;
-        var titleFilter = filterer.parameters.title;
-        var abstractFilter = filterer.parameters.abstract;
-        var metadataDateFilterFrom = filterer.parameters.metadata_change_date_from;
-        var metadataDateFilterTo = filterer.parameters.metadata_change_date_to;
-        var temporalExtentFilterFrom = filterer.parameters.temporal_extent_date_from;
-        var temporalExtentFilterTo = filterer.parameters.temporal_extent_date_to;
-
-        var msg = Ext.MessageBox.wait('Loading...');
-        
-        _ajaxRequest = Ext.Ajax.request({
-            url : 'getUncachedCSWRecords.do',
-            params : {
-                cswServiceUrl : cswServiceUrl,
-                recordInfoUrl : recordInfoUrl,
-                cqlText : cqlText,
-                startPoint : 1,
-                maxRecords : this._maximumCSWRecordsToRetrieveAtOnce,
-                //bbox : Ext.JSON.encode(bboxFilter),
-                anyText : anyTextFilter,
-                title : titleFilter,
-                abstract_ : abstractFilter,
-                metadataDateFrom : metadataDateFilterFrom, 
-                metadataDateTo : metadataDateFilterTo,
-                temporalExtentFrom : temporalExtentFilterFrom,
-                temporalExtentTo : temporalExtentFilterTo
-            },
-            scope: this,
-            success : function(response) {
-                msg.hide();
-                response = Ext.JSON.decode(response.responseText);
-                if (response.success) {
-                    cswRecords = [];
-                    
-                    for (i = 0; i < response.data.length; i++) {
-                        cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
-                    }
-
-                    if (response.totalResults > this._maximumCSWRecordsToRetrieveAtOnce) {
-                        var me = this;
+        // Just try to get one record first so that we can pull out the total result from response
+        this._getCSWRecords(resources, filterer, 1, function(initialResponse) {
+            initialResponse = Ext.JSON.decode(initialResponse.responseText);
                         
-                        // We have to ask the user what they want to do.
-                        Ext.Msg.show({
-                            title:'Display partial result set?',
-                            msg: 'This query returns more than ' + this._maximumCSWRecordsToRetrieveAtOnce + 
-                            ' records. The portal will only show the first ' + this._maximumCSWRecordsToRetrieveAtOnce + 
-                            ' records. Alternatively, you can abort this operation, adjust your filter and try again.',
-                            buttonText: {
-                                yes : 'Display ' + this._maximumCSWRecordsToRetrieveAtOnce + ' records',
-                                no : 'Abort'
-                            },
-                            icon: Ext.Msg.QUESTION,
-                            fn : function (buttonId) {
-                                if (buttonId == 'yes') {
-                                    me._displayCSWsWithCSWRenderer(cswRecords);
+            if (initialResponse.totalResults > this._maximumCSWRecordsToRetrieveAtOnce) {
+                // We'll ask the user what they want to do:
+                var me = this;
+                
+                // We have to ask the user what they want to do.
+                Ext.Msg.show({
+                    title:'Display partial result set?',
+                    msg: 'This query returns more than ' + this._maximumCSWRecordsToRetrieveAtOnce + 
+                    ' records. The portal will only show the first ' + this._maximumCSWRecordsToRetrieveAtOnce + 
+                    ' records. Alternatively, you can abort this operation, adjust your filter and try again.',
+                    buttonText: {
+                        yes : 'Display ' + this._maximumCSWRecordsToRetrieveAtOnce + ' records',
+                        no : 'Abort'
+                    },
+                    icon: Ext.Msg.QUESTION,
+                    fn : function (buttonId) {
+                        if (buttonId == 'yes') {
+                            var msg = Ext.MessageBox.wait('Loading...');
+                            me._getCSWRecords(resources, filterer, me._maximumCSWRecordsToRetrieveAtOnce, function(response) {
+                                response = Ext.JSON.decode(response.responseText);
+                                if (response.success) {
+                                    cswRecords = [];
+                                    
+                                    for (i = 0; i < response.data.length; i++) {
+                                        cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
+                                    }
                                 }
-                            }
-                       });
+                                
+                                me._displayCSWsWithCSWRenderer(cswRecords);
+                                msg.hide();
+                            });
+                        }
                     }
-                    else { 
-                        // The number of totalResults is <= this._maximumCSWRecordsToRetrieveAtOnce so we can just show them.
-                        this._displayCSWsWithCSWRenderer(cswRecords);
+                });
+            }
+            else {
+                
+                /* TODO: this needs to be refactored so that it doesn't duplicate the code above */
+                var msg = Ext.MessageBox.wait('Loading...');
+                me._getCSWRecords(resources, filterer, me._maximumCSWRecordsToRetrieveAtOnce, function(response) {
+                    response = Ext.JSON.decode(response.responseText);
+                    if (response.success) {
+                        cswRecords = [];
+                        
+                        for (i = 0; i < response.data.length; i++) {
+                            cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
+                        }
                     }
-                }
+                    
+                    me._displayCSWsWithCSWRenderer(cswRecords);
+                    msg.hide();
             }
         });
+        
+   /*     
+        var msg = Ext.MessageBox.wait('Loading...');
+        this._getCSWRecords(resources, filterer, this._maximumCSWRecordsToRetrieveAtOnce, function(response) {
+            msg.hide();
+            response = Ext.JSON.decode(response.responseText);
+            if (response.success) {
+                cswRecords = [];
+                
+                for (i = 0; i < response.data.length; i++) {
+                    cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
+                }
+
+                if (response.totalResults > this._maximumCSWRecordsToRetrieveAtOnce) {
+//                    var me = this;
+//                    
+//                    // We have to ask the user what they want to do.
+//                    Ext.Msg.show({
+//                        title:'Display partial result set?',
+//                        msg: 'This query returns more than ' + this._maximumCSWRecordsToRetrieveAtOnce + 
+//                        ' records. The portal will only show the first ' + this._maximumCSWRecordsToRetrieveAtOnce + 
+//                        ' records. Alternatively, you can abort this operation, adjust your filter and try again.',
+//                        buttonText: {
+//                            yes : 'Display ' + this._maximumCSWRecordsToRetrieveAtOnce + ' records',
+//                            no : 'Abort'
+//                        },
+//                        icon: Ext.Msg.QUESTION,
+//                        fn : function (buttonId) {
+//                            if (buttonId == 'yes') {
+//                                me._displayCSWsWithCSWRenderer(cswRecords);
+//                            }
+//                        }
+//                   });
+                }
+                else { 
+                    // The number of totalResults is <= this._maximumCSWRecordsToRetrieveAtOnce so we can just show them.
+                    this._displayCSWsWithCSWRenderer(cswRecords);
+                }
+            }
+        });*/
     },
 
     /**
@@ -215,8 +278,8 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
      * An abstract function - see parent class for more info
      */
     abortDisplay : function() {
-        if (_ajaxRequest != null) {
-            Ext.Ajax.abort(_ajaxRequest);
+        for (var i = 0; i < this._ajaxRequests.length; i++) {
+            Ext.Ajax.abort(this._ajaxRequests[i]);
         }
     }
 });
