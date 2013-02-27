@@ -100,11 +100,11 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         // else: ask the user if they want to get them all or just get some
         // 4. Render the responses as CSWRecords.
         // to determine which specialised renderer to use?
-
-        
         this.removeData();
         var cswRecord = this.parentLayer.data.cswRecords[0].data;
+        var recordInfoUrl = cswRecord.recordInfoUrl;
         var cswServiceUrl = resources[0].data.url;
+
         var cqlText = cswRecord.descriptiveKeywords[0];
         
         var bboxFilter = filterer.spatialParam;
@@ -122,6 +122,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             url : 'getUncachedCSWRecords.do',
             params : {
                 cswServiceUrl : cswServiceUrl,
+                recordInfoUrl : recordInfoUrl,
                 cqlText : cqlText,
                 startPoint : 1,
                 maxRecords : this._maximumCSWRecordsToRetrieveAtOnce,
@@ -140,7 +141,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 response = Ext.JSON.decode(response.responseText);
                 if (response.success) {
                     cswRecords = [];
-
+                    
                     for (i = 0; i < response.data.length; i++) {
                         cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
                     }

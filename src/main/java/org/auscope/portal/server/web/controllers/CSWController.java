@@ -74,6 +74,7 @@ public class CSWController extends BaseCSWController {
     @RequestMapping("/getUncachedCSWRecords.do")
     public ModelAndView getUncachedCSWRecords(
             String cswServiceUrl,
+            String recordInfoUrl,
             String cqlText,
             int startPoint,
             int maxRecords,
@@ -87,7 +88,8 @@ public class CSWController extends BaseCSWController {
             String temporalExtentTo) {
         CSWServiceItem endpoint = new CSWServiceItem(
                 "", // This ID won't actually be used so we can just leave it blank. 
-                cswServiceUrl);
+                cswServiceUrl, 
+                recordInfoUrl);
         endpoint.setCqlText(cqlText);
 
         CSWService cswService = new CSWService(
@@ -124,7 +126,7 @@ public class CSWController extends BaseCSWController {
                     filter);
             
             List<CSWRecord> records = response.getRecords();
-            
+
             return generateJSONResponseMAV(
                     records.toArray(new CSWRecord[records.size()]),
                     response.getRecordsMatched());
