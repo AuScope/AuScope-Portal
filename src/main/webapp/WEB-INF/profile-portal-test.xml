@@ -62,10 +62,9 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-          <!--  TODO: Remove this comment, I just blocked these 'cause it's too slow at home
           		<ref bean="cswMDUTest" />
                 <ref bean="cswAuscopeTest" />
-                <ref bean="cswAsterProduction" />  -->
+                <ref bean="cswAsterProduction" />
                 <ref bean="cswInSarTest" />
             </list>
         </constructor-arg>
