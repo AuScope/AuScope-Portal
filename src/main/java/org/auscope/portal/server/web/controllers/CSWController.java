@@ -16,6 +16,9 @@ import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +36,21 @@ public class CSWController extends BaseCSWController {
             ViewKnownLayerFactory viewKnownLayerFactory) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.serviceCaller = serviceCaller;
+    }
+    
+    /**
+     * 
+     * @param dateString in format: 28/02/2013
+     * @return
+     */
+    private DateTime stringToDateTime(String dateString) {
+        String[] date = dateString.split("/");
+        
+        return new DateTime(
+                Integer.parseInt(date[2]),
+                Integer.parseInt(date[1]),
+                Integer.parseInt(date[0]),
+                0,0,0,0);
     }
 
     /**
@@ -59,11 +77,14 @@ public class CSWController extends BaseCSWController {
             String cqlText,
             int startPoint,
             int maxRecords,
-            String bbox,
+            //String bbox,
             String anyText,
             String title,
-            String abstract_            
-            ) {
+            String abstract_,
+            String metadataDateFrom,
+            String metadataDateTo,
+            String temporalExtentFrom,
+            String temporalExtentTo) {
         CSWServiceItem endpoint = new CSWServiceItem(
                 "", // This ID won't actually be used so we can just leave it blank. 
                 cswServiceUrl);
@@ -75,18 +96,27 @@ public class CSWController extends BaseCSWController {
                 false);
 
         try {
-            FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
-            
-            // TODO: REMOVE
-            System.out.println(spatialBounds);
-            System.out.println(bbox);
-            
+            //FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
+              
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
                     anyText,
-                    spatialBounds); 
+                    null//spatialBounds
+                    ); 
             
             filter.setTitle(title);
             filter.setAbstract(abstract_);
+            
+            if (!metadataDateFrom.isEmpty() && !metadataDateTo.isEmpty()) {
+                filter.setMetadataChangeDate(
+                        stringToDateTime(metadataDateFrom), 
+                        stringToDateTime(metadataDateTo));
+            }
+            
+            if (!temporalExtentFrom.isEmpty() && !temporalExtentTo.isEmpty()) {
+                filter.setTemporalExtent(
+                        stringToDateTime(temporalExtentFrom), 
+                        stringToDateTime(temporalExtentTo));
+            }
             
             CSWGetRecordResponse response = cswService.queryCSWEndpoint(
                     startPoint, 

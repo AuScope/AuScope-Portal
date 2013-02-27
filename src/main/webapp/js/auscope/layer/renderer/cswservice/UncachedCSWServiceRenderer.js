@@ -6,6 +6,10 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     extend : 'portal.layer.renderer.Renderer',
 
     _maximumCSWRecordsToRetrieveAtOnce : 100,
+    
+    _cswRenderer : null,
+    
+    _ajaxRequest : null,
 
     config : {
         /**
@@ -21,6 +25,47 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
+    },
+    
+    _displayCSWsWithCSWRenderer : function (cswRecords) {
+        // This bit is a bit sneaky: we have to store the CSWRecords on this
+        // parent layer so that we can make the CSWRenderer use them.
+        // We temporarily store the existing records (i.e. the pointer to the
+        // CSW endpoint) and then replace it at the end.
+        var tempCSWRecords = this.parentLayer.get('cswRecords');
+        this.parentLayer.set('cswRecords', cswRecords);
+        
+        // Show the results:
+        _cswRenderer = Ext.create('portal.layer.renderer.csw.CSWRenderer', {
+            map : this.map,
+            icon : this.icon,
+            polygonColor: this.polygonColor
+        });
+        
+        _cswRenderer.parentLayer = this.parentLayer;
+        
+        var wholeGlobe = Ext.create('portal.util.BBox', {
+            northBoundLatitude : 90,
+            southBoundLatitude : -90,
+            eastBoundLongitude : -180,
+            westBoundLongitude : 180                            
+        });
+        
+        var emptyFilter = Ext.create('portal.layer.filterer.Filterer', {
+            spatialParam : wholeGlobe}); 
+        
+        _cswRenderer.displayData(
+                cswRecords, 
+                emptyFilter,
+                undefined);
+        
+        // This is where we put the proper CSW record back. 
+        // If this wasn't done you'd get a problem where you add
+        // the layer to the map and apply filter and then try to
+        // filter it again. The second filter will be applied to 
+        // the results of the original request instead of the 
+        // CSW endpoint itself.
+        this.parentLayer.set('cswRecords', tempCSWRecords);
     },
 
     /**
@@ -42,7 +87,6 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
      * this function
      */
     displayData : function(resources, filterer, callback) {
-
         // This method is called at the time the user presses "Apply Filter >>".
         // You need to do the following things:
         // 
@@ -54,12 +98,11 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         // then: just get them all (you can just request from position 2 onwards
         // since you already have the 1st).
         // else: ask the user if they want to get them all or just get some
-        // 4. Render the responses. TODO: Will they be rendered as CSWRecords or
-        // should the CSWOnlineResources be used
+        // 4. Render the responses as CSWRecords.
         // to determine which specialised renderer to use?
 
-        // Here's step 1:
-        // var running = true;
+        
+        this.removeData();
         var cswRecord = this.parentLayer.data.cswRecords[0].data;
         var cswServiceUrl = resources[0].data.url;
         var cqlText = cswRecord.descriptiveKeywords[0];
@@ -68,8 +111,13 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var anyTextFilter = filterer.parameters.anyText;
         var titleFilter = filterer.parameters.title;
         var abstractFilter = filterer.parameters.abstract;
-        
+        var metadataDateFilterFrom = filterer.parameters.metadata_change_date_from;
+        var metadataDateFilterTo = filterer.parameters.metadata_change_date_to;
+        var temporalExtentFilterFrom = filterer.parameters.temporal_extent_date_from;
+        var temporalExtentFilterTo = filterer.parameters.temporal_extent_date_to;
 
+        var msg = Ext.MessageBox.wait('Loading...');
+        
         _ajaxRequest = Ext.Ajax.request({
             url : 'getUncachedCSWRecords.do',
             params : {
@@ -77,54 +125,50 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 cqlText : cqlText,
                 startPoint : 1,
                 maxRecords : this._maximumCSWRecordsToRetrieveAtOnce,
-                bbox : Ext.JSON.encode(bboxFilter),
+                //bbox : Ext.JSON.encode(bboxFilter),
                 anyText : anyTextFilter,
                 title : titleFilter,
-                abstract_ : abstractFilter
-            // TODO: add filtering bit here for date ranges.
+                abstract_ : abstractFilter,
+                metadataDateFrom : metadataDateFilterFrom, 
+                metadataDateTo : metadataDateFilterTo,
+                temporalExtentFrom : temporalExtentFilterFrom,
+                temporalExtentTo : temporalExtentFilterTo
             },
             scope: this,
             success : function(response) {
+                msg.hide();
                 response = Ext.JSON.decode(response.responseText);
                 if (response.success) {
                     cswRecords = [];
 
                     for (i = 0; i < response.data.length; i++) {
-                        cswRecords.push(Ext.create('portal.csw.CSWRecord',
-                                response.data[i]));
+                        cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
                     }
 
-                    var recordsReturned = cswRecords.length;
-                    var recordsAvailable = response.totalResults;
-
-                    if (recordsReturned <= recordsAvailable) {
+                    if (response.totalResults > this._maximumCSWRecordsToRetrieveAtOnce) {
+                        var me = this;
                         
-                        this.parentLayer.set('cswRecords', cswRecords);
-                        
-                        // Just show the results straight away:
-                        var cswRenderer = Ext.create('portal.layer.renderer.csw.CSWRenderer', {
-                            map : this.map,
-                            icon : this.icon,
-                            polygonColor: this.polygonColor
-                        });
-                        
-                        cswRenderer.parentLayer = this.parentLayer;
-                        
-                        var wholeGlobe = Ext.create('portal.util.BBox', {
-                            northBoundLatitude : 90,
-                            southBoundLatitude : -90,
-                            eastBoundLongitude : -180,
-                            westBoundLongitude : 180                            
-                        });
-                        
-                        var emptyFilter = Ext.create('portal.layer.filterer.Filterer', {
-                            spatialParam : wholeGlobe}); 
-                        
-                        cswRenderer.displayData(cswRecords, 
-                                emptyFilter,
-                                undefined);
-                    } else {
                         // We have to ask the user what they want to do.
+                        Ext.Msg.show({
+                            title:'Display partial result set?',
+                            msg: 'This query returns more than ' + this._maximumCSWRecordsToRetrieveAtOnce + 
+                            ' records. The portal will only show the first ' + this._maximumCSWRecordsToRetrieveAtOnce + 
+                            ' records. Alternatively, you can abort this operation, adjust your filter and try again.',
+                            buttonText: {
+                                yes : 'Display ' + this._maximumCSWRecordsToRetrieveAtOnce + ' records',
+                                no : 'Abort'
+                            },
+                            icon: Ext.Msg.QUESTION,
+                            fn : function (buttonId) {
+                                if (buttonId == 'yes') {
+                                    me._displayCSWsWithCSWRenderer(cswRecords);
+                                }
+                            }
+                       });
+                    }
+                    else { 
+                        // The number of totalResults is <= this._maximumCSWRecordsToRetrieveAtOnce so we can just show them.
+                        this._displayCSWsWithCSWRenderer(cswRecords);
                     }
                 }
             }
@@ -143,7 +187,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
      * 
      * resources - (same as displayData) an array of data sources which should
      * be used to render data filterer - (same as displayData) A custom filter
-     * that can be applied to the speHoucified data sources
+     * that can be applied to the specified data sources
      */
     getLegend : function(resources, filterer) {
         return this.legend;
@@ -159,6 +203,10 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
      * returns - void
      */
     removeData : function() {
+        if (typeof(_cswRenderer) != 'undefined' && _cswRenderer != null) {
+            _cswRenderer.removeData();
+        }
+
         this.primitiveManager.clearPrimitives();
     },
 
@@ -166,6 +214,8 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
      * An abstract function - see parent class for more info
      */
     abortDisplay : function() {
-        Ext.Ajax.abort(_ajaxRequest);
+        if (_ajaxRequest != null) {
+            Ext.Ajax.abort(_ajaxRequest);
+        }
     }
 });
