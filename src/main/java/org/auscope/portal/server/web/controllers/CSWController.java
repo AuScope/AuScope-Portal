@@ -2,23 +2,16 @@ package org.auscope.portal.server.web.controllers;
 
 import java.util.List;
 
-import net.sf.json.JSON;
-import net.sf.json.JSONObject;
-
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWService;
-import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
-import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +45,7 @@ public class CSWController extends BaseCSWController {
                 Integer.parseInt(date[0]),
                 0,0,0,0);
     }
-
+    
     /**
      * Requests CSW records from the cswServiceUrl provided.
      * The results will be filtered by the CQL Text and the filter options.
@@ -60,10 +53,17 @@ public class CSWController extends BaseCSWController {
      * and the number of records retrieved will not exceed maxRecords.
      * 
      * @param cswServiceUrl
+     * @param recordInfoUrl
      * @param cqlText
-     * // TODO: add filter options.
      * @param startPoint
      * @param maxRecords
+     * @param anyText
+     * @param title
+     * @param abstract_
+     * @param metadataDateFrom
+     * @param metadataDateTo
+     * @param temporalExtentFrom
+     * @param temporalExtentTo
      * @return
      * Example:
      * "data":[portal.csw.CSWRecord], // These are anonymous objects, you can use them as the config for portal.csw.CSWRecord.
