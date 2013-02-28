@@ -143,10 +143,10 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         // Just try to get one record first so that we can pull out the total result from response
         this._getCSWRecords(resources, filterer, 1, function(initialResponse) {
             initialResponse = Ext.JSON.decode(initialResponse.responseText);
-                        
+                
+            var cswRecords = [],
+                me = this;
             if (initialResponse.totalResults > this._maximumCSWRecordsToRetrieveAtOnce) {
-                // We'll ask the user what they want to do:
-                var me = this;
                 
                 // We have to ask the user what they want to do.
                 Ext.Msg.show({
@@ -165,8 +165,6 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                             me._getCSWRecords(resources, filterer, me._maximumCSWRecordsToRetrieveAtOnce, function(response) {
                                 response = Ext.JSON.decode(response.responseText);
                                 if (response.success) {
-                                    cswRecords = [];
-                                    
                                     for (i = 0; i < response.data.length; i++) {
                                         cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
                                     }
@@ -180,14 +178,11 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 });
             }
             else {
-                
                 /* TODO: this needs to be refactored so that it doesn't duplicate the code above */
                 var msg = Ext.MessageBox.wait('Loading...');
                 me._getCSWRecords(resources, filterer, me._maximumCSWRecordsToRetrieveAtOnce, function(response) {
                     response = Ext.JSON.decode(response.responseText);
                     if (response.success) {
-                        cswRecords = [];
-                        
                         for (i = 0; i < response.data.length; i++) {
                             cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
                         }
@@ -195,48 +190,9 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                     
                     me._displayCSWsWithCSWRenderer(cswRecords);
                     msg.hide();
+                });
             }
         });
-        
-   /*     
-        var msg = Ext.MessageBox.wait('Loading...');
-        this._getCSWRecords(resources, filterer, this._maximumCSWRecordsToRetrieveAtOnce, function(response) {
-            msg.hide();
-            response = Ext.JSON.decode(response.responseText);
-            if (response.success) {
-                cswRecords = [];
-                
-                for (i = 0; i < response.data.length; i++) {
-                    cswRecords.push(Ext.create('portal.csw.CSWRecord', response.data[i]));
-                }
-
-                if (response.totalResults > this._maximumCSWRecordsToRetrieveAtOnce) {
-//                    var me = this;
-//                    
-//                    // We have to ask the user what they want to do.
-//                    Ext.Msg.show({
-//                        title:'Display partial result set?',
-//                        msg: 'This query returns more than ' + this._maximumCSWRecordsToRetrieveAtOnce + 
-//                        ' records. The portal will only show the first ' + this._maximumCSWRecordsToRetrieveAtOnce + 
-//                        ' records. Alternatively, you can abort this operation, adjust your filter and try again.',
-//                        buttonText: {
-//                            yes : 'Display ' + this._maximumCSWRecordsToRetrieveAtOnce + ' records',
-//                            no : 'Abort'
-//                        },
-//                        icon: Ext.Msg.QUESTION,
-//                        fn : function (buttonId) {
-//                            if (buttonId == 'yes') {
-//                                me._displayCSWsWithCSWRenderer(cswRecords);
-//                            }
-//                        }
-//                   });
-                }
-                else { 
-                    // The number of totalResults is <= this._maximumCSWRecordsToRetrieveAtOnce so we can just show them.
-                    this._displayCSWsWithCSWRenderer(cswRecords);
-                }
-            }
-        });*/
     },
 
     /**
