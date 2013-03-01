@@ -36,6 +36,7 @@ public class CSWController extends BaseCSWController {
      * @param dateString in format: 28/02/2013
      * @return
      */
+    // TODO: Get rid of this, I shouldn't need to do it myself.
     private DateTime stringToDateTime(String dateString) {
         String[] date = dateString.split("/");
         
