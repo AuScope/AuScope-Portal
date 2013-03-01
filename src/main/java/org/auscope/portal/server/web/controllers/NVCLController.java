@@ -15,6 +15,7 @@ import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AbstractStreamResponse;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
@@ -46,8 +47,8 @@ public class NVCLController extends BasePortalController {
     private BoreholeService boreholeService;
     private NVCLDataService dataService;
     private CSWCacheService cswService;
-	
-	private int BUFFERSIZE = 1024 * 1024;
+
+    private int BUFFERSIZE = 1024 * 1024;
 
     @Autowired
     public NVCLController(BoreholeService boreholeService,
@@ -200,7 +201,7 @@ public class NVCLController extends BasePortalController {
             servletResponse.setContentType(serviceResponse.getContentType());
             responseOutput = servletResponse.getOutputStream();
 
-            writeInputToOutputStream(serviceInputStream, responseOutput, BUFFERSIZE, true);
+            FileIOUtil.writeInputToOutputStream(serviceInputStream, responseOutput, BUFFERSIZE, true);
         } finally {
             if (responseOutput != null) {
                 responseOutput.close();

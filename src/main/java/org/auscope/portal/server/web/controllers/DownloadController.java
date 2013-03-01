@@ -53,7 +53,7 @@ public class DownloadController extends BasePortalController {
         DownloadTracker downloadTracker=DownloadTracker.getTracker(email);
         Progression progress= downloadTracker.getProgress();
         if(progress==Progression.COMPLETED){
-            this.writeInputToOutputStream( downloadTracker.getFile(), response.getOutputStream(), 1024, true);
+            FileIOUtil.writeInputToOutputStream( downloadTracker.getFile(), response.getOutputStream(), 1024, true);
         }
 
     }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
@@ -65,7 +66,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
                     with(any(String.class)), with(any(Integer.class)), with(BaseWFSService.DEFAULT_SRS), with(equal(ResultType.Results)), with(equal((String) null)));
             will(returnValue(mockMethod));
 
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
+            oneOf(httpServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));
             will(returnValue(mockMineResponse));
 
             oneOf(mineralOccurrencesResponseHandler).getMines(mockMineResponse);
@@ -96,7 +97,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(methodMaker).makePostMethod(serviceURL, "er:MiningFeatureOccurrence", mineFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results, null); will(returnValue(mockMethod));
 
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
+            oneOf(httpServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));
             will(returnValue(mockMineResponse));
 
             oneOf(mineralOccurrencesResponseHandler).getMines(mockMineResponse);
@@ -188,7 +189,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         context.checking(new Expectations() {{
             //the mineral occurrence query part
             oneOf(methodMaker).makePostMethod(serviceURL, "gsml:MappedFeature", mineralOccurrenceFilter.getFilterStringAllRecords(), 0, BaseWFSService.DEFAULT_SRS, ResultType.Results, null); will(returnValue(mockMethod));
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(mockCommodityResponse));
+            oneOf(httpServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(returnValue(mockCommodityResponse));
 
             oneOf(mockGmlToKml).convert(mockCommodityResponse, serviceURL);
         }});
@@ -217,7 +218,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
             oneOf(methodMaker).makePostMethod(with(serviceUrl), with("er:MiningFeatureOccurrence"),
                     with(any(String.class)), with(any(Integer.class)), with(BaseWFSService.DEFAULT_SRS), with(ResultType.Results), with(equal((String) null)));
             will(returnValue(mockMethod));
-            oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod);
+            oneOf(httpServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));
             will(returnValue(mockActivityResponse));
 
             oneOf(mockGmlToKml).convert(mockActivityResponse, serviceUrl);

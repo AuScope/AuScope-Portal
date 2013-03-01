@@ -45,7 +45,7 @@ public class WCSController extends BasePortalController {
 
     private int BUFFERSIZE = 1024 * 1024;
 
-	
+
     @Autowired
     public WCSController(WCSService wcsService) {
         this.wcsService = wcsService;
@@ -236,9 +236,9 @@ public class WCSController extends BasePortalController {
             //Make our request
             dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams);
             zout.putNextEntry(new ZipEntry(outFileName));
-            writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
+            FileIOUtil.writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
         } catch (Exception ex) {
-            writeErrorToZip(zout, "", ex, "error.txt");
+            FileIOUtil.writeErrorToZip(zout, "", ex, "error.txt");
         } finally {
             FileIOUtil.closeQuietly(dataStream);
             FileIOUtil.closeQuietly(zout);

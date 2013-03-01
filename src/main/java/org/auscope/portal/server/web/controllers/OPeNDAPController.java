@@ -16,6 +16,7 @@ import org.auscope.portal.core.services.OpendapService;
 import org.auscope.portal.core.services.methodmakers.OPeNDAPGetDataMethodMaker.OPeNDAPFormat;
 import org.auscope.portal.core.services.responses.opendap.AbstractViewVariable;
 import org.auscope.portal.core.services.responses.opendap.ViewVariableFactory;
+import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.view.JSONModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,7 +41,7 @@ public class OPeNDAPController extends BasePortalController {
 
     private int BUFFERSIZE = 1024 * 1024;
 
-	
+
     /**
      * Instantiates a new opendap controller.
      *
@@ -139,8 +140,8 @@ public class OPeNDAPController extends BasePortalController {
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
         InputStream dataStream = null;
         try {
-		
-			String query =  opendapService.getQueryDetails(opendapUrl,format, constraints);
+
+            String query =  opendapService.getQueryDetails(opendapUrl,format, constraints);
             zout.putNextEntry(new ZipEntry("query.txt"));
             zout.write(query.getBytes());
 
@@ -148,11 +149,11 @@ public class OPeNDAPController extends BasePortalController {
 
             dataStream = opendapService.getData(opendapUrl, format, constraints);
 
-            writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
+            FileIOUtil.writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
         } catch (Exception ex) {
             log.info(String.format("Error requesting data from '%1$s'", opendapUrl));
             log.debug("Exception...", ex);
-            writeErrorToZip(zout, String.format("Error connecting to '%1$s'", opendapUrl), ex, "error.txt");
+            FileIOUtil.writeErrorToZip(zout, String.format("Error connecting to '%1$s'", opendapUrl), ex, "error.txt");
         } finally {
             if (dataStream != null) {
                 dataStream.close();

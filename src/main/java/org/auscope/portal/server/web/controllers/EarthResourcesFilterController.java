@@ -9,6 +9,7 @@ import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -370,7 +371,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        this.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
 
         styleStream.close();
         outputStream.close();
@@ -407,7 +408,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        this.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
 
         styleStream.close();
         outputStream.close();
@@ -447,7 +448,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        this.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
 
         styleStream.close();
         outputStream.close();

@@ -4,6 +4,8 @@ import java.awt.Menu;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -42,11 +44,19 @@ public class MenuController {
            = hostConfigurer.resolvePlaceholder("HOST.maxFeatures.value");
       String analyticKey
           = hostConfigurer.resolvePlaceholder("HOST.google.analytics.key");
+      String localhost=null;
+      try{
+          localhost = InetAddress.getLocalHost().getCanonicalHostName();
+      }catch(UnknownHostException e){
+          logger.warn(e);
+          return null;
+      }
 
       logger.debug("googleKey: " + googleKey);
       logger.debug("vocabServiceUrl: " + vocabServiceUrl);
       logger.debug("maxFeatureValue: " + maxFeatureValue);
       logger.debug("analyticKey: " + analyticKey);
+      logger.debug("hostname: " + localhost);
 
       ModelAndView mav = new ModelAndView("gmap");
       mav.addObject("googleKey", googleKey);
@@ -54,6 +64,9 @@ public class MenuController {
       mav.addObject("maxFeatureValue", maxFeatureValue);
       if (analyticKey != null && !analyticKey.isEmpty()) {
           mav.addObject("analyticKey", analyticKey);
+      }
+      if (localhost != null && !localhost.isEmpty()) {
+          mav.addObject("localhost", localhost);
       }
       return mav;
    }

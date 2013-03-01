@@ -23,6 +23,7 @@
         <property name="proxyUrl" value="doMineFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
+        <property name="proxyDownloadUrl" value="doMineFilterDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -57,6 +58,7 @@
         <property name="proxyUrl" value="doMineralOccurrenceFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do"/>
+        <property name="proxyDownloadUrl" value="doMineralOccurrenceFilterDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -91,6 +93,7 @@
         <property name="proxyUrl" value="doMiningActivityFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
+        <property name="proxyDownloadUrl" value="doMiningActivityFilterDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">

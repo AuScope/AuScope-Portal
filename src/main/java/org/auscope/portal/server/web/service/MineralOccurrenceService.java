@@ -39,8 +39,7 @@ public class MineralOccurrenceService extends BaseWFSService {
     public static final String MINE_FEATURE_TYPE = "er:MiningFeatureOccurrence";
     public static final String MINERAL_OCCURRENCE_FEATURE_TYPE = "gsml:MappedFeature";
     public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";
-    public static final int DEFAULT_TIMEOUT = 7200000;
-    private  final HttpClient client;
+
 
     // ----------------------------------------------------- Instance variables
 
@@ -57,11 +56,7 @@ public class MineralOccurrenceService extends BaseWFSService {
         super(httpServiceCaller, methodMaker);
         this.mineralOccurrencesResponseHandler = respHandler;
         this.gmlToKml = gmlToKml;
-        client=new HttpClient();
-        HttpClientParams clientParams=new HttpClientParams();
-        clientParams.setSoTimeout(DEFAULT_TIMEOUT);//VT 2 hours
 
-        client.setParams(clientParams);
     }
 
     /**
@@ -70,15 +65,13 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
      */
-    private String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
+    public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
         String filterString = null;
         if (bbox == null) {
             filterString = filter.getFilterStringAllRecords();
         } else {
             filterString = filter.getFilterStringBoundingBox(bbox);
         }
-
-        log.trace(filterString);
 
         return filterString;
     }
@@ -99,7 +92,7 @@ public class MineralOccurrenceService extends BaseWFSService {
         HttpMethodBase method = null;
         try {
             method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
-            String responseGml = httpServiceCaller.getMethodResponseAsString(method,client);
+            String responseGml = httpServiceCaller.getMethodResponseAsString(method);
             String responseKml = gmlToKml.convert(responseGml, serviceUrl);
 
             return new WFSTransformedResponse(responseGml, responseKml, method);
@@ -123,7 +116,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
         HttpMethodBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
-            String response = httpServiceCaller.getMethodResponseAsString(method,client);
+            String response = httpServiceCaller.getMethodResponseAsString(method);
             return mineralOccurrencesResponseHandler.getMines(response);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
@@ -182,7 +175,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
         HttpMethodBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
-            String response = httpServiceCaller.getMethodResponseAsString(method,client);
+            String response = httpServiceCaller.getMethodResponseAsString(method);
             String kml = gmlToKml.convert(response, serviceURL);
             return new WFSTransformedResponse(response, kml, method);
         } catch (Exception ex) {
@@ -260,7 +253,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
         HttpMethodBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
-            String response = httpServiceCaller.getMethodResponseAsString(method,client);
+            String response = httpServiceCaller.getMethodResponseAsString(method);
             String kml = gmlToKml.convert(response, serviceURL);
             return new WFSTransformedResponse(response, kml, method);
         } catch (Exception ex) {

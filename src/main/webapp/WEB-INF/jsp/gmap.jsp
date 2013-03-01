@@ -25,6 +25,7 @@
          var VOCAB_SERVICE_URL = "${vocabServiceUrl}";
          var NVCL_WEB_SERVICE_IP = "${nvclWebServiceIP}";
          var MAX_FEATURES = "${maxFeatureValue}";
+         var LOCALHOST = "${localhost}";
          var WEB_CONTEXT = '<%= request.getContextPath() %>';
 
       </script>
