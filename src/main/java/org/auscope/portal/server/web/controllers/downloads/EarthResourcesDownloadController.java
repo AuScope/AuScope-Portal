@@ -59,7 +59,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
         try {
             InputStream results = this.mineralOccurrenceDownloadService.downloadMinesGml(serviceUrl, mineName, bbox, maxFeatures);
 
-            FileIOUtil.writeInputToOutputStream(results, outputStream, 1024,true);
+            FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
 
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
@@ -117,7 +117,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     maxFeatures,
                     bbox);
 
-            FileIOUtil.writeInputToOutputStream(results, outputStream, 1024,true);
+            FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
 
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
@@ -180,7 +180,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     , bbox);
 
 
-            FileIOUtil.writeInputToOutputStream(results, outputStream, 1024,true);
+            FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
 
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));

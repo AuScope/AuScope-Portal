@@ -9,6 +9,7 @@ import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.server.http.download.ServiceDownloadManager;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
@@ -41,7 +42,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
     public static final String MINE_FEATURE_TYPE = "er:MiningFeatureOccurrence";
     public static final String MINERAL_OCCURRENCE_FEATURE_TYPE = "gsml:MappedFeature";
     public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";
-    public static final int DEFAULT_TIMEOUT = 7200000;//VT: let it download for 2 hours
+    public static final int DEFAULT_TIMEOUT = ServiceDownloadManager.MAX_WAIT_TIME_MINUTE * 60 * 1000;
     private  final HttpClient client;
 
 
