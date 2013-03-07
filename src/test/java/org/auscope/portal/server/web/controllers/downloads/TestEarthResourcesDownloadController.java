@@ -89,8 +89,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         }});
 
         this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0,this.response);
-        Assert.assertTrue(out.getInputString().startsWith("<error>org.auscope.portal.core.services.PortalServiceException"));
-
+        Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
 
 
@@ -140,7 +139,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
      */
     @Test
     public void testMineralOccurrenceDownloadException() throws Exception {
-        final String serviceUrl = "http://localhost?";
+        final String serviceUrl = "http://testblah.com";
         final int maxFeatures = 21341;
         final String commodityName = "cn";
         final String measureType = "mt";
@@ -171,7 +170,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                         minCommodityAmount, minCommodityAmountUOM, null,
                         maxFeatures, this.response);
 
-        Assert.assertTrue(out.getInputString().startsWith("<error>org.auscope.portal.core.services.PortalServiceException"));
+        Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
 
     /**
@@ -180,7 +179,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
      */
     @Test
     public void testMineActivityDownload() throws Exception {
-        final String serviceURL = "http://localhost?";
+        final String serviceURL = "http://testblah.com";
         final int maxFeatures = 21341;
         final String mineName = "mineName"; // to get all mines
         final String startDate = "2010-01-01";
@@ -220,7 +219,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
      */
     @Test
     public void testMineActivityDownloadException() throws Exception {
-        final String serviceURL = "http://localhost?";
+        final String serviceURL = "http://testblah.com";
         final int maxFeatures = 21341;
         final String mineName = "mineName"; // to get all mines
         final String startDate = "2010-01-01";
@@ -251,7 +250,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 serviceURL, mineName, startDate, endDate, oreProcessed,
                 producedMaterial, cutOffGrade, production, null, maxFeatures,
                 this.response);
-        Assert.assertTrue(out.getInputString().startsWith("<error>org.auscope.portal.core.services.PortalServiceException"));
+        Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
 
 

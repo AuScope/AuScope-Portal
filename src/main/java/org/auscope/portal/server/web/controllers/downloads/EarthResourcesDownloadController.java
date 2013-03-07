@@ -1,5 +1,10 @@
 package org.auscope.portal.server.web.controllers.downloads;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -55,17 +60,25 @@ public class EarthResourcesDownloadController extends BasePortalController{
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
-
+        File file=null;
         try {
             InputStream results = this.mineralOccurrenceDownloadService.downloadMinesGml(serviceUrl, mineName, bbox, maxFeatures);
 
-            FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
+            file= this.writeStreamToFileTemporary(results, "MFD", ".xml", true);
+            FileInputStream in=new FileInputStream(file);
+            FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);
-            FileIOUtil.writeExceptionToXMLStream(e, outputStream,true);
+            FileIOUtil.writeExceptionToXMLStream(e, outputStream,false,serviceUrl);
 
+        }finally{
+            outputStream.flush();
+            outputStream.close();
+            if(file != null){
+                file.delete();
+            }
         }
     }
 
@@ -103,6 +116,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
+        File file=null;
 
         try {
             //get the mineral occurrences
@@ -117,12 +131,20 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     maxFeatures,
                     bbox);
 
-            FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
+            file= this.writeStreamToFileTemporary(results, "MOD", ".xml", true);
+            FileInputStream in=new FileInputStream(file);
+            FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);
-            FileIOUtil.writeExceptionToXMLStream(e, outputStream,true);
+            FileIOUtil.writeExceptionToXMLStream(e, outputStream,false,serviceUrl);
+        }finally{
+            outputStream.flush();
+            outputStream.close();
+            if(file != null){
+                file.delete();
+            }
         }
     }
 
@@ -165,6 +187,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
+        File file=null;
 
         try {
             // Get the mining activities
@@ -180,12 +203,46 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     , bbox);
 
 
-            FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
+            file= this.writeStreamToFileTemporary(results, "MAD", ".xml", true);
+            FileInputStream in=new FileInputStream(file);
+            FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
+
 
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);
-            FileIOUtil.writeExceptionToXMLStream(e, outputStream,true);
+            FileIOUtil.writeExceptionToXMLStream(e, outputStream,false,serviceUrl);
+        }finally{
+            outputStream.flush();
+            outputStream.close();
+            if(file != null){
+                file.delete();
+            }
+        }
+    }
+
+
+    private File writeStreamToFileTemporary(InputStream ins,String identifier,String fileSuffix,boolean closeIns) throws IOException {
+        BufferedOutputStream out=null;
+        File f=null;
+        try{
+            f = File.createTempFile(identifier, fileSuffix);
+            out= new BufferedOutputStream(new FileOutputStream(f));
+            FileIOUtil.writeInputToOutputStream(ins, out, 8 * 1024, false);
+            out.flush();
+            out.close();
+
+            //VT: After we have finish writing the stream to file we want to return it.
+            log.info(f.getCanonicalPath() + " : Complete writing of temporary file");
+            return f;
+
+        }catch(IOException e){
+            throw e;
+        }finally{
+            out.close();
+            if(closeIns){
+                ins.close();
+            }
         }
     }
 

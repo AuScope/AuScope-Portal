@@ -1,8 +1,6 @@
 package org.auscope.portal.server.web.service.download;
 
 import java.io.InputStream;
-import java.util.List;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.params.HttpClientParams;
@@ -42,7 +40,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
     public static final String MINE_FEATURE_TYPE = "er:MiningFeatureOccurrence";
     public static final String MINERAL_OCCURRENCE_FEATURE_TYPE = "gsml:MappedFeature";
     public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";
-    public static final int DEFAULT_TIMEOUT = ServiceDownloadManager.MAX_WAIT_TIME_MINUTE * 60 * 1000;
+    public static final int DEFAULT_TIMEOUT = 60 * 60 * 1000; //VT: we give 1 hour to download per service location
     private  final HttpClient client;
 
 
