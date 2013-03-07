@@ -74,8 +74,9 @@ public class EarthResourcesDownloadController extends BasePortalController{
             FileIOUtil.writeExceptionToXMLStream(e, outputStream,false,serviceUrl);
 
         }finally{
-            outputStream.flush();
-            outputStream.close();
+            //outputStream.close();
+            // VT : do not attempt to close the outputStream
+            //http://stackoverflow.com/questions/1159168/should-one-call-close-on-httpservletresponse-getoutputstream-getwriter
             if(file != null){
                 file.delete();
             }
@@ -140,8 +141,6 @@ public class EarthResourcesDownloadController extends BasePortalController{
             log.debug("Exception: ", e);
             FileIOUtil.writeExceptionToXMLStream(e, outputStream,false,serviceUrl);
         }finally{
-            outputStream.flush();
-            outputStream.close();
             if(file != null){
                 file.delete();
             }
@@ -213,8 +212,6 @@ public class EarthResourcesDownloadController extends BasePortalController{
             log.debug("Exception: ", e);
             FileIOUtil.writeExceptionToXMLStream(e, outputStream,false,serviceUrl);
         }finally{
-            outputStream.flush();
-            outputStream.close();
             if(file != null){
                 file.delete();
             }
