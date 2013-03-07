@@ -77,10 +77,10 @@ public class MSCLWFSService extends BaseWFSService {
 	    String filterString = String.format( 
 	            "<Filter>" +
 	            "    <And>" +
-	            "        <PropertyIs>" +
+	            "        <PropertyIsEqualTo>" +
 	            "            <PropertyName>mscl:borehole_header_id</PropertyName>" +
 	            "            <Literal>%s</Literal>" +
-	            "        </PropertyIs>" +
+	            "        </PropertyIsEqualTo>" +
 	            "        <PropertyIsBetween>" +
 	            "            <PropertyName>mscl:depth</PropertyName>" +
 	            "            <LowerBoundary>" +
