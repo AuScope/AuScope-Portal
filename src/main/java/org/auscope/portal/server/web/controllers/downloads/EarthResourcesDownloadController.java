@@ -233,7 +233,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
             out.close();
 
             //VT: After we have finish writing the stream to file we want to return it.
-            log.info(f.getCanonicalPath() + " : Complete writing of temporary file");
+            log.info(f.getName() + " : Complete writing of temporary file");
             return f;
 
         }catch(IOException e){
