@@ -70,6 +70,9 @@ public class MSCLWFSService extends BaseWFSService {
 	        final String boreholeHeaderId,
 	        final String startDepth,
 	        final String endDepth) throws ConnectException, ConnectTimeoutException, UnknownHostException, Exception {
+	    	    
+	    // Remove the first part of the id.; we need to use the numerical part when looking up the observations:
+	    String boreholeHeaderIdDigitsOnly = boreholeHeaderId.replaceFirst("borehole\\.", ""); 
 
 	    String filterString = String.format( 
 	            "<Filter>" +
@@ -89,7 +92,7 @@ public class MSCLWFSService extends BaseWFSService {
 	            "        </PropertyIsBetween>" +
 	            "    </And>" +
 	            "</Filter>", 
-	            boreholeHeaderId,
+	            boreholeHeaderIdDigitsOnly,
 	            startDepth,
 	            endDepth);
 
