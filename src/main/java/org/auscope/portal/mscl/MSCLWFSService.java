@@ -71,25 +71,27 @@ public class MSCLWFSService extends BaseWFSService {
 	        final String startDepth,
 	        final String endDepth) throws ConnectException, ConnectTimeoutException, UnknownHostException, Exception {
 
-        String filterString = String.format( 
-            "<Filter>" +
-            "   <PropertyIs>" +
-            "       <PropertyName>mscl:borehole_header_id</PropertyName>" +
-            "       <Literal>%s</Literal>" +
-            "   </PropertyIs>" +
-            "   <PropertyIsBetween>" +
-            "       <PropertyName>mscl:depth</PropertyName>" +
-            "       <LowerBoundary>" +
-            "           <Literal>%s</Literal>" +
-            "       </LowerBoundary>" +
-            "       <UpperBoundary>" +
-            "           <Literal>%s</Literal>" +
-            "       </UpperBoundary>" +
-            "   </PropertyIsBetween>" +
-            "</Filter>", 
-            boreholeHeaderId,
-            startDepth,
-            endDepth);
+	    String filterString = String.format( 
+	            "<Filter>" +
+	            "    <And>" +
+	            "        <PropertyIs>" +
+	            "            <PropertyName>mscl:borehole_header_id</PropertyName>" +
+	            "            <Literal>%s</Literal>" +
+	            "        </PropertyIs>" +
+	            "        <PropertyIsBetween>" +
+	            "            <PropertyName>mscl:depth</PropertyName>" +
+	            "            <LowerBoundary>" +
+	            "                <Literal>%s</Literal>" +
+	            "            </LowerBoundary>" +
+	            "            <UpperBoundary>" +
+	            "                <Literal>%s</Literal>" +
+	            "            </UpperBoundary>" +
+	            "        </PropertyIsBetween>" +
+	            "    </And>" +
+	            "</Filter>", 
+	            boreholeHeaderId,
+	            startDepth,
+	            endDepth);
 
 	    HttpMethodBase method = this.generateWFSRequest(
 	        serviceUrl,
