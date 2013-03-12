@@ -10,12 +10,7 @@
       <meta name="description" content="Access geoscientific information from around Australia, via AuScopes national e-Research infrastructure.">
       <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
       <meta name="author" content="AuScope">
-
-      <%-- Google Maps imports --%>
-      <!--<script src="http://maps.google.com/maps?file=api&amp;v=2.X&amp;key=${googleKey}" type="text/javascript"></script>
-      <script src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js"
-             type="text/javascript"></script>-->
-
+      
       <%-- Open Layers Imports --%>
       <link rel="stylesheet" href="portal-core/js/OpenLayers-2.12/theme/default/style.css" type="text/css">
       <script src="portal-core/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
