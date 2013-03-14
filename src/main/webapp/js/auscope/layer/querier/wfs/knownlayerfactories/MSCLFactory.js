@@ -8,13 +8,9 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
     // I want this to always be an array, even if only has one element.
     observationsToReturn = [].concat(observationsToReturn);
 
-    initialChartWidth = 369;
-    
-    // Basically this means that the first chart should have an initial value of 400. This one needs to be wider than the rest because
-    // it is the only one that includes the y-axis label. If the user resizes the window then the first chart's width will have to be
-    // set based on this same multiplier.
-    firstChartExtraWidthMultiplier = 400 / initialChartWidth; 
-    initialChartHeight = 700;
+    firstInitialChartWidth = 381;
+    initialChartWidth = 350;
+    initialChartHeight = 500;
 
     // Define the model:
     Ext.define('DynamicModel', {
@@ -91,7 +87,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 // Create the array of charts
                 charts[i] = Ext.create('Ext.chart.Chart', {
                     height : initialChartHeight,
-                    width : initialChartWidth * (first ? firstChartExtraWidthMultiplier : 1), // The first chart is slightly wider to accommodate its y-axis label.
+                    width : first ? firstInitialChartWidth : initialChartWidth, // The first chart is slightly wider to accommodate its y-axis label.
                     shadow : false,
                     store : store,
                     axes : [ {
@@ -158,7 +154,6 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         }
                     }
                 }
-                
             }).show();
 
             // Remove the load mask once the window has been rendered:
