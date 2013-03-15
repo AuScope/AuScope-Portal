@@ -64,7 +64,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
         try {
             InputStream results = this.mineralOccurrenceDownloadService.downloadMinesGml(serviceUrl, mineName, bbox, maxFeatures);
 
-            file= this.writeStreamToFileTemporary(results, "MFD", ".xml", true);
+            file= this.writeStreamToFileTemporary(results, "APT_MFD", ".xml", true);
             FileInputStream in=new FileInputStream(file);
             FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
@@ -132,7 +132,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     maxFeatures,
                     bbox);
 
-            file= this.writeStreamToFileTemporary(results, "MOD", ".xml", true);
+            file= this.writeStreamToFileTemporary(results, "APT_MOD", ".xml", true);
             FileInputStream in=new FileInputStream(file);
             FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
@@ -202,7 +202,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     , bbox);
 
 
-            file= this.writeStreamToFileTemporary(results, "MAD", ".xml", true);
+            file= this.writeStreamToFileTemporary(results, "APT_MAD", ".xml", true);
             FileInputStream in=new FileInputStream(file);
             FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
