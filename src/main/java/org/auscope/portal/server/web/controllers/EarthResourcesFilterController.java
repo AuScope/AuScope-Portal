@@ -456,13 +456,31 @@ public class EarthResourcesFilterController extends BasePortalController {
 
 
     public String getStyle(String filter, String name, String color){
+        //VT : This is a hack to get around using functions in feature chaining
+        // https://jira.csiro.au/browse/SISS-1374
+        // there are currently no available fix as wms request are made prior to 
+        // knowing app-schema mapping.
+        
+        String hackSldRule="<sld:Rule>" +
+                    "<sld:Name>hackSld</sld:Name>" +
+                    "<sld:Title>hackSld</sld:Title>" +
+                    "<ogc:Filter>" +
+                        "<ogc:Not>" +
+                        "<ogc:PropertyIsNull>" +
+                            "<ogc:PropertyName>FEATURE_LINK</ogc:PropertyName>" +
+                        "</ogc:PropertyIsNull>" +
+                        "</ogc:Not>" +
+                    "</ogc:Filter>" +
+                "</sld:Rule>";
+
+
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
                 + "<NamedLayer>" + "<Name>" + name + "</Name>"
                 + "<UserStyle>" + "<Name>portal-style</Name>"
                 + "<Title>portal-style</Title>"
                 + "<Abstract>portal-style</Abstract>"
-                + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>" + "<Rule>"
+                + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>" + hackSldRule + "<Rule>"
                 + "<Name>portal-style</Name>"
                 + "<Abstract>portal-style</Abstract>"
                 + filter
