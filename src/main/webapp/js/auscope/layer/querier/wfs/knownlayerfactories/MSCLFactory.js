@@ -125,7 +125,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 })
             }
 
-            Ext.create('Ext.Window', {
+            const graphWindow = Ext.create('Ext.Window', {
                 border : true,
                 layout : 'hbox',
                 resizable : true,
@@ -155,6 +155,16 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     }
                 }
             }).show();
+            
+            // Make sure that the graph window isn't larger than the brower's viewport:
+            var viewSize = Ext.getBody().getViewSize();
+            var graphSize = graphWindow.getSize();
+            const border = 20;            
+            graphSize.width = Math.min(graphSize.width, viewSize.width - border);
+            graphSize.height = Math.min(graphSize.height, viewSize.height - border); 
+
+            graphWindow.setSize(graphSize);
+            graphWindow.center();
 
             // Remove the load mask once the window has been rendered:
             maskedElement.setLoading(false);
