@@ -156,7 +156,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 }
             }).show();
             
-            // Make sure that the graph window isn't larger than the brower's viewport:
+            // Make sure that the graph window isn't larger than the browser's viewport:
             var viewSize = Ext.getBody().getViewSize();
             var graphSize = graphWindow.getSize();
             const border = 20;            
