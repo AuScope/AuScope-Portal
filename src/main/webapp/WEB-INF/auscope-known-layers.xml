@@ -340,7 +340,7 @@
                 </constructor-arg>
                 <property name="relatedFeatureTypeNames">
                     <list>
-                        <value>sa:SamplingFeatureCollection</value>
+                        <value>mscl:scanned_data</value>
                     </list>
                 </property>
             </bean>
