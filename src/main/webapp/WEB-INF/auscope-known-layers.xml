@@ -341,6 +341,7 @@
                 <property name="relatedFeatureTypeNames">
                     <list>
                         <value>mscl:scanned_data</value>
+                        <value>sa:SamplingFeatureCollection</value>
                     </list>
                 </property>
             </bean>
