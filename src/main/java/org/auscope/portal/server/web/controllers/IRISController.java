@@ -1,16 +1,9 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.namespaces.IterableNamespace;
@@ -23,6 +16,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -35,6 +30,17 @@ public class IRISController extends BasePortalController {
         return string.endsWith("/") ? string : string + "/";
     }
     
+    /**
+     * Makes a request to the IRIS service specified, for all the stations
+     * on the network code provided.
+     * 
+     * The response is converted to some KML points to be rendered on the
+     * map.
+     * 
+     * @param serviceUrl The IRIS web service URL.
+     * @param networkCode The network code that you're interested in.
+     * @return a JSONResponseMAV containing KML points of each station.
+     */
     @RequestMapping("/getIRISStations.do")
     public ModelAndView getIRISStations(
         @RequestParam("serviceUrl") String serviceUrl,
@@ -84,6 +90,15 @@ public class IRISController extends BasePortalController {
         }
     }
     
+    /**
+     * Makes a request to the IRIS service for a particular station's channels.
+     * 
+     * @param serviceUrl The IRIS web service URL.
+     * @param networkCode The network code that you're interested in.
+     * @param stationCode The code of the station to interrogate.
+     * @return a JSONResponseMAV containing the start and end dates of the site and
+     * a collection of channel codes.
+     */
     @RequestMapping("/getStationChannels.do")
     public ModelAndView getStationChannels(
         @RequestParam("serviceUrl") String serviceUrl,
@@ -91,7 +106,6 @@ public class IRISController extends BasePortalController {
         @RequestParam("stationCode") String stationCode) {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
         try {
-            // TODO: validate input!
             InputStream inputStream = new URL(serviceUrl + "station/query?net=" + networkCode + "&station=" + stationCode + "&level=chan").openStream();
             Scanner scanner = new Scanner(inputStream, "ISO-8859-1");
             String irisResponse = scanner.useDelimiter("\\A").next();

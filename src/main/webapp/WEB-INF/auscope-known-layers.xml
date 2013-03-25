@@ -366,24 +366,16 @@
         </property>
     </bean>
 
-
-
-
-
     <bean id="knownTypeSeismologyInSchool" class="org.auscope.portal.view.ResearchDataLayer">
         <constructor-arg name="id" value="seismology-in-schools-site"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.view.knownlayer.IRISSelector">
-                <constructor-arg name="networkCode" value="S"/>
                 <constructor-arg name="serviceEndpoint" value="http://www.iris.edu/ws"/>
             </bean>
         </constructor-arg>
-        <!--  TODO:  -->
         <property name="name" value="IRIS Feed"/>
         <property name="description" value="Seismographs in Schools data feed from Incorporated Research Institutions for Seismology (IRIS). S network code."/>
         <property name="group" value="Seismographs in Schools Network"/>
-        <property name="proxyUrl" value="doIRISFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -398,11 +390,7 @@
             </bean>
         </property>
     </bean>
-
-
-
-
-
+    
     <bean id="knownTypeBoreholePressureDB" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="pressuredb-borehole"/>
         <constructor-arg name="knownLayerSelector">

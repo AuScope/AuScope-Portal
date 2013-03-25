@@ -44,10 +44,11 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
      */
     displayData : function(resources, filterer, callback) {
         var me = this;
-        var serviceUrl = resources[0].data.url;
-        me.renderStatus.initialiseResponses([serviceUrl], 'Loading...');
         var irisResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.IRIS);
-        var onlineResource = irisResources[0];
+        var irisResource = irisResources[0];
+        var serviceUrl = irisResource.data.url;
+        var networkCode = irisResource.data.name;        
+        me.renderStatus.initialiseResponses([serviceUrl], 'Loading...');
         var layer = me.parentLayer;
 
         // Keep track of the _ajaxRequest handle so that we can abort it if need be:
@@ -55,7 +56,7 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
             url : 'getIRISStations.do',
             params : {
                 serviceUrl : serviceUrl,
-                networkCode : 'S'
+                networkCode : networkCode
             },
             success : function(response) {
                 var jsonReponse = Ext.JSON.decode(response.responseText);
@@ -64,7 +65,7 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
                 // this is what I'm generating. I don't really know why the KML parser is in the WFS
                 // namespace because to me it seems like they shouldn't be coupled...
                 var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : jsonReponse.data.kml, map : me.map});
-                var primitives = parser.makePrimitives(me.icon, onlineResource, layer);
+                var primitives = parser.makePrimitives(me.icon, irisResource, layer);
                 
                 // Add our single points and overlays to the overlay manager (which will add them to the map)
                 me.primitiveManager.addPrimitives(primitives);

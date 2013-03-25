@@ -12,13 +12,11 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
     },
-
-    _generateErrorComponent : function(message) {
-        return Ext.create('portal.layer.querier.BaseComponent', {
-            html: Ext.util.Format.format('<p class="centeredlabel">{0}</p>', message)
-        });
-    },
-
+    
+    /**
+     * Defines a form which, once filled out, can be submitted to instigate a 
+     * request for some of IRIS's timeseries data.
+     * */
     query : function(queryTarget, callback) {
         // This should make a request to get the available channels on the particular station, e.g.:
         // http://www.iris.edu/ws/station/query?net=S&station=AUDAR&level=chan
@@ -133,7 +131,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     }
                                     
-                                    // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&duration=1000&output=saca&ref=direct                                   
+                                    // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&end=2012-10-05T00:00:00&output=saca&ref=direct                                   
                                     window.open(irisUrl + '/timeseries/query?net=' + network + 
                                             '&sta=' + station + 
                                             '&cha=' + formValues.channel +
