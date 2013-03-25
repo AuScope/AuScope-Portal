@@ -199,7 +199,7 @@ Ext.application({
                 }
             }
 
-            layerStore.add(newLayer); //this adds the layer to our store
+            layerStore.insert(0,newLayer); //this adds the layer to our store
             layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
         };
 
