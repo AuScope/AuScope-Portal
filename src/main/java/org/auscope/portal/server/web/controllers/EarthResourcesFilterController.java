@@ -355,8 +355,8 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {
+        //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
-
         // Get the mining activities
         // VT: Currently not working as GeoServer is returning strange error for this filer
         String filter = this.mineralOccurrenceService.getMiningActivityFilter(
@@ -393,8 +393,8 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {
+        //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
-
         // Get the mining activities
         String filter = this.mineralOccurrenceService.getMineFilter(mineName,
                 bbox);
@@ -430,8 +430,8 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {
+        //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
-
         // Get the mining activities
         String unescapeCommodityName="";
         if(commodityName!=null){
@@ -458,9 +458,9 @@ public class EarthResourcesFilterController extends BasePortalController {
     public String getStyle(String filter, String name, String color){
         //VT : This is a hack to get around using functions in feature chaining
         // https://jira.csiro.au/browse/SISS-1374
-        // there are currently no available fix as wms request are made prior to 
+        // there are currently no available fix as wms request are made prior to
         // knowing app-schema mapping.
-        
+
         String hackSldRule="<sld:Rule>" +
                     "<sld:Name>hackSld</sld:Name>" +
                     "<sld:Title>hackSld</sld:Title>" +
@@ -500,16 +500,5 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
         return style;
     }
-// VT: Keeping this temporily  whilst vocab is getting fixed. To be deleted.
-//    public String myFilter(){
-//        String  result="<ogc:Filter>" +
-//        "<ogc:PropertyIsEqualTo >" +
-//        "<ogc:PropertyName>gsml:specification/er:MineralOccurrence/er:commodityDescription/er:Commodity/er:commodityName</ogc:PropertyName> " +
-//        "<ogc:Literal>urn:cgi:classifier:GA:commodity:Cu</ogc:Literal>" +
-//        "</ogc:PropertyIsEqualTo>" +
-//        "</ogc:Filter>";
-//        return result;
-//
-//    }
 
 }
