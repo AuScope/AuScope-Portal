@@ -78,7 +78,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                     xtype : 'radiogroup',
                                     fieldLabel : 'Channel',
                                     allowBlank : false,
-                                    columns : 1,
+                                    columns : 2,
                                     vertical : true,
                                     items : channelRadioButtons
                                 }, {
