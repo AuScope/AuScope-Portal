@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<StaMessage xmlns:iris="http://www.www.iris.edu/ws/schemas/station/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.data.scec.org/xml/station/" xsi:schemaLocation="http://www.data.scec.org/xml/station/20120307/ http://www.data.scec.org/xml/station/20120307/station.xsd http://www.iris.edu/ws/schemas/station/2012/03/22/ http://www.iris.edu/ws/schemas/station/2012/03/22/station_comments.xsd">
+ <Source>IRIS-DMC</Source>
+ <Sender>IRIS-DMC</Sender>
+ <Module>IRIS WEB SERVICE: http://www.iris.edu/ws/station - version: 1.3.8</Module>
+ <ModuleURI>http://www.iris.edu/ws/station/query?net=S</ModuleURI>
+ <SentDate>2013-03-27T01:20:11</SentDate>
+ <Network net_code="S">
+  <StartDate>2011-01-01T00:00:00</StartDate>
+  <EndDate>2500-12-12T23:59:59</EndDate>
+  <Description>Seismographs in Schools Projects</Description>
+  <TotalNumberStations>5</TotalNumberStations>
+  <SelectedNumberStations>5</SelectedNumberStations>
+  <Station net_code="S" sta_code="AUDAR">
+   <StationEpoch>
+    <StartDate>2011-05-04T00:00:00</StartDate>
+    <EndDate>2599-12-31T23:59:59</EndDate>
+    <Lat>-35.253</Lat>
+    <Lon>149.1377</Lon>
+    <Elevation>575.0</Elevation>
+    <Site>
+     <Name>Daramalan College, ACT</Name>
+    </Site>
+    <Operator>
+     <Agency>Seismographs in Schools Network</Agency>
+     <Contact>
+      <Name>UNKNOWN</Name>
+     </Contact>
+    </Operator>
+    <CreationDate>2011-05-04T00:00:00</CreationDate>
+    <TotalNumberChannels>6</TotalNumberChannels>
+    <SelectedNumberChannels>0</SelectedNumberChannels>
+   </StationEpoch>
+  </Station>
+  <Station net_code="S" sta_code="AUMHS">
+   <StationEpoch>
+    <StartDate>2011-05-04T00:00:00</StartDate>
+    <EndDate>2599-12-31T23:59:59</EndDate>
+    <Lat>-35.3635</Lat>
+    <Lon>149.0888</Lon>
+    <Elevation>615.0</Elevation>
+    <Site>
+     <Name>Melrose High School, ACT</Name>
+    </Site>
+    <Operator>
+     <Agency>Seismographs in Schools Network</Agency>
+     <Contact>
+      <Name>UNKNOWN</Name>
+     </Contact>
+    </Operator>
+    <CreationDate>2011-05-04T00:00:00</CreationDate>
+    <TotalNumberChannels>6</TotalNumberChannels>
+    <SelectedNumberChannels>0</SelectedNumberChannels>
+   </StationEpoch>
+  </Station>
+  <Station net_code="S" sta_code="AUMTS">
+   <StationEpoch>
+    <StartDate>2011-05-04T00:00:00</StartDate>
+    <EndDate>2599-12-31T23:59:59</EndDate>
+    <Lat>-35.3188</Lat>
+    <Lon>148.9964</Lon>
+    <Elevation>667.0</Elevation>
+    <Site>
+     <Name>Mt Stromlo, ANU</Name>
+    </Site>
+    <Operator>
+     <Agency>Seismographs in Schools Network</Agency>
+     <Contact>
+      <Name>UNKNOWN</Name>
+     </Contact>
+    </Operator>
+    <CreationDate>2011-05-04T00:00:00</CreationDate>
+    <TotalNumberChannels>6</TotalNumberChannels>
+    <SelectedNumberChannels>0</SelectedNumberChannels>
+   </StationEpoch>
+  </Station>
+  <Station net_code="S" sta_code="AUSIS">
+   <StationEpoch>
+    <StartDate>2011-05-04T00:00:00</StartDate>
+    <EndDate>2599-12-31T23:59:59</EndDate>
+    <Lat>-35.2839</Lat>
+    <Lon>149.1147</Lon>
+    <Elevation>585.0</Elevation>
+    <Site>
+     <Name>RSES, ANU</Name>
+    </Site>
+    <Operator>
+     <Agency>Seismographs in Schools Network</Agency>
+     <Contact>
+      <Name>UNKNOWN</Name>
+     </Contact>
+    </Operator>
+    <CreationDate>2011-05-04T00:00:00</CreationDate>
+    <TotalNumberChannels>6</TotalNumberChannels>
+    <SelectedNumberChannels>0</SelectedNumberChannels>
+   </StationEpoch>
+  </Station>
+  <Station net_code="S" sta_code="AUSMG">
+   <StationEpoch>
+    <StartDate>2013-03-14T00:00:00</StartDate>
+    <EndDate>2599-12-31T23:59:59</EndDate>
+    <Lat>-36.4161</Lat>
+    <Lon>148.6084</Lon>
+    <Elevation>951.0</Elevation>
+    <Site>
+     <Name>Snowy Mountains Grammar School, Jindabyne, NSW</Name>
+    </Site>
+    <Operator>
+     <Agency>Seismographs in Schools Network</Agency>
+     <Contact>
+      <Name>UNKNOWN</Name>
+     </Contact>
+    </Operator>
+    <CreationDate>2013-03-14T00:00:00</CreationDate>
+    <TotalNumberChannels>6</TotalNumberChannels>
+    <SelectedNumberChannels>0</SelectedNumberChannels>
+   </StationEpoch>
+  </Station>
+ </Network>
+</StaMessage>

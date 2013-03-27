@@ -1,6 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
@@ -15,9 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -25,9 +28,71 @@ import javax.xml.xpath.XPathFactory;
 
 @Controller
 public class IRISController extends BasePortalController {
+    /**
+     * The format with which to encode input stream. 
+     */
+    private static final String ENCODING = "ISO-8859-1";
+    
+    /**
+     * The XPath object that's used to create expressions to extract information from the IRIS responses.
+     */
+    private XPath xPath;
+    
+    /**
+     * Makes sure that a string has a trailing forward slash.
+     * @param string The string that you want to have a trailing forward slash.
+     * @return The original string, modified if required, with a trailing forward slash.
+     */
     private String ensureTrailingForwardslash(String string) {
         // Make sure the trailing separator is in place:
         return string.endsWith("/") ? string : string + "/";
+    }
+    
+    /**
+     * Instantiates the IRISController object.
+     * 
+     * Initialises the xPath object.
+     */
+    public IRISController() {
+        this.xPath = XPathFactory.newInstance().newXPath();
+        this.xPath.setNamespaceContext(new IterableNamespace() {
+            {
+                map.put("default", "http://www.data.scec.org/xml/station/");
+            }
+        });
+    }
+    
+    /**
+     * Downloads a resource from a URL and returns it as Document object.
+     * @param queryUrl The URL of the resource you require.
+     * @return The resource at the URL requested, converted to a Document object.
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
+    private Document getDocumentFromURL(String queryUrl)
+            throws IOException, ParserConfigurationException, SAXException {
+        String irisResponse = getIrisResponseFromQuery(queryUrl);
+        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        domFactory.setNamespaceAware(true);
+        DocumentBuilder builder = domFactory.newDocumentBuilder();
+        return builder.parse(new ByteArrayInputStream(irisResponse.getBytes(ENCODING)));
+    }
+    
+    /**
+     * Downloads a resource from a URL and returns it as a String object.
+     * @param queryUrl The URL of the resource you require.
+     * @return The resource at the requested URL, as a String object.
+     * @throws IOException
+     */
+    protected String getIrisResponseFromQuery(String queryUrl) throws IOException {
+        // NB: This method is protected so that it can be overridden in order break external dependencies in tests. 
+        InputStream inputStream = new URL(queryUrl).openStream();
+        Scanner scanner = new Scanner(inputStream, ENCODING);
+        String irisResponse = scanner.useDelimiter("\\A").next();
+        scanner.close();
+        inputStream.close();
+        return irisResponse;
     }
     
     /**
@@ -36,6 +101,8 @@ public class IRISController extends BasePortalController {
      * 
      * The response is converted to some KML points to be rendered on the
      * map.
+     * 
+     * The request will look something like this: http://www.iris.edu/ws/station/query?net=S
      * 
      * @param serviceUrl The IRIS web service URL.
      * @param networkCode The network code that you're interested in.
@@ -48,18 +115,7 @@ public class IRISController extends BasePortalController {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
 
         try {
-            String irisResponse = new Scanner(new URL(serviceUrl + "station/query?net=" + networkCode).openStream(), "ISO-8859-1").useDelimiter("\\A").next();
-                        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setNamespaceAware(true); // never forget this!
-            DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document irisDoc = builder.parse(new ByteArrayInputStream(irisResponse.getBytes("ISO-8859-1")));
-            
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            xPath.setNamespaceContext(new IterableNamespace() {
-                {
-                    map.put("default", "http://www.data.scec.org/xml/station/");
-                }
-            });
+            Document irisDoc = getDocumentFromURL(serviceUrl + "station/query?net=" + networkCode);
             
             NodeList stations = irisDoc.getDocumentElement().getElementsByTagName("Station");
             XPathExpression nameExpression = xPath.compile("default:StationEpoch/default:Site/default:Name/text()");
@@ -93,6 +149,8 @@ public class IRISController extends BasePortalController {
     /**
      * Makes a request to the IRIS service for a particular station's channels.
      * 
+     * The request will look something like this: http://www.iris.edu/ws/station/query?net=S&station=AUDAR&level=chan
+     * 
      * @param serviceUrl The IRIS web service URL.
      * @param networkCode The network code that you're interested in.
      * @param stationCode The code of the station to interrogate.
@@ -106,24 +164,8 @@ public class IRISController extends BasePortalController {
         @RequestParam("stationCode") String stationCode) {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
         try {
-            InputStream inputStream = new URL(serviceUrl + "station/query?net=" + networkCode + "&station=" + stationCode + "&level=chan").openStream();
-            Scanner scanner = new Scanner(inputStream, "ISO-8859-1");
-            String irisResponse = scanner.useDelimiter("\\A").next();
-            scanner.close();
-            inputStream.close();
-            
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setNamespaceAware(true); // never forget this!
-            DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document irisDoc = builder.parse(new ByteArrayInputStream(irisResponse.getBytes("ISO-8859-1")));
-            
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            xPath.setNamespaceContext(new IterableNamespace() {
-                {
-                    map.put("default", "http://www.data.scec.org/xml/station/");
-                }
-            });
-            
+            Document irisDoc = getDocumentFromURL(serviceUrl + "station/query?net=" + networkCode + "&station=" + stationCode + "&level=chan");
+             
             NodeList channels = irisDoc.getDocumentElement().getElementsByTagName("Channel");
             
             String[] channelCodes = new String[channels.getLength()];

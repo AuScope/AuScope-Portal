@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<StaMessage xmlns:iris="http://www.www.iris.edu/ws/schemas/station/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.data.scec.org/xml/station/" xsi:schemaLocation="http://www.data.scec.org/xml/station/20120307/ http://www.data.scec.org/xml/station/20120307/station.xsd http://www.iris.edu/ws/schemas/station/2012/03/22/ http://www.iris.edu/ws/schemas/station/2012/03/22/station_comments.xsd">
+ <Source>IRIS-DMC</Source>
+ <Sender>IRIS-DMC</Sender>
+ <Module>IRIS WEB SERVICE: http://www.iris.edu/ws/station - version: 1.3.8</Module>
+ <ModuleURI>http://www.iris.edu/ws/station/query?net=S&amp;station=AUDAR&amp;level=chan</ModuleURI>
+ <SentDate>2013-03-27T02:25:52</SentDate>
+ <Network net_code="S">
+  <StartDate>2011-01-01T00:00:00</StartDate>
+  <EndDate>2500-12-12T23:59:59</EndDate>
+  <Description>Seismographs in Schools Projects</Description>
+  <TotalNumberStations>5</TotalNumberStations>
+  <SelectedNumberStations>1</SelectedNumberStations>
+  <Station net_code="S" sta_code="AUDAR">
+   <StationEpoch>
+    <StartDate>2011-05-04T00:00:00</StartDate>
+    <EndDate>2599-12-31T23:59:59</EndDate>
+    <Lat>-35.253</Lat>
+    <Lon>149.1377</Lon>
+    <Elevation>575.0</Elevation>
+    <Site>
+     <Name>Daramalan College, ACT</Name>
+    </Site>
+    <Operator>
+     <Agency>Seismographs in Schools Network</Agency>
+     <Contact>
+      <Name>UNKNOWN</Name>
+     </Contact>
+    </Operator>
+    <CreationDate>2011-05-04T00:00:00</CreationDate>
+    <TotalNumberChannels>6</TotalNumberChannels>
+    <SelectedNumberChannels>6</SelectedNumberChannels>
+    <Channel chan_code="BHE" restricted="0" loc_code="  ">
+     <CreationDate>2011-05-04T00:00:00</CreationDate>
+     <Epoch iris:restricted="0">
+      <StartDate>2011-05-04T00:00:00</StartDate>
+      <EndDate>2599-12-31T23:59:59</EndDate>
+      <Comment>T6F16 C1856</Comment>
+      <Lat>-35.253</Lat>
+      <Lon>149.1377</Lon>
+      <Elevation>575.0</Elevation>
+      <Depth>0.0</Depth>
+      <Azimuth>90.0</Azimuth>
+      <Dip>0.0</Dip>
+      <Output>GEOPHYSICAL</Output>
+      <SampleRate>10.0</SampleRate>
+      <ClockDrift>0.001</ClockDrift>
+      <CalibrationUnit>V</CalibrationUnit>
+      <Sensor>
+       <EquipType>Guralp CMG6TD Sensor/Guralp CMG6TD Datalogger</EquipType>
+      </Sensor>
+      <InstrumentSensitivity>
+       <SensitivityValue>9.35684E8</SensitivityValue>
+       <Frequency>0.2</Frequency>
+       <SensitivityUnits>M/S - velocity in meters per second</SensitivityUnits>
+      </InstrumentSensitivity>
+     </Epoch>
+    </Channel>
+    <Channel chan_code="BHN" restricted="0" loc_code="  ">
+     <CreationDate>2011-05-04T00:00:00</CreationDate>
+     <Epoch iris:restricted="0">
+      <StartDate>2011-05-04T00:00:00</StartDate>
+      <EndDate>2599-12-31T23:59:59</EndDate>
+      <Comment>T6F16 C1856</Comment>
+      <Lat>-35.253</Lat>
+      <Lon>149.1377</Lon>
+      <Elevation>575.0</Elevation>
+      <Depth>0.0</Depth>
+      <Azimuth>0.0</Azimuth>
+      <Dip>0.0</Dip>
+      <Output>GEOPHYSICAL</Output>
+      <SampleRate>10.0</SampleRate>
+      <ClockDrift>0.001</ClockDrift>
+      <CalibrationUnit>V</CalibrationUnit>
+      <Sensor>
+       <EquipType>Guralp CMG6TD Sensor/Guralp CMG6TD Datalogger</EquipType>
+      </Sensor>
+      <InstrumentSensitivity>
+       <SensitivityValue>9.35684E8</SensitivityValue>
+       <Frequency>0.2</Frequency>
+       <SensitivityUnits>M/S - velocity in meters per second</SensitivityUnits>
+      </InstrumentSensitivity>
+     </Epoch>
+    </Channel>
+    <Channel chan_code="BHZ" restricted="0" loc_code="  ">
+     <CreationDate>2011-05-04T00:00:00</CreationDate>
+     <Epoch iris:restricted="0">
+      <StartDate>2011-05-04T00:00:00</StartDate>
+      <EndDate>2599-12-31T23:59:59</EndDate>
+      <Comment>T6F16 C1856</Comment>
+      <Lat>-35.253</Lat>
+      <Lon>149.1377</Lon>
+      <Elevation>575.0</Elevation>
+      <Depth>0.0</Depth>
+      <Azimuth>0.0</Azimuth>
+      <Dip>-90.0</Dip>
+      <Output>GEOPHYSICAL</Output>
+      <SampleRate>10.0</SampleRate>
+      <ClockDrift>0.001</ClockDrift>
+      <CalibrationUnit>V</CalibrationUnit>
+      <Sensor>
+       <EquipType>Guralp CMG6TD Sensor/Guralp CMG6TD Datalogger</EquipType>
+      </Sensor>
+      <InstrumentSensitivity>
+       <SensitivityValue>9.35684E8</SensitivityValue>
+       <Frequency>0.2</Frequency>
+       <SensitivityUnits>M/S - velocity in meters per second</SensitivityUnits>
+      </InstrumentSensitivity>
+     </Epoch>
+    </Channel>
+    <Channel chan_code="HHE" restricted="0" loc_code="  ">
+     <CreationDate>2011-05-04T00:00:00</CreationDate>
+     <Epoch iris:restricted="0">
+      <StartDate>2011-05-04T00:00:00</StartDate>
+      <EndDate>2599-12-31T23:59:59</EndDate>
+      <Comment>T6F16 C1856</Comment>
+      <Lat>-35.253</Lat>
+      <Lon>149.1377</Lon>
+      <Elevation>575.0</Elevation>
+      <Depth>0.0</Depth>
+      <Azimuth>90.0</Azimuth>
+      <Dip>0.0</Dip>
+      <Output>GEOPHYSICAL</Output>
+      <SampleRate>100.0</SampleRate>
+      <ClockDrift>1.0E-4</ClockDrift>
+      <CalibrationUnit>V</CalibrationUnit>
+      <Sensor>
+       <EquipType>Guralp CMG6TD Sensor/Guralp CMG6TD Datalogger</EquipType>
+      </Sensor>
+      <InstrumentSensitivity>
+       <SensitivityValue>9.40346E8</SensitivityValue>
+       <Frequency>0.8</Frequency>
+       <SensitivityUnits>M/S - velocity in meters per second</SensitivityUnits>
+      </InstrumentSensitivity>
+     </Epoch>
+    </Channel>
+    <Channel chan_code="HHN" restricted="0" loc_code="  ">
+     <CreationDate>2011-05-04T00:00:00</CreationDate>
+     <Epoch iris:restricted="0">
+      <StartDate>2011-05-04T00:00:00</StartDate>
+      <EndDate>2599-12-31T23:59:59</EndDate>
+      <Comment>T6F16 C1856</Comment>
+      <Lat>-35.253</Lat>
+      <Lon>149.1377</Lon>
+      <Elevation>575.0</Elevation>
+      <Depth>0.0</Depth>
+      <Azimuth>0.0</Azimuth>
+      <Dip>0.0</Dip>
+      <Output>GEOPHYSICAL</Output>
+      <SampleRate>100.0</SampleRate>
+      <ClockDrift>1.0E-4</ClockDrift>
+      <CalibrationUnit>V</CalibrationUnit>
+      <Sensor>
+       <EquipType>Guralp CMG6TD Sensor/Guralp CMG6TD Datalogger</EquipType>
+      </Sensor>
+      <InstrumentSensitivity>
+       <SensitivityValue>9.40346E8</SensitivityValue>
+       <Frequency>0.8</Frequency>
+       <SensitivityUnits>M/S - velocity in meters per second</SensitivityUnits>
+      </InstrumentSensitivity>
+     </Epoch>
+    </Channel>
+    <Channel chan_code="HHZ" restricted="0" loc_code="  ">
+     <CreationDate>2011-05-04T00:00:00</CreationDate>
+     <Epoch iris:restricted="0">
+      <StartDate>2011-05-04T00:00:00</StartDate>
+      <EndDate>2599-12-31T23:59:59</EndDate>
+      <Comment>T6F16 C1856</Comment>
+      <Lat>-35.253</Lat>
+      <Lon>149.1377</Lon>
+      <Elevation>575.0</Elevation>
+      <Depth>0.0</Depth>
+      <Azimuth>0.0</Azimuth>
+      <Dip>-90.0</Dip>
+      <Output>GEOPHYSICAL</Output>
+      <SampleRate>100.0</SampleRate>
+      <ClockDrift>1.0E-4</ClockDrift>
+      <CalibrationUnit>V</CalibrationUnit>
+      <Sensor>
+       <EquipType>Guralp CMG6TD Sensor/Guralp CMG6TD Datalogger</EquipType>
+      </Sensor>
+      <InstrumentSensitivity>
+       <SensitivityValue>9.40346E8</SensitivityValue>
+       <Frequency>0.8</Frequency>
+       <SensitivityUnits>M/S - velocity in meters per second</SensitivityUnits>
+      </InstrumentSensitivity>
+     </Epoch>
+    </Channel>
+   </StationEpoch>
+  </Station>
+ </Network>
+</StaMessage>
