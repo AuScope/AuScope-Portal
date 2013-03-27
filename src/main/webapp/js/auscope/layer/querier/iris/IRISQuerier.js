@@ -43,10 +43,8 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                     });
                 }
                 
-                var valueField = 'valueField';
-                var displayField = 'displayField';
                 var outputFormats = Ext.create('Ext.data.Store', {
-                    fields : [valueField, displayField],
+                    fields : ['valueField', 'displayField'],
                     data : [
                         {valueField : 'miniseed', displayField : 'IRIS miniSEED'},
                         {valueField : 'ascii1', displayField : 'ASCII: value'},
@@ -58,6 +56,22 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                         {valueField : 'sacbl', displayField : 'SAC - binary little-endian'}
                     ]
                 });
+                
+                
+                var data = [];
+                for (var i = 1; i <= 31; i++) {
+                    data[i-1] = {value: i}; 
+                    
+                }
+                
+                var daysStore = Ext.create('Ext.data.Store', {
+                    fields : ['value'],
+                    data : data
+                });
+                
+                console.log(daysStore);
+                console.log(outputFormats);
+                
                 
                 channel_info.start_date = new Date(channel_info.start_date);
                 channel_info.end_date = new Date(channel_info.end_date);
@@ -82,20 +96,20 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                     vertical : true,
                                     items : channelRadioButtons
                                 }, {
+                                    xtype : 'combobox',
+                                    fieldLabel : 'Days',
+                                    name : 'days',
+                                    allowBlank : false,
+                                    store : daysStore,
+                                    queryMode : 'local',
+                                    displayField : 'value',
+                                    valueField : 'value'
+                                }, {
                                     xtype : 'datefield',
                                     fieldLabel : 'From',
                                     name : 'from_date',
                                     allowBlank : false,
                                     value : channel_info.start_date,
-                                    minValue : channel_info.start_date,
-                                    maxValue : channel_info.end_date,
-                                    format : 'd/m/Y'
-                                }, {
-                                    xtype : 'datefield',
-                                    fieldLabel : 'To',
-                                    name : 'to_date',
-                                    allowBlank : false,
-                                    value : channel_info.end_date,
                                     minValue : channel_info.start_date,
                                     maxValue : channel_info.end_date,
                                     format : 'd/m/Y'
@@ -106,8 +120,8 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                     allowBlank : false,
                                     store : outputFormats,
                                     queryMode : 'local',
-                                    displayField : displayField,
-                                    valueField : valueField
+                                    displayField : 'displayField',
+                                    valueField : 'valueField'
                                 }]
                             }],
                             buttons: [{
@@ -136,7 +150,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                             '&sta=' + station + 
                                             '&cha=' + formValues.channel +
                                             '&start=' + convertDateToIrisFormat(formValues.from_date, 'T00:00:00') +
-                                            '&end=' + convertDateToIrisFormat(formValues.to_date, 'T23:59:59')  +
+                                            '&duration=' + (formValues.days * 86400) +
                                             '&loc=--&ref=direct&output=' + formValues.output,
                                             '_blank');
                                 }
