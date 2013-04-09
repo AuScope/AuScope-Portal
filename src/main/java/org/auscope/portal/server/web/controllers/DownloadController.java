@@ -96,7 +96,7 @@ public class DownloadController extends BasePortalController {
     @RequestMapping("/downloadGMLAsZip.do")
     public void downloadGMLAsZip(
             @RequestParam("serviceUrls") final String[] serviceUrls,
-            @RequestParam("email") final String email,
+            @RequestParam(required = false,value = "email" , defaultValue ="") final String email,
             HttpServletResponse response) throws Exception {
         ExecutorService pool = Executors.newCachedThreadPool();
         downloadGMLAsZip(serviceUrls,response,pool,email);
