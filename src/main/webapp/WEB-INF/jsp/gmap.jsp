@@ -10,7 +10,7 @@
       <meta name="description" content="Access geoscientific information from around Australia, via AuScopes national e-Research infrastructure.">
       <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
       <meta name="author" content="AuScope">
-      
+
       <%-- Open Layers Imports --%>
       <link rel="stylesheet" href="portal-core/js/OpenLayers-2.12/theme/default/style.css" type="text/css">
       <script src="portal-core/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
@@ -57,7 +57,7 @@
       </c:if>
    </head>
 
-    <body onunload="GUnload()">
+    <body>
       <!-- Include Navigation Header -->
       <%@ include file="page_header.jsp" %>
    </body>
