@@ -125,7 +125,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 })
             }
 
-            const graphWindow = Ext.create('Ext.Window', {
+            var graphWindow = Ext.create('Ext.Window', {
                 border : true,
                 layout : 'hbox',
                 resizable : true,
@@ -137,17 +137,17 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 listeners : {
                     resize : function(me, width, height, oldWidth, oldHeight, eOpts) {
                         // When the user resizes the window we need to resize the charts
-                        // within it, too. 
+                        // within it, too.
                         var differenceInHeight = height - (typeof(oldHeight) === 'undefined' ? height : oldHeight);
                         if (differenceInHeight !== 0) {
                             for (var i = 0; i < me.items.items.length; i++) {
                                 me.items.items[i].setHeight(me.items.items[i].height + differenceInHeight);
                             }
                         }
-                        
+
                         var differenceInWidth = width - (typeof(oldWidth) === 'undefined' ? width : oldWidth);
                         if (differenceInWidth !== 0) {
-                            differenceInWidth = Math.floor(differenceInWidth / me.items.items.length);   
+                            differenceInWidth = Math.floor(differenceInWidth / me.items.items.length);
                             for (var i = 0; i < me.items.items.length; i++) {
                                 me.items.items[i].setWidth(me.items.items[i].width + differenceInWidth);
                             }
@@ -155,13 +155,13 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     }
                 }
             }).show();
-            
+
             // Make sure that the graph window isn't larger than the browser's viewport:
             var viewSize = Ext.getBody().getViewSize();
             var graphSize = graphWindow.getSize();
-            const border = 20;            
+            var border = 20;
             graphSize.width = Math.min(graphSize.width, viewSize.width - border);
-            graphSize.height = Math.min(graphSize.height, viewSize.height - border); 
+            graphSize.height = Math.min(graphSize.height, viewSize.height - border);
 
             graphWindow.setSize(graphSize);
             graphWindow.center();
