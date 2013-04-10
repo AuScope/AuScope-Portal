@@ -13,8 +13,8 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
             url : iconUrl,
             width : iconSize ? iconSize.width : 32,
             height : iconSize ? iconSize.height : 32,
-            anchorOffsetX : iconAnchor ? iconAnchor.x : 0,
-            anchorOffsetY : iconAnchor ? iconAnchor.y : 0
+            anchorOffsetX : iconAnchor ? iconAnchor.x : 16,
+            anchorOffsetY : iconAnchor ? iconAnchor.y : 32
         });
 
         if(wmsResources.length > 0 && wfsResources.length > 0){
