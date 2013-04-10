@@ -61,17 +61,12 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                 var data = [];
                 for (var i = 1; i <= 31; i++) {
                     data[i-1] = {value: i}; 
-                    
                 }
                 
                 var daysStore = Ext.create('Ext.data.Store', {
                     fields : ['value'],
                     data : data
                 });
-                
-                console.log(daysStore);
-                console.log(outputFormats);
-                
                 
                 channel_info.start_date = new Date(channel_info.start_date);
                 channel_info.end_date = new Date(channel_info.end_date);
@@ -145,14 +140,45 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     }
                                     
-                                    // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&end=2012-10-05T00:00:00&output=saca&ref=direct                                   
-                                    window.open(irisUrl + '/timeseries/query?net=' + network + 
-                                            '&sta=' + station + 
-                                            '&cha=' + formValues.channel +
-                                            '&start=' + convertDateToIrisFormat(formValues.from_date, 'T00:00:00') +
-                                            '&duration=' + (formValues.days * 86400) +
-                                            '&loc=--&ref=direct&output=' + formValues.output,
-                                            '_blank');
+                                    
+                                    var loadMask = new Ext.LoadMask(this, {msg:"Please wait..."});
+                                    loadMask.show();
+                                    
+                                    Ext.Ajax.request({
+                                        url : 'getTimeseriesUrl.do',
+                                        timeout : 180 * 1000,
+                                        method : 'get',
+                                        disableCaching : false,
+                                        params : {
+                                            serviceUrl : irisUrl,
+                                            networkCode : network,
+                                            stationCode : station,
+                                            channel : formValues.channel,
+                                            start : convertDateToIrisFormat(formValues.from_date, 'T00:00:00'),
+                                            duration : (formValues.days * 86400), 
+                                            output : formValues.output
+                                        },
+                                        callback : function(options, success, response) {
+                                            var jsonResponse  = Ext.JSON.decode(response.responseText);
+                                            
+                                            // Success just means that the AJAX request worked, it doesn't mean that we have 
+                                            // a real result back. We could still have an error message with a 404, meaning that
+                                            // IRIS couldn't find data for the date range provided.
+                                            if (success) {
+                                                loadMask.hide();
+                                                if (!jsonResponse.success && jsonResponse.data == '404') {
+                                                    Ext.Msg.show({
+                                                        title:'No data found',
+                                                        msg: "IRIS doesn't have any data for the date range specified. Please try again.",
+                                                        buttons: Ext.Msg.OK
+                                                     });
+                                                }
+                                                else {
+                                                    window.open(jsonResponse.data, '_blank');
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
                             }]
                         }]                        
