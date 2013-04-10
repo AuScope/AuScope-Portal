@@ -11,8 +11,8 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
     _generateRenderer : function(wfsResources, wmsResources, irisResources, proxyUrl, proxyCountUrl, iconUrl, iconSize, iconAnchor,polygonColor) {
         var icon = Ext.create('portal.map.Icon', {
             url : iconUrl,
-            width : iconSize ? iconSize.width : 16,
-            height : iconSize ? iconSize.height : 16,
+            width : iconSize ? iconSize.width : 32,
+            height : iconSize ? iconSize.height : 32,
             anchorOffsetX : iconAnchor ? iconAnchor.x : 0,
             anchorOffsetY : iconAnchor ? iconAnchor.y : 0
         });

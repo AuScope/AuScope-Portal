@@ -37,6 +37,7 @@ Ext.define('auscope.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
             autoScroll : true,
             items : [{
                 xtype : 'fieldset',
+                height : 280,
                 title : 'Geophysics Anomaly',
                 items : [{
                     xtype : 'displayfield',
