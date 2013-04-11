@@ -1,6 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -86,7 +87,8 @@ public class IRISController extends BasePortalController {
      * @throws IOException
      */
     protected String getIrisResponseFromQuery(String queryUrl) throws IOException {
-        // NB: This method is protected so that it can be overridden in order break external dependencies in tests. 
+        // NB: This method is protected so that it can be overridden in order to break external dependencies in tests. 
+        
         InputStream inputStream = new URL(queryUrl).openStream();
         Scanner scanner = new Scanner(inputStream, ENCODING);
         String irisResponse = scanner.useDelimiter("\\A").next();
@@ -142,7 +144,7 @@ public class IRISController extends BasePortalController {
 
             return generateJSONResponseMAV(true, "gml", kml.toString(), null);
         } catch (Exception e) {
-            return generateJSONResponseMAV(false, e, "Failed.");
+            return generateJSONResponseMAV(false, e.getMessage(), "Failed.");
         }
     }
     
@@ -186,7 +188,37 @@ public class IRISController extends BasePortalController {
             
             return generateJSONResponseMAV(true, channelInfo, "OK");
         } catch (Exception e) {
-            return generateJSONResponseMAV(false, e, "Failed.");
+            return generateJSONResponseMAV(false, e.getMessage(), "Failed.");
         }
     }
+    
+    @RequestMapping("/getTimeseriesUrl.do")
+    public ModelAndView getTimeseriesUrl(
+        @RequestParam("serviceUrl") String serviceUrl,
+        @RequestParam("networkCode") String networkCode,
+        @RequestParam("stationCode") String stationCode,
+        @RequestParam("channel") String channel,
+        @RequestParam("start") String start,
+        @RequestParam("duration") String duration,
+        @RequestParam("output") String output) {
+
+        serviceUrl = ensureTrailingForwardslash(serviceUrl);
+        try {
+            Document irisDoc = getDocumentFromURL(
+                    serviceUrl + "timeseries/query?net=" + networkCode + 
+                    "&station=" + stationCode + 
+                    "&cha=" + channel +  
+                    "&start=" + start + 
+                    "&duration=" + duration + 
+                    "&output=" + output + 
+                    "&loc=--&ref=xml");
+            
+            Node urlNode = irisDoc.getDocumentElement().getElementsByTagName("url").item(0);
+            return generateJSONResponseMAV(true, urlNode.getTextContent(), "OK");
+        } catch (FileNotFoundException ioe) {
+            return generateJSONResponseMAV(false, "404", "Failed: no data was available for the date range specified.");
+        } catch (Exception e) {
+            return generateJSONResponseMAV(false, e.getMessage(), "Failed.");
+        }
+    }    
 }
