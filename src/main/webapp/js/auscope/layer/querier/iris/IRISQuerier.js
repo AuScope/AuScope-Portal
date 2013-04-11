@@ -140,8 +140,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     }
                                     
-                                    
-                                    var loadMask = new Ext.LoadMask(this, {msg:"Please wait..."});
+                                    var loadMask = new Ext.LoadMask(this.up('form'), { msg: "Please wait..." });
                                     loadMask.show();
                                     
                                     Ext.Ajax.request({
