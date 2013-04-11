@@ -1,6 +1,23 @@
 /**
  * Class for making and then parsing an IRIS request/response using a GenericParser.Parser class
  */
+
+function _parseISO8601 (dateStringInRange) {
+    var isoExp = /^\s*(\d{4})-(\d\d)-(\d\d)\s*$/,
+        date = new Date(NaN), month,
+        parts = isoExp.exec(dateStringInRange);
+
+    if (parts) {
+        month = +parts[2];
+        date.setFullYear(parts[1], month - 1, parts[3]);
+        if (month != date.getMonth() + 1) {
+            date.setTime(NaN);
+        }
+    }
+
+    return date;
+}
+
 Ext.define('auscope.layer.querier.iris.IRISQuerier', {
     extend: 'portal.layer.querier.Querier',
 
@@ -68,8 +85,11 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                     data : data
                 });
                 
-                channel_info.start_date = new Date(channel_info.start_date);
-                channel_info.end_date = new Date(channel_info.end_date);
+                var start_date = channel_info.start_date.substr(0, channel_info.start_date.indexOf('T'));
+                var end_date = channel_info.end_date.substr(0, channel_info.end_date.indexOf('T'));
+                
+                channel_info.start_date = _parseISO8601(start_date);
+                channel_info.end_date = _parseISO8601(end_date);
                 
                 var allComponents = [];
                 allComponents.push(
@@ -124,7 +144,8 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                 formBind: true, //only enabled once the form is valid
                                 handler: function() {
                                     // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&duration=10000&output=saca&ref=direct
-                                    var formValues = this.up('form').getForm().getValues();
+                                    var form = this.up('form');
+                                    var formValues = form.getForm().getValues();
                                     
                                     var addLeadingZero = function(value) {
                                         return value < 10 ? '0' + value : value; 
@@ -140,7 +161,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     }
                                     
-                                    var loadMask = new Ext.LoadMask(this.up('form'), { msg: "Please wait..." });
+                                    var loadMask = new Ext.LoadMask(form, { msg: "Please wait..." });
                                     loadMask.show();
                                     
                                     Ext.Ajax.request({
