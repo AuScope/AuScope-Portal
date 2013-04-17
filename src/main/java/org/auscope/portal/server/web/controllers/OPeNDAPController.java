@@ -135,9 +135,10 @@ public class OPeNDAPController extends BasePortalController {
             constraints = ViewVariableFactory.fromJSONArray(obj.getJSONArray("constraints"));
         }
         
+        // AUS-2287
         // The rest of this method will result in one of three outcomes:
         //  * Outcome 1: The request is successful - we send back a zip containing query.txt and data.[txt|bin].
-        //  * Outcome 2: The request failed because it was too big - we send back a JSON object containing the size of the requested data and the maximum limit.
+        //  * Outcome 2: The request failed because it was too big - we send back a response indicating same.
         //  * Outcome 3: The request failed for some unknown reason - we send back a zip containing query.txt and an error.txt.
         String query = null;
         InputStream dataStream = null;
@@ -160,12 +161,12 @@ public class OPeNDAPController extends BasePortalController {
                 if (matcher.find()) {
                     String requestedSize = matcher.group(1); 
                     String maximumSize = matcher.group(2);
-                    String mstring = String.format(
+                    String messageString = String.format(
                             "Error:%nYour request has failed. The data you requested was %s MB but the maximum allowed by the server is %s MB.%nPlease reduce the scope of your query and try again.", 
                             requestedSize,
                             maximumSize);
                     
-                    servletOutputStream.write(mstring.getBytes());
+                    servletOutputStream.write(messageString.getBytes());
                     servletOutputStream.close();
                     return;
                 }
@@ -190,13 +191,13 @@ public class OPeNDAPController extends BasePortalController {
             // Outcome 1:
             zout.putNextEntry(new ZipEntry(outputFileName));
             FileIOUtil.writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
-            dataStream.close();
+            FileIOUtil.closeQuietly(dataStream);
         }
         else if (stashedException != null) {
             // Outcome 3:
             FileIOUtil.writeErrorToZip(zout, String.format("Error connecting to '%1$s'", opendapUrl), stashedException, "error.txt");
         }
 
-        zout.close();
+        FileIOUtil.closeQuietly(zout);
     }
 }
