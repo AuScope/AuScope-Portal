@@ -11,11 +11,13 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.WCSService;
 import org.auscope.portal.core.services.responses.csw.CSWGeographicBoundingBox;
 import org.auscope.portal.core.services.responses.wcs.DescribeCoverageRecord;
@@ -187,10 +189,10 @@ public class WCSController extends BasePortalController {
                                  @RequestParam(required = false, value = "outputResX") final Double outputResX,
                                  @RequestParam(required = false, value = "outputResY") final Double outputResY,
                                  @RequestParam(required = false, value = "outputCrs") final String outputCrs,
-                                 @RequestParam(required=false, defaultValue="0",  value="northBoundLatitude") final double northBoundLatitude,
-                                 @RequestParam(required=false, defaultValue="0", value="southBoundLatitude") final double southBoundLatitude,
-                                 @RequestParam(required=false, defaultValue="0", value="eastBoundLongitude") final double eastBoundLongitude,
-                                 @RequestParam(required=false, defaultValue="0", value="westBoundLongitude") final double westBoundLongitude,
+                                 @RequestParam(required = false, defaultValue="0",  value="northBoundLatitude") final double northBoundLatitude,
+                                 @RequestParam(required = false, defaultValue="0", value="southBoundLatitude") final double southBoundLatitude,
+                                 @RequestParam(required = false, defaultValue="0", value="eastBoundLongitude") final double eastBoundLongitude,
+                                 @RequestParam(required = false, defaultValue="0", value="westBoundLongitude") final double westBoundLongitude,
                                  @RequestParam(required = false, value = "timePosition") final String[] timePositions,
                                  @RequestParam(required = false, value = "timePeriodFrom") final String timePeriodFrom,
                                  @RequestParam(required = false, value = "timePeriodTo") final String timePeriodTo,
@@ -226,23 +228,51 @@ public class WCSController extends BasePortalController {
 
         logger.debug(String.format("serviceUrl='%1$s' bbox='%2$s' timeString='%3$s' layerName='%4$s'", serviceUrl, bbox, timeConstraint, layerName));
 
+        // AUS-2287
+        // The rest of this method will result in one of three outcomes:
+        //  * Outcome 1: The request is successful - we send back a zip containing a file named $outFileName.
+        //  * Outcome 2: The request failed because it was (probably) too big - we send back a response indicating same.
+        //  * Outcome 3: The request failed for some unknown reason - we send back a zip containing an error.txt.
         InputStream dataStream = null;
-
-        //Pipe the request into a zip
+        PortalServiceException stashedException = null;
+        ServletOutputStream servletOutputStream = response.getOutputStream();
+        
+        try {
+            dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams); 
+        } catch (PortalServiceException ex) {
+            Throwable cause = ex.getCause();
+            String causeMessage = cause == null ? "" : cause.getMessage();
+            
+            if (causeMessage.contains("<ServiceException>Unknown problem</ServiceException>")){
+                // Outcome 2:
+                // We'll just show the user a page informing them that there's a problem:
+                String messageString = String.format("Error:%nYour request has failed. This is likely due to the requested data exceeding the server's size limit.%nPlease adjust you query and try again.");
+                servletOutputStream.write(messageString.getBytes());
+                servletOutputStream.close();
+                return;
+            }
+            
+            // Stash this exception for now, we'll add it to the zip output later.
+            stashedException = ex;           
+        }
+        
+        // At this point we know we're going to be sending back a zip file:
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition","inline; filename=WCSDownload.zip;");
-        ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
-        try {
-            //Make our request
-            dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams);
+        ZipOutputStream zout = new ZipOutputStream(servletOutputStream);
+        
+        if (dataStream != null) {
+            // Outcome 1:
             zout.putNextEntry(new ZipEntry(outFileName));
             FileIOUtil.writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
-        } catch (Exception ex) {
-            FileIOUtil.writeErrorToZip(zout, "", ex, "error.txt");
-        } finally {
-            FileIOUtil.closeQuietly(dataStream);
-            FileIOUtil.closeQuietly(zout);
+            dataStream.close();
         }
+        else if (stashedException != null) {
+            // Outcome 3:
+            FileIOUtil.writeErrorToZip(zout, "", stashedException, "error.txt");
+        }
+        
+        FileIOUtil.closeQuietly(zout);
     }
 
     /**

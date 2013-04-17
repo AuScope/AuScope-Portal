@@ -1,9 +1,12 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
@@ -13,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.OpendapService;
+import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.OPeNDAPGetDataMethodMaker.OPeNDAPFormat;
 import org.auscope.portal.core.services.responses.opendap.AbstractViewVariable;
 import org.auscope.portal.core.services.responses.opendap.ViewVariableFactory;
@@ -23,7 +27,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 
 /**
  * A controller for marshaling requests for an arbitrary OPeNDAP resource.
@@ -131,36 +134,70 @@ public class OPeNDAPController extends BasePortalController {
             JSONObject obj = JSONObject.fromObject(constraintsJson);
             constraints = ViewVariableFactory.fromJSONArray(obj.getJSONArray("constraints"));
         }
+        
+        // AUS-2287
+        // The rest of this method will result in one of three outcomes:
+        //  * Outcome 1: The request is successful - we send back a zip containing query.txt and data.[txt|bin].
+        //  * Outcome 2: The request failed because it was too big - we send back a response indicating same.
+        //  * Outcome 3: The request failed for some unknown reason - we send back a zip containing query.txt and an error.txt.
+        String query = null;
+        InputStream dataStream = null;
+        PortalServiceException stashedException = null;
+        ServletOutputStream servletOutputStream = response.getOutputStream();
+        
+        try {
+            query =  opendapService.getQueryDetails(opendapUrl, format, constraints);
+            dataStream = opendapService.getData(opendapUrl, format, constraints);
+        } catch (PortalServiceException ex) {
+            Throwable cause = ex.getCause();
+            String causeMessage = cause == null ? "" : cause.getMessage();  
+            
+            if (causeMessage.contains("Request too big=")){
+                // Outcome 2:
+                // Pull the information out of the exception and return it
+                Pattern pattern = Pattern.compile("Request too big=([0-9\\.]+) Mbytes, max=([0-9\\.]+)");
+                Matcher matcher = pattern.matcher(causeMessage);
+                
+                if (matcher.find()) {
+                    String requestedSize = matcher.group(1); 
+                    String maximumSize = matcher.group(2);
+                    String messageString = String.format(
+                            "Error:%nYour request has failed. The data you requested was %s MB but the maximum allowed by the server is %s MB.%nPlease reduce the scope of your query and try again.", 
+                            requestedSize,
+                            maximumSize);
+                    
+                    servletOutputStream.write(messageString.getBytes());
+                    servletOutputStream.close();
+                    return;
+                }
+            }
 
-
-
-        //Make our request, push the contents to the outputstream (as a zipfile)
+            // Stash this exception for now, we'll add it to the zip output later.
+            stashedException = ex;
+        }
+        
+        // At this point we know we're going to be sending back a zip file:
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "inline; filename=OPeNDAPDownload.zip;");
-        ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
-        InputStream dataStream = null;
-        try {
-
-            String query =  opendapService.getQueryDetails(opendapUrl,format, constraints);
+        ZipOutputStream zout = new ZipOutputStream(servletOutputStream);
+        
+        if (query != null) {
+            // This is where we add query.txt for Outcomes 1 & 3:
             zout.putNextEntry(new ZipEntry("query.txt"));
             zout.write(query.getBytes());
-
-            zout.putNextEntry(new ZipEntry(outputFileName));
-
-            dataStream = opendapService.getData(opendapUrl, format, constraints);
-
-            FileIOUtil.writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
-        } catch (Exception ex) {
-            log.info(String.format("Error requesting data from '%1$s'", opendapUrl));
-            log.debug("Exception...", ex);
-            FileIOUtil.writeErrorToZip(zout, String.format("Error connecting to '%1$s'", opendapUrl), ex, "error.txt");
-        } finally {
-            if (dataStream != null) {
-                dataStream.close();
-            }
-            if (zout != null) {
-                zout.close();
-            }
         }
+        
+        if (dataStream != null) {
+            // Outcome 1:
+            zout.putNextEntry(new ZipEntry(outputFileName));
+            FileIOUtil.writeInputToOutputStream(dataStream, zout, BUFFERSIZE, false);
+            FileIOUtil.closeQuietly(dataStream);
+        }
+        else if (stashedException != null) {
+            // Outcome 3:
+            FileIOUtil.writeErrorToZip(zout, String.format("Error connecting to '%1$s'", opendapUrl), stashedException, "error.txt");
+        }
+
+        FileIOUtil.closeQuietly(zout);
     }
 }

@@ -112,7 +112,6 @@ public class TestWCSController extends PortalTestClass {
 
         outStream = new MyServletOutputStream();
 
-
         context.checking(new Expectations() {{
             //Our method maker call should be passed all the correct variables
             oneOf(wcsService).getCoverage(with(serviceUrl),
