@@ -301,7 +301,18 @@ Ext.application({
             region: 'center',
             id: 'center_region',
             margins: '100 0 0 0',
-            cmargins:'100 0 0 0'
+            cmargins:'100 0 0 0',
+            listeners: {
+                // This listener tells the openlayers map to refresh its layers when the main 
+                // container has been resized. It prevents a problem we had where the layers 
+                // weren't moving correctly in relation to the basemap during resize 
+                // operations (See: AUS-2301).
+                resize : function() {
+                    if (map instanceof portal.map.openlayers.OpenLayersMap && map.map != null) {
+                        map.map.updateSize();
+                    }
+                } 
+            }
         });
 
         /**
