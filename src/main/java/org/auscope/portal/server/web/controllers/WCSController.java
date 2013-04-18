@@ -246,7 +246,7 @@ public class WCSController extends BasePortalController {
             if (causeMessage.contains("<ServiceException>Unknown problem</ServiceException>")){
                 // Outcome 2:
                 // We'll just show the user a page informing them that there's a problem:
-                String messageString = String.format("Error:%nYour request has failed. This is likely due to the requested data exceeding the server's size limit.%nPlease adjust you query and try again.");
+                String messageString = String.format("Error:%nYour request has failed. This is likely due to the requested data exceeding the server's size limit.%nPlease adjust your query and try again.");
                 servletOutputStream.write(messageString.getBytes());
                 servletOutputStream.close();
                 return;
