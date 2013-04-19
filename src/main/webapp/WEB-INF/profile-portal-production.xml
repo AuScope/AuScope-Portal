@@ -19,7 +19,6 @@
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeGeodesy" />
                 <ref bean="knownTypeReports" />
-                <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
