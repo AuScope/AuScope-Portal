@@ -117,7 +117,7 @@ public class WMSController extends BaseCSWController {
                     cswRecords.add(newRecord);
                 }
             }
-            //generate the same response from a getCSWRecords call
+            //generate the same response from a getCachedCSWRecords call
             records = cswRecords.toArray(new CSWRecord[cswRecords.size()]);
         }
         catch (MalformedURLException e) {

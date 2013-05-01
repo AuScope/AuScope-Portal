@@ -215,16 +215,16 @@
             </bean>
         </property>
     </bean>
-     <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="portal-InSar-reports"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.CSWTitleFilterRecordSelector">
-                <property name="title" value="SAR"/>
+                <property name="title" value="InSAR Geonetwork"/><!-- This matches the title in auscope-registries.xml -->
             </bean>
         </constructor-arg>
 
-        <property name="name" value="InSAR data"/>
-        <property name="description" value="A collection of InSAR scientific reports that have been spatially located"/>
+        <property name="name" value="Synthetic Aperture Radar data"/><!-- INSAR -->
+        <property name="description" value="Raw Synthetic Aperture Radar (SAR) data from ERS-1 and ERS-2 satellites. Data is provided in the standardised CEOS format under licence from the European Space Agency (ESA)."/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-stars.png"/>
          <property name="polygonColor" value="#FE2A00,#FF694C" />
         <property name="iconAnchor">

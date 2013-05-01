@@ -59,7 +59,7 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
                 return this._generateResult(baseFilterForm, true);
             }
         }
-
+        
         //otherwise let's see if we can guess an appropriate filter based on layer renderer
         if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer) {
             baseFilterForm = Ext.create('portal.layer.filterer.forms.WMSLayerFilterForm', baseFilterFormCfg);
@@ -67,6 +67,16 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             //the opacity can be adjusted from there on
             return this._generateResult(baseFilterForm, false);
         }
+
+        // TODO: Can I get rid of containsCSWService and make this check the renderer like the example above?
+        // don't forget this method is used in AuScopeRendererFactory.js, too.
+        // Once you work out what the renderer will be called you CAN change this to make it like the one above
+        // and then remove the containsCSWService method from Layer.js
+        if (layer.containsCSWService()) {
+            baseFilterForm = Ext.create('auscope.layer.filterer.forms.CSWServiceFilterForm', baseFilterFormCfg);
+            return this._generateResult(baseFilterForm, true);
+        }
+        
 
         //And otherwise we just show the empty filter form
         return this._generateResult(Ext.create('portal.layer.filterer.forms.EmptyFilterForm', baseFilterFormCfg), false);

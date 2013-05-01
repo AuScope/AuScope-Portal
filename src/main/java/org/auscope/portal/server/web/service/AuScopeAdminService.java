@@ -29,8 +29,6 @@ public class AuScopeAdminService extends AdminService {
     /**
      * Creates a new AdminService
      * @param serviceCaller For testing basic requests
-     * @param cswServiceList For accessing the various CSW's
-     * @param portalProperties for checking config options
      */
     @Autowired
     public AuScopeAdminService(HttpServiceCaller serviceCaller) {
