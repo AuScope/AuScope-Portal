@@ -181,10 +181,8 @@ Ext.application({
             for (var i = 0; i < cswRecords.length; i++) {
                 if (cswRecords[i].hasConstraints()) {
                     var popup = Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
-                        width : 900,
-                        height : 400,
-                        cswRecords : cswRecords,
-                        autoHeight : false
+                        width : 600,
+                        cswRecords : cswRecords
                     });
                     popup.show()
 
