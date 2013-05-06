@@ -11,12 +11,11 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     
     _loadMask : null,
     
+    _loadMaskCounter : 0,
+    
     _ajaxRequests : [],
 
     config : {
-        /**
-         * 
-         */
         icon : null
     },
 
@@ -87,7 +86,17 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var temporalExtentFilterFrom = filterer.parameters.temporal_extent_date_from;
         var temporalExtentFilterTo = filterer.parameters.temporal_extent_date_to;
         
-        this._loadMask.show();
+        // This _loadMaskCounter is preventing an issue whereby
+        // loadMask.show was called a second time before hide had been called at all.
+        // It would mean that the first call to hide() would get rid of the load mask
+        // even though it should still be kept on. It's because the callback arguments
+        // to this method also include calls to this method.
+        if (this._loadMaskCounter == 0) {
+            this._loadMask.show();
+        }
+        
+        this._loadMaskCounter++;
+        
         this._ajaxRequests.push(Ext.Ajax.request({
             url : 'getUncachedCSWRecords.do',
             params : {
@@ -107,8 +116,12 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             },
             scope: this,
             success : callback,
-            callback : function() { 
-                this._loadMask.hide();
+            callback : function() {
+                if (this._loadMaskCounter == 1) {
+                    this._loadMask.hide();    
+                }
+                
+                this._loadMaskCounter--;
             }
         }));
     },
@@ -139,12 +152,11 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         // tell it you only want 1 record.
         // 2. Use that record's 'total number of records' field to decide
         // whether or not you should request the rest of them.
-        // 3. If numberOfRecords < $someLimit
-        // then: just get them all (you can just request from position 2 onwards
-        // since you already have the 1st).
-        // else: ask the user if they want to get them all or just get some
+        // 3. If numberOfRecords < this._maximumCSWRecordsToRetrieveAtOnce
+        // then: get them all
+        // else: ask the user if they want get the first this._maximumCSWRecordsToRetrieveAtOnce 
+        // number of records or abort.
         // 4. Render the responses as CSWRecords.
-        // to determine which specialised renderer to use?
         this.removeData();
         
         // Just try to get one record first so that we can pull out the total result from response
