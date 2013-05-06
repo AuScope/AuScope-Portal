@@ -34,17 +34,22 @@ public class CSWController extends BaseCSWController {
     /**
      * 
      * @param dateString in format: 28/02/2013
+     * @param endOfDay
+     * false means the time will be 00:00:00:000
+     * true means the time will be 23:59:59:999
      * @return
      */
-    // TODO: Get rid of this, I shouldn't need to do it myself.
-    private DateTime stringToDateTime(String dateString) {
+    private DateTime stringToDateTime(String dateString, boolean endOfDay) {
         String[] date = dateString.split("/");
-        
+       
         return new DateTime(
-                Integer.parseInt(date[2]),
-                Integer.parseInt(date[1]),
-                Integer.parseInt(date[0]),
-                0,0,0,0);
+            Integer.parseInt(date[2]), // year
+            Integer.parseInt(date[1]), // monthOfYear
+            Integer.parseInt(date[0]), // dayOfMonth
+            endOfDay ? 23 : 0, // hourOfDay
+            endOfDay ? 59 : 0, // minuteOfHour
+            endOfDay ? 59 : 0, // secondOfMinute
+            endOfDay ? 999 : 0); // millisOfSecond
     }
     
     /**
@@ -111,14 +116,14 @@ public class CSWController extends BaseCSWController {
             
             if (!metadataDateFrom.isEmpty() && !metadataDateTo.isEmpty()) {
                 filter.setMetadataChangeDate(
-                        stringToDateTime(metadataDateFrom), 
-                        stringToDateTime(metadataDateTo));
+                        stringToDateTime(metadataDateFrom, false), 
+                        stringToDateTime(metadataDateTo, true));
             }
             
             if (!temporalExtentFrom.isEmpty() && !temporalExtentTo.isEmpty()) {
                 filter.setTemporalExtent(
-                        stringToDateTime(temporalExtentFrom), 
-                        stringToDateTime(temporalExtentTo));
+                        stringToDateTime(temporalExtentFrom, false), 
+                        stringToDateTime(temporalExtentTo, true));
             }
             
             CSWGetRecordResponse response = cswService.queryCSWEndpoint(
