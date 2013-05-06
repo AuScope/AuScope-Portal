@@ -8,7 +8,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
      * Accepts a config for portal.layer.filterer.BaseFilterForm
      */
     constructor : function(config) {
-        //First build our keyword/resource data from our list of CSWRecords
+        // First build our keyword/resource data from our list of CSWRecords
         // Always treat it as an array:
         var cswRecords = [].concat(config.layer.get('cswRecords'));
 
@@ -75,7 +75,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                         fieldLabel : 'From',
                         name : 'temporal_extent_date_from',
                         allowBlank : true,
-                        maxValue : current_date, // TODO: does this still make sense for a temporal extent?
+                        maxValue : current_date,
                         format : 'd/m/Y'
                     },{
                         anchor: '100%',
@@ -83,7 +83,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                         fieldLabel : 'To',
                         name : 'temporal_extent_date_to',
                         allowBlank : true,
-                        maxValue : current_date, // TODO: does this still make sense for a temporal extent?
+                        maxValue : current_date,
                         format : 'd/m/Y'
                     }]
                 }]
