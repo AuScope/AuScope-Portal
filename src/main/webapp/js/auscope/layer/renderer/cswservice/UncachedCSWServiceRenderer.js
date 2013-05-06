@@ -9,6 +9,8 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     
     _cswRenderer : null,
     
+    _loadMask : null,
+    
     _ajaxRequests : [],
 
     config : {
@@ -25,6 +27,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
+        this._loadMask = new Ext.LoadMask(Ext.getBody(), {msg : "Loading..." });
     },
     
     _displayCSWsWithCSWRenderer : function (cswRecords) {
@@ -84,6 +87,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var temporalExtentFilterFrom = filterer.parameters.temporal_extent_date_from;
         var temporalExtentFilterTo = filterer.parameters.temporal_extent_date_to;
         
+        this._loadMask.show();
         this._ajaxRequests.push(Ext.Ajax.request({
             url : 'getUncachedCSWRecords.do',
             params : {
@@ -102,7 +106,10 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 temporalExtentTo : temporalExtentFilterTo
             },
             scope: this,
-            success : callback
+            success : callback,
+            callback : function() { 
+                this._loadMask.hide();
+            }
         }));
     },
 
@@ -161,7 +168,6 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                     icon: Ext.Msg.QUESTION,
                     fn : function (buttonId) {
                         if (buttonId == 'yes') {
-                            var msg = Ext.MessageBox.wait('Loading...');
                             me._getCSWRecords(resources, filterer, me._maximumCSWRecordsToRetrieveAtOnce, function(response) {
                                 response = Ext.JSON.decode(response.responseText);
                                 if (response.success) {
@@ -171,15 +177,12 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                                 }
                                 
                                 me._displayCSWsWithCSWRenderer(cswRecords);
-                                msg.hide();
                             });
                         }
                     }
                 });
             }
             else {
-                /* TODO: this needs to be refactored so that it doesn't duplicate the code above */
-                var msg = Ext.MessageBox.wait('Loading...');
                 me._getCSWRecords(resources, filterer, me._maximumCSWRecordsToRetrieveAtOnce, function(response) {
                     response = Ext.JSON.decode(response.responseText);
                     if (response.success) {
@@ -189,7 +192,6 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                     }
                     
                     me._displayCSWsWithCSWRenderer(cswRecords);
-                    msg.hide();
                 });
             }
         });
