@@ -62,7 +62,7 @@
         <!-- This will only work if your machine's IP has been granted access to eos-test --> 
         <constructor-arg name="serviceUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
-        <property name="cqlText" value="AnyText like '%SAR%'"/>
+        <property name="defaultAnyTextFilter" value="SAR"/>
         
         <!-- TODO: This was just used for testing because my home PC couldn't access eos-test: 
         <constructor-arg name="serviceUrl" value="http://aster.nci.org.au/geonetwork/srv/en/csw"/>
@@ -82,7 +82,7 @@
         <constructor-arg name="title" value="InSAR Geonetwork"/>
         <constructor-arg name="serviceUrl" value="PRODUCTION URL TO BE PROVIDED"/>
         <constructor-arg name="recordInformationUrl" value="PRODUCTION URL TO BE PROVIDED"/>
-        <property name="cqlText" value="AnyText like '%SAR%'"/>
+        <property name="defaultAnyTextFilter" value="SAR"/>
         <property name="noCache" value="true"/>
 		<property name="defaultConstraints">
 		    <list>

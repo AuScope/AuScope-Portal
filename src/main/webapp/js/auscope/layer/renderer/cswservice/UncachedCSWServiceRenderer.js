@@ -75,7 +75,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var recordInfoUrl = cswRecord.recordInfoUrl;
         var cswServiceUrl = resources[0].data.url;
 
-        var cqlText = cswRecord.descriptiveKeywords[0];
+        var defaultAnyTextFilter = cswRecord.descriptiveKeywords[0];
         
         var bboxFilter = filterer.spatialParam;
         var anyTextFilter = filterer.parameters.anyText;
@@ -97,16 +97,18 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         
         this._loadMaskCounter++;
         
+        var anyText = defaultAnyTextFilter || '';
+        anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;       
+        
         this._ajaxRequests.push(Ext.Ajax.request({
             url : 'getUncachedCSWRecords.do',
             params : {
                 cswServiceUrl : cswServiceUrl,
                 recordInfoUrl : recordInfoUrl,
-                cqlText : cqlText,
                 startPoint : 1,
                 maxRecords : maximumRecords,
                 //bbox : Ext.JSON.encode(bboxFilter),
-                anyText : anyTextFilter,
+                anyText : anyText,
                 title : titleFilter,
                 abstract_ : abstractFilter,
                 metadataDateFrom : metadataDateFilterFrom, 

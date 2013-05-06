@@ -81,7 +81,6 @@ public class CSWController extends BaseCSWController {
     public ModelAndView getUncachedCSWRecords(
             String cswServiceUrl,
             String recordInfoUrl,
-            String cqlText,
             int startPoint,
             int maxRecords,
             //String bbox,
@@ -96,7 +95,6 @@ public class CSWController extends BaseCSWController {
                 "", // This ID won't actually be used so we can just leave it blank. 
                 cswServiceUrl, 
                 recordInfoUrl);
-        endpoint.setCqlText(cqlText);
 
         CSWService cswService = new CSWService(
                 endpoint,
@@ -114,16 +112,20 @@ public class CSWController extends BaseCSWController {
             filter.setTitle(title);
             filter.setAbstract(abstract_);
             
-            if (!metadataDateFrom.isEmpty() && !metadataDateTo.isEmpty()) {
-                filter.setMetadataChangeDate(
-                        stringToDateTime(metadataDateFrom, false), 
-                        stringToDateTime(metadataDateTo, true));
+            if (!metadataDateFrom.isEmpty()) {
+                filter.setMetadataChangeDateFrom(stringToDateTime(metadataDateFrom, false)); 
             }
             
-            if (!temporalExtentFrom.isEmpty() && !temporalExtentTo.isEmpty()) {
-                filter.setTemporalExtent(
-                        stringToDateTime(temporalExtentFrom, false), 
-                        stringToDateTime(temporalExtentTo, true));
+            if (!metadataDateTo.isEmpty()) {
+                filter.setMetadataChangeDateTo(stringToDateTime(metadataDateTo, true));
+            }
+            
+            if (!temporalExtentFrom.isEmpty()) {
+                filter.setTemporalExtentFrom(stringToDateTime(temporalExtentFrom, false));
+            }
+            
+            if (!temporalExtentTo.isEmpty()) {
+                filter.setTemporalExtentTo(stringToDateTime(temporalExtentTo, true));
             }
             
             CSWGetRecordResponse response = cswService.queryCSWEndpoint(
