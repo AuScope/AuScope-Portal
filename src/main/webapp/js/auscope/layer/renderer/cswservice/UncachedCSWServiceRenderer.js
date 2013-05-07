@@ -86,7 +86,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     displayData : function(resources, filterer, callback) {
         var pageSize=20;
         this.removeData();
-
+        me = this;
         var cswRecord = this.parentLayer.data.cswRecords[0].data;
         var recordInfoUrl = cswRecord.recordInfoUrl;
 
@@ -118,6 +118,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             width: 650,
             layout: 'fit',
             items: [{  // Let's put an empty grid in just to illustrate fit layout
+                id : 'pagingPanel1',
                 xtype: 'cswpagingpanel',
                 cswConfig : configuration,
                 layout : 'fit'
@@ -129,14 +130,20 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 text : 'Add All Records',
                 iconCls : 'addall',
                 handler : function(button, e) {
-                    //do something here
+                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
+                    var allStore = cswPagingPanel.getStore();
+                    var cswRecords = allStore.getRange();
+                    me._displayCSWsWithCSWRenderer(cswRecords);
+
                 }
             },{
                 xtype : 'button',
                 text : 'Add Selected Records',
                 iconCls : 'add',
                 handler : function(button, e) {
-                    //do something here
+                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
+                    var csw = cswPagingPanel.getSelectionModel().getSelection();
+                    me._displayCSWsWithCSWRenderer(csw);
                 }
             }]
 
