@@ -15,13 +15,14 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CSWController extends BaseCSWController {
 
     private HttpServiceCaller serviceCaller;
-    
+
     @Autowired
     public CSWController(
             HttpServiceCaller serviceCaller,
@@ -30,29 +31,29 @@ public class CSWController extends BaseCSWController {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.serviceCaller = serviceCaller;
     }
-    
+
     /**
-     * 
+     *
      * @param dateString in format: 28/02/2013
      * @return
      */
     // TODO: Get rid of this, I shouldn't need to do it myself.
     private DateTime stringToDateTime(String dateString) {
         String[] date = dateString.split("/");
-        
+
         return new DateTime(
                 Integer.parseInt(date[2]),
                 Integer.parseInt(date[1]),
                 Integer.parseInt(date[0]),
                 0,0,0,0);
     }
-    
+
     /**
      * Requests CSW records from the cswServiceUrl provided.
      * The results will be filtered by the CQL Text and the filter options.
      * Records will be returned from the starting point (where 1 is the first record, not 0)
      * and the number of records retrieved will not exceed maxRecords.
-     * 
+     *
      * @param cswServiceUrl
      * @param recordInfoUrl
      * @param cqlText
@@ -74,22 +75,22 @@ public class CSWController extends BaseCSWController {
      */
     @RequestMapping("/getUncachedCSWRecords.do")
     public ModelAndView getUncachedCSWRecords(
-            String cswServiceUrl,
-            String recordInfoUrl,
-            String cqlText,
-            int startPoint,
-            int maxRecords,
+            @RequestParam(value="cswServiceUrl", required=false) String cswServiceUrl,
+            @RequestParam(value="recordInfoUrl", required=false) String recordInfoUrl,
+            @RequestParam(value="cqlText", required=false) String cqlText,
+            @RequestParam(value="start", required=false) int start,
+            @RequestParam(value="limit", required=false) int limit,
             //String bbox,
-            String anyText,
-            String title,
-            String abstract_,
-            String metadataDateFrom,
-            String metadataDateTo,
-            String temporalExtentFrom,
-            String temporalExtentTo) {
+            @RequestParam(value="anyText", required=false) String anyText,
+            @RequestParam(value="title", required=false) String title,
+            @RequestParam(value="abstract_", required=false) String abstract_,
+            @RequestParam(value="metadataDateFrom", required=false) String metadataDateFrom,
+            @RequestParam(value="metadataDateTo", required=false) String metadataDateTo,
+            @RequestParam(value="temporalExtentFrom", required=false) String temporalExtentFrom,
+            @RequestParam(value="temporalExtentTo", required=false) String temporalExtentTo) {
         CSWServiceItem endpoint = new CSWServiceItem(
-                "", // This ID won't actually be used so we can just leave it blank. 
-                cswServiceUrl, 
+                "", // This ID won't actually be used so we can just leave it blank.
+                cswServiceUrl,
                 recordInfoUrl);
         endpoint.setCqlText(cqlText);
 
@@ -100,32 +101,32 @@ public class CSWController extends BaseCSWController {
 
         try {
             //FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
-              
+
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
                     anyText,
                     null//spatialBounds
-                    ); 
-            
+                    );
+
             filter.setTitle(title);
             filter.setAbstract(abstract_);
-            
+
             if (!metadataDateFrom.isEmpty() && !metadataDateTo.isEmpty()) {
                 filter.setMetadataChangeDate(
-                        stringToDateTime(metadataDateFrom), 
+                        stringToDateTime(metadataDateFrom),
                         stringToDateTime(metadataDateTo));
             }
-            
+
             if (!temporalExtentFrom.isEmpty() && !temporalExtentTo.isEmpty()) {
                 filter.setTemporalExtent(
-                        stringToDateTime(temporalExtentFrom), 
+                        stringToDateTime(temporalExtentFrom),
                         stringToDateTime(temporalExtentTo));
             }
-            
+
             CSWGetRecordResponse response = cswService.queryCSWEndpoint(
-                    startPoint, 
-                    maxRecords,
+                    start,
+                    limit,
                     filter);
-            
+
             List<CSWRecord> records = response.getRecords();
 
             return generateJSONResponseMAV(
@@ -135,7 +136,7 @@ public class CSWController extends BaseCSWController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         return generateJSONResponseMAV(false);
     }
 }
