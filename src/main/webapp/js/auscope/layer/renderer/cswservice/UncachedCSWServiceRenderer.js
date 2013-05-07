@@ -64,6 +64,18 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     },
 
 
+    _callBackDisplayInfo : function(record){
+        Ext.create('Ext.window.Window', {
+            title : 'CSW Record Information',
+            items : [{
+                xtype : 'cswmetadatapanel',
+                width : 500,
+                border : false,
+                cswRecord : record
+            }]
+        }).show();
+    },
+
 
     /**
      * An implementation of the abstract base function. See comments in
@@ -108,7 +120,9 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 pagingConfig:{
                     limit : pageSize,
                     start : 1
-                }
+                },
+
+                callback: this._callBackDisplayInfo
         });
 
 
