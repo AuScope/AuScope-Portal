@@ -12,6 +12,9 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         icon : null
     },
 
+    _cswRenderer : null,
+    layerCSW : null,
+
     constructor : function(config) {
         // this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
         // iconUrl : config.icon ? config.icon.getUrl() : ''
@@ -23,21 +26,41 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
 
     _displayCSWsWithCSWRenderer : function (cswRecords) {
-        // This bit is a bit sneaky: we have to store the CSWRecords on this
-        // parent layer so that we can make the CSWRenderer use them.
-        // We temporarily store the existing records (i.e. the pointer to the
-        // CSW endpoint) and then replace it at the end.
+        //append the cswRecords to the layer
         var tempCSWRecords = this.parentLayer.get('cswRecords');
-        this.parentLayer.set('cswRecords', cswRecords);
 
-        // Show the results:
-        _cswRenderer = Ext.create('portal.layer.renderer.csw.CSWRenderer', {
-            map : this.map,
-            icon : this.icon,
-            polygonColor: this.polygonColor
-        });
+        if(!this.layerCSW){
+            this.layerCSW=tempCSWRecords;
+        }
 
-        _cswRenderer.parentLayer = this.parentLayer;
+        var distinctCSWRecords=[];
+
+        var keyArray=[];
+
+        for(var j=0; j<tempCSWRecords.length;j++){
+            keyArray[tempCSWRecords[j].get('id')]=true;
+        }
+
+        for(var i = 0; i< cswRecords.length;i++){
+            if(!(keyArray[cswRecords[i].get('id')])){
+                distinctCSWRecords.push(cswRecords[i]);
+            }
+
+        }
+
+        tempCSWRecords=tempCSWRecords.concat(distinctCSWRecords);
+        this.parentLayer.set('cswRecords', tempCSWRecords);
+
+        if(!this._cswRenderer){
+            // Show the results:
+            this._cswRenderer = Ext.create('portal.layer.renderer.csw.CSWRenderer', {
+                map : this.map,
+                icon : this.icon,
+                polygonColor: this.polygonColor
+            });
+        }
+
+        this._cswRenderer.parentLayer = this.parentLayer;
 
         var wholeGlobe = Ext.create('portal.util.BBox', {
             northBoundLatitude : 90,
@@ -49,18 +72,9 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var emptyFilter = Ext.create('portal.layer.filterer.Filterer', {
             spatialParam : wholeGlobe});
 
-        _cswRenderer.displayData(
-                cswRecords,
-                emptyFilter,
-                undefined);
+        this._cswRenderer.displayData(distinctCSWRecords, emptyFilter, undefined);
 
-        // This is where we put the proper CSW record back.
-        // If this wasn't done you'd get a problem where you add
-        // the layer to the map and apply filter and then try to
-        // filter it again. The second filter will be applied to
-        // the results of the original request instead of the
-        // CSW endpoint itself.
-        this.parentLayer.set('cswRecords', tempCSWRecords);
+
     },
 
 
@@ -95,7 +109,18 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
      * and passed an instance of this renderer and the parameters used to call
      * this function
      */
-    displayData : function(resources, filterer, callback) {
+
+    displayData : function(resources, filterer, callback,event) {
+        //adding a optional parameter event to capture what event calls to display Data. Slightly dodgy
+        //and feel free to change if there is a better way of doing this.
+        if(event === 'visibilityChange'){
+            this._displayCSWsWithCSWRenderer([]);
+            return;
+        }else if(this.layerCSW){
+            this.parentLayer.set('cswRecords', this.layerCSW);
+            this._cswRenderer.parentLayer = this.parentLayer;
+        }
+
         var pageSize=20;
         this.removeData();
         me = this;
@@ -195,8 +220,8 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
      * returns - void
      */
     removeData : function() {
-        if (typeof(_cswRenderer) != 'undefined' && _cswRenderer != null) {
-            _cswRenderer.removeData();
+        if (typeof(this._cswRenderer) != 'undefined' && this._cswRenderer != null) {
+            this._cswRenderer.removeData();
         }
 
         this.primitiveManager.clearPrimitives();
@@ -205,9 +230,5 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     /**
      * An abstract function - see parent class for more info
      */
-    abortDisplay : function() {
-        for (var i = 0; i < this._ajaxRequests.length; i++) {
-            Ext.Ajax.abort(this._ajaxRequests[i]);
-        }
-    }
+    abortDisplay : Ext.emptyFn
 });
