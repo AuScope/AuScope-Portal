@@ -29,6 +29,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         //append the cswRecords to the layer
         var tempCSWRecords = this.parentLayer.get('cswRecords');
 
+
         if(!this.layerCSW){
             this.layerCSW=tempCSWRecords;
         }
@@ -92,11 +93,12 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         }).show();
     },
 
+
     /**
      *
      * Function to handle adding all csw records to map
      */
-    _addAllFilteredCSWHandler : function(cfg){
+    _addAllFilteredCSWHandler : function(cfg,scope){
         var me = this;
         var cswRecordStore = Ext.create('Ext.data.Store', {
             id:'addAllCSWStore',
@@ -122,6 +124,8 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                     if(successful && records.length > 0 && store.lastOptions.page < 4){
                         me._displayCSWsWithCSWRenderer(records);
                         store.nextPage();
+                    }else{
+                        scope.fireEvent('renderfinished', scope);
                     }
                 }
             }
@@ -216,19 +220,23 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 text : 'Add Selected Records',
                 iconCls : 'add',
                 handler : function(button, e) {
+
                     var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
                     var csw = cswPagingPanel.getSelectionModel().getSelection();
                     me._displayCSWsWithCSWRenderer(csw);
+
                 }
             },{
                 xtype : 'button',
                 text : 'Add All Current Page Records',
                 iconCls : 'addall',
                 handler : function(button, e) {
+
                     var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
                     var allStore = cswPagingPanel.getStore();
                     var cswRecords = allStore.getRange();
                     me._displayCSWsWithCSWRenderer(cswRecords);
+
 
                 }
             },{
@@ -248,13 +256,15 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                             buttons: Ext.MessageBox.OKCANCEL,
                             fn: function(buttonId) {
                                 if (buttonId === "ok") {
-                                    me._addAllFilteredCSWHandler(configuration);
+                                    me.fireEvent('renderstarted',me,null,null);
+                                    me._addAllFilteredCSWHandler(configuration,me);
+
                                 }
                             }
                         });
 
                     }else{
-                        me._addAllFilteredCSWHandler(configuration);
+                        me._addAllFilteredCSWHandler(configuration,me);
                     }
 
                 }
