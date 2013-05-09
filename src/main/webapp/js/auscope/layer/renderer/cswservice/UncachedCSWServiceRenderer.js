@@ -77,7 +77,9 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
     },
 
-
+    /**
+     * Call back function to handle double click of the csw to bring up a window to display its information
+     */
     _callBackDisplayInfo : function(record){
         Ext.create('Ext.window.Window', {
             title : 'CSW Record Information',
@@ -90,6 +92,51 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         }).show();
     },
 
+    /**
+     *
+     * Function to handle adding all csw records to map
+     */
+    _addAllFilteredCSWHandler : function(cfg){
+        var me = this;
+        var cswRecordStore = Ext.create('Ext.data.Store', {
+            id:'addAllCSWStore',
+            autoLoad: false,
+            model : 'portal.csw.CSWRecord',
+            pageSize: 50,
+            proxy: {
+                type: 'ajax',
+                url: 'getUncachedCSWRecords.do',
+                extraParams:cfg.extraParams,
+                reader: {
+                    type: 'json',
+                    root: 'data',
+                    successProperty: 'success',
+                    totalProperty: 'totalResults'
+                }
+
+            },
+            listeners : {
+                load : function( store, records, successful, operation, eOpts ){
+                    //VT: a cap for testing purposes. Even though results are paged, we really
+                    //shouldn't allow more than 200 results
+                    if(successful && records.length > 0 && store.lastOptions.page < 4){
+                        me._displayCSWsWithCSWRenderer(records);
+                        store.nextPage();
+                    }
+                }
+            }
+        });
+
+        cswRecordStore.load({
+            params:{
+                limit : 50,
+                start : 1
+            },
+        });
+
+
+
+    },
 
     /**
      * An implementation of the abstract base function. See comments in
@@ -166,7 +213,16 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             buttonAlign : 'right',
             buttons : [{
                 xtype : 'button',
-                text : 'Add All Records',
+                text : 'Add Selected Records',
+                iconCls : 'add',
+                handler : function(button, e) {
+                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
+                    var csw = cswPagingPanel.getSelectionModel().getSelection();
+                    me._displayCSWsWithCSWRenderer(csw);
+                }
+            },{
+                xtype : 'button',
+                text : 'Add All Current Page Records',
                 iconCls : 'addall',
                 handler : function(button, e) {
                     var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
@@ -177,18 +233,34 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 }
             },{
                 xtype : 'button',
-                text : 'Add Selected Records',
-                iconCls : 'add',
+                text : 'Add All Records',
+                iconCls : 'addall',
                 handler : function(button, e) {
                     var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
-                    var csw = cswPagingPanel.getSelectionModel().getSelection();
-                    me._displayCSWsWithCSWRenderer(csw);
+                    var allStore = cswPagingPanel.getStore();
+                    if(allStore.getTotalCount() > 200){
+
+                        Ext.MessageBox.show({
+                            title: "Warning",
+                            msg: 'Your query request has resulted in more than 200 results,<br>' +
+                                'This may potentially crash your browser. Would you like to continue',
+                            icon: Ext.MessageBox.WARNING,
+                            buttons: Ext.MessageBox.OKCANCEL,
+                            fn: function(buttonId) {
+                                if (buttonId === "ok") {
+                                    me._addAllFilteredCSWHandler(configuration);
+                                }
+                            }
+                        });
+
+                    }else{
+                        me._addAllFilteredCSWHandler(configuration);
+                    }
+
                 }
             }]
 
         }).show();
-
-
 
     },
 
