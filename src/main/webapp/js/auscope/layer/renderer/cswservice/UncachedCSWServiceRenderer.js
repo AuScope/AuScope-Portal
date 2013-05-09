@@ -120,8 +120,8 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             listeners : {
                 load : function( store, records, successful, operation, eOpts ){
                     //VT: a cap for testing purposes. Even though results are paged, we really
-                    //shouldn't allow more than 200 results
-                    if(successful && records.length > 0 && store.lastOptions.page < 10){
+                    //shouldn't allow more than 200 results // && store.lastOptions.page < 10
+                    if(successful && records.length > 0){
                         me._displayCSWsWithCSWRenderer(records);
                         store.nextPage();
                     }else{
