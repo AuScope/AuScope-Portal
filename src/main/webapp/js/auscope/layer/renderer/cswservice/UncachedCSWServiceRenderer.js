@@ -264,6 +264,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                         });
 
                     }else{
+                        me.fireEvent('renderstarted',me,null,null);
                         me._addAllFilteredCSWHandler(configuration,me);
                     }
 
