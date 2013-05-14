@@ -6,6 +6,7 @@ import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
@@ -35,19 +36,23 @@ public class CSWController extends BaseCSWController {
     /**
      *
      * @param dateString in format: 28/02/2013
+     * @param endOfDay
+     * false means the time will be 00:00:00:000
+     * true means the time will be 23:59:59:999
      * @return
      */
-    // TODO: Get rid of this, I shouldn't need to do it myself.
-    private DateTime stringToDateTime(String dateString) {
+    private DateTime stringToDateTime(String dateString, boolean endOfDay) {
         String[] date = dateString.split("/");
-
         return new DateTime(
-                Integer.parseInt(date[2]),
-                Integer.parseInt(date[1]),
-                Integer.parseInt(date[0]),
-                0,0,0,0);
+            Integer.parseInt(date[2]), // year
+            Integer.parseInt(date[1]), // monthOfYear
+            Integer.parseInt(date[0]), // dayOfMonth
+            endOfDay ? 23 : 0, // hourOfDay
+            endOfDay ? 59 : 0, // minuteOfHour
+            endOfDay ? 59 : 0, // secondOfMinute
+            endOfDay ? 999 : 0); // millisOfSecond
     }
-
+    
     /**
      * Requests CSW records from the cswServiceUrl provided.
      * The results will be filtered by the CQL Text and the filter options.
@@ -57,8 +62,9 @@ public class CSWController extends BaseCSWController {
      * @param cswServiceUrl
      * @param recordInfoUrl
      * @param cqlText
-     * @param startPoint
-     * @param maxRecords
+     * @param start
+     * @param limit
+     * @param bbox
      * @param anyText
      * @param title
      * @param abstract_
@@ -75,24 +81,23 @@ public class CSWController extends BaseCSWController {
      */
     @RequestMapping("/getUncachedCSWRecords.do")
     public ModelAndView getUncachedCSWRecords(
-            @RequestParam(value="cswServiceUrl", required=false) String cswServiceUrl,
-            @RequestParam(value="recordInfoUrl", required=false) String recordInfoUrl,
-            @RequestParam(value="cqlText", required=false) String cqlText,
-            @RequestParam(value="start", required=false) int start,
-            @RequestParam(value="limit", required=false) int limit,
-            //String bbox,
-            @RequestParam(value="anyText", required=false) String anyText,
-            @RequestParam(value="title", required=false) String title,
-            @RequestParam(value="abstract_", required=false) String abstract_,
-            @RequestParam(value="metadataDateFrom", required=false) String metadataDateFrom,
-            @RequestParam(value="metadataDateTo", required=false) String metadataDateTo,
-            @RequestParam(value="temporalExtentFrom", required=false) String temporalExtentFrom,
-            @RequestParam(value="temporalExtentTo", required=false) String temporalExtentTo) {
+            @RequestParam(value="cswServiceUrl", required = false) String cswServiceUrl,
+            @RequestParam(value="recordInfoUrl", required = false) String recordInfoUrl,
+            @RequestParam(value="cqlText", required = false) String cqlText,
+            @RequestParam(value="start", required = false) int start,
+            @RequestParam(value="limit", required = false) int limit,
+            @RequestParam(value="bbox", required = false) String bbox,
+            @RequestParam(value="anyText", required = false) String anyText,
+            @RequestParam(value="title", required = false) String title,
+            @RequestParam(value="abstract_", required = false) String abstract_,
+            @RequestParam(value="metadataDateFrom", required = false) String metadataDateFrom,
+            @RequestParam(value="metadataDateTo", required = false) String metadataDateTo,
+            @RequestParam(value="temporalExtentFrom", required = false) String temporalExtentFrom,
+            @RequestParam(value="temporalExtentTo", required = false) String temporalExtentTo) {
         CSWServiceItem endpoint = new CSWServiceItem(
                 "", // This ID won't actually be used so we can just leave it blank.
                 cswServiceUrl,
                 recordInfoUrl);
-        endpoint.setCqlText(cqlText);
 
         CSWService cswService = new CSWService(
                 endpoint,
@@ -100,28 +105,31 @@ public class CSWController extends BaseCSWController {
                 false);
 
         try {
-            //FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
+            FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
 
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
                     anyText,
-                    null//spatialBounds
-                    );
+                    spatialBounds);
 
             filter.setTitle(title);
             filter.setAbstract(abstract_);
 
-            if (!metadataDateFrom.isEmpty() && !metadataDateTo.isEmpty()) {
-                filter.setMetadataChangeDate(
-                        stringToDateTime(metadataDateFrom),
-                        stringToDateTime(metadataDateTo));
+            if (!metadataDateFrom.isEmpty()) {
+                filter.setMetadataChangeDateFrom(stringToDateTime(metadataDateFrom, false)); 
             }
 
-            if (!temporalExtentFrom.isEmpty() && !temporalExtentTo.isEmpty()) {
-                filter.setTemporalExtent(
-                        stringToDateTime(temporalExtentFrom),
-                        stringToDateTime(temporalExtentTo));
+            if (!metadataDateTo.isEmpty()) {
+                filter.setMetadataChangeDateTo(stringToDateTime(metadataDateTo, true));
             }
 
+            if (!temporalExtentFrom.isEmpty()) {
+                filter.setTemporalExtentFrom(stringToDateTime(temporalExtentFrom, false));
+            }
+            
+            if (!temporalExtentTo.isEmpty()) {
+                filter.setTemporalExtentTo(stringToDateTime(temporalExtentTo, true));
+            }
+            
             CSWGetRecordResponse response = cswService.queryCSWEndpoint(
                     start,
                     limit,

@@ -29,8 +29,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         //append the cswRecords to the layer
         var tempCSWRecords = this.parentLayer.get('cswRecords');
 
-
-        if(!this.layerCSW){
+        if (!this.layerCSW) {
             this.layerCSW=tempCSWRecords;
         }
 
@@ -38,21 +37,20 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
         var keyArray=[];
 
-        for(var j=0; j<tempCSWRecords.length;j++){
+        for (var j=0; j<tempCSWRecords.length;j++) {
             keyArray[tempCSWRecords[j].get('id')]=true;
         }
 
-        for(var i = 0; i< cswRecords.length;i++){
+        for (var i = 0; i< cswRecords.length;i++) {
             if(!(keyArray[cswRecords[i].get('id')])){
                 distinctCSWRecords.push(cswRecords[i]);
             }
-
         }
 
         tempCSWRecords=tempCSWRecords.concat(distinctCSWRecords);
         this.parentLayer.set('cswRecords', tempCSWRecords);
 
-        if(!this._cswRenderer){
+        if (!this._cswRenderer) {
             // Show the results:
             this._cswRenderer = Ext.create('portal.layer.renderer.csw.CSWRenderer', {
                 map : this.map,
@@ -74,8 +72,6 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             spatialParam : wholeGlobe});
 
         this._cswRenderer.displayData(distinctCSWRecords, emptyFilter, undefined);
-
-
     },
 
     /**
@@ -93,12 +89,11 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         }).show();
     },
 
-
     /**
      *
      * Function to handle adding all csw records to map
      */
-    _addAllFilteredCSWHandler : function(cfg,scope){
+    _addAllFilteredCSWHandler : function(cfg, scope) {
         var me = this;
         var cswRecordStore = Ext.create('Ext.data.Store', {
             id:'addAllCSWStore',
@@ -137,9 +132,6 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 start : 1
             },
         });
-
-
-
     },
 
     /**
@@ -164,33 +156,51 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     displayData : function(resources, filterer, callback,event) {
         //adding a optional parameter event to capture what event calls to display Data. Slightly dodgy
         //and feel free to change if there is a better way of doing this.
-        if(event === 'visibilityChange'){
+        if (event === 'visibilityChange') {
             this._displayCSWsWithCSWRenderer([]);
             return;
-        }else if(this.layerCSW){
+        } else if (this.layerCSW) {
             this.parentLayer.set('cswRecords', this.layerCSW);
             this._cswRenderer.parentLayer = this.parentLayer;
         }
 
-        var pageSize=20;
+        var pageSize = 20;
         this.removeData();
         me = this;
         var cswRecord = this.parentLayer.data.cswRecords[0].data;
         var recordInfoUrl = cswRecord.recordInfoUrl;
 
-        var configuration =Ext.apply({},{
+        var anyTextFilter = filterer.parameters.anyText;
+        var defaultAnyTextFilter = cswRecord.descriptiveKeywords[0];
+        var anyText = defaultAnyTextFilter || '';
+        anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;
+        
+        // Use the bounding box form instead of viewport only if all 
+        // four values have been filled in.
+        if (filterer.parameters.lat_max.length > 0 &&
+            filterer.parameters.long_max.length > 0 &&
+            filterer.parameters.lat_min.length > 0 &&
+            filterer.parameters.long_min.length > 0) {
+            
+            filterer.spatialParam.northBoundLatitude = filterer.parameters.lat_max;
+            filterer.spatialParam.eastBoundLongitude = filterer.parameters.long_max; 
+            filterer.spatialParam.southBoundLatitude = filterer.parameters.lat_min;
+            filterer.spatialParam.westBoundLongitude = filterer.parameters.long_min;
+        }
+        
+        var configuration = Ext.apply({}, {
                 extraParams : {
-                    recordInfoUrl : cswRecord.recordInfoUrl,
                     cswServiceUrl : resources[0].data.url,
+                    recordInfoUrl : cswRecord.recordInfoUrl,                    
                     cqlText : cswRecord.descriptiveKeywords[0],
-                    //bbox : filterer.spatialParam,
-                    anyText : filterer.parameters.anyText,
+                    bbox : Ext.JSON.encode(filterer.spatialParam),
+                    anyText : anyText,
                     title : filterer.parameters.title,
                     abstract_ : filterer.parameters.abstract,
                     metadataDateFrom : filterer.parameters.metadata_change_date_from,
                     metadataDateTo : filterer.parameters.metadata_change_date_to,
                     temporalExtentFrom : filterer.parameters.temporal_extent_date_from,
-                    temporalExtentTo : filterer.parameters.temporal_extent_date_to,
+                    temporalExtentTo : filterer.parameters.temporal_extent_date_to
                 },
 
                 pagingConfig:{
@@ -200,15 +210,14 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
                 callback: this._callBackDisplayInfo
         });
-
-
+        
         Ext.create('Ext.window.Window', {
             title: 'CSW Record Selection',
             height: 500,
             width: 650,
             layout: 'fit',
             items: [{  // Let's put an empty grid in just to illustrate fit layout
-                id : 'pagingPanel1',
+                id : 'pagingPanel',
                 xtype: 'cswpagingpanel',
                 cswConfig : configuration,
                 layout : 'fit'
@@ -221,7 +230,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 iconCls : 'add',
                 handler : function(button, e) {
 
-                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
+                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel');
                     var csw = cswPagingPanel.getSelectionModel().getSelection();
                     me._displayCSWsWithCSWRenderer(csw);
 
@@ -231,41 +240,38 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 text : 'Add All Current Page Records',
                 iconCls : 'addall',
                 handler : function(button, e) {
-
-                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
+                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel');
                     var allStore = cswPagingPanel.getStore();
                     var cswRecords = allStore.getRange();
                     me._displayCSWsWithCSWRenderer(cswRecords);
-
-
                 }
             },{
                 xtype : 'button',
                 text : 'Add All Records',
                 iconCls : 'addall',
                 handler : function(button, e) {
-                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel1');
+                    var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel');
                     var allStore = cswPagingPanel.getStore();
-                    if(allStore.getTotalCount() > 200){
+                    if (allStore.getTotalCount() > 200) {
 
                         Ext.MessageBox.show({
                             title: "Warning",
                             msg: 'Your query request has resulted in more than 200 results,<br>' +
-                                'This may potentially crash your browser. Would you like to continue',
+                                'This may potentially crash your browser. Would you like to continue?',
                             icon: Ext.MessageBox.WARNING,
                             buttons: Ext.MessageBox.OKCANCEL,
                             fn: function(buttonId) {
                                 if (buttonId === "ok") {
-                                    me.fireEvent('renderstarted',me,null,null);
-                                    me._addAllFilteredCSWHandler(configuration,me);
+                                    me.fireEvent('renderstarted', me, null, null);
+                                    me._addAllFilteredCSWHandler(configuration, me);
 
                                 }
                             }
                         });
 
-                    }else{
-                        me.fireEvent('renderstarted',me,null,null);
-                        me._addAllFilteredCSWHandler(configuration,me);
+                    } else {
+                        me.fireEvent('renderstarted', me, null, null);
+                        me._addAllFilteredCSWHandler(configuration, me);
                     }
 
                 }
