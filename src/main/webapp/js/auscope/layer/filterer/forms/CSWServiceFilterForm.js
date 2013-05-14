@@ -113,7 +113,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     // Row 2:
                     emptyCell, {
                         xtype : 'textfield',
-                        name : 'latMax'
+                        name : 'lat_max'
                     }, emptyCell,
 
                     // Row 3:
@@ -127,11 +127,11 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     // Row 4:
                     {
                         xtype : 'textfield',
-                        name : 'longMin'
+                        name : 'long_min'
                     }, 
                     emptyCell,{
                         xtype : 'textfield',
-                        name : 'longMax'
+                        name : 'long_max'
                     },
                     
                     // Row 5:
@@ -142,7 +142,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     // Row 6:
                     emptyCell, {
                         xtype : 'textfield',
-                        name : 'latMin'
+                        name : 'lat_min'
                     }, 
                     emptyCell]
                 }]
