@@ -107,7 +107,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 recordInfoUrl : recordInfoUrl,
                 startPoint : 1,
                 maxRecords : maximumRecords,
-                //bbox : Ext.JSON.encode(bboxFilter),
+                bbox : Ext.JSON.encode(bboxFilter),
                 anyText : anyText,
                 title : titleFilter,
                 abstract_ : abstractFilter,

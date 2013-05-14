@@ -6,6 +6,7 @@ import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
@@ -83,7 +84,7 @@ public class CSWController extends BaseCSWController {
             String recordInfoUrl,
             int startPoint,
             int maxRecords,
-            //String bbox,
+            String bbox,
             String anyText,
             String title,
             String abstract_,
@@ -102,12 +103,11 @@ public class CSWController extends BaseCSWController {
                 false);
 
         try {
-            //FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
+            FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
               
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
                     anyText,
-                    null//spatialBounds
-                    ); 
+                    spatialBounds);
             
             filter.setTitle(title);
             filter.setAbstract(abstract_);
