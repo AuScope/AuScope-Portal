@@ -57,36 +57,29 @@
     </bean>
     <bean id="cswInSarTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswInSarTest"/>
-        <constructor-arg name="title" value="InSAR Geonetwork"/>
+        <constructor-arg name="title" value="InSAR GeoNetwork"/>
         
         <!-- This will only work if your machine's IP has been granted access to eos-test --> 
         <constructor-arg name="serviceUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
         <property name="defaultAnyTextFilter" value="SAR"/>
-        
-        <!-- TODO: This was just used for testing because my home PC couldn't access eos-test: 
-        <constructor-arg name="serviceUrl" value="http://aster.nci.org.au/geonetwork/srv/en/csw"/>
-        <constructor-arg name="recordInformationUrl" value="http://aster.nci.org.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
-        <property name="cqlText" value="AnyText like '%'"/>
-		-->
-         
         <property name="noCache" value="true"/>
         <property name="defaultConstraints">
 		    <list>
-		        <value>&lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation data.&lt;/a&gt;</value>
+		        <value>The European Space Agency Terms and Conditions apply to use of this data. In order to download the data, you will need to fill in the Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation Data v11/05/11 available in the link &lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122&lt;/a&gt;. Forward a scan of the completed document to &lt;a href="mailto:InSAR@ga.gov.au"&gt;InSAR@ga.gov.au&lt;/a&gt; to obtain a user id and password.</value>
 		    </list>
 		</property>
     </bean>
     <bean id="cswInSarProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswInSarProduction"/>
-        <constructor-arg name="title" value="InSAR Geonetwork"/>
+        <constructor-arg name="title" value="InSAR GeoNetwork"/>
         <constructor-arg name="serviceUrl" value="PRODUCTION URL TO BE PROVIDED"/>
         <constructor-arg name="recordInformationUrl" value="PRODUCTION URL TO BE PROVIDED"/>
         <property name="defaultAnyTextFilter" value="SAR"/>
         <property name="noCache" value="true"/>
 		<property name="defaultConstraints">
 		    <list>
-		        <value>&lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation data.&lt;/a&gt;</value>
+		        <value>The European Space Agency Terms and Conditions apply to use of this data. In order to download the data, you will need to fill in the Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation Data v11/05/11 available in the link &lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122&lt;/a&gt;. Forward a scan of the completed document to &lt;a href="mailto:InSAR@ga.gov.au"&gt;InSAR@ga.gov.au&lt;/a&gt; to obtain a user id and password.</value>
 		    </list>
 		</property>        
     </bean>

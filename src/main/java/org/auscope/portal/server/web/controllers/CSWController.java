@@ -83,7 +83,6 @@ public class CSWController extends BaseCSWController {
     public ModelAndView getUncachedCSWRecords(
             @RequestParam(value="cswServiceUrl", required = false) String cswServiceUrl,
             @RequestParam(value="recordInfoUrl", required = false) String recordInfoUrl,
-            @RequestParam(value="cqlText", required = false) String cqlText,
             @RequestParam(value="start", required = false) int start,
             @RequestParam(value="limit", required = false) int limit,
             @RequestParam(value="bbox", required = false) String bbox,
