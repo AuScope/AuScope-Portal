@@ -16,7 +16,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     layerCSW : null,
 
     constructor : function(config) {
-        
+
         // this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
         // iconUrl : config.icon ? config.icon.getUrl() : ''
         // });
@@ -173,24 +173,24 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var defaultAnyTextFilter = cswRecord.descriptiveKeywords[0];
         var anyText = defaultAnyTextFilter || '';
         anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;
-        
-        // Use the bounding box form instead of viewport only if all 
+
+        // Use the bounding box form instead of viewport only if all
         // four values have been filled in.
         if (filterer.parameters.lat_max.length > 0 &&
             filterer.parameters.long_max.length > 0 &&
             filterer.parameters.lat_min.length > 0 &&
             filterer.parameters.long_min.length > 0) {
-            
+
             filterer.spatialParam.northBoundLatitude = filterer.parameters.lat_max;
-            filterer.spatialParam.eastBoundLongitude = filterer.parameters.long_max; 
+            filterer.spatialParam.eastBoundLongitude = filterer.parameters.long_max;
             filterer.spatialParam.southBoundLatitude = filterer.parameters.lat_min;
             filterer.spatialParam.westBoundLongitude = filterer.parameters.long_min;
         }
-        
+
         var configuration = Ext.apply({}, {
                 extraParams : {
                     cswServiceUrl : resources[0].data.url,
-                    recordInfoUrl : cswRecord.recordInfoUrl,                    
+                    recordInfoUrl : cswRecord.recordInfoUrl,
                     bbox : Ext.JSON.encode(filterer.spatialParam),
                     anyText : anyText,
                     title : filterer.parameters.title,
@@ -208,7 +208,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
                 callback: this._callBackDisplayInfo
         });
-        
+
         Ext.create('Ext.window.Window', {
             title: 'CSW Record Selection',
             height: 500,
@@ -249,11 +249,12 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 handler : function(button, e) {
                     var cswPagingPanel = button.findParentByType('window').getComponent('pagingPanel');
                     var allStore = cswPagingPanel.getStore();
-                    if (allStore.getTotalCount() > 200) {
+                    if (allStore.getTotalCount() > 500) {
                         Ext.MessageBox.show({
                             title: "Warning",
-                            msg: 'Your query request has resulted in more than 200 results,<br>' +
-                                'This may potentially crash your browser. Would you like to continue?',
+                            msg:   'The query you have requested returns more than 500 records.<br>' +
+                                   ' Your browser may not be able to load this much data and crash.<br>' +
+                                   'Would you like to continue?'
                             icon: Ext.MessageBox.WARNING,
                             buttons: Ext.MessageBox.OKCANCEL,
                             fn: function(buttonId) {
