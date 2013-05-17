@@ -174,24 +174,15 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var anyText = defaultAnyTextFilter || '';
         anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;
 
-        // Use the bounding box form instead of viewport only if all
-        // four values have been filled in.
-        if (filterer.parameters.lat_max.length > 0 &&
-            filterer.parameters.long_max.length > 0 &&
-            filterer.parameters.lat_min.length > 0 &&
-            filterer.parameters.long_min.length > 0) {
-
-            filterer.spatialParam.northBoundLatitude = filterer.parameters.lat_max;
-            filterer.spatialParam.eastBoundLongitude = filterer.parameters.long_max;
-            filterer.spatialParam.southBoundLatitude = filterer.parameters.lat_min;
-            filterer.spatialParam.westBoundLongitude = filterer.parameters.long_min;
-        }
-
         var configuration = Ext.apply({}, {
                 extraParams : {
                     cswServiceUrl : resources[0].data.url,
                     recordInfoUrl : cswRecord.recordInfoUrl,
                     bbox : Ext.JSON.encode(filterer.spatialParam),
+                    northBoundLatitude : filterer.parameters.lat_max, 
+                    eastBoundLongitude : filterer.parameters.long_max,
+                    southBoundLatitude : filterer.parameters.lat_min,
+                    westBoundLongitude : filterer.parameters.long_min,
                     anyText : anyText,
                     title : filterer.parameters.title,
                     abstract_ : filterer.parameters.abstract,

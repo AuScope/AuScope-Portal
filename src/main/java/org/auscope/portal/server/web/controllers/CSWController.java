@@ -86,6 +86,10 @@ public class CSWController extends BaseCSWController {
             @RequestParam(value="start", required = false) int start,
             @RequestParam(value="limit", required = false) int limit,
             @RequestParam(value="bbox", required = false) String bbox,
+            @RequestParam(value="northBoundLatitude", required = false) String northBoundLatitude,
+            @RequestParam(value="eastBoundLongitude", required = false) String eastBoundLongitude,
+            @RequestParam(value="southBoundLatitude", required = false) String southBoundLatitude,
+            @RequestParam(value="westBoundLongitude", required = false) String westBoundLongitude,
             @RequestParam(value="anyText", required = false) String anyText,
             @RequestParam(value="title", required = false) String title,
             @RequestParam(value="abstract_", required = false) String abstract_,
@@ -104,8 +108,22 @@ public class CSWController extends BaseCSWController {
                 false);
 
         try {
-            FilterBoundingBox spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
-
+            FilterBoundingBox spatialBounds;
+            
+            // If ALL the explicit bounds have been set we will use them, otherwise we'll just the viewport (i.e. bbox)
+            if (northBoundLatitude.length() != 0 &&
+                eastBoundLongitude.length() != 0 &&
+                southBoundLatitude.length() != 0 &&
+                westBoundLongitude.length() != 0) {
+                spatialBounds = new FilterBoundingBox(
+                    "EPSG:4326",
+                    new double[] {Double.parseDouble(eastBoundLongitude), Double.parseDouble(southBoundLatitude)},
+                    new double[] {Double.parseDouble(westBoundLongitude), Double.parseDouble(northBoundLatitude)});
+            }
+            else {
+                spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);    
+            }
+            
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
                     anyText,
                     spatialBounds);
