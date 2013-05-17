@@ -254,7 +254,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                             title: "Warning",
                             msg:   'The query you have requested returns more than 500 records.<br>' +
                                    'Your browser may not be able to load this much data and crash.<br>' +
-                                   'Would you like to continue?'
+                                   'Would you like to continue?',
                             icon: Ext.MessageBox.WARNING,
                             buttons: Ext.MessageBox.OKCANCEL,
                             fn: function(buttonId) {
