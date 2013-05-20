@@ -66,7 +66,7 @@
         <property name="noCache" value="true"/>
         <property name="defaultConstraints">
 		    <list>
-		        <value>The European Space Agency Terms and Conditions apply to use of this data. In order to download the data, you will need to fill in the Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation Data v11/05/11 available in the link &lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122&lt;/a&gt;.&lt;br/&gt;Forward a scan of the completed document to &lt;a href="mailto:InSAR@ga.gov.au"&gt;InSAR@ga.gov.au&lt;/a&gt; to obtain a userid and password.</value>
+		        <value>The European Space Agency Terms and Conditions apply to use of this data. In order to download the data, you will need to fill in the Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation Data v11/05/11 available in the link &lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122&lt;/a&gt;.&lt;br/&gt;&lt;br/&gt;Forward a scan of the completed document to &lt;a href="mailto:InSAR@ga.gov.au"&gt;InSAR@ga.gov.au&lt;/a&gt; to obtain a userid and password.</value>
 		    </list>
 		</property>
     </bean>
@@ -79,7 +79,7 @@
         <property name="noCache" value="true"/>
 		<property name="defaultConstraints">
 		    <list>
-		        <value>The European Space Agency Terms and Conditions apply to use of this data. In order to download the data, you will need to fill in the Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation Data v11/05/11 available in the link &lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122&lt;/a&gt;.&lt;br/&gt;Forward a scan of the completed document to &lt;a href="mailto:InSAR@ga.gov.au"&gt;InSAR@ga.gov.au&lt;/a&gt; to obtain a userid and password.</value>
+		        <value>The European Space Agency Terms and Conditions apply to use of this data. In order to download the data, you will need to fill in the Terms and Conditions for the utilisation of the European Space Agency&apos;s Earth Observation Data v11/05/11 available in the link &lt;a target="_blank" href="https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122"&gt;https://earth.esa.int/pi/esa?type=file&amp;ts=1127284911811&amp;table=aotarget&amp;cmd=image&amp;id=122&lt;/a&gt;.&lt;br/&gt;&lt;br/&gt;Forward a scan of the completed document to &lt;a href="mailto:InSAR@ga.gov.au"&gt;InSAR@ga.gov.au&lt;/a&gt; to obtain a userid and password.</value>
 		    </list>
 		</property>        
     </bean>
