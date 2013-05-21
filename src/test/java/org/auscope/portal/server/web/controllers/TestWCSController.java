@@ -52,14 +52,14 @@ public class TestWCSController extends PortalTestClass {
         try {
             final String[] timePositions = new String[] {"1986-10-09 12:34:56 FAIL"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, timePositions, null, null, null, null , mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, timePositions, null, null, null, null, "", mockResponse);
             Assert.fail("Should've failed to parse time");
         } catch (ParseException ex) { }
 
         try {
             final String[] timePositions = new String[] {"1986-10-09 12:99:56"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, timePositions, null, null, null, null , mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, timePositions, null, null, null, null, "", mockResponse);
             Assert.fail("Should've failed to parse time");
         } catch (ParseException ex) { }
     }
@@ -69,21 +69,21 @@ public class TestWCSController extends PortalTestClass {
         try {
             final String[] customParamValue = new String[] {"param1=1/a/3", "param2=4", "param1=5"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue , mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue, "", mockResponse); 
             Assert.fail("Should've failed to parse custom params");
         } catch (IllegalArgumentException ex) { }
 
         try {
             final String[] customParamValue = new String[] {"param1=1/2/3", "param2=a", "param1=5"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue , mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue, "", mockResponse);
             Assert.fail("Should've failed to parse custom params");
         } catch (IllegalArgumentException ex) { }
 
         try {
             final String[] customParamValue = new String[] {"param1=a/2/3", "param2=2", "param1=5"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue , mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue, "", mockResponse);
             Assert.fail("Should've failed to parse custom params");
         } catch (IllegalArgumentException ex) { }
     }
@@ -133,7 +133,7 @@ public class TestWCSController extends PortalTestClass {
          }});
 
         WCSController controller = new WCSController(wcsService);
-        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX, outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions, timePeriodFrom, timePeriodTo,timePeriodResolution, customParamValue , mockResponse);
+        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX, outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions, timePeriodFrom, timePeriodTo,timePeriodResolution, customParamValue, "", mockResponse);
     }
 
     @Test
@@ -185,7 +185,7 @@ public class TestWCSController extends PortalTestClass {
          }});
 
         WCSController controller = new WCSController(wcsService);
-        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX, outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions, timePeriodFrom, timePeriodTo,timePeriodResolution, customParams , mockResponse);
+        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX, outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions, timePeriodFrom, timePeriodTo,timePeriodResolution, customParams, "", mockResponse);
 
         ZipInputStream zip = outStream.getZipInputStream();
         ZipEntry ze = zip.getNextEntry();
