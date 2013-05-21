@@ -198,8 +198,8 @@ public class WCSController extends BasePortalController {
                                  @RequestParam(required = false, value = "timePeriodTo") final String timePeriodTo,
                                  @RequestParam(required = false, value = "timePeriodResolution") final String timePeriodResolution,
                                  @RequestParam(required = false, value = "customParamValue") final String[] customParamValues,
+                                 @RequestParam(required = false, value = "ftpURL") final String ftpURL,
                                 HttpServletResponse response) throws Exception {
-
         String outFileName = generateOutputFilename(layerName, downloadFormat);
         TimeConstraint timeConstraint = parseTimeConstraint(timePositions, timePeriodFrom, timePeriodTo, timePeriodResolution);
         Map<String, String> customParams = generateCustomParamMap(customParamValues);
@@ -245,8 +245,15 @@ public class WCSController extends BasePortalController {
             
             if (causeMessage.contains("<ServiceException>Unknown problem</ServiceException>")){
                 // Outcome 2:
+                
+                // If we have an FTP URL we can add a link to it in the error message:
+                String ftpMessage = ftpURL != null && ftpURL.compareTo("") != 0 ? 
+                        String.format("<br/>Alternatively, you can download the data directly from <a href=\"%s\">here</a>.", ftpURL) : "";
+                        
                 // We'll just show the user a page informing them that there's a problem:
-                String messageString = String.format("Error:%nYour request has failed. This is likely due to the requested data exceeding the server's size limit.%nPlease adjust your query and try again.");
+                String messageString = String.format(
+                        "<html>Error:<br/>Your request has failed. This is likely due to the requested data exceeding the server&apos;s size limit.<br/>Please adjust your query and try again.%s</html>",
+                        ftpMessage);
                 servletOutputStream.write(messageString.getBytes());
                 servletOutputStream.close();
                 return;

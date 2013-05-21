@@ -110,12 +110,14 @@ public class OPeNDAPController extends BasePortalController {
     public void makeRequest(@RequestParam("opendapUrl") final String opendapUrl,
             @RequestParam("downloadFormat") final String downloadFormat,
             @RequestParam(required = false, value = "constraints") final String constraintsJson,
+            @RequestParam(required = false, value = "ftpURL") final String ftpURL,
             HttpServletResponse response) throws Exception {
 
         log.trace(String.format("opendapUrl='%1$s'", opendapUrl));
         log.trace(String.format("downloadFormat='%1$s'", downloadFormat));
         log.trace(String.format("constraintsJson='%1$s'", constraintsJson));
-
+        log.trace(String.format("ftpURL='%1$s'", ftpURL));
+        
         OPeNDAPFormat format;
         String outputFileName;
         if (downloadFormat.equals("ascii")) {
@@ -161,10 +163,16 @@ public class OPeNDAPController extends BasePortalController {
                 if (matcher.find()) {
                     String requestedSize = matcher.group(1); 
                     String maximumSize = matcher.group(2);
+                    
+                    // If we have an FTP URL we can add a link to it in the error message:
+                    String ftpMessage = ftpURL != null && ftpURL.compareTo("") != 0 ? 
+                            String.format("<br/>Alternatively, you can download the data directly from <a href=\"%s\">here</a>.", ftpURL) : "";
+
                     String messageString = String.format(
-                            "Error:%nYour request has failed. The data you requested was %s MB but the maximum allowed by the server is %s MB.%nPlease reduce the scope of your query and try again.", 
+                            "<html>Error:<br/>Your request has failed. The data you requested was %s MB but the maximum allowed by the server is %s MB.<br/>Please reduce the scope of your query and try again.%s</html>", 
                             requestedSize,
-                            maximumSize);
+                            maximumSize,
+                            ftpMessage);
                     
                     servletOutputStream.write(messageString.getBytes());
                     servletOutputStream.close();
