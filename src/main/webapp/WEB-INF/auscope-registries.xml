@@ -60,8 +60,8 @@
         <constructor-arg name="title" value="InSAR GeoNetwork"/>
         
         <!-- This will only work if your machine's IP has been granted access to eos --> 
-        <constructor-arg name="serviceUrl" value="http://eos.ga.gov.au/geonetwork/srv/eng/csw"/>
-        <constructor-arg name="recordInformationUrl" value="http://eos.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
+        <constructor-arg name="serviceUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw"/>
+        <constructor-arg name="recordInformationUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
         <property name="defaultAnyTextFilter" value="SAR"/>
         <property name="noCache" value="true"/>
         <property name="defaultConstraints">

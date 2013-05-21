@@ -193,16 +193,19 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
               westBoundLongitude : 180
           });               
         this.map.scrollToBounds(fullBbox);
-        // then highlight bounding box 
-        // check for 90 and -90 because they reproject to infinity
-        var bbox = Ext.create('portal.util.BBox',{
-          	  northBoundLatitude : (north >= 90 ? 85 : north),
-              southBoundLatitude : (south <= -90 ? -85 : south),
-              eastBoundLongitude : east,
-              westBoundLongitude : west,
-              crs : 'EPSG:3857'
-          });
-        this.map.highlightBounds(bbox);
+        
+        if (!(north == 90 && east == 180 && south == -90 && west == -180)) {
+            // then highlight bounding box if they're filled in
+            // check for 90 and -90 because they reproject to infinity
+            var bbox = Ext.create('portal.util.BBox',{
+              	  northBoundLatitude : (north >= 90 ? 85 : north),
+                  southBoundLatitude : (south <= -90 ? -85 : south),
+                  eastBoundLongitude : east,
+                  westBoundLongitude : west,
+                  crs : 'EPSG:3857'
+              });
+            this.map.highlightBounds(bbox);
+        }
         
         var configuration = Ext.apply({}, {
                 extraParams : {
