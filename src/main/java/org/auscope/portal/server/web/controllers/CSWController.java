@@ -85,7 +85,6 @@ public class CSWController extends BaseCSWController {
             @RequestParam(value="recordInfoUrl", required = false) String recordInfoUrl,
             @RequestParam(value="start", required = false) int start,
             @RequestParam(value="limit", required = false) int limit,
-            @RequestParam(value="bbox", required = false) String bbox,
             @RequestParam(value="northBoundLatitude", required = false) double northBoundLatitude,
             @RequestParam(value="eastBoundLongitude", required = false) double eastBoundLongitude,
             @RequestParam(value="southBoundLatitude", required = false) double southBoundLatitude,

@@ -211,7 +211,6 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 extraParams : {
                     cswServiceUrl : resources[0].data.url,
                     recordInfoUrl : cswRecord.recordInfoUrl,
-                    bbox : Ext.JSON.encode(filterer.spatialParam),
                     northBoundLatitude : north,
                     eastBoundLongitude : east,
                     southBoundLatitude : south,
