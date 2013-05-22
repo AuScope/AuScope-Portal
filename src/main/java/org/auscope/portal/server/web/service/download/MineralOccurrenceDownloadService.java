@@ -41,7 +41,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
     public static final String MINERAL_OCCURRENCE_FEATURE_TYPE = "gsml:MappedFeature";
     public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";
     public static final int DEFAULT_TIMEOUT = 60 * 60 * 1000; //VT: we give 1 hour to download per service location
-    private  final HttpClient client;
+
 
 
 
@@ -55,11 +55,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
                                      WFSGetFeatureMethodMaker methodMaker) {
         super(httpServiceCaller, methodMaker);
 
-        client=new HttpClient();
-        HttpClientParams clientParams=new HttpClientParams();
-        clientParams.setSoTimeout(DEFAULT_TIMEOUT);//VT 2 hours
 
-        client.setParams(clientParams);
     }
 
     /**
@@ -95,7 +91,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
         HttpMethodBase method = null;
         try {
             method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
-            return httpServiceCaller.getMethodResponseAsStream(method,client);
+            return httpServiceCaller.getMethodResponseAsStream(method);
 
         } catch (Exception ex) {
             throw new PortalServiceException(method, "Error when attempting to download Mines GML", ex);
@@ -140,7 +136,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
 
         HttpMethodBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
-            return httpServiceCaller.getMethodResponseAsStream(method,client);
+            return httpServiceCaller.getMethodResponseAsStream(method);
 
 
         } catch (Exception ex) {
@@ -184,7 +180,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
 
         HttpMethodBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
-            return httpServiceCaller.getMethodResponseAsStream(method,client);
+            return httpServiceCaller.getMethodResponseAsStream(method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }

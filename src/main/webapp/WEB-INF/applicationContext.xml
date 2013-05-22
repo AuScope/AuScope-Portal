@@ -21,15 +21,11 @@
 
 
     <bean id="httpServiceCaller" class="org.auscope.portal.core.server.http.HttpServiceCaller">
-        <constructor-arg name="clientParams">
-            <bean class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">
-                <!--  15 minutes -->
-                <property name="connectionTimeout" value="900000"/>
-                <!--  15 minutes -->
-                <property name="soTimeout" value="900000"/>
-            </bean>
+        <constructor-arg type="int" name="connectionTimeOut">
+            <value>900000</value>
         </constructor-arg>
     </bean>
+
 
     <bean id="viewCswRecordFactory" class="org.auscope.portal.core.view.ViewCSWRecordFactory">
     </bean>
