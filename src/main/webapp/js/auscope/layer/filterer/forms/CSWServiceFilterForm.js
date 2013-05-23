@@ -114,7 +114,10 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     emptyCell, {
                         xtype : 'textfield',
                         name : 'lat_max',
-                        value : 90
+                        id : 'lat_max',
+                        listeners : {
+                        	change : Ext.bind(this._toggleSpatialBounds, this)
+                        }
                     }, emptyCell,
 
                     // Row 3:
@@ -129,12 +132,18 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     {
                         xtype : 'textfield',
                         name : 'long_min',
-                        value : -180
+                        id : 'long_min',
+                        listeners : {
+                        	change : Ext.bind(this._toggleSpatialBounds, this)
+                        }
                     }, 
                     emptyCell,{
                         xtype : 'textfield',
                         name : 'long_max',
-                        value : 180
+                        id : 'long_max',
+                        listeners : {
+                        	change : Ext.bind(this._toggleSpatialBounds, this)
+                        }
                     },
                     
                     // Row 5:
@@ -146,13 +155,129 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     emptyCell, {
                         xtype : 'textfield',
                         name : 'lat_min',
-                        value : -90
-                    }, 
-                    emptyCell]
+                        id : 'lat_min',
+                        listeners : {
+                        	change : Ext.bind(this._toggleSpatialBounds, this)
+                        }
+                    },                        	
+                    // Bbox preview button
+                    {
+                    	xtype : 'panel',
+                    	layout : 'anchor',
+                    	hideBorder : true,
+                    	items : [{
+	                    	xtype : 'button',
+	                    	anchor : '30%',
+	                    	html : this._spatialBoundsRenderer(),
+	                    	id: 'bboxPreviewButton',
+	                    	align: 'CENTER',
+	                        disabled: true,
+	                        tooltip : {
+	                        	text: 'Click to preview the bounds of this filter, double click to pan the map to those bounds.',
+	                        },
+		                    listeners : {
+		                        click : Ext.bind(this._spatialBoundsClickHandler, this),
+		                        dblclick : Ext.bind(this._spatialBoundsDoubleClickHandler, this),
+		                        element : 'el'
+		                    }
+                    	}]
+                    }]
                 }]
             }]
         });
 
         this.callParent(arguments);
+    },
+    
+    /**
+     * Enable bbox preview on the map when all bounding box text fields are filled in.
+     */
+    _toggleSpatialBounds : function() {
+    	var lat_max = this.form._fields.get("lat_max").lastValue;
+    	var lat_min = this.form._fields.get("lat_min").lastValue;
+    	var long_max = this.form._fields.get("long_max").lastValue;
+    	var long_min = this.form._fields.get("long_min").lastValue;
+   			  		
+	    // check if all fields are filled in
+ 		if (lat_max && lat_min && long_max && long_min) {       
+    		// enable spatial bounds preview
+ 			Ext.getCmp('bboxPreviewButton').enable();
+ 		} else {
+ 			Ext.getCmp('bboxPreviewButton').disable();
+ 		}
+    },
+    
+    /**
+     * Generates an Ext.DomHelper.markup for the specified imageUrl
+     * for usage as an image icon within this grid.
+     */
+    _spatialBoundsRenderer : function() {
+    	return Ext.DomHelper.markup({
+            tag : 'div',
+            style : 'text-align:center;',
+            children : [{
+                tag : 'img',
+                width : 16,
+                height : 16,
+                align: 'CENTER',
+                src: 'img/magglass.gif'
+            }]
+        });
+    },
+    
+    /**
+     * On single click, show a highlight of all BBoxes
+     */
+    _spatialBoundsClickHandler : function() {
+    	var bbox = this._getBBoxFilterBounds();
+    	if (bbox) {
+            if (bbox.southBoundLatitude !== bbox.northBoundLatitude ||
+                bbox.eastBoundLongitude !== bbox.westBoundLongitude) {
+
+                //VT: Google map uses EPSG:3857 and its maximum latitude is only 85 degrees
+                // anything more will stretch the transformation
+                if(bbox.northBoundLatitude>85){
+                    bbox.northBoundLatitude=85;
+                }
+                if(bbox.southBoundLatitude<-85){
+                    bbox.southBoundLatitude=-85;
+                }
+            }
+
+            this.map.highlightBounds(bbox);
+    	}
+    },
+    
+    /**
+     * Get the bounding box based on text fields values.
+     */
+    _getBBoxFilterBounds : function() {
+    	// They're assumed to be filled in because this has been checked when the button is enabled
+    	var lat_max = Number(this.form._fields.get("lat_max").lastValue);
+    	var lat_min = Number(this.form._fields.get("lat_min").lastValue);
+    	var long_max = Number(this.form._fields.get("long_max").lastValue);
+    	var long_min = Number(this.form._fields.get("long_min").lastValue);
+   			
+        // validate against non numerical values
+        if (isNaN(lat_max) || isNaN(lat_min) || isNaN(long_max) || isNaN(long_min)) {
+           alert("You have entered invalid bounding box filter values! Please re-enter and try again.");
+           return null;
+        } 
+        return Ext.create('portal.util.BBox', {
+                northBoundLatitude : lat_max,
+                southBoundLatitude : lat_min,
+                eastBoundLongitude : long_max,
+                westBoundLongitude : long_min
+        });  	
+    },
+
+    /**
+     * On double click, move the map so that specified bounds are visible
+     */
+    _spatialBoundsDoubleClickHandler : function() {
+    	var spatialBounds = this._getBBoxFilterBounds();
+    	if (spatialBounds) {
+    	    this.map.scrollToBounds(spatialBounds);
+    	}
     }
 });

@@ -85,6 +85,7 @@ public class CSWController extends BaseCSWController {
             @RequestParam(value="recordInfoUrl", required = false) String recordInfoUrl,
             @RequestParam(value="start", required = false) int start,
             @RequestParam(value="limit", required = false) int limit,
+            @RequestParam(value="bbox", required = false) String bbox,
             @RequestParam(value="northBoundLatitude", required = false) double northBoundLatitude,
             @RequestParam(value="eastBoundLongitude", required = false) double eastBoundLongitude,
             @RequestParam(value="southBoundLatitude", required = false) double southBoundLatitude,
@@ -107,11 +108,21 @@ public class CSWController extends BaseCSWController {
                 false);
 
         try {
-            FilterBoundingBox spatialBounds = new FilterBoundingBox(
-                    "EPSG:4326",
-                    new double[] {eastBoundLongitude, southBoundLatitude},
-                    new double[] {westBoundLongitude, northBoundLatitude});
+            FilterBoundingBox spatialBounds;
             
+			// If ALL the explicit bounds have been set we will use them,
+			// otherwise we'll just the viewport (i.e. bbox)
+			if (Double.isNaN(northBoundLatitude)
+					|| Double.isNaN(southBoundLatitude)
+					|| Double.isNaN(eastBoundLongitude)
+					|| Double.isNaN(westBoundLongitude)) {
+				spatialBounds = FilterBoundingBox.attemptParseFromJSONTemp(bbox);
+			} else {
+				spatialBounds = new FilterBoundingBox(
+						"EPSG:4326",
+						new double[] { eastBoundLongitude, southBoundLatitude },
+						new double[] { westBoundLongitude, northBoundLatitude });
+			}
             
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
                     anyText,

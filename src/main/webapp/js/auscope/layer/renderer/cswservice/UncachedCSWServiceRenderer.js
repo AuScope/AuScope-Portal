@@ -172,46 +172,35 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var anyTextFilter = filterer.parameters.anyText;
         var defaultAnyTextFilter = cswRecord.descriptiveKeywords[0];
         var anyText = defaultAnyTextFilter || '';
-        anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;
+        anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;        
+        
 
-        // get bounding box fields, use default max values if empty
-        var north = (filterer.parameters.lat_max.length > 0) ? Number(filterer.parameters.lat_max) : 90;
-        var east = (filterer.parameters.long_max.length > 0) ? Number(filterer.parameters.long_max) : 180;
-        var south = (filterer.parameters.lat_min.length > 0) ? Number(filterer.parameters.lat_min) : -90;
-        var west = (filterer.parameters.long_min.length > 0) ? Number(filterer.parameters.long_min) : -180;
-        
-        // validate against non numerical values                
-        if (isNaN(north) || isNaN(east) || isNaN(south) || isNaN(west)) {
-        	alert("You have entered invalid bounding box filter values! Please re-enter and try again.");
-        	return;
-        }        
-        // zoom out to max view to show everything
-        var fullBbox = Ext.create('portal.util.BBox',{
-          	  northBoundLatitude : 90,
-              southBoundLatitude : -90,
-              eastBoundLongitude : -180,
-              westBoundLongitude : 180
-          });               
-        this.map.scrollToBounds(fullBbox);
-        
-        if (!(north == 90 && east == 180 && south == -90 && west == -180)) {
-            // then highlight bounding box if they're filled in
-            // check for 90 and -90 because they reproject to infinity
-            var bbox = Ext.create('portal.util.BBox',{
-              	  northBoundLatitude : (north >= 90 ? 85 : north),
-                  southBoundLatitude : (south <= -90 ? -85 : south),
-                  eastBoundLongitude : east,
-                  westBoundLongitude : west,
-                  crs : 'EPSG:3857'
-              });
-            this.map.highlightBounds(bbox);
+    	// get bounding box fields and pass them on if all filled in
+        var north = NaN;
+        var east = NaN;
+        var south = NaN;
+        var west = NaN;
+                
+        if (filterer.parameters.lat_max.length > 0 && filterer.parameters.long_max.length > 0
+        		&& filterer.parameters.lat_min.length > 0 && filterer.parameters.long_min.length > 0) {         	
+        	north = Number(filterer.parameters.lat_max);
+            east = Number(filterer.parameters.long_max);
+            south = Number(filterer.parameters.lat_min);
+            west = Number(filterer.parameters.long_min);
+            
+            // validate against non numerical values                
+            if (isNaN(north) || isNaN(east) || isNaN(south) || isNaN(west)) {
+            	alert("You have entered invalid bounding box filter values! Please re-enter and try again.");
+            	return;
+            } 
         }
         
         var configuration = Ext.apply({}, {
                 extraParams : {
                     cswServiceUrl : resources[0].data.url,
                     recordInfoUrl : cswRecord.recordInfoUrl,
-                    northBoundLatitude : north,
+                    bbox : Ext.JSON.encode(filterer.spatialParam),
+                    northBoundLatitude : north, 
                     eastBoundLongitude : east,
                     southBoundLatitude : south,
                     westBoundLongitude : west,
