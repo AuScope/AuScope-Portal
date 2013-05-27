@@ -1,9 +1,9 @@
 package org.auscope.portal.server.web.service;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.SISSVoc3Service;
@@ -42,15 +42,16 @@ public class NvclVocabService extends SISSVoc3Service {
      *
      * @return
      * @throws PortalServiceException
+     * @throws URISyntaxException
      */
-    public Model getAllScalarConcepts() throws PortalServiceException {
+    public Model getAllScalarConcepts() throws PortalServiceException, URISyntaxException {
         Model model = ModelFactory.createDefaultModel();
         int pageNumber = 0;
         int pageSize = this.getPageSize();
 
         //Request each page in turn - put the results into Model
         do {
-            HttpMethodBase method = ((NvclVocabMethodMaker)sissVocMethodMaker).getAllScalars(getBaseUrl(), getRepository(), Format.Rdf, pageSize, pageNumber);
+            HttpRequestBase method = ((NvclVocabMethodMaker)sissVocMethodMaker).getAllScalars(getBaseUrl(), getRepository(), Format.Rdf, pageSize, pageNumber);
             if (requestPageOfConcepts(method, model)) {
                 pageNumber++;
             } else {
@@ -66,15 +67,16 @@ public class NvclVocabService extends SISSVoc3Service {
      * @param label The label to lookup
      * @return
      * @throws PortalServiceException
+     * @throws URISyntaxException
      */
-    public List<Resource> getScalarsByLabel(String label) throws PortalServiceException {
+    public List<Resource> getScalarsByLabel(String label) throws PortalServiceException, URISyntaxException {
         Model model = ModelFactory.createDefaultModel();
         int pageNumber = 0;
         int pageSize = this.getPageSize();
 
         //Request each page in turn - put the results into Model
         do {
-            HttpMethodBase method = ((NvclVocabMethodMaker)sissVocMethodMaker).getScalarsByLabel(getBaseUrl(), getRepository(), label, Format.Rdf, pageSize, pageNumber);
+            HttpRequestBase method = ((NvclVocabMethodMaker)sissVocMethodMaker).getScalarsByLabel(getBaseUrl(), getRepository(), label, Format.Rdf, pageSize, pageNumber);
             if (requestPageOfConcepts(method, model)) {
                 pageNumber++;
             } else {
@@ -95,8 +97,9 @@ public class NvclVocabService extends SISSVoc3Service {
      * @param label The label to lookup
      * @return
      * @throws PortalServiceException
+     * @throws URISyntaxException
      */
-    public List<String> getScalarDefinitionsByLabel(String label) throws PortalServiceException {
+    public List<String> getScalarDefinitionsByLabel(String label) throws PortalServiceException, URISyntaxException {
         List<Resource> resources = getScalarsByLabel(label);
         List<String> defns = new ArrayList<String>();
 

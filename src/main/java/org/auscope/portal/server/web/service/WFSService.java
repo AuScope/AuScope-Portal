@@ -1,7 +1,9 @@
 package org.auscope.portal.server.web.service;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.methods.GetMethod;
+import java.net.URISyntaxException;
+
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.PortalServiceException;
@@ -42,7 +44,7 @@ public class WFSService extends BaseWFSService {
         this.gmlToHtml = gmlToHtml;
     }
 
-    private WFSTransformedResponse doRequestAndKmlTransform(HttpMethodBase method, String serviceUrl) throws PortalServiceException {
+    private WFSTransformedResponse doRequestAndKmlTransform(HttpRequestBase method, String serviceUrl) throws PortalServiceException {
         try {
             String wfs = httpServiceCaller.getMethodResponseAsString(method);
             OWSExceptionParser.checkForExceptionResponse(wfs);
@@ -54,7 +56,7 @@ public class WFSService extends BaseWFSService {
         }
     }
 
-    private WFSTransformedResponse doRequestAndHtmlTransform(HttpMethodBase method, String serviceUrl) throws PortalServiceException {
+    private WFSTransformedResponse doRequestAndHtmlTransform(HttpRequestBase method, String serviceUrl) throws PortalServiceException {
         try {
             String wfs = httpServiceCaller.getMethodResponseAsString(method);
             OWSExceptionParser.checkForExceptionResponse(wfs);
@@ -74,10 +76,11 @@ public class WFSService extends BaseWFSService {
      * @param featureType the type name
      * @param featureId A unique ID of a single feature type to query
      * @return
+     * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String featureId) throws PortalServiceException {
-        HttpMethodBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
+    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String featureId) throws PortalServiceException, URISyntaxException {
+        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
         return doRequestAndKmlTransform(method, wfsUrl);
     }
 
@@ -91,10 +94,11 @@ public class WFSService extends BaseWFSService {
      * @param maxFeatures  A maximum number of features to request
      * @param srs [Optional] The spatial reference system the response should be encoded to @param srsName - will use BaseWFSService.DEFAULT_SRS if unspecified
      * @return
+     * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srs) throws PortalServiceException {
-        HttpMethodBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srs, ResultType.Results);
+    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srs) throws PortalServiceException, URISyntaxException {
+        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srs, ResultType.Results);
         return doRequestAndKmlTransform(method, wfsUrl);
     }
 
@@ -109,9 +113,10 @@ public class WFSService extends BaseWFSService {
      * @param srsName [Optional] the SRS to make the WFS request using - will use BaseWFSService.DEFAULT_SRS if unspecified
      * @return
      * @throws PortalServiceException
+     * @throws URISyntaxException
      */
-    public WFSCountResponse getWfsFeatureCount(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srsName) throws PortalServiceException {
-        HttpMethodBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srsName, ResultType.Hits);
+    public WFSCountResponse getWfsFeatureCount(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srsName) throws PortalServiceException, URISyntaxException {
+        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srsName, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
 
@@ -123,10 +128,11 @@ public class WFSService extends BaseWFSService {
      * @param featureType the type name
      * @param featureId A unique ID of a single feature type to query
      * @return
+     * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsHtml(String wfsUrl, String featureType, String featureId) throws PortalServiceException {
-        HttpMethodBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
+    public WFSTransformedResponse getWfsResponseAsHtml(String wfsUrl, String featureType, String featureId) throws PortalServiceException, URISyntaxException {
+        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
         return doRequestAndHtmlTransform(method, wfsUrl);
     }
 
@@ -141,7 +147,7 @@ public class WFSService extends BaseWFSService {
      * @throws Exception
      */
     public WFSTransformedResponse getWfsResponseAsHtml(String wfsUrl) throws PortalServiceException {
-        HttpMethodBase method = new GetMethod(wfsUrl);
+        HttpRequestBase method = new HttpGet(wfsUrl);
         return doRequestAndHtmlTransform(method, wfsUrl);
     }
 }

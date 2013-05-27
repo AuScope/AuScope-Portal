@@ -6,8 +6,7 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.PortalServiceException;
@@ -51,7 +50,7 @@ public class GeodesyService extends BaseWFSService {
      */
     public List<GeodesyObservation> getObservationsForStation(String wfsUrl, String stationId, String startDate, String endDate) throws PortalServiceException {
         GeodesyObservationsFilter filter = new GeodesyObservationsFilter(stationId, startDate, endDate);
-        HttpMethodBase method = null;
+        HttpRequestBase method = null;
         List<GeodesyObservation> allObservations = new ArrayList<GeodesyObservation>();
         try {
             //Make our request

@@ -3,7 +3,7 @@ package org.auscope.portal.server.web.service;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -19,7 +19,7 @@ public class TestPressureDBService extends PortalTestClass {
     private PressureDBService service;
     private PressureDBMethodMaker mockMethodMaker = context.mock(PressureDBMethodMaker.class);
     private HttpServiceCaller mockHttpServiceCaller = context.mock(HttpServiceCaller.class);
-    private HttpMethodBase mockHttpMethod = context.mock(HttpMethodBase.class);
+    private HttpRequestBase mockHttpMethod = context.mock(HttpRequestBase.class);
     private InputStream mockStream = context.mock(InputStream.class);
 
     @Before

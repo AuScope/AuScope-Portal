@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
@@ -41,7 +41,7 @@ public class TestBoreholeService extends PortalTestClass {
     private WFSGetFeatureMethodMaker mockMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
 
     /** The mock HTTP method*/
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
     /** The mock GML transformer*/
     private WfsToKmlTransformer mockGmlToKml = context.mock(WfsToKmlTransformer.class);
@@ -83,7 +83,7 @@ public class TestBoreholeService extends PortalTestClass {
 
             oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
         }});
@@ -115,7 +115,7 @@ public class TestBoreholeService extends PortalTestClass {
         context.checking(new Expectations() {{
 
             oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
         }});
@@ -147,7 +147,7 @@ public class TestBoreholeService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));will(returnValue(gmlString));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
         }});
@@ -192,7 +192,7 @@ public class TestBoreholeService extends PortalTestClass {
             will(returnValue(new AbstractCSWOnlineResource[] {}));
 
             oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), (Integer) null, null);
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
             will(returnValue(successResponse));
         }});
 
@@ -211,8 +211,8 @@ public class TestBoreholeService extends PortalTestClass {
         final CSWRecord mockRecord1 = context.mock(CSWRecord.class, "mockRecord1"); //will return failure
         final CSWRecord mockRecord2 = context.mock(CSWRecord.class, "mockRecord2"); //good record
         final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
-        final HttpMethodBase mockRecord1Method = context.mock(HttpMethodBase.class, "rec1method");
-        final HttpMethodBase mockRecord2Method = context.mock(HttpMethodBase.class, "rec2method");
+        final HttpRequestBase mockRecord1Method = context.mock(HttpRequestBase.class, "rec1method");
+        final HttpRequestBase mockRecord2Method = context.mock(HttpRequestBase.class, "rec2method");
         final CSWRecordsHostFilter hostFilter=new CSWRecordsHostFilter("");
         final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
         final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
@@ -280,7 +280,7 @@ public class TestBoreholeService extends PortalTestClass {
             will(returnValue(new AbstractCSWOnlineResource[] {}));
 
             oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), (Integer) null, null);
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
+            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
             will(returnValue(owsErrorResponse));
         }});
 

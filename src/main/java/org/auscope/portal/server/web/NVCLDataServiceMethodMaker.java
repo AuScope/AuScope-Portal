@@ -1,10 +1,11 @@
 package org.auscope.portal.server.web;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
 import org.auscope.portal.core.services.methodmakers.AbstractMethodMaker;
 import org.springframework.stereotype.Repository;
 
@@ -32,17 +33,17 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * Generates a method for making request for all NVCL DataSets that belong to a particular borehole
      * @param serviceUrl The URL of the NVCLDataService
      * @param holeIdentifier The unique ID of the borehole to query
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getDatasetCollectionMethod(String serviceUrl, String holeIdentifier) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "getDatasetCollection.html"));
+    public HttpRequestBase getDatasetCollectionMethod(String serviceUrl, String holeIdentifier) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+        URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "getDatasetCollection.html"));
 
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("holeidentifier", holeIdentifier));
-
-        //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        builder.setParameter("holeidentifier", holeIdentifier);
+        method.setURI(builder.build());
 
         return method;
     }
@@ -53,20 +54,21 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @param datasetId The dataset ID to query
      * @param forMosaicService [Optional] indicates if the getLogCollection service should generate a result specifically for the use of a Mosaic Service
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getLogCollectionMethod(String serviceUrl, String datasetId, Boolean forMosaicService) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "getLogCollection.html"));
+    public HttpRequestBase getLogCollectionMethod(String serviceUrl, String datasetId, Boolean forMosaicService) throws URISyntaxException {
+        HttpGet method = new HttpGet();
 
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+        URIBuilder builder= new URIBuilder(urlPathConcat(serviceUrl, "getLogCollection.html"));
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("datasetid", datasetId));
+       builder.setParameter("datasetid", datasetId);
         if (forMosaicService != null) {
-            valuePairs.add(new NameValuePair("mosaicsvc", forMosaicService.booleanValue() ? "yes" : "no"));
+            builder.setParameter("mosaicsvc", forMosaicService.booleanValue() ? "yes" : "no");
         }
 
         //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        method.setURI(builder.build());
 
         return method;
     }
@@ -81,26 +83,27 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @param startSampleNo [Optional] the first sample image to be displayed
      * @param endSampleNo [Optional] the last sample image to be displayed
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getMosaicMethod(String serviceUrl, String logId, Integer width, Integer startSampleNo, Integer endSampleNo) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "mosaic.html"));
+    public HttpRequestBase getMosaicMethod(String serviceUrl, String logId, Integer width, Integer startSampleNo, Integer endSampleNo) throws URISyntaxException {
+        HttpGet method = new HttpGet();
 
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+       URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "mosaic.html"));
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("logid", logId));
+        builder.setParameter("logid", logId);
         if (width != null) {
-            valuePairs.add(new NameValuePair("width", width.toString()));
+            builder.setParameter("width", width.toString());
         }
         if (startSampleNo != null) {
-            valuePairs.add(new NameValuePair("startsampleno", startSampleNo.toString()));
+            builder.setParameter("startsampleno", startSampleNo.toString());
         }
         if (endSampleNo != null) {
-            valuePairs.add(new NameValuePair("endsampleno", endSampleNo.toString()));
+            builder.setParameter("endsampleno", endSampleNo.toString());
         }
 
         //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        method.setURI(builder.build());
 
         return method;
     }
@@ -118,45 +121,46 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @param samplingInterval [Optional] the interval of the sampling
      * @param graphType [Optional] The type of graph to plot
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getPlotScalarMethod(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "plotscalar.html"));
+    public HttpRequestBase getPlotScalarMethod(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType) throws URISyntaxException {
+        HttpGet method = new HttpGet();
 
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+        URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "plotscalar.html"));
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("logid", logId));
+        builder.setParameter("logid", logId);
         if (width != null) {
-            valuePairs.add(new NameValuePair("width", width.toString()));
+            builder.setParameter("width", width.toString());
         }
         if (height != null) {
-            valuePairs.add(new NameValuePair("height", height.toString()));
+            builder.setParameter("height", height.toString());
         }
         if (startDepth != null) {
-            valuePairs.add(new NameValuePair("startdepth", startDepth.toString()));
+            builder.setParameter("startdepth", startDepth.toString());
         }
         if (endDepth != null) {
-            valuePairs.add(new NameValuePair("enddepth", endDepth.toString()));
+            builder.setParameter("enddepth", endDepth.toString());
         }
         if (samplingInterval != null) {
-            valuePairs.add(new NameValuePair("samplinginterval", samplingInterval.toString()));
+            builder.setParameter("samplinginterval", samplingInterval.toString());
         }
         if (graphType != null) {
             switch (graphType) {
             case LineChart:
-                valuePairs.add(new NameValuePair("graphtype", "3"));
+                builder.setParameter("graphtype", "3");
                 break;
             case ScatteredChart:
-                valuePairs.add(new NameValuePair("graphtype", "2"));
+                builder.setParameter("graphtype", "2");
                 break;
             case StackedBarChart:
-                valuePairs.add(new NameValuePair("graphtype", "1"));
+                builder.setParameter("graphtype", "1");
                 break;
             }
         }
 
         //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        method.setURI(builder.build());
 
         return method;
     }
@@ -183,47 +187,48 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @param mosaicPics [Optional] yes or no. If no then the hole mosaic picture is not downloaded. The default is yes.
      * @param mapPics [Optional] yes or no. If no then the map pictures are not downloaded. The default is yes.
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getDownloadTSGMethod(String serviceUrl, String email, String datasetId, String matchString, Boolean lineScan, Boolean spectra, Boolean profilometer, Boolean trayPics, Boolean mosaicPics, Boolean mapPics) {
+    public HttpRequestBase getDownloadTSGMethod(String serviceUrl, String email, String datasetId, String matchString, Boolean lineScan, Boolean spectra, Boolean profilometer, Boolean trayPics, Boolean mosaicPics, Boolean mapPics) throws URISyntaxException {
 
         if ((datasetId == null && matchString == null) ||
             (datasetId != null && matchString != null)) {
             throw new IllegalArgumentException("must specify ONLY one of datasetId and matchString");
         }
 
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "downloadtsg.html"));
+        HttpGet method = new HttpGet();
 
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+        URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "downloadtsg.html"));
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("email", email));
+        builder.setParameter("email", email);
         if (datasetId != null) {
-            valuePairs.add(new NameValuePair("datasetid", datasetId));
+            builder.setParameter("datasetid", datasetId);
         }
         if (matchString != null) {
-            valuePairs.add(new NameValuePair("match_string", matchString));
+            builder.setParameter("match_string", matchString);
         }
         if (lineScan != null) {
-            valuePairs.add(new NameValuePair("linescan", lineScan.booleanValue() ? "yes" : "no"));
+            builder.setParameter("linescan", lineScan.booleanValue() ? "yes" : "no");
         }
         if (spectra != null) {
-            valuePairs.add(new NameValuePair("spectra", spectra.booleanValue() ? "yes" : "no"));
+            builder.setParameter("spectra", spectra.booleanValue() ? "yes" : "no");
         }
         if (profilometer != null) {
-            valuePairs.add(new NameValuePair("profilometer", profilometer.booleanValue() ? "yes" : "no"));
+            builder.setParameter("profilometer", profilometer.booleanValue() ? "yes" : "no");
         }
         if (trayPics != null) {
-            valuePairs.add(new NameValuePair("traypics", trayPics.booleanValue() ? "yes" : "no"));
+            builder.setParameter("traypics", trayPics.booleanValue() ? "yes" : "no");
         }
         if (mosaicPics != null) {
-            valuePairs.add(new NameValuePair("mospic", mosaicPics.booleanValue() ? "yes" : "no"));
+            builder.setParameter("mospic", mosaicPics.booleanValue() ? "yes" : "no");
         }
         if (mapPics != null) {
-            valuePairs.add(new NameValuePair("mappics", mapPics.booleanValue() ? "yes" : "no"));
+            builder.setParameter("mappics", mapPics.booleanValue() ? "yes" : "no");
         }
 
         //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        method.setURI(builder.build());
 
         return method;
     }
@@ -236,17 +241,17 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @param serviceUrl The URL of the NVCLDataService
      * @param email The user's email address
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getCheckTSGStatusMethod(String serviceUrl, String email) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "checktsgstatus.html"));
-
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+    public HttpRequestBase getCheckTSGStatusMethod(String serviceUrl, String email) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+        URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "checktsgstatus.html"));
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("email", email));
+        builder.setParameter("email", email);
 
         //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        method.setURI(builder.build());
 
         return method;
     }
@@ -266,20 +271,21 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @param omUrl The valid url for the Observations and Measurements WFS
      * @param typeName The url parameter for the wfs request
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getDownloadWFSMethod(String serviceUrl, String email, String boreholeId, String omUrl, String typeName) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "downloadwfs.html"));
+    public HttpRequestBase getDownloadWFSMethod(String serviceUrl, String email, String boreholeId, String omUrl, String typeName) throws URISyntaxException {
+        HttpGet method = new HttpGet();
 
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+        URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "downloadwfs.html"));
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("email", email));
-        valuePairs.add(new NameValuePair("boreholeid", boreholeId));
-        valuePairs.add(new NameValuePair("serviceurl", omUrl));
-        valuePairs.add(new NameValuePair("typename", typeName));
+        builder.setParameter("email", email);
+        builder.setParameter("boreholeid", boreholeId);
+        builder.setParameter("serviceurl", omUrl);
+        builder.setParameter("typename", typeName);
 
         //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        method.setURI(builder.build());
 
         return method;
     }
@@ -292,17 +298,18 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @param serviceUrl The URL of the NVCLDataService
      * @param email The user's email address
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getCheckWFSStatusMethod(String serviceUrl, String email) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "checkwfsstatus.html"));
+    public HttpRequestBase getCheckWFSStatusMethod(String serviceUrl, String email) throws URISyntaxException {
+        HttpGet method = new HttpGet();
 
-        ArrayList<NameValuePair> valuePairs = new ArrayList<NameValuePair>();
+        URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "checkwfsstatus.html"));
 
         //set all of the parameters
-        valuePairs.add(new NameValuePair("email", email));
+        builder.setParameter("email", email);
 
         //attach them to the method
-        method.setQueryString((NameValuePair[]) valuePairs.toArray(new NameValuePair[valuePairs.size()]));
+        method.setURI(builder.build());
 
         return method;
     }

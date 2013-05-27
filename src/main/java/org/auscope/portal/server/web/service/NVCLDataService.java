@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.Header;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.util.DOMUtil;
@@ -65,7 +65,7 @@ public class NVCLDataService {
      * @throws Exception
      */
     public List<GetDatasetCollectionResponse> getDatasetCollection(String serviceUrl, String holeIdentifier) throws Exception {
-        HttpMethodBase method = methodMaker.getDatasetCollectionMethod(serviceUrl, holeIdentifier);
+        HttpRequestBase method = methodMaker.getDatasetCollectionMethod(serviceUrl, holeIdentifier);
 
         //Make our request, parse it into a DOM document
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
@@ -100,7 +100,7 @@ public class NVCLDataService {
      * @throws Exception
      */
     public List<GetLogCollectionResponse> getLogCollection(String serviceUrl, String datasetId, Boolean forMosaicService) throws Exception {
-        HttpMethodBase method = methodMaker.getLogCollectionMethod(serviceUrl, datasetId, forMosaicService);
+        HttpRequestBase method = methodMaker.getLogCollectionMethod(serviceUrl, datasetId, forMosaicService);
 
         //Make our request, parse it into a DOM document
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
@@ -148,10 +148,10 @@ public class NVCLDataService {
      * @return
      */
     public MosaicResponse getMosaic(String serviceUrl, String logId, Integer width, Integer startSampleNo, Integer endSampleNo) throws Exception {
-        HttpMethodBase method = methodMaker.getMosaicMethod(serviceUrl, logId, width, startSampleNo, endSampleNo);
+        HttpRequestBase method = methodMaker.getMosaicMethod(serviceUrl, logId, width, startSampleNo, endSampleNo);
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getResponseHeader("Content-Type");
+        Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new MosaicResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -170,10 +170,10 @@ public class NVCLDataService {
      * @return
      */
     public PlotScalarResponse getPlotScalar(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType) throws Exception {
-        HttpMethodBase method = methodMaker.getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);
+        HttpRequestBase method = methodMaker.getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getResponseHeader("Content-Type");
+        Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new PlotScalarResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -193,24 +193,26 @@ public class NVCLDataService {
         //This is to workaround some erroneous behaviour from the dataservice
         //Where the logged omUrl points to a geoserver instance RATHER than the actual WFS service endpoint
         if (!serviceUrl.endsWith("wfs") && !serviceUrl.endsWith("wfs/")) {
-        	log.warn("altering ServiceURL:" + serviceUrl);
-        	
+            log.warn("altering ServiceURL:" + serviceUrl);
+
             if (serviceUrl.endsWith("/")) {
                 serviceUrl += "wfs";
             } else {
                 serviceUrl += "/wfs";
             }
-            
+
             log.warn("altered ServiceURL:" + serviceUrl);
         }
 
         //We need to make a normal WFS request with some simple modifications
-        HttpMethodBase method = wfsMethodMaker.makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer)null, null);
-        String newQueryString = method.getQueryString() + String.format("&CQL_FILTER=(DATASET_ID='%1$s')&outputformat=csv", datasetId);
-        method.setQueryString(newQueryString);
+        HttpRequestBase method = wfsMethodMaker.makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer)null, null);
+        String newQueryString = method.getURI().getQuery() + String.format("&CQL_FILTER=(DATASET_ID='%1$s')&outputformat=csv", datasetId);
+        URIBuilder builder=new URIBuilder(method.getURI());
+        builder.setQuery(newQueryString);
+        method.setURI(builder.build());
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getResponseHeader("Content-Type");
+        Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new CSVDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -233,10 +235,10 @@ public class NVCLDataService {
      * @return
      */
     public TSGDownloadResponse getTSGDownload(String serviceUrl, String email, String datasetId, String matchString, Boolean lineScan, Boolean spectra, Boolean profilometer, Boolean trayPics, Boolean mosaicPics, Boolean mapPics) throws Exception {
-        HttpMethodBase method = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);
+        HttpRequestBase method = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getResponseHeader("Content-Type");
+        Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new TSGDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -252,10 +254,10 @@ public class NVCLDataService {
      * @throws Exception
      */
     public TSGStatusResponse checkTSGStatus(String serviceUrl, String email) throws Exception {
-        HttpMethodBase method = methodMaker.getCheckTSGStatusMethod(serviceUrl, email);
+        HttpRequestBase method = methodMaker.getCheckTSGStatusMethod(serviceUrl, email);
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getResponseHeader("Content-Type");
+        Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new TSGStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -274,10 +276,10 @@ public class NVCLDataService {
      * @throws Exception
      */
     public WFSDownloadResponse getWFSDownload(String serviceUrl, String email, String boreholeId, String omUrl, String typeName) throws Exception {
-        HttpMethodBase method = methodMaker.getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);
+        HttpRequestBase method = methodMaker.getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getResponseHeader("Content-Type");
+        Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new WFSDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -293,10 +295,10 @@ public class NVCLDataService {
      * @throws Exception
      */
     public WFSStatusResponse checkWFSStatus(String serviceUrl, String email) throws Exception {
-        HttpMethodBase method = methodMaker.getCheckWFSStatusMethod(serviceUrl, email);
+        HttpRequestBase method = methodMaker.getCheckWFSStatusMethod(serviceUrl, email);
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getResponseHeader("Content-Type");
+        Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new WFSStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }

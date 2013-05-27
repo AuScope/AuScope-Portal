@@ -12,10 +12,11 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.methods.GetMethod;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.Header;
+import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.server.http.download.DownloadResponse;
@@ -176,9 +177,9 @@ public class DownloadController extends BasePortalController {
 
         for (int i = 0; i<serviceUrls.length; i++) {
 
-            GetMethod method = new GetMethod(serviceUrls[i]);
+            HttpGet method = new HttpGet(serviceUrls[i]);
             byte[] responseBytes = serviceCaller.getMethodResponseAsBytes(method);
-            Header contentType = method.getResponseHeader("Content-Type");
+            Header contentType = method.getFirstHeader("Content-Type");
 
             //create a new entry in the zip file with a timestamped name
             String mime = null;

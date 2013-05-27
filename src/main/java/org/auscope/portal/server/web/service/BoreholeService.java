@@ -1,15 +1,15 @@
 package org.auscope.portal.server.web.service;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-
-import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.CSWCacheService;
@@ -80,7 +80,7 @@ public class BoreholeService extends BaseWFSService {
 
 
 
-        HttpMethodBase method = null;
+        HttpRequestBase method = null;
         try {
             // Create a GetFeature request with an empty filter - get all
             method = this.generateWFSRequest(serviceURL, "gsml:Borehole", null, filterString, maxFeatures, null, ResultType.Results);
@@ -95,9 +95,9 @@ public class BoreholeService extends BaseWFSService {
     }
 
 
-    private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList) throws PortalServiceException {
+    private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList) throws PortalServiceException, URISyntaxException {
         //Make request
-        HttpMethodBase method = wfsMethodMaker.makeGetMethod(url, typeName, (Integer)null, null);
+        HttpRequestBase method = wfsMethodMaker.makeGetMethod(url, typeName, (Integer)null, null);
         try {
             String wfsResponse = httpServiceCaller.getMethodResponseAsString(method);
 

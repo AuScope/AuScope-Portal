@@ -3,8 +3,8 @@ package org.auscope.portal.server.web.service;
 import java.io.InputStream;
 import java.net.ConnectException;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.PortalServiceException;
@@ -32,7 +32,7 @@ public class TestWFSService extends PortalTestClass {
     private GmlToHtml mockGmlToHtml = context.mock(GmlToHtml.class);
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private WFSGetFeatureMethodMaker mockMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
     private WFSService service;
 
     @Before
@@ -310,7 +310,7 @@ public class TestWFSService extends PortalTestClass {
         final String serviceUrl = "http://service/wfs?request=GetFeature";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(HttpGet.class)));will(returnValue(responseString));
 
             oneOf(mockGmlToHtml).convert(responseString, serviceUrl);will(returnValue(responseKml));
 
@@ -331,7 +331,7 @@ public class TestWFSService extends PortalTestClass {
         final String serviceUrl = "http://service/wfs?request=GetFeature";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(throwException(exceptionThrown));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(HttpGet.class)));will(throwException(exceptionThrown));
         }});
 
         try {
@@ -339,7 +339,7 @@ public class TestWFSService extends PortalTestClass {
             Assert.fail("Exception should have been thrown");
         } catch (PortalServiceException ex) {
             Assert.assertSame(exceptionThrown, ex.getCause());
-            Assert.assertTrue(ex.getRootMethod() instanceof GetMethod);
+            Assert.assertTrue(ex.getRootMethod() instanceof HttpGet);
         }
     }
 
@@ -352,7 +352,7 @@ public class TestWFSService extends PortalTestClass {
         final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(GetMethod.class)));will(returnValue(responseString));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(HttpGet.class)));will(returnValue(responseString));
         }});
 
 

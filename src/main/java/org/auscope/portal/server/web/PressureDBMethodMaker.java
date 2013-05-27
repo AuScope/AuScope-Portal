@@ -1,11 +1,14 @@
 package org.auscope.portal.server.web;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.auscope.portal.core.services.methodmakers.AbstractMethodMaker;
 import org.springframework.stereotype.Repository;
 
@@ -23,14 +26,15 @@ public class PressureDBMethodMaker extends AbstractMethodMaker {
      * @param serviceUrl
      * @param wellID
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase makeGetAvailableOMMethod(String serviceUrl, String wellID) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "getAvailableOM.html"));
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
+    public HttpRequestBase makeGetAvailableOMMethod(String serviceUrl, String wellID) throws URISyntaxException {
+        HttpGet method = new HttpGet();
 
-        params.add(new NameValuePair("wellid", wellID));
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getAvailableOM.html"));
 
-        method.setQueryString(params.toArray(new NameValuePair[params.size()]));
+        builder.setParameter("wellid", wellID);
+        method.setURI(builder.build());
 
         return method;
     }
@@ -40,17 +44,17 @@ public class PressureDBMethodMaker extends AbstractMethodMaker {
      * @param serviceUrl
      * @param wellID
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase makeDownloadMethod(String serviceUrl, String wellID, String[] features) {
-        GetMethod method = new GetMethod(urlPathConcat(serviceUrl, "download.html"));
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-        params.add(new NameValuePair("wellid", wellID));
+    public HttpRequestBase makeDownloadMethod(String serviceUrl, String wellID, String[] features) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+        URIBuilder builder= new URIBuilder(urlPathConcat(serviceUrl, "download.html"));
+        builder.setParameter("wellid", wellID);
         for (String feature : features) {
-            params.add(new NameValuePair("feature", feature));
+            builder.setParameter("feature", feature);
         }
 
-        method.setQueryString(params.toArray(new NameValuePair[params.size()]));
+        method.setURI(builder.build());
 
         return method;
     }

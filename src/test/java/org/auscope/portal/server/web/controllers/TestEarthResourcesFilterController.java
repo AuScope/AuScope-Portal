@@ -1,7 +1,9 @@
 package org.auscope.portal.server.web.controllers;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.URI;
+
+import java.net.URI;
+
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
@@ -75,10 +77,10 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
     public void testDoMineFilterSpecificError() throws Exception {
         final String mineName = "testMine";
         final String serviceURL = "http://testblah.com";
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+        final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
         context.checking(new Expectations() {{
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceURL, true)));
+            allowing(mockMethod).getURI();will(returnValue(new URI(serviceURL)));
 
             oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);will(throwException(new PortalServiceException(mockMethod)));
         }});
@@ -98,7 +100,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         final String serviceURL = "http://testblah.com";
         final String expectedKML = "";
         final String mineName = "mineName";
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+        final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
         final String xmlErrorResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
 
         context.checking(new Expectations() {{
@@ -119,12 +121,12 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
     public void testDoMineFilterAllMines() throws Exception {
         final String serviceURL = "http://localhost?";
         final String mineName = ""; //to get all mines
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+        final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
         final String expectedKML = "<kml/>";
         final String expectedGML = "<gml/>";
 
         context.checking(new Expectations() {{
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceURL, true)));
+            allowing(mockMethod).getURI();will(returnValue(new URI(serviceURL)));
             oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);will(returnValue(new WFSTransformedResponse(expectedGML, expectedKML, mockMethod)));
         }});
 
@@ -143,12 +145,12 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
     public void testDoMineFilterSingleMine() throws Exception {
         final String serviceURL = "http://localhost?";
         final String mineName = "mineName"; //to get all mines
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+        final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
         final String expectedKML = "<kml/>";
         final String expectedGML = "<gml/>";
 
         context.checking(new Expectations() {{
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceURL, true)));
+            allowing(mockMethod).getURI();will(returnValue(new URI(serviceURL)));
             oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);will(returnValue(new WFSTransformedResponse(expectedGML, expectedKML, mockMethod)));
         }});
 

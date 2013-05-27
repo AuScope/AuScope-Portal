@@ -1,12 +1,10 @@
 package org.auscope.portal.server.web.service;
 
+import java.net.URISyntaxException;
 import java.util.List;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.PortalServiceException;
@@ -89,7 +87,7 @@ public class MineralOccurrenceService extends BaseWFSService {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpMethodBase method = null;
+        HttpRequestBase method = null;
         try {
             method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
             String responseGml = httpServiceCaller.getMethodResponseAsString(method);
@@ -109,12 +107,13 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param maxFeatures The maximum number of features to request
      * @return
      * @throws PortalServiceException
+     * @throws URISyntaxException
      */
-    public List<Mine> getMines(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException {
+    public List<Mine> getMines(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException, URISyntaxException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpMethodBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
             return mineralOccurrencesResponseHandler.getMines(response);
@@ -131,12 +130,13 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param maxFeatures The maximum number of features to request
      * @return
      * @throws PortalServiceException
+     * @throws URISyntaxException
      */
-    public WFSCountResponse getMinesCount(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException {
+    public WFSCountResponse getMinesCount(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException, URISyntaxException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpMethodBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
 
@@ -153,6 +153,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param cutOffGradeUOM
      * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
+     * @throws URISyntaxException
      */
     public WFSTransformedResponse getMineralOccurrenceGml(String serviceURL,
                                            String commodityName,
@@ -162,7 +163,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                                            String minCommodityAmount,
                                            String minCommodityAmountUOM,
                                            int maxFeatures,
-                                           FilterBoundingBox bbox) throws PortalServiceException {
+                                           FilterBoundingBox bbox) throws PortalServiceException, URISyntaxException {
 
         MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,
                                            measureType,
@@ -173,7 +174,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
         String filterString = generateFilterString(filter, bbox);
 
-        HttpMethodBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
             String kml = gmlToKml.convert(response, serviceURL);
@@ -196,6 +197,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param cutOffGradeUOM
      * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
+     * @throws URISyntaxException
      */
     public WFSCountResponse getMineralOccurrenceCount(String serviceURL,
                                            String commodityName,
@@ -205,7 +207,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                                            String minCommodityAmount,
                                            String minCommodityAmountUOM,
                                            int maxFeatures,
-                                           FilterBoundingBox bbox) throws PortalServiceException {
+                                           FilterBoundingBox bbox) throws PortalServiceException, URISyntaxException {
 
         MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,
                                            measureType,
@@ -215,7 +217,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                                            minCommodityAmountUOM);
 
         String filterString = generateFilterString(filter, bbox);
-        HttpMethodBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
 
@@ -251,7 +253,7 @@ public class MineralOccurrenceService extends BaseWFSService {
         MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpMethodBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
             String kml = gmlToKml.convert(response, serviceURL);
@@ -292,7 +294,7 @@ public class MineralOccurrenceService extends BaseWFSService {
         MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpMethodBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
 

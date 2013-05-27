@@ -5,9 +5,8 @@ import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.URI;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
@@ -36,7 +35,7 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
     private WFSService mockWfsService = context.mock(WFSService.class);
 
     /** The mock method*/
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
     /** The yilgarn loc specimen controller. */
     private YilgarnGeochemistryController controller;

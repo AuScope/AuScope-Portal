@@ -3,10 +3,11 @@ package org.auscope.portal.server.web.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.URI;
 import java.util.List;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.Header;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -35,7 +36,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private NVCLDataServiceMethodMaker mockMethodMaker = context.mock(NVCLDataServiceMethodMaker.class);
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
     private WFSGetFeatureMethodMaker mockWFSMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
     private NVCLDataService dataService = new NVCLDataService(mockServiceCaller, mockMethodMaker, mockWFSMethodMaker);
 
@@ -193,7 +194,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
             oneOf(mockMethodMaker).getMosaicMethod(serviceUrl, logId, width, startSampleNo, endSampleNo);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            oneOf(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
@@ -250,7 +251,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
             oneOf(mockMethodMaker).getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            oneOf(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
@@ -304,11 +305,11 @@ public class TestNVCLDataService extends PortalTestClass {
             oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);will(returnValue(mockMethod));
 
             //We aren't testing the query string additions
-            allowing(mockMethod).getQueryString();will(returnValue(""));
-            allowing(mockMethod).setQueryString(with(any(String.class)));
+            allowing(mockMethod).getURI();will(returnValue(new URI("")));
+            allowing(mockMethod).setURI(with(any(URI.class)));
 
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            oneOf(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
@@ -338,11 +339,11 @@ public class TestNVCLDataService extends PortalTestClass {
             allowing(mockWFSMethodMaker).makeGetMethod(actualWFSEndpoint, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);will(returnValue(mockMethod));
 
             //We aren't testing the query string additions
-            allowing(mockMethod).getQueryString();will(returnValue(""));
-            allowing(mockMethod).setQueryString(with(any(String.class)));
+            allowing(mockMethod).getURI();will(returnValue(new URI("")));
+            allowing(mockMethod).setURI(with(any(URI.class)));
 
             allowing(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            allowing(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            allowing(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             allowing(mockHeader).getValue();will(returnValue(contentType));
         }});
 
@@ -372,8 +373,8 @@ public class TestNVCLDataService extends PortalTestClass {
             oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);will(returnValue(mockMethod));
 
             //We aren't testing the query string additions
-            allowing(mockMethod).getQueryString();will(returnValue(""));
-            allowing(mockMethod).setQueryString(with(any(String.class)));
+            allowing(mockMethod).getURI();will(returnValue(new URI("")));
+            allowing(mockMethod).setURI(with(any(URI.class)));
 
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(new ConnectException()));
         }});
@@ -407,7 +408,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
             oneOf(mockMethodMaker).getDownloadTSGMethod(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            oneOf(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
@@ -435,7 +436,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
             oneOf(mockMethodMaker).getCheckTSGStatusMethod(serviceUrl, email);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            oneOf(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
@@ -466,7 +467,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
             oneOf(mockMethodMaker).getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            oneOf(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
@@ -494,7 +495,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
             oneOf(mockMethodMaker).getCheckWFSStatusMethod(serviceUrl, email);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
-            oneOf(mockMethod).getResponseHeader("Content-Type");will(returnValue(mockHeader));
+            oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
