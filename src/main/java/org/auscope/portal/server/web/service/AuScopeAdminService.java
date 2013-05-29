@@ -1,9 +1,11 @@
 package org.auscope.portal.server.web.service;
 
+import java.net.URISyntaxException;
+
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.admin.AdminDiagnosticResponse;
 import org.auscope.portal.core.services.admin.AdminService;
@@ -39,13 +41,14 @@ public class AuScopeAdminService extends AdminService {
      * Tests connectivity to a particular SISSVoc service - also tests some basic SISSVoc requests
      * @param vocabServiceUrl The SISSVoc endpoint
      * @return
+     * @throws URISyntaxException
      */
-    public AdminDiagnosticResponse sissVoc2Connectivity(String vocabServiceUrl) {
+    public AdminDiagnosticResponse sissVoc2Connectivity(String vocabServiceUrl) throws URISyntaxException {
         AdminDiagnosticResponse diagnosticResponse = new AdminDiagnosticResponse();
 
         //Is the repository info request returning valid XML?
         SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
-        HttpMethodBase method = methodMaker.getRepositoryInfoMethod(vocabServiceUrl);
+        HttpRequestBase method = methodMaker.getRepositoryInfoMethod(vocabServiceUrl);
         try {
             String serviceResponse = serviceCaller.getMethodResponseAsString(method);
             try {

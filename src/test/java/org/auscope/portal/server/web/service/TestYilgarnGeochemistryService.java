@@ -3,7 +3,7 @@ package org.auscope.portal.server.web.service;
 import java.io.ByteArrayInputStream;
 import java.net.ConnectException;
 
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
@@ -24,7 +24,7 @@ import org.junit.Test;
 public class TestYilgarnGeochemistryService extends PortalTestClass {
 
     private WFSGetFeatureMethodMaker mockMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private YilgarnGeochemistryService service;
 

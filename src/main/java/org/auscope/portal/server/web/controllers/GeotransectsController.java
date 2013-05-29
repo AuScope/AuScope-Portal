@@ -1,8 +1,9 @@
 package org.auscope.portal.server.web.controllers;
 
-import org.apache.commons.httpclient.methods.GetMethod;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.view.JSONModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class GeotransectsController {
     @RequestMapping("/requestGeotransectsData.do")
     public ModelAndView requestGeotransectsData(String serviceUrl) {
 
-        GetMethod httpMethod = new GetMethod(serviceUrl);
+        HttpGet httpMethod = new HttpGet(serviceUrl);
         String response = "";
         ModelMap model = new ModelMap();
 

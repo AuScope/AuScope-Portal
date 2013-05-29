@@ -1,9 +1,10 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.net.URI;
+
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.URI;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.filter.SimplePropertyFilter;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
@@ -31,7 +32,7 @@ public class TestWfsController extends PortalTestClass {
     private WFSController wfsController;
 
 
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
     private WFSService mockWfsService = context.mock(WFSService.class);
 
@@ -58,7 +59,7 @@ public class TestWfsController extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs", false)));
+            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
         }});
 
         ModelAndView modelAndView = wfsController.requestAllFeatures(wfsUrl, featureType, bboxJsonString, maxFeatures);
@@ -82,7 +83,7 @@ public class TestWfsController extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs", false)));
+            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
         }});
 
         ModelAndView modelAndView = wfsController.requestAllFeatures(wfsUrl, featureType, bboxJsonString, maxFeatures);
@@ -104,7 +105,7 @@ public class TestWfsController extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, featureId);will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs", false)));
+            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
         }});
 
         ModelAndView modelAndView = wfsController.requestFeature(wfsUrl, featureType, featureId);
@@ -129,7 +130,7 @@ public class TestWfsController extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, filterString, null, null);will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs", false)));
+            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
         }});
 
         ModelAndView modelAndView = wfsController.requestFeatureByProperty(wfsUrl, featureType, featureProperty, propertyValue);
@@ -195,7 +196,7 @@ public class TestWfsController extends PortalTestClass {
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(convertedData.getBytes().length);
 
         context.checking(new Expectations() {{
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceUrl, false)));
+            allowing(mockMethod).getURI();will(returnValue(new URI(serviceUrl)));
 
             allowing(mockResponse).setContentType(with(any(String.class)));
 

@@ -4,10 +4,9 @@ import java.io.InputStream;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-
-import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.util.DOMUtil;
@@ -91,7 +90,7 @@ public class PressureDBService {
     public AvailableOMResponse makeGetAvailableOMRequest(String wellID, String serviceUrl) throws PortalServiceException {
 
         //Generate and then make the request
-        HttpMethodBase method = null;
+        HttpRequestBase method = null;
         Document doc = null;
         try {
             method = methodMaker.makeGetAvailableOMMethod(serviceUrl, wellID);
@@ -144,7 +143,7 @@ public class PressureDBService {
      * @throws Exception
      */
     public InputStream makeDownloadRequest(String wellID, String serviceUrl, String[] features) throws Exception {
-        HttpMethodBase method = methodMaker.makeDownloadMethod(serviceUrl, wellID, features);
+        HttpRequestBase method = methodMaker.makeDownloadMethod(serviceUrl, wellID, features);
         return httpServiceCaller.getMethodResponseAsStream(method);
     }
 }

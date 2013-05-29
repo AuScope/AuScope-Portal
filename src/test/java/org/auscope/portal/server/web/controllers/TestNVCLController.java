@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.net.ConnectException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,9 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.URI;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsFilterVisitor;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
@@ -87,8 +87,8 @@ public class TestNVCLController extends PortalTestClass {
         final String nvclWfsResponse = "wfsResponse";
         final String nvclKmlResponse = "kmlResponse";
         final boolean onlyHylogger = false;
-        final HttpMethodBase mockHttpMethodBase = context.mock(HttpMethodBase.class);
-        final URI httpMethodURI = new URI("http://example.com", true);
+        final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
+        final URI httpMethodURI = new URI("http://example.com");
 
         context.checking(new Expectations() {{
             oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, null);
@@ -125,8 +125,8 @@ public class TestNVCLController extends PortalTestClass {
         final String nvclKmlResponse = "kmlResponse";
         final List<String> restrictedIds = Arrays.asList("ID1", "ID2");
         final boolean onlyHylogger = true;
-        final HttpMethodBase mockHttpMethodBase = context.mock(HttpMethodBase.class);
-        final URI httpMethodURI = new URI("http://example.com", true);
+        final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
+        final URI httpMethodURI = new URI("http://example.com");
 
         context.checking(new Expectations() {{
             oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),with(any(CSWRecordsFilterVisitor.class)));
@@ -162,8 +162,8 @@ public class TestNVCLController extends PortalTestClass {
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final boolean onlyHylogger = true;
-        final HttpMethodBase mockHttpMethodBase = context.mock(HttpMethodBase.class);
-        final URI httpMethodURI = new URI("http://example.com", true);
+        final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
+        final URI httpMethodURI = new URI("http://example.com");
 
         context.checking(new Expectations() {{
             oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),with(any(CSWRecordsFilterVisitor.class)));
@@ -191,8 +191,8 @@ public class TestNVCLController extends PortalTestClass {
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1., 2.}, new double[] {3., 4.});
         final boolean onlyHylogger = true;
-        final HttpMethodBase mockHttpMethodBase = context.mock(HttpMethodBase.class);
-        final URI httpMethodURI = new URI("http://example.com", true);
+        final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
+        final URI httpMethodURI = new URI("http://example.com");
 
         context.checking(new Expectations() {{
             oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),with(any(CSWRecordsFilterVisitor.class)));
@@ -609,8 +609,8 @@ public class TestNVCLController extends PortalTestClass {
         final String nvclWfsResponse = "wfsResponse";
         final String nvclKmlResponse = "kmlResponse";
         final String onlyHylogger = "off";
-        final HttpMethodBase mockHttpMethodBase = context.mock(HttpMethodBase.class);
-        final URI httpMethodURI = new URI("http://example.com", true);
+        final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
+        final URI httpMethodURI = new URI("http://example.com");
 
         context.checking(new Expectations() {{
             oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, null, null);

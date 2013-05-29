@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.Assert;
 
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -79,7 +79,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         final String serviceURL = "http://testblah.com";
         final String resultXML = "<result>this is a test</result>";
         final MyServletOutputStream out = new MyServletOutputStream(resultXML.length());
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+        final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
         context.checking(new Expectations() {{
             allowing(response).setContentType(with(any(String.class)));
@@ -149,7 +149,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         final String minCommodityAmountUOM = "4";
         final String resultXML = "<result>this is a test</result>";
         final MyServletOutputStream out = new MyServletOutputStream(resultXML.length());
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+        final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
         context.checking(new Expectations() {
             {
@@ -230,7 +230,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         final String production = "prod";
         final String resultXML = "<result>this is a test</result>";
         final MyServletOutputStream out = new MyServletOutputStream(resultXML.length());
-        final HttpMethodBase mockMethod = context.mock(HttpMethodBase.class);
+        final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
 
         context.checking(new Expectations() {

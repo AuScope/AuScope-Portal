@@ -1,10 +1,12 @@
 package org.auscope.portal.mineraloccurrence;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.message.BasicNameValuePair;
 import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +27,9 @@ public class CommodityVocabMethodMaker extends SISSVoc3MethodMaker {
      * @param pageSize [Optional] How many concepts should be returned per page
      * @param pageNumber [Optional] The page number to request (0 based)
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getAllCommodities(String sissVocUrl, String repository, Format format, Integer pageSize, Integer pageNumber) {
+    public HttpRequestBase getAllCommodities(String sissVocUrl, String repository, Format format, Integer pageSize, Integer pageNumber) throws URISyntaxException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         appendPagingParams(params, pageSize, pageNumber);
@@ -46,11 +49,12 @@ public class CommodityVocabMethodMaker extends SISSVoc3MethodMaker {
      * @param pageNumber [Optional] The page number to request (0 based)
      * @param urn A regular expression to match against URNs
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getCommoditiesMatchingUrn(String sissVocUrl, String repository, Format format, Integer pageSize, Integer pageNumber, String urn) {
+    public HttpRequestBase getCommoditiesMatchingUrn(String sissVocUrl, String repository, Format format, Integer pageSize, Integer pageNumber, String urn) throws URISyntaxException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-        params.add(new NameValuePair("urncontains", urn));
+        params.add(new BasicNameValuePair("urncontains", urn));
         appendPagingParams(params, pageSize, pageNumber);
 
 

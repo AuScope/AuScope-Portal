@@ -1,34 +1,24 @@
 package org.auscope.portal.server.web.service;
 
 import java.io.InputStream;
-import java.net.ConnectException;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
-import org.auscope.portal.core.services.PortalServiceException;
-import org.auscope.portal.core.services.SISSVoc3Service;
-import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker;
 import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker.Format;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
-import org.auscope.portal.mineraloccurrence.CommodityVocabMethodMaker;
 import org.auscope.portal.nvcl.NvclVocabMethodMaker;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 public class TestNvclVocabService extends PortalTestClass {
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class, "mockMethod");
-    private HttpMethodBase mockMethod2 = context.mock(HttpMethodBase.class, "mockMethod2");
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class, "mockMethod");
+    private HttpRequestBase mockMethod2 = context.mock(HttpRequestBase.class, "mockMethod2");
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private NvclVocabMethodMaker mockMethodMaker = context.mock(NvclVocabMethodMaker.class);
     private String baseUrl = "http://example.org:8080/sissvoc/path";

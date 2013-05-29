@@ -5,8 +5,7 @@ import java.util.Map;
 import junit.framework.Assert;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.jmock.Expectations;
@@ -30,7 +29,7 @@ public class TestGeotransectsController extends PortalTestClass {
                 "\"result\":{\"code\":0,\"msg\":\"No error detected\",\"success\":true}}";
 
         context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(HttpMethodBase.class)));
+            oneOf(mockServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
             will(returnValue(jsonResponse));
         }});
 

@@ -5,7 +5,7 @@ import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpMethodBase;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.SISSVoc3Service;
@@ -26,8 +26,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 public class TestErmlVocabService extends PortalTestClass {
-    private HttpMethodBase mockMethod = context.mock(HttpMethodBase.class, "mockMethod");
-    private HttpMethodBase mockMethod2 = context.mock(HttpMethodBase.class, "mockMethod2");
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class, "mockMethod");
+    private HttpRequestBase mockMethod2 = context.mock(HttpRequestBase.class, "mockMethod2");
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private CommodityVocabMethodMaker mockMethodMaker = context.mock(CommodityVocabMethodMaker.class);
     private String baseUrl = "http://example.org:8080/sissvoc/path";

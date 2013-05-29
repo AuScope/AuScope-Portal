@@ -6,10 +6,9 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-
-import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.PortalServiceException;
@@ -73,7 +72,7 @@ public class YilgarnGeochemistryService extends BaseWFSService {
      */
     public YilgarnLocatedSpecimenRecord getLocatedSpecimens(String serviceUrl, String locSpecimenId) throws PortalServiceException {
         //Make our request
-        HttpMethodBase method = null;
+        HttpRequestBase method = null;
         Document wfsResponseDoc = null;
 
         try {

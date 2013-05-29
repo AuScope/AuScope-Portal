@@ -1,10 +1,12 @@
 package org.auscope.portal.nvcl;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.message.BasicNameValuePair;
 import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker;
 
 /**
@@ -25,8 +27,9 @@ public class NvclVocabMethodMaker extends SISSVoc3MethodMaker {
      * @param pageSize [Optional] How many concepts should be returned per page
      * @param pageNumber [Optional] The page number to request (0 based)
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getAllScalars(String sissVocUrl, String repository, Format format, Integer pageSize, Integer pageNumber) {
+    public HttpRequestBase getAllScalars(String sissVocUrl, String repository, Format format, Integer pageSize, Integer pageNumber) throws URISyntaxException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         appendPagingParams(params, pageSize, pageNumber);
@@ -45,11 +48,12 @@ public class NvclVocabMethodMaker extends SISSVoc3MethodMaker {
      * @param pageSize [Optional] How many concepts should be returned per page
      * @param pageNumber [Optional] The page number to request (0 based)
      * @return
+     * @throws URISyntaxException
      */
-    public HttpMethodBase getScalarsByLabel(String sissVocUrl, String repository, String label, Format format, Integer pageSize, Integer pageNumber) {
+    public HttpRequestBase getScalarsByLabel(String sissVocUrl, String repository, String label, Format format, Integer pageSize, Integer pageNumber) throws URISyntaxException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-        params.add(new NameValuePair("anylabel", label));
+        params.add(new BasicNameValuePair("anylabel", label));
         appendPagingParams(params, pageSize, pageNumber);
 
         return buildGetMethod(sissVocUrl, repository, "scalar", format, params);
