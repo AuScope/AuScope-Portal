@@ -52,7 +52,7 @@ public class CSWController extends BaseCSWController {
             endOfDay ? 59 : 0, // secondOfMinute
             endOfDay ? 999 : 0); // millisOfSecond
     }
-    
+
     /**
      * Requests CSW records from the cswServiceUrl provided.
      * The results will be filtered by the CQL Text and the filter options.
@@ -109,21 +109,21 @@ public class CSWController extends BaseCSWController {
 
         try {
             FilterBoundingBox spatialBounds;
-            
-			// If ALL the explicit bounds have been set we will use them,
-			// otherwise we'll just the viewport (i.e. bbox)
-			if (Double.isNaN(northBoundLatitude)
-					|| Double.isNaN(southBoundLatitude)
-					|| Double.isNaN(eastBoundLongitude)
-					|| Double.isNaN(westBoundLongitude)) {
-				spatialBounds = FilterBoundingBox.attemptParseFromJSONTemp(bbox);
-			} else {
-				spatialBounds = new FilterBoundingBox(
-						"EPSG:4326",
-						new double[] { eastBoundLongitude, southBoundLatitude },
-						new double[] { westBoundLongitude, northBoundLatitude });
-			}
-            
+
+            // If ALL the explicit bounds have been set we will use them,
+            // otherwise we'll just the viewport (i.e. bbox)
+            if (Double.isNaN(northBoundLatitude)
+                    || Double.isNaN(southBoundLatitude)
+                    || Double.isNaN(eastBoundLongitude)
+                    || Double.isNaN(westBoundLongitude)) {
+                spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
+            } else {
+                spatialBounds = new FilterBoundingBox(
+                        "EPSG:4326",
+                        new double[] { eastBoundLongitude, southBoundLatitude },
+                        new double[] { westBoundLongitude, northBoundLatitude });
+            }
+
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
                     anyText,
                     spatialBounds);
@@ -132,7 +132,7 @@ public class CSWController extends BaseCSWController {
             filter.setAbstract(abstract_);
 
             if (!metadataDateFrom.isEmpty()) {
-                filter.setMetadataChangeDateFrom(stringToDateTime(metadataDateFrom, false)); 
+                filter.setMetadataChangeDateFrom(stringToDateTime(metadataDateFrom, false));
             }
 
             if (!metadataDateTo.isEmpty()) {
@@ -142,11 +142,11 @@ public class CSWController extends BaseCSWController {
             if (!temporalExtentFrom.isEmpty()) {
                 filter.setTemporalExtentFrom(stringToDateTime(temporalExtentFrom, false));
             }
-            
+
             if (!temporalExtentTo.isEmpty()) {
                 filter.setTemporalExtentTo(stringToDateTime(temporalExtentTo, true));
             }
-            
+
             CSWGetRecordResponse response = cswService.queryCSWEndpoint(
                     start,
                     limit,
