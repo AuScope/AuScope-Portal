@@ -1,7 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><!DOCTYPE html>
 <!-- Credits for icons from http://www.fatcow.com/free-icons/ under http://creativecommons.org/licenses/by/3.0/us/-->
 <html xmlns:v="urn:schemas-microsoft-com:vml">
    <head>
@@ -10,7 +7,8 @@
       <meta name="description" content="Access geoscientific information from around Australia, via AuScopes national e-Research infrastructure.">
       <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
       <meta name="author" content="AuScope">
-
+      <meta charset="UTF-8" />
+      
       <%-- Open Layers Imports --%>
       <link rel="stylesheet" href="portal-core/js/OpenLayers-2.12/theme/default/style.css" type="text/css">
       <script src="portal-core/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
