@@ -84,7 +84,7 @@ Ext.define('auscope.layer.querier.wfs.factories.BoreholeFactory', {
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Drilling Date',
-                    value : drillingDate
+                    value : new Date(drillingDate.replace("Z", '')).toDateString()
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Drilling Method',
