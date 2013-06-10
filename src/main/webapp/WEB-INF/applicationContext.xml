@@ -87,11 +87,21 @@
         </constructor-arg>
     </bean>
 
+    <bean id= "WMSMethodMaker" class="org.auscope.portal.core.services.methodmakers.WMSMethodMaker">
+        <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
+    </bean>
+
+    <bean id= "WMS_1_3_0_MethodMaker" class="org.auscope.portal.core.services.methodmakers.WMS_1_3_0_MethodMaker">
+        <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
+    </bean>
+
     <bean id="wmsService" class="org.auscope.portal.core.services.WMSService">
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
         <constructor-arg name="methodMaker">
-            <bean class="org.auscope.portal.core.services.methodmakers.WMSMethodMaker">
-            </bean>
+            <list>
+               <ref bean="WMSMethodMaker"/>
+               <ref bean="WMS_1_3_0_MethodMaker"/>
+            </list>
         </constructor-arg>
     </bean>
 

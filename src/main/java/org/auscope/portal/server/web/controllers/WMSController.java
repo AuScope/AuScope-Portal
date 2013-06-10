@@ -28,6 +28,7 @@ import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @version $Id$
  */
 @Controller
+@Scope("session")//this can't be a singleton as each request by a user may be targeting a specific wms version
 public class WMSController extends BaseCSWController {
 
 
@@ -84,7 +86,7 @@ public class WMSController extends BaseCSWController {
                 for (GetCapabilitiesWMSLayerRecord rec : capabilitiesRec.getLayers()) {
                     //to check if layers are EPSG: 4326 SRS
                     String[] uniqueSRSList = getSRSList(capabilitiesRec.getLayerSRS() , rec.getChildLayerSRS());
-                    if (!((Arrays.binarySearch(uniqueSRSList, "EPSG:4326")) >= 0 || (Arrays.binarySearch(uniqueSRSList, "epsg:4326")) >= 0)) {
+                    if (!((Arrays.binarySearch(uniqueSRSList, "EPSG:3857")) >= 0 || (Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0)) {
                         invalidLayerCount += 1;
                         continue;
                     }
@@ -113,8 +115,11 @@ public class WMSController extends BaseCSWController {
                             rec.getTitle());
 
                     CSWRecord newRecord = new CSWRecord(serviceName, fileId, recordInfoUrl, dataAbstract, onlineResources, geoEls);
+                    newRecord.setVersion(capabilitiesRec.getVersion());
                     newRecord.setContact(responsibleParty);
                     cswRecords.add(newRecord);
+
+
                 }
             }
             //generate the same response from a getCachedCSWRecords call
@@ -166,6 +171,7 @@ public class WMSController extends BaseCSWController {
     @RequestMapping("/getLayerFormats.do")
     public ModelAndView getLayerFormats(@RequestParam("serviceUrl") String serviceUrl) throws Exception {
         try {
+
             GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl);
 
             List<ModelMap> data = new ArrayList<ModelMap>();
