@@ -41,17 +41,16 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     observationsToReturn[i] == 'p_wave_amplitude' ? 'P-Wave amp (mV)' :
                     observationsToReturn[i] == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
                     observationsToReturn[i] == 'density' ? 'Density (g/cm³)' :
-                    // I.E. Wouldn't render the ⁻⁵ properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render the ⁻⁵ properly so I've used the other notation.
                     observationsToReturn[i] == 'magnetic_susceptibility' ? 'Mag. sus. (×10^-5 SI)' :
-                    // I.E. Wouldn't render the ⁻² or ⁻¹ properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render the ⁻² or ⁻¹ properly so I've used the other notation.
                     observationsToReturn[i] == 'impedance' ? 'Impedance (×10³ kgm^-2 s^-1)' :
                     observationsToReturn[i] == 'natural_gamma' ? 'Natural gamma (cps)' :
-                    observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ω·m)' : 
+                    observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ω·m)' :
                     undefined;
 
                 windowTitle +=
                     // Add a comma or ampersand if needed:
-                    (first ? '' : (last ? ' & ' : ', ')) +
                     // Remove the unit of measure:
                     new RegExp('^(.+?) \\(').exec(xAxisTitle)[1];
 
