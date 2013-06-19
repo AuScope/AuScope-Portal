@@ -49,7 +49,7 @@ Ext.application({
                     if(!successful){
                         Ext.Msg.show({
                             title:'Error!',
-                            msg: 'Either the URL is not valid or it does not conform to EPSG:4326 WMS layers standard',
+                            msg: 'Your WMS service has to support EPSG:3857 to be supported by Google map. You are seeing this error because either the URL is not valid or it does not conform to EPSG:3857 WMS layers standard',
                             buttons: Ext.Msg.OK
                         });
                     }else{
