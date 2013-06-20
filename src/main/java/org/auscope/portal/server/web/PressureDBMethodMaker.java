@@ -50,8 +50,9 @@ public class PressureDBMethodMaker extends AbstractMethodMaker {
         HttpGet method = new HttpGet();
         URIBuilder builder= new URIBuilder(urlPathConcat(serviceUrl, "download.html"));
         builder.setParameter("wellid", wellID);
+
         for (String feature : features) {
-            builder.setParameter("feature", feature);
+            builder.addParameter("feature", feature);
         }
 
         method.setURI(builder.build());

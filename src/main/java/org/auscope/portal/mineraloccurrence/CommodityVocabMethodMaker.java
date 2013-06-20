@@ -8,7 +8,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.message.BasicNameValuePair;
 import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker;
-import org.springframework.stereotype.Component;
+
 
 /**
  * Additions to the SISSVoc3 method maker to better support the commodity vocab
