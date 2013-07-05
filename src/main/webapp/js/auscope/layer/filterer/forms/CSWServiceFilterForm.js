@@ -26,6 +26,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
             labelWidth : 70,
             bodyStyle : 'padding:5px',
             autoHeight : true,
+            itemId : 'cswServiceFilterForm',
             items : [ {
                 xtype : 'fieldset',
                 title : 'CSW Filter Properties',
@@ -114,7 +115,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     emptyCell, {
                         xtype : 'textfield',
                         name : 'lat_max',
-                        id : 'lat_max',
+                        itemId : 'lat_max',
                         listeners : {
                         	change : Ext.bind(this._toggleSpatialBounds, this)
                         }
@@ -132,7 +133,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     {
                         xtype : 'textfield',
                         name : 'long_min',
-                        id : 'long_min',
+                        itemId : 'long_min',
                         listeners : {
                         	change : Ext.bind(this._toggleSpatialBounds, this)
                         }
@@ -140,7 +141,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     emptyCell,{
                         xtype : 'textfield',
                         name : 'long_max',
-                        id : 'long_max',
+                        itemId : 'long_max',
                         listeners : {
                         	change : Ext.bind(this._toggleSpatialBounds, this)
                         }
@@ -155,7 +156,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     emptyCell, {
                         xtype : 'textfield',
                         name : 'lat_min',
-                        id : 'lat_min',
+                        itemId : 'lat_min',
                         listeners : {
                         	change : Ext.bind(this._toggleSpatialBounds, this)
                         }
@@ -163,13 +164,15 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     // Bbox preview button
                     {
                     	xtype : 'panel',
+                        itemId : 'cswServiceFilterBboxPanel',
                     	layout : 'anchor',
                     	hideBorder : true,
                     	items : [{
 	                    	xtype : 'button',
 	                    	anchor : '30%',
 	                    	html : this._spatialBoundsRenderer(),
-	                    	id: 'bboxPreviewButton',
+	                    	name : 'bboxPreviewButton',
+	                    	itemId: 'bboxPreviewButton',
 	                    	align: 'CENTER',
 	                        disabled: true,
 	                        tooltip : {
@@ -193,17 +196,18 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
      * Enable bbox preview on the map when all bounding box text fields are filled in.
      */
     _toggleSpatialBounds : function() {
-    	var lat_max = this.form._fields.get("lat_max").lastValue;
-    	var lat_min = this.form._fields.get("lat_min").lastValue;
-    	var long_max = this.form._fields.get("long_max").lastValue;
-    	var long_min = this.form._fields.get("long_min").lastValue;
-   			  		
+    	var lat_max = this.form.findField("lat_max").lastValue;
+    	var lat_min = this.form.findField("lat_min").lastValue;
+    	var long_max = this.form.findField("long_max").lastValue;
+    	var long_min = this.form.findField("long_min").lastValue;
+
+    	var previewBtn = Ext.ComponentQuery.query('panel#cswServiceFilterBboxPanel > button:first')[0];    	
 	    // check if all fields are filled in
- 		if (lat_max && lat_min && long_max && long_min) {       
+ 		if (lat_max && lat_min && long_max && long_min) {
     		// enable spatial bounds preview
- 			Ext.getCmp('bboxPreviewButton').enable();
+ 		    previewBtn.enable();
  		} else {
- 			Ext.getCmp('bboxPreviewButton').disable();
+ 		    previewBtn.disable();
  		}
     },
     
@@ -253,10 +257,10 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
      */
     _getBBoxFilterBounds : function() {
     	// They're assumed to be filled in because this has been checked when the button is enabled
-    	var lat_max = Number(this.form._fields.get("lat_max").lastValue);
-    	var lat_min = Number(this.form._fields.get("lat_min").lastValue);
-    	var long_max = Number(this.form._fields.get("long_max").lastValue);
-    	var long_min = Number(this.form._fields.get("long_min").lastValue);
+    	var lat_max = Number(this.form.findField("lat_max").lastValue);
+    	var lat_min = Number(this.form.findField("lat_min").lastValue);
+    	var long_max = Number(this.form.findField("long_max").lastValue);
+    	var long_min = Number(this.form.findField("long_min").lastValue);
    			
         // validate against non numerical values
         if (isNaN(lat_max) || isNaN(lat_min) || isNaN(long_max) || isNaN(long_min)) {
