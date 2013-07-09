@@ -94,6 +94,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     } ]
                 }, {
                     xtype : 'fieldset',
+                    id : 'bboxFieldset',
                     collapsible: true,
                     collapsed: true,
                     layout : {
