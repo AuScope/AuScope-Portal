@@ -34,6 +34,12 @@ Ext.define('auscope.layer.querier.wfs.factories.BoreholeFactory', {
         var inclinationType = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:inclinationType');
         var startPoint = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:startPoint');
 
+        if(drillingDate){
+            drillingDate = new Date(drillingDate.replace("Z", '')).toDateString();
+        }else{
+            drillingDate = "";
+        }
+
         //For IE we can't apply XPath predicates like gml:name[@codeSpace=\'http://www.ietf.org/rfc/rfc2616\']
         //so we do a manual loop instead over gml:name instead
         var rawId = '';
@@ -84,7 +90,7 @@ Ext.define('auscope.layer.querier.wfs.factories.BoreholeFactory', {
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Drilling Date',
-                    value : new Date(drillingDate.replace("Z", '')).toDateString()
+                    value : drillingDate
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Drilling Method',
