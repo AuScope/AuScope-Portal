@@ -27,6 +27,10 @@ Ext.define('auscope.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
 
         var actualId = gmlId.substring('Anomalies.'.length);
 
+        //Construct WFS GetFeature request
+        var url = Ext.util.Format.format('{0}?version=1.1.0&request=GetFeature&typeName={1}&featureId={2}', 
+                wfsUrl, 'geophysics:Anomalies', gmlId);
+        
         //ASSUMPTION - image service at same host as geoserver
         var baseUrl = this._getBaseUrl(wfsUrl);
         var imgUrl = baseUrl + '/getJpeg.aspx?anomalyId=' + escape(actualId);
@@ -42,7 +46,7 @@ Ext.define('auscope.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
                 items : [{
                     xtype : 'displayfield',
                     fieldLabel : 'Id',
-                    value : gmlId
+                    value : this._makeGeneralPopupHtml(url, gmlId, 'Click here to open xml view of this feature.')
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Anomaly Name',
