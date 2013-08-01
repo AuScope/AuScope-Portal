@@ -20,6 +20,8 @@ Ext.application({
             groupField: 'contactOrg',
             proxy : {
                 type : 'ajax',
+                method : 'GET',
+                noCache : false,
                 url : 'getUnmappedCSWRecords.do',
                 reader : {
                     type : 'json',
@@ -36,6 +38,8 @@ Ext.application({
             model : 'portal.csw.CSWRecord',
             proxy : {
                 type : 'ajax',
+                method : 'GET',
+                noCache : false,
                 url : 'getCustomLayers.do',
                 reader : {
                     type : 'json',
@@ -71,6 +75,8 @@ Ext.application({
             groupField: 'group',
             proxy : {
                 type : 'ajax',
+                method : 'GET',
+                noCache : false,
                 url : 'getKnownLayers.do',
                 reader : {
                     type : 'json',
@@ -86,6 +92,8 @@ Ext.application({
             groupField: 'group',
             proxy : {
                 type : 'ajax',
+                method : 'GET',
+                noCache : false,
                 url : 'getResearchDataLayers.do',
                 reader : {
                     type : 'json',

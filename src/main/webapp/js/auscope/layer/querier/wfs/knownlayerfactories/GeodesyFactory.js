@@ -27,6 +27,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory', {
 
         store.setProxy({
             type : 'ajax',
+            method : 'GET',
+            noCache : false,
             url : 'getGeodesyObservations.do',
             extraParams : {
                 serviceUrl : wfsUrl,
@@ -53,6 +55,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory', {
             autoLoad : false,
             proxy : {
                 type : 'ajax',
+                method : 'GET',
+                noCache : false,
                 url : 'getGeodesyObservations.do',
                 extraParams : {
                     serviceUrl : parentOnlineResource.get('url'),

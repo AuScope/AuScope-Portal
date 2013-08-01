@@ -101,6 +101,8 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             pageSize: 50,
             proxy: {
                 type: 'ajax',
+                method : 'GET',
+                noCache : false,
                 url: 'getUncachedCSWRecords.do',
                 extraParams:cfg.extraParams,
                 reader: {

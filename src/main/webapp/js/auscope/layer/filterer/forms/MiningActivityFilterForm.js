@@ -12,6 +12,8 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
             fields : ['urn', 'label'],
             proxy : {
                 type : 'ajax',
+                method : 'GET',
+                noCache : false,
                 url : 'getAllCommodities.do',
                 reader : {
                     type : 'array',
