@@ -12,8 +12,6 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
             fields : ['urn', 'label'],
             proxy : {
                 type : 'ajax',
-                method : 'GET',
-                noCache : false,
                 url : 'getAllCommodities.do',
                 reader : {
                     type : 'array',

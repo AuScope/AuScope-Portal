@@ -39,8 +39,6 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
             model : 'auscope.knownlayer.yilgarngeochem.LocatedSpecimen',
             proxy : {
                 type : 'ajax',
-                method : 'GET',
-                noCache : false,
                 url: 'doLocatedSpecimenFeature.do',
                 timeout: 180000,
                 extraParams: {

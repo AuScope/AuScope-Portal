@@ -50,8 +50,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             model : 'auscope.knownlayer.nvcl.Log',
             proxy : {
                 type : 'ajax',
-                method : 'GET',
-                noCache : false,
                 url : 'getNVCLLogs.do',
                 extraParams : {
                     serviceUrl : nvclDataServiceUrl,
@@ -155,8 +153,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         model : 'auscope.knownlayer.nvcl.Log',
                         proxy : {
                             type : 'ajax',
-                            method : 'GET',
-                            noCache : false,
                             url : 'getNVCLLogs.do',
                             extraParams : {
                                 serviceUrl : nvclDataServiceUrl,
@@ -741,8 +737,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     model : 'auscope.knownlayer.nvcl.Dataset',
                     proxy : {
                         type : 'ajax',
-                        method : 'GET',
-                        noCache : false,
                         url : 'getNVCLDatasets.do',
                         extraParams : {
                             serviceUrl : nvclDataServiceUrl,

@@ -11,6 +11,15 @@ Ext.application({
             'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
 
+        
+        // WARNING - Terry IS playing dangerous games here!
+        // if !(oldBrowser) then ....
+        Ext.Ajax.method = 'GET';
+        //True to add a unique cache-buster param to GET requests. Defaults to true.
+        Ext.Ajax.disableCaching = false;
+        //IF END
+        
+
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var isDebugMode = urlParams.debug;
 
@@ -20,8 +29,6 @@ Ext.application({
             groupField: 'contactOrg',
             proxy : {
                 type : 'ajax',
-                method : 'GET',
-                noCache : false,
                 url : 'getUnmappedCSWRecords.do',
                 reader : {
                     type : 'json',
@@ -38,8 +45,6 @@ Ext.application({
             model : 'portal.csw.CSWRecord',
             proxy : {
                 type : 'ajax',
-                method : 'GET',
-                noCache : false,
                 url : 'getCustomLayers.do',
                 reader : {
                     type : 'json',
@@ -75,8 +80,6 @@ Ext.application({
             groupField: 'group',
             proxy : {
                 type : 'ajax',
-                method : 'GET',
-                noCache : false,
                 url : 'getKnownLayers.do',
                 reader : {
                     type : 'json',
@@ -92,8 +95,6 @@ Ext.application({
             groupField: 'group',
             proxy : {
                 type : 'ajax',
-                method : 'GET',
-                noCache : false,
                 url : 'getResearchDataLayers.do',
                 reader : {
                     type : 'json',
