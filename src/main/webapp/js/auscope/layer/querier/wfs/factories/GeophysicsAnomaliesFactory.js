@@ -34,14 +34,14 @@ Ext.define('auscope.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
         //ASSUMPTION - image service at same host as geoserver
         var baseUrl = this._getBaseUrl(wfsUrl);
         var imgUrl = baseUrl + '/getJpeg.aspx?anomalyId=' + escape(actualId);
-
+        
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
-            autoScroll : true,
+            autoScroll : false,
             items : [{
                 xtype : 'fieldset',
-                height : 280,
+                height : 250,
                 title : 'Geophysics Anomaly',
                 items : [{
                     xtype : 'displayfield',
@@ -60,15 +60,44 @@ Ext.define('auscope.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
                     fieldLabel : 'Data Type',
                     value : dataType
                 },{
-                    xtype : 'box',
-                    autoEl : {
-                        tag:'div',
-                        children:[{
-                            tag : 'img',
-                            src : imgUrl
-                        }]
-                    }
+                    xtype : 'container',
+                    autoScroll : true,
+                    height : 140,
+                    width : 580,
+                    items : [{
+                        xtype : 'box',
+                        autoEl : {
+                            tag:'div',
+                            children:[{
+                                tag : 'img',
+                                src : imgUrl
+                            }]
+                        }
+                    }]
                 }]
+            }],
+            buttonAlign : 'right',
+            buttons : [{
+                text : 'Download Grid',
+                iconCls : 'download',
+                handler : function() {
+                    var anomalyDataUrl = baseUrl + '/getAnomalyData.ashx?anomalyId=' + escape(actualId);
+                    portal.util.FileDownloader.downloadFile(anomalyDataUrl);
+                }
+            },{
+                text : 'Download Analyses',
+                iconCls : 'download',
+                handler : function() {
+                    var magEstDataUrl = baseUrl + '/getMagEstData.ashx?magestid=' + escape(actualId);
+                    portal.util.FileDownloader.downloadFile(magEstDataUrl);
+                }                
+            },{
+                text : 'Download Models',
+                iconCls : 'download',
+                handler : function() {
+                    var modelFileUrl = baseUrl + '/getMagEstData.ashx?magestid=' + escape(actualId);
+                    portal.util.FileDownloader.downloadFile(modelFileUrl);
+                }
             }]
         });
     }
