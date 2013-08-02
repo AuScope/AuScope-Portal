@@ -123,7 +123,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                             'stroke-width' : 1
                         }
                     } ]
-                })
+                });
             }
 
             var graphWindow = Ext.create('Ext.Window', {

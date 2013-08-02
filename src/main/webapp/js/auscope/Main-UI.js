@@ -193,7 +193,8 @@ Ext.application({
                         width : 625,
                         cswRecords : cswRecords
                     });
-                    popup.show()
+
+                    popup.show();
 
                     //HTML images may take a moment to load which stuffs up our layout
                     //This is a horrible, horrible workaround.

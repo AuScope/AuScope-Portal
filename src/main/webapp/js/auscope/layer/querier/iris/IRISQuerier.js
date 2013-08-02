@@ -159,7 +159,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         
                                         var date = new Date(year, month, day);
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
-                                    }
+                                    };
                                     
                                     var loadMask = new Ext.LoadMask(form, { msg: "Please wait..." });
                                     loadMask.show();
