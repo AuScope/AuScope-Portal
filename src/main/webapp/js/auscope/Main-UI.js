@@ -17,6 +17,8 @@ Ext.application({
         Ext.Ajax.method = 'GET';
         //True to add a unique cache-buster param to GET requests. Defaults to true.
         Ext.Ajax.disableCaching = false;
+        // I think this is 300 seconds, 5 mins...
+        Ext.Ajax.timeout = 300000; 
         //IF END
         
 
