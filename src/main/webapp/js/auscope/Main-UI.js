@@ -16,6 +16,9 @@ Ext.application({
         // if !(oldBrowser) then ....
         Ext.Ajax.method = 'GET';
         //True to add a unique cache-buster param to GET requests. Defaults to true.
+        //http://www.sencha.com/forum/showthread.php?257086-Is-there-a-simple-way-to-disable-caching-for-an-entire-ExtJS-4-application
+        Ext.data.Connection.disableCaching = false;
+        Ext.data.proxy.Server.prototype.noCache = false;
         Ext.Ajax.disableCaching = false;
         // I think this is 300 seconds, 5 mins...
         Ext.Ajax.timeout = 300000; 
