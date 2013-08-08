@@ -57,6 +57,13 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
             }],
             buttonAlign : 'right',
             buttons : [{
+                text : 'Download KML',
+                iconCls : 'download',
+                handler : function() {
+                    var anomalyDataUrl = baseUrl + '/getKml.aspx?anomalyid=' + escape(actualId);
+                    portal.util.FileDownloader.downloadFile(anomalyDataUrl);
+                }
+            },{
                 text : 'Download Grid',
                 iconCls : 'download',
                 handler : function() {
@@ -67,14 +74,14 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
                 text : 'Download Analyses',
                 iconCls : 'download',
                 handler : function() {
-                    var magEstDataUrl = baseUrl + '/getMagEstData.ashx?magestid=' + escape(actualId);
+                    var magEstDataUrl = baseUrl + '/getAllAnalysesForAnomaly.ashx?anomalyid=' + escape(actualId);
                     portal.util.FileDownloader.downloadFile(magEstDataUrl);
                 }                
             },{
                 text : 'Download Models',
                 iconCls : 'download',
                 handler : function() {
-                    var modelFileUrl = baseUrl + '/getModelFile.ashx?modelid=' + escape(actualId);
+                    var modelFileUrl = baseUrl + '/getAllModelsForAnomaly.ashx?anomalyid=' + escape(actualId);
                     portal.util.FileDownloader.downloadFile(modelFileUrl);
                 }
             }]
