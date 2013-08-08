@@ -81,7 +81,7 @@ Ext.define('auscope.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
                 text : 'Download Grid',
                 iconCls : 'download',
                 handler : function() {
-                    var anomalyDataUrl = baseUrl + '/getAnomalyData.ashx?anomalyId=' + escape(actualId);
+                    var anomalyDataUrl = baseUrl + '/getAnomalyData.ashx?anomalyid=' + escape(actualId);
                     portal.util.FileDownloader.downloadFile(anomalyDataUrl);
                 }
             },{
@@ -95,7 +95,7 @@ Ext.define('auscope.layer.querier.wfs.factories.GeophysicsAnomaliesFactory', {
                 text : 'Download Models',
                 iconCls : 'download',
                 handler : function() {
-                    var modelFileUrl = baseUrl + '/getMagEstData.ashx?magestid=' + escape(actualId);
+                    var modelFileUrl = baseUrl + '/getModelFile.ashx?modelid=' + escape(actualId);
                     portal.util.FileDownloader.downloadFile(modelFileUrl);
                 }
             }]
