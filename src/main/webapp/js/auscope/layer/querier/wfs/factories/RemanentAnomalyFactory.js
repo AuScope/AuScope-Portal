@@ -12,7 +12,8 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
     },
 
     supportsNode : function(domNode) {
-        return portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'Anomaly';
+        return domNode.namespaceURI === 'http://remanentanomalies.csiro.au' && 
+            portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'Anomaly';
     },
 
     /**
@@ -25,6 +26,12 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
         //ASSUMPTION - image service at same host as geoserver
         var baseUrl = this._getBaseUrl(wfsUrl);
         var imgUrl = baseUrl + '/getJpeg.aspx?anomalyId=' + escape(actualId);
+                    
+        var models = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'RemAnom:modelCollection');
+        var disableModelsDownload = (models.length > 0) ? false : true;
+        
+        var analyses = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'RemAnom:analysisCollection');
+        var disableAnalysesDownload = (analyses.length > 0) ? false : true;
         
         // Turn our DOM Node in an ExtJS Tree
         var rootNode = this._createTreeNode(domNode);
@@ -98,6 +105,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
             },{
                 text : 'Download Analyses',
                 iconCls : 'download',
+                disabled : disableAnalysesDownload,
                 handler : function() {
                     var magEstDataUrl = baseUrl + '/getAllAnalysesForAnomaly.ashx?anomalyid=' + escape(actualId);
                     portal.util.FileDownloader.downloadFile(magEstDataUrl);
@@ -105,6 +113,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
             },{
                 text : 'Download Models',
                 iconCls : 'download',
+                disabled : disableModelsDownload,
                 handler : function() {
                     var modelFileUrl = baseUrl + '/getAllModelsForAnomaly.ashx?anomalyid=' + escape(actualId);
                     portal.util.FileDownloader.downloadFile(modelFileUrl);
