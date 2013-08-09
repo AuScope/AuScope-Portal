@@ -11,7 +11,7 @@ Ext.application({
             'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
 
-        
+
         // WARNING - Terry IS playing dangerous games here!
         // if !(oldBrowser) then ....
         Ext.Ajax.method = 'GET';
@@ -21,9 +21,9 @@ Ext.application({
         Ext.data.proxy.Server.prototype.noCache = false;
         Ext.Ajax.disableCaching = false;
         // I think this is 300 seconds, 5 mins...
-        Ext.Ajax.timeout = 300000; 
+        Ext.Ajax.timeout = 300000;
         //IF END
-        
+
 
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var isDebugMode = urlParams.debug;
@@ -336,22 +336,45 @@ Ext.application({
 
             var stateString = mss.serialize();
 
-            var popup = Ext.create('portal.widgets.window.PermanentLinkWindow', {
-                state : stateString
+            LZMA.compress(stateString, "1", function (result) {
+                var stateString = portal.util.Base64.encode(String.fromCharCode.apply(String, result));
+
+                var popup = Ext.create('portal.widgets.window.PermanentLinkWindow', {
+                    state : stateString
+                });
+
+                popup.show();
+
             });
 
-            popup.show();
         };
         Ext.get('permalink').on('click', permalinkHandler);
         Ext.get('permalinkicon').on('click', permalinkHandler);
 
-        //Handle deserialisation
-        var deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
-            knownLayerStore : knownLayerStore,
-            cswRecordStore : unmappedCSWRecordStore,
-            layerFactory : layerFactory,
-            layerStore : layerStore,
-            map : map
-        });
+        //Handle deserialisation -- ONLY if we have a uri param called "state".
+        
+        var deserializationHandler;
+        var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
+        if (urlParams && urlParams.state) {
+            var decodedString = portal.util.Base64.decode(urlParams.state);
+            var compressedByteArray = [];
+            for (var i = 0; i < decodedString.length; i++) {
+                compressedByteArray.push(decodedString.charCodeAt(i));
+              }
+
+            LZMA.decompress(compressedByteArray, function (result) {
+                deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
+                    knownLayerStore : knownLayerStore,
+                    cswRecordStore : unmappedCSWRecordStore,
+                    layerFactory : layerFactory,
+                    layerStore : layerStore,
+                    map : map,
+                    state : result
+                });
+            });            
+            
+        }
+        
+            
     }
 });
