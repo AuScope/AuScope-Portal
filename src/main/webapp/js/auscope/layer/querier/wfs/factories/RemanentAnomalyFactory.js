@@ -21,8 +21,10 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
     parseNode : function(domNode, wfsUrl, rootCfg) {
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var actualId = gmlId.substring('anomaly.'.length);
+        
+        //ASSUMPTION - image service at same host as geoserver
         var baseUrl = this._getBaseUrl(wfsUrl);
-        console.debug("baseUrl: " + baseUrl);
+        var imgUrl = baseUrl + '/getJpeg.aspx?anomalyId=' + escape(actualId);
         
         // Turn our DOM Node in an ExtJS Tree
         var rootNode = this._createTreeNode(domNode);
@@ -50,18 +52,41 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
             layout : 'fit',
             height: 300, 
             items : [{
-                xtype : 'treepanel',
-                autoScroll : true,
-                rootVisible : true,
-                root : rootNode
+                xtype : 'tabpanel',
+                activeItem : 0,
+                enableTabScroll : true,
+                buttonAlign : 'center',
+                items : [{
+                    title : 'Anomaly',
+                    xtype : 'treepanel',
+                    autoScroll : true,
+                    rootVisible : true,
+                    root : rootNode               
+                },{
+                   title : 'Image',
+                   xtype : 'container',
+                   autoScroll : true,
+                   height : 140,
+                   width : 580,
+                   items : [{
+                       xtype : 'box',
+                       autoEl : {
+                           tag:'div',
+                           children:[{
+                               tag : 'img',
+                               src : imgUrl
+                           }]
+                       }
+                   }]
+                }]
             }],
             buttonAlign : 'right',
             buttons : [{
                 text : 'Download KML',
                 iconCls : 'download',
                 handler : function() {
-                    var anomalyDataUrl = baseUrl + '/getKml.aspx?anomalyid=' + escape(actualId);
-                    portal.util.FileDownloader.downloadFile(anomalyDataUrl);
+                    var anomalyKMLUrl = baseUrl + '/getKml.aspx?anomalyid=' + escape(actualId);
+                    portal.util.FileDownloader.downloadFile(anomalyKMLUrl);
                 }
             },{
                 text : 'Download Grid',
