@@ -7,12 +7,6 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-    <bean id="cswAuscopeDev" class="org.auscope.portal.core.services.csw.CSWServiceItem">
-        <constructor-arg name="id" value="cswAuscopeDev"/>
-        <constructor-arg name="title" value="AuScope Dev Geonetwork"/>
-        <constructor-arg name="serviceUrl" value="http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/en/csw"/>
-        <constructor-arg name="recordInformationUrl" value="http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
-    </bean>
     <bean id="cswAuscopeTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswAuscopeTest"/>
         <constructor-arg name="title" value="AuScope Test Geonetwork"/>
