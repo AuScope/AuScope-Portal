@@ -25,7 +25,7 @@ import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
-import org.auscope.portal.mineraloccurrence.BoreholeFilter;
+import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

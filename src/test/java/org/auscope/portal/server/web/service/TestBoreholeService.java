@@ -19,7 +19,7 @@ import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
-import org.auscope.portal.mineraloccurrence.BoreholeFilter;
+import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.jmock.Expectations;
 import org.junit.Assert;
