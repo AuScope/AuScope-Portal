@@ -13,18 +13,13 @@
       <link rel="stylesheet" href="portal-core/js/OpenLayers-2.12/theme/default/style.css" type="text/css">
       <script src="portal-core/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
 
-
       <script type="text/javascript">
          var VOCAB_SERVICE_URL = "${vocabServiceUrl}";
          var NVCL_WEB_SERVICE_IP = "${nvclWebServiceIP}";
          var MAX_FEATURES = "${maxFeatureValue}";
          var LOCALHOST = "${localhost}";
          var WEB_CONTEXT = '<%= request.getContextPath() %>';
-
       </script>
-
-      <%-- CSS imports - relative paths back to the webapp directory--%>
-      <jsp:include page="../../portal-core/cssimports.htm"/>
 
       <%-- JS imports - relative paths back to the webapp directory --%>
       <jsp:include page="../../portal-core/jsimports.htm"/>
@@ -32,8 +27,8 @@
       <jsp:include page="../../portal-core/jsimports-openlayers.htm"/>
       <jsp:include page="../../jsimports.htm"/>
 
-
-
+      <%-- CSS imports - relative paths back to the webapp directory--%>
+      <jsp:include page="../../portal-core/cssimports.htm"/>
 
       <script src="js/auscope/Main-UI.js" type="text/javascript"></script>
 
