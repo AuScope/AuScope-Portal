@@ -746,7 +746,17 @@
             <xsl:for-each select="./gsml:preferredAge/gsml:GeologicEvent">
                 <tr>
                     <td></td>
-                    <td><xsl:value-of select="./gsml:eventAge/gsml:CGI_NumericValue/gsml:principalValue"/></td>
+                    <td>
+                    <xsl:choose>
+                        <xsl:when test="./gsml:eventAge/gsml:CGI_TermValue/gsml:value">
+                            <xsl:value-of select="./gsml:eventAge/gsml:CGI_TermValue/gsml:value"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="./gsml:eventAge/gsml:CGI_NumericValue/gsml:principalValue"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    </td>
+                    <td><xsl:value-of select="./gsml:eventAge/gsml:CGI_TermValue/gsml:value"/></td>
                     <td><xsl:value-of select="./gsml:eventProcess/gsml:CGI_TermValue/gsml:value"/></td>
                     <td><xsl:value-of select="./gsml:eventEnvironment/gsml:CGI_TermValue/gsml:value"/></td>
                     <td></td>

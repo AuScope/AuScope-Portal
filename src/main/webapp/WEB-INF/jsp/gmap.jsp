@@ -8,7 +8,7 @@
       <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
       <meta name="author" content="AuScope">
       <meta charset="UTF-8" />
-      
+
       <%-- Open Layers Imports --%>
       <link rel="stylesheet" href="portal-core/js/OpenLayers-2.12/theme/default/style.css" type="text/css">
       <script src="portal-core/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
