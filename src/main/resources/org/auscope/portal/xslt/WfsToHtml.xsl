@@ -165,59 +165,56 @@
                     <td class="row"><xsl:value-of select="./er:oreProcessed"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
                     <td class="row" colspan="3">&#160;</td>
                 </tr>
-                <!-- Commodity -->
-                <xsl:for-each select="./er:producedMaterial/er:Product/er:sourceCommodity">
-
-                    <xsl:variable name="commodityName">
-                        <xsl:choose>
-                            <xsl:when test="exists(./er:Commodity/er:commodityName)">
-                                <xsl:value-of select="./er:Commodity/er:commodityName" />
-                            </xsl:when>
-                            <xsl:when test="starts-with(@xlink:href, '#')">
-                                <xsl:value-of select="$commodity/er:commodityName" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="''" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-
-                    <xsl:variable name="commodityID">
-                        <xsl:choose>
-                            <xsl:when test="exists(./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616'])">
-                                <xsl:value-of select="./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
-                            </xsl:when>
-                            <xsl:when test="starts-with(@xlink:href, '#')">
-                                <xsl:value-of select="$commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="@xlink:href" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-
-                    <tr>
-                        <td class="row header">Commodity</td>
-                        <td class="row"><xsl:value-of select="$commodityName"/></td>
-                        <td class="row header">Commodity Id:</td>
-                        <td class="row" colspan="2">
-                            <xsl:choose>
-                                <xsl:when test="starts-with($commodityID, 'http://')">
-                                    <a href="wfsFeaturePopup.do?url={$commodityID}" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="$commodityID"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </td>
-                    </tr>
-
-                </xsl:for-each>
+               
 
                 <!-- Product Name -->
                 <xsl:for-each select="./er:producedMaterial">
+								<!-- <xsl:for-each select="./er:producedMaterial/er:Product/er:sourceCommodity">-->
+						  <xsl:variable name="commodityName">
+							<xsl:choose>
+								<xsl:when test="exists(./er:Commodity/er:commodityName)">
+									<xsl:value-of select="./er:Commodity/er:commodityName" />
+								</xsl:when>
+								<xsl:when test="starts-with(@xlink:href, '#')">
+									<xsl:value-of select="$commodity/er:commodityName" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="''" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
+	
+						<xsl:variable name="commodityID">
+							<xsl:choose>
+								<xsl:when test="exists(./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616'])">
+									<xsl:value-of select="./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+								</xsl:when>
+								<xsl:when test="starts-with(@xlink:href, '#')">
+									<xsl:value-of select="$commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="@xlink:href" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
+						
                     <xsl:choose>
                         <xsl:when test="position()=1">
+                        <tr>
+							<td class="row header">Commodity</td>
+							<td class="row"><xsl:value-of select="$commodityName"/></td>
+							<td class="row header">Commodity Id:</td>
+							<td class="row" colspan="2">
+								<xsl:choose>
+									<xsl:when test="starts-with($commodityID, 'http://')">
+										<a href="wfsFeaturePopup.do?url={$commodityID}" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$commodityID"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</td>
+						</tr>
                         <tr>
                             <td class="row">&#160;</td>
                             <td class="row">&#160;</td>
