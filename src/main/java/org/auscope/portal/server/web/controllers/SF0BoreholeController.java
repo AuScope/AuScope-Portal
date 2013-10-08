@@ -282,6 +282,7 @@ public class SF0BoreholeController extends BasePortalController {
                 + "</Rule>"
                 + "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+
         return style;
     }
 

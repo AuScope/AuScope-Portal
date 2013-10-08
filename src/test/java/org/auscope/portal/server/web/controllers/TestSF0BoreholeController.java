@@ -1,38 +1,61 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+
+import net.sf.saxon.xpath.XPathFactoryImpl;
+
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsFilterVisitor;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
 import org.auscope.portal.core.test.PortalTestClass;
+import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.gsml.SF0BoreholeFilter;
+import org.auscope.portal.mineraloccurrence.Commodity;
+import org.auscope.portal.mineraloccurrence.MineralOccurrenceNamespaceContext;
+import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * The Class TestNVCLController.
  * @version: $Id$
  */
 @SuppressWarnings("rawtypes")
+//public class TestSF0BoreholeController extends PortalTestClass {
 public class TestSF0BoreholeController extends PortalTestClass {
 
 
@@ -246,27 +269,38 @@ public class TestSF0BoreholeController extends PortalTestClass {
         Assert.assertNull(data);
     }
 
-//    /**
-//     * Test that SF0 filter style will return a valid wms layer
-//     */
-//    @Test
-//    public void testSF0FilterStyle() throws Exception {
-//       final String nameFilter = "filterBob";
-//       final String custodianFilter = "filterCustodian";
-//       final String filterDate = "1980-10-09";
-//       final int maxFeatures = 10;
-//       final String convertedData = "gmlToKMLResult";
-//       final String featureType = "gsmlp:BoreholeView";
-//       final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(convertedData.getBytes().length);
-//
-//       context.checking(new Expectations() {{
-//           allowing(mockHttpResponse).setContentType(with(any(String.class)));
-//           oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
-//       }});
-//
-//       this.sf0BoreholeController.doSF0FilterStyle(mockHttpResponse, nameFilter, custodianFilter, filterDate,featureType,maxFeatures);
-//
-//       Assert.assertArrayEquals(convertedData.getBytes(), outputStream.toByteArray());
-//
-//    }
+
+      /**
+        * Test that SF0 filter style will return a style layer descriptor with correct feature type name
+        */
+       @Test
+       public void testSF0FilterStyle() throws Exception {
+          final String serviceURL = "http://example.com";
+          final String nameFilter = "asda";
+          final String custodianFilter = "shaksdhska";
+          final String filterDate= "2010-01-02";
+          final int maxFeatures = 45;
+          final FilterBoundingBox bbox = null;
+          final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
+          final String getSF0FilterResponse = "sf0FilterResponse";
+          final String getStyleResponse = "styleResponse";
+          final InputStream mockInput = context.mock(InputStream.class);
+          final OutputStream outputStream = context.mock(OutputStream.class);
+          final int bufferSize = 1024;
+
+          context.checking(new Expectations() {{
+              oneOf(mockSF0BoreholeService).getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox, restrictedIds);
+              will(returnValue(getSF0FilterResponse));
+
+          }});
+
+          String style = this.sf0BoreholeController.getStyle(this.mockSF0BoreholeService.getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox, restrictedIds),
+                 "gsmlp:BoreholeView", "#2242c7");
+          Assert.assertNotNull(style);
+          Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
+
+       }
+
+
+
 }
