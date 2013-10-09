@@ -162,7 +162,16 @@
                 <!-- Amount of Ore Processed -->
                 <tr>
                     <td class="row header">Amount of Ore Processed</td>
-                    <td class="row"><xsl:value-of select="./er:oreProcessed"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                    <td class="row"><xsl:value-of select="./er:oreProcessed"/><xsl:value-of select="' '"/>
+                        <xsl:choose>
+                            <xsl:when test="contains(./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                <xsl:value-of select="substring-after(./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </td>
                     <td class="row" colspan="3">&#160;</td>
                 </tr>
                 <!-- Commodity -->
@@ -222,18 +231,54 @@
                         <tr>
                             <td class="header">Product Name</td>
                             <td><xsl:value-of select="./er:Product/er:productName"/></td>
-                            <td><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                             <td><xsl:value-of select="./er:Product/er:recovery"/></td>
-                            <td><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                         </tr>
                         </xsl:when>
                         <xsl:otherwise>
                         <tr>
                             <td>&#160;</td>
                             <td class="row"><xsl:value-of select="./er:Product/er:productName"/></td>
-                            <td class="row"><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td class="row"><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                             <td class="row"><xsl:value-of select="./er:Product/er:recovery"/></td>
-                            <td class="row"><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td class="row"><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                         </tr>
                         </xsl:otherwise>
                     </xsl:choose>
