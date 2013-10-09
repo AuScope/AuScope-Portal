@@ -851,26 +851,12 @@
                     </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
                         <xsl:call-template name="convert-escaped-percentage">
-                            <xsl:choose>
-                                <xsl:when test="contains(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
-                                    <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:with-param name="value" select="./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                            <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
                         </xsl:call-template>
                     </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
                         <xsl:call-template name="convert-escaped-percentage">
-                            <xsl:choose>
-                                <xsl:when test="contains(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
-                                    <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:with-param name="value" select="./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
+                            <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
                         </xsl:call-template>
                     </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:commodityOfInterest/er:commodityImportance"/></td>
