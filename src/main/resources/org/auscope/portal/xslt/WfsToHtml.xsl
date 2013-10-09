@@ -749,7 +749,6 @@
                         </xsl:otherwise>
                     </xsl:choose>
                     </td>
-                    <td><xsl:value-of select="./gsml:eventAge/gsml:CGI_TermValue/gsml:value"/></td>
                     <td><xsl:value-of select="./gsml:eventProcess/gsml:CGI_TermValue/gsml:value"/></td>
                     <td><xsl:value-of select="./gsml:eventEnvironment/gsml:CGI_TermValue/gsml:value"/></td>
                     <td></td>
