@@ -167,44 +167,44 @@
                 </tr>
                 <!-- Commodity -->
                <xsl:for-each select="./er:producedMaterial/er:Product/er:sourceCommodity">
-				
-					<xsl:choose>
-						<xsl:when test="exists(./er:Commodity/er:commodityName)">
-							<xsl:variable name="commodityName">							
-								<xsl:value-of select="./er:Commodity/er:commodityName" />								
-							</xsl:variable>
 
-							<xsl:variable name="commodityID">
-								<xsl:choose>
-									<xsl:when test="exists(./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616'])">
-										<xsl:value-of select="./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
-									</xsl:when> 
-									<xsl:when test="starts-with(@xlink:href, '#')">
-										<xsl:value-of select="$commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="@xlink:href" />
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:variable>
+                    <xsl:choose>
+                        <xsl:when test="exists(./er:Commodity/er:commodityName)">
+                            <xsl:variable name="commodityName">
+                                <xsl:value-of select="./er:Commodity/er:commodityName" />
+                            </xsl:variable>
 
-							<tr>
-								<td class="row header">Commodity</td>
-								<td class="row"><xsl:value-of select="$commodityName"/></td>
-								<td class="row header">Commodity Id:</td>
-								<td class="row" colspan="2">
-									<xsl:choose>
-										<xsl:when test="starts-with($commodityID, 'http://')">
-											<a href="wfsFeaturePopup.do?url={$commodityID}" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="$commodityID"/>
-										</xsl:otherwise>
-									</xsl:choose>
-								</td>
-							</tr>
-						</xsl:when>                           
-					</xsl:choose>	
+                            <xsl:variable name="commodityID">
+                                <xsl:choose>
+                                    <xsl:when test="exists(./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616'])">
+                                        <xsl:value-of select="./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+                                    </xsl:when>
+                                    <xsl:when test="starts-with(@xlink:href, '#')">
+                                        <xsl:value-of select="$commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="@xlink:href" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
+
+                            <tr>
+                                <td class="row header">Commodity</td>
+                                <td class="row"><xsl:value-of select="$commodityName"/></td>
+                                <td class="row header">Commodity Id:</td>
+                                <td class="row" colspan="2">
+                                    <xsl:choose>
+                                        <xsl:when test="starts-with($commodityID, 'http://')">
+                                            <a href="wfsFeaturePopup.do?url={$commodityID}" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$commodityID"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </td>
+                            </tr>
+                        </xsl:when>
+                    </xsl:choose>
 
                 </xsl:for-each>
 
@@ -332,22 +332,21 @@
 
 
                 </tr>
-                <!-- Start Date -->
-                <tr>
-                    <td class="row header">Start Date</td>
-                    <td class="row"><xsl:value-of select="./er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin"/></td>
-                    <td class="row header">End Date:</td>
-                    <td class="row"><xsl:value-of select="./er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end"/></td>
-                    <td class="row">&#160;</td>
-                </tr>
+
                 <xsl:for-each select="./er:relatedActivity/er:MiningActivity">
                     <!-- Related Mining Activity -->
                     <xsl:variable name="rel-mine-id" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
                     <xsl:choose>
                         <xsl:when test="position()=1">
+                         <tr>
+                            <td class="row header">&#160;</td>
+                            <td class="row col_header">Start Date - End Date</td>
+                            <td class="row header">&#160;</td>
+                            <td class="row" colspan="2">&#160;</td>
+                        </tr>
                         <tr>
                             <td class="row header">Related Mining Activity</td>
-                            <td class="row">&#160;</td>
+                            <td class="row"><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin"/> - <xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end"/></td>
                             <td class="row header">Mining Activity Id:</td>
                             <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
                                     <xsl:with-param name="friendly-name" select="$rel-mine-id"/>
@@ -358,7 +357,7 @@
                         <xsl:otherwise>
                         <tr>
                             <td>&#160;</td>
-                            <td>&#160;</td>
+                            <td><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin"/> - <xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end"/></td>
                             <td class="row header">Mining Activity Id:</td>
                             <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
                                     <xsl:with-param name="friendly-name" select="$rel-mine-id"/>
