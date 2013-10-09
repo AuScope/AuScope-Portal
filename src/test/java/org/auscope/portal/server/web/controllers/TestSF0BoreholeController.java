@@ -275,18 +275,13 @@ public class TestSF0BoreholeController extends PortalTestClass {
         */
        @Test
        public void testSF0FilterStyle() throws Exception {
-          final String serviceURL = "http://example.com";
-          final String nameFilter = "asda";
-          final String custodianFilter = "shaksdhska";
-          final String filterDate= "2010-01-02";
-          final int maxFeatures = 45;
+          final String nameFilter = "filterBob";
+          final String custodianFilter = "filterCustodian";
+          final String filterDate= "1986-10-09";
+          final int maxFeatures = 10;
           final FilterBoundingBox bbox = null;
           final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
           final String getSF0FilterResponse = "sf0FilterResponse";
-          final String getStyleResponse = "styleResponse";
-          final InputStream mockInput = context.mock(InputStream.class);
-          final OutputStream outputStream = context.mock(OutputStream.class);
-          final int bufferSize = 1024;
 
           context.checking(new Expectations() {{
               oneOf(mockSF0BoreholeService).getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox, restrictedIds);
