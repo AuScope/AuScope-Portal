@@ -171,6 +171,7 @@ Ext.application({
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
 
+
         //Utility function for adding a new layer to the map
         //record must be a CSWRecord or KnownLayer
         var handleAddRecordToMap = function(sourceGrid, record) {
@@ -215,6 +216,23 @@ Ext.application({
             layerStore.insert(0,newLayer); //this adds the layer to our store
             layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
         };
+
+
+        var personalRecordsPanel = Ext.create('portal.widgets.panel.PersonalRecordPanel', {
+            title : 'Personal',
+            store : knownLayerStore,
+            tooltip : {
+                title : 'Personal Data Layers',
+                text : 'This tab allows you to personalize your tab to view the content you want',
+                showDelay : 100,
+                dismissDelay : 30000
+            },
+            map : map,
+            listeners : {
+                addlayerrequest : handleAddRecordToMap
+            }
+        });
+
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
@@ -264,7 +282,7 @@ Ext.application({
         });
 
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Research Data',
+            title : 'Research',
             store : researchDataLayerStore,
             map : map,
             tooltip : {
@@ -286,7 +304,8 @@ Ext.application({
             split : true,
             height : 265,
             enableTabScroll : true,
-            items:[knownLayersPanel,
+            items:[personalRecordsPanel,
+                knownLayersPanel,
                 unmappedRecordsPanel,
                 customRecordsPanel,
                 researchDataPanel
@@ -303,7 +322,7 @@ Ext.application({
             split:true,
             //margins: '100 0 0 0',
             margins:'100 0 0 3',
-            width: 350,
+            width: 370,
             items:[tabsPanel , layersPanel, filterPanel]
         };
 
@@ -340,8 +359,8 @@ Ext.application({
                     version : version
                 });
 
-                popup.show(); 
-            });            
+                popup.show();
+            });
         };
         Ext.get('permalink').on('click', permalinkHandler);
         Ext.get('permalinkicon').on('click', permalinkHandler);
@@ -352,7 +371,7 @@ Ext.application({
         if (urlParams && (urlParams.state || urlParams.s)) {
             var decodedString = urlParams.state ? urlParams.state : urlParams.s;
             var decodedVersion = urlParams.v;
-            
+
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
                 cswRecordStore : unmappedCSWRecordStore,
@@ -361,10 +380,10 @@ Ext.application({
                 map : map,
                 stateString : decodedString,
                 stateVersion : decodedVersion
-            });           
-            
+            });
+
         }
-        
-            
+
+
     }
 });
