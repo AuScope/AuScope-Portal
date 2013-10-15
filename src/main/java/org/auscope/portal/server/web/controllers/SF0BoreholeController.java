@@ -2,10 +2,6 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
@@ -14,6 +10,7 @@ import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.core.util.HttpUtil;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +29,7 @@ public class SF0BoreholeController extends BasePortalController {
 
     private SF0BoreholeService sf0BoreholeService;
     private CSWCacheService cswService;
+    private HttpUtil httpUtil;
 
     @Autowired
     public SF0BoreholeController(SF0BoreholeService sf0BoreholeService,
@@ -73,7 +71,7 @@ public class SF0BoreholeController extends BasePortalController {
         String[] serviceFilterArray = serviceFilter.split(",");
 
         if (!serviceFilter.equals("")
-                && !(containHost(serviceUrl, serviceFilterArray))) {
+                && !(httpUtil.containHost(serviceUrl, serviceFilterArray))) {
             return this.generateJSONResponseMAV(false, null, "Not Queried");
         }
 
@@ -92,17 +90,6 @@ public class SF0BoreholeController extends BasePortalController {
                 dateOfDrilling, maxFeatures, bbox, onlyHylogger);
     }
 
-    private boolean containHost(String url, String[] filterUrls)
-            throws MalformedURLException {
-        String urlHost = new URL(url).getHost();
-        for (String filterUrl : filterUrls) {
-            String filterHost = new URL(filterUrl).getHost();
-            if (urlHost.equalsIgnoreCase(filterHost)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Handles the borehole filter queries.
@@ -186,7 +173,7 @@ public class SF0BoreholeController extends BasePortalController {
         String[] serviceFilterArray = serviceFilter.split(",");
 
         if (!serviceFilter.equals("")
-                && !(containHost(serviceUrl, serviceFilterArray))) {
+                && !(httpUtil.containHost(serviceUrl, serviceFilterArray))) {
             // return this.generateJSONResponseMAV(false,null,"Not Queried");
             log.warn("Not Queried");
         }
