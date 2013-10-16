@@ -79,6 +79,23 @@ Ext.application({
             }
         });
 
+        //Create our personal store
+        var personalLayerStore = Ext.create('Ext.data.Store', {
+            model : 'portal.csw.CSWRecord',
+            //groupField: 'group',
+//            proxy : {
+//                type : 'ajax',
+//                url : 'getKnownLayers.do',
+//                reader : {
+//                    type : 'json',
+//                    root : 'data'
+//                }
+//            },
+            autoLoad : false,
+            data : []
+        });
+
+
         //Create our KnownLayer store
         var knownLayerStore = Ext.create('Ext.data.Store', {
             model : 'portal.knownlayer.KnownLayer',
@@ -220,7 +237,7 @@ Ext.application({
 
         var personalRecordsPanel = Ext.create('portal.widgets.panel.PersonalRecordPanel', {
             title : 'Personal',
-            store : knownLayerStore,
+            store : personalLayerStore,
             tooltip : {
                 title : 'Personal Data Layers',
                 text : 'This tab allows you to personalize your tab to view the content you want',
