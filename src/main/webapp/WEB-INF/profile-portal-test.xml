@@ -56,6 +56,7 @@
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSurfaceAftershock" />
                 <ref bean="knownTypeSeismologyInSchool" />
+                <ref bean="knownTypeSF0BoreholeNVCL" />
             </list>
         </constructor-arg>
     </bean>
@@ -63,7 +64,7 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-                <ref bean="cswMDUTest" /> 
+                <ref bean="cswMDUTest" />
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswAsterProduction" />
                 <ref bean="cswInSarProduction" />
