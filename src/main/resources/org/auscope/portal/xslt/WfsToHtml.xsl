@@ -162,55 +162,58 @@
                 <!-- Amount of Ore Processed -->
                 <tr>
                     <td class="row header">Amount of Ore Processed</td>
-                    <td class="row"><xsl:value-of select="./er:oreProcessed"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                    <td class="row"><xsl:value-of select="./er:oreProcessed"/><xsl:value-of select="' '"/>
+                        <xsl:choose>
+                            <xsl:when test="contains(./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                <xsl:value-of select="substring-after(./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="./er:oreProcessed/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </td>
                     <td class="row" colspan="3">&#160;</td>
                 </tr>
                 <!-- Commodity -->
-                <xsl:for-each select="./er:producedMaterial/er:Product/er:sourceCommodity">
+               <xsl:for-each select="./er:producedMaterial/er:Product/er:sourceCommodity">
 
-                    <xsl:variable name="commodityName">
-                        <xsl:choose>
-                            <xsl:when test="exists(./er:Commodity/er:commodityName)">
+                    <xsl:choose>
+                        <xsl:when test="exists(./er:Commodity/er:commodityName)">
+                            <xsl:variable name="commodityName">
                                 <xsl:value-of select="./er:Commodity/er:commodityName" />
-                            </xsl:when>
-                            <xsl:when test="starts-with(@xlink:href, '#')">
-                                <xsl:value-of select="$commodity/er:commodityName" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="''" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
+                            </xsl:variable>
 
-                    <xsl:variable name="commodityID">
-                        <xsl:choose>
-                            <xsl:when test="exists(./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616'])">
-                                <xsl:value-of select="./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
-                            </xsl:when>
-                            <xsl:when test="starts-with(@xlink:href, '#')">
-                                <xsl:value-of select="$commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="@xlink:href" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
+                            <xsl:variable name="commodityID">
+                                <xsl:choose>
+                                    <xsl:when test="exists(./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616'])">
+                                        <xsl:value-of select="./er:Commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+                                    </xsl:when>
+                                    <xsl:when test="starts-with(@xlink:href, '#')">
+                                        <xsl:value-of select="$commodity/gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="@xlink:href" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
 
-                    <tr>
-                        <td class="row header">Commodity</td>
-                        <td class="row"><xsl:value-of select="$commodityName"/></td>
-                        <td class="row header">Commodity Id:</td>
-                        <td class="row" colspan="2">
-                            <xsl:choose>
-                                <xsl:when test="starts-with($commodityID, 'http://')">
-                                    <a href="wfsFeaturePopup.do?url={$commodityID}" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="$commodityID"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </td>
-                    </tr>
+                            <tr>
+                                <td class="row header">Commodity</td>
+                                <td class="row"><xsl:value-of select="$commodityName"/></td>
+                                <td class="row header">Commodity Id:</td>
+                                <td class="row" colspan="2">
+                                    <xsl:choose>
+                                        <xsl:when test="starts-with($commodityID, 'http://')">
+                                            <a href="wfsFeaturePopup.do?url={$commodityID}" onclick="var w=window.open('wfsFeaturePopup.do?url={$commodityID}','AboutWin','toolbar=no, menubar=no,location=no,resizable=yes,scrollbars=yes,statusbar=no,height=450,width=850');w.focus();return false;"><xsl:value-of select="$commodityID"/></a>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="$commodityID"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </td>
+                            </tr>
+                        </xsl:when>
+                    </xsl:choose>
 
                 </xsl:for-each>
 
@@ -228,18 +231,54 @@
                         <tr>
                             <td class="header">Product Name</td>
                             <td><xsl:value-of select="./er:Product/er:productName"/></td>
-                            <td><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                             <td><xsl:value-of select="./er:Product/er:recovery"/></td>
-                            <td><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                         </tr>
                         </xsl:when>
                         <xsl:otherwise>
                         <tr>
                             <td>&#160;</td>
                             <td class="row"><xsl:value-of select="./er:Product/er:productName"/></td>
-                            <td class="row"><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td class="row"><xsl:value-of select="./er:Product/er:production"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:production/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                             <td class="row"><xsl:value-of select="./er:Product/er:recovery"/></td>
-                            <td class="row"><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                            <td class="row"><xsl:value-of select="./er:Product/er:grade"/><xsl:value-of select="' '"/>
+                            <xsl:choose>
+                                <xsl:when test="contains(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                    <xsl:value-of select="substring-after(./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./er:Product/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            </td>
                         </tr>
                         </xsl:otherwise>
                     </xsl:choose>
@@ -338,22 +377,21 @@
 
 
                 </tr>
-                <!-- Start Date -->
-                <tr>
-                    <td class="row header">Start Date</td>
-                    <td class="row"><xsl:value-of select="./er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:begin"/></td>
-                    <td class="row header">End Date:</td>
-                    <td class="row"><xsl:value-of select="./er:relatedActivity/er:MiningActivity/er:activityDuration/gml:TimePeriod/gml:end"/></td>
-                    <td class="row">&#160;</td>
-                </tr>
+
                 <xsl:for-each select="./er:relatedActivity/er:MiningActivity">
                     <!-- Related Mining Activity -->
                     <xsl:variable name="rel-mine-id" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
                     <xsl:choose>
                         <xsl:when test="position()=1">
+                         <tr>
+                            <td class="row header">&#160;</td>
+                            <td class="row col_header">Start Date - End Date</td>
+                            <td class="row header">&#160;</td>
+                            <td class="row" colspan="2">&#160;</td>
+                        </tr>
                         <tr>
                             <td class="row header">Related Mining Activity</td>
-                            <td class="row">&#160;</td>
+                            <td class="row"><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin"/> - <xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end"/></td>
                             <td class="row header">Mining Activity Id:</td>
                             <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
                                     <xsl:with-param name="friendly-name" select="$rel-mine-id"/>
@@ -364,7 +402,7 @@
                         <xsl:otherwise>
                         <tr>
                             <td>&#160;</td>
-                            <td>&#160;</td>
+                            <td><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin"/> - <xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end"/></td>
                             <td class="row header">Mining Activity Id:</td>
                             <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
                                     <xsl:with-param name="friendly-name" select="$rel-mine-id"/>
@@ -746,7 +784,16 @@
             <xsl:for-each select="./gsml:preferredAge/gsml:GeologicEvent">
                 <tr>
                     <td></td>
-                    <td><xsl:value-of select="./gsml:eventAge/gsml:CGI_NumericValue/gsml:principalValue"/></td>
+                    <td>
+                    <xsl:choose>
+                        <xsl:when test="./gsml:eventAge/gsml:CGI_TermValue/gsml:value">
+                            <xsl:value-of select="./gsml:eventAge/gsml:CGI_TermValue/gsml:value"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="./gsml:eventAge/gsml:CGI_NumericValue/gsml:principalValue"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    </td>
                     <td><xsl:value-of select="./gsml:eventProcess/gsml:CGI_TermValue/gsml:value"/></td>
                     <td><xsl:value-of select="./gsml:eventEnvironment/gsml:CGI_TermValue/gsml:value"/></td>
                     <td></td>
@@ -790,17 +837,46 @@
                     <td class="row col_header">Grade</td>
                     <td class="row col_header">Importance</td>
                 </tr>
+                <xsl:variable name="cut_off_grade_uom">
+                    <xsl:choose>
+                        <xsl:when test="contains(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                            <xsl:value-of select="substring-after(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:variable name="grade_uom">
+                    <xsl:choose>
+                        <xsl:when test="contains(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                            <xsl:value-of select="substring-after(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <tr>
                     <td></td>
-                    <td><xsl:value-of select="./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                    <td><xsl:value-of select="./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
+                        <xsl:choose>
+                            <xsl:when test="contains(./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                <xsl:value-of select="substring-after(./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
                         <xsl:call-template name="convert-escaped-percentage">
-                            <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            <xsl:with-param name="value" select="$cut_off_grade_uom"/>
                         </xsl:call-template>
                     </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
                         <xsl:call-template name="convert-escaped-percentage">
-                            <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            <xsl:with-param name="value" select="$grade_uom"/>
                         </xsl:call-template>
                     </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:commodityOfInterest/er:commodityImportance"/></td>
@@ -837,6 +913,26 @@
                             </xsl:call-template>
                         </td>
                     </tr>
+                <xsl:variable name="cut_off_grade_uom">
+                    <xsl:choose>
+                        <xsl:when test="contains(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                            <xsl:value-of select="substring-after(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:variable name="grade_uom">
+                    <xsl:choose>
+                        <xsl:when test="contains(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                            <xsl:value-of select="substring-after(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <tr>
                     <td></td>
                     <td class="row col_header">Commodity Amount</td>
@@ -846,15 +942,24 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><xsl:value-of select="./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/><xsl:value-of select="substring-after(./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/></td>
+                    <td><xsl:value-of select="./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
+                        <xsl:choose>
+                            <xsl:when test="contains(./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')">
+                                <xsl:value-of select="substring-after(./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="./er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
                         <xsl:call-template name="convert-escaped-percentage">
-                            <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:cutOffGrade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            <xsl:with-param name="value" select="$cut_off_grade_uom"/>
                         </xsl:call-template>
                     </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue"/><xsl:value-of select="' '"/>
                         <xsl:call-template name="convert-escaped-percentage">
-                            <xsl:with-param name="value" select="substring-after(./er:CommodityMeasure/er:grade/gsml:CGI_NumericValue/gsml:principalValue/@uom,'::')"/>
+                            <xsl:with-param name="value" select="$grade_uom"/>
                         </xsl:call-template>
                     </td>
                     <td><xsl:value-of select="./er:CommodityMeasure/er:commodityOfInterest/er:commodityImportance"/></td>

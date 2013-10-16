@@ -232,23 +232,29 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
      * On single click, show a highlight of all BBoxes
      */
     _spatialBoundsClickHandler : function() {
-    	var bbox = this._getBBoxFilterBounds();
-    	if (bbox) {
-            if (bbox.southBoundLatitude !== bbox.northBoundLatitude ||
-                bbox.eastBoundLongitude !== bbox.westBoundLongitude) {
+        // In IE & Chrome, this handler will get called even though the button 
+        // is disabled. Hence, we need to do an explicit checking to see if 
+        // the preview button is enabled before we continue.
+        var previewBtn = Ext.getCmp('bboxPreviewButton');
+        if (previewBtn && !previewBtn.disabled) {
+            var bbox = this._getBBoxFilterBounds();
+            if (bbox) {
+                if (bbox.southBoundLatitude !== bbox.northBoundLatitude ||
+                    bbox.eastBoundLongitude !== bbox.westBoundLongitude) {
 
-                //VT: Google map uses EPSG:3857 and its maximum latitude is only 85 degrees
-                // anything more will stretch the transformation
-                if(bbox.northBoundLatitude>85){
-                    bbox.northBoundLatitude=85;
+                    //VT: Google map uses EPSG:3857 and its maximum latitude is only 85 degrees
+                    // anything more will stretch the transformation
+                    if(bbox.northBoundLatitude>85){
+                        bbox.northBoundLatitude=85;
+                    }
+                    if(bbox.southBoundLatitude<-85){
+                        bbox.southBoundLatitude=-85;
+                    }
                 }
-                if(bbox.southBoundLatitude<-85){
-                    bbox.southBoundLatitude=-85;
-                }
+
+                this.map.highlightBounds(bbox);
             }
-
-            this.map.highlightBounds(bbox);
-    	}
+        }
     },
     
     /**
@@ -260,7 +266,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
     	var lat_min = Number(this.form._fields.get("lat_min").lastValue);
     	var long_max = Number(this.form._fields.get("long_max").lastValue);
     	var long_min = Number(this.form._fields.get("long_min").lastValue);
-   			
+    		
         // validate against non numerical values
         if (isNaN(lat_max) || isNaN(lat_min) || isNaN(long_max) || isNaN(long_min)) {
            alert("You have entered invalid bounding box filter values! Please re-enter and try again.");
@@ -278,9 +284,15 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
      * On double click, move the map so that specified bounds are visible
      */
     _spatialBoundsDoubleClickHandler : function() {
-    	var spatialBounds = this._getBBoxFilterBounds();
-    	if (spatialBounds) {
-    	    this.map.scrollToBounds(spatialBounds);
-    	}
+        // In IE & Chrome, this handler will get called even though the button 
+        // is disabled. Hence, we need to do an explicit checking to see if 
+        // the preview button is enabled before we continue.        
+        var previewBtn = Ext.getCmp('bboxPreviewButton');
+        if (previewBtn && !previewBtn.disabled) {
+            var spatialBounds = this._getBBoxFilterBounds();
+            if (spatialBounds) {
+                this.map.scrollToBounds(spatialBounds);
+            }            
+        }
     }
 });
