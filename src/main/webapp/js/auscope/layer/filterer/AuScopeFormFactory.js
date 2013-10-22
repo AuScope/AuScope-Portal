@@ -57,9 +57,12 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             case 'portal-reports':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.ReportFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
+            case 'sf0-borehole-nvcl' :
+                baseFilterForm = Ext.create('auscope.layer.filterer.forms.SF0BoreholeFilterForm', baseFilterFormCfg);
+                return this._generateResult(baseFilterForm, true);
             }
         }
-        
+
         //otherwise let's see if we can guess an appropriate filter based on layer renderer
         if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer) {
             baseFilterForm = Ext.create('portal.layer.filterer.forms.WMSLayerFilterForm', baseFilterFormCfg);
@@ -76,7 +79,7 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             baseFilterForm = Ext.create('auscope.layer.filterer.forms.CSWServiceFilterForm', baseFilterFormCfg);
             return this._generateResult(baseFilterForm, true);
         }
-        
+
 
         //And otherwise we just show the empty filter form
         return this._generateResult(Ext.create('portal.layer.filterer.forms.EmptyFilterForm', baseFilterFormCfg), false);
