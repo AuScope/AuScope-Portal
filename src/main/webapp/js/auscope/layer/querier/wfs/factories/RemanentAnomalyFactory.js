@@ -25,7 +25,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
         
         //ASSUMPTION - image service at same host as geoserver
         var baseUrl = this._getBaseUrl(wfsUrl);
-        var imgUrl = baseUrl + '/getJpeg.aspx?anomalyId=' + escape(actualId);
+        var imgUrl = baseUrl + '/getJpeg.ashx?anomalyId=' + escape(actualId);
                     
         var models = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'RemAnom:modelCollection');
         var disableModelsDownload = (models.length > 0) ? false : true;
