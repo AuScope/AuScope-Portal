@@ -197,7 +197,7 @@ Ext.define('auscope.layer.querier.wfs.factories.SF0BoreholeFactory', {
             }],
             buttonAlign : 'right',
             buttons : [{
-                text : 'Download Portrayal Borehole View',
+                text : 'Download XML',
                 iconCls : 'download',
                 handler : function() {
                     var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, 'gsmlp:BoreholeView', gmlId);
