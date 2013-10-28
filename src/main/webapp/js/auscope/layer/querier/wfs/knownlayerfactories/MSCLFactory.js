@@ -41,9 +41,9 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     observationsToReturn[i] == 'p_wave_amplitude' ? 'P-Wave amp (mV)' :
                     observationsToReturn[i] == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
                     observationsToReturn[i] == 'density' ? 'Density (g/cm³)' :
-                    // AGOS-42: I.E. Wouldn't render the ⁻⁵ properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render the  properly so I've used the other notation.
                     observationsToReturn[i] == 'magnetic_susceptibility' ? 'Mag. sus. (×10^-5 SI)' :
-                    // AGOS-42: I.E. Wouldn't render the ⁻² or ⁻¹ properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render  properly so I've used the other notation.
                     observationsToReturn[i] == 'impedance' ? 'Impedance (×10³ kgm^-2 s^-1)' :
                     observationsToReturn[i] == 'natural_gamma' ? 'Natural gamma (cps)' :
                     observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ω·m)' :
@@ -220,6 +220,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                     }, {
                         xtype : 'checkboxgroup',
                         fieldLabel : 'Observation',
+                        allowBlank : false,
+                        blankText : 'Select at least 1 checkbox',
                         // Arrange radio buttons into two columns, distributed vertically
                         columns : 2,
                         vertical : true,
@@ -227,6 +229,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                             boxLabel : 'Diameter',
                             name : 'observationToReturn',
                             inputValue : 'diameter',
+                            checked: true
                         }, {
                             boxLabel : 'P-Wave amplitude',
                             name : 'observationToReturn',
