@@ -86,7 +86,7 @@ Ext.define('auscope.layer.filterer.forms.ReportFilterForm', {
                     anchor: '100%',
                     queryMode: 'local',
                     name: 'keyword',
-                    fieldLabel: 'keyword',
+                    fieldLabel: 'Keyword',
                     labelAlign: 'left',
                     forceSelection: true,
                     store: keywordStore,
