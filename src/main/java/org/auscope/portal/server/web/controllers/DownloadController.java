@@ -1,19 +1,16 @@
 package org.auscope.portal.server.web.controllers;
 
 
-import java.io.File;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,6 +56,9 @@ public class DownloadController extends BasePortalController {
         DownloadTracker downloadTracker=DownloadTracker.getTracker(email);
         Progression progress= downloadTracker.getProgress();
         if(progress==Progression.COMPLETED){
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition",
+                    "inline; filename=GMLDownload.zip;");
             FileIOUtil.writeInputToOutputStream( downloadTracker.getFile(), response.getOutputStream(), 1024, true);
         }
 
