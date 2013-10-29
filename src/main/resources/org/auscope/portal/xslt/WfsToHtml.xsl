@@ -401,7 +401,7 @@
                         </xsl:when>
                         <xsl:otherwise>
                         <tr>
-                            <td class="row header">Related Mining Activity</td>
+                            <td class="header">&#160;</td>
                             <td class="row"><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin"/> - <xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end"/></td>
                             <td class="row header">Mining Activity Id:</td>
                             <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
