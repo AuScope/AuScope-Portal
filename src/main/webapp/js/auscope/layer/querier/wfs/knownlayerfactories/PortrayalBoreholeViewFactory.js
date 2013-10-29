@@ -494,12 +494,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PortrayalBoreholeViewF
                         columns: [100,100],
                         vertical: true,
                         items: [
-                            {boxLabel: 'linescan', name: 'lineScan', inputValue: 'true', checked: true},
-                            {boxLabel: 'spectra', name: 'spectra', inputValue: 'true', checked: true},
-                            {boxLabel: 'profilometer', name: 'profilometer', inputValue: 'true', checked: true},
-                            {boxLabel: 'traypics', name: 'trayPics', inputValue: 'true', checked: true},
-                            {boxLabel: 'mospic', name: 'mosaicPics', inputValue: 'true', checked: true},
-                            {boxLabel: 'mappics', name: 'mapPics', inputValue: 'true', checked: true}
+                            {boxLabel: 'linescan', name: 'lineScan', inputValue: 'true', uncheckedValue: 'false', checked: true}
                         ]
                     },{
                         xtype : 'toolbar',
