@@ -281,7 +281,7 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
         //set all of the parameters
         builder.setParameter("email", email);
         builder.setParameter("boreholeid", boreholeId);
-        builder.setParameter("serviceurl", omUrl);
+        builder.setParameter("serviceurl", omUrl +"wfs");
         builder.setParameter("typename", typeName);
 
         //attach them to the method

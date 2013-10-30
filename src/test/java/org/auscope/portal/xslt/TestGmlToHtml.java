@@ -1,5 +1,9 @@
 package org.auscope.portal.xslt;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
 import org.junit.Assert;
@@ -27,4 +31,14 @@ public class TestGmlToHtml extends PortalTestClass {
         Assert.assertNotNull(response);
         Assert.assertFalse(response.isEmpty());
     }
+
+//VT: this code is useful for debugging the XSLT engine that portal uses as results varied when I use xmlspy
+//    @Test
+//    public void test() throws Exception {
+//
+//        final InputStream wfs = new FileInputStream(new File("C:\\VPrograms\\test.xml"));
+//
+//        final String response = gmlToHtml.convert(wfs, "http://auscope-services-test.arrc.csiro.au/gsnsw-earthresource/wfs");
+//        System.out.println(response);
+//    }
 }

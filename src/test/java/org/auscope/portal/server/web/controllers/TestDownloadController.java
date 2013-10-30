@@ -9,7 +9,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.message.BasicHeader;
@@ -256,6 +259,10 @@ public class TestDownloadController extends PortalTestClass {
         //final Header header = new BasicHeader("Content-Type", "text/xml");
         final MyServletOutputStream servletOutputStream = new MyServletOutputStream(dummyData.length());
 
+        final HttpResponse httpResponse=context.mock(HttpResponse.class);
+        final HttpEntity httpEntity=context.mock(HttpEntity.class);
+        final InputStream is = new ByteArrayInputStream(dummyData.getBytes());
+
         context.checking(new Expectations() {
             {
                 // setting of the headers for the return content
@@ -266,9 +273,18 @@ public class TestDownloadController extends PortalTestClass {
                 will(returnValue(servletOutputStream));
 
                 // calling the service
-                oneOf(httpServiceCaller).getMethodResponseAsBytes(
+                oneOf(httpServiceCaller).getMethodResponseAsHttpResponse(
                         with(any(HttpRequestBase.class)));
-                will(returnValue(dummyData.getBytes()));
+                will(returnValue(httpResponse));
+
+                oneOf(httpResponse).getFirstHeader("Content-Type");
+                will(returnValue(null));
+
+                oneOf(httpResponse).getEntity();
+                will(returnValue(httpEntity));
+
+                oneOf(httpEntity).getContent();
+                will(returnValue(is));
             }
         });
 
@@ -307,6 +323,10 @@ public class TestDownloadController extends PortalTestClass {
         //final Header header = new BasicHeader("Content-Type", "image/png");
         final MyServletOutputStream servletOutputStream = new MyServletOutputStream(dummyData.length());
 
+        final HttpResponse httpResponse=context.mock(HttpResponse.class);
+        final HttpEntity httpEntity=context.mock(HttpEntity.class);
+        final InputStream is = new ByteArrayInputStream(dummyData.getBytes());
+
         context.checking(new Expectations() {
             {
                 // setting of the headers for the return content
@@ -317,9 +337,18 @@ public class TestDownloadController extends PortalTestClass {
                 will(returnValue(servletOutputStream));
 
                 // calling the service
-                oneOf(httpServiceCaller).getMethodResponseAsBytes(
+                oneOf(httpServiceCaller).getMethodResponseAsHttpResponse(
                         with(any(HttpRequestBase.class)));
-                will(returnValue(dummyData.getBytes()));
+                will(returnValue(httpResponse));
+
+                oneOf(httpResponse).getFirstHeader("Content-Type");
+                will(returnValue(null));
+
+                oneOf(httpResponse).getEntity();
+                will(returnValue(httpEntity));
+
+                oneOf(httpEntity).getContent();
+                will(returnValue(is));
 
             }
         });

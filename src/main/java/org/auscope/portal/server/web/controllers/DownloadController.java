@@ -1,21 +1,21 @@
 package org.auscope.portal.server.web.controllers;
 
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
@@ -29,6 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.google.common.io.Files;
 
 /**
  * User: Mathew Wyatt
@@ -54,6 +56,9 @@ public class DownloadController extends BasePortalController {
         DownloadTracker downloadTracker=DownloadTracker.getTracker(email);
         Progression progress= downloadTracker.getProgress();
         if(progress==Progression.COMPLETED){
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition",
+                    "inline; filename=GMLDownload.zip;");
             FileIOUtil.writeInputToOutputStream( downloadTracker.getFile(), response.getOutputStream(), 1024, true);
         }
 
@@ -167,10 +172,14 @@ public class DownloadController extends BasePortalController {
                                   HttpServletResponse response) throws Exception {
 
         String filenameStr = filename == null || filename.length() < 0 ? "DataDownload" : filename;
+        String ext = Files.getFileExtension(filename);
+        if(ext.length() < 1){
+            ext="zip";
+        }
 
         //set the content type for zip files
         response.setContentType("application/zip");
-        response.setHeader("Content-Disposition","inline; filename=" + filenameStr + ".zip;");
+        response.setHeader("Content-Disposition","inline; filename=" + Files.getNameWithoutExtension(filenameStr) + "." + ext + ";");
 
         //create the output stream
         ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
@@ -178,8 +187,11 @@ public class DownloadController extends BasePortalController {
         for (int i = 0; i<serviceUrls.length; i++) {
 
             HttpGet method = new HttpGet(serviceUrls[i]);
-            byte[] responseBytes = serviceCaller.getMethodResponseAsBytes(method);
-            Header contentType = method.getFirstHeader("Content-Type");
+            HttpResponse httpResponse = serviceCaller.getMethodResponseAsHttpResponse(method);
+
+            Header contentType = httpResponse.getFirstHeader("Content-Type");
+
+            byte [] responseBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
 
             //create a new entry in the zip file with a timestamped name
             String mime = null;

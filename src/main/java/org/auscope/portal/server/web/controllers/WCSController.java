@@ -236,38 +236,54 @@ public class WCSController extends BasePortalController {
         InputStream dataStream = null;
         PortalServiceException stashedException = null;
         ServletOutputStream servletOutputStream = response.getOutputStream();
-        
+
         try {
-            dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams); 
+            dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams);
         } catch (PortalServiceException ex) {
             Throwable cause = ex.getCause();
             String causeMessage = cause == null ? "" : cause.getMessage();
-            
-            if (causeMessage.contains("<ServiceException>Unknown problem</ServiceException>")){
+
+            if (causeMessage==null || causeMessage.contains("<ServiceException>Unknown problem</ServiceException>")){
+
+                if(causeMessage==null){
+                    causeMessage=ex.getMessage();
+                }
+
                 // Outcome 2:
-                
+
                 // If we have an FTP URL we can add a link to it in the error message:
-                String ftpMessage = ftpURL != null && ftpURL.compareTo("") != 0 ? 
+                String ftpMessage = ftpURL != null && ftpURL.compareTo("") != 0 ?
                         String.format("<br/>Alternatively, you can download the data directly from <a href=\"%s\">here</a>.", ftpURL) : "";
-                        
-                // We'll just show the user a page informing them that there's a problem:
-                String messageString = String.format(
-                        "<html>Error:<br/>Your request has failed. This is likely due to the requested data exceeding the server&apos;s size limit.<br/>Please adjust your query and try again.%s</html>",
+
+                String messageString=String.format(
+                        "<html>Error message: "+ causeMessage +"<br/>Your request has failed by unexpected reasons.%s</html>",
                         ftpMessage);
+
+                if(causeMessage.contains("400 Bad Request")){
+                    messageString = String.format(
+                            "<html>Error message: "+ causeMessage +"<br/>Your request has failed due to unsupported bad request.%s</html>",
+                            ftpMessage);
+                }else{
+
+                    // We'll just show the user a page informing them that there's a problem:
+                    messageString = String.format(
+                        "<html>Error message: "+ causeMessage +"<br/>Your request has failed. This is likely due to the requested data exceeding the server&apos;s size limit.<br/>Please adjust your query and try again.%s</html>",
+                            ftpMessage);
+                }
                 servletOutputStream.write(messageString.getBytes());
                 servletOutputStream.close();
                 return;
             }
-            
+
             // Stash this exception for now, we'll add it to the zip output later.
-            stashedException = ex;           
+            stashedException = ex;
         }
-        
+
         // At this point we know we're going to be sending back a zip file:
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition","inline; filename=WCSDownload.zip;");
         ZipOutputStream zout = new ZipOutputStream(servletOutputStream);
-        
+
         if (dataStream != null) {
             // Outcome 1:
             zout.putNextEntry(new ZipEntry(outFileName));
@@ -278,7 +294,7 @@ public class WCSController extends BasePortalController {
             // Outcome 3:
             FileIOUtil.writeErrorToZip(zout, "", stashedException, "error.txt");
         }
-        
+
         FileIOUtil.closeQuietly(zout);
     }
 
