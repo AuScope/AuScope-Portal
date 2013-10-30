@@ -21,6 +21,7 @@ Ext.define('auscope.layer.querier.wfs.AuScopeParser', {
                 'auscope.layer.querier.wfs.factories.LocatedSpecimenFactory',
                 'auscope.layer.querier.wfs.factories.SamplingFeatureCollectionFactory',
                 'auscope.layer.querier.wfs.factories.BoreholeFactory',
+                'auscope.layer.querier.wfs.factories.SF0BoreholeFactory',
                 'auscope.layer.querier.wfs.factories.MappedFeatureFactory',
                 'auscope.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory',
                 'auscope.layer.querier.wfs.factories.RemanentAnomalyFactory',

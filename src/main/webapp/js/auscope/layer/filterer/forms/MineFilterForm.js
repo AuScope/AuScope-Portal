@@ -22,7 +22,7 @@ Ext.define('auscope.layer.filterer.forms.MineFilterForm', {
             autoHeight: true,
             items: [{
                 xtype:'fieldset',
-                title: '<span data-qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
+                title: '<span data-qtip="Please enter the filter constraints then hit \'Show Results\'">' +
                            'Mine Filter Properties' +
                        '</span>',
                 autoHeight: true,

@@ -77,7 +77,7 @@ Ext.define('auscope.layer.filterer.forms.ReportFilterForm', {
                 items: [{
                     anchor: '100%',
                     xtype: 'textfield',
-                    fieldLabel: 'Title',
+                    fieldLabel: '<span data-qtip="Do not use wildcard characters in the search"> Title</span>',
                     name: 'title'
                 },{
                     xtype: 'combo',
@@ -86,7 +86,7 @@ Ext.define('auscope.layer.filterer.forms.ReportFilterForm', {
                     anchor: '100%',
                     queryMode: 'local',
                     name: 'keyword',
-                    fieldLabel: 'keyword',
+                    fieldLabel: '<span data-qtip="Search based on keywords"> Keyword</span>',
                     labelAlign: 'left',
                     forceSelection: true,
                     store: keywordStore,
@@ -101,7 +101,7 @@ Ext.define('auscope.layer.filterer.forms.ReportFilterForm', {
                     anchor: '100%',
                     queryMode: 'local',
                     name: 'resourceProvider',
-                    fieldLabel: 'Resource Provider',
+                    fieldLabel: '<span data-qtip="Search based on Provider"> Resource Provider</span>',
                     labelAlign: 'left',
                     forceSelection: true,
                     store: resourceProviderStore,

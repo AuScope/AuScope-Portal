@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.mineraloccurrence.BoreholeFilter;
+import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.server.domain.ogc.AbstractFilterTestUtilities;
 import org.junit.Assert;
 import org.junit.Test;

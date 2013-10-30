@@ -1,9 +1,9 @@
 /**
- * Builds a form panel for generic gsml:Borehole filters
+ * Builds a form panel for generic gsmlp:BoreholeView filters
  * @param {number} id of this formpanel instance
  * @param {string} the service url for submit
  */
-Ext.define('auscope.layer.filterer.forms.BoreholeFilterForm', {
+Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
     extend: 'portal.layer.filterer.BaseFilterForm',
 
     /**
@@ -18,7 +18,7 @@ Ext.define('auscope.layer.filterer.forms.BoreholeFilterForm', {
         for (var i = 0; i < cswRecords.length; i++) {
             var adminArea = cswRecords[i].get('adminArea');
             var allOnlineResources = cswRecords[i].get('onlineResources');
-            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'gsml:Borehole');
+            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'gsmlp:BoreholeView');
 
             for (var j = 0; j < bhOnlineResources.length; j++) {
                 if (adminAreasMap[adminArea]) {
@@ -57,7 +57,7 @@ Ext.define('auscope.layer.filterer.forms.BoreholeFilterForm', {
             items: [{
                 xtype:'fieldset',
                 itemId: 'borehole-fieldset',
-                title: 'Borehole Filter Properties',
+                title: 'Borehole View Filter Properties',
                 autoHeight : true,
                 items: [{
                     xtype: 'textfield',
@@ -65,8 +65,8 @@ Ext.define('auscope.layer.filterer.forms.BoreholeFilterForm', {
                     itemId: 'name-field',
                     fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' + 'Name',
                     name: 'boreholeName'
-                },{                   	
-                    xtype: 'datefield',
+                },{
+                	xtype: 'datefield',
                     anchor: '95%',
                     itemId: 'drillingdate-field',
                     fieldLabel: 'Drill Date',
@@ -87,6 +87,11 @@ Ext.define('auscope.layer.filterer.forms.BoreholeFilterForm', {
                     valueField: 'serviceFilter',
                     displayField: 'displayText',
                     hiddenName: 'serviceFilter'
+                },{
+                    xtype: 'hidden',
+                    itemId: 'hylogger-field',
+                    name: 'onlyHylogger',
+                    value: true
                 }]
             }]
         });

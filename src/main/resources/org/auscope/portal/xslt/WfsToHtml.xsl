@@ -401,8 +401,8 @@
                         </xsl:when>
                         <xsl:otherwise>
                         <tr>
-                            <td>&#160;</td>
-                            <td><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin"/> - <xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end"/></td>
+                            <td class="header">&#160;</td>
+                            <td class="row"><xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:begin"/> - <xsl:value-of select="./er:activityDuration/gml:TimePeriod/gml:end"/></td>
                             <td class="row header">Mining Activity Id:</td>
                             <td class="row" colspan="2"><xsl:call-template name="make-wfspopup-url">
                                     <xsl:with-param name="friendly-name" select="$rel-mine-id"/>
@@ -412,7 +412,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                     <!-- Related Mine -->
-                    <xsl:for-each select="./er:associatedMine">
+                    <!--<xsl:for-each select="./er:associatedMine">
                         <xsl:variable name="rel-mine-id" select="@xlink:href"/>
                         <xsl:choose>
                             <xsl:when test="position()=1">
@@ -438,7 +438,7 @@
                             </tr>
                             </xsl:otherwise>
                         </xsl:choose>
-                    </xsl:for-each>
+                    </xsl:for-each>-->
                 </xsl:for-each>
             </tbody>
         </table>

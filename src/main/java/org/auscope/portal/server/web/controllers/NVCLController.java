@@ -16,6 +16,7 @@ import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.core.util.HttpUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AbstractStreamResponse;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
@@ -47,6 +48,7 @@ public class NVCLController extends BasePortalController {
     private BoreholeService boreholeService;
     private NVCLDataService dataService;
     private CSWCacheService cswService;
+    private HttpUtil httpUtil;
 
     private int BUFFERSIZE = 1024 * 1024;
 
@@ -82,7 +84,7 @@ public class NVCLController extends BasePortalController {
 
         String [] serviceFilterArray=serviceFilter.split(",");
 
-        if (!serviceFilter.equals("") && !(containHost(serviceUrl,serviceFilterArray))) {
+        if (!serviceFilter.equals("") && !(httpUtil.containHost(serviceUrl,serviceFilterArray))) {
             return this.generateJSONResponseMAV(false,null,"Not Queried");
         }
 
@@ -99,16 +101,7 @@ public class NVCLController extends BasePortalController {
         return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, maxFeatures,bbox, onlyHylogger);
     }
 
-    private boolean containHost(String url,String[]filterUrls) throws MalformedURLException{
-       String urlHost=new URL(url).getHost();
-       for (String filterUrl:filterUrls) {
-           String filterHost=new URL(filterUrl).getHost();
-           if (urlHost.equalsIgnoreCase(filterHost)) {
-               return true;
-           }
-       }
-       return false;
-    }
+
 
     /**
      * Handles the borehole filter queries.
