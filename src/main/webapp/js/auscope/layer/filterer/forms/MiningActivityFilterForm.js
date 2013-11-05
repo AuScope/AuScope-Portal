@@ -8,6 +8,40 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
      * Accepts a config for portal.layer.filterer.BaseFilterForm
      */
     constructor : function(config) {
+
+        var cswRecords = config.layer.get('cswRecords');
+
+
+        //Set up a map of admin areas + URL's that belong to each
+        var adminAreasMap = {};
+        for (var i = 0; i < cswRecords.length; i++) {
+            var adminArea = cswRecords[i].get('adminArea');
+            var allOnlineResources = cswRecords[i].get('onlineResources');
+            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'er:MiningFeatureOccurrence');
+
+            for (var j = 0; j < bhOnlineResources.length; j++) {
+                if (adminAreasMap[adminArea]) {
+                    adminAreasMap[adminArea].push(bhOnlineResources[j].get('url'));
+                } else {
+                    adminAreasMap[adminArea] = [bhOnlineResources[j].get('url')];
+                }
+            }
+        }
+
+        //Set up a list of each unique admin area
+        var adminAreasList = [];
+        for(key in adminAreasMap){
+            adminAreasList.push({
+                displayText : key,
+                serviceFilter : adminAreasMap[key]
+            });
+        }
+
+        var adminAreasStore = Ext.create('Ext.data.Store', {
+            fields: ['displayText', 'serviceFilter'],
+            data : adminAreasList
+        });
+
         var commodityStore = Ext.create('Ext.data.Store', {
             fields : ['urn', 'label'],
             proxy : {
@@ -48,7 +82,6 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
                     name: 'producedMaterial', /* this just returns the values from displayField! */
                     hiddenName: 'producedMaterial',    /* this returns the values from valueField! */
                     fieldLabel: 'Produced Material',
-                    labelAlign: 'right',
                     forceSelection: true,
                     queryMode: 'local',
                     store: commodityStore,
@@ -89,6 +122,20 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
                     name: 'cutOffGrade',
                     hidden: true,
                     hideLabel: true
+                },{
+                    xtype: 'combo',
+                    anchor: '100%',
+                    itemId: 'serviceFilter-field',
+                    fieldLabel: 'Provider',
+                    name: 'serviceFilter',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    lazyRender:true,
+                    mode: 'local',
+                    store: adminAreasStore,
+                    valueField: 'serviceFilter',
+                    displayField: 'displayText',
+                    hiddenName: 'serviceFilter'
                 }]
             }]
         });
