@@ -73,7 +73,7 @@ public class SF0BoreholeController extends BasePortalController {
         String[] serviceFilterArray = serviceFilter.split(",");
 
         if (!serviceFilter.equals("")
-                && !(httpUtil.containHost(serviceUrl, serviceFilterArray))) {
+                && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
             return this.generateJSONResponseMAV(false, null, "Not Queried");
         }
 
