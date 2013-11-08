@@ -31,7 +31,7 @@ public class SF0BoreholeController extends BasePortalController {
 
     private SF0BoreholeService sf0BoreholeService;
     private CSWCacheService cswService;
-    private HttpUtil httpUtil;
+
 
     @Autowired
     public SF0BoreholeController(SF0BoreholeService sf0BoreholeService,
@@ -175,7 +175,7 @@ public class SF0BoreholeController extends BasePortalController {
         String[] serviceFilterArray = serviceFilter.split(",");
 
         if (!serviceFilter.equals("")
-                && !(httpUtil.containHost(serviceUrl, serviceFilterArray))) {
+                && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
             // return this.generateJSONResponseMAV(false,null,"Not Queried");
             log.warn("Not Queried");
         }
