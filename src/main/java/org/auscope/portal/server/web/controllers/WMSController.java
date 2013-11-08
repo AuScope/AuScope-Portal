@@ -227,6 +227,17 @@ public class WMSController extends BaseCSWController {
       double lat2 = Double.parseDouble(bboxParts[3]);
       String sldDecoded=URLDecoder.decode(sld,"UTF-8");
       String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857", Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2), Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude), Double.parseDouble(latitude), (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldDecoded);
+      //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
+      //VT : GA style sheet also mess up the portal styling of tables as well.
+      if(responseString.contains("table, th, td {")){
+          responseString = responseString.replaceFirst("font-size: 80%", "font-size: 90%");
+          responseString = responseString.replaceFirst("table, th, td \\{", "table.ausga, table.ausga th, table.ausga td {");
+          responseString = responseString.replaceFirst("th, td \\{", "table.ausga th, table.ausga td {");
+          responseString = responseString.replaceFirst("th \\{", "table.ausga th {");
+          responseString = responseString.replaceFirst("<table", "<table class='ausga'");
+      }
+
+
       InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
       FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
    }
