@@ -8,6 +8,40 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
      * Accepts a config for portal.layer.filterer.BaseFilterForm
      */
     constructor : function(config) {
+
+        var cswRecords = config.layer.get('cswRecords');
+
+
+        //Set up a map of admin areas + URL's that belong to each
+        var adminAreasMap = {};
+        for (var i = 0; i < cswRecords.length; i++) {
+            var adminArea = cswRecords[i].get('adminArea');
+            var allOnlineResources = cswRecords[i].get('onlineResources');
+            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'gsml:MappedFeature');
+
+            for (var j = 0; j < bhOnlineResources.length; j++) {
+                if (adminAreasMap[adminArea]) {
+                    adminAreasMap[adminArea].push(bhOnlineResources[j].get('url'));
+                } else {
+                    adminAreasMap[adminArea] = [bhOnlineResources[j].get('url')];
+                }
+            }
+        }
+
+        //Set up a list of each unique admin area
+        var adminAreasList = [];
+        for(key in adminAreasMap){
+            adminAreasList.push({
+                displayText : key,
+                serviceFilter : adminAreasMap[key]
+            });
+        }
+
+        var adminAreasStore = Ext.create('Ext.data.Store', {
+            fields: ['displayText', 'serviceFilter'],
+            data : adminAreasList
+        });
+
         var commodityStore = Ext.create('Ext.data.Store', {
             fields : ['urn', 'label'],
             proxy : {
@@ -55,6 +89,21 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
                     typeAheadDelay: 500,
                     displayField:'label',   /* change tpl field to this value as well! */
                     valueField:'urn'
+                },{
+                    xtype: 'combo',
+                    anchor: '100%',
+                    itemId: 'serviceFilter-field',
+                    fieldLabel: 'Provider',
+                    name: 'serviceFilter',
+                    labelAlign: 'right',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    lazyRender:true,
+                    mode: 'local',
+                    store: adminAreasStore,
+                    valueField: 'serviceFilter',
+                    displayField: 'displayText',
+                    hiddenName: 'serviceFilter'
                 }]
             }]
         });

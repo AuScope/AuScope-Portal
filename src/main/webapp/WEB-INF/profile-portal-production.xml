@@ -53,6 +53,7 @@
                 <ref bean="knownTypeSilicaContent" />
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
+				<ref bean="knownTypeSF0BoreholeNVCL" />
             </list>
         </constructor-arg>
     </bean>
