@@ -1,6 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.auscope.portal.core.server.controllers.BaseCSWController;
@@ -81,6 +82,19 @@ public class CSWFilterController extends BaseCSWController {
         return generateJSONResponseMAV(true, convertedServiceItems, "");
     }
 
+//    @RequestParam(value = "cswServiceId", required = false) String cswServiceId,
+//    @RequestParam(value = "anyText", required = false) String anyText,
+//    @RequestParam(value = "westBoundLongitude", required = false) Double westBoundLongitude,
+//    @RequestParam(value = "eastBoundLongitude", required = false) Double eastBoundLongitude,
+//    @RequestParam(value = "northBoundLatitude", required = false) Double northBoundLatitude,
+//    @RequestParam(value = "southBoundLatitude", required = false) Double southBoundLatitude,
+//    @RequestParam(value = "keyword", required = false) String[] keywords,
+//    @RequestParam(value = "keywordMatchType", required = false) KeywordMatchType keywordMatchType,
+//    @RequestParam(value = "capturePlatform", required = false) String capturePlatform,
+//    @RequestParam(value = "sensor", required = false) String sensor,
+//    @RequestParam(value = "limit", required = false) Integer maxRecords,
+//    @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition)
+
     /**
      * Gets a list of CSWRecord view objects filtered by the specified values from all internal
      * CSW's
@@ -98,25 +112,57 @@ public class CSWFilterController extends BaseCSWController {
      */
     @RequestMapping("/getFilteredCSWRecords.do")
     public ModelAndView getFilteredCSWRecords(
-            @RequestParam(value = "cswServiceId", required = false) String cswServiceId,
-            @RequestParam(value = "anyText", required = false) String anyText,
-            @RequestParam(value = "westBoundLongitude", required = false) Double westBoundLongitude,
-            @RequestParam(value = "eastBoundLongitude", required = false) Double eastBoundLongitude,
-            @RequestParam(value = "northBoundLatitude", required = false) Double northBoundLatitude,
-            @RequestParam(value = "southBoundLatitude", required = false) Double southBoundLatitude,
-            @RequestParam(value = "keyword", required = false) String[] keywords,
-            @RequestParam(value = "keywordMatchType", required = false) KeywordMatchType keywordMatchType,
-            @RequestParam(value = "capturePlatform", required = false) String capturePlatform,
-            @RequestParam(value = "sensor", required = false) String sensor,
-            @RequestParam(value = "limit", required = false) Integer maxRecords,
-            @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition) {
+            @RequestParam(value="key", required=false) String[] keys,
+            @RequestParam(value="value", required=false) String[] values){
 
-        //CSW uses a 1 based index
-        if (startPosition ==  null) {
-            startPosition = 1;
-        } else {
-            startPosition = startPosition + 1;
+        HashMap<String,String> parameters=this.arrayPairtoMap(keys, values);
+
+
+        Integer startPosition = null;
+
+        String cswServiceId = parameters.get("cswServiceId");
+        String anyText = parameters.get("anyText");
+        Double westBoundLongitude = null;
+        Double eastBoundLongitude = null;
+        Double northBoundLatitude = null;
+        Double southBoundLatitude = null;
+
+        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
+             westBoundLongitude = Double.parseDouble(parameters.get("westBoundLongitude"));
         }
+        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
+            eastBoundLongitude = Double.parseDouble(parameters.get("eastBoundLongitude"));
+        }
+        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
+            northBoundLatitude = Double.parseDouble(parameters.get("northBoundLatitude"));
+        }
+        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
+            southBoundLatitude = Double.parseDouble(parameters.get("southBoundLatitude"));
+        }
+
+        String [] keywords = {parameters.get("keywords")};
+        KeywordMatchType keywordMatchType = null;
+        String capturePlatform = parameters.get("capturePlatform");
+        String sensor = parameters.get("sensor");
+
+        Integer maxRecords = null;
+        if(parameters.get("maxRecords")!= null && parameters.get("maxRecords").length()>0){
+            maxRecords=new Integer(parameters.get("maxRecords"));
+        }
+
+        if( parameters.get("keywordMatchType")!=null){
+            if(parameters.get("keywordMatchType").toLowerCase().equals("any")){
+                keywordMatchType = KeywordMatchType.Any;
+            }else{
+                keywordMatchType = KeywordMatchType.All;
+            }
+        }
+
+
+        if(parameters.get("startPosition")!=null){
+            startPosition = new Integer(parameters.get("startPosition")) + 1;
+        }
+
 
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
@@ -147,6 +193,17 @@ public class CSWFilterController extends BaseCSWController {
             log.warn(String.format("Error fetching filtered records for filter '%1$s'", filter), ex);
             return generateJSONResponseMAV(false, null, "Error fetching filtered records");
         }
+    }
+
+    private HashMap<String,String> arrayPairtoMap(String[]keys, String [] values){
+        HashMap<String,String> results=new HashMap<String,String>();
+        if(keys==null){
+            return results;
+        }
+        for(int i=0;i<keys.length;i++){
+            results.put(keys[i], values[i]);
+        }
+        return results;
     }
 
     /**

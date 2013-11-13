@@ -82,15 +82,6 @@ Ext.application({
         //Create our personal store
         var personalLayerStore = Ext.create('Ext.data.Store', {
             model : 'portal.csw.CSWRecord',
-            //groupField: 'group',
-//            proxy : {
-//                type : 'ajax',
-//                url : 'getKnownLayers.do',
-//                reader : {
-//                    type : 'json',
-//                    root : 'data'
-//                }
-//            },
             autoLoad : false,
             data : []
         });
