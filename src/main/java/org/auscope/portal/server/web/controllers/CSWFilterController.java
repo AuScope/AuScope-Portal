@@ -113,14 +113,18 @@ public class CSWFilterController extends BaseCSWController {
     @RequestMapping("/getFilteredCSWRecords.do")
     public ModelAndView getFilteredCSWRecords(
             @RequestParam(value="key", required=false) String[] keys,
-            @RequestParam(value="value", required=false) String[] values){
+            @RequestParam(value="value", required=false) String[] values,
+            @RequestParam(value = "limit", required = false) Integer maxRecords,
+            @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition){
 
         HashMap<String,String> parameters=this.arrayPairtoMap(keys, values);
 
+        //csw index starts from 1
+        startPosition++;
 
-        Integer startPosition = null;
-
-        String cswServiceId = parameters.get("cswServiceId");
+        //String cswServiceId = parameters.get("cswServiceId");
+        //VT: hardcoding the registry for the time being.
+        String cswServiceId = "cswAuscopeTest";
         String anyText = parameters.get("anyText");
         Double westBoundLongitude = null;
         Double eastBoundLongitude = null;
@@ -145,10 +149,6 @@ public class CSWFilterController extends BaseCSWController {
         String capturePlatform = parameters.get("capturePlatform");
         String sensor = parameters.get("sensor");
 
-        Integer maxRecords = null;
-        if(parameters.get("maxRecords")!= null && parameters.get("maxRecords").length()>0){
-            maxRecords=new Integer(parameters.get("maxRecords"));
-        }
 
         if( parameters.get("keywordMatchType")!=null){
             if(parameters.get("keywordMatchType").toLowerCase().equals("any")){
@@ -156,11 +156,6 @@ public class CSWFilterController extends BaseCSWController {
             }else{
                 keywordMatchType = KeywordMatchType.All;
             }
-        }
-
-
-        if(parameters.get("startPosition")!=null){
-            startPosition = new Integer(parameters.get("startPosition")) + 1;
         }
 
 
