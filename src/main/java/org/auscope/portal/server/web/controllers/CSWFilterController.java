@@ -122,9 +122,7 @@ public class CSWFilterController extends BaseCSWController {
         //csw index starts from 1
         startPosition++;
 
-        //String cswServiceId = parameters.get("cswServiceId");
-        //VT: hardcoding the registry for the time being.
-        String cswServiceId = "cswAuscopeTest";
+        String cswServiceId = parameters.get("cswServiceId");
         String anyText = parameters.get("anyText");
         Double westBoundLongitude = null;
         Double eastBoundLongitude = null;
