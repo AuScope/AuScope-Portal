@@ -136,11 +136,8 @@ Ext.application({
         };
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var map = null;
-        if (urlParams && urlParams.map && urlParams.map === 'googleMap') {
-            map = Ext.create('portal.map.gmap.GoogleMap', mapCfg);
-        } else {
-            map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-        }
+
+        map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
 
         var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
             title : 'Active Layers',
