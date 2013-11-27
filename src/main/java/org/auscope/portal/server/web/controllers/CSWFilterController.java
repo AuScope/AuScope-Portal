@@ -132,17 +132,17 @@ public class CSWFilterController extends BaseCSWController {
         Double northBoundLatitude = null;
         Double southBoundLatitude = null;
 
-        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
-             westBoundLongitude = Double.parseDouble(parameters.get("westBoundLongitude"));
+        if(parameters.get("west")!=null && parameters.get("west").length() > 0){
+             westBoundLongitude = Double.parseDouble(parameters.get("west"));
         }
-        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
-            eastBoundLongitude = Double.parseDouble(parameters.get("eastBoundLongitude"));
+        if(parameters.get("east")!=null && parameters.get("east").length() > 0){
+            eastBoundLongitude = Double.parseDouble(parameters.get("east"));
         }
-        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
-            northBoundLatitude = Double.parseDouble(parameters.get("northBoundLatitude"));
+        if(parameters.get("north")!=null && parameters.get("north").length() > 0){
+            northBoundLatitude = Double.parseDouble(parameters.get("north"));
         }
-        if(parameters.get("westBoundLongitude")!=null && parameters.get("westBoundLongitude").length() > 0){
-            southBoundLatitude = Double.parseDouble(parameters.get("southBoundLatitude"));
+        if(parameters.get("south")!=null && parameters.get("south").length() > 0){
+            southBoundLatitude = Double.parseDouble(parameters.get("south"));
         }
 
         String [] keywords = {parameters.get("keywords")};

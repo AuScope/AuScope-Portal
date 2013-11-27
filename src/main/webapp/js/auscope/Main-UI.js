@@ -79,12 +79,6 @@ Ext.application({
             }
         });
 
-        //Create our personal store
-        var personalLayerStore = Ext.create('Ext.data.Store', {
-            model : 'portal.csw.CSWRecord',
-            autoLoad : false,
-            data : []
-        });
 
 
         //Create our KnownLayer store
@@ -223,25 +217,11 @@ Ext.application({
         };
 
 
-        var personalRecordsPanel = Ext.create('portal.widgets.panel.PersonalRecordPanel', {
-            title : 'Personal',
-            store : personalLayerStore,
-            tooltip : {
-                title : 'Personal Data Layers',
-                text : 'This tab allows you to personalize your tab to view the content you want',
-                showDelay : 100,
-                dismissDelay : 30000
-            },
-            map : map,
-            listeners : {
-                addlayerrequest : handleAddRecordToMap
-            }
-        });
-
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             store : knownLayerStore,
+            enableBrowse : true,//VT: if true browse catalogue option will appear
             map : map,
             tooltip : {
                 anchor : 'top',
@@ -287,8 +267,9 @@ Ext.application({
         });
 
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Research',
+            title : 'Research Data',
             store : researchDataLayerStore,
+            enableBrowse : false,//VT: if true browse catalogue option will appear
             map : map,
             tooltip : {
                 title : 'Research Data Layers',
@@ -309,7 +290,7 @@ Ext.application({
             split : true,
             height : 265,
             enableTabScroll : true,
-            items:[personalRecordsPanel,
+            items:[
                 knownLayersPanel,
                 unmappedRecordsPanel,
                 customRecordsPanel,
@@ -327,7 +308,7 @@ Ext.application({
             split:true,
             //margins: '100 0 0 0',
             margins:'100 0 0 3',
-            width: 370,
+            width: 350,
             items:[tabsPanel , layersPanel, filterPanel]
         };
 
