@@ -76,6 +76,9 @@ public class CSWFilterController extends BaseCSWController {
             map.put("id", item.getId());
             map.put("url", item.getServiceUrl());
 
+            if(item.getId().toLowerCase().contains("auscope")){
+                map.put("selectedByDefault", true);
+            }
             convertedServiceItems.add(map);
         }
 
