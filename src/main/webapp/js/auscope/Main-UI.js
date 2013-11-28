@@ -174,46 +174,52 @@ Ext.application({
         //Utility function for adding a new layer to the map
         //record must be a CSWRecord or KnownLayer
         var handleAddRecordToMap = function(sourceGrid, record) {
-            var newLayer = null;
-
-            //Ensure the layer DNE first
-            var existingRecord = layerStore.getById(record.get('id'));
-            if (existingRecord) {
-                layersPanel.getSelectionModel().select([existingRecord], false);
-                return;
+            if(!(record instanceof Array)){
+                record = [record];
             }
 
-            //Turn our KnownLayer/CSWRecord into an actual Layer
-            if (record instanceof portal.csw.CSWRecord) {
-                newLayer = layerFactory.generateLayerFromCSWRecord(record);
-            } else {
-                newLayer = layerFactory.generateLayerFromKnownLayer(record);
-            }
+            for(var z=0; z < record.length; z++){
+                var newLayer = null;
 
-            //We may need to show a popup window with copyright info
-            var cswRecords = newLayer.get('cswRecords');
-            for (var i = 0; i < cswRecords.length; i++) {
-                if (cswRecords[i].hasConstraints()) {
-                    var popup = Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
-                        width : 625,
-                        cswRecords : cswRecords
-                    });
-
-                    popup.show();
-
-                    //HTML images may take a moment to load which stuffs up our layout
-                    //This is a horrible, horrible workaround.
-                    var task = new Ext.util.DelayedTask(function(){
-                        popup.doLayout();
-                    });
-                    task.delay(1000);
-
-                    break;
+                //Ensure the layer DNE first
+                var existingRecord = layerStore.getById(record[z].get('id'));
+                if (existingRecord) {
+                    layersPanel.getSelectionModel().select([existingRecord], false);
+                    return;
                 }
-            }
 
-            layerStore.insert(0,newLayer); //this adds the layer to our store
-            layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
+                //Turn our KnownLayer/CSWRecord into an actual Layer
+                if (record[z] instanceof portal.csw.CSWRecord) {
+                    newLayer = layerFactory.generateLayerFromCSWRecord(record[z]);
+                } else {
+                    newLayer = layerFactory.generateLayerFromKnownLayer(record[z]);
+                }
+
+                //We may need to show a popup window with copyright info
+                var cswRecords = newLayer.get('cswRecords');
+                for (var i = 0; i < cswRecords.length; i++) {
+                    if (cswRecords[i].hasConstraints()) {
+                        var popup = Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
+                            width : 625,
+                            cswRecords : cswRecords
+                        });
+
+                        popup.show();
+
+                        //HTML images may take a moment to load which stuffs up our layout
+                        //This is a horrible, horrible workaround.
+                        var task = new Ext.util.DelayedTask(function(){
+                            popup.doLayout();
+                        });
+                        task.delay(1000);
+
+                        break;
+                    }
+                }
+
+                layerStore.insert(0,newLayer); //this adds the layer to our store
+                layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
+            }
         };
 
 

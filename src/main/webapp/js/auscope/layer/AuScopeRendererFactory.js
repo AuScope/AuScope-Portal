@@ -9,13 +9,13 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
      * Creates a new instance of renderer based on the specified values
      */
     _generateRenderer : function(wfsResources, wmsResources, irisResources, knownLayer) {
-        var proxyUrl; 
-        var proxyCountUrl; 
+        var proxyUrl;
+        var proxyCountUrl;
         var iconUrl;
-        var iconSize; 
+        var iconSize;
         var iconAnchor;
         var polygonColor;
-        
+
         if (knownLayer != undefined) {
             proxyUrl = knownLayer.get('proxyUrl');
             proxyCountUrl = knownLayer.get('proxyCountUrl');
@@ -24,7 +24,7 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
             iconAnchor = knownLayer.get('iconAnchor');
             polygonColor = knownLayer.get('polygonColor');
         }
-        
+
         var icon = Ext.create('portal.map.Icon', {
             url : iconUrl,
             width : iconSize ? iconSize.width : 32,
@@ -56,7 +56,7 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
                 proxyUrl : proxyUrl,
                 proxyCountUrl : proxyCountUrl
             });
-        } else if (knownLayer.containsCSWService()) {
+        } else if (knownLayer && knownLayer.containsCSWService()) {
             // TODO: ADAM: I'm not sure what parameters I need to send in...
             return Ext.create('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 map : this.map,
