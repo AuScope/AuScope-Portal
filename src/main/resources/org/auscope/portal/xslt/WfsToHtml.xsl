@@ -15,7 +15,7 @@
     <xsl:param name="serviceURL"/>
     <xsl:param name="vocabserviceURL"/>
     <xsl:param name="vocabservice-reponame"/>
-    <xsl:variable name="vocab-hard-coded-lookup" select="concat('http://services-test.auscope.org/SISSVoc/getConceptByURI?commodity_vocab/', '')"/>
+    <xsl:variable name="vocab-hard-coded-lookup" select="concat('http://services.auscope.org/sissvoc/api/commodity-vocab/resource.rdf?uri=http://resource.auscope.org/classifier/GA/commodity/', '')"/>
     <xsl:variable name="vocab-hard-coded-lookupCGI" select="concat('http://services-test.auscope.org/SISSVoc/getConceptByURI?CGI/', '')"/>
 
     <!-- Global Variables -->
@@ -465,7 +465,7 @@
                     <td class="row">
                         <xsl:call-template name="make-popup-url">
                             <xsl:with-param name="friendly-name" select="$commodity_name"/>
-                            <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,$commodity_name)"/>
+                            <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($commodity_name, string-length($commodity_name) - 1))"/>
                         </xsl:call-template>
                     </td>
                     <td class="row header">Commodity Id:</td>
@@ -598,7 +598,7 @@
                     <td class="row header">Commodity</td>
                     <td class="row"><xsl:call-template name="make-popup-url">
                         <xsl:with-param name="friendly-name" select="$comm_name"/>
-                        <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,$comm_name)"/>
+                        <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($comm_name, string-length($comm_name) - 1))"/>
                     </xsl:call-template></td>
                     <td class="row header">Id:</td>
                     <td class="row" colspan="2">
@@ -614,7 +614,7 @@
                     <td>&#160;</td>
                     <td class="row"><xsl:call-template name="make-popup-url">
                         <xsl:with-param name="friendly-name" select="$comm_name"/>
-                        <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,$comm_name)"/>
+                        <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($comm_name, string-length($comm_name) - 1))"/>
                     </xsl:call-template></td>
                     <td class="row header">Id:</td>
                     <td class="row" colspan="2">
@@ -819,7 +819,7 @@
                     <td class="row">
                         <xsl:call-template name="make-popup-url">
                             <xsl:with-param name="friendly-name" select="$comm_std_name"/>
-                            <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,$comm_std_name)"/>
+                            <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($comm_std_name, string-length($comm_std_name) - 1))"/>
                         </xsl:call-template>
                     </td>
                     <td class="row header">Commodity Id:</td>
@@ -902,7 +902,7 @@
                         <td class="row">
                             <xsl:call-template name="make-popup-url">
                                 <xsl:with-param name="friendly-name" select="$comm_std_name"/>
-                                <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,$comm_std_name)"/>
+                                <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($comm_std_name, string-length($comm_std_name) - 1))"/>
                             </xsl:call-template>
                         </td>
                         <td class="row header">Id:</td>
