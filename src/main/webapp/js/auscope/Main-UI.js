@@ -79,6 +79,8 @@ Ext.application({
             }
         });
 
+
+
         //Create our KnownLayer store
         var knownLayerStore = Ext.create('Ext.data.Store', {
             model : 'portal.knownlayer.KnownLayer',
@@ -128,11 +130,8 @@ Ext.application({
         };
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var map = null;
-        if (urlParams && urlParams.map && urlParams.map === 'googleMap') {
-            map = Ext.create('portal.map.gmap.GoogleMap', mapCfg);
-        } else {
-            map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-        }
+
+        map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
 
         var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
             title : 'Active Layers',
@@ -171,54 +170,64 @@ Ext.application({
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
 
+
         //Utility function for adding a new layer to the map
         //record must be a CSWRecord or KnownLayer
         var handleAddRecordToMap = function(sourceGrid, record) {
-            var newLayer = null;
-
-            //Ensure the layer DNE first
-            var existingRecord = layerStore.getById(record.get('id'));
-            if (existingRecord) {
-                layersPanel.getSelectionModel().select([existingRecord], false);
-                return;
+            if(!(record instanceof Array)){
+                record = [record];
             }
 
-            //Turn our KnownLayer/CSWRecord into an actual Layer
-            if (record instanceof portal.csw.CSWRecord) {
-                newLayer = layerFactory.generateLayerFromCSWRecord(record);
-            } else {
-                newLayer = layerFactory.generateLayerFromKnownLayer(record);
-            }
+            for(var z=0; z < record.length; z++){
+                var newLayer = null;
 
-            //We may need to show a popup window with copyright info
-            var cswRecords = newLayer.get('cswRecords');
-            for (var i = 0; i < cswRecords.length; i++) {
-                if (cswRecords[i].hasConstraints()) {
-                    var popup = Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
-                        width : 625,
-                        cswRecords : cswRecords
-                    });
-
-                    popup.show();
-
-                    //HTML images may take a moment to load which stuffs up our layout
-                    //This is a horrible, horrible workaround.
-                    var task = new Ext.util.DelayedTask(function(){
-                        popup.doLayout();
-                    });
-                    task.delay(1000);
-
-                    break;
+                //Ensure the layer DNE first
+                var existingRecord = layerStore.getById(record[z].get('id'));
+                if (existingRecord) {
+                    layersPanel.getSelectionModel().select([existingRecord], false);
+                    return;
                 }
-            }
 
-            layerStore.insert(0,newLayer); //this adds the layer to our store
-            layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
+                //Turn our KnownLayer/CSWRecord into an actual Layer
+                if (record[z] instanceof portal.csw.CSWRecord) {
+                    newLayer = layerFactory.generateLayerFromCSWRecord(record[z]);
+                } else {
+                    newLayer = layerFactory.generateLayerFromKnownLayer(record[z]);
+                }
+
+                //We may need to show a popup window with copyright info
+                var cswRecords = newLayer.get('cswRecords');
+                for (var i = 0; i < cswRecords.length; i++) {
+                    if (cswRecords[i].hasConstraints()) {
+                        var popup = Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
+                            width : 625,
+                            cswRecords : cswRecords
+                        });
+
+                        popup.show();
+
+                        //HTML images may take a moment to load which stuffs up our layout
+                        //This is a horrible, horrible workaround.
+                        var task = new Ext.util.DelayedTask(function(){
+                            popup.doLayout();
+                        });
+                        task.delay(1000);
+
+                        break;
+                    }
+                }
+
+                layerStore.insert(0,newLayer); //this adds the layer to our store
+                layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
+            }
         };
+
+
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             store : knownLayerStore,
+            enableBrowse : true,//VT: if true browse catalogue option will appear
             map : map,
             tooltip : {
                 anchor : 'top',
@@ -266,6 +275,7 @@ Ext.application({
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Research Data',
             store : researchDataLayerStore,
+            enableBrowse : false,//VT: if true browse catalogue option will appear
             map : map,
             tooltip : {
                 title : 'Research Data Layers',
@@ -286,7 +296,8 @@ Ext.application({
             split : true,
             height : 265,
             enableTabScroll : true,
-            items:[knownLayersPanel,
+            items:[
+                knownLayersPanel,
                 unmappedRecordsPanel,
                 customRecordsPanel,
                 researchDataPanel
@@ -340,8 +351,8 @@ Ext.application({
                     version : version
                 });
 
-                popup.show(); 
-            });            
+                popup.show();
+            });
         };
         Ext.get('permalink').on('click', permalinkHandler);
         Ext.get('permalinkicon').on('click', permalinkHandler);
@@ -352,7 +363,7 @@ Ext.application({
         if (urlParams && (urlParams.state || urlParams.s)) {
             var decodedString = urlParams.state ? urlParams.state : urlParams.s;
             var decodedVersion = urlParams.v;
-            
+
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
                 cswRecordStore : unmappedCSWRecordStore,
@@ -361,10 +372,10 @@ Ext.application({
                 map : map,
                 stateString : decodedString,
                 stateVersion : decodedVersion
-            });           
-            
+            });
+
         }
-        
-            
+
+
     }
 });
