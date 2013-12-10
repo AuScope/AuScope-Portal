@@ -402,6 +402,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
      *        to break this into more manageable pieces because the code is still very much a copy from the original source.
      */
     showDownloadWindow : function(datasetId, datasetName, omUrl, nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource) {
+
+
+        var downloadUrl=parentOnlineResource.get('url');
+
+
         // Dataset download window
         var win = Ext.create('Ext.Window', {
             border          : true,
@@ -457,7 +462,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             iconCls : 'download',
                             handler : function() {
                                 portal.util.FileDownloader.downloadFile('getNVCLCSVDownload.do', {
-                                    serviceUrl : omUrl,
+                                    serviceUrl : downloadUrl,
                                     datasetId : datasetId
                                 });
                             }
