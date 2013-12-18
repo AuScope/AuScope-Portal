@@ -3,8 +3,6 @@ package org.auscope.portal.gsml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.springframework.stereotype.Service;
@@ -23,12 +21,6 @@ public class SF0BoreholeFilter extends AbstractFilter {
     private String custodian;
     private String dateOfDrilling;
     private List<String> restrictToIDList;
-
-
-    // -------------------------------------------------------------- Constants
-
-    /** Log object for this class. */
-    private final Log logger = LogFactory.getLog(getClass());
 
     // ----------------------------------------------------------- Constructors
 
@@ -86,8 +78,7 @@ public class SF0BoreholeFilter extends AbstractFilter {
             List<String> idFragments = new ArrayList<String>();
             for (String id : restrictToIDList) {
                 if (id != null && id.length() > 0) {
-                    idFragments.add(this.generatePropertyIsEqualToFragment(
-                            "gsmlp:specification_uri", id, true));
+                	idFragments.add(this.generateGmlObjectIdFragment("gsml.borehole." + escapeLiteral(id)));
                 }
             }
             parameterFragments.add(this

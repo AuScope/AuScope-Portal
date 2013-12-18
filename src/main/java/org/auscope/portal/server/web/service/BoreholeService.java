@@ -114,8 +114,13 @@ public class BoreholeService extends BaseWFSService {
             for (int i = 0; i < publishedDatasets.getLength(); i++) {
                 Node holeIdentifier = (Node)xPath.evaluate("@xlink:href", publishedDatasets.item(i), XPathConstants.NODE);
                 if (holeIdentifier != null) {
-                    idList.add(holeIdentifier.getTextContent());
-                }
+                	String[] urnBlocks = holeIdentifier.getTextContent().split("/");
+                	if (urnBlocks.length > 1) {
+                		// skip invalid URIs
+                        idList.add(urnBlocks[urnBlocks.length - 1]);
+                	}
+            	}
+                
             }
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);

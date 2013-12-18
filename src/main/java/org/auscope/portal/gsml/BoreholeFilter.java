@@ -79,12 +79,7 @@ public class BoreholeFilter extends AbstractFilter {
             List<String> idFragments = new ArrayList<String>();
             for (String id : restrictToIDList) {
                 if (id != null && id.length() > 0) {
-                    // TODO - Uncomment this when
-                    // http://jira.codehaus.org/browse/GEOT-3522 is fixed
-                    // idFragments.add(this.generatePropertyIsEqualToFragment("gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']",id));
-                    idFragments.add(this.generatePropertyIsEqualToFragment(
-                            "gml:name[1]", id, true));
-                    logger.info("is http://jira.codehaus.org/browse/GEOT-3522 is fixed for non-joining yet?");
+                	idFragments.add(this.generateGmlObjectIdFragment("gsml.borehole." + escapeLiteral(id)));
                 }
             }
             parameterFragments.add(this
