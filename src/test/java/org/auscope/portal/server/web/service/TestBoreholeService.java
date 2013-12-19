@@ -50,7 +50,7 @@ public class TestBoreholeService extends PortalTestClass {
     private static final String GETSCANNEDBOREHOLEXML = "org/auscope/portal/nvcl/GetScannedBorehole.xml";
 
     /** The Constant HOLEIDS. */
-    private static final String[] HOLEIDS =  new String[] {"http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/WTB5", "http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/GSDD006", "http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/GDDH7"};
+    private static final String[] HOLEIDS =  new String[] {"WTB5", "GSDD006", "GDDH7"};
 
     /**
      * Setup.

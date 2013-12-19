@@ -34,21 +34,6 @@ public class TestBoreholeFilter extends PortalTestClass {
     }
 
     /**
-     * Tests that the ID restriction list uses CASE SENSITIVE comparisons
-     * @throws Exception
-     */
-    @Test
-    public void testCaseSensitiveIDs() throws Exception {
-        List<String> restrictedIDs = Arrays.asList("CaseSensitiveId1", "CaseSensitiveId2");
-        BoreholeFilter filter = new BoreholeFilter("", "", "", restrictedIDs);
-
-        String filterString = filter.getFilterStringAllRecords();
-
-        Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filterString);
-        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsEqualTo/@matchCase", new String[] {"true"}, 2);
-    }
-
-    /**
      * Tests that the non ID string comparisons will ALWAYS use matchCase=false
      * @throws Exception
      */

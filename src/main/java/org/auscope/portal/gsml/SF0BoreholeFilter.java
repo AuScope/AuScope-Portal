@@ -78,7 +78,7 @@ public class SF0BoreholeFilter extends AbstractFilter {
             List<String> idFragments = new ArrayList<String>();
             for (String id : restrictToIDList) {
                 if (id != null && id.length() > 0) {
-                	idFragments.add(this.generateGmlObjectIdFragment("gsml.borehole." + escapeLiteral(id)));
+                	idFragments.add(generateFeatureIdFragment("gsml.borehole." + id));
                 }
             }
             parameterFragments.add(this
