@@ -123,7 +123,9 @@ public class CSWFilterController extends BaseCSWController {
         HashMap<String,String> parameters=this.arrayPairtoMap(keys, values);
 
         //csw index starts from 1
-        startPosition++;
+        if(startPosition!=null){
+            startPosition++;
+        }
 
         String cswServiceId = parameters.get("cswServiceId");
         String anyText = parameters.get("anyText");
@@ -145,7 +147,10 @@ public class CSWFilterController extends BaseCSWController {
             southBoundLatitude = Double.parseDouble(parameters.get("south"));
         }
 
-        String [] keywords = {parameters.get("keywords")};
+        String [] keywords=null;
+        if(parameters.get("keywords")!=null){
+            keywords = parameters.get("keywords").split(",");
+        }
         KeywordMatchType keywordMatchType = null;
         String capturePlatform = parameters.get("capturePlatform");
         String sensor = parameters.get("sensor");
