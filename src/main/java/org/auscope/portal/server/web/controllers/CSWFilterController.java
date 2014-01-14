@@ -154,6 +154,8 @@ public class CSWFilterController extends BaseCSWController {
         KeywordMatchType keywordMatchType = null;
         String capturePlatform = parameters.get("capturePlatform");
         String sensor = parameters.get("sensor");
+        String abstrac=parameters.get("abstract");
+        String title=parameters.get("title");
 
 
         if( parameters.get("keywordMatchType")!=null){
@@ -168,7 +170,7 @@ public class CSWFilterController extends BaseCSWController {
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType);
+        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType,abstrac,title);
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
@@ -195,6 +197,7 @@ public class CSWFilterController extends BaseCSWController {
             return generateJSONResponseMAV(false, null, "Error fetching filtered records");
         }
     }
+
 
     private HashMap<String,String> arrayPairtoMap(String[]keys, String [] values){
         HashMap<String,String> results=new HashMap<String,String>();
@@ -238,7 +241,7 @@ public class CSWFilterController extends BaseCSWController {
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType);
+        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType,null,null);
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
