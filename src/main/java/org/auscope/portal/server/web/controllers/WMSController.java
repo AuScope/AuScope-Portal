@@ -86,7 +86,7 @@ public class WMSController extends BaseCSWController {
                 for (GetCapabilitiesWMSLayerRecord rec : capabilitiesRec.getLayers()) {
                     //to check if layers are EPSG: 4326 SRS
                     String[] uniqueSRSList = getSRSList(capabilitiesRec.getLayerSRS() , rec.getChildLayerSRS());
-                    if (!((Arrays.binarySearch(uniqueSRSList, "EPSG:4326")) >= 0 || (Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0)) {
+                    if (!((Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0 || (Arrays.binarySearch(uniqueSRSList, "epsg:4326")) >= 0)) {
                         invalidLayerCount += 1;
                         continue;
                     }
@@ -134,6 +134,10 @@ public class WMSController extends BaseCSWController {
             return generateJSONResponseMAV(false, "Unable to process request", null);
         }
 
+        if(records.length==0){
+            return generateJSONResponseMAV(false,"No records that supports EPSG:3857 was found",null);
+        }
+
         ModelAndView mav = generateJSONResponseMAV(records);
         mav.addObject("invalidLayerCount", invalidLayerCount);
         return mav;
@@ -157,6 +161,11 @@ public class WMSController extends BaseCSWController {
             }
             String[] uniqueSRS = new String[k];
             System.arraycopy(totalSRS, 0, uniqueSRS, 0, k);
+
+            for (int i = 0; i < uniqueSRS.length; i++) {
+                uniqueSRS[i] = uniqueSRS[i].toLowerCase();
+            }
+
             return uniqueSRS;
         } catch (Exception e) {
             log.debug(e.getMessage());
