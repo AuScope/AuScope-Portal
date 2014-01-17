@@ -86,7 +86,7 @@ public class WMSController extends BaseCSWController {
                 for (GetCapabilitiesWMSLayerRecord rec : capabilitiesRec.getLayers()) {
                     //to check if layers are EPSG: 4326 SRS
                     String[] uniqueSRSList = getSRSList(capabilitiesRec.getLayerSRS() , rec.getChildLayerSRS());
-                    if (!((Arrays.binarySearch(uniqueSRSList, "EPSG:3857")) >= 0 || (Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0)) {
+                    if (!((Arrays.binarySearch(uniqueSRSList, "EPSG:4326")) >= 0 || (Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0)) {
                         invalidLayerCount += 1;
                         continue;
                     }
