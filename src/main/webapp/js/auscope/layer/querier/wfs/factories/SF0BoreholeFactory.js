@@ -204,6 +204,21 @@ Ext.define('auscope.layer.querier.wfs.factories.SF0BoreholeFactory', {
                     var url = 'downloadGMLAsZip.do?serviceUrls=' + escape(getXmlUrl);
                     portal.util.FileDownloader.downloadFile(url);
                 }
+            },{
+                text : 'Download CSV',
+                iconCls : 'download',
+                handler : function() {
+                    var optionalParam={
+                      key : "outputFormat",
+                      value : "csv"
+                    };
+
+                    optionalParam=[optionalParam];
+
+                    var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, 'gsmlp:BoreholeView', gmlId,optionalParam);
+                    var url = 'downloadGMLAsZip.do?serviceUrls=' + escape(getXmlUrl);
+                    portal.util.FileDownloader.downloadFile(url);
+                }
             }]
         });
     }
