@@ -215,8 +215,8 @@ Ext.define('auscope.layer.querier.wfs.factories.SF0BoreholeFactory', {
 
                     optionalParam=[optionalParam];
 
-                    var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, 'gsmlp:BoreholeView', gmlId,optionalParam);
-                    var url = 'downloadGMLAsZip.do?serviceUrls=' + escape(getXmlUrl);
+                    var getXmlUrl = bf._makeWFSFeatureRequestUrl(wfsUrl, 'gsmlp:BoreholeView', gmlId,optionalParam);
+                    var url = 'downloadDataAsZip.do?filename=csvdownloads.zip&serviceUrls=' + escape(getXmlUrl);
                     portal.util.FileDownloader.downloadFile(url);
                 }
             }]

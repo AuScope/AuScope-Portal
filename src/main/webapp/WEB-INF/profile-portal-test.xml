@@ -56,7 +56,7 @@
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSurfaceAftershock" />
                 <ref bean="knownTypeSeismologyInSchool" />
-                <ref bean="knownTypeSF0BoreholeNVCL" />
+                <ref bean="testKnownTypeSF0BoreholeNVCL" />
             </list>
         </constructor-arg>
     </bean>
