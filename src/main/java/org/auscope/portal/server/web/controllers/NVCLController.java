@@ -1,5 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.io.IOUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
@@ -284,7 +286,18 @@ public class NVCLController extends BasePortalController {
             return;
         }
 
-        writeStreamResponse(response, serviceResponse);
+
+            response.setContentType(serviceResponse.getContentType());
+            //vt:we have to hack the response because the html response has relative url and when
+            //the result is proxied, the service url becomes portal's url.
+            String stringResponse = IOUtils.toString(serviceResponse.getResponse());
+
+            stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "/Display_Tray_Thumb.html");
+
+            FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
+
+
+
     }
 
     /**

@@ -34,7 +34,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             plain       : false,
             title       : 'Borehole Id: ' + datasetName,
             height      : 600,
-            width       : 820,
+            width       : 850,
             items:[{
                 xtype           : 'tabpanel',
                 activeItem      : 0,
