@@ -291,9 +291,7 @@ public class NVCLController extends BasePortalController {
             //vt:we have to hack the response because the html response has relative url and when
             //the result is proxied, the service url becomes portal's url.
             String stringResponse = IOUtils.toString(serviceResponse.getResponse());
-
-            stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "/Display_Tray_Thumb.html");
-
+            stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "Display_Tray_Thumb.html");
             FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
 
 
