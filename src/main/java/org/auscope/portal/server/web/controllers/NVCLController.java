@@ -3,8 +3,6 @@ package org.auscope.portal.server.web.controllers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +23,13 @@ import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
 import org.auscope.portal.server.domain.nvcldataservice.PlotScalarResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGStatusResponse;
+import org.auscope.portal.server.domain.nvcldataservice.TrayThumbNailResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.auscope.portal.server.web.service.BoreholeService;
+import org.auscope.portal.server.web.service.NVCL2_0_DataService;
 import org.auscope.portal.server.web.service.NVCLDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,6 +47,7 @@ public class NVCLController extends BasePortalController {
 
     private BoreholeService boreholeService;
     private NVCLDataService dataService;
+    private NVCL2_0_DataService dataService2_0;
     private CSWCacheService cswService;
     private HttpUtil httpUtil;
 
@@ -55,11 +56,13 @@ public class NVCLController extends BasePortalController {
     @Autowired
     public NVCLController(BoreholeService boreholeService,
                             CSWCacheService cswService,
-                            NVCLDataService dataService) {
+                            NVCLDataService dataService,
+                            NVCL2_0_DataService dataService2_0) {
 
         this.boreholeService = boreholeService;
         this.cswService = cswService;
         this.dataService = dataService;
+        this.dataService2_0=dataService2_0;
 
     }
 
@@ -182,6 +185,30 @@ public class NVCLController extends BasePortalController {
         }
     }
 
+
+    /**
+     * Gets the list of logs for given NVCL dataset from the specified NVCL dataservice url.
+     * @param serviceUrl The URL of an NVCL Data service
+     * @param datasetId The unique ID of a dataset
+     * @return
+     */
+    @RequestMapping("getNVCL2_0_Logs.do")
+    public ModelAndView getNVCL2_0_Logs(@RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("datasetId") String datasetId,
+            @RequestParam(required = false, value = "mosaicService") Boolean forMosaicService) {
+        List<GetLogCollectionResponse> responseObjs = null;
+        try {
+            responseObjs = dataService2_0.getLogCollection(serviceUrl, datasetId, forMosaicService);
+
+            return generateJSONResponseMAV(true, responseObjs, "");
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting log collection for dataset '%1$s' from %2$s: %3$s", datasetId, serviceUrl, ex));
+            log.debug("Exception:", ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+
+
     /**
      * Utility function for piping the contents of serviceResponse to servletResponse
      */
@@ -220,6 +247,36 @@ public class NVCLController extends BasePortalController {
         MosaicResponse serviceResponse = null;
         try {
             serviceResponse = dataService.getMosaic(serviceUrl, logId, width, startSampleNo, endSampleNo);
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting mosaic for logid '%1$s' from %2$s: %3$s", logId, serviceUrl, ex));
+            log.debug("Exception:", ex);
+            response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+
+        writeStreamResponse(response, serviceResponse);
+    }
+
+
+    /**
+     * Proxies a NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
+     * @param serviceUrl The URL of an NVCL Data service
+     * @param logId The unique ID of a log (from a getNVCLLogs.do request)
+     * @return
+     */
+    @RequestMapping("getNVCL2_0_Thumbnail.do")
+    public void getNVCL2_0_Thumbnail(@RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("dataSetId") String dataSetId,
+            @RequestParam("logId") String logId,
+            @RequestParam(required=false,value="width") Integer width,
+            @RequestParam(required=false,value="startSampleNo") Integer startSampleNo,
+            @RequestParam(required=false,value="endSampleNo") Integer endSampleNo,
+            HttpServletResponse response) throws Exception {
+
+        //Make our request
+        TrayThumbNailResponse serviceResponse = null;
+        try {
+            serviceResponse = this.dataService2_0.getTrayThumbNail(dataSetId,serviceUrl, logId, width, startSampleNo, endSampleNo);
         } catch (Exception ex) {
             log.warn(String.format("Error requesting mosaic for logid '%1$s' from %2$s: %3$s", logId, serviceUrl, ex));
             log.debug("Exception:", ex);
@@ -304,6 +361,32 @@ public class NVCLController extends BasePortalController {
         }
 
         response.setHeader("Content-Disposition","attachment; filename=GETPUBLISHEDSYSTEMTSA.csv");
+        writeStreamResponse(response, serviceResponse);
+    }
+
+    /**
+     * Proxies a CSV download request to a WFS from a NVCL 2.0 service. Writes directly to the HttpServletResponse
+     * @param serviceUrl The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
+     * @param datasetId The dataset to download
+     * @return
+     */
+    @RequestMapping("getNVCL2_0_CSVDownload.do")
+    public void getNVCL2_0_CSVDownload(@RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("logIds") String [] logIds,
+            HttpServletResponse response) throws Exception {
+
+        //Make our request
+        CSVDownloadResponse serviceResponse = null;
+        try {
+            serviceResponse = dataService2_0.getNVCL2_0_CSVDownload(serviceUrl, logIds);
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting csw download for logId '%1$s' from %2$s: %3$s", logIds, serviceUrl, ex));
+            log.debug("Exception:", ex);
+            response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+
+        response.setHeader("Content-Disposition","attachment; filename=downloadScalar.csv");
         writeStreamResponse(response, serviceResponse);
     }
 

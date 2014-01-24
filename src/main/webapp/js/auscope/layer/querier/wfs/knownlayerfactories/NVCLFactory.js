@@ -50,7 +50,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             model : 'auscope.knownlayer.nvcl.Log',
             proxy : {
                 type : 'ajax',
-                url : 'getNVCLLogs.do',
+                url : 'getNVCL2_0_Logs.do',
                 extraParams : {
                     serviceUrl : nvclDataServiceUrl,
                     datasetId : datasetId,
@@ -69,81 +69,28 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         logStore.load({
             callback : function(recs, options, success) {
                 //Find our 'mosaic' and 'imagery' record
-                var mosaicRecord = null;
-                var imageryRecord = null;
+                var trayThumbNail = null;
+
                 for (var i = 0; i < recs.length; i++) {
                     switch(recs[i].get('logName')) {
-                    case 'Mosaic':
-                        mosaicRecord = recs[i];
-                        break;
-                    case 'Imagery':
-                        imageryRecord = recs[i];
+                    case 'Tray Thumbnail Images':
+                        trayThumbNail = recs[i];
                         break;
                     }
                 }
 
                 //Add our mosaic tab (if available)
-                if (mosaicRecord !== null) {
+                if (trayThumbNail !== null) {
                     tp.add({
-                        title : ' Mosaic ',
+                        title : ' Thumb Nail Imagery ',
                         layout : 'fit',
                         html: '<iframe id="nav" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
-                              'getNVCLMosaic.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&logId=' + mosaicRecord.get('logId') +
+                              'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
                               '"></iframe>'
                     });
                 }
 
-                //Add our imagery tab (if available)
-                if (imageryRecord !== null) {
-                    var startSampleNo   = 0;
-                    var endSampleNo     = 100;
-                    var sampleIncrement = 100;
-                    var totalCount      = imageryRecord.get('sampleCount');
 
-                    //Navigation function for Imagery tab
-                    var cardNav = function(incr) {
-
-                        if ( startSampleNo >= 0 && endSampleNo >= sampleIncrement) {
-                            startSampleNo = 1 * startSampleNo + incr;
-                            endSampleNo = 1 * endSampleNo + incr;
-                            Ext.getCmp('card-prev').setDisabled(startSampleNo < 1);
-                            Ext.get('imageryFrame').dom.src = 'getNVCLMosaic.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&logId=' + imageryRecord.get('logId') + '&startSampleNo=' + startSampleNo + '&endSampleNo=' + endSampleNo;
-
-                            // Ext.fly ... does not work in IE7
-                            //Ext.fly('display-count').update('Displayying Images: ' + startSampleNo + ' - ' + endSampleNo + ' of ' + totalCount);
-                            Ext.getCmp('display-count').setText('Displaying Imagess: ' + startSampleNo + ' - ' + endSampleNo + ' of ' + totalCount);
-                        }
-
-                        Ext.getCmp('card-prev').setDisabled(startSampleNo <= 0);
-                        Ext.getCmp('card-next').setDisabled(startSampleNo + sampleIncrement >= totalCount);
-                    };
-
-                    //Add the actual tab
-                    tp.add({
-                        title : ' Imagery ',
-                        layout : 'fit',
-                        html : '<iframe id="imageryFrame" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
-                              'getNVCLMosaic.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&logId=' + imageryRecord.get('logId') +
-                              '&startSampleNo='+ startSampleNo +
-                              '&endSampleNo=' + sampleIncrement +
-                              '"></iframe>',
-                        bbar: [{
-                            id   : 'display-count',
-                            text : 'Displaying Images: ' + startSampleNo + ' - ' + endSampleNo + ' of ' + totalCount
-                        },
-                        '->',
-                        {
-                            id  : 'card-prev',
-                            text: '< Previous',
-                            disabled: true,
-                            handler: Ext.bind(cardNav, this, [-100])
-                        },{
-                            id  : 'card-next',
-                            text: 'Next >',
-                            handler: Ext.bind(cardNav, this, [100])
-                        }]
-                    });
-                }
 
                 //Add our scalars tab (this always exists
                 var scalarGrid = Ext.create('Ext.grid.Panel', {
@@ -380,12 +327,36 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         });
                                     }
                                 }
+                            },{
+                                text : 'Download',
+                                xtype : 'button',
+                                iconCls : 'download',
+                                handler : function() {
+
+                                    if(scalarGrid.getSelectionModel().getCount()===0){
+                                        Ext.Msg.show({
+                                            title:'Hint',
+                                            msg: 'You need to select a scalar(s) from the "List of Scalars" table to download the csv.',
+                                            buttons: Ext.Msg.OK
+                                        });
+                                    }else{
+                                        var datasetIds = scalarGrid.getSelectionModel().getSelection();
+                                        var logIds = [];
+                                        for(var i=0;i<datasetIds.length;i++){
+                                            logIds[i] =  datasetIds[i].get('logId');
+                                        }
+                                        portal.util.FileDownloader.downloadFile('getNVCL2_0_CSVDownload.do', {
+                                            serviceUrl : nvclDataServiceUrl,
+                                            logIds : logIds
+                                        });
+                                    }
+                                }
                             }]
                         }]
                     }
                 });
 
-                if (mosaicRecord !== null || imageryRecord !== null) {
+                if (trayThumbNail !== null) {
                     win.show();
                     win.center();
                 } else {
@@ -402,10 +373,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
      *        to break this into more manageable pieces because the code is still very much a copy from the original source.
      */
     showDownloadWindow : function(datasetId, datasetName, omUrl, nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource) {
-
-
-        var downloadUrl=parentOnlineResource.get('url');
-
 
         // Dataset download window
         var win = Ext.create('Ext.Window', {
@@ -440,43 +407,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     xtype   : 'hidden',
                     name    : 'datasetId', //name of the field sent to the server
                     value   : datasetId  //value of the field
-                },{
-                    xtype           : 'fieldset',
-                    layout          : 'anchor',
-                    id              : 'csvFldSet',
-                    title           : 'Comma-separated values (CSV) file',
-                    checkboxName    : 'csv',
-                    checkboxToggle  : true,
-                    collapsed       : true,
-                    items:[{
-                        xtype : 'toolbar',
-                        border : false,
-                        plain : true,
-                        layout : {
-                            type : 'hbox',
-                            pack : 'end'
-                        },
-                        items : {
-                            text : 'Download',
-                            xtype : 'button',
-                            iconCls : 'download',
-                            handler : function() {
-                                portal.util.FileDownloader.downloadFile('getNVCLCSVDownload.do', {
-                                    serviceUrl : downloadUrl,
-                                    datasetId : datasetId
-                                });
-                            }
-                        }
-                    }],
-                    listeners: {
-                        'expand' : {
-                            scope: this,
-                            fn : function(panel) {
-                                Ext.getCmp('tsgFldSet').collapse();
-                                Ext.getCmp('omFldSet').collapse();
-                            }
-                        }
-                    }
                 },{
                     xtype           : 'fieldset',
                     id              : 'tsgFldSet',

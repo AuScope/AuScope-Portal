@@ -29,6 +29,7 @@ import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.auscope.portal.server.web.service.BoreholeService;
+import org.auscope.portal.server.web.service.NVCL2_0_DataService;
 import org.auscope.portal.server.web.service.NVCLDataService;
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -56,8 +57,13 @@ public class TestNVCLController extends PortalTestClass {
     /** The mock dataservice*/
     private NVCLDataService mockDataService;
 
+    /** Mock data service */
+    private NVCL2_0_DataService mock2_0_DataService;
+
     /** The nvcl controller. */
     private NVCLController nvclController;
+
+
 
     /**
      * Setup.
@@ -68,7 +74,8 @@ public class TestNVCLController extends PortalTestClass {
         this.mockBoreholeService = context.mock(BoreholeService.class);
         this.mockCSWService = context.mock(CSWCacheService.class);
         this.mockDataService = context.mock(NVCLDataService.class);
-        this.nvclController = new NVCLController(this.mockBoreholeService, this.mockCSWService, this.mockDataService);
+        this.mock2_0_DataService = context.mock(NVCL2_0_DataService.class);
+        this.nvclController = new NVCLController(this.mockBoreholeService, this.mockCSWService, this.mockDataService,this.mock2_0_DataService);
     }
 
     /**
