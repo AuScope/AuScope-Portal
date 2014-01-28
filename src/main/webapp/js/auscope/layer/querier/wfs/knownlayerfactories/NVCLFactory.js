@@ -22,8 +22,9 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
      * Note - AUS-2055 brought about the removal of the requirement for an open proxy - work still needs to be done
      *        to break this into more manageable pieces because the code is still very much a copy from the original source.
      */
-    showDetailsWindow : function(datasetId, datasetName, omUrl, nvclDataServiceUrl, featureId, parentKnownLayer, parentOnlineResource) {
+    showDetailsWindow : function(datasetId, datasetName, omUrl, nvclDataServiceUrl,nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource,scope) {
 
+        var me = scope;
         //We create an instance of our popup window but don't show it immediately
         //We need to dynamically add to its contents
         var win = Ext.create('Ext.Window', {
@@ -79,13 +80,13 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     }
                 }
 
-                //Add our mosaic tab (if available)
+                //Add our thumbnail tab (if available)
                 if (trayThumbNail !== null) {
                     tp.add({
                         title : ' Thumb Nail Imagery ',
                         layout : 'fit',
                         html: '<iframe id="nav" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
-                              'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
+                              'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&width=2&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
                               '"></iframe>'
                     });
                 }
@@ -356,6 +357,25 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     }
                 });
 
+                var downloadPanel = me.getDownloadPanel(datasetId,
+                        datasetName,
+                        omUrl,
+                        nvclDownloadServiceUrl,
+                        featureId,
+                        parentKnownLayer,
+                        parentOnlineResource);
+
+
+                tp.add({
+                    title : 'Download '+ datasetName,
+                    layout : 'fit',
+                    border : false,
+                    items : [downloadPanel]
+                })
+
+
+
+
                 if (trayThumbNail !== null) {
                     win.show();
                     win.center();
@@ -372,15 +392,14 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
      * Note - AUS-2055 brought about the removal of the requirement for an open proxy - work still needs to be done
      *        to break this into more manageable pieces because the code is still very much a copy from the original source.
      */
-    showDownloadWindow : function(datasetId, datasetName, omUrl, nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource) {
+    getDownloadPanel : function(datasetId, datasetName, omUrl, nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource) {
 
         // Dataset download window
-        var win = Ext.create('Ext.Window', {
+        var panel = Ext.create('Ext.panel.Panel', {
             border          : true,
             layout          : 'fit',
             resizable       : false,
             modal           : true,
-            title           : 'Borehole Id:  '+ datasetName,
             height          : 400,
             width           : 500,
             items:[{
@@ -611,7 +630,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         modal       : true,
                                         plain       : false,
                                         title       : 'Download confirmation: ',
-                                        height      : 200,
+                                        height      : 350,
                                         width       : 840
                                       });
 
@@ -636,7 +655,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             }]
         });
 
-        win.show();
+        return panel;
+        //win.show();
     },
 
     /**
@@ -655,7 +675,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
 
         return Ext.create('portal.layer.querier.BaseComponent',{
-            tabTitle : 'Details',
+            tabTitle : 'Available Dataset',
             layout : 'fit',
             //We only have a single child which is our grid
             items : [{
@@ -734,27 +754,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     selectedRec.get('datasetName'),
                                     selectedRec.get('omUrl'),
                                     nvclDataServiceUrl,
-                                    featureId,
-                                    parentKnownLayer,
-                                    parentOnlineResource);
-                        }
-                    }
-                },{
-                    xtype : 'button',
-                    iconCls : 'download',
-                    text : 'Download',
-                    handler : function(button, e) {
-                        var grid = button.ownerCt.ownerCt;
-                        var selection = grid.getSelectionModel().getSelection();
-                        var selectedRec = (selection && (selection.length > 0)) ? selection[0] : null;
-                        if (selectedRec) {
-                            me.showDownloadWindow(selectedRec.get('datasetId'),
-                                    selectedRec.get('datasetName'),
-                                    selectedRec.get('omUrl'),
                                     nvclDownloadServiceUrl,
                                     featureId,
                                     parentKnownLayer,
-                                    parentOnlineResource);
+                                    parentOnlineResource,
+                                    me);
                         }
                     }
                 }]

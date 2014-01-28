@@ -187,6 +187,7 @@ Ext.define('auscope.layer.querier.wfs.factories.SF0BoreholeFactory', {
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
+            tabTitle : 'Borehole Summary',
             layout : 'fit',
             items : [{
                 xtype : 'fieldset',
