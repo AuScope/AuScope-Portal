@@ -47,9 +47,9 @@ public class SF0BoreholeService extends BoreholeService {
      * @return
      * @throws Exception
      */
-    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian, String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList) throws Exception {
+    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian, String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox) throws Exception {
         String filterString;
-        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictToIDList);
+        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling);
         if (bbox == null) {
             filterString = sf0BoreholeFilter.getFilterStringAllRecords();
         } else {
@@ -90,8 +90,8 @@ public class SF0BoreholeService extends BoreholeService {
     }
 
     public String getSF0Filter(String boreholeName, String custodian, String dateOfDrilling,
-            int maxFeatures, FilterBoundingBox bbox, List<String>restrictToIDList) throws Exception {
-        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictToIDList);
+            int maxFeatures, FilterBoundingBox bbox) throws Exception {
+        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling);
         return generateFilterString(filter, bbox);
     }
 

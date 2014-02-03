@@ -20,7 +20,6 @@ public class SF0BoreholeFilter extends AbstractFilter {
     private String boreholeName;
     private String custodian;
     private String dateOfDrilling;
-    private List<String> restrictToIDList;
 
     // ----------------------------------------------------------- Constructors
 
@@ -28,11 +27,10 @@ public class SF0BoreholeFilter extends AbstractFilter {
         // test
     }
 
-    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling, List<String> restrictToIDList) {
+    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling) {
         this.boreholeName = boreholeName;
         this.custodian = custodian;
         this.dateOfDrilling = dateOfDrilling;
-        this.restrictToIDList = restrictToIDList;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -72,18 +70,6 @@ public class SF0BoreholeFilter extends AbstractFilter {
             parameterFragments.add(this.generatePropertyIsLikeFragment(
                     "gsmlp:drillStartDate",
                     this.dateOfDrilling));
-        }
-
-        if (this.restrictToIDList != null && !this.restrictToIDList.isEmpty()) {
-            List<String> idFragments = new ArrayList<String>();
-            for (String id : restrictToIDList) {
-                if (id != null && id.length() > 0) {
-                	idFragments.add(generateFeatureIdFragment("gsml.borehole." + id));
-                }
-            }
-            parameterFragments.add(this
-                    .generateOrComparisonFragment(idFragments
-                            .toArray(new String[idFragments.size()])));
         }
 
         return this.generateAndComparisonFragment(this

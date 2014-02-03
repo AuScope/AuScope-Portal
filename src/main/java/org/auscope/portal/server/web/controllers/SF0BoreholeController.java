@@ -168,7 +168,6 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
             throws Exception {
 
@@ -180,45 +179,11 @@ public class SF0BoreholeController extends BasePortalController {
             log.warn("Not Queried");
         }
 
-        boolean onlyHylogger = false;
-        if (onlyHyloggerString != null && onlyHyloggerString.length() > 0) {
-            if (onlyHyloggerString.equals("on")) {
-                onlyHylogger = true;
-            } else {
-                onlyHylogger = Boolean.parseBoolean(onlyHyloggerString);
-            }
-        }
-
         FilterBoundingBox bbox = FilterBoundingBox
                 .attemptParseFromJSON(bboxJson);
 
-        // return doSF0BoreholeFilter(serviceUrl,boreholeName, custodian,
-        // dateOfDrilling, maxFeatures, bbox, onlyHylogger);
-        List<String> hyloggerBoreholeIDs = null;
-        if (onlyHylogger) {
-            try {
-                hyloggerBoreholeIDs = this.sf0BoreholeService
-                        .discoverHyloggerBoreholeIDs(this.cswService,
-                                new CSWRecordsHostFilter(serviceUrl));
-            } catch (Exception e) {
-                log.warn(String
-                        .format("Error requesting list of hylogger borehole ID's from %1$s: %2$s",
-                                serviceUrl, e));
-                log.debug("Exception:", e);
-                // return generateJSONResponseMAV(false, null,
-                // "Failure when identifying which boreholes have Hylogger data.");
-            }
-
-            if (hyloggerBoreholeIDs.size() == 0) {
-                log.warn("No hylogger boreholes exist (or the services are missing)");
-                // return generateJSONResponseMAV(false, null,
-                // "Unable to identify any boreholes with Hylogger data.");
-            }
-        }
-
         String filter = this.sf0BoreholeService.getSF0Filter(boreholeName,
-                custodian, dateOfDrilling, maxFeatures, bbox,
-                hyloggerBoreholeIDs);
+                custodian, dateOfDrilling, maxFeatures, bbox);
         String style = this.getStyle(filter, "gsmlp:BoreholeView", "#2242c7");
 
         response.setContentType("text/xml");
