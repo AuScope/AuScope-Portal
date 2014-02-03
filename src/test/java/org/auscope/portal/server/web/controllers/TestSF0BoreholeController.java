@@ -280,16 +280,15 @@ public class TestSF0BoreholeController extends PortalTestClass {
           final String filterDate= "1986-10-09";
           final int maxFeatures = 10;
           final FilterBoundingBox bbox = null;
-          final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
           final String getSF0FilterResponse = "sf0FilterResponse";
 
           context.checking(new Expectations() {{
-              oneOf(mockSF0BoreholeService).getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox, restrictedIds);
+              oneOf(mockSF0BoreholeService).getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox);
               will(returnValue(getSF0FilterResponse));
 
           }});
 
-          String style = this.sf0BoreholeController.getStyle(this.mockSF0BoreholeService.getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox, restrictedIds),
+          String style = this.sf0BoreholeController.getStyle(this.mockSF0BoreholeService.getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox),
                  "gsmlp:BoreholeView", "#2242c7");
           Assert.assertNotNull(style);
           Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
