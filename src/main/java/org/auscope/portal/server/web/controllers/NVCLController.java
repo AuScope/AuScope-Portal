@@ -51,7 +51,7 @@ public class NVCLController extends BasePortalController {
     private NVCLDataService dataService;
     private NVCL2_0_DataService dataService2_0;
     private CSWCacheService cswService;
-    private HttpUtil httpUtil;
+
 
     private int BUFFERSIZE = 1024 * 1024;
 
@@ -89,7 +89,7 @@ public class NVCLController extends BasePortalController {
 
         String [] serviceFilterArray=serviceFilter.split(",");
 
-        if (!serviceFilter.equals("") && !(httpUtil.containHost(serviceUrl,serviceFilterArray))) {
+        if (!serviceFilter.equals("") && !(HttpUtil.containHost(serviceUrl,serviceFilterArray))) {
             return this.generateJSONResponseMAV(false,null,"Not Queried");
         }
 
