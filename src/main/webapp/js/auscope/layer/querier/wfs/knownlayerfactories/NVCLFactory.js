@@ -346,7 +346,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         for(var i=0;i<datasetIds.length;i++){
                                             logIds[i] =  datasetIds[i].get('logId');
                                         }
-                                        _gaq.push(['_trackEvent', 'NVCL', 'DOWNLOAD', 'CSV Download:'+nvclDataServiceUrl,10]);
                                         portal.util.FileDownloader.downloadFile('getNVCL2_0_CSVDownload.do', {
                                             serviceUrl : nvclDataServiceUrl,
                                             logIds : logIds
@@ -470,7 +469,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     return;
                                 } else {
                                     Ext.getCmp('omEmailAddress').setValue(sEmail);
-
                                     var winStat = new Ext.Window({
                                         autoScroll  : true,
                                         border      : true,
@@ -502,6 +500,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('tsgEmailAddress').markInvalid();
                                     return;
                                 } else {
+                                    _gaq.push(['_trackEvent', 'NVCL', 'TSG DOWNLOAD', 'Download:' + nvclDownloadServiceUrl]);
                                     Ext.getCmp('omEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
                                     sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
@@ -608,6 +607,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('omEmailAddress').markInvalid();
                                     return;
                                 } else {
+                                    _gaq.push(['_trackEvent', 'NVCL', 'O&M DOWNLOAD', 'Download:' + nvclDownloadServiceUrl]);
                                     Ext.getCmp('tsgEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
                                     sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
