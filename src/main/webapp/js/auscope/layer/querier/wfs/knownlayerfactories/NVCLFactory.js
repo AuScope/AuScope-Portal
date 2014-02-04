@@ -346,7 +346,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         for(var i=0;i<datasetIds.length;i++){
                                             logIds[i] =  datasetIds[i].get('logId');
                                         }
-                                        _gaq.push(['_trackEvent', 'NVCL', 'DOWNLOAD', 'CSV Download:'+nvclDataServiceUrl,logIds]);
+                                        _gaq.push(['_trackEvent', 'NVCL', 'DOWNLOAD', 'CSV Download:'+nvclDataServiceUrl,logIds.join()]);
                                         portal.util.FileDownloader.downloadFile('getNVCL2_0_CSVDownload.do', {
                                             serviceUrl : nvclDataServiceUrl,
                                             logIds : logIds
