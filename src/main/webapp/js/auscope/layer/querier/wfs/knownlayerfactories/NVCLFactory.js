@@ -501,6 +501,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     return;
                                 } else {
                                     _gaq.push(['_trackEvent', 'NVCL:TSG DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, datasetId ]);
+                                    _gaq.push(['_trackPageview', '/tsg/getNVCLTSGDownload.do']);
                                     Ext.getCmp('omEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
                                     sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
@@ -608,6 +609,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     return;
                                 } else {
                                     _gaq.push(['_trackEvent', 'NVCL:O&M DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, datasetId ]);
+                                    _gaq.push(['_trackPageview', '/OM/getNVCLWFSDownload.do']);
                                     Ext.getCmp('tsgEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
                                     sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
