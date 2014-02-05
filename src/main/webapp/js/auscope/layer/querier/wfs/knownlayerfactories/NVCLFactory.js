@@ -500,7 +500,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('tsgEmailAddress').markInvalid();
                                     return;
                                 } else {
-                                    _gaq.push(['_trackEvent', 'NVCL:TSG DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, datasetId ]);
+                                    _gaq.push(['_trackEvent', 'NVCL:TSG DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, 'datasetid:' + datasetId ]);
                                     _gaq.push(['_trackPageview', '/tsg/getNVCLTSGDownload.do']);
                                     Ext.getCmp('omEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
@@ -608,7 +608,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('omEmailAddress').markInvalid();
                                     return;
                                 } else {
-                                    _gaq.push(['_trackEvent', 'NVCL:O&M DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, datasetId ]);
+                                    _gaq.push(['_trackEvent', 'NVCL:O&M DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, 'datasetid:' + datasetId ]);
                                     _gaq.push(['_trackPageview', '/OM/getNVCLWFSDownload.do']);
                                     Ext.getCmp('tsgEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
