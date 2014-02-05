@@ -91,7 +91,7 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
                     xtype: 'hidden',
                     itemId: 'hylogger-field',
                     name: 'onlyHylogger',
-                    value: true
+                    value: false
                 }]
             }]
         });
