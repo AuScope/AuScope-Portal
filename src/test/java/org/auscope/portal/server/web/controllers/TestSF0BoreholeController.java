@@ -1,54 +1,27 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
-
-import net.sf.saxon.xpath.XPathFactoryImpl;
-
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsFilterVisitor;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
-import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.ResourceUtil;
-import org.auscope.portal.core.util.DOMUtil;
-import org.auscope.portal.core.util.FileIOUtil;
-import org.auscope.portal.gsml.SF0BoreholeFilter;
-import org.auscope.portal.mineraloccurrence.Commodity;
-import org.auscope.portal.mineraloccurrence.MineralOccurrenceNamespaceContext;
-import org.auscope.portal.nvcl.NVCLNamespaceContext;
-import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * The Class TestNVCLController.
@@ -59,9 +32,6 @@ import org.w3c.dom.NodeList;
 public class TestSF0BoreholeController extends PortalTestClass {
 
 
-    /** The mock http response. */
-    private HttpServletResponse mockHttpResponse;
-
     /** The mock csw service. */
     private CSWCacheService mockCSWService;
 
@@ -69,17 +39,17 @@ public class TestSF0BoreholeController extends PortalTestClass {
     private SF0BoreholeService mockSF0BoreholeService;
 
     /** The portrayal borehole view controller. */
-    private SF0BoreholeController sf0BoreholeController;
+    private NVCLController sf0BoreholeController;
 
     /**
      * Setup.
      */
     @Before
     public void setUp() {
-        this.mockHttpResponse = context.mock(HttpServletResponse.class);
+        context.mock(HttpServletResponse.class);
         this.mockSF0BoreholeService = context.mock(SF0BoreholeService.class);
         this.mockCSWService = context.mock(CSWCacheService.class);
-        this.sf0BoreholeController = new SF0BoreholeController(this.mockSF0BoreholeService, this.mockCSWService);
+        this.sf0BoreholeController = new NVCLController(this.mockSF0BoreholeService, this.mockCSWService, null, null);
     }
 
     /**
@@ -110,7 +80,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
 
         }});
 
-        ModelAndView response = this.sf0BoreholeController.doSF0BoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -150,7 +120,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
             will(returnValue(httpMethodURI));
         }});
 
-        ModelAndView response = this.sf0BoreholeController.doSF0BoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -184,7 +154,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
             will(returnValue(httpMethodURI));
         }});
 
-        ModelAndView response = this.sf0BoreholeController.doSF0BoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
@@ -213,7 +183,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
             will(returnValue(httpMethodURI));
         }});
 
-        ModelAndView response = this.sf0BoreholeController.doSF0BoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
@@ -245,7 +215,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
             will(returnValue(httpMethodURI));
         }});
 
-        ModelAndView response = this.sf0BoreholeController.doSF0BoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures,"", onlyHylogger,serviceFilter);
+        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures,"", onlyHylogger,serviceFilter);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -264,7 +234,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
         final int maxFeatures = 10;
         final String onlyHylogger = "off";
 
-        ModelAndView response = this.sf0BoreholeController.doSF0BoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures,"", onlyHylogger,serviceFilter);
+        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures,"", onlyHylogger,serviceFilter);
         Map data = (Map) response.getModel().get("data");
         Assert.assertNull(data);
     }
@@ -283,12 +253,12 @@ public class TestSF0BoreholeController extends PortalTestClass {
           final String getSF0FilterResponse = "sf0FilterResponse";
 
           context.checking(new Expectations() {{
-              oneOf(mockSF0BoreholeService).getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox);
+              oneOf(mockSF0BoreholeService).getFilter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox, null);
               will(returnValue(getSF0FilterResponse));
 
           }});
 
-          String style = this.sf0BoreholeController.getStyle(this.mockSF0BoreholeService.getSF0Filter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox),
+          String style = this.sf0BoreholeController.getStyle(this.mockSF0BoreholeService.getFilter(nameFilter, custodianFilter, filterDate, maxFeatures, bbox, null),
                  "gsmlp:BoreholeView", "#2242c7");
           Assert.assertNotNull(style);
           Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));

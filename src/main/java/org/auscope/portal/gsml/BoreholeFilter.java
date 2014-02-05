@@ -16,9 +16,9 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 
 public class BoreholeFilter extends AbstractFilter {
 
-    private String boreholeName;
-    private String custodian;
-    private String dateOfDrilling;
+    protected String boreholeName;
+    protected String custodian;
+    protected String dateOfDrilling;
     private List<String> restrictToIDList;
 
     // -------------------------------------------------------------- Constants
@@ -54,7 +54,7 @@ public class BoreholeFilter extends AbstractFilter {
     }
 
     // -------------------------------------------------------- Private Methods
-    private String generateFilterFragment() {
+    protected String generateFilterFragment() {
         List<String> parameterFragments = new ArrayList<String>();
         if (boreholeName != null && !boreholeName.isEmpty()) {
             parameterFragments.add(this.generatePropertyIsLikeFragment(

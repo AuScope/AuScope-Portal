@@ -8,7 +8,6 @@ import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
@@ -61,7 +60,7 @@ public class SF0BoreholeService extends BoreholeService {
         HttpRequestBase method = null;
         try {
             // Create a GetFeature request with an empty filter - get all
-            method = this.generateWFSRequest(serviceURL, "gsmlp:BoreholeView", null, filterString, maxFeatures, null, ResultType.Results);
+            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null, ResultType.Results);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
             String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
 
@@ -72,27 +71,16 @@ public class SF0BoreholeService extends BoreholeService {
     }
 
 
-    /**
-     * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
-     * @return
-     */
-    public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
-        String filterString = null;
-        if (bbox == null) {
-            filterString = filter.getFilterStringAllRecords();
-        } else {
-            filterString = filter.getFilterStringBoundingBox(bbox);
-        }
-
-        return filterString;
-    }
-
-    public String getSF0Filter(String boreholeName, String custodian, String dateOfDrilling,
-            int maxFeatures, FilterBoundingBox bbox) throws Exception {
+    @Override
+    public String getFilter(String boreholeName, String custodian, String dateOfDrilling,
+            int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
         SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling);
         return generateFilterString(filter, bbox);
+    }
+    
+    @Override
+    public String getTypeName() {
+    	return "gsmlp:BoreholeView";
     }
 
 }

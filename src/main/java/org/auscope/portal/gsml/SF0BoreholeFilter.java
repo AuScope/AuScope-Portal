@@ -3,7 +3,6 @@ package org.auscope.portal.gsml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +14,17 @@ import org.springframework.stereotype.Service;
  */
 @Service
 
-public class SF0BoreholeFilter extends AbstractFilter {
-
-    private String boreholeName;
-    private String custodian;
-    private String dateOfDrilling;
+public class SF0BoreholeFilter extends BoreholeFilter {
 
     // ----------------------------------------------------------- Constructors
 
     public SF0BoreholeFilter() {
         // test
+    	super(null, null, null, null);
     }
 
     public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling) {
-        this.boreholeName = boreholeName;
-        this.custodian = custodian;
-        this.dateOfDrilling = dateOfDrilling;
+        super(boreholeName, custodian, dateOfDrilling, null);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -49,9 +43,9 @@ public class SF0BoreholeFilter extends AbstractFilter {
                                 "gsmlp:shape"),
                         this.generateFilterFragment()));
     }
-
-    // -------------------------------------------------------- Private Methods
-    private String generateFilterFragment() {
+    
+    @Override
+    protected String generateFilterFragment() {
         List<String> parameterFragments = new ArrayList<String>();
         if (boreholeName != null && !boreholeName.isEmpty()) {
             parameterFragments.add(this.generatePropertyIsLikeFragment(

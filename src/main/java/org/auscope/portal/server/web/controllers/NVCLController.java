@@ -529,4 +529,122 @@ public class NVCLController extends BasePortalController {
 
         writeStreamResponse(response, serviceResponse);
     }
+    
+    /**
+     * Handles getting the style of the SF0 borehole filter queries. (If the
+     * bbox elements are specified, they will limit the output response to 200
+     * records implicitly)
+     *
+     * @param mineName
+     *            the name of the mine to query for
+     * @param bbox
+     * @param maxFeatures
+     * @throws Exception
+     */
+    @RequestMapping("/doFilterStyle.do")
+    public void doBoreholeFilterStyle(
+            HttpServletResponse response,
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
+            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
+            throws Exception {
+
+        String[] serviceFilterArray = serviceFilter.split(",");
+
+        if (!serviceFilter.equals("")
+                && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
+            // return this.generateJSONResponseMAV(false,null,"Not Queried");
+            log.warn("Not Queried");
+        }
+
+        boolean onlyHylogger = false;
+        if (onlyHyloggerString != null && onlyHyloggerString.length() > 0) {
+            if (onlyHyloggerString.equals("on")) {
+                onlyHylogger = true;
+            } else {
+                onlyHylogger = Boolean.parseBoolean(onlyHyloggerString);
+            }
+        }
+
+        FilterBoundingBox bbox = FilterBoundingBox
+                .attemptParseFromJSON(bboxJson);
+        
+        List<String> hyloggerBoreholeIDs = null;
+        if (onlyHylogger) {
+            try {
+                hyloggerBoreholeIDs = this.boreholeService
+                        .discoverHyloggerBoreholeIDs(this.cswService,
+                                new CSWRecordsHostFilter(serviceUrl));
+            } catch (Exception e) {
+                log.warn(String
+                        .format("Error requesting list of hylogger borehole ID's from %1$s: %2$s",
+                                serviceUrl, e));
+                log.debug("Exception:", e);
+            }
+
+            if (hyloggerBoreholeIDs.size() == 0) {
+                log.warn("No hylogger boreholes exist (or the services are missing)");
+            }
+        }
+
+        String filter = this.boreholeService.getFilter(boreholeName,
+                custodian, dateOfDrilling, maxFeatures, bbox,
+                hyloggerBoreholeIDs);
+        String style = this.getStyle(filter, this.boreholeService.getTypeName(), "#2242c7");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,
+                false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+
+    public String getStyle(String filter, String name, String color) {
+
+        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>"
+                + name
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>portal-style</Name>"
+                + "<Title>portal-style</Title>"
+                + "<Abstract>portal-style</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>portal-style</Name>"
+                + "<Abstract>portal-style</Abstract>"
+                + filter
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">"
+                + color
+                + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>8</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+
+        return style;
+    }
+    
 }

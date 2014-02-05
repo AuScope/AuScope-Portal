@@ -18,6 +18,7 @@ import org.auscope.portal.core.services.csw.CSWRecordsFilterVisitor;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
@@ -83,7 +84,7 @@ public class BoreholeService extends BaseWFSService {
         HttpRequestBase method = null;
         try {
             // Create a GetFeature request with an empty filter - get all
-            method = this.generateWFSRequest(serviceURL, "gsml:Borehole", null, filterString, maxFeatures, null, ResultType.Results);
+            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null, ResultType.Results);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
             String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
 
@@ -154,4 +155,31 @@ public class BoreholeService extends BaseWFSService {
 
         return ids;
     }
+    
+    public String getFilter(String boreholeName, String custodian, String dateOfDrilling,
+            int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
+        BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling, ids);
+        return generateFilterString(filter, bbox);
+    }
+    
+    /**
+     * Utility for turning a filter and optional bounding box into a OGC filter string
+     * @param filter The filter
+     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @return
+     */
+    public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
+        String filterString = null;
+        if (bbox == null) {
+            filterString = filter.getFilterStringAllRecords();
+        } else {
+            filterString = filter.getFilterStringBoundingBox(bbox);
+        }
+
+        return filterString;
+    }
+
+	public String getTypeName() {
+		return "gsml:Borehole";
+	}
 }
