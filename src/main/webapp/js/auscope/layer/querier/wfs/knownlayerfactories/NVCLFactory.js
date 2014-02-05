@@ -500,7 +500,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('tsgEmailAddress').markInvalid();
                                     return;
                                 } else {
-                                    _gaq.push(['_trackEvent', 'NVCL:TSG DOWNLOAD', ''Download:' + nvclDownloadServiceUrl', datasetId ]);
+                                    _gaq.push(['_trackEvent', 'NVCL:TSG DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, datasetId ]);
                                     Ext.getCmp('omEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
                                     sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
@@ -607,7 +607,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('omEmailAddress').markInvalid();
                                     return;
                                 } else {
-                                    _gaq.push(['_trackEvent', 'NVCL:O&M DOWNLOAD', ''Download:' + nvclDownloadServiceUrl', datasetId ]);
+                                    _gaq.push(['_trackEvent', 'NVCL:O&M DOWNLOAD', 'Download:' + nvclDownloadServiceUrl, datasetId ]);
                                     Ext.getCmp('tsgEmailAddress').setValue(sEmail);
                                     var downloadForm = Ext.getCmp('nvclDownloadFrm').getForm();
                                     sUrl += '<iframe id="nav1" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="';
