@@ -227,7 +227,8 @@ public class WMSController extends BaseCSWController {
                             @RequestParam("WIDTH") String width,
                             @RequestParam("HEIGHT") String height,
                             @RequestParam("INFO_FORMAT") String infoFormat,
-                            @RequestParam("SLD_BODY") String sldBody) throws Exception {
+                            @RequestParam("SLD_BODY") String sldBody,
+                            @RequestParam(value="postMethod", defaultValue = "false") Boolean  postMethod) throws Exception {
 
       String[] bboxParts = bbox.split(",");
       double lng1 = Double.parseDouble(bboxParts[0]);
@@ -235,7 +236,7 @@ public class WMSController extends BaseCSWController {
       double lat1 = Double.parseDouble(bboxParts[1]);
       double lat2 = Double.parseDouble(bboxParts[3]);
 
-      String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857", Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2), Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude), Double.parseDouble(latitude), (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldBody);
+      String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857", Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2), Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude), Double.parseDouble(latitude), (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldBody,postMethod);
       //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
       //VT : GA style sheet also mess up the portal styling of tables as well.
       if(responseString.contains("table, th, td {")){
