@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -212,9 +213,11 @@ public class WMSController extends BaseCSWController {
     * @param width
     * @param height
     * @param infoFormat
+    * @param sld_body - sld_body
+    * @param postMethod Use getfeatureinfo POST method rather then GET
     * @throws Exception
     */
-   @RequestMapping("/wmsMarkerPopup.do")
+   @RequestMapping(value = "/wmsMarkerPopup.do",  method = { RequestMethod.GET, RequestMethod.POST })
    public void wmsUnitPopup(HttpServletRequest request,
                             HttpServletResponse response,
                             @RequestParam("WMS_URL") String wmsUrl,

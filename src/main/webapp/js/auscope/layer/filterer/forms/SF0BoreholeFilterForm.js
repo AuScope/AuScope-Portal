@@ -66,7 +66,7 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
                     fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' + 'Name',
                     name: 'boreholeName'
                 },{
-                	xtype: 'datefield',
+                    xtype: 'datefield',
                     anchor: '95%',
                     itemId: 'drillingdate-field',
                     fieldLabel: 'Drill Date',
