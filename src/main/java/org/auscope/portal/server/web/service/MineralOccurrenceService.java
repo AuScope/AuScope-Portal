@@ -15,6 +15,7 @@ import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
+import org.auscope.portal.mineraloccurrence.MinOccurViewFilter;
 import org.auscope.portal.mineraloccurrence.Mine;
 import org.auscope.portal.mineraloccurrence.MineFilter;
 import org.auscope.portal.mineraloccurrence.MineralOccurrenceFilter;
@@ -321,4 +322,13 @@ public class MineralOccurrenceService extends BaseWFSService {
         MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,"","","","","");
         return generateFilterString(filter, bbox);
     }
+
+
+
+    public String getMinOccurViewFilter(String commodityName, FilterBoundingBox bbox)
+            throws Exception {
+        MinOccurViewFilter filter = new MinOccurViewFilter(commodityName);
+        return generateFilterString(filter, bbox);
+    }
+
 }

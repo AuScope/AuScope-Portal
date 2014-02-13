@@ -1,12 +1,14 @@
 package org.auscope.portal.server.web.controllers.downloads;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.auscope.portal.server.web.service.download.MineralOccurrenceDownloadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,12 +30,17 @@ public class EarthResourcesDownloadController extends BasePortalController{
  // ----------------------------------------------------- Instance variables
 
     private MineralOccurrenceDownloadService mineralOccurrenceDownloadService;
+    private MineralOccurrenceService mineralOccurrenceService;
+
+    public static final String MIN_OCCUR_VIEW_TYPE = "mo:MinOccView";
 
     private final Log log = LogFactory.getLog(getClass());
 
     @Autowired
-    public EarthResourcesDownloadController(MineralOccurrenceDownloadService mineralOccurrenceDownloadService) {
+    public EarthResourcesDownloadController(MineralOccurrenceDownloadService mineralOccurrenceDownloadService,
+                                MineralOccurrenceService mineralOccurrenceService) {
         this.mineralOccurrenceDownloadService = mineralOccurrenceDownloadService;
+        this.mineralOccurrenceService = mineralOccurrenceService;
 
     }
 
@@ -216,6 +224,41 @@ public class EarthResourcesDownloadController extends BasePortalController{
                 file.delete();
             }
         }
+    }
+
+
+    /**
+     * Handles counting the results of a Earth Resource MineralOccerrence SF0 view style request query.
+     *
+     * @param commodityName
+     * @param bbox
+     * @param maxFeatures
+     *
+     * @throws Exception
+     */
+    @RequestMapping("/downloadMinOccurView.do")
+    public void doMinOccurViewFilterStyle(
+            HttpServletResponse response,
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(value="commodityName",         required=false) String commodityName,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
+
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+
+        String unescapeCommodityName="";
+        if(commodityName!=null){
+            unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
+        }
+        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName, bbox);
+        response.setContentType("text/xml");
+        OutputStream outputStream = response.getOutputStream();
+
+        InputStream results = this.mineralOccurrenceDownloadService.downloadWFS(serviceUrl, MIN_OCCUR_VIEW_TYPE, filter, null);
+        FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
+        outputStream.close();
+
     }
 
 

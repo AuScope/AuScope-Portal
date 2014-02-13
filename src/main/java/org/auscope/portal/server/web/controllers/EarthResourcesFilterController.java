@@ -10,6 +10,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.web.controllers.downloads.EarthResourcesDownloadController;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -454,6 +455,45 @@ public class EarthResourcesFilterController extends BasePortalController {
         outputStream.close();
     }
 
+    /**
+     * Handles counting the results of a Earth Resource MineralOccerrence SF0 view style request query.
+     *
+     * @param commodityName
+     * @param bbox
+     * @param maxFeatures
+     *
+     * @throws Exception
+     */
+    @RequestMapping("/doMinOccurViewFilterStyle.do")
+    public void doMinOccurViewFilterStyle(
+            HttpServletResponse response,
+            @RequestParam(value="commodityName",         required=false) String commodityName,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
+        //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
+        FilterBoundingBox bbox = null;
+        // Get the mining activities
+        String unescapeCommodityName="";
+        if(commodityName!=null){
+            unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
+        }
+        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName, bbox);
+
+        String style=this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "#ed9c38");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+
 
     public String getStyle(String filter, String name, String color){
         //VT : This is a hack to get around using functions in feature chaining
@@ -462,7 +502,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         // knowing app-schema mapping.
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:mo=\"http://xmlns.geoscience.gov.au/minoccml/1.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
                 + "<NamedLayer>" + "<Name>" + name + "</Name>"
                 + "<UserStyle>" + "<Name>portal-style</Name>"
                 + "<Title>portal-style</Title>"

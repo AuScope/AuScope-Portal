@@ -38,7 +38,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
     public void setUp() {
 
         this.mineralOccurrenceDownloadService = context.mock(MineralOccurrenceDownloadService.class);
-        this.earthResourcesDownloadController = new EarthResourcesDownloadController(this.mineralOccurrenceDownloadService);
+        this.earthResourcesDownloadController = new EarthResourcesDownloadController(this.mineralOccurrenceDownloadService,null);
         this.response = context.mock(HttpServletResponse.class);
     }
 
