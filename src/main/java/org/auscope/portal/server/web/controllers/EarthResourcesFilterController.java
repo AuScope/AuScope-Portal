@@ -509,8 +509,8 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "<Abstract>EarthResource</Abstract>"
                 + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>"
                 + "<Rule>"
-                + "<Name>portal-style</Name>"
-                + "<Abstract>portal-style</Abstract>"
+                + "<Name>" + name + "</Name>"
+                + "<Abstract>" + name + "</Abstract>"
                 + filter
                 + "<PointSymbolizer>"
                 + "<Graphic>"
