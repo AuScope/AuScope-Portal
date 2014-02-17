@@ -65,10 +65,10 @@ public class MineralTenementController extends BasePortalController {
      */
     @RequestMapping("/getMineralTenementStyle.do")
     public void doMineFilterStyle(
-                        @RequestParam("serviceUrl") String serviceUrl,
-                        @RequestParam("name") String name,
-                        @RequestParam("tenementType") String tenementType,
-                        @RequestParam("owner") String owner,
+                        @RequestParam(required = false,value="serviceUrl") String serviceUrl,
+                        @RequestParam(required = false, value ="name") String name,
+                        @RequestParam(required = false, value = "tenementType") String tenementType,
+                        @RequestParam(required = false, value = "owner") String owner,
                         HttpServletResponse response)throws Exception {
 
         //Vt: wms shouldn't need the bbox because it is tiled.
@@ -113,7 +113,7 @@ public class MineralTenementController extends BasePortalController {
                         "<FeatureTypeStyle>" +
                         "<Rule>" +
                         "<Name>Polygon for mineral tenement</Name>" +
-                        "<Title>GreenFill GreenOutline</Title>" +
+                        "<Title>Not Active Tenement</Title>" +
                         "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
                          filter +
                         "<PolygonSymbolizer>" +
@@ -129,7 +129,7 @@ public class MineralTenementController extends BasePortalController {
                         "</Rule>" +
                         "<Rule>" +
                         "<Name>Polygon for mineral tenement</Name>" +
-                        "<Title>GreenFill GreenOutline</Title>" +
+                        "<Title>Active Tenement</Title>" +
                         "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
                          stylefilter +
                         "<PolygonSymbolizer>" +
