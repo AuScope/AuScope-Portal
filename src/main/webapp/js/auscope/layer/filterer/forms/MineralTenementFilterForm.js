@@ -42,6 +42,16 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
             data : adminAreasList
         });
 
+        var tenementTypeStore = Ext.create('Ext.data.Store', {
+            fields: ['displayText', 'valueText'],
+            data : [
+                {displayText: 'Exploration', valueText: '*exploration*'},
+                {displayText: 'Prospecting', valueText: '*prospecting*'},
+                {displayText: 'Miscellaneous', valueText: '*miscellaneous*'},
+                {displayText: 'MINING LEASE', valueText: '*mining*'},
+            ]
+        });
+
         Ext.apply(config, {
             delayedFormLoading: false,
             border: false,
@@ -68,12 +78,18 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
                                 '</span>',
                     name: 'name'
                 },{
+                    xtype: 'combo',
                     anchor: '100%',
-                    xtype: 'textfield',
-                    fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
-                                    'Tenement Type' +
-                                '</span>',
-                    name: 'tenementType'
+                    fieldLabel: 'Tenement Type',
+                    name: 'tenementType',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    lazyRender:true,
+                    mode: 'local',
+                    store: tenementTypeStore,
+                    valueField: 'valueText',
+                    displayField: 'displayText',
+                    hiddenName: 'valueText'
                 },{
                     anchor: '100%',
                     xtype: 'textfield',
@@ -81,6 +97,22 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
                                     'owner' +
                                 '</span>',
                     name: 'owner'
+                },{
+                    anchor: '100%',
+                    xtype: 'datefield',
+                    fieldLabel: '<span data-qtip="Tenement active till this date">' +
+                                'Tenement Expiry End Date' +
+                                '</span>',
+                    name: 'endDate',
+                    format: "Y-m-d",
+                    value: ''
+                },{
+                    anchor: '100%',
+                    xtype: 'textfield',
+                    fieldLabel: '<span data-qtip="Minimum size of the Tenement">' +
+                                'Min Size' +
+                                '</span>',
+                    name: 'size'
                 },{
                     xtype: 'combo',
                     anchor: '100%',

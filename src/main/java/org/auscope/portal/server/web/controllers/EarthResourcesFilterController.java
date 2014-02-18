@@ -468,6 +468,10 @@ public class EarthResourcesFilterController extends BasePortalController {
     public void doMinOccurViewFilterStyle(
             HttpServletResponse response,
             @RequestParam(value="commodityName",         required=false) String commodityName,
+            @RequestParam(required = false, value = "size") String size,
+            @RequestParam(required = false, value = "minOreAmount") String minOreAmount,
+            @RequestParam(required = false, value = "minReserves") String minReserves,
+            @RequestParam(required = false, value = "minResources") String minResources,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {
@@ -478,7 +482,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         if(commodityName!=null){
             unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
         }
-        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName, bbox);
+        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName,minOreAmount,minReserves,minResources, bbox);
 
         String style=this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "#ed9c38");
 

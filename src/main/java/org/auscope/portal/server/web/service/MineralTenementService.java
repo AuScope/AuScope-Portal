@@ -44,16 +44,16 @@ public class MineralTenementService extends BaseWFSService {
         return filterString;
     }
 
-    public String getMineralTenementFilter(String name, String tenementType, String owner,FilterBoundingBox bbox)
+    public String getMineralTenementFilter(String name, String tenementType, String owner,String size, String endDate,FilterBoundingBox bbox)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name,tenementType,owner);
+        MineralTenementFilter filter = new MineralTenementFilter(name,tenementType,owner,size,endDate);
         return generateFilterString(filter,bbox);
     }
 
 
-    public String getMineralTenementWithStyling(String name, String tenementType, String owner)
+    public String getMineralTenementWithStyling(String name, String tenementType, String owner,String size, String endDate)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name,tenementType,owner);
+        MineralTenementFilter filter = new MineralTenementFilter(name,tenementType,owner,size,endDate);
         return generateAdditionalStyleFilter(filter);
     }
 

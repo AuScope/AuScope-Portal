@@ -113,7 +113,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MinOccurViewFactory', {
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'Specification URI',
-                    value : earthResourceSpecification_uri
+                    value : this._makeWfsUriPopupHtml(earthResourceSpecification_uri, earthResourceSpecification_uri, 'Click here for more information about this feature.')
                 }]
             }],
             buttonAlign : 'right',

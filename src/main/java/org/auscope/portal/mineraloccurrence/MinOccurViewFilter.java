@@ -23,11 +23,23 @@ public class MinOccurViewFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public MinOccurViewFilter(String commodity) {
+    public MinOccurViewFilter(String commodity,String minOreAmount,String minReserves,String minResources) {
 
         fragments = new ArrayList<String>();
         if (commodity != null && !commodity.isEmpty()) {
             fragments.add(this.generatePropertyIsLikeFragment("mo:commodity", commodity));
+        }
+
+        if (minOreAmount != null && !minOreAmount.isEmpty()) {
+            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("mo:totalOreAmount", minOreAmount));
+        }
+
+        if (minReserves != null && !minReserves.isEmpty()) {
+            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("mo:totalReserves", minReserves));
+        }
+
+        if (minResources != null && !minResources.isEmpty()) {
+            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("mo:totalResources", minResources));
         }
 
     }

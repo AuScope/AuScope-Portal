@@ -81,7 +81,7 @@ Ext.define('auscope.layer.filterer.forms.MinOccurViewFilterForm', {
                     name: 'commodityName',
                     fieldLabel: '<span data-qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
                     labelAlign: 'right',
-                    forceSelection: true,
+                    forceSelection: false,
                     queryMode: 'local',
                     store: commodityStore,
                     triggerAction: 'all',
@@ -89,6 +89,30 @@ Ext.define('auscope.layer.filterer.forms.MinOccurViewFilterForm', {
                     typeAheadDelay: 500,
                     displayField:'label',   /* change tpl field to this value as well! */
                     valueField:'urn'
+                },{
+                    anchor: '100%',
+                    xtype: 'textfield',
+                    labelAlign: 'right',
+                    fieldLabel: '<span data-qtip="Minimum Ore Amount">' +
+                                'Min Ore Amount' +
+                                '</span>',
+                    name: 'minOreAmount'
+                },{
+                    anchor: '100%',
+                    xtype: 'textfield',
+                    labelAlign: 'right',
+                    fieldLabel: '<span data-qtip="Minimum Ore Reserves">' +
+                                'Min Ore Reserves' +
+                                '</span>',
+                    name: 'minReserves'
+                },{
+                    anchor: '100%',
+                    xtype: 'textfield',
+                    labelAlign: 'right',
+                    fieldLabel: '<span data-qtip="Minimum Ore Resources">' +
+                                'Min Ore Resources' +
+                                '</span>',
+                    name: 'minResources'
                 },{
                     xtype: 'combo',
                     anchor: '100%',

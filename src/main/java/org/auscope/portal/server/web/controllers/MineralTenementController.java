@@ -36,12 +36,14 @@ public class MineralTenementController extends BasePortalController {
                         @RequestParam("name") String name,
                         @RequestParam("tenementType") String tenementType,
                         @RequestParam("owner") String owner,
+                        @RequestParam(required = false, value = "size") String size,
+                        @RequestParam(required = false, value = "endDate") String endDate,
                         @RequestParam(required = false, value = "bbox") String bboxJson,
                         HttpServletResponse response)throws Exception {
 
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        String filter=this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner,bbox); //VT:get filter from service
+        String filter=this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner,size,endDate,bbox); //VT:get filter from service
 
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
@@ -69,13 +71,15 @@ public class MineralTenementController extends BasePortalController {
                         @RequestParam(required = false, value ="name") String name,
                         @RequestParam(required = false, value = "tenementType") String tenementType,
                         @RequestParam(required = false, value = "owner") String owner,
+                        @RequestParam(required = false, value = "size") String size,
+                        @RequestParam(required = false, value = "endDate") String endDate,
                         HttpServletResponse response)throws Exception {
 
         //Vt: wms shouldn't need the bbox because it is tiled.
         FilterBoundingBox bbox = null;
-        String stylefilter=this.mineralTenementService.getMineralTenementWithStyling(name, tenementType, owner); //VT:get filter from service
+        String stylefilter=this.mineralTenementService.getMineralTenementWithStyling(name, tenementType, owner,size,endDate); //VT:get filter from service
 
-        String filter=this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner,bbox); //VT:get filter from service
+        String filter=this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner,size,endDate,bbox); //VT:get filter from service
 
         String style=this.getPolygonStyle(stylefilter, filter,MINERAL_TENEMENT_TYPE, "#00FF00","#00FF00");
 
