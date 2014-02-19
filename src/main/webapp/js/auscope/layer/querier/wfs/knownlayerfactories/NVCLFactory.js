@@ -83,10 +83,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 //Add our thumbnail tab (if available)
                 if (trayThumbNail !== null) {
                     tp.add({
-                        title : ' Thumb Nail Imagery ',
+                        title : 'Mosaic',
                         layout : 'fit',
                         html: '<iframe id="nav" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
-                              'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&width=2&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
+                              'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&width=3&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
                               '"></iframe>'
                     });
                 }
@@ -98,6 +98,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     //This store will be loaded when this component renders
                     store : Ext.create('Ext.data.Store', {
                         autoLoad : true,
+                        sorters: [{ property:'logName', direction:'ASC'}],
                         model : 'auscope.knownlayer.nvcl.Log',
                         proxy : {
                             type : 'ajax',
@@ -265,17 +266,43 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 }]
                             },{
                                 xtype       : 'fieldset',
-                                title       : 'Graph Types',
+                                title       : 'Graph Options',
+                                padding : '0 0 0 0',
+                                border : false,
+                                layout: {
+                                    type: 'hbox',
+                                    pack: 'start',
+                                    align: 'stretch'
+                                },
                                 autoHeight  : true,
                                 items       :[{
-                                    xtype   : 'radiogroup',
-                                    id      : 'ts1',
-                                    columns : 1,
-                                    items   : [
-                                        {boxLabel: 'Stacked Bar Chart', name: 'graphType', inputValue: 1, checked: true},
-                                        {boxLabel: 'Scattered Chart', name: 'graphType', inputValue: 2},
-                                        {boxLabel: 'Line Chart', name: 'graphType', inputValue: 3}
-                                    ]
+                                    xtype  : 'fieldset',
+                                    title  : 'Graph Type',
+                                    flex   : 3,
+                                    items :[{
+                                        xtype   : 'radiogroup',
+                                        flex    : 2,
+                                        id      : 'ts1',
+                                        columns : 1,
+                                        items   : [
+                                            {boxLabel: 'Stacked Bar Chart', name: 'graphType', inputValue: 1, checked: true},
+                                            {boxLabel: 'Scattered Chart', name: 'graphType', inputValue: 2},
+                                            {boxLabel: 'Line Chart', name: 'graphType', inputValue: 3}
+                                        ]
+                                    }]
+                                }, {
+                                    xtype: 'fieldset',
+                                    title : 'Graph Display Option',
+                                    flex: 2,
+                                    items : [{
+                                        xtype     : 'checkbox',
+                                        flex      : 1,
+                                        checked   : true,
+                                        boxLabel  : 'Show Legend',
+                                        name      : 'legend',
+                                        inputValue: '1',
+                                        itemId    : 'legendcheckbox1'
+                                    }]
                                 }]
 
                             }],
@@ -437,7 +464,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         xtype           : 'textfield',
                         id              : 'tsgEmailAddress',
                         fieldLabel      : 'Email Address*',
-                        value           : 'Your.Name@csiro.au',
+                        value           : 'Your.Name@email.com.au',
                         name            : 'email',
                         selectOnFocus   : true,
                         allowBlank      : false,
@@ -463,7 +490,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             iconCls : 'info',
                             handler: function() {
                                 var sEmail = Ext.getCmp('tsgEmailAddress').getValue();
-                                if (sEmail === 'Your.Name@csiro.au' || sEmail === '') {
+                                if (sEmail === 'Your.Name@email.com.au' || sEmail === '') {
                                     Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
                                     Ext.getCmp('tsgEmailAddress').markInvalid();
                                     return;
@@ -495,7 +522,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             handler: function(button) {
                                 var sUrl = '';
                                 var sEmail = Ext.getCmp('tsgEmailAddress').getValue();
-                                if (sEmail == 'Your.Name@csiro.au' || sEmail == '') {
+                                if (sEmail == 'Your.Name@email.com.au' || sEmail == '') {
                                     Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
                                     Ext.getCmp('tsgEmailAddress').markInvalid();
                                     return;
@@ -555,7 +582,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         id            : 'omEmailAddress',
                         xtype         : 'textfield',
                         fieldLabel    : 'Email Address*',
-                        value         : 'Your.Name@csiro.au',
+                        value         : 'Your.Name@email.com.au',
                         name          : 'email',
                         selectOnFocus : true,
                         allowBlank    : false,
@@ -573,7 +600,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             iconCls : 'info',
                             handler : function() {
                                 var sEmail = Ext.getCmp('omEmailAddress').getValue();
-                                if (sEmail === 'Your.Name@csiro.au' || sEmail === '') {
+                                if (sEmail === 'Your.Name@email.com.au' || sEmail === '') {
                                     Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
                                     Ext.getCmp('omEmailAddress').markInvalid();
                                     return;
@@ -605,7 +632,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             handler: function(button) {
                                 var sUrl = '';
                                 var sEmail = Ext.getCmp('omEmailAddress').getValue();
-                                if (sEmail === 'Your.Name@csiro.au' || sEmail === '') {
+                                if (sEmail === 'Your.Name@email.com.au' || sEmail === '') {
                                     Ext.MessageBox.alert('Unable to submit request...','Please Enter valid Email Address');
                                     Ext.getCmp('omEmailAddress').markInvalid();
                                     return;
@@ -682,7 +709,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
 
         return Ext.create('portal.layer.querier.BaseComponent',{
-            tabTitle : 'Available Dataset',
+            tabTitle : 'Available Datasets',
             layout : 'fit',
             //We only have a single child which is our grid
             items : [{

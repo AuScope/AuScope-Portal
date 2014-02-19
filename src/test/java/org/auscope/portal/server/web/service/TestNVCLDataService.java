@@ -249,13 +249,13 @@ public class TestNVCLDataService extends PortalTestClass {
         context.checking(new Expectations() {{
 
 
-            oneOf(mockMethodMaker).getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
             oneOf(mockMethod).getFirstHeader("Content-Type");will(returnValue(mockHeader));
             oneOf(mockHeader).getValue();will(returnValue(contentType));
         }});
 
-        PlotScalarResponse response = dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);
+        PlotScalarResponse response = dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);
         Assert.assertNotNull(response);
         Assert.assertSame(responseStream, response.getResponse());
         Assert.assertEquals(contentType, response.getContentType());
@@ -279,11 +279,11 @@ public class TestNVCLDataService extends PortalTestClass {
         context.checking(new Expectations() {{
 
 
-            oneOf(mockMethodMaker).getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);will(returnValue(mockMethod));
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(new ConnectException()));
         }});
 
-        dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);
+        dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);
     }
 
     /**

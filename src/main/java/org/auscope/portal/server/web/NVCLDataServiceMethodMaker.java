@@ -123,7 +123,7 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
      * @return
      * @throws URISyntaxException
      */
-    public HttpRequestBase getPlotScalarMethod(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType) throws URISyntaxException {
+    public HttpRequestBase getPlotScalarMethod(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType, Integer legend) throws URISyntaxException {
         HttpGet method = new HttpGet();
 
         URIBuilder builder=new URIBuilder(urlPathConcat(serviceUrl, "plotscalar.html"));
@@ -145,6 +145,11 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
         if (samplingInterval != null) {
             builder.setParameter("samplinginterval", samplingInterval.toString());
         }
+
+        if (legend != null) {
+            builder.setParameter("legend", legend.toString());
+        }
+
         if (graphType != null) {
             switch (graphType) {
             case LineChart:

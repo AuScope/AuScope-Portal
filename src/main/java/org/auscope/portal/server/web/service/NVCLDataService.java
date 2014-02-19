@@ -169,14 +169,15 @@ public class NVCLDataService {
      * @param graphType [Optional] The type of graph to plot
      * @return
      */
-    public PlotScalarResponse getPlotScalar(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType) throws Exception {
-        HttpRequestBase method = methodMaker.getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);
+    public PlotScalarResponse getPlotScalar(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType,Integer legend) throws Exception {
+        HttpRequestBase method = methodMaker.getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,legend);
 
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
         Header contentHeader = method.getFirstHeader("Content-Type");
 
         return new PlotScalarResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
+
 
     /**
      * Makes a CSV download request and returns the resulting data in a CSVDownloadResponse

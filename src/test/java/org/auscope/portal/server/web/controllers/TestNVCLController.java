@@ -367,7 +367,7 @@ public class TestNVCLController extends PortalTestClass {
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
         context.checking(new Expectations() {{
-            oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);will(returnValue(mockPlotScalarResponse));
+            oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);will(returnValue(mockPlotScalarResponse));
 
             oneOf(mockHttpResponse).setContentType(contentType);
             oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
@@ -376,7 +376,7 @@ public class TestNVCLController extends PortalTestClass {
             allowing(mockPlotScalarResponse).getResponse();will(returnValue(inputStream));
         }});
 
-        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphTypeInt, mockHttpResponse);
+        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphTypeInt,0, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
     }
 
@@ -397,12 +397,12 @@ public class TestNVCLController extends PortalTestClass {
         final PlotScalarGraphType graphType = PlotScalarGraphType.StackedBarChart;
 
         context.checking(new Expectations() {{
-            oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);will(throwException(new ConnectException()));
+            oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);will(throwException(new ConnectException()));
 
             oneOf(mockHttpResponse).sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }});
 
-        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphTypeInt, mockHttpResponse);
+        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphTypeInt,0, mockHttpResponse);
     }
 
     /**

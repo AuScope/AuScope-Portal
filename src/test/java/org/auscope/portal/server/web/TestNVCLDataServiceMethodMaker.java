@@ -64,7 +64,7 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
     @Test
     public void testParamValidity_GetPlotScalar() throws Exception {
         //Mandatory
-        URI uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, null, null, null, null, null, null).getURI();
+        URI uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, null, null, null, null, null, null,0).getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertDoesntContainURLParam(uri, "startdepth");
         assertDoesntContainURLParam(uri, "enddepth");
@@ -72,9 +72,10 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertDoesntContainURLParam(uri, "width");
         assertDoesntContainURLParam(uri, "height");
         assertDoesntContainURLParam(uri, "graphtype");
+        assertContainsURLParam(uri, "legend", "0");
 
         //Optional (also test the various PlotScalarGraphType mappins)
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.LineChart).getURI();
+        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.LineChart,0).getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertContainsURLParam(uri, "startdepth", "10");
         assertContainsURLParam(uri, "enddepth", "20");
@@ -82,8 +83,9 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "width", "30");
         assertContainsURLParam(uri, "height", "40");
         assertContainsURLParam(uri, "graphtype", "3");
+        assertContainsURLParam(uri, "legend", "0");
 
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.ScatteredChart).getURI();
+        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.ScatteredChart,1).getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertContainsURLParam(uri, "startdepth", "10");
         assertContainsURLParam(uri, "enddepth", "20");
@@ -91,8 +93,9 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "width", "30");
         assertContainsURLParam(uri, "height", "40");
         assertContainsURLParam(uri, "graphtype", "2");
+        assertContainsURLParam(uri, "legend", "1");
 
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.StackedBarChart).getURI();
+        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.StackedBarChart,1).getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertContainsURLParam(uri, "startdepth", "10");
         assertContainsURLParam(uri, "enddepth", "20");
@@ -100,6 +103,7 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "width", "30");
         assertContainsURLParam(uri, "height", "40");
         assertContainsURLParam(uri, "graphtype", "1");
+        assertContainsURLParam(uri, "legend", "1");
     }
 
     @Test

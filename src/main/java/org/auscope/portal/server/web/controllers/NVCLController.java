@@ -292,11 +292,14 @@ public class NVCLController extends BasePortalController {
             //the result is proxied, the service url becomes portal's url.
             String stringResponse = IOUtils.toString(serviceResponse.getResponse());
             stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "Display_Tray_Thumb.html");
+            stringResponse = stringResponse.replace("<img", "<img style=\"max-width: 33%;height: auto;width: auto\\9;\" ");
+
             FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
 
 
 
     }
+
 
     /**
      * Proxies a NVCL Plot Scalar request. Writes directly to the HttpServletResponse
@@ -313,6 +316,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required=false,value="height") Integer height,
             @RequestParam(required=false,value="samplingInterval") Double samplingInterval,
             @RequestParam(required=false,value="graphType") Integer graphTypeInt,
+            @RequestParam(value="legend",defaultValue = "0") Integer legend,
             HttpServletResponse response) throws Exception {
 
         //Parse our graph type
@@ -338,7 +342,7 @@ public class NVCLController extends BasePortalController {
         //Make our request
         PlotScalarResponse serviceResponse = null;
         try {
-            serviceResponse = dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType);
+            serviceResponse = dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType, legend);
         } catch (Exception ex) {
             log.warn(String.format("Error requesting scalar plot for logid '%1$s' from %2$s: %3$s", logId, serviceUrl, ex));
             log.debug("Exception:", ex);
@@ -529,7 +533,7 @@ public class NVCLController extends BasePortalController {
 
         writeStreamResponse(response, serviceResponse);
     }
-    
+
     /**
      * Handles getting the style of the SF0 borehole filter queries. (If the
      * bbox elements are specified, they will limit the output response to 200
@@ -573,7 +577,7 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox
                 .attemptParseFromJSON(bboxJson);
-        
+
         List<String> hyloggerBoreholeIDs = null;
         if (onlyHylogger) {
             try {
@@ -646,5 +650,5 @@ public class NVCLController extends BasePortalController {
 
         return style;
     }
-    
+
 }
