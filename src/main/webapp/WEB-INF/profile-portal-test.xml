@@ -70,6 +70,7 @@
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswAsterProduction" />
                 <ref bean="cswInSarProduction" />
+                <ref bean="cswMRTTest" />
             </list>
         </constructor-arg>
     </bean>

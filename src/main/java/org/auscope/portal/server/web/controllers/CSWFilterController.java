@@ -85,19 +85,6 @@ public class CSWFilterController extends BaseCSWController {
         return generateJSONResponseMAV(true, convertedServiceItems, "");
     }
 
-//    @RequestParam(value = "cswServiceId", required = false) String cswServiceId,
-//    @RequestParam(value = "anyText", required = false) String anyText,
-//    @RequestParam(value = "westBoundLongitude", required = false) Double westBoundLongitude,
-//    @RequestParam(value = "eastBoundLongitude", required = false) Double eastBoundLongitude,
-//    @RequestParam(value = "northBoundLatitude", required = false) Double northBoundLatitude,
-//    @RequestParam(value = "southBoundLatitude", required = false) Double southBoundLatitude,
-//    @RequestParam(value = "keyword", required = false) String[] keywords,
-//    @RequestParam(value = "keywordMatchType", required = false) KeywordMatchType keywordMatchType,
-//    @RequestParam(value = "capturePlatform", required = false) String capturePlatform,
-//    @RequestParam(value = "sensor", required = false) String sensor,
-//    @RequestParam(value = "limit", required = false) Integer maxRecords,
-//    @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition)
-
     /**
      * Gets a list of CSWRecord view objects filtered by the specified values from all internal
      * CSW's
