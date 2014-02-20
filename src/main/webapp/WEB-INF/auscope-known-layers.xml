@@ -152,7 +152,7 @@
 
         <property name="name" value="Mineral Occurrence View"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mo:MinOccView"/>
-        <property name="group" value="Mineral Tenements group"/>
+        <property name="group" value="AuScope Earth Resource Services"/>
         <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
