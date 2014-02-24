@@ -82,5 +82,10 @@ public class SF0BoreholeService extends BoreholeService {
     public String getTypeName() {
     	return "gsmlp:BoreholeView";
     }
+    
+    @Override
+    public String getGeometryName() {
+    	return "gsmlp:shape";
+    }
 
 }

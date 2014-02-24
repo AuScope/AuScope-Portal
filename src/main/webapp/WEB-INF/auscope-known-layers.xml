@@ -414,9 +414,9 @@
         <property name="name" value="Borehole View"/>
         <property name="group" value="Boreholes"/>
         <property name="description" value="A collection of services implementing the GeoSciML Portrayal Borehole View (gsmlp:BoreholeView)"/>
-        <property name="proxyUrl" value="doBoreholeFilter.do"/>
+        <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="doFilterStyle.do"/>
+        <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">

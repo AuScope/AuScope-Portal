@@ -21,6 +21,7 @@ import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -127,6 +128,27 @@ public class TestBoreholeService extends PortalTestClass {
         Assert.assertSame(mockMethod, result.getMethod());
     }
 
+    /**
+     * Test that filter style will return a style layer descriptor with correct feature type name and geom.
+     */
+	@Test
+	public void testFilterStyle() throws Exception {
+		final String nameFilter = "filterBob";
+		final String custodianFilter = "filterCustodian";
+		final String filterDate = "1986-10-09";
+		final int maxFeatures = 10;
+		final FilterBoundingBox bbox = null;
+
+		String filter = service.getFilter(nameFilter, custodianFilter,
+				filterDate, maxFeatures, bbox, null);
+
+		String style = service.getStyle(filter, "#2242c7");
+		Assert.assertNotNull(style);
+		Assert.assertThat(style, Matchers.containsString("gsml:Borehole"));
+		Assert.assertTrue(style.contains(service.getGeometryName()));
+
+	}
+	
     /**
      * Test get restricted boreholes bbox.
      *

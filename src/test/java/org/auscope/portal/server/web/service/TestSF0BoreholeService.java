@@ -19,9 +19,9 @@ import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
-import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -94,6 +94,27 @@ public class TestSF0BoreholeService extends PortalTestClass {
         Assert.assertEquals(kmlString, result.getTransformed());
         Assert.assertSame(mockMethod, result.getMethod());
     }
+    
+
+    /**
+      * Test that SF0 filter style will return a style layer descriptor with correct feature type name
+      */
+	@Test
+	public void testSF0FilterStyle() throws Exception {
+		final String nameFilter = "filterBob";
+		final String custodianFilter = "filterCustodian";
+		final String filterDate = "1986-10-09";
+		final int maxFeatures = 10;
+		final FilterBoundingBox bbox = null;
+
+		String filter = service.getFilter(nameFilter, custodianFilter,
+				filterDate, maxFeatures, bbox, null);
+
+		String style = service.getStyle(filter, "#2242c7");
+		Assert.assertNotNull(style);
+		Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
+
+	}
 
     /**
      * Test get all boreholes bbox.

@@ -178,8 +178,51 @@ public class BoreholeService extends BaseWFSService {
 
         return filterString;
     }
+    
+    public String getStyle(String filter, String color) {
+
+        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
+        		+ "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>"
+                + getTypeName()
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>portal-style</Name>"
+                + "<Title>portal-style</Title>"
+                + "<Abstract>portal-style</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>portal-style</Name>"
+                + "<Abstract>portal-style</Abstract>"
+                + filter
+                + "<PointSymbolizer>"                
+                + "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">"
+                + color
+                + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>8</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+
+        return style;
+    }
 
 	public String getTypeName() {
 		return "gsml:Borehole";
+	}
+
+	public String getGeometryName() {
+		return "gsml:collarLocation/gsml:BoreholeCollar/gsml:location";
 	}
 }

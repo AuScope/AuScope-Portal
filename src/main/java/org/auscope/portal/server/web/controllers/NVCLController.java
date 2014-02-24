@@ -546,7 +546,7 @@ public class NVCLController extends BasePortalController {
      * @throws Exception
      */
     @RequestMapping("/doFilterStyle.do")
-    public void doBoreholeFilterStyle(
+    public void doFilterStyle(
             HttpServletResponse response,
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
@@ -599,7 +599,7 @@ public class NVCLController extends BasePortalController {
         String filter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrilling, maxFeatures, bbox,
                 hyloggerBoreholeIDs);
-        String style = this.getStyle(filter, this.boreholeService.getTypeName(), "#2242c7");
+        String style = this.boreholeService.getStyle(filter, "#2242c7");
 
         response.setContentType("text/xml");
 
@@ -612,43 +612,6 @@ public class NVCLController extends BasePortalController {
 
         styleStream.close();
         outputStream.close();
-    }
-
-    public String getStyle(String filter, String name, String color) {
-
-        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-                + "<NamedLayer>" + "<Name>"
-                + name
-                + "</Name>"
-                + "<UserStyle>"
-                + "<Name>portal-style</Name>"
-                + "<Title>portal-style</Title>"
-                + "<Abstract>portal-style</Abstract>"
-                + "<IsDefault>1</IsDefault>"
-                + "<FeatureTypeStyle>"
-                + "<Rule>"
-                + "<Name>portal-style</Name>"
-                + "<Abstract>portal-style</Abstract>"
-                + filter
-                + "<PointSymbolizer>"
-                + "<Graphic>"
-                + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
-                + "<Fill>"
-                + "<CssParameter name=\"fill\">"
-                + color
-                + "</CssParameter>"
-                + "</Fill>"
-                + "</Mark>"
-                + "<Size>8</Size>"
-                + "</Graphic>"
-                + "</PointSymbolizer>"
-                + "</Rule>"
-                + "</FeatureTypeStyle>"
-                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
-
-        return style;
     }
 
 }
