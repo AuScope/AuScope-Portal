@@ -1,5 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -469,5 +470,81 @@ public class TestCSWFilterController extends PortalTestClass {
         Assert.assertEquals("id2", actual.get(1).get("id"));
         Assert.assertEquals("serviceUrl2", actual.get(1).get("url"));
         Assert.assertEquals("title2", actual.get(1).get("title"));
+    }
+
+
+    /**
+     * Test that getFilteredCSWKeywords returns the keywords cache as expected.
+     * @throws Exception
+     */
+    @Test
+    public void testGetFilteredCSWKeywords() throws Exception{
+
+        final String [] cswServiceIds = {"serviceIdDNE"};
+        final ArrayList<CSWRecord> list= new ArrayList<CSWRecord>();
+        final CSWGetRecordResponse filteredResponse = context.mock(CSWGetRecordResponse.class, "cswResponse1");
+
+        CSWRecord c1=new CSWRecord("c1");
+        c1.setDescriptiveKeywords(new String[]{"kw1","kw2","kw3"});
+        CSWRecord c2=new CSWRecord("c2");
+        list.add(c1);
+        c2.setDescriptiveKeywords(new String[]{"kw1","kw2"});
+        list.add(c2);
+        CSWRecord c3=new CSWRecord("c3");
+        c3.setDescriptiveKeywords(new String[]{"kw1"});
+        list.add(c3);
+
+
+        context.checking(new Expectations() {{
+            //oneOf(mockService).getFilteredRecords(with(equal(cswServiceIds[0])),with(equal(null)),with(equal(CSWFilterController.DEFAULT_MAX_RECORDS)),with(equal(1)));will(returnValue(filteredResponse));
+            oneOf(mockService).getFilteredRecords(cswServiceIds[0],null,CSWFilterController.DEFAULT_MAX_RECORDS,1);will(returnValue(filteredResponse));
+            oneOf(filteredResponse).getRecords();
+            will(returnValue(list));
+
+            exactly(2).of(filteredResponse).getNextRecord();
+            will(returnValue(0));
+
+            oneOf(filteredResponse).getRecordsMatched();
+            will(returnValue(3));
+
+        }});
+
+        ModelAndView mav = controller.getFilteredCSWKeywords(cswServiceIds,"");
+        Assert.assertNotNull(mav);
+        Assert.assertTrue((Boolean) mav.getModel().get("success"));
+        List<ModelMap> actual = (List<ModelMap>) mav.getModel().get("data");
+        Assert.assertNotNull(actual);
+
+        Assert.assertEquals("kw3", actual.get(0).get("keyword"));
+        Assert.assertEquals(1, actual.get(0).get("count"));
+
+        Assert.assertEquals("kw2", actual.get(1).get("keyword"));
+        Assert.assertEquals(2, actual.get(1).get("count"));
+
+        Assert.assertEquals("kw1", actual.get(2).get("keyword"));
+        Assert.assertEquals(3, actual.get(2).get("count"));
+        Assert.assertEquals(3, actual.size());
+
+        //VT: since this is a static variable, we clean this up incase it corrupts other test cases.
+        CSWFilterController.catalogueKeywordCache.clear();
+    }
+
+    /**
+     * Test that getFilteredCSWKeywords returns the keywords cache as expected.
+     * @throws Exception
+     */
+    @Test
+    public void testGetFilteredCSWKeywordsEmptyCSWID() throws Exception{
+
+        final String [] cswServiceIds = {"serviceIdDNE"};
+        final ArrayList<CSWRecord> list= new ArrayList<CSWRecord>();
+        final CSWGetRecordResponse filteredResponse = context.mock(CSWGetRecordResponse.class, "cswResponse1");
+
+        ModelAndView mav = controller.getFilteredCSWKeywords(null,"");
+        Assert.assertNotNull(mav);
+        Assert.assertTrue((Boolean) mav.getModel().get("success"));
+        Assert.assertEquals(null, mav.getModel().get("data"));
+
+
     }
 }
