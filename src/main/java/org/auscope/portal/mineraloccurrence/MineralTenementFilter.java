@@ -67,7 +67,7 @@ public class MineralTenementFilter extends AbstractFilter {
     public String getFilterWithAdditionalStyle() {
 
         List<String> localFragment = new ArrayList<String>(fragments);
-        localFragment.add(this.generateOrComparisonFragment(this.generatePropertyIsLikeFragment("mt:status", "Active"),this.generatePropertyIsLikeFragment("mt:status", "LIVE")));
+        localFragment.add(this.generateOrComparisonFragment(this.generatePropertyIsLikeFragment("mt:status", "Active"),this.generatePropertyIsLikeFragment("mt:status", "GRANTED")));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment.size()])));
     }

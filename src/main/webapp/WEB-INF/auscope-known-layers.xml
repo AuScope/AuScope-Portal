@@ -589,7 +589,7 @@
         <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value=""/>
+        <property name="proxyStyleUrl" value="doFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
