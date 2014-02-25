@@ -47,7 +47,7 @@ public class TestMineralTenementFilter extends PortalTestClass{
         String result = filter.getFilterWithAdditionalStyle();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(result);
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/ogc:Literal",
-                new String[] {"abc","def","ghi","Active","LIVE"}, 5);
+                new String[] {"abc","def","ghi","Active","GRANTED"}, 5);
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal",
                 new String[] {"jkl"}, 1);
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLessThanOrEqualTo/ogc:Literal",
