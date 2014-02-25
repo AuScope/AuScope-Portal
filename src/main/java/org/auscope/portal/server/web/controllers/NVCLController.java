@@ -555,7 +555,8 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
-            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
+            @RequestParam(required = false, value = "color",defaultValue="") String color)
             throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
@@ -599,7 +600,8 @@ public class NVCLController extends BasePortalController {
         String filter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrilling, maxFeatures, bbox,
                 hyloggerBoreholeIDs);
-        String style = this.boreholeService.getStyle(filter, "#2242c7");
+
+        String style = this.boreholeService.getStyle(filter, (color.isEmpty()?"#2242c7":color));
 
         response.setContentType("text/xml");
 
