@@ -44,10 +44,11 @@ public class SF0BoreholeController extends BasePortalController {
      */
     @RequestMapping("/doBoreholeViewFilter.do")
     public ModelAndView doBoreholeFilter(String serviceUrl,String boreholeName,String custodian,
-                                        String dateOfDrilling,int maxFeatures,FilterBoundingBox bbox) throws Exception {
+                                        String dateOfDrilling,int maxFeatures,String bbox) throws Exception {
 
         try {
-            WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, null);
+            FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox);
+            WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, box);
             return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             return this.generateExceptionResponse(e, serviceUrl);
