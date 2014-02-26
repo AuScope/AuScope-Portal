@@ -25,14 +25,14 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class SF0BoreholeController extends BasePortalController {
-	
+
     private SF0BoreholeService boreholeService;
 
-	@Autowired
+    @Autowired
     public SF0BoreholeController(SF0BoreholeService sf0BoreholeService) {
-    	this.boreholeService = sf0BoreholeService;
+        this.boreholeService = sf0BoreholeService;
     }
-    
+
     /**
      * Handles the borehole filter queries.
      *
@@ -42,7 +42,7 @@ public class SF0BoreholeController extends BasePortalController {
      * @return a WFS response converted into KML
      * @throws Exception
      */
-	@RequestMapping("/doBoreholeViewFilter.do")
+    @RequestMapping("/doBoreholeViewFilter.do")
     public ModelAndView doBoreholeFilter(String serviceUrl,String boreholeName,String custodian,
                                         String dateOfDrilling,int maxFeatures,FilterBoundingBox bbox) throws Exception {
 
@@ -53,7 +53,7 @@ public class SF0BoreholeController extends BasePortalController {
             return this.generateExceptionResponse(e, serviceUrl);
         }
     }
-    
+
     /**
      * Handles getting the style of the SF0 borehole filter queries. (If the
      * bbox elements are specified, they will limit the output response to 200
@@ -75,7 +75,8 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
-            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
+            @RequestParam(required = false, value = "color",defaultValue="") String color)
             throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
@@ -88,11 +89,11 @@ public class SF0BoreholeController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox
                 .attemptParseFromJSON(bboxJson);
-        
+
         String filter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrilling, maxFeatures, bbox,
                 null);
-        String style = this.boreholeService.getStyle(filter, "#2242c7");
+        String style = this.boreholeService.getStyle(filter, (color.isEmpty()?"#2242c7":color));
 
         response.setContentType("text/xml");
 
