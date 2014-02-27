@@ -272,7 +272,7 @@ public class CSWFilterController extends BaseCSWController {
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType,abstrac,title);
+        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType,abstrac,title,CSWGetDataRecordsFilter.Type.dataset);
         log.debug(String.format("filter '%1$s'", filter));
         return filter;
     }
@@ -320,7 +320,7 @@ public class CSWFilterController extends BaseCSWController {
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType,null,null);
+        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform, sensor, keywordMatchType,null,null,CSWGetDataRecordsFilter.Type.dataset);
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
