@@ -117,25 +117,9 @@ public class MineralTenementController extends BasePortalController {
                         "<FeatureTypeStyle>" +
                         "<Rule>" +
                         "<Name>Polygon for mineral tenement</Name>" +
-                        "<Title>Not Active Tenement</Title>" +
+                        "<Title>Mineral Tenement</Title>" +
                         "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
                          filter +
-                        "<PolygonSymbolizer>" +
-                        "<Fill>" +
-                        "<CssParameter name=\"fill\">" + "#f21317" + "</CssParameter>" +
-                        "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                        "</Fill>" +
-                        "<Stroke>" +
-                        "<CssParameter name=\"stroke\">" + "#f21317" + "</CssParameter>" +
-                        "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                        "</Stroke>" +
-                        "</PolygonSymbolizer>" +
-                        "</Rule>" +
-                        "<Rule>" +
-                        "<Name>Polygon for mineral tenement</Name>" +
-                        "<Title>Active Tenement</Title>" +
-                        "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
-                         stylefilter +
                         "<PolygonSymbolizer>" +
                         "<Fill>" +
                         "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
@@ -147,6 +131,22 @@ public class MineralTenementController extends BasePortalController {
                         "</Stroke>" +
                         "</PolygonSymbolizer>" +
                         "</Rule>" +
+//                        "<Rule>" +
+//                        "<Name>Polygon for mineral tenement</Name>" +
+//                        "<Title>Active Tenement</Title>" +
+//                        "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
+//                         stylefilter +
+//                        "<PolygonSymbolizer>" +
+//                        "<Fill>" +
+//                        "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
+//                        "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
+//                        "</Fill>" +
+//                        "<Stroke>" +
+//                        "<CssParameter name=\"stroke\">" + borderColor + "</CssParameter>" +
+//                        "<CssParameter name=\"stroke-width\">1</CssParameter>" +
+//                        "</Stroke>" +
+//                        "</PolygonSymbolizer>" +
+//                        "</Rule>" +
                         "</FeatureTypeStyle>" +
                         "</UserStyle>" +
                         "</NamedLayer>" +

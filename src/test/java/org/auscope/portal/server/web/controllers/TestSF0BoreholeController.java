@@ -58,7 +58,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
         final URI httpMethodURI = new URI("http://example.com");
 
         context.checking(new Expectations() {{
-            oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, null, null);
+            oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, null);
             will(returnValue(new WFSTransformedResponse(sf0BoreholeWfsResponse, sf0BoreholeKmlResponse, mockHttpMethodBase)));
 
             allowing(mockHttpMethodBase).getURI();
