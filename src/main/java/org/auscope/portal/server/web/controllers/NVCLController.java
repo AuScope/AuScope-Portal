@@ -450,6 +450,13 @@ public class NVCLController extends BasePortalController {
             return;
         }
 
+        response.setContentType(serviceResponse.getContentType());
+        String stringResponse = IOUtils.toString(serviceResponse.getResponse());
+        stringResponse = stringResponse.replace("downloadtsg.html", serviceUrl + "downloadtsg.html");
+
+        FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
+
+
         writeStreamResponse(response, serviceResponse);
     }
 
@@ -475,7 +482,13 @@ public class NVCLController extends BasePortalController {
             return;
         }
 
-        writeStreamResponse(response, serviceResponse);
+        response.setContentType(serviceResponse.getContentType());
+        String stringResponse = IOUtils.toString(serviceResponse.getResponse());
+        stringResponse = stringResponse.replace("downloadtsg.html", serviceUrl + "downloadtsg.html");
+
+        FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
+
+        //writeStreamResponse(response, serviceResponse);
     }
 
     /**
