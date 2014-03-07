@@ -53,7 +53,7 @@
                 <ref bean="knownTypeSilicaContent" />
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
-				<ref bean="knownTypeSF0BoreholeNVCL" />
+                <ref bean="knownTypeSF0BoreholeNVCL" />
             </list>
         </constructor-arg>
     </bean>
@@ -65,6 +65,7 @@
                 <ref bean="cswMDUProduction" />
                 <ref bean="cswAsterProduction" />
                 <ref bean="cswInSarProduction" />
+                <ref bean="cswMRTProduction" />
             </list>
         </constructor-arg>
     </bean>

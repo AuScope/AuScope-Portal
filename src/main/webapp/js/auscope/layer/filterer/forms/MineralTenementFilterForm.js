@@ -48,7 +48,8 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
                 {displayText: 'Exploration', valueText: '*exploration*'},
                 {displayText: 'Prospecting', valueText: '*prospecting*'},
                 {displayText: 'Miscellaneous', valueText: '*miscellaneous*'},
-                {displayText: 'MINING LEASE', valueText: '*mining*'},
+                {displayText: 'Mining Lease', valueText: '*mining*'},
+                {displayText: 'Licence', valueText: '*licence*'}
             ]
         });
 
