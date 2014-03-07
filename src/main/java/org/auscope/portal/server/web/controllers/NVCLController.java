@@ -485,6 +485,7 @@ public class NVCLController extends BasePortalController {
         response.setContentType(serviceResponse.getContentType());
         String stringResponse = IOUtils.toString(serviceResponse.getResponse());
         stringResponse = stringResponse.replace("downloadtsg.html", serviceUrl + "downloadtsg.html");
+        stringResponse = stringResponse.replace("href", " target='_blank' href");
 
         FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
 
