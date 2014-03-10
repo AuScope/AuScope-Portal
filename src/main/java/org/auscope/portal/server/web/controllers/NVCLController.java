@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
@@ -397,8 +398,16 @@ public class NVCLController extends BasePortalController {
         } catch (Exception ex) {
             log.warn(String.format("Error requesting csw download for logId '%1$s' from %2$s: %3$s", logIds, serviceUrl, ex));
             log.debug("Exception:", ex);
-            response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            return;
+            if(ex.getMessage().contains("404")){
+                String htmlMessage = "<html><head><title>Error 404</title></head>" +
+                                     "<body><h1>HTTP Status 404 - </h1><p>You could be seeing this error because the service does not support this operation</p>" +
+                                     "</body></html>";
+
+                FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(htmlMessage.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
+                return;
+            }else{
+                throw new ServletException(ex);
+            }
         }
 
         response.setHeader("Content-Disposition","attachment; filename=downloadScalar.csv");
@@ -456,8 +465,6 @@ public class NVCLController extends BasePortalController {
 
         FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
 
-
-        writeStreamResponse(response, serviceResponse);
     }
 
     /**
