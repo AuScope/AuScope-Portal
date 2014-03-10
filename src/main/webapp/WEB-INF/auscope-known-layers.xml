@@ -120,7 +120,7 @@
 
         <property name="name" value="Mineral Tenements"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
-        <property name="group" value="Mineral Tenements group"/>
+        <property name="group" value="Tenements"/>
 
         <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
