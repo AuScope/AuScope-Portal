@@ -75,45 +75,50 @@ Ext.define('auscope.layer.filterer.forms.MinOccurViewFilterForm', {
                 autoHeight: true,
                 labelAlign: 'right',
                 bodyStyle: 'padding:0px',
-                items :[{
-                    xtype : 'combo',
-                    anchor: '100%',
-                    name: 'commodityName',
-                    fieldLabel: '<span data-qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
-                    labelAlign: 'right',
-                    forceSelection: false,
-                    queryMode: 'local',
-                    store: commodityStore,
-                    triggerAction: 'all',
-                    typeAhead: true,
-                    typeAheadDelay: 500,
-                    displayField:'label',   /* change tpl field to this value as well! */
-                    valueField:'urn'
-                },{
-                    anchor: '100%',
-                    xtype: 'textfield',
-                    labelAlign: 'right',
-                    fieldLabel: '<span data-qtip="Minimum Ore Amount">' +
-                                'Min Ore Amount' +
-                                '</span>',
-                    name: 'minOreAmount'
-                },{
-                    anchor: '100%',
-                    xtype: 'textfield',
-                    labelAlign: 'right',
-                    fieldLabel: '<span data-qtip="Minimum Ore Reserves">' +
-                                'Min Ore Reserves' +
-                                '</span>',
-                    name: 'minReserves'
-                },{
-                    anchor: '100%',
-                    xtype: 'textfield',
-                    labelAlign: 'right',
-                    fieldLabel: '<span data-qtip="Minimum Ore Resources">' +
-                                'Min Ore Resources' +
-                                '</span>',
-                    name: 'minResources'
-                },{
+                items :[
+
+
+//                        {
+//                    xtype : 'combo',
+//                    anchor: '100%',
+//                    name: 'commodityName',
+//                    fieldLabel: '<span data-qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
+//                    labelAlign: 'right',
+//                    forceSelection: false,
+//                    queryMode: 'local',
+//                    store: commodityStore,
+//                    triggerAction: 'all',
+//                    typeAhead: true,
+//                    typeAheadDelay: 500,
+//                    displayField:'label',   /* change tpl field to this value as well! */
+//                    valueField:'urn'
+//                },{
+//                    anchor: '100%',
+//                    xtype: 'textfield',
+//                    labelAlign: 'right',
+//                    fieldLabel: '<span data-qtip="Minimum Ore Amount">' +
+//                                'Min Ore Amount' +
+//                                '</span>',
+//                    name: 'minOreAmount'
+//                },{
+//                    anchor: '100%',
+//                    xtype: 'textfield',
+//                    labelAlign: 'right',
+//                    fieldLabel: '<span data-qtip="Minimum Ore Reserves">' +
+//                                'Min Ore Reserves' +
+//                                '</span>',
+//                    name: 'minReserves'
+//                },{
+//                    anchor: '100%',
+//                    xtype: 'textfield',
+//                    labelAlign: 'right',
+//                    fieldLabel: '<span data-qtip="Minimum Ore Resources">' +
+//                                'Min Ore Resources' +
+//                                '</span>',
+//                    name: 'minResources'
+//                },
+
+                {
                     xtype: 'combo',
                     anchor: '100%',
                     itemId: 'serviceFilter-field',
