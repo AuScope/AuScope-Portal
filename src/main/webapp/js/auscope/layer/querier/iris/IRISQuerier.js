@@ -29,9 +29,9 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
     },
-    
+
     /**
-     * Defines a form which, once filled out, can be submitted to instigate a 
+     * Defines a form which, once filled out, can be submitted to instigate a
      * request for some of IRIS's timeseries data.
      * */
     query : function(queryTarget, callback) {
@@ -41,25 +41,25 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
         var irisUrl = onlineResource.get('url');
         var network = onlineResource.get('name'); // TODO: I'm using 'name' to store the network code... is that bad?
         var station = queryTarget.get('id');
-       
+
         var me = this;
         this.irisFeatureSource.getStationInfo(
-            irisUrl, 
-            network, 
-            station, 
+            irisUrl,
+            network,
+            station,
             function (success, channel_info) {
                 // Make sure this is an array:
                 channel_info.channel_codes = [].concat(channel_info.channel_codes);
-                
+
                 var channelRadioButtons = [];
                 for(var i = 0; i < channel_info.channel_codes.length; i++) {
                     channelRadioButtons.push({
                         boxLabel : channel_info.channel_codes[i],
                         name : 'channel',
-                        inputValue : channel_info.channel_codes[i], 
+                        inputValue : channel_info.channel_codes[i]
                     });
                 }
-                
+
                 var outputFormats = Ext.create('Ext.data.Store', {
                     fields : ['valueField', 'displayField'],
                     data : [
@@ -73,24 +73,24 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                         {valueField : 'sacbl', displayField : 'SAC - binary little-endian'}
                     ]
                 });
-                
-                
+
+
                 var data = [];
                 for (var i = 1; i <= 31; i++) {
-                    data[i-1] = {value: i}; 
+                    data[i-1] = {value: i};
                 }
-                
+
                 var daysStore = Ext.create('Ext.data.Store', {
                     fields : ['value'],
                     data : data
                 });
-                
+
                 var start_date = channel_info.start_date.substr(0, channel_info.start_date.indexOf('T'));
                 var end_date = channel_info.end_date.substr(0, channel_info.end_date.indexOf('T'));
-                
+
                 channel_info.start_date = _parseISO8601(start_date);
                 channel_info.end_date = _parseISO8601(end_date);
-                
+
                 var allComponents = [];
                 allComponents.push(
                     Ext.create('portal.layer.querier.BaseComponent', {
@@ -146,24 +146,24 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                     // www.iris.edu/ws/timeseries/query?net=S&sta=AUDAR&loc=--&cha=HHE&start=2012-10-04T00:00:00&duration=10000&output=saca&ref=direct
                                     var form = this.up('form');
                                     var formValues = form.getForm().getValues();
-                                    
+
                                     var addLeadingZero = function(value) {
-                                        return value < 10 ? '0' + value : value; 
+                                        return value < 10 ? '0' + value : value;
                                     };
-                                    
+
                                     var convertDateToIrisFormat = function(date_dmY, time_component) {
                                         var components = date_dmY.split('/');
                                         var day = components[0];
                                         var month = components[1];
                                         var year = components[2];
-                                        
+
                                         var date = new Date(year, month, day);
                                         return date.getFullYear() + '-' + addLeadingZero(date.getMonth()) + '-' + addLeadingZero(date.getDate()) + time_component;
                                     };
-                                    
+
                                     var loadMask = new Ext.LoadMask(form, { msg: "Please wait..." });
                                     loadMask.show();
-                                    
+
                                     Ext.Ajax.request({
                                         url : 'getTimeseriesUrl.do',
                                         timeout : 180 * 1000,
@@ -175,13 +175,13 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                             stationCode : station,
                                             channel : formValues.channel,
                                             start : convertDateToIrisFormat(formValues.from_date, 'T00:00:00'),
-                                            duration : (formValues.days * 86400), 
+                                            duration : (formValues.days * 86400),
                                             output : formValues.output
                                         },
                                         callback : function(options, success, response) {
                                             var jsonResponse  = Ext.JSON.decode(response.responseText);
-                                            
-                                            // Success just means that the AJAX request worked, it doesn't mean that we have 
+
+                                            // Success just means that the AJAX request worked, it doesn't mean that we have
                                             // a real result back. We could still have an error message with a 404, meaning that
                                             // IRIS couldn't find data for the date range provided.
                                             if (success) {
@@ -201,7 +201,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                     });
                                 }
                             }]
-                        }]                        
+                        }]
                     })
                 );
 

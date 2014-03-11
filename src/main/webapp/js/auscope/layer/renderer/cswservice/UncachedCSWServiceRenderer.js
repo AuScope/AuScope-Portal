@@ -129,7 +129,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             params:{
                 limit : 50,
                 start : 1
-            },
+            }
         });
     },
 
@@ -172,35 +172,35 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         var anyTextFilter = filterer.parameters.anyText;
         var defaultAnyTextFilter = cswRecord.descriptiveKeywords[0];
         var anyText = defaultAnyTextFilter || '';
-        anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;        
-        
+        anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;
 
-    	// get bounding box fields and pass them on if all filled in
+
+        // get bounding box fields and pass them on if all filled in
         var north = NaN;
         var east = NaN;
         var south = NaN;
         var west = NaN;
-                
+
         if (filterer.parameters.lat_max.length > 0 && filterer.parameters.long_max.length > 0
-        		&& filterer.parameters.lat_min.length > 0 && filterer.parameters.long_min.length > 0) {         	
-        	north = Number(filterer.parameters.lat_max);
+                && filterer.parameters.lat_min.length > 0 && filterer.parameters.long_min.length > 0) {
+            north = Number(filterer.parameters.lat_max);
             east = Number(filterer.parameters.long_max);
             south = Number(filterer.parameters.lat_min);
             west = Number(filterer.parameters.long_min);
-            
-            // validate against non numerical values                
+
+            // validate against non numerical values
             if (isNaN(north) || isNaN(east) || isNaN(south) || isNaN(west)) {
-            	alert("You have entered invalid bounding box filter values! Please re-enter and try again.");
-            	return;
-            } 
+                alert("You have entered invalid bounding box filter values! Please re-enter and try again.");
+                return;
+            }
         }
-        
+
         var configuration = Ext.apply({}, {
                 extraParams : {
                     cswServiceUrl : resources[0].data.url,
                     recordInfoUrl : cswRecord.recordInfoUrl,
                     bbox : Ext.JSON.encode(filterer.spatialParam),
-                    northBoundLatitude : north, 
+                    northBoundLatitude : north,
                     eastBoundLongitude : east,
                     southBoundLatitude : south,
                     westBoundLongitude : west,
