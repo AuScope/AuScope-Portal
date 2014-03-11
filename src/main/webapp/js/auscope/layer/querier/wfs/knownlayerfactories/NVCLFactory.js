@@ -22,7 +22,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
      * Note - AUS-2055 brought about the removal of the requirement for an open proxy - work still needs to be done
      *        to break this into more manageable pieces because the code is still very much a copy from the original source.
      */
-    showDetailsWindow : function(datasetId, datasetName, omUrl, nvclDataServiceUrl,nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource,scope) {
+    showDetailsWindow : function(datasetId, datasetName, omUrl, nvclDataServiceUrl,nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource,startDepth,endDepth,scope) {
 
         var me = scope;
         //We create an instance of our popup window but don't show it immediately
@@ -243,14 +243,14 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     fieldLabel  : 'Start Depth (m)',
                                     name        : 'startDepth',
                                     minValue    : 0,
-                                    value       : 0,
+                                    value       : startDepth,
                                     accelerate  : true
                                 },{
                                     xtype       : 'numberfield',
                                     fieldLabel  : 'End Depth (m)',
                                     name        : 'endDepth',
                                     minValue    : 0,
-                                    value       : 99999,
+                                    value       : endDepth,
                                     accelerate  : true
                                 },{
                                     xtype                   : 'numberfield',
@@ -781,6 +781,22 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     text : 'Display',
                     handler : function(button, e) {
                         var grid = button.ownerCt.ownerCt;
+
+
+                        var parent = grid.ownerCt.ownerCt.ownerCt;
+                        var startDepth = parent.query('displayfield#boreholeStartDepth');
+                        if(startDepth && startDepth.length > 0){
+                            startDepth = Math.floor(startDepth[0].getValue());
+                        }else{
+                            startDepth = 0;
+                        }
+                        var endDepth = parent.query('displayfield#boreholeEndDepth');
+                        if(endDepth && endDepth.length > 0){
+                            endDepth = Math.ceil(endDepth[0].getValue());
+                        }else{
+                            endDepth = 99999;
+                        }
+
                         var selection = grid.getSelectionModel().getSelection();
                         var selectedRec = (selection && (selection.length > 0)) ? selection[0] : null;
                         if (selectedRec) {
@@ -792,6 +808,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     featureId,
                                     parentKnownLayer,
                                     parentOnlineResource,
+                                    startDepth,
+                                    endDepth,
                                     me);
                         }
                     }

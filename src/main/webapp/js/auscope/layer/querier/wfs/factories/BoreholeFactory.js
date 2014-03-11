@@ -74,10 +74,12 @@ Ext.define('auscope.layer.querier.wfs.factories.BoreholeFactory', {
                     value : elevation
                 },{
                     xtype : 'displayfield',
+                    itemId : 'boreholeStartDepth',
                     fieldLabel : 'Start Depth (m)',
                     value : startDepth
                 },{
                     xtype : 'displayfield',
+                    itemId : 'boreholeEndDepth',
                     fieldLabel : 'End Depth (m)',
                     value : endDepth
                 },{
