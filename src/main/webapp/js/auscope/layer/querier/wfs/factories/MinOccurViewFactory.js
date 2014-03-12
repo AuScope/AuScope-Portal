@@ -49,6 +49,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MinOccurViewFactory', {
             items : [{
                 xtype : 'fieldset',
                 title : 'Mineral Occurrence View',
+                margin : '0 20 0 0',
                 autoScroll : true,
                 items : [{
                     xtype : 'displayfield',
@@ -120,6 +121,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MinOccurViewFactory', {
             buttons : [{
                 text : 'Download Feature',
                 iconCls : 'download',
+                margin : '0 20 0 0',
                 handler : function() {
                     var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, domNode.nodeName, gmlId);
                     portal.util.FileDownloader.downloadFile('downloadGMLAsZip.do',{
