@@ -180,23 +180,8 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         },
                                         callback : function(options, success, response) {
                                             var jsonResponse  = Ext.JSON.decode(response.responseText);
-
-                                            // Success just means that the AJAX request worked, it doesn't mean that we have
-                                            // a real result back. We could still have an error message with a 404, meaning that
-                                            // IRIS couldn't find data for the date range provided.
-                                            if (success) {
-                                                loadMask.hide();
-                                                if (!jsonResponse.success && jsonResponse.data == '404') {
-                                                    Ext.Msg.show({
-                                                        title:'No data found',
-                                                        msg: "IRIS doesn't have any data for the date range specified. Please try again.",
-                                                        buttons: Ext.Msg.OK
-                                                     });
-                                                }
-                                                else {
-                                                    window.open(jsonResponse.data, '_blank');
-                                                }
-                                            }
+                                            window.open(jsonResponse.data, '_blank');
+                                            loadMask.hide();
                                         }
                                     });
                                 }

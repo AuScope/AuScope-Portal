@@ -7,8 +7,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.namespaces.IterableNamespace;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,6 +45,8 @@ public class IRISController extends BasePortalController {
      */
     private XPath xPath;
 
+    private HttpServiceCaller httpService;
+
     /**
      * Makes sure that a string has a trailing forward slash.
      * @param string The string that you want to have a trailing forward slash.
@@ -54,11 +62,13 @@ public class IRISController extends BasePortalController {
      *
      * Initialises the xPath object.
      */
-    public IRISController() {
+    @Autowired
+    public IRISController(HttpServiceCaller httpService) {
         this.xPath = XPathFactory.newInstance().newXPath();
+        this.httpService=httpService;
         this.xPath.setNamespaceContext(new IterableNamespace() {
             {
-                map.put("default", "http://www.data.scec.org/xml/station/");
+                map.put("default", "http://www.fdsn.org/xml/station/1");
             }
         });
     }
@@ -105,7 +115,7 @@ public class IRISController extends BasePortalController {
      * The response is converted to some KML points to be rendered on the
      * map.
      *
-     * The request will look something like this: http://www.iris.edu/ws/station/query?net=S
+     * The request will look something like this: http://service.iris.edu/fdsnws/station/1/query?net=S
      *
      * @param serviceUrl The IRIS web service URL.
      * @param networkCode The network code that you're interested in.
@@ -118,21 +128,21 @@ public class IRISController extends BasePortalController {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
 
         try {
-            Document irisDoc = getDocumentFromURL(serviceUrl + "station/query?net=" + networkCode);
+            Document irisDoc = getDocumentFromURL(serviceUrl + "fdsnws/station/1/query?net=" + networkCode);
 
             //TODO VT: As part of the review for AGOS-15 , we should be following the same architecture as the rest of portal and
             // create a xslt file to do the transformation from xml to kml
             NodeList stations = irisDoc.getDocumentElement().getElementsByTagName("Station");
-            XPathExpression nameExpression = xPath.compile("default:StationEpoch/default:Site/default:Name/text()");
-            XPathExpression latExpression = xPath.compile("default:StationEpoch/default:Lat/text()");
-            XPathExpression lonExpression = xPath.compile("default:StationEpoch/default:Lon/text()");
+            XPathExpression nameExpression = xPath.compile("default:Site/default:Name/text()");
+            XPathExpression latExpression = xPath.compile("default:Latitude/text()");
+            XPathExpression lonExpression = xPath.compile("default:Longitude/text()");
 
             StringBuilder kml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><name>GML Links to KML</name><description><![CDATA[GeoSciML data converted to KML]]></description>");
 
             // For each station:
             for (int i = 0; i < stations.getLength(); i++) {
                 Node station = stations.item(i);
-                Node staCode = station.getAttributes().getNamedItem("sta_code");
+                Node staCode = station.getAttributes().getNamedItem("code");
                 kml.append(
                         String.format(
                                 "<Placemark><name>%s</name><description><![CDATA[GENERIC_PARSER:%s]]></description>" +
@@ -169,7 +179,7 @@ public class IRISController extends BasePortalController {
         @RequestParam("stationCode") String stationCode) {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
         try {
-            Document irisDoc = getDocumentFromURL(serviceUrl + "station/query?net=" + networkCode + "&station=" + stationCode + "&level=chan");
+            Document irisDoc = getDocumentFromURL(serviceUrl + "fdsnws/station/1/query?net=" + networkCode + "&sta=" + stationCode + "&level=chan");
 
             NodeList channels = irisDoc.getDocumentElement().getElementsByTagName("Channel");
 
@@ -178,11 +188,11 @@ public class IRISController extends BasePortalController {
             // For each station:
             for (int i = 0; i < channels.getLength(); i++) {
                 Node channel = channels.item(i);
-                channelCodes[i] = channel.getAttributes().getNamedItem("chan_code").getTextContent();
+                channelCodes[i] = channel.getAttributes().getNamedItem("code").getTextContent();
             }
 
-            String startDate = xPath.compile("//default:Station[@sta_code='" + stationCode + "']/default:StationEpoch/default:StartDate").evaluate(irisDoc, XPathConstants.STRING).toString();
-            String endDate = xPath.compile("//default:Station[@sta_code='" + stationCode + "']/default:StationEpoch/default:EndDate").evaluate(irisDoc, XPathConstants.STRING).toString();
+            String startDate = xPath.compile("//default:Station[@code='" + stationCode + "']/default:Channel/@startDate").evaluate(irisDoc, XPathConstants.STRING).toString();
+            String endDate = xPath.compile("//default:Station[@code='" + stationCode + "']/default:Channel/@endDate").evaluate(irisDoc, XPathConstants.STRING).toString();
 
             ModelMap channelInfo = new ModelMap();
             channelInfo.put("start_date", startDate);
@@ -203,25 +213,19 @@ public class IRISController extends BasePortalController {
         @RequestParam("channel") String channel,
         @RequestParam("start") String start,
         @RequestParam("duration") String duration,
-        @RequestParam("output") String output) {
+        @RequestParam("output") String output,
+        HttpServletResponse response) throws ServletException {
 
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
-        try {
-            Document irisDoc = getDocumentFromURL(
-                    serviceUrl + "timeseries/query?net=" + networkCode +
-                    "&station=" + stationCode +
-                    "&cha=" + channel +
-                    "&start=" + start +
-                    "&duration=" + duration +
-                    "&output=" + output +
-                    "&loc=--&ref=xml");
+        String url= serviceUrl + "irisws/timeseries/1/query?net=" + networkCode +
+                "&sta=" + stationCode +
+                "&cha=" + channel +
+                "&starttime=" + start +
+                "&duration=" + duration +
+                "&output=" + output +
+                "&loc=--";//VT: i removed ref=xml so because the url returned seem to be unresolvable.
 
-            Node urlNode = irisDoc.getDocumentElement().getElementsByTagName("url").item(0);
-            return generateJSONResponseMAV(true, urlNode.getTextContent(), "OK");
-        } catch (FileNotFoundException ioe) {
-            return generateJSONResponseMAV(false, "404", "Failed: no data was available for the date range specified.");
-        } catch (Exception e) {
-            return generateJSONResponseMAV(false, e.getMessage(), "Failed.");
-        }
+        return generateJSONResponseMAV(true, url, "OK");
+
     }
 }

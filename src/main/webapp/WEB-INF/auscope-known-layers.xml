@@ -507,7 +507,7 @@
         <constructor-arg name="id" value="seismology-in-schools-site"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.view.knownlayer.IRISSelector">
-                <constructor-arg name="serviceEndpoint" value="http://www.iris.edu/ws"/>
+                <constructor-arg name="serviceEndpoint" value="http://service.iris.edu"/>
             </bean>
         </constructor-arg>
         <property name="name" value="IRIS Feed"/>
