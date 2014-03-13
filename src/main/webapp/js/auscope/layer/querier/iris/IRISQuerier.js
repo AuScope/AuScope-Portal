@@ -180,7 +180,14 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                         },
                                         callback : function(options, success, response) {
                                             var jsonResponse  = Ext.JSON.decode(response.responseText);
-                                            window.open(jsonResponse.data, '_blank');
+                                            //window.open(jsonResponse.data, '_blank');
+                                            var browserWindow = new portal.util.misc.BrowserWindowWithWarning({
+                                                id : 'irisPopupWarning',
+                                                message : 'Please make sure you have pop-ups enabled in your browser. If you don\'t see anything, check your browser warning for blocked pop-ups.'
+                                            });
+                                            browserWindow.open(function(){
+                                                window.open(jsonResponse.data, '_blank','status=1');
+                                            })
                                             loadMask.hide();
                                         }
                                     });
