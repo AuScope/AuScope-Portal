@@ -3,11 +3,13 @@ package org.auscope.portal.server.web.controllers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.services.CSWFilterService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
@@ -16,8 +18,11 @@ import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,6 +37,9 @@ public class CSWFilterController extends BaseCSWController {
     public static final int DEFAULT_MAX_RECORDS = 100;
     private CSWFilterService cswFilterService;
     protected static ConcurrentHashMap<String,KeywordCacheEntity> catalogueKeywordCache;
+    @Autowired
+    private ConversionService  converter;
+
     static {
         catalogueKeywordCache = new ConcurrentHashMap<String,KeywordCacheEntity>();
     }
@@ -47,6 +55,13 @@ public class CSWFilterController extends BaseCSWController {
             ViewKnownLayerFactory viewKnownLayerFactory) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswFilterService = cswFilterService;
+
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder)
+    {
+        binder.setConversionService(converter);
     }
 
     /**
@@ -192,7 +207,8 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value="key", required=false) String[] keys,
             @RequestParam(value="value", required=false) String[] values,
             @RequestParam(value = "limit", required = false) Integer maxRecords,
-            @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition){
+            @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition,
+            @RequestParam(value = "customregistries",required=false) CustomRegistryInt customRegistries){
 
         if(startPosition!=null){
             startPosition++;
@@ -200,6 +216,9 @@ public class CSWFilterController extends BaseCSWController {
 
         HashMap<String,String> parameters=this.arrayPairtoMap(keys, values);
         String cswServiceId = parameters.get("cswServiceId");
+        if(cswServiceId==null || cswServiceId.isEmpty()){
+            throw new MissingResourceException("missing cswServiceId", "getFilteredCSWRecords", cswServiceId);
+        }
 
         CSWGetDataRecordsFilter filter = this.getFilter(parameters);
 
@@ -208,13 +227,13 @@ public class CSWFilterController extends BaseCSWController {
         int matchedResults = 0;
         try {
             //We may be requesting from all CSW's or just a specific one
-            if (cswServiceId == null || cswServiceId.isEmpty()) {
+            if (!customRegistries.isEmpty()) {
                 records = new ArrayList<CSWRecord>();
-                CSWGetRecordResponse[] responses = cswFilterService.getFilteredRecords(filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords);
-                for (CSWGetRecordResponse response : responses) {
-                    records.addAll(response.getRecords());
-                    matchedResults += response.getRecordsMatched();
-                }
+                CSWGetRecordResponse response = cswFilterService.getFilteredRecords(customRegistries,filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords,startPosition);
+
+                records = response.getRecords();
+                matchedResults = response.getRecordsMatched();
+
             } else {
                 CSWGetRecordResponse response = cswFilterService.getFilteredRecords(cswServiceId, filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords, startPosition);
                 records = response.getRecords();

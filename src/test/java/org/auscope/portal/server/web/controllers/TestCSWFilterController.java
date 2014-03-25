@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.CSWFilterService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
@@ -33,6 +34,8 @@ public class TestCSWFilterController extends PortalTestClass {
     private CSWFilterService mockService;
     private CSWFilterController controller;
     private ViewKnownLayerFactory mockKnownLayerFactory;
+    private CustomRegistry customRegistry;
+
 
     /**
      * Initialise our unit tests
@@ -43,6 +46,7 @@ public class TestCSWFilterController extends PortalTestClass {
         mockKnownLayerFactory = context.mock(ViewKnownLayerFactory.class);
         mockService = context.mock(CSWFilterService.class);
         controller = new CSWFilterController(mockService, mockViewRecordFactory, mockKnownLayerFactory);
+        customRegistry = new CustomRegistry("","","","");
     }
 
     private static CSWGetDataRecordsFilterMatcher aCSWFilter(FilterBoundingBox spatialBounds,
@@ -109,7 +113,7 @@ public class TestCSWFilterController extends PortalTestClass {
             will(returnValue(mockViewRec3));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, startPosition);
+        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, startPosition,customRegistry);
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
@@ -124,81 +128,10 @@ public class TestCSWFilterController extends PortalTestClass {
 
     /**
      * Tests that requesting filtered records (with no service id) relies correctly on all dependencies
+     * VT: I removed this test as it is no long application.
      * @throws Exception
      */
-    @Test
-    public void testGetFilteredRecordsNoServiceID() throws Exception {
-        final String anyText = "any-text";
-        final double east = 0.1;
-        final double west = 5.5;
-        final double north = 4.8;
-        final double south = 8.6;
-        final String[] keywords = new String[] {"kw1", "kw2"};
-        final String capturePlatform = "capturePlatform";
-        final String sensor = "sensor";
 
-        String [] key={"keywordMatchType","anyText","east","west","north","south","keywords","capturePlatform","sensor"};
-        String [] value={"ALL","any-text","0.1","5.5","4.8","8.6","kw1,kw2","capturePlatform","sensor"};
-
-        final Integer maxRecords = 123;
-        final FilterBoundingBox expectedBBox = new FilterBoundingBox("",
-                new double[] {east, south},
-                new double[] {west, north});
-        final CSWRecord[] filteredRecs = new CSWRecord[] {
-                context.mock(CSWRecord.class, "cswRecord1"),
-                context.mock(CSWRecord.class, "cswRecord2"),
-                context.mock(CSWRecord.class, "cswRecord3")
-        };
-        final CSWGetRecordResponse[] filteredResponses = new CSWGetRecordResponse[] {
-                context.mock(CSWGetRecordResponse.class, "cswResponse1"),
-                context.mock(CSWGetRecordResponse.class, "cswResponse2"),
-        };
-        final ModelMap mockViewRec1 = context.mock(ModelMap.class, "mockViewRec1");
-        final ModelMap mockViewRec2 = context.mock(ModelMap.class, "mockViewRec2");
-        final ModelMap mockViewRec3 = context.mock(ModelMap.class, "mockViewRec3");
-        final int response1RecordsMatched = 234;
-        final int response2RecordsMatched = 723;
-        final KeywordMatchType matchType = KeywordMatchType.All;
-
-        context.checking(new Expectations() {{
-            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor, matchType)), with(equal(maxRecords)));
-            will(returnValue(filteredResponses));
-
-            oneOf(filteredResponses[0]).getRecordsMatched();
-            will(returnValue(response1RecordsMatched));
-
-            oneOf(filteredResponses[1]).getRecordsMatched();
-            will(returnValue(response2RecordsMatched));
-
-            oneOf(filteredResponses[0]).getRecords();
-            will(returnValue(Arrays.asList(filteredRecs[0])));
-
-            oneOf(filteredResponses[1]).getRecords();
-            will(returnValue(Arrays.asList(filteredRecs[1], filteredRecs[2])));
-
-            oneOf(mockViewRecordFactory).toView(filteredRecs[0]);
-            will(returnValue(mockViewRec1));
-
-            oneOf(mockViewRecordFactory).toView(filteredRecs[1]);
-            will(returnValue(mockViewRec2));
-
-            oneOf(mockViewRecordFactory).toView(filteredRecs[2]);
-            will(returnValue(mockViewRec3));
-
-        }});
-
-        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, null);
-        Assert.assertNotNull(mav);
-        Assert.assertTrue((Boolean) mav.getModel().get("success"));
-        Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
-        Assert.assertNotNull(dataRecs);
-        Assert.assertTrue(dataRecs.contains(mockViewRec1));
-        Assert.assertTrue(dataRecs.contains(mockViewRec2));
-        Assert.assertTrue(dataRecs.contains(mockViewRec3));
-        Assert.assertEquals(3, dataRecs.size());
-
-        Assert.assertEquals(response1RecordsMatched + response2RecordsMatched, mav.getModel().get("totalResults"));
-    }
 
     /**
      * Tests that requesting filtered records fails gracefully
@@ -231,10 +164,11 @@ public class TestCSWFilterController extends PortalTestClass {
             oneOf(mockService).getFilteredRecords(with(equal(cswServiceId)), with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor, matchType)), with(equal(maxRecords)), with(equal(startPosition + 1)));will(throwException(new Exception()));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, startPosition);
+        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, startPosition,customRegistry);
         Assert.assertNotNull(mav);
         Assert.assertFalse((Boolean) mav.getModel().get("success"));
     }
+
 
     /**
      * Tests that requesting filtered records relies correctly on all dependencies when all optional
@@ -242,73 +176,138 @@ public class TestCSWFilterController extends PortalTestClass {
      * @throws Exception
      */
     @Test
-    public void testGetFilteredRecordsOptionalParams() throws Exception {
-        final String anyText = null;
-        final String cswServiceId = null;
-        final Double east = null;
-        final Double west = null;
-        final Double north = null;
-        final Double south = null;
+    public void testOptionalParamRecords() throws Exception {
+
+        final Integer maxRecords = 123;
+        final String cswServiceId = "my-csw-service-id";
         final String[] keywords = null;
         final String capturePlatform = null;
         final String sensor = null;
 
+
         String [] key={"anyText","cswServiceId","east","west","north","south","keywords","capturePlatform","sensor"};
-        String [] value={null,null,null,null,null,null,null,null,null};
+        String [] value={null,"my-csw-service-id",null,null,null,null,null,null,null};
+
+
 
         final FilterBoundingBox expectedBBox = null;
-        final Integer maxRecords = null;
         final CSWRecord[] filteredRecs = new CSWRecord[] {
                 context.mock(CSWRecord.class, "cswRecord1"),
                 context.mock(CSWRecord.class, "cswRecord2"),
                 context.mock(CSWRecord.class, "cswRecord3")
         };
-        final CSWGetRecordResponse[] filteredResponses = new CSWGetRecordResponse[] {
-                context.mock(CSWGetRecordResponse.class, "cswResponse1"),
-                context.mock(CSWGetRecordResponse.class, "cswResponse2"),
-        };
+        final CSWGetRecordResponse filteredResponse = context.mock(CSWGetRecordResponse.class, "cswResponse1");
+
         final ModelMap mockViewRec1 = context.mock(ModelMap.class, "mockViewRec1");
         final ModelMap mockViewRec2 = context.mock(ModelMap.class, "mockViewRec2");
         final ModelMap mockViewRec3 = context.mock(ModelMap.class, "mockViewRec3");
+        final int response1RecordsMatched = 442;
         final KeywordMatchType matchType = null;
-        final Integer startPosition = null;
-        final int response1RecordsMatched = 234;
-        final int response2RecordsMatched = 723;
+        final Integer startPosition = 3;
 
         context.checking(new Expectations() {{
-            //Throw an error
-            oneOf(mockService).getFilteredRecords(with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor, matchType)), with(equal(CSWFilterController.DEFAULT_MAX_RECORDS)));will(returnValue(filteredResponses));
+            oneOf(mockService).getFilteredRecords(with(equal(cswServiceId)), with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor, matchType)), with(equal(maxRecords)), with(equal(startPosition + 1)));will(returnValue(filteredResponse));
 
-            oneOf(filteredResponses[0]).getRecordsMatched();
+            oneOf(filteredResponse).getRecordsMatched();
             will(returnValue(response1RecordsMatched));
 
-            oneOf(filteredResponses[1]).getRecordsMatched();
-            will(returnValue(response2RecordsMatched));
-
-            oneOf(filteredResponses[0]).getRecords();
-            will(returnValue(Arrays.asList(filteredRecs[0])));
-
-            oneOf(filteredResponses[1]).getRecords();
-            will(returnValue(Arrays.asList(filteredRecs[1], filteredRecs[2])));
+            oneOf(filteredResponse).getRecords();
+            will(returnValue(Arrays.asList(filteredRecs[0], filteredRecs[1], filteredRecs[2])));
 
             oneOf(mockViewRecordFactory).toView(filteredRecs[0]);
             will(returnValue(mockViewRec1));
+
             oneOf(mockViewRecordFactory).toView(filteredRecs[1]);
             will(returnValue(mockViewRec2));
+
             oneOf(mockViewRecordFactory).toView(filteredRecs[2]);
             will(returnValue(mockViewRec3));
         }});
 
-        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, startPosition);
+        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, startPosition,customRegistry);
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
         Assert.assertNotNull(dataRecs);
         Assert.assertTrue(dataRecs.contains(mockViewRec1));
         Assert.assertTrue(dataRecs.contains(mockViewRec2));
+        Assert.assertTrue(dataRecs.contains(mockViewRec3));
         Assert.assertEquals(3, dataRecs.size());
-        Assert.assertEquals(response1RecordsMatched + response2RecordsMatched, mav.getModel().get("totalResults"));
+
+        Assert.assertEquals(response1RecordsMatched, mav.getModel().get("totalResults"));
     }
+
+
+//    /**
+//     * Tests that requesting filtered records relies correctly on all dependencies when all optional
+//     * parameters are omitted
+//     * @throws Exception
+//     */
+//    @Test
+//    public void testGetFilteredRecordsOptionalParams() throws Exception {
+//        final String anyText = null;
+//        final String cswServiceId = "my-csw-service-id";
+//        final Double east = null;
+//        final Double west = null;
+//        final Double north = null;
+//        final Double south = null;
+//        final String[] keywords = null;
+//        final String capturePlatform = null;
+//        final String sensor = null;
+//
+//        String [] key={"anyText","cswServiceId","east","west","north","south","keywords","capturePlatform","sensor"};
+//        String [] value={null,cswServiceId,null,null,null,null,null,null,null};
+//
+//        final FilterBoundingBox expectedBBox = null;
+//        final Integer maxRecords = null;
+//        final CSWRecord[] filteredRecs = new CSWRecord[] {
+//                context.mock(CSWRecord.class, "cswRecord1"),
+//                context.mock(CSWRecord.class, "cswRecord2"),
+//                context.mock(CSWRecord.class, "cswRecord3")
+//        };
+//        final CSWGetRecordResponse filteredResponses = context.mock(CSWGetRecordResponse.class, "cswResponse1");
+//        final ModelMap mockViewRec1 = context.mock(ModelMap.class, "mockViewRec1");
+//        final ModelMap mockViewRec2 = context.mock(ModelMap.class, "mockViewRec2");
+//        final ModelMap mockViewRec3 = context.mock(ModelMap.class, "mockViewRec3");
+//        final KeywordMatchType matchType = null;
+//        final Integer startPosition = 0;
+//        final int response1RecordsMatched = 234;
+//        final int response2RecordsMatched = 723;
+//
+//        context.checking(new Expectations() {{
+//            //Throw an error
+//            oneOf(mockService).getFilteredRecords(with(equal(cswServiceId)),with(aCSWFilter(expectedBBox, keywords, capturePlatform, sensor, matchType)), with(equal(CSWFilterController.DEFAULT_MAX_RECORDS)),with(equal(startPosition + 1)));will(returnValue(filteredResponses));
+//
+//            oneOf(filteredResponses[0]).getRecordsMatched();
+//            will(returnValue(response1RecordsMatched));
+//
+//            oneOf(filteredResponses[1]).getRecordsMatched();
+//            will(returnValue(response2RecordsMatched));
+//
+//            oneOf(filteredResponses[0]).getRecords();
+//            will(returnValue(Arrays.asList(filteredRecs[0])));
+//
+//            oneOf(filteredResponses[1]).getRecords();
+//            will(returnValue(Arrays.asList(filteredRecs[1], filteredRecs[2])));
+//
+//            oneOf(mockViewRecordFactory).toView(filteredRecs[0]);
+//            will(returnValue(mockViewRec1));
+//            oneOf(mockViewRecordFactory).toView(filteredRecs[1]);
+//            will(returnValue(mockViewRec2));
+//            oneOf(mockViewRecordFactory).toView(filteredRecs[2]);
+//            will(returnValue(mockViewRec3));
+//        }});
+//
+//        ModelAndView mav = controller.getFilteredCSWRecords(key,value, maxRecords, startPosition,customRegistry);
+//        Assert.assertNotNull(mav);
+//        Assert.assertTrue((Boolean) mav.getModel().get("success"));
+//        Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
+//        Assert.assertNotNull(dataRecs);
+//        Assert.assertTrue(dataRecs.contains(mockViewRec1));
+//        Assert.assertTrue(dataRecs.contains(mockViewRec2));
+//        Assert.assertEquals(3, dataRecs.size());
+//        Assert.assertEquals(response1RecordsMatched + response2RecordsMatched, mav.getModel().get("totalResults"));
+//    }
 
     /**
      * Tests that requesting filtered count relies correctly on all dependencies
@@ -544,6 +543,102 @@ public class TestCSWFilterController extends PortalTestClass {
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Assert.assertEquals(null, mav.getModel().get("data"));
+
+
+    }
+
+    private final class CustomRegistry implements CustomRegistryInt{
+        private String id;
+        private String title,serviceUrl;
+        private String recordInformationUrl;
+
+        public CustomRegistry(String id,String title,String serviceUrl,String recordInformationUrl){
+            this.setId(id);
+            this.setTitle(title);
+            if(!serviceUrl.endsWith("csw")){
+                this.setServiceUrl(serviceUrl + "/csw");
+            }else{
+                this.setServiceUrl(serviceUrl);
+            }
+
+            if(!recordInformationUrl.endsWith("uuid=%1$s")){
+                this.setRecordInformationUrl(recordInformationUrl + "?uuid=%1$s");
+            }else{
+                this.setRecordInformationUrl(recordInformationUrl);
+            }
+        }
+
+        public CustomRegistry(String [] registryInfo){
+            this(registryInfo[0],registryInfo[1],registryInfo[2],registryInfo[3]);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            //VT: All info are crucial therefore we don't recognize this registry if it is missing any information.
+           if(id.isEmpty() || title.isEmpty() || serviceUrl.isEmpty() || recordInformationUrl.isEmpty()){
+               return true;
+           }else{
+               return false;
+           }
+
+        }
+
+        /**
+         * @return the recordInformationUrl
+         */
+        public String getRecordInformationUrl() {
+            return recordInformationUrl;
+        }
+
+        /**
+         * @param recordInformationUrl the recordInformationUrl to set
+         */
+        public void setRecordInformationUrl(String recordInformationUrl) {
+            this.recordInformationUrl = recordInformationUrl;
+        }
+
+        /**
+         * @return the serviceUrl
+         */
+        public String getServiceUrl() {
+            return serviceUrl;
+        }
+
+        /**
+         * @param serviceUrl the serviceUrl to set
+         */
+        public void setServiceUrl(String serviceUrl) {
+            this.serviceUrl = serviceUrl;
+        }
+
+        /**
+         * @return the title
+         */
+        public String getTitle() {
+            return title;
+        }
+
+        /**
+         * @param title the title to set
+         */
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        /**
+         * @return the id
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * @param id the id to set
+         */
+        public void setId(String id) {
+            this.id = id;
+        }
+
 
 
     }

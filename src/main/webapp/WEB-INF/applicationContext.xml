@@ -12,6 +12,17 @@
         </property>
     </bean>
 
+    <!-- This list all the implementation of converters used in spring -->
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="org.auscope.portal.server.web.controllers.sessonobject.StringArrayToCustomRegistry" />
+            </set>
+        </property>
+    </bean>
+
+
     <!-- This is the core threadpool shared by object instances throughout the portal -->
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <property name="corePoolSize" value="5" />
