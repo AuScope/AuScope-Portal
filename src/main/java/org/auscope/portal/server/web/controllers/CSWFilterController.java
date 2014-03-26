@@ -216,9 +216,6 @@ public class CSWFilterController extends BaseCSWController {
 
         HashMap<String,String> parameters=this.arrayPairtoMap(keys, values);
         String cswServiceId = parameters.get("cswServiceId");
-        if(cswServiceId==null || cswServiceId.isEmpty()){
-            throw new MissingResourceException("missing cswServiceId", "getFilteredCSWRecords", cswServiceId);
-        }
 
         CSWGetDataRecordsFilter filter = this.getFilter(parameters);
 
