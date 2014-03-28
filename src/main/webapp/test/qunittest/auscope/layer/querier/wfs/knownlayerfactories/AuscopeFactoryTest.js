@@ -64,6 +64,10 @@ test( "AuScopeParser count", function() {
 
 });
 
+//QUnit.jUnitReport = function(report) {
+//    console.log(report.xml);
+//};
+
 
 
 

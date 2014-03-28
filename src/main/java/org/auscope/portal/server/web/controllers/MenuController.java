@@ -98,6 +98,11 @@ public class MenuController {
       return new ModelAndView("links");
    }
 
+   @RequestMapping("/qunit.test")
+   public ModelAndView tests() {
+      return new ModelAndView("qunit");
+   }
+
    @RequestMapping("/admin.html")
    public ModelAndView admin(HttpServletRequest request) {
        return generateViewFromManifest(request, "admin");
