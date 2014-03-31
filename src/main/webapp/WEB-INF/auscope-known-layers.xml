@@ -932,4 +932,5 @@
         </constructor-arg>
         <property name="hidden" value="true"/>
     </bean>
+
 </beans>

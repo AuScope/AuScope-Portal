@@ -1,7 +1,7 @@
 //VT: This file tests everything in /AuScope-Portal/src/main/webapp/js/auscope/layer/querier/wfs/knownlayerfactories
 //VT : plus AuscopeParser.js and AuScopeKnownLayerParser.js
-module( "Test Factories" );
-test( "Test supportsKnownLayer PortrayalBoreholeViewFactory", function() {
+module( "Test auscope.layer.querier.wfs.knownlayerfactories" );
+test( "Test PortrayalBoreholeViewFactory", function() {
     var factory = new auscope.layer.querier.wfs.knownlayerfactories.PortrayalBoreholeViewFactory({
         name : 'Test'
     });
@@ -12,7 +12,7 @@ test( "Test supportsKnownLayer PortrayalBoreholeViewFactory", function() {
 
 });
 
-test( "Test supportsKnownLayer GeodesyFactory", function() {
+test( "Test GeodesyFactory", function() {
     var factory = new auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory({
         name : 'Test'
     });
@@ -23,7 +23,7 @@ test( "Test supportsKnownLayer GeodesyFactory", function() {
 
 });
 
-test( "Test supportsKnownLayer NVCLFactory", function() {
+test( "Test NVCLFactory", function() {
     var factory = new auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory({
         name : 'Test'
     });
@@ -35,7 +35,7 @@ test( "Test supportsKnownLayer NVCLFactory", function() {
 });
 
 
-test( "Test supportsKnownLayer PressureDBFactory", function() {
+test( "Test PressureDBFactory", function() {
     var factory = new auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory({
         name : 'Test'
     });
@@ -48,8 +48,8 @@ test( "Test supportsKnownLayer PressureDBFactory", function() {
 
 
 
-module( "Test Auscope Factory Parser" );
-test( "AuScopeParser count", function() {
+module( "Test auscope.layer.querier.wfs" );
+test( "Test AuScopeParser", function() {
     var auscopeParser = new auscope.layer.querier.wfs.AuScopeParser({
         name : 'test',
     })

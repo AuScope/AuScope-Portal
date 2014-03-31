@@ -28,7 +28,7 @@
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
-
+  <script src="test/qunittest/portal-core/portal/layer/querier/wfs/factories/BaseFactoryTest.js"></script>
   <script src="test/qunittest/auscope/layer/querier/wfs/knownlayerfactories/AuscopeFactoryTest.js"></script>
 </body>
 </html>

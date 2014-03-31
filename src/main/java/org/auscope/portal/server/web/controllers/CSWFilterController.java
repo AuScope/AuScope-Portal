@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.services.CSWFilterService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.csw.custom.CustomRegistry;
 import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
@@ -37,6 +38,7 @@ public class CSWFilterController extends BaseCSWController {
     public static final int DEFAULT_MAX_RECORDS = 100;
     private CSWFilterService cswFilterService;
     protected static ConcurrentHashMap<String,KeywordCacheEntity> catalogueKeywordCache;
+    protected List<CustomRegistryInt> catalogueOnlyRegistries;
     @Autowired
     private ConversionService  converter;
 
@@ -52,9 +54,10 @@ public class CSWFilterController extends BaseCSWController {
     @Autowired
     public CSWFilterController(CSWFilterService cswFilterService,
             ViewCSWRecordFactory viewCSWRecordFactory,
-            ViewKnownLayerFactory viewKnownLayerFactory) {
+            ViewKnownLayerFactory viewKnownLayerFactory, List<CustomRegistryInt> customRegistries) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswFilterService = cswFilterService;
+        this.catalogueOnlyRegistries=customRegistries;
 
     }
 
@@ -103,6 +106,15 @@ public class CSWFilterController extends BaseCSWController {
             convertedServiceItems.add(map);
         }
 
+        //Simplify our service items for the view
+        for (CustomRegistryInt item : this.catalogueOnlyRegistries) {
+            ModelMap map = new ModelMap();
+            map.put("title", item.getTitle());
+            map.put("id", item.getId());
+            map.put("url", item.getServiceUrl());
+            convertedServiceItems.add(map);
+        }
+
         return generateJSONResponseMAV(true, convertedServiceItems, "");
     }
 
@@ -115,7 +127,11 @@ public class CSWFilterController extends BaseCSWController {
         int startPosition = 1;
 
         do {
-            response = cswFilterService.getFilteredRecords(cswServiceId, null,DEFAULT_MAX_RECORDS, startPosition);
+            try{
+                response = cswFilterService.getFilteredRecords(cswServiceId, null,DEFAULT_MAX_RECORDS, startPosition);
+            }catch(IllegalArgumentException e){
+                response = cswFilterService.getFilteredRecords(this.getCustomRegistry(cswServiceId), null,DEFAULT_MAX_RECORDS, startPosition);
+            }
 
             for (CSWRecord record : response.getRecords()) {
 
@@ -232,7 +248,13 @@ public class CSWFilterController extends BaseCSWController {
                 matchedResults = response.getRecordsMatched();
 
             } else {
-                CSWGetRecordResponse response = cswFilterService.getFilteredRecords(cswServiceId, filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords, startPosition);
+                CSWGetRecordResponse response=null;
+                //VT: if it returns an exception, try finding it in the customRegistry
+                try{
+                    response = cswFilterService.getFilteredRecords(cswServiceId, filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords, startPosition);
+                }catch(IllegalArgumentException e){
+                    response = cswFilterService.getFilteredRecords(this.getCustomRegistry(cswServiceId), filter, maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords, startPosition);
+                }
                 records = response.getRecords();
                 matchedResults = response.getRecordsMatched();
             }
@@ -243,6 +265,7 @@ public class CSWFilterController extends BaseCSWController {
             return generateJSONResponseMAV(false, null, "Error fetching filtered records");
         }
     }
+
 
     private CSWGetDataRecordsFilter getFilter( HashMap<String,String> parameters){
 
@@ -354,6 +377,15 @@ public class CSWFilterController extends BaseCSWController {
         }
 
         return generateJSONResponseMAV(true, count, "");
+    }
+
+    private CustomRegistryInt getCustomRegistry(String id){
+        for(CustomRegistryInt cr:this.catalogueOnlyRegistries){
+            if(cr.getId().equals(id)){
+                return cr;
+            }
+        }
+        return null;
     }
 
     protected class KeywordCacheEntity{

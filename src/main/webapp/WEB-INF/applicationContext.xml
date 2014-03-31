@@ -133,4 +133,21 @@
         </constructor-arg>
         <constructor-arg name="baseUrl" value="${HOST.vocabService.url}"/>
     </bean>
+
+        <!-- Registries to be listed on Custom registry handler but no in feature or register tab -->
+    <bean id="cswVeglProduction" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">
+        <constructor-arg name="id" value="cswVeglProduction" />
+        <constructor-arg name="title" value="SISS ANU Geonetwork" />
+        <constructor-arg name="serviceUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/csw" />
+        <constructor-arg name="recordInformationUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/main.home?uuid=%1$s" />
+    </bean>
+
+    <bean id="customRegistryList" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="cswVeglProduction" />
+            </list>
+        </constructor-arg>
+    </bean>
+
 </beans>

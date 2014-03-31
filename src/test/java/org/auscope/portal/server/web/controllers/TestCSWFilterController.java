@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.CSWFilterService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
+import org.auscope.portal.core.services.csw.custom.CustomRegistry;
 import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
@@ -45,7 +46,10 @@ public class TestCSWFilterController extends PortalTestClass {
         mockViewRecordFactory = context.mock(ViewCSWRecordFactory.class);
         mockKnownLayerFactory = context.mock(ViewKnownLayerFactory.class);
         mockService = context.mock(CSWFilterService.class);
-        controller = new CSWFilterController(mockService, mockViewRecordFactory, mockKnownLayerFactory);
+        CustomRegistry catalogueOnly = new CustomRegistry("1234","aaa","bbb","vvv");
+        ArrayList<CustomRegistryInt> catalogueOnlys = new ArrayList<CustomRegistryInt>();
+        catalogueOnlys.add(catalogueOnly);
+        controller = new CSWFilterController(mockService, mockViewRecordFactory, mockKnownLayerFactory,catalogueOnlys);
         customRegistry = new CustomRegistry("","","","");
     }
 
@@ -461,7 +465,7 @@ public class TestCSWFilterController extends PortalTestClass {
         List<ModelMap> actual = (List<ModelMap>) mav.getModel().get("data");
         Assert.assertNotNull(actual);
 
-        Assert.assertEquals(2, actual.size());
+        Assert.assertEquals(3, actual.size());
         Assert.assertEquals("id1", actual.get(0).get("id"));
         Assert.assertEquals("serviceUrl1", actual.get(0).get("url"));
         Assert.assertEquals("title1", actual.get(0).get("title"));
