@@ -170,7 +170,12 @@ public class CSWFilterController extends BaseCSWController {
            //VT: if the cache keyword has not been generated, generate it.
            for(String cswServiceId:cswServiceIds){
                if(!CSWFilterController.catalogueKeywordCache.containsKey(cswServiceId)){
-                   this.generateKeywordCache(cswServiceId);
+                   try{
+                       this.generateKeywordCache(cswServiceId);
+                   }catch(IllegalArgumentException ex){
+                       //VT: if the key does not exist, it does not matter.
+                       log.info(String.format("serviceId '%s' DNE", cswServiceId));
+                   }
                }
            }
 
@@ -178,7 +183,13 @@ public class CSWFilterController extends BaseCSWController {
            KeywordCacheEntity keywordCacheEntity= new KeywordCacheEntity();
            //VT: this is to append the results from the different registeries
            for (String cswServiceId : cswServiceIds) {
-               keywordCacheEntity.append(this.catalogueKeywordCache.get(cswServiceId));
+               if(this.catalogueKeywordCache.get(cswServiceId) != null){
+                   keywordCacheEntity.append(this.catalogueKeywordCache.get(cswServiceId));
+               }
+           }
+           //VT: if no keyword is found, just return.
+           if(keywordCacheEntity.getKeywordPair().keySet().size() <= 0){
+               return generateJSONResponseMAV(true);
            }
 
            //VT: Put the accumalated results into a ModalMap.
