@@ -34,7 +34,7 @@ public class MineralTenementController extends BasePortalController {
     public void doMineralTenementDownload(
                         @RequestParam("serviceUrl") String serviceUrl,
                         @RequestParam("name") String name,
-                        @RequestParam("tenementType") String tenementType,
+                        @RequestParam(required = false, value = "tenementType") String tenementType,
                         @RequestParam("owner") String owner,
                         @RequestParam(required = false, value = "size") String size,
                         @RequestParam(required = false, value = "endDate") String endDate,
