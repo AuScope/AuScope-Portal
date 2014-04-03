@@ -63,7 +63,7 @@ test( "Test BaseFactory:_makeVocabPopupHtml", function() {
 
 test( "Test BaseFactory:_makeFeatureRequestUrl", function() {
     var result = factory._makeFeatureRequestUrl('wfsUrl', 'typeName', 'featureTypeId', null);
-    equal(result,'http://localhost:8088/requestFeature.do?serviceUrl=wfsUrl&typeName=typeName&featureId=featureTypeId')
+    ok(result.indexOf('requestFeature.do?serviceUrl=wfsUrl&typeName=typeName&featureId=featureTypeId')!= -1)
 
 });
 
