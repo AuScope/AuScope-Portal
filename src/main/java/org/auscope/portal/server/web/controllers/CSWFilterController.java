@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.services.CSWFilterService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
@@ -14,6 +16,7 @@ import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
+import org.auscope.portal.core.services.responses.csw.CSWGetCapabilities;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
@@ -152,6 +155,24 @@ public class CSWFilterController extends BaseCSWController {
         this.catalogueKeywordCache.put(cswServiceId, keywordCacheEntity);
 
 
+    }
+
+    /**
+     * Returns getCapabilities result. For the moment we only require the title but more can
+     * be added on as needed.
+     * @param cswServiceUrl
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/getCSWGetCapabilities.do")
+    public ModelAndView testConnection(
+            @RequestParam(value="cswServiceUrl", required = true) String cswServiceUrl) throws Exception{
+
+        CSWGetCapabilities cswGetCapabilities = cswFilterService.getCapabilities(cswServiceUrl);
+        ModelMap modelMap = new ModelMap();
+        modelMap.put("title", cswGetCapabilities.getTitle());
+
+        return generateJSONResponseMAV(true,modelMap,"success");
     }
 
     /**
