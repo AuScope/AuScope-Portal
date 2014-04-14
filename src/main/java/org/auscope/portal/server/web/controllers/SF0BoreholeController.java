@@ -69,7 +69,7 @@ public class SF0BoreholeController extends BasePortalController {
     @RequestMapping("/doBoreholeViewFilterStyle.do")
     public void doFilterStyle(
             HttpServletResponse response,
-            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "serviceUrl", defaultValue = "") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
             @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
             @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
@@ -80,13 +80,16 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "color",defaultValue="") String color)
             throws Exception {
 
-        String[] serviceFilterArray = serviceFilter.split(",");
+//        VT: I removed this code as it is not relevant. Florence might not have
+//        realized that it is already filtered from the javascript side
+//        String[] serviceFilterArray = serviceFilter.split(",");
 
-        if (!serviceFilter.equals("")
-                && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
-            // return this.generateJSONResponseMAV(false,null,"Not Queried");
-            log.warn("Not Queried");
-        }
+
+//        if (!serviceFilter.equals("")
+//                && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
+//            // return this.generateJSONResponseMAV(false,null,"Not Queried");
+//            log.warn("Not Queried");
+//        }
 
         FilterBoundingBox bbox = FilterBoundingBox
                 .attemptParseFromJSON(bboxJson);

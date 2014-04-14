@@ -417,7 +417,7 @@
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/>
+        <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/> -->
         <property name="iconAnchor">
             <bean class="java.awt.Point">
                 <constructor-arg index="0" value="16"/>
