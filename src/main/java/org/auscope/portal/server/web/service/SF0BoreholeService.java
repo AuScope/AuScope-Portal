@@ -48,14 +48,12 @@ public class SF0BoreholeService extends BoreholeService {
      */
     public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian, String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox) throws Exception {
         String filterString;
-        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling);
+        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null);
         if (bbox == null) {
             filterString = sf0BoreholeFilter.getFilterStringAllRecords();
         } else {
             filterString = sf0BoreholeFilter.getFilterStringBoundingBox(bbox);
         }
-
-
 
         HttpRequestBase method = null;
         try {
@@ -74,7 +72,7 @@ public class SF0BoreholeService extends BoreholeService {
     @Override
     public String getFilter(String boreholeName, String custodian, String dateOfDrilling,
             int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
-        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling);
+        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, ids);
         return generateFilterString(filter, bbox);
     }
     

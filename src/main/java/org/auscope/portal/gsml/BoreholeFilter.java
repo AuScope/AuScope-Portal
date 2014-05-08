@@ -19,12 +19,12 @@ public class BoreholeFilter extends AbstractFilter {
     protected String boreholeName;
     protected String custodian;
     protected String dateOfDrilling;
-    private List<String> restrictToIDList;
+    protected List<String> restrictToIDList;
 
     // -------------------------------------------------------------- Constants
 
     /** Log object for this class. */
-    private final Log logger = LogFactory.getLog(getClass());
+    protected final Log logger = LogFactory.getLog(getClass());
 
     // ----------------------------------------------------------- Constructors
 

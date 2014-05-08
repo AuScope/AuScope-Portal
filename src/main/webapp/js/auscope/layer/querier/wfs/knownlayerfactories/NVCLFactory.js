@@ -709,13 +709,13 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
 
         return Ext.create('portal.layer.querier.BaseComponent',{
-            tabTitle : 'Available Datasets',
+            tabTitle : 'TSG Datasets',
             layout : 'fit',
             //We only have a single child which is our grid
             items : [{
                 xtype : 'grid',
                 border : false,
-                title : 'Available Datasets',
+                title : 'TSG Datasets',
                 //This is for holding our dataset information
                 store : Ext.create('Ext.data.Store', {
                     model : 'auscope.knownlayer.nvcl.Dataset',

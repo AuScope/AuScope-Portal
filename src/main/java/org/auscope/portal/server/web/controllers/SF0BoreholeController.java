@@ -2,14 +2,16 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
-import org.auscope.portal.core.util.HttpUtil;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,10 +29,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class SF0BoreholeController extends BasePortalController {
 
     private SF0BoreholeService boreholeService;
+    
+    private CSWCacheService cswService;
 
     @Autowired
-    public SF0BoreholeController(SF0BoreholeService sf0BoreholeService) {
+    public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService) {
         this.boreholeService = sf0BoreholeService;
+        this.cswService = cswService;
     }
 
     /**
@@ -75,30 +80,38 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "color",defaultValue="") String color)
             throws Exception {
-
-//        VT: I removed this code as it is not relevant. Florence might not have
-//        realized that it is already filtered from the javascript side
-//        String[] serviceFilterArray = serviceFilter.split(",");
-
-
-//        if (!serviceFilter.equals("")
-//                && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
-//            // return this.generateJSONResponseMAV(false,null,"Not Queried");
-//            log.warn("Not Queried");
-//        }
-
-        FilterBoundingBox bbox = FilterBoundingBox
-                .attemptParseFromJSON(bboxJson);
-
+    	
+		FilterBoundingBox bbox = FilterBoundingBox
+				.attemptParseFromJSON(bboxJson);
+        
+		List<String> hyloggerBoreholeIDs = null;
+		try {
+			// don't get hylogger IDs if this is only to populate the legend
+			if (!serviceUrl.isEmpty()) {
+				hyloggerBoreholeIDs = this.boreholeService
+						.discoverHyloggerBoreholeIDs(this.cswService,
+								new CSWRecordsHostFilter(serviceUrl));
+			}
+		} catch (Exception e) {
+			log.warn(String
+					.format("Error requesting list of hylogger borehole ID's from %1$s: %2$s",
+							serviceUrl, e));
+			log.debug("Exception:", e);
+		}
+		
         String filter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrilling, maxFeatures, bbox,
                 null);
-        String style = this.boreholeService.getStyle(filter, (color.isEmpty()?"#2242c7":color));
 
+        String hyloggerFilter = this.boreholeService.getFilter(boreholeName,
+                custodian, dateOfDrilling, maxFeatures, bbox,
+                hyloggerBoreholeIDs);
+        
+        String style = this.boreholeService.getStyle(filter, (color.isEmpty()?"#2242c7":color), hyloggerFilter, "#F87217");
+        
         response.setContentType("text/xml");
 
         ByteArrayInputStream styleStream = new ByteArrayInputStream(

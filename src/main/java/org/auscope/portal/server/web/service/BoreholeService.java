@@ -115,10 +115,10 @@ public class BoreholeService extends BaseWFSService {
             for (int i = 0; i < publishedDatasets.getLength(); i++) {
                 Node holeIdentifier = (Node)xPath.evaluate("@xlink:href", publishedDatasets.item(i), XPathConstants.NODE);
                 if (holeIdentifier != null) {
-                    String[] urnBlocks = holeIdentifier.getTextContent().split("/");
+                	String[] urnBlocks = holeIdentifier.getTextContent().split("/");
                     if (urnBlocks.length > 1) {
                         // skip invalid URIs
-                        idList.add(urnBlocks[urnBlocks.length - 1]);
+                        idList.add(urnBlocks[urnBlocks.length - 1].trim());
                     }
                 }
 
@@ -179,7 +179,7 @@ public class BoreholeService extends BaseWFSService {
         return filterString;
     }
 
-    public String getStyle(String filter, String color) {
+    public String getStyle(String filter, String color, String hyloggerFilter, String hyloggerColor) {
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
@@ -192,10 +192,9 @@ public class BoreholeService extends BaseWFSService {
                 + "<Title>portal-style</Title>"
                 + "<Abstract>portal-style</Abstract>"
                 + "<IsDefault>1</IsDefault>"
-                + "<FeatureTypeStyle>"
+                + "<FeatureTypeStyle>"                
                 + "<Rule>"
-                + "<Name>Borehole</Name>"
-                + "<Abstract>portal-style</Abstract>"
+                + "<Name>Other Boreholes</Name>"
                 + filter
                 + "<PointSymbolizer>"
                 + "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>"
@@ -211,8 +210,28 @@ public class BoreholeService extends BaseWFSService {
                 + "<Size>8</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>"
-                + "</Rule>"
-                + "</FeatureTypeStyle>"
+                + "</Rule>"                              
+                + "<Rule>"
+                + "<Name>National Virtual Core Library</Name>"
+				+ hyloggerFilter
+				+ "<PointSymbolizer>"
+				+ "<Geometry><ogc:PropertyName>"
+				+ getGeometryName()
+				+ "</ogc:PropertyName></Geometry>"
+				+ "<Graphic>"
+				+ "<Mark>"
+				+ "<WellKnownName>square</WellKnownName>"
+				+ "<Fill>"
+				+ "<CssParameter name=\"fill\">"
+				+ hyloggerColor
+				+ "</CssParameter>"
+				+ "</Fill>"
+				+ "</Mark>"
+				+ "<Size>8</Size>"
+				+ "</Graphic>"
+				+ "</PointSymbolizer>"
+				+ "</Rule>"
+				+ "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
 
         return style;

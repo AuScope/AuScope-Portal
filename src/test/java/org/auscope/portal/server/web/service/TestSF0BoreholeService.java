@@ -110,7 +110,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
 		String filter = service.getFilter(nameFilter, custodianFilter,
 				filterDate, maxFeatures, bbox, null);
 
-		String style = service.getStyle(filter, "#2242c7");
+		String style = service.getStyle(filter, "#2242c7", null, null);
 		Assert.assertNotNull(style);
 		Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
 
@@ -161,7 +161,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String dateOfDrilling = "2010-01-02";
         final String gmlString = "xmlString";
         final String kmlString = "kmlString";
-        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling)).getFilterStringAllRecords();
+        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null)).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
             oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));

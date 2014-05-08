@@ -336,7 +336,7 @@ public class NVCLController extends BasePortalController {
                 graphType = PlotScalarGraphType.LineChart;
                 break;
             default:
-                log.warn("Inalid graphType: " + graphTypeInt);
+                log.warn("Invalid graphType: " + graphTypeInt);
                 response.sendError(HttpStatus.SC_BAD_REQUEST);
                 return;
             }
@@ -624,7 +624,7 @@ public class NVCLController extends BasePortalController {
                 custodian, dateOfDrilling, maxFeatures, bbox,
                 hyloggerBoreholeIDs);
 
-        String style = this.boreholeService.getStyle(filter, (color.isEmpty()?"#2242c7":color));
+        String style = this.boreholeService.getStyle(filter, (color.isEmpty()?"#2242c7":color), null, null);
 
         response.setContentType("text/xml");
 

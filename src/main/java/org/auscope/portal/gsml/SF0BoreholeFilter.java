@@ -23,8 +23,8 @@ public class SF0BoreholeFilter extends BoreholeFilter {
     	super(null, null, null, null);
     }
 
-    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling) {
-        super(boreholeName, custodian, dateOfDrilling, null);
+    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling, List<String> ids) {
+        super(boreholeName, custodian, dateOfDrilling, ids);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -65,6 +65,19 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                     "gsmlp:drillStartDate",
                     this.dateOfDrilling));
         }
+        
+        if (this.restrictToIDList != null && !this.restrictToIDList.isEmpty()) {
+            List<String> idFragments = new ArrayList<String>();
+            for (String id : restrictToIDList) {
+                if (id != null && id.length() > 0) {
+                    idFragments.add(this.generateFeatureIdFragment("gsml.borehole." + id));
+                }
+            }
+            parameterFragments.add(this
+                    .generateOrComparisonFragment(idFragments
+                            .toArray(new String[idFragments.size()])));
+        }
+
 
         return this.generateAndComparisonFragment(this
                 .generateAndComparisonFragment(parameterFragments
