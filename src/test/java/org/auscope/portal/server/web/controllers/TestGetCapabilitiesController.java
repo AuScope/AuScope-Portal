@@ -32,7 +32,7 @@ public class TestGetCapabilitiesController extends PortalTestClass {
     public void setUp(){
         service = context.mock(WMSService.class);
 
-        controller = new WMSController(service, viewCswFactory, viewKlFactory);
+        controller = new WMSController(service, viewCswFactory, viewKlFactory,null);
     }
 
     @Test

@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.CSWGeographicBoundingBox;
@@ -52,13 +54,15 @@ public class WMSController extends BaseCSWController {
     private WMSService wmsService;
     private final Log log = LogFactory.getLog(getClass());
     private int BUFFERSIZE = 1024 * 1024;
+    HttpServiceCaller serviceCaller;
 
     // ----------------------------------------------------------- Constructors
 
     @Autowired
-    public WMSController(WMSService wmsService, ViewCSWRecordFactory viewCSWRecordFactory, ViewKnownLayerFactory knownLayerFact) {
+    public WMSController(WMSService wmsService, ViewCSWRecordFactory viewCSWRecordFactory, ViewKnownLayerFactory knownLayerFact,HttpServiceCaller serviceCaller) {
         super(viewCSWRecordFactory, knownLayerFact);
         this.wmsService = wmsService;
+        this.serviceCaller=serviceCaller;
     }
 
 
@@ -254,4 +258,6 @@ public class WMSController extends BaseCSWController {
       InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
       FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
    }
+
+
 }
