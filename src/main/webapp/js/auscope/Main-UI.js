@@ -135,31 +135,38 @@ Ext.application({
 
         var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
             title : 'Active Layers',
-            region : 'center',
+            region: 'south',
             store : layerStore,
             map : map,
+            height: 250,
+            split: true,
             allowDebugWindow : isDebugMode,
             listeners : {
-                //On selection, update our filter panel
-                select : function(rowModel, record, index) {
-                    filterPanel.showFilterForLayer(record);
-                },
                 removelayerrequest: function(sourceGrid, record) {
                     filterPanel.clearFilter();
                 }
             }
         });
 
+        var handleFilterSelectionComplete =  function(){
+
+            var activePanel = tabsPanel.activeTab;
+            activePanel.addSelectedLayerToActive();
+
+        };
+
         /**
          * Used to show extra details for querying services
          */
         var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
             title : 'Filter',
-            region: 'south',
+            region : 'center',
             layerPanel : layersPanel,
             map : map,
-            split: true,
-            height: 170
+            listeners : {
+                filterselectioncomplete : handleFilterSelectionComplete
+            }
+
         });
 
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
@@ -169,6 +176,9 @@ Ext.application({
             querierFactory : Ext.create('auscope.layer.AuScopeQuerierFactory', {map: map}),
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
+
+
+
 
 
         //Utility function for adding a new layer to the map
@@ -190,9 +200,16 @@ Ext.application({
 
                 //Turn our KnownLayer/CSWRecord into an actual Layer
                 if (record[z] instanceof portal.csw.CSWRecord) {
-                    newLayer = layerFactory.generateLayerFromCSWRecord(record[z]);
+                    newLayer = record[z].get('layer');
                 } else {
-                    newLayer = layerFactory.generateLayerFromKnownLayer(record[z]);
+                    newLayer = record[z].get('layer');
+                }
+
+                //if newLayer is undefined, it must have come from some other source like mastercatalogue
+                if(!newLayer){
+                    newLayer = layerFactory.generateLayerFromCSWRecord(record[z])
+                    //we want it to display immediately.
+                    newLayer.set('displayed',true);
                 }
 
                 //We may need to show a popup window with copyright info
@@ -238,7 +255,20 @@ Ext.application({
                 dismissDelay : 30000
             },
             listeners : {
+                //On selection, update our filter panel
+                select : function(rowModel, record, index) {
+                    var newLayer;
+                    if(record.get('layer')){
+                        newLayer = record.get('layer');
+                    }else{
+                        newLayer = layerFactory.generateLayerFromKnownLayer(record);
+                        record.set('layer', newLayer);
+                    }
+
+                    filterPanel.showFilterForLayer(newLayer);
+                },
                 addlayerrequest : handleAddRecordToMap
+
             }
         });
 
@@ -253,6 +283,18 @@ Ext.application({
             },
             map : map,
             listeners : {
+              //On selection, update our filter panel
+                select : function(rowModel, record, index) {
+                    var newLayer;
+                    if(record.get('layer')){
+                        newLayer = record.get('layer');
+                    }else{
+                        newLayer = layerFactory.generateLayerFromCSWRecord(record);
+                        record.set('layer', newLayer);
+                    }
+
+                    filterPanel.showFilterForLayer(newLayer);
+                },
                 addlayerrequest : handleAddRecordToMap
             }
         });
@@ -301,7 +343,23 @@ Ext.application({
                 unmappedRecordsPanel,
                 customRecordsPanel,
                 researchDataPanel
-            ]
+            ],
+            listeners : {
+                tabchange : function( tabPanel, newCard, oldCard, eOpts ){
+                    var record = newCard.getSelectionModel().getSelection()[0];
+                    if(record){
+                        var newLayer;
+                        if(record.get('layer')){
+                            newLayer = record.get('layer');
+                        }else{
+                            newLayer = layerFactory.generateLayerFromCSWRecord(record);
+                            record.set('layer', newLayer);
+                        }
+
+                        filterPanel.showFilterForLayer(newLayer);
+                    }
+                }
+            }
         });
 
         /**
@@ -315,7 +373,7 @@ Ext.application({
             //margins: '100 0 0 0',
             margins:'100 0 0 3',
             width: 350,
-            items:[tabsPanel , layersPanel, filterPanel]
+            items:[tabsPanel , filterPanel, layersPanel]
         };
 
         /**
