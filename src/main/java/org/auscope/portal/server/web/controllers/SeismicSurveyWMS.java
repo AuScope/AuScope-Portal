@@ -53,7 +53,7 @@ public class SeismicSurveyWMS extends BaseCSWController {
 
       CSWRecord[] record= new CSWRecord[1];
       record[0] = this.seismicWMSService.getCSWRecord(serviceUrl);
-      record[0].setRecordInfoUrl(serviceUrl);
+      record[0].setRecordInfoUrl(serviceUrl.replace("/xml", ""));
       ModelAndView mav = generateJSONResponseMAV(record,record.length);
 
       return mav;

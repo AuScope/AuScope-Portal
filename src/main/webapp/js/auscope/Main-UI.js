@@ -310,6 +310,17 @@ Ext.application({
             },
             map : map,
             listeners : {
+                select : function(rowModel, record, index) {
+                    var newLayer;
+                    if(record.get('layer')){
+                        newLayer = record.get('layer');
+                    }else{
+                        newLayer = layerFactory.generateLayerFromCSWRecord(record);
+                        record.set('layer', newLayer);
+                    }
+
+                    filterPanel.showFilterForLayer(newLayer);
+                },
                 addlayerrequest : handleAddRecordToMap
             }
         });
