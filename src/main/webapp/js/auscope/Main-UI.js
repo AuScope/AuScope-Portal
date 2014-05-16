@@ -138,7 +138,8 @@ Ext.application({
             region: 'south',
             store : layerStore,
             map : map,
-            flex : 2,
+            flex : 1,
+            width : '100%',
             split: true,
             allowDebugWindow : isDebugMode,
             listeners : {
@@ -161,8 +162,9 @@ Ext.application({
         var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
             title : 'Filter',
             region : 'center',
-            height  : 100,
+            width : '100%',
             layerPanel : layersPanel,
+            maxHeight : 350,
             map : map,
             listeners : {
                 filterselectioncomplete : handleFilterSelectionComplete
@@ -349,6 +351,7 @@ Ext.application({
             region : 'north',
             split : true,
             height : 265,
+            width : '100%',
             enableTabScroll : true,
             items:[
                 knownLayersPanel,
@@ -378,7 +381,11 @@ Ext.application({
          * Used as a placeholder for the tree and details panel on the left of screen
          */
         var westPanel = {
-            layout: 'border',
+            layout: {
+                type : 'vbox',
+                align : 'left',
+                pack : 'start'
+            },
             region:'west',
             border: false,
             split:true,
