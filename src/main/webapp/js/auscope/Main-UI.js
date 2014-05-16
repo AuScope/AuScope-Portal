@@ -138,7 +138,7 @@ Ext.application({
             region: 'south',
             store : layerStore,
             map : map,
-            height: 250,
+            flex : 2,
             split: true,
             allowDebugWindow : isDebugMode,
             listeners : {
@@ -161,6 +161,7 @@ Ext.application({
         var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
             title : 'Filter',
             region : 'center',
+            height  : 100,
             layerPanel : layersPanel,
             map : map,
             listeners : {
