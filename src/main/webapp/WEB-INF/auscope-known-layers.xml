@@ -353,7 +353,6 @@
         <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="doFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">

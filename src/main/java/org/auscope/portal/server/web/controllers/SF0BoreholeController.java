@@ -88,19 +88,22 @@ public class SF0BoreholeController extends BasePortalController {
 				.attemptParseFromJSON(bboxJson);
         
 		List<String> hyloggerBoreholeIDs = null;
-		try {
-			// don't get hylogger IDs if this is only to populate the legend
-			if (!serviceUrl.isEmpty()) {
-				hyloggerBoreholeIDs = this.boreholeService
-						.discoverHyloggerBoreholeIDs(this.cswService,
-								new CSWRecordsHostFilter(serviceUrl));
-			}
-		} catch (Exception e) {
-			log.warn(String
-					.format("Error requesting list of hylogger borehole ID's from %1$s: %2$s",
-							serviceUrl, e));
-			log.debug("Exception:", e);
-		}
+		// AUS-2445
+		// RA: we can't show WMS for NVCL for now because the way GeoServer filter WMS isn't very efficient and
+		// it will cause services with a lot of scanned boreholes (e.g. SA) to run out of memory!		
+//		try {
+//			// don't get hylogger IDs if this is only to populate the legend
+//			if (!serviceUrl.isEmpty()) {
+//				hyloggerBoreholeIDs = this.boreholeService
+//						.discoverHyloggerBoreholeIDs(this.cswService,
+//								new CSWRecordsHostFilter(serviceUrl));
+//			}
+//		} catch (Exception e) {
+//			log.warn(String
+//					.format("Error requesting list of hylogger borehole ID's from %1$s: %2$s",
+//							serviceUrl, e));
+//			log.debug("Exception:", e);
+//		}
 		
         String filter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrilling, maxFeatures, bbox,

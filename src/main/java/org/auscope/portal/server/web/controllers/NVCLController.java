@@ -104,7 +104,8 @@ public class NVCLController extends BasePortalController {
         }
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, maxFeatures,bbox, onlyHylogger);
+        // show all NVCL boreholes
+        return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, -1,bbox, onlyHylogger);
     }
 
 
@@ -555,88 +556,6 @@ public class NVCLController extends BasePortalController {
         }
 
         writeStreamResponse(response, serviceResponse);
-    }
-
-    /**
-     * Handles getting the style of the SF0 borehole filter queries. (If the
-     * bbox elements are specified, they will limit the output response to 200
-     * records implicitly)
-     *
-     * @param mineName
-     *            the name of the mine to query for
-     * @param bbox
-     * @param maxFeatures
-     * @throws Exception
-     */
-    @RequestMapping("/doFilterStyle.do")
-    public void doFilterStyle(
-            HttpServletResponse response,
-            @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
-            @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
-            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
-            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
-            @RequestParam(required = false, value = "color",defaultValue="") String color)
-            throws Exception {
-
-        String[] serviceFilterArray = serviceFilter.split(",");
-
-        if (!serviceFilter.equals("")
-                && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
-            // return this.generateJSONResponseMAV(false,null,"Not Queried");
-            log.warn("Not Queried");
-        }
-
-        boolean onlyHylogger = false;
-        if (onlyHyloggerString != null && onlyHyloggerString.length() > 0) {
-            if (onlyHyloggerString.equals("on")) {
-                onlyHylogger = true;
-            } else {
-                onlyHylogger = Boolean.parseBoolean(onlyHyloggerString);
-            }
-        }
-
-        FilterBoundingBox bbox = FilterBoundingBox
-                .attemptParseFromJSON(bboxJson);
-
-        List<String> hyloggerBoreholeIDs = null;
-        if (onlyHylogger) {
-            try {
-                hyloggerBoreholeIDs = this.boreholeService
-                        .discoverHyloggerBoreholeIDs(this.cswService,
-                                new CSWRecordsHostFilter(serviceUrl));
-            } catch (Exception e) {
-                log.warn(String
-                        .format("Error requesting list of hylogger borehole ID's from %1$s: %2$s",
-                                serviceUrl, e));
-                log.debug("Exception:", e);
-            }
-
-            if (hyloggerBoreholeIDs.size() == 0) {
-                log.warn("No hylogger boreholes exist (or the services are missing)");
-            }
-        }
-
-        String filter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrilling, maxFeatures, bbox,
-                hyloggerBoreholeIDs);
-
-        String style = this.boreholeService.getStyle(filter, (color.isEmpty()?"#2242c7":color), null, null);
-
-        response.setContentType("text/xml");
-
-        ByteArrayInputStream styleStream = new ByteArrayInputStream(
-                style.getBytes());
-        OutputStream outputStream = response.getOutputStream();
-
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,
-                false);
-
-        styleStream.close();
-        outputStream.close();
     }
 
 }

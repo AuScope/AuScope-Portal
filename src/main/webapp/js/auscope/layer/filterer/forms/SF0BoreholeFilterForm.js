@@ -87,6 +87,10 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
                     valueField: 'serviceFilter',
                     displayField: 'displayText',
                     hiddenName: 'serviceFilter'
+                },{
+                	xtype: 'hidden',
+                	name: 'postMethod',
+                	value: 'true'              	                
                 }]
             }]
         });

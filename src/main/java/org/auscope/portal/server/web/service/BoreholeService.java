@@ -194,7 +194,7 @@ public class BoreholeService extends BaseWFSService {
                 + "<IsDefault>1</IsDefault>"
                 + "<FeatureTypeStyle>"                
                 + "<Rule>"
-                + "<Name>Other Boreholes</Name>"
+                + "<Name>Boreholes</Name>"
                 + filter
                 + "<PointSymbolizer>"
                 + "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>"
@@ -210,27 +210,28 @@ public class BoreholeService extends BaseWFSService {
                 + "<Size>8</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>"
-                + "</Rule>"                              
-                + "<Rule>"
-                + "<Name>National Virtual Core Library</Name>"
-				+ hyloggerFilter
-				+ "<PointSymbolizer>"
-				+ "<Geometry><ogc:PropertyName>"
-				+ getGeometryName()
-				+ "</ogc:PropertyName></Geometry>"
-				+ "<Graphic>"
-				+ "<Mark>"
-				+ "<WellKnownName>square</WellKnownName>"
-				+ "<Fill>"
-				+ "<CssParameter name=\"fill\">"
-				+ hyloggerColor
-				+ "</CssParameter>"
-				+ "</Fill>"
-				+ "</Mark>"
-				+ "<Size>8</Size>"
-				+ "</Graphic>"
-				+ "</PointSymbolizer>"
-				+ "</Rule>"
+                + "</Rule>"         
+// Won't do this until SISS-1513 is fixed.
+//                + "<Rule>"
+//                + "<Name>National Virtual Core Library</Name>"
+//				+ hyloggerFilter
+//				+ "<PointSymbolizer>"
+//				+ "<Geometry><ogc:PropertyName>"
+//				+ getGeometryName()
+//				+ "</ogc:PropertyName></Geometry>"
+//				+ "<Graphic>"
+//				+ "<Mark>"
+//				+ "<WellKnownName>square</WellKnownName>"
+//				+ "<Fill>"
+//				+ "<CssParameter name=\"fill\">"
+//				+ hyloggerColor
+//				+ "</CssParameter>"
+//				+ "</Fill>"
+//				+ "</Mark>"
+//				+ "<Size>8</Size>"
+//				+ "</Graphic>"
+//				+ "</PointSymbolizer>"
+//				+ "</Rule>"
 				+ "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
 
