@@ -83,7 +83,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 //Add our thumbnail tab (if available)
                 if (trayThumbNail !== null) {
                     tp.add({
-                        title : 'Mosaic',
+                        title : 'Images',
                         layout : 'fit',
                         html: '<iframe id="nav" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
                               'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&width=3&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
@@ -693,12 +693,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         //win.show();
     },
 
-    /**
-     * Overrides abstract parseKnownLayerFeature
-     */
-    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
-        var me = this;
-
+    _getNVCLDataServiceUrl : function(parentOnlineResource){
         //NVCL URL's are discovered by doing some 'tricky' URL rewriting
         var baseUrl = this.getBaseUrl(parentOnlineResource.get('url'));
         if (baseUrl.indexOf('pir.sa.gov.au') >= 0) {
@@ -706,16 +701,37 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         }
 
         var nvclDataServiceUrl = baseUrl + '/NVCLDataServices/';
+        return nvclDataServiceUrl;
         var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
+    },
+
+    _getNVCLDownloadServiceUrl : function(parentOnlineResource){
+        //NVCL URL's are discovered by doing some 'tricky' URL rewriting
+        var baseUrl = this.getBaseUrl(parentOnlineResource.get('url'));
+        if (baseUrl.indexOf('pir.sa.gov.au') >= 0) {
+            baseUrl += '/nvcl'; //AUS-2144 - PIRSA specific fix
+        }
+        var nvclDownloadServiceUrl = baseUrl + '/NVCLDownloadServices/';
+        return nvclDownloadServiceUrl;
+    },
+
+    /**
+     * Overrides abstract parseKnownLayerFeature
+     */
+    parseKnownLayerFeature : function(featureId, parentKnownLayer, parentOnlineResource) {
+        var me = this;
+
+        var nvclDataServiceUrl =  this._getNVCLDataServiceUrl(parentOnlineResource);
+        var nvclDownloadServiceUrl = this._getNVCLDownloadServiceUrl(parentOnlineResource);
 
         return Ext.create('portal.layer.querier.BaseComponent',{
-            tabTitle : 'TSG Datasets',
+            tabTitle : 'Spectral Datasets',
             layout : 'fit',
             //We only have a single child which is our grid
             items : [{
                 xtype : 'grid',
                 border : false,
-                title : 'TSG Datasets',
+                title : 'Spectral Datasets',
                 //This is for holding our dataset information
                 store : Ext.create('Ext.data.Store', {
                     model : 'auscope.knownlayer.nvcl.Dataset',
@@ -769,6 +785,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 var sm = grid.getSelectionModel();
                                 if (sm && grid.getStore().getCount() > 0) {
                                     sm.select(0, false);
+                                };
+
+                                if(grid.getStore().getCount()==1){
+                                    me._handleBoreholeDetailDisplay(grid,parentOnlineResource,featureId,parentKnownLayer);
                                 }
                             }
                         });
@@ -778,43 +798,51 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 buttons : [{
                     xtype : 'button',
                     iconCls : 'info',
-                    text : 'Display',
+                    text : 'Images and Scalars',
                     handler : function(button, e) {
                         var grid = button.ownerCt.ownerCt;
+                        me._handleBoreholeDetailDisplay(grid,parentOnlineResource,featureId,parentKnownLayer);
 
 
-                        var parent = grid.ownerCt.ownerCt.ownerCt;
-                        var startDepth = parent.query('displayfield#boreholeStartDepth');
-                        if(startDepth && startDepth.length > 0){
-                            startDepth = Math.floor(startDepth[0].getValue());
-                        }else{
-                            startDepth = 1;
-                        }
-                        var endDepth = parent.query('displayfield#boreholeEndDepth');
-                        if(endDepth && endDepth.length > 0){
-                            endDepth = Math.ceil(endDepth[0].getValue());
-                        }else{
-                            endDepth = 99999;
-                        }
-
-                        var selection = grid.getSelectionModel().getSelection();
-                        var selectedRec = (selection && (selection.length > 0)) ? selection[0] : null;
-                        if (selectedRec) {
-                            me.showDetailsWindow(selectedRec.get('datasetId'),
-                                    selectedRec.get('datasetName'),
-                                    selectedRec.get('omUrl'),
-                                    nvclDataServiceUrl,
-                                    nvclDownloadServiceUrl,
-                                    featureId,
-                                    parentKnownLayer,
-                                    parentOnlineResource,
-                                    startDepth,
-                                    endDepth,
-                                    me);
-                        }
                     }
                 }]
             }]
         });
+    },
+
+    _handleBoreholeDetailDisplay : function(grid,parentOnlineResource,featureId,parentKnownLayer){
+
+        var nvclDataServiceUrl =  this._getNVCLDataServiceUrl(parentOnlineResource);
+        var nvclDownloadServiceUrl = this._getNVCLDownloadServiceUrl(parentOnlineResource);
+
+        var parent = grid.ownerCt.ownerCt.ownerCt;
+        var startDepth = parent.query('displayfield#boreholeStartDepth');
+        if(startDepth && startDepth.length > 0){
+            startDepth = Math.floor(startDepth[0].getValue());
+        }else{
+            startDepth = 1;
+        }
+        var endDepth = parent.query('displayfield#boreholeEndDepth');
+        if(endDepth && endDepth.length > 0){
+            endDepth = Math.ceil(endDepth[0].getValue());
+        }else{
+            endDepth = 99999;
+        }
+
+        var selection = grid.getSelectionModel().getSelection();
+        var selectedRec = (selection && (selection.length > 0)) ? selection[0] : null;
+        if (selectedRec) {
+            this.showDetailsWindow(selectedRec.get('datasetId'),
+                    selectedRec.get('datasetName'),
+                    selectedRec.get('omUrl'),
+                    nvclDataServiceUrl,
+                    nvclDownloadServiceUrl,
+                    featureId,
+                    parentKnownLayer,
+                    parentOnlineResource,
+                    startDepth,
+                    endDepth,
+                    this);
+        }
     }
 });
