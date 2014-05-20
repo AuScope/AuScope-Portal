@@ -293,7 +293,7 @@ public class NVCLController extends BasePortalController {
             //the result is proxied, the service url becomes portal's url.
             String stringResponse = IOUtils.toString(serviceResponse.getResponse());
             stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "Display_Tray_Thumb.html");
-            if(!stringResponse.contains("div style=\"max-width: 33%")){
+            if(!stringResponse.contains("style=\"max-width: 33%")){
                 stringResponse = stringResponse.replace("<img", "<img style=\"max-width: 33%;height: auto;width: auto\\9;\" ");
             }
 

@@ -242,14 +242,14 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     xtype       : 'numberfield',
                                     fieldLabel  : 'Start Depth (m)',
                                     name        : 'startDepth',
-                                    minValue    : 0,
+                                    minValue    : 1,
                                     value       : startDepth,
                                     accelerate  : true
                                 },{
                                     xtype       : 'numberfield',
                                     fieldLabel  : 'End Depth (m)',
                                     name        : 'endDepth',
-                                    minValue    : 0,
+                                    minValue    : 1,
                                     value       : endDepth,
                                     accelerate  : true
                                 },{
@@ -257,7 +257,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     fieldLabel              : 'Interval (m)',
                                     name                    : 'samplingInterval',
                                     minValue                : 0,
-                                    value                   : 1.0,
+                                    value                   : 2.0,
                                     allowDecimals           : true,
                                     decimalPrecision        : 1,
                                     step                    : 0.1,
@@ -788,7 +788,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         if(startDepth && startDepth.length > 0){
                             startDepth = Math.floor(startDepth[0].getValue());
                         }else{
-                            startDepth = 0;
+                            startDepth = 1;
                         }
                         var endDepth = parent.query('displayfield#boreholeEndDepth');
                         if(endDepth && endDepth.length > 0){
