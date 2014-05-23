@@ -612,7 +612,7 @@ public class TestNVCLController extends PortalTestClass {
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
         final String filterDate = "1986-10-09";
-        final int maxFeatures = 10;
+        final int maxFeatures = -1;
         final String nvclWfsResponse = "wfsResponse";
         final String nvclKmlResponse = "kmlResponse";
         final String onlyHylogger = "off";
