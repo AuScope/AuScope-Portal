@@ -104,6 +104,45 @@ public class NVCLController extends BasePortalController {
         }
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        
+        return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, maxFeatures,bbox, onlyHylogger);
+    }
+    
+    /**
+     * Handles the borehole filter queries.
+     *
+     * @param serviceUrl the url of the service to query
+     * @param mineName   the name of the mine to query for
+     * @param request    the HTTP client request
+     * @return a WFS response converted into KML
+     * @throws Exception
+     */
+    @RequestMapping("/doNVCLFilter.do")
+    public ModelAndView doNVCLFilter(@RequestParam("serviceUrl") String serviceUrl,
+                                      @RequestParam(required = false, value = "boreholeName", defaultValue="")     String boreholeName,
+                                      @RequestParam(required = false, value = "custodian", defaultValue="")        String custodian,
+                                      @RequestParam(required = false, value = "dateOfDrilling", defaultValue="")   String dateOfDrilling,
+                                      @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures,
+                                      @RequestParam(required = false, value = "bbox") String bboxJson,
+                                      @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
+                                      @RequestParam(required = false, value = "serviceFilter", defaultValue="") String serviceFilter) throws Exception {
+
+        String [] serviceFilterArray=serviceFilter.split(",");
+
+        if (!serviceFilter.equals("") && !(HttpUtil.containHost(serviceUrl,serviceFilterArray))) {
+            return this.generateJSONResponseMAV(false,null,"Not Queried");
+        }
+
+        boolean onlyHylogger = false;
+        if (onlyHyloggerString != null && onlyHyloggerString.length() > 0) {
+            if (onlyHyloggerString.equals("on")) {
+                onlyHylogger = true;
+            } else {
+                onlyHylogger = Boolean.parseBoolean(onlyHyloggerString);
+            }
+        }
+
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         // show all NVCL boreholes
         return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, -1,bbox, onlyHylogger);
     }
