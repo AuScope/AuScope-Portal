@@ -84,8 +84,9 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "color",defaultValue="") String color)
             throws Exception {
     	
-		FilterBoundingBox bbox = FilterBoundingBox
-				.attemptParseFromJSON(bboxJson);
+		FilterBoundingBox bbox = null;
+//				FilterBoundingBox
+//				.attemptParseFromJSON(bboxJson);
         
 		List<String> hyloggerBoreholeIDs = null;
 		// AUS-2445
