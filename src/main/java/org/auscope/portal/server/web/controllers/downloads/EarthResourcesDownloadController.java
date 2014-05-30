@@ -258,7 +258,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
 
-        InputStream results = this.mineralOccurrenceDownloadService.downloadWFS(serviceUrl, MIN_OCCUR_VIEW_TYPE, filter, null);
+        InputStream results = this.mineralOccurrenceDownloadService.downloadWFS(serviceUrl, MIN_OCCUR_VIEW_TYPE, filter, maxFeatures);
         FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
         outputStream.close();
 
