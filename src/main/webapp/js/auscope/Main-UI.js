@@ -138,7 +138,7 @@ Ext.application({
             region: 'south',
             store : layerStore,
             map : map,
-            flex : 1,
+            flex : 2,
             width : '100%',
             split: true,
             allowDebugWindow : isDebugMode,
@@ -164,7 +164,9 @@ Ext.application({
             region : 'center',
             width : '100%',
             layerPanel : layersPanel,
-            maxHeight : 350,
+            //maxHeight : 350, //VT:settings for vbox layout
+            height : 100,
+            split: true,
             map : map,
             listeners : {
                 filterselectioncomplete : handleFilterSelectionComplete
@@ -381,11 +383,7 @@ Ext.application({
          * Used as a placeholder for the tree and details panel on the left of screen
          */
         var westPanel = {
-            layout: {
-                type : 'vbox',
-                align : 'left',
-                pack : 'start'
-            },
+            layout: 'border',//VT: vbox doesn't support splitbar unless we custom it.
             region:'west',
             border: false,
             split:true,
