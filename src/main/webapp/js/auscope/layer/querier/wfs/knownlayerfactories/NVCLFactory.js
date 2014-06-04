@@ -400,15 +400,9 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     items : [downloadPanel]
                 })
 
+                win.show();
+                win.center();
 
-
-
-                if (trayThumbNail !== null) {
-                    win.show();
-                    win.center();
-                } else {
-                    Ext.MessageBox.alert('Info', 'Selected dataset is empty and contains no imagery!');
-                }
             }
         });
     },
