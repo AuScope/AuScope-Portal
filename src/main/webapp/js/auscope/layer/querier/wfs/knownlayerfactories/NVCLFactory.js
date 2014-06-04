@@ -407,7 +407,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     win.show();
                     win.center();
                 } else {
-                    Ext.MessageBox.alert('Info', 'Selected dataset is empty!');
+                    Ext.MessageBox.alert('Info', 'Selected dataset is empty and contains no imagery!');
                 }
             }
         });
@@ -723,6 +723,19 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
         var nvclDataServiceUrl =  this._getNVCLDataServiceUrl(parentOnlineResource);
         var nvclDownloadServiceUrl = this._getNVCLDownloadServiceUrl(parentOnlineResource);
+
+        //VT: This is absolutely a last resort to solving this problem without a massive overhaul of the code.
+        //VT: A synchronous ajax request to the server to check for dataset. If none are found, return null
+        //VT: so that the tab will not even be rendered.
+        //VT: https://jira.csiro.au/browse/AUS-2487
+        var request = ((window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"));
+        request.open("GET", ('getNVCLDatasets.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&holeIdentifier=' + featureId.replace('gsml.borehole.', '')), false); //<-- false makes it a synchonous request!
+        request.send(null);
+        var responseObject=Ext.decode(request.responseText);
+        if(responseObject.data.length==0){
+            return null;
+        }
+
 
         return Ext.create('portal.layer.querier.BaseComponent',{
             tabTitle : 'Spectral Datasets',
