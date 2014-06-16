@@ -143,6 +143,12 @@ Ext.application({
             split: true,
             allowDebugWindow : isDebugMode,
             listeners : {
+                select : function(rowModel, record, index) {
+                    filterPanel.showFilterForLayer(record);
+                },
+                itemclick : function(view, record, item, index, e, eOpts ){
+                    filterPanel.showFilterForLayer(record);
+                },
                 removelayerrequest: function(sourceGrid, record) {
                     filterPanel.clearFilter();
                 }
