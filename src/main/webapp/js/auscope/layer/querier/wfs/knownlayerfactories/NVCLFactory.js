@@ -141,7 +141,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         hasTip : true,
                         tipRenderer : function(value, record, column, tip) {
                             //Load our vocab string asynchronously
-                            var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(record.get('logName').replace(' ', '_'));
+                            var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(record.get('logName'));
                             Ext.Ajax.request({
                                 url : vocabsQuery,
                                 success : function(pData, options) {
