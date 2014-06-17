@@ -85,9 +85,20 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                     tp.add({
                         title : 'Images',
                         layout : 'fit',
-                        html: '<iframe id="nav" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
+                        html: '<iframe id="nvcl-iframe-nav" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
                               'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&width=3&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
-                              '"></iframe>'
+                              '"></iframe>',
+                        listeners : {
+                            afterrender : function(comp, eOpts){
+                                var myMask = new Ext.LoadMask(comp, {msg:"Downloading Images..."});
+                                myMask.show();
+                                var el = Ext.get('nvcl-iframe-nav');
+                                el.on('load',function(){
+                                    myMask.hide();
+                                })
+
+                            }
+                        }
                     });
                 }
 
