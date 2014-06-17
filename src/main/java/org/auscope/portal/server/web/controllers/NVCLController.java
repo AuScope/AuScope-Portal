@@ -56,6 +56,7 @@ public class NVCLController extends BasePortalController {
 
     private int BUFFERSIZE = 1024 * 1024;
 
+
     @Autowired
     public NVCLController(BoreholeService boreholeService,
                             CSWCacheService cswService,
@@ -104,10 +105,10 @@ public class NVCLController extends BasePortalController {
         }
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        
+
         return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, maxFeatures,bbox, onlyHylogger);
     }
-    
+
     /**
      * Handles the borehole filter queries.
      *
@@ -495,6 +496,10 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);
         } catch (Exception ex) {
+            if(ex.getMessage().contains("404 Not Found")){
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+                return;
+            }
             log.warn(String.format("Error requesting tsg download from %1$s: %2$s", serviceUrl, ex));
             log.debug("Exception:", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -525,6 +530,10 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.checkTSGStatus(serviceUrl, email);
         } catch (Exception ex) {
+            if(ex.getMessage().contains("404 Not Found")){
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+                return;
+            }
             log.warn(String.format("Error requesting tsg status from %1$s: %2$s", serviceUrl, ex));
             log.debug("Exception:", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -563,6 +572,10 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.getWFSDownload(serviceUrl, email, boreholeId, omUrl, typeName);
         } catch (Exception ex) {
+            if(ex.getMessage().contains("404 Not Found")){
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+                return;
+            }
             log.warn(String.format("Error requesting %1$s download from omUrl '%2$s' for borehole '%3$s' and nvcl dataservice %4$s: %5$s", typeName,omUrl, boreholeId, serviceUrl, ex));
             log.debug("Exception:", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -588,6 +601,10 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.checkWFSStatus(serviceUrl, email);
         } catch (Exception ex) {
+            if(ex.getMessage().contains("404 Not Found")){
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+                return;
+            }
             log.warn(String.format("Error requesting wfs status from %1$s: %2$s", serviceUrl, ex));
             log.debug("Exception:", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -597,4 +614,9 @@ public class NVCLController extends BasePortalController {
         writeStreamResponse(response, serviceResponse);
     }
 
+
+    private static InputStream get404HTMLError() throws IOException{
+        InputStream input = NVCLController.class.getResourceAsStream("/htmlerrors/NVCL404Response.html");
+        return input;
+    }
 }

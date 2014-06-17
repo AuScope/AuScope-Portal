@@ -554,7 +554,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         modal       : true,
                                         plain       : false,
                                         title       : 'Download confirmation: ',
-                                        height      : 200,
+                                        height      : 400,
                                         width       : 840
                                       });
 
@@ -570,7 +570,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         'expand' : {
                             scope: this,
                             fn : function(panel, anim) {
-                                Ext.getCmp('csvFldSet').collapse();
+                                //Ext.getCmp('csvFldSet').collapse();
                                 Ext.getCmp('omFldSet').collapse();
                             }
                         }
@@ -669,7 +669,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         modal       : true,
                                         plain       : false,
                                         title       : 'Download confirmation: ',
-                                        height      : 350,
+                                        height      : 400,
                                         width       : 840
                                       });
 
@@ -685,7 +685,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         'expand' : {
                             scope: this,
                             fn : function(panel) {
-                                Ext.getCmp('csvFldSet').collapse();
+                                //Ext.getCmp('csvFldSet').collapse();
                                 Ext.getCmp('tsgFldSet').collapse();
                             }
                         }
