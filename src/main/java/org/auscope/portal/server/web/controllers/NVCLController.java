@@ -616,7 +616,7 @@ public class NVCLController extends BasePortalController {
 
 
     private static InputStream get404HTMLError() throws IOException{
-        InputStream input = NVCLController.class.getResourceAsStream("/htmlerrors/NVCL404Response.html");
+        InputStream input = NVCLController.class.getResourceAsStream("/htmlerror/NVCL404Response.htm");
         return input;
     }
 }

@@ -143,11 +143,16 @@ Ext.application({
             split: true,
             allowDebugWindow : isDebugMode,
             listeners : {
-                select : function(rowModel, record, index) {
-                    filterPanel.showFilterForLayer(record);
-                },
-                itemclick : function(view, record, item, index, e, eOpts ){
-                    filterPanel.showFilterForLayer(record);
+                itemclick : function(sm,record, eOpts){
+                    var allTabPanels = tabsPanel.items.items;
+                    for (var i=0; i< allTabPanels.length; i++){
+                        var tabPanelSelectedRecord = allTabPanels[i].getStore().getById(record.get('id'));
+                        if(tabPanelSelectedRecord){
+                            allTabPanels[i].getSelectionModel().select([tabPanelSelectedRecord], false);
+                            tabsPanel.setActiveTab(allTabPanels[i]);
+                            break;
+                        }
+                    }
                 },
                 removelayerrequest: function(sourceGrid, record) {
                     filterPanel.clearFilter();
@@ -156,10 +161,8 @@ Ext.application({
         });
 
         var handleFilterSelectionComplete =  function(){
-
             var activePanel = tabsPanel.activeTab;
-            activePanel.addSelectedLayerToActive();
-
+            activePanel.addSelectedLayerToActive()
         };
 
         /**
@@ -348,6 +351,17 @@ Ext.application({
                 dismissDelay : 30000
             },
             listeners : {
+                select : function(rowModel, record, index) {
+                    var newLayer;
+                    if(record.get('layer')){
+                        newLayer = record.get('layer');
+                    }else{
+                        newLayer = layerFactory.generateLayerFromKnownLayer(record);
+                        record.set('layer', newLayer);
+                    }
+
+                    filterPanel.showFilterForLayer(newLayer);
+                },
                 addlayerrequest : handleAddRecordToMap
             }
         });
