@@ -84,6 +84,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 if (trayThumbNail !== null) {
                     tp.add({
                         title : 'Images',
+                        tooltip : 'Display mosaic images of available core trays. Click on a thumbnail to open the full tray image.',
                         layout : 'fit',
                         html: '<iframe id="nvcl-iframe-nav" style="overflow:auto;width:100%;height:100%;" frameborder="0" src="' +
                               'getNVCL2_0_Thumbnail.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&width=3&dataSetId=' + datasetId + '&logId=' + trayThumbNail.get('logId') +
@@ -180,6 +181,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 tp.add({
                     title : 'Scalars',
                     layout : 'fit',
+                    tooltip : 'A scalar refers to any set of imported or calculated values associated with the loaded spectral data.',
                     border : false,
                     items : {
                         // Bounding form
@@ -406,6 +408,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
                 tp.add({
                     title : 'Download '+ datasetName,
+                    tooltip : 'Download spectral data and more.',
                     layout : 'fit',
                     border : false,
                     items : [downloadPanel]
@@ -816,6 +819,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 buttons : [{
                     xtype : 'button',
                     iconCls : 'info',
+                    tooltip : 'View and download images, scalars and downhole data.',
                     text : 'Images and Scalars',
                     handler : function(button, e) {
                         var grid = button.ownerCt.ownerCt;
