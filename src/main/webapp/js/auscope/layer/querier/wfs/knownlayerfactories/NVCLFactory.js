@@ -168,7 +168,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
                                         updateTipText(tip, response.data.scopeNote);
                                     } else {
-                                        return null;
+                                    	updateTipText(tip, record.get('logName'));
                                     }
                                 }
                            });
