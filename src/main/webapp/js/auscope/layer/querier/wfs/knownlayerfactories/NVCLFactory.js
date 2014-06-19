@@ -167,6 +167,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         updateTipText(tip, response.data.definition);
                                     } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
                                         updateTipText(tip, response.data.scopeNote);
+                                    } else {
+                                        return null;
                                     }
                                 }
                            });
@@ -817,7 +819,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 buttons : [{
                     xtype : 'button',
                     iconCls : 'info',
-                    tooltip : 'View and download images, scalars and downhole data.',
                     text : 'Images and Scalars',
                     handler : function(button, e) {
                         var grid = button.ownerCt.ownerCt;
