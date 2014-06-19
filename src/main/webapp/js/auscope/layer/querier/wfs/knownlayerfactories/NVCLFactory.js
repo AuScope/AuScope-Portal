@@ -142,9 +142,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         hasTip : true,
                         tipRenderer : function(value, record, column, tip) {
                             //Load our vocab string asynchronously
-                            var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(record.get('logName'));
+                        	var logName = record.get('logName');
+                            var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(logName);
                             Ext.Ajax.request({
                                 url : vocabsQuery,
+                                logName : logName,
                                 success : function(pData, options) {
                                     var pResponseCode = pData.status;
                                     var updateTipText = function(tip, text) {
@@ -168,7 +170,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
                                         updateTipText(tip, response.data.scopeNote);
                                     } else {
-                                    	updateTipText(tip, record.get('logName'));
+                                    	updateTipText(tip, logName);
                                     }
                                 }
                            });
