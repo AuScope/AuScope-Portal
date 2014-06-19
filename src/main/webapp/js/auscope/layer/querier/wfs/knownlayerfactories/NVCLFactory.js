@@ -167,8 +167,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         updateTipText(tip, response.data.definition);
                                     } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
                                         updateTipText(tip, response.data.scopeNote);
-                                    } else {
-                                        updateTipText(tip, 'N/A');
                                     }
                                 }
                            });
