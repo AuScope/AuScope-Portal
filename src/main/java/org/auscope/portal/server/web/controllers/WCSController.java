@@ -259,17 +259,11 @@ public class WCSController extends BasePortalController {
                         "<html>Error message: "+ causeMessage +"<br/>Your request has failed by unexpected reasons.%s</html>",
                         ftpMessage);
 
-                if(causeMessage.contains("400 Bad Request")){
-                    messageString = String.format(
-                            "<html>Error message: "+ causeMessage +"<br/>Your request has failed due to unsupported bad request.%s</html>",
-                            ftpMessage);
-                }else{
+                //VT: Note Http 400 is a valid response from the service. https://jira.csiro.au/browse/AUS-2421
+                messageString = String.format(
+                      "<html>Error message: "+ causeMessage +"<br/>Your request has failed. This is likely due to the requested data exceeding the server&apos;s size limit.<br/>Please adjust your query and try again.%s</html>",
+                          ftpMessage);
 
-                    // We'll just show the user a page informing them that there's a problem:
-                    messageString = String.format(
-                        "<html>Error message: "+ causeMessage +"<br/>Your request has failed. This is likely due to the requested data exceeding the server&apos;s size limit.<br/>Please adjust your query and try again.%s</html>",
-                            ftpMessage);
-                }
                 servletOutputStream.write(messageString.getBytes());
                 servletOutputStream.close();
                 return;
