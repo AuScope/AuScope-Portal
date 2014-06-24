@@ -155,7 +155,7 @@ Ext.application({
                     }
                 },
                 removelayerrequest: function(sourceGrid, record) {
-                    filterPanel.clearFilter();
+                    //filterPanel.clearFilter();
                 }
             }
         });
