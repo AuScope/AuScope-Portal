@@ -44,6 +44,10 @@
                 <ref bean="knownTypeAsterFerricOxideContent" />
                 <ref bean="knownTypeAsterFeoh" />
                 <ref bean="knownTypeFerricOxideComp" />
+                <ref bean="knownTypeAsterChileSandToClay" />
+                <ref bean="knownTypeAsterChileWaterIndex" />
+                <ref bean="knownTypeAsterChileAlOHComp" />
+                <ref bean="knownTypeAsterChileFalseColour" />
                 <ref bean="knownTypeGroupIndex" />
                 <ref bean="knownTypeQuartzIndex" />
                 <ref bean="knownTypeMgohContent" />
@@ -67,10 +71,9 @@
         <constructor-arg>
             <list>
                 <ref bean="cswAuscopeTest" />
+                <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswAsterProduction" />
-                <ref bean="cswInSarProduction" />
-                <!-- <ref bean="cswMRTTest" /> -->
             </list>
         </constructor-arg>
     </bean>

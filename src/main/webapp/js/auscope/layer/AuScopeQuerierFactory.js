@@ -40,6 +40,13 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
                 }
             }
 
+            for (var i = 0; i < wmsResources.length; i++) {
+                if (wmsResources[i].get('name') === 'FalseColour123-gamma1.0') {
+                    return Ext.create('portal.layer.querier.wms.AsterChileWMS', cfg);
+                }
+            }
+
+
             //Or just the plain old WMS querier
             return Ext.create('portal.layer.querier.wms.WMSQuerier', cfg);
         } else if (irisResources.length > 0) {

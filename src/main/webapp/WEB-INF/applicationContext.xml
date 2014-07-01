@@ -110,8 +110,8 @@
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
         <constructor-arg name="methodMaker">
             <list>
-               <ref bean="WMSMethodMaker"/>
                <ref bean="WMS_1_3_0_MethodMaker"/>
+               <ref bean="WMSMethodMaker"/>
             </list>
         </constructor-arg>
     </bean>
