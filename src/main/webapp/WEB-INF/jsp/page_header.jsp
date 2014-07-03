@@ -6,6 +6,7 @@
       </div>
       <div id="menu">
          <ul >
+            <li><a id="help-button">Help<span></span></a></li>
             <li><a href="http://www.auscope.org">AuScope.org<span></span></a></li>
             <li><a href="mailto:cg-admin@csiro.au">Contact Us<span></span></a></li>
             <li <%if (request.getRequestURL().toString().contains("/gmap.")) {%>class="current" <%} %>><a href="gmap.html">AuScope Discovery Portal<span></span></a></li>

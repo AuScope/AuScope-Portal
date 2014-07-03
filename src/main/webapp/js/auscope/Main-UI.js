@@ -134,6 +134,7 @@ Ext.application({
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
 
         var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
+            id : 'auscope-layers-panel',
             title : 'Active Layers',
             region: 'south',
             store : layerStore,
@@ -169,6 +170,7 @@ Ext.application({
          * Used to show extra details for querying services
          */
         var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
+            id : 'auscope-filter-panel',
             title : 'Filter',
             region : 'center',
             width : '100%',
@@ -368,6 +370,7 @@ Ext.application({
 
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
+            id : 'auscope-tabs-panel',
             title : 'Layers',
             activeTab : 0,
             region : 'north',
