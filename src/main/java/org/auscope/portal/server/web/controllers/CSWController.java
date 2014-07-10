@@ -83,6 +83,31 @@ public class CSWController extends BaseCSWController {
         }
 
     }
+    
+    /**
+     * use for testing a csw connection
+     * @param cswServiceUrl
+     * @return
+     * @throws Exception
+     * @throws URISyntaxException
+     */
+    @RequestMapping("/testServiceGetCap.do")
+    public ModelAndView testServiceGetCap(
+            @RequestParam(value="serviceUrl", required = true) String serviceUrl) throws Exception{
+        try{
+            HttpGet method = new HttpGet(serviceUrl);
+            URIBuilder builder= new URIBuilder(serviceUrl);
+            // test request=GetCapabilities&service=CSW&acceptVersions=2.0.2&acceptFormats=application%2Fxml
+            builder.addParameter("request", "GetCapabilities");           
+            method.setURI(builder.build());
+            this.serviceCaller.getMethodResponseAsString(method);
+
+            return generateJSONResponseMAV(true);
+        }catch(Exception e){
+            throw e;
+        }
+
+    }
 
     /**
      * Requests CSW records from the cswServiceUrl provided.
