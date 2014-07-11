@@ -86,7 +86,7 @@ Ext.define('auscope.HelpHandler', {
                 auscope.HelpHandler.manager.showInstructions([Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'auscope-tabs-panel',
                     title : 'Find data/layers',
-                    description : 'In this panel a list of all available datasets in the form of layers will be presented to you.  Select the layer you would like to visualise.  Selecting a layer will also bring up any advanced filter options in the window below. <br/><br/>Further information about the data behind each layer can be displayed by clicking the icons alongside the layer name.'
+                    description : 'In this panel a list of all available datasets in the form of layers will be presented to you.  Select the layer you would like to visualise. If you do not wish to filter your datasets, you can visualise the data by clicking "Add to Map" in the window below. <br><br>  Selecting a layer will also bring up any advanced filter options in the window below. <br/><br/>Further information about the data behind each layer can be displayed by clicking the icons alongside the layer name.'
                 }),Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'auscope-filter-panel',
                     title : 'Apply filters',
@@ -94,17 +94,12 @@ Ext.define('auscope.HelpHandler', {
                 }),Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'auscope-layers-panel',
                     title : 'Manage Layers',
-                    description : 'Whenever you add a layer to the map, it will be listed in this window. Layers can be removed by selecting them and pressing "Remove Layer".'
+                    description : 'Whenever you add a layer to the map, it will be listed in this window. Layers can be removed by selecting them and pressing "Remove Layer".<br><br> Selecting a layer will also bring up any advanced filter options in the window above.'
                 }),Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'center_region',
                     anchor : 'right',
                     title : 'Visualise Data',
                     description : 'The map panel here is where all of the currently added layers will be visualised. You can pan and zoom the map to an area of interest if required.'
-                }),Ext.create('portal.util.help.Instruction', {
-                    highlightEl : 'help-button',
-                    anchor : 'bottom',
-                    title : 'More information',
-                    description : 'For futher information, please consult the online <a target="_blank" href="http://auscope.org.au/">Auscope wiki</a>.'
                 })]);
             });
         }  else {
