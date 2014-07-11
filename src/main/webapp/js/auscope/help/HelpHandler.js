@@ -86,7 +86,7 @@ Ext.define('auscope.HelpHandler', {
                 auscope.HelpHandler.manager.showInstructions([Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'auscope-tabs-panel',
                     title : 'Find data/layers',
-                    description : 'In this panel a list of all available datasets in the form of layers will be presented to you.  Select the layer you would like to visualise. If you do not wish to filter your datasets, you can visualise the data by clicking "Add to Map" in the window below. <br><br>  Selecting a layer will also bring up any advanced filter options in the window below. <br/><br/>Further information about the data behind each layer can be displayed by clicking the icons alongside the layer name.'
+                    description : 'In this panel a list of all available datasets in the form of layers will be presented to you.  Select the layer you would like to visualise.<br><br>Selecting a layer will also bring up any advanced filter options in the window below. If you do not wish to filter your datasets, you can visualise the data by clicking "Add to Map" in the window below.<br/><br/>Further information about the data behind each layer can be displayed by clicking the icons alongside the layer name.'
                 }),Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'auscope-filter-panel',
                     title : 'Apply filters',
