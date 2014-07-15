@@ -141,11 +141,19 @@
         <constructor-arg name="serviceUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/csw" />
         <constructor-arg name="recordInformationUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/main.home?uuid=%1$s" />
     </bean>
+    
+    <bean id="cswSARegistry" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">
+        <constructor-arg name="id" value="cswSARegistry" />
+        <constructor-arg name="title" value="South Australia Registry" />
+        <constructor-arg name="serviceUrl" value="https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/csw" />
+        <constructor-arg name="recordInformationUrl" value="https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s" />
+    </bean>
 
     <bean id="customRegistryList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
                 <ref bean="cswVeglProduction" />
+                <ref bean="cswSARegistry" />
             </list>
         </constructor-arg>
     </bean>
