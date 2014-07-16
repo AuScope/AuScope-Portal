@@ -26,7 +26,7 @@ Ext.define('auscope.layer.filterer.forms.YilgarnGeochemistryFilterForm', {
                 items: [{
                     anchor: '100%',
                     xtype: 'textfield',
-                    fieldLabel: 'Geologic Unit Name',
+                    fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' + 'Geologic Unit Name',
                     name: 'geologicName'
                 }]
             }]
