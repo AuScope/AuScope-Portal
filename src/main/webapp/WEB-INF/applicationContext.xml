@@ -148,12 +148,20 @@
         <constructor-arg name="serviceUrl" value="https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/csw" />
         <constructor-arg name="recordInformationUrl" value="https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s" />
     </bean>
+    
+    <bean id="cswNTRegistry" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">
+        <constructor-arg name="id" value="cswNTRegistry" />
+        <constructor-arg name="title" value="Northern Territory Registry" />
+        <constructor-arg name="serviceUrl" value="http://geology.data.nt.gov.au/geonetwork/srv/eng/csw" />
+        <constructor-arg name="recordInformationUrl" value="http://geology.data.nt.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s" />
+    </bean>
 
     <bean id="customRegistryList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
                 <ref bean="cswVeglProduction" />
                 <ref bean="cswSARegistry" />
+                <ref bean="cswNTRegistry" />
             </list>
         </constructor-arg>
     </bean>
