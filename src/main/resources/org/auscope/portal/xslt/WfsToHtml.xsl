@@ -1088,16 +1088,13 @@
                     <td colspan="2" ALIGN="right"><b>View As: </b>
                         <xsl:call-template name="make-popup-url">
                             <xsl:with-param name="friendly-name" select="'XML'"/>
-                            <xsl:with-param name="real-url" select="$serviceURL"/>
+                            <xsl:with-param name="real-url" select="concat($serviceURL,'?SERVICE=WFS&amp;REQUEST=GetFeature&amp;VERSION=1.1.0&amp;typeName=gsml:GeologicUnit&amp;featureId=',$guID)"/>
                         </xsl:call-template>
                     </td>
                 </tr>
                 <tr>
                     <td class="row header">Id:</td>
-                    <td class="row" colspan="4"><xsl:call-template name="make-wfspopup-url">
-                            <xsl:with-param name="friendly-name" select="$guID"/>
-                            <xsl:with-param name="real-url" select="$serviceURL"/>
-                        </xsl:call-template></td>
+                    <td class="row" colspan="4"><xsl:value-of select="$guID"/></td>
                 </tr>
                 <xsl:for-each select="./gml:name[not(@codeSpace='http://www.ietf.org/rfc/rfc3406')]">
                     <xsl:choose>

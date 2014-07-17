@@ -35,7 +35,7 @@ Ext.define('auscope.layer.querier.wfs.factories.GnssStationFactory', {
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
-            autoScroll : true,
+            autoScroll : false,
             items : [{
                 xtype : 'fieldset',
                 title : 'GNSS Station',
