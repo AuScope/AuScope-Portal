@@ -1,5 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -170,7 +171,13 @@ public class CSWFilterController extends BaseCSWController {
 
         CSWGetCapabilities cswGetCapabilities = cswFilterService.getCapabilities(cswServiceUrl);
         ModelMap modelMap = new ModelMap();
-        modelMap.put("title", cswGetCapabilities.getTitle());
+        if(cswGetCapabilities.getTitle() != null && !cswGetCapabilities.getTitle().isEmpty()){
+            modelMap.put("title", cswGetCapabilities.getTitle());
+        }else{
+            URI uri = new URI(cswServiceUrl);
+            modelMap.put("title", uri.getHost());
+            
+        }
 
         return generateJSONResponseMAV(true,modelMap,"success");
     }
