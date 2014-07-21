@@ -166,7 +166,7 @@ public class CSWFilterController extends BaseCSWController {
      * @throws Exception
      */
     @RequestMapping("/getCSWGetCapabilities.do")
-    public ModelAndView testConnection(
+    public ModelAndView getCSWGetCapabilities(
             @RequestParam(value="cswServiceUrl", required = true) String cswServiceUrl) throws Exception{
 
         CSWGetCapabilities cswGetCapabilities = cswFilterService.getCapabilities(cswServiceUrl);
