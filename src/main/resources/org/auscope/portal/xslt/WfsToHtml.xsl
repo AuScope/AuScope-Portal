@@ -463,10 +463,22 @@
                 <tr>
                     <td class="row header">Commodity</td>
                     <td class="row">
-                        <xsl:call-template name="make-popup-url">
-                            <xsl:with-param name="friendly-name" select="$commodity_name"/>
-                            <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($commodity_name, string-length($commodity_name) - 1))"/>
-                        </xsl:call-template>
+                    
+                        <xsl:choose>
+                            <xsl:when test="contains($commodity_name, '/')">                   
+                                <xsl:call-template name="make-popup-url">
+                                    <xsl:with-param name="friendly-name" select="substring-after($commodity_name,'classifier/cgi/commodity/')"/>
+                                    <xsl:with-param name="real-url" select="$commodity_name"/>                                                                 
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:call-template name="make-popup-url">
+                                    <xsl:with-param name="friendly-name" select="$commodity_name"/>
+                                    <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($commodity_name, string-length($commodity_name) - 1))"/>                                                                 
+                                </xsl:call-template>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                                                        
                     </td>
                     <td class="row header">Commodity Id:</td>
                     <td class="row" colspan="1">
