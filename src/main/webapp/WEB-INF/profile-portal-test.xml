@@ -20,8 +20,7 @@
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeGSMLBorehole" />
-                <ref bean="knownTypeGeodesy" />
-                <ref bean="knownTypeGeochron" />
+                <ref bean="knownTypeGeodesy" />                
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
@@ -59,10 +58,11 @@
                 <ref bean="knownTypeAlohGroupContent" />
                 <ref bean="knownTypeGypsumContent" />
                 <ref bean="knownTypeSilicaContent" />
-                <ref bean="knownTypeBoreholeMSCL" />
-                <ref bean="knownTypeSurfaceAftershock" />
+                <ref bean="knownTypeBoreholeMSCL" />                
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />
+                <ref bean="knownTypeGeochron" />
+                <ref bean="knownTypeSurfaceAftershock" />
             </list>
         </constructor-arg>
     </bean>
