@@ -12,7 +12,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory', {
      * Overrides abstract supportsKnownLayer. Supports only the Geodesy known layer
      */
     supportsKnownLayer : function(knownLayer) {
-        return knownLayer.getId() === 'geodesy:gnssstation';
+        return knownLayer.getId() === 'geodesy:gnssstation' ;
     },
 
     _handleDateChange : function(field, newValue, oldValue, eOpts, store, wfsUrl, featureId) {
