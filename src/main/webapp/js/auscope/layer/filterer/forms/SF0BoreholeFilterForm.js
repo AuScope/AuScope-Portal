@@ -93,10 +93,6 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
                 	xtype: 'hidden',
                 	name: 'postMethod',
                 	value: 'true'              	                
-                },{
-                	xtype: 'hidden',
-                	name: 'cswBbox',
-                	value: Ext.JSON.encode(bbox)
                 }]
             }]
         });
