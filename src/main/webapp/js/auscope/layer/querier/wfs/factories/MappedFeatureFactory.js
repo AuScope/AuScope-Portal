@@ -15,6 +15,21 @@ Ext.define('auscope.layer.querier.wfs.factories.MappedFeatureFactory', {
         return domNode.namespaceURI === this.XMLNS_GSML_2 &&
                portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'MappedFeature';
     },
+    
+    _getShortestNameFromNode : function(nodes){
+        var result=null;
+        for(var i=0;i<nodes.length;i++){
+            if(result==null){
+                result = portal.util.xml.SimpleDOM.getNodeTextContent(nodes[i]);
+                continue;
+            }else if(result.length > portal.util.xml.SimpleDOM.getNodeTextContent(nodes[i]).length){
+                result = portal.util.xml.SimpleDOM.getNodeTextContent(nodes[i]);
+            }
+        }
+        
+        return result;
+        
+    },
 
     /**
      * Generates a simple tree panel that represents the specified node
@@ -68,6 +83,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MappedFeatureFactory', {
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
+            tabTitle : this._getShortestNameFromNode(allNames),
             layout : 'fit',
             items : [{
                 xtype : 'fieldset',
