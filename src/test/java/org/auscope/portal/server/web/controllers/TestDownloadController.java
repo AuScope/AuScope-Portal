@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -16,6 +17,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.message.BasicHeader;
+import org.auscope.portal.core.configuration.ServiceConfiguration;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -34,6 +36,7 @@ public class TestDownloadController extends PortalTestClass {
      * Mock httpService caller
      */
     private HttpServiceCaller httpServiceCaller = context.mock(HttpServiceCaller.class);
+    private ServiceConfiguration serviceConfiguration = context.mock(ServiceConfiguration.class);
 
     /**
      * The controller to test
@@ -62,7 +65,7 @@ public class TestDownloadController extends PortalTestClass {
 
     @Before
     public void setUp() {
-        downloadController = new DownloadController(httpServiceCaller);
+        downloadController = new DownloadController(httpServiceCaller,serviceConfiguration);
         // TODO : VT jmock 2.5.1 doesn't have great support for testing multi
         // threading. Currently if we allow more then 1 thread to run, I get
         // erratic test errors. 2.6.0 will provide greater support with
@@ -96,7 +99,7 @@ public class TestDownloadController extends PortalTestClass {
 
                 // calling the service
                 oneOf(httpServiceCaller).getMethodResponseAsHttpResponse(with(any(HttpRequestBase.class)));
-                    will(returnValue(new MyHttpResponse(dummyJSONResponseIS)));
+                will(returnValue(new MyHttpResponse(dummyJSONResponseIS)));
             }
         });
 
@@ -134,7 +137,7 @@ public class TestDownloadController extends PortalTestClass {
 
         final String[] serviceUrls = {
                 "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs",
-                "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://www.mrt.tas.gov.au:80/web-services/wfs" };
+        "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://www.mrt.tas.gov.au:80/web-services/wfs" };
         final String dummyMessage = "hereisadummymessage";
         final String dummyJSONResponse = "{\"msg\": '" + dummyMessage
                 + "',\"success\":false}";
@@ -172,9 +175,9 @@ public class TestDownloadController extends PortalTestClass {
         Assert.assertTrue(name.equals("downloadInfo.txt"));
 
         String error="Unsuccessful JSON reply from: http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs\n" +
-                     "hereisadummymessage\n\n" +
-                     "Unsuccessful JSON reply from: http://www.mrt.tas.gov.au:80/web-services/wfs\n" +
-                     "No error message\n\n";
+                "hereisadummymessage\n\n" +
+                "Unsuccessful JSON reply from: http://www.mrt.tas.gov.au:80/web-services/wfs\n" +
+                "No error message\n\n";
 
 
         byte[] uncompressedData = new byte[error.getBytes().length];
@@ -195,7 +198,7 @@ public class TestDownloadController extends PortalTestClass {
 
         final String[] serviceUrls = {
                 "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs",
-                "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://www.mrt.tas.gov.au:80/web-services/wfs" };
+        "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://www.mrt.tas.gov.au:80/web-services/wfs" };
         final String dummyGml = "<someGmlHere/>";
         final String dummyJSONResponse = "{\"data\":{\"kml\":\"<someKmlHere/>\", \"gml\":\""
                 + dummyGml + "\"},\"success\":true}";

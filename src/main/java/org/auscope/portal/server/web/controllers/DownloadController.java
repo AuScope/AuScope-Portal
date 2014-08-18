@@ -9,14 +9,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.auscope.portal.core.configuration.ServiceConfiguration;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.server.http.download.DownloadResponse;
@@ -42,11 +45,13 @@ import com.google.common.io.Files;
 public class DownloadController extends BasePortalController {
     private final Log logger = LogFactory.getLog(getClass());
     private HttpServiceCaller serviceCaller;
+    private ServiceConfiguration serviceConfiguration;
 
 
     @Autowired
-    public DownloadController(HttpServiceCaller serviceCaller) {
+    public DownloadController(HttpServiceCaller serviceCaller, ServiceConfiguration serviceConfiguration) {
         this.serviceCaller = serviceCaller;
+        this.serviceConfiguration = serviceConfiguration;
     }
 
     @RequestMapping("/getGmlDownload.do")
@@ -112,7 +117,7 @@ public class DownloadController extends BasePortalController {
     public void downloadGMLAsZip(String[] serviceUrls,HttpServletResponse response,ExecutorService threadpool,String email) throws Exception {
 
         logger.trace("No. of serviceUrls: " + serviceUrls.length);
-        ServiceDownloadManager downloadManager = new ServiceDownloadManager(serviceUrls, serviceCaller,threadpool);
+        ServiceDownloadManager downloadManager = new ServiceDownloadManager(serviceUrls, serviceCaller,threadpool,this.serviceConfiguration);
 
         if(email != null && email.length() > 0){
 
@@ -121,11 +126,11 @@ public class DownloadController extends BasePortalController {
             String htmlResponse="";
             response.setContentType("text/html");
             if(progress==Progression.INPROGRESS){
-                 htmlResponse="<html><p>You are not allowed to start a new download when another download is in progress Please wait for your previous download to complete.</p>" +
-                         " <p>To check the progress of your download, enter your email address on the download popup and click on 'Check Status'</p>" +
-                         " <p>Please contact the administrator if you encounter any issues</p></html>";
-                 response.getOutputStream().write(htmlResponse.getBytes());
-                 return;
+                htmlResponse="<html><p>You are not allowed to start a new download when another download is in progress Please wait for your previous download to complete.</p>" +
+                        " <p>To check the progress of your download, enter your email address on the download popup and click on 'Check Status'</p>" +
+                        " <p>Please contact the administrator if you encounter any issues</p></html>";
+                response.getOutputStream().write(htmlResponse.getBytes());
+                return;
             }
 
             downloadTracker.startTrack(downloadManager);
@@ -168,8 +173,8 @@ public class DownloadController extends BasePortalController {
      */
     @RequestMapping("/downloadDataAsZip.do")
     public void downloadDataAsZip( @RequestParam("serviceUrls") final String[] serviceUrls,
-                                  @RequestParam("filename") final String filename,
-                                  HttpServletResponse response) throws Exception {
+            @RequestParam("filename") final String filename,
+            HttpServletResponse response) throws Exception {
 
         String filenameStr = filename == null || filename.length() < 0 ? "DataDownload" : filename;
         String ext = Files.getFileExtension(filename);

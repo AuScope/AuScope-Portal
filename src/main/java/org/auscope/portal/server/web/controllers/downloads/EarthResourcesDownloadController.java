@@ -1,17 +1,11 @@
 package org.auscope.portal.server.web.controllers.downloads;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
@@ -27,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class EarthResourcesDownloadController extends BasePortalController{
 
- // ----------------------------------------------------- Instance variables
+    // ----------------------------------------------------- Instance variables
 
     private MineralOccurrenceDownloadService mineralOccurrenceDownloadService;
     private MineralOccurrenceService mineralOccurrenceService;
@@ -38,7 +32,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
 
     @Autowired
     public EarthResourcesDownloadController(MineralOccurrenceDownloadService mineralOccurrenceDownloadService,
-                                MineralOccurrenceService mineralOccurrenceService) {
+            MineralOccurrenceService mineralOccurrenceService) {
         this.mineralOccurrenceDownloadService = mineralOccurrenceDownloadService;
         this.mineralOccurrenceService = mineralOccurrenceService;
 
@@ -61,18 +55,24 @@ public class EarthResourcesDownloadController extends BasePortalController{
             @RequestParam("mineName") String mineName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
+            @RequestParam(required = false, value = "startIndex") String startIndex,
             HttpServletResponse response) throws Exception {
 
-        //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
-        //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
+        //The presence of a startIndex assume paging and if maxFeature is 0, we will default it to 200.
+        //This will in turn limit the number of points returned to 200
+        if(maxFeatures == 0 && (bbox != null || startIndex != null)){
+            maxFeatures = 200;
+        }
+
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
         File file=null;
         try {
-            InputStream results = this.mineralOccurrenceDownloadService.downloadMinesGml(serviceUrl, mineName, bbox, maxFeatures);
+            InputStream results = this.mineralOccurrenceDownloadService.downloadMinesGml(serviceUrl, mineName, bbox, maxFeatures,startIndex);
 
-            file= this.writeStreamToFileTemporary(results, "APT_MFD", ".xml", true);
+            file= FileIOUtil.writeStreamToFileTemporary(results, "APT_MFD", ".xml", true);
             FileInputStream in=new FileInputStream(file);
             FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
@@ -110,19 +110,26 @@ public class EarthResourcesDownloadController extends BasePortalController{
      */
     @RequestMapping("/doMineralOccurrenceFilterDownload.do")
     public void doMineralOccurrenceFilterDownload(
-        @RequestParam(value = "serviceUrl",            required = false) String serviceUrl,
-        @RequestParam(value = "commodityName",         required = false) String commodityName,
-        @RequestParam(value = "measureType",           required = false) String measureType,
-        @RequestParam(value = "minOreAmount",          required = false) String minOreAmount,
-        @RequestParam(value = "minOreAmountUOM",       required = false) String minOreAmountUOM,
-        @RequestParam(value = "minCommodityAmount",    required = false) String minCommodityAmount,
-        @RequestParam(value = "minCommodityAmountUOM", required = false) String minCommodityAmountUOM,
-        @RequestParam(required = false, value = "bbox") String bboxJson,
-        @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
-        HttpServletResponse response) throws Exception {
-        //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
-        //This will in turn limit the number of points returned to 200
+            @RequestParam(value = "serviceUrl",            required = false) String serviceUrl,
+            @RequestParam(value = "commodityName",         required = false) String commodityName,
+            @RequestParam(value = "measureType",           required = false) String measureType,
+            @RequestParam(value = "minOreAmount",          required = false) String minOreAmount,
+            @RequestParam(value = "minOreAmountUOM",       required = false) String minOreAmountUOM,
+            @RequestParam(value = "minCommodityAmount",    required = false) String minCommodityAmount,
+            @RequestParam(value = "minCommodityAmountUOM", required = false) String minCommodityAmountUOM,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
+            @RequestParam(required = false, value = "startIndex") String startIndex,
+            HttpServletResponse response) throws Exception {
+
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
+        //The presence of a startIndex assume paging and if maxFeature is 0, we will default it to 200.
+        //This will in turn limit the number of points returned to 200
+        if(maxFeatures == 0 && (bbox != null || startIndex != null)){
+            maxFeatures = 200;
+        }
+
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
         File file=null;
@@ -138,9 +145,10 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     minCommodityAmount,
                     minCommodityAmountUOM,
                     maxFeatures,
-                    bbox);
+                    bbox,
+                    startIndex);
 
-            file= this.writeStreamToFileTemporary(results, "APT_MOD", ".xml", true);
+            file= FileIOUtil.writeStreamToFileTemporary(results, "APT_MOD", ".xml", true);
             FileInputStream in=new FileInputStream(file);
             FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
@@ -186,12 +194,19 @@ public class EarthResourcesDownloadController extends BasePortalController{
             @RequestParam(required = false, value = "production", defaultValue = "")       String production,
             @RequestParam(required = false, value = "bbox", defaultValue = "")             String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0")     int maxFeatures,
+            @RequestParam(required = false, value = "startIndex") String startIndex,
             HttpServletResponse response)
-    throws Exception
+                    throws Exception
     {
-        //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
-        //This will in turn limit the number of points returned to 200
+
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
+        //The presence of a startIndex assume paging and if maxFeature is 0, we will default it to 200.
+        //This will in turn limit the number of points returned to 200
+        if(maxFeatures == 0 && (bbox != null || startIndex != null)){
+            maxFeatures = 200;
+        }
+
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
         File file=null;
@@ -207,10 +222,11 @@ public class EarthResourcesDownloadController extends BasePortalController{
                     , cutOffGrade
                     , production
                     , maxFeatures
-                    , bbox);
+                    , bbox
+                    , startIndex);
 
 
-            file= this.writeStreamToFileTemporary(results, "APT_MAD", ".xml", true);
+            file= FileIOUtil.writeStreamToFileTemporary(results, "APT_MAD", ".xml", true);
             FileInputStream in=new FileInputStream(file);
             FileIOUtil.writeInputToOutputStream(in, outputStream, 8 * 1024, true);
 
@@ -246,7 +262,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
             @RequestParam(required = false, value = "minReserves") String minResources,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
@@ -265,29 +281,7 @@ public class EarthResourcesDownloadController extends BasePortalController{
     }
 
 
-    private File writeStreamToFileTemporary(InputStream ins,String identifier,String fileSuffix,boolean closeIns) throws IOException {
-        BufferedOutputStream out=null;
-        File f=null;
-        try{
-            f = File.createTempFile(identifier, fileSuffix);
-            out= new BufferedOutputStream(new FileOutputStream(f));
-            FileIOUtil.writeInputToOutputStream(ins, out, 8 * 1024, false);
-            out.flush();
-            out.close();
 
-            //VT: After we have finish writing the stream to file we want to return it.
-            log.info(f.getName() + " : Complete writing of temporary file");
-            return f;
-
-        }catch(IOException e){
-            throw e;
-        }finally{
-            out.close();
-            if(closeIns){
-                ins.close();
-            }
-        }
-    }
 
 
 

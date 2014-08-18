@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.exceptions.InitializationException;
+import org.auscope.portal.core.util.FileIOUtil;
 
 public class Initializer {
     private final Log log = LogFactory.getLog(getClass());
@@ -29,7 +30,7 @@ public class Initializer {
                 File [] files = dir.listFiles();
                 for(int i=0;i<files.length;i++){
                     if(files[i].getName().startsWith("APT_")){
-                        files[i].delete();
+                        FileIOUtil.deleteFilesRecursive(files[i]);
                     }
                 }
 
@@ -39,4 +40,6 @@ public class Initializer {
         }
 
     }
+
+
 }
