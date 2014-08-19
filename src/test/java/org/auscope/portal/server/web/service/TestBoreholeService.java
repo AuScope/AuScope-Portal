@@ -82,7 +82,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 
@@ -115,7 +115,7 @@ public class TestBoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)),with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
@@ -131,24 +131,24 @@ public class TestBoreholeService extends PortalTestClass {
     /**
      * Test that filter style will return a style layer descriptor with correct feature type name and geom.
      */
-	@Test
-	public void testFilterStyle() throws Exception {
-		final String nameFilter = "filterBob";
-		final String custodianFilter = "filterCustodian";
-		final String filterDate = "1986-10-09";
-		final int maxFeatures = 10;
-		final FilterBoundingBox bbox = null;
+    @Test
+    public void testFilterStyle() throws Exception {
+        final String nameFilter = "filterBob";
+        final String custodianFilter = "filterCustodian";
+        final String filterDate = "1986-10-09";
+        final int maxFeatures = 10;
+        final FilterBoundingBox bbox = null;
 
-		String filter = service.getFilter(nameFilter, custodianFilter,
-				filterDate, maxFeatures, bbox, null);
+        String filter = service.getFilter(nameFilter, custodianFilter,
+                filterDate, maxFeatures, bbox, null);
 
-		String style = service.getStyle(filter, "#2242c7", null, null);
-		Assert.assertNotNull(style);
-		Assert.assertThat(style, Matchers.containsString("gsml:Borehole"));
-		Assert.assertTrue(style.contains(service.getGeometryName()));
+        String style = service.getStyle(filter, "#2242c7", null, null);
+        Assert.assertNotNull(style);
+        Assert.assertThat(style, Matchers.containsString("gsml:Borehole"));
+        Assert.assertTrue(style.contains(service.getGeometryName()));
 
-	}
-	
+    }
+
     /**
      * Test get restricted boreholes bbox.
      *
@@ -167,7 +167,7 @@ public class TestBoreholeService extends PortalTestClass {
         final String filterString = (new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictedIds)).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsml:Borehole")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)),with(equal((String)null)));will(returnValue(mockMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 

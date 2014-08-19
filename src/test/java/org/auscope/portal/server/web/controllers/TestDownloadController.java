@@ -36,7 +36,7 @@ public class TestDownloadController extends PortalTestClass {
      * Mock httpService caller
      */
     private HttpServiceCaller httpServiceCaller = context.mock(HttpServiceCaller.class);
-    private ServiceConfiguration serviceConfiguration = context.mock(ServiceConfiguration.class);
+    private ServiceConfiguration mockServiceConfiguration = context.mock(ServiceConfiguration.class);
 
     /**
      * The controller to test
@@ -65,7 +65,7 @@ public class TestDownloadController extends PortalTestClass {
 
     @Before
     public void setUp() {
-        downloadController = new DownloadController(httpServiceCaller,serviceConfiguration);
+        downloadController = new DownloadController(httpServiceCaller,mockServiceConfiguration);
         // TODO : VT jmock 2.5.1 doesn't have great support for testing multi
         // threading. Currently if we allow more then 1 thread to run, I get
         // erratic test errors. 2.6.0 will provide greater support with
@@ -100,6 +100,9 @@ public class TestDownloadController extends PortalTestClass {
                 // calling the service
                 oneOf(httpServiceCaller).getMethodResponseAsHttpResponse(with(any(HttpRequestBase.class)));
                 will(returnValue(new MyHttpResponse(dummyJSONResponseIS)));
+
+                allowing(mockServiceConfiguration).getServiceConfigurationItem(with(any(String.class)));
+                will(returnValue(null));
             }
         });
 
@@ -158,6 +161,9 @@ public class TestDownloadController extends PortalTestClass {
                 will(returnValue(new MyHttpResponse(dummyJSONResponseIS)));
                 oneOf(httpServiceCaller).getMethodResponseAsHttpResponse(with(any(HttpRequestBase.class)));
                 will(delayReturnValue(300,new MyHttpResponse(dummyJSONResponseNoMsgIS)));
+
+                allowing(mockServiceConfiguration).getServiceConfigurationItem(with(any(String.class)));
+                will(returnValue(null));
             }
         });
 
@@ -217,6 +223,9 @@ public class TestDownloadController extends PortalTestClass {
                 will(throwException(new Exception("Exception test")));
                 oneOf(httpServiceCaller).getMethodResponseAsHttpResponse(with(any(HttpRequestBase.class)));
                 will(delayReturnValue(100,new MyHttpResponse(dummyJSONResponseIS2)));
+
+                allowing(mockServiceConfiguration).getServiceConfigurationItem(with(any(String.class)));
+                will(returnValue(null));
             }
         });
 
