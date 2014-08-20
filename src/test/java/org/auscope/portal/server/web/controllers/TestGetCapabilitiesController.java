@@ -44,7 +44,7 @@ public class TestGetCapabilitiesController extends PortalTestClass {
             final GetCapabilitiesRecord record = new GetCapabilitiesRecord_1_1_1(is);
 
             context.checking(new Expectations() {{
-                oneOf(service).getWmsCapabilities(serviceUrl);will(returnValue(record));
+                oneOf(service).getWmsCapabilities(serviceUrl,null);will(returnValue(record));
 
                 exactly(21).of(viewCswFactory).toView(with(any(CSWRecord.class)));will(returnValue(new ModelMap()));
             }});
@@ -74,7 +74,7 @@ public class TestGetCapabilitiesController extends PortalTestClass {
             final GetCapabilitiesRecord record = new GetCapabilitiesRecord_1_3_0(is);
 
             context.checking(new Expectations() {{
-                oneOf(service).getWmsCapabilities(serviceUrl);will(returnValue(record));
+                oneOf(service).getWmsCapabilities(serviceUrl,null);will(returnValue(record));
 
                 exactly(1).of(viewCswFactory).toView(with(any(CSWRecord.class)));will(returnValue(new ModelMap()));
             }});

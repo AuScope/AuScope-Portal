@@ -82,7 +82,9 @@ public class WMSController extends BaseCSWController {
         CSWRecord[] records;
         int invalidLayerCount = 0;
         try {
-            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl);
+            //VT:We have absolutely no way of finding out wms version in custom layer so we have to
+            //guess the version by setting version to null.
+            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl,null);
 
             List<CSWRecord> cswRecords = new ArrayList<CSWRecord>();
 
@@ -114,13 +116,20 @@ public class WMSController extends BaseCSWController {
                     }
 
                     AbstractCSWOnlineResource[] onlineResources = new AbstractCSWOnlineResource[1];
-                    onlineResources[0] = new CSWOnlineResourceImpl(new URL(capabilitiesRec.getMapUrl()),
-                            "OGC:WMS-1.1.1-http-get-map",
-                            rec.getName(),
-                            rec.getTitle());
+
+                    if(capabilitiesRec.getVersion().equals("1.3.0")){
+                        onlineResources[0] = new CSWOnlineResourceImpl(new URL(capabilitiesRec.getMapUrl()),
+                                "OGC:WMS-1.3.0-http-get-map",
+                                rec.getName(),
+                                rec.getTitle());
+                    }else{
+                        onlineResources[0] = new CSWOnlineResourceImpl(new URL(capabilitiesRec.getMapUrl()),
+                                "OGC:WMS-1.1.1-http-get-map",
+                                rec.getName(),
+                                rec.getTitle());
+                    }
 
                     CSWRecord newRecord = new CSWRecord(serviceName, fileId, recordInfoUrl, dataAbstract, onlineResources, geoEls);
-                    newRecord.setVersion(capabilitiesRec.getVersion());
                     newRecord.setContact(responsibleParty);
                     cswRecords.add(newRecord);
 
@@ -186,7 +195,7 @@ public class WMSController extends BaseCSWController {
     public ModelAndView getLayerFormats(@RequestParam("serviceUrl") String serviceUrl) throws Exception {
         try {
 
-            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl);
+            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl,null);
 
             List<ModelMap> data = new ArrayList<ModelMap>();
             for (String format : capabilitiesRec.getGetMapFormats()) {
@@ -204,60 +213,64 @@ public class WMSController extends BaseCSWController {
     }
 
     /**
-    *
-    * @param request
-    * @param response
-    * @param wmsUrl
-    * @param latitude
-    * @param longitude
-    * @param queryLayers
-    * @param x
-    * @param y
-    * @param bbox A CSV string formatted in the form - longitude,latitude,longitude,latitude
-    * @param width
-    * @param height
-    * @param infoFormat
-    * @param sld_body - sld_body
-    * @param postMethod Use getfeatureinfo POST method rather then GET
-    * @throws Exception
-    */
-   @RequestMapping(value = "/wmsMarkerPopup.do",  method = { RequestMethod.GET, RequestMethod.POST })
-   public void wmsUnitPopup(HttpServletRequest request,
-                            HttpServletResponse response,
-                            @RequestParam("WMS_URL") String wmsUrl,
-                            @RequestParam("lat") String latitude,
-                            @RequestParam("lng") String longitude,
-                            @RequestParam("QUERY_LAYERS") String queryLayers,
-                            @RequestParam("x") String x,
-                            @RequestParam("y") String y,
-                            @RequestParam("BBOX") String bbox,
-                            @RequestParam("WIDTH") String width,
-                            @RequestParam("HEIGHT") String height,
-                            @RequestParam("INFO_FORMAT") String infoFormat,
-                            @RequestParam("SLD_BODY") String sldBody,
-                            @RequestParam(value="postMethod", defaultValue = "false") Boolean  postMethod) throws Exception {
+     *
+     * @param request
+     * @param response
+     * @param wmsUrl
+     * @param latitude
+     * @param longitude
+     * @param queryLayers
+     * @param x
+     * @param y
+     * @param bbox A CSV string formatted in the form - longitude,latitude,longitude,latitude
+     * @param width
+     * @param height
+     * @param infoFormat
+     * @param sld_body - sld_body
+     * @param postMethod Use getfeatureinfo POST method rather then GET
+     * @param version - the wms version to use
+     * @throws Exception
+     */
+    @RequestMapping(value = "/wmsMarkerPopup.do",  method = { RequestMethod.GET, RequestMethod.POST })
+    public void wmsUnitPopup(HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam("WMS_URL") String wmsUrl,
+            @RequestParam("lat") String latitude,
+            @RequestParam("lng") String longitude,
+            @RequestParam("QUERY_LAYERS") String queryLayers,
+            @RequestParam("x") String x,
+            @RequestParam("y") String y,
+            @RequestParam("BBOX") String bbox,
+            @RequestParam("WIDTH") String width,
+            @RequestParam("HEIGHT") String height,
+            @RequestParam("INFO_FORMAT") String infoFormat,
+            @RequestParam("SLD_BODY") String sldBody,
+            @RequestParam(value="postMethod", defaultValue = "false") Boolean  postMethod,
+            @RequestParam("version") String version) throws Exception {
 
-      String[] bboxParts = bbox.split(",");
-      double lng1 = Double.parseDouble(bboxParts[0]);
-      double lng2 = Double.parseDouble(bboxParts[2]);
-      double lat1 = Double.parseDouble(bboxParts[1]);
-      double lat2 = Double.parseDouble(bboxParts[3]);
+        String[] bboxParts = bbox.split(",");
+        double lng1 = Double.parseDouble(bboxParts[0]);
+        double lng2 = Double.parseDouble(bboxParts[2]);
+        double lat1 = Double.parseDouble(bboxParts[1]);
+        double lat2 = Double.parseDouble(bboxParts[3]);
 
-      String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857", Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2), Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude), Double.parseDouble(latitude), (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldBody,postMethod);
-      //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
-      //VT : GA style sheet also mess up the portal styling of tables as well.
-      if(responseString.contains("table, th, td {")){
-          responseString = responseString.replaceFirst("font-size: 80%", "font-size: 90%");
-          responseString = responseString.replaceFirst("table, th, td \\{", "table.ausga, table.ausga th, table.ausga td {");
-          responseString = responseString.replaceFirst("th, td \\{", "table.ausga th, table.ausga td {");
-          responseString = responseString.replaceFirst("th \\{", "table.ausga th {");
-          responseString = responseString.replaceFirst("<table", "<table class='ausga'");
-      }
+        String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857", Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
+                Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude), Double.parseDouble(latitude),
+                (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldBody,postMethod,version);
+        //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
+        //VT : GA style sheet also mess up the portal styling of tables as well.
+        if(responseString.contains("table, th, td {")){
+            responseString = responseString.replaceFirst("font-size: 80%", "font-size: 90%");
+            responseString = responseString.replaceFirst("table, th, td \\{", "table.ausga, table.ausga th, table.ausga td {");
+            responseString = responseString.replaceFirst("th, td \\{", "table.ausga th, table.ausga td {");
+            responseString = responseString.replaceFirst("th \\{", "table.ausga th {");
+            responseString = responseString.replaceFirst("<table", "<table class='ausga'");
+        }
 
 
-      InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
-      FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
-   }
+        InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
+        FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
+    }
 
 
 }
