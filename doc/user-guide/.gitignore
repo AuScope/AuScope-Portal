@@ -1,0 +1,9 @@
+# Output
+
+ug.pdf
+ug.tex
+ug.html
+
+# Temp. files etc
+tmp
+*.pyc
