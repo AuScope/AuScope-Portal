@@ -7,6 +7,9 @@ import os.path
 import re
 import sys
 import errno
+
+from datetime import datetime
+
 # local libraries (basic_logging)
 sys.path.append(os.path.abspath('./lib'))
 
@@ -20,7 +23,10 @@ logger = logging.getLogger()
 def Link(url, name, trailing_space = ''):
     return '[[%s][%s]]%s' % (url, name, trailing_space)
 
-PREAMBLE = """%TOC%
+PREAMBLE = """%%TOC%%
+
+==Generated at %s==
+
 """
 
 class MarkdownException(Exception):
@@ -407,7 +413,9 @@ class MarkdownFoswiki:
             logger.info('Writing %s', output_path)
 
             # use 'write' to prevent additional \n
-            foswiki.write(PREAMBLE)
+            now = datetime.now().strftime('%Y-%m-%d %H:%M')
+            head = PREAMBLE % now
+            foswiki.write(head)
 
             for line in output:
                 updated = re.sub(link_re, self.replaceLink, line)
