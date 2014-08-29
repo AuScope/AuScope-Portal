@@ -6,7 +6,7 @@ The AuScope portal displays [geospatial](http://ands.org.au/guides/geospatial.ht
 
 The data services are a collections of web-based services from organisations around Australia that provide geospatial data, such as Geoscience Australia, CSIRO, State Governments and several Universities.
 
-The following sections describe the portal: the first section of this document is an overview of the portal.  Later sections provide details on the portal's operations.  The [Examples](examples) section contains steps to perform common activities.
+The following sections describe the portal: the first section of this document is an overview of the portal.  Later sections provide details on the portal's operations.  The [Examples](#examples) section contains steps to perform common activities.
 
 [CSW]: http://en.wikipedia.org/wiki/Catalog_Service_for_the_Web
 [GML]: http://en.wikipedia.org/wiki/Geography_Markup_Language
@@ -105,8 +105,6 @@ Type of data             | WMS Linky
 [OpenStreetMap] example  | http://irs.gis-lab.info/?layers=osm
 [OpenWeather]            | http://wms.openweathermap.org/service (not working)
 
-TODO WMS is mentioned in the prompt but are there any other services supported?
-
 #### Layer icons
 
 Layer types are identified using these icons:
@@ -169,8 +167,7 @@ Wildcards are special characters that allow filters to match all or part of a te
 The _Active Layers_ panel displays the layers current shown on the map. Each row has six columns:
 
 * Layer description: Click the **plus sign** to display a short description of the layer.  Click it a second time to hide the description.
-* Layer colour: the colour used to draw the data from this service. The colour is selected from a fixed palette.
-* TODO what does the key icon mean in the active layers?
+* Layer colour: the colour used to draw the data from this service. The colour is selected from a fixed palette and the default icon is the standard "teardrop" map marker unless the service provides its own icons (in this case, the **Active Layers** panel will show a _key_ next to the layer name and the map will display the graphics provided by the service).
 * [Processing status](#processing-status): this is an animated graphic to indicate whether data is being fetched and from where (see below).
 * Layer name: obtained from the provider.
 * Visibility: toggle the check box to temporarily hide or show the layer on the map.
