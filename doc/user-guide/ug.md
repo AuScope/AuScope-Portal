@@ -6,7 +6,7 @@ The AuScope portal displays [geospatial](http://ands.org.au/guides/geospatial.ht
 
 The data services are a collections of web-based services from organisations around Australia that provide geospatial data, such as Geoscience Australia, CSIRO, State Governments and several Universities.
 
-The following sections describe the portal: the first section of this document is an overview of the portal.  Later sections provide details on the portal's operations.  The [Examples](examples) section contains steps to perform common activities.
+The following sections describe the portal: the first section of this document is an overview of the portal.  Later sections provide details on the portal's operations.  The [Examples](#examples) section contains steps to perform common activities.
 
 [CSW]: http://en.wikipedia.org/wiki/Catalog_Service_for_the_Web
 [GML]: http://en.wikipedia.org/wiki/Geography_Markup_Language
@@ -93,8 +93,6 @@ Press **Enter** to connect to the service and the portal will query the service'
 
 ![Warning](images/warn.png) Custom Layers are not saved -- you will have to add them again when you revisit the portal.
 
-TODO double check permanent link
-
 ![Alert](images/alert.png) Some [WMS] services are not compatible with the Portal.  They may provide capabilities that are not supported by the portal or provide data in a format that cannot be used.  The most common problem is the service provides data in a "spatial reference system" ( [SRS] ) that is not supported by the mapping software.
 
 [OpenStreetMap]: http://www.openstreetmap.org/
@@ -106,8 +104,6 @@ Type of data             | WMS Linky
 [GA Historic flood maps] | http://eos.ga.gov.au/geoserver/NFRIP-WOfS/wms
 [OpenStreetMap] example  | http://irs.gis-lab.info/?layers=osm
 [OpenWeather]            | http://wms.openweathermap.org/service (not working)
-
-TODO WMS is mentioned in the prompt but are there any other services supported?
 
 #### Layer icons
 
@@ -123,7 +119,8 @@ Each layer provides different ways to filter the data depending on the structure
 
 * Plain text fields match the data exactly, but case insensitive.  Some data services also support [wildcards](#wildcards) to match portions of the field.
 * Date fields are in the format: yyyy-mm-dd and also provide a pop-up calendar to selected the date (invalid dates are indicated with a red border around the input text box).
-* Select lists are populated from unique values in the data. TODO is this correct (e.g. does the data and/or service provide items)?
+* Select lists are populated from unique values from the data.
+
 
 ![Sample layer filters](images/panel-filter-examples.png)
 
@@ -170,8 +167,7 @@ Wildcards are special characters that allow filters to match all or part of a te
 The _Active Layers_ panel displays the layers current shown on the map. Each row has six columns:
 
 * Layer description: Click the **plus sign** to display a short description of the layer.  Click it a second time to hide the description.
-* Layer colour: the colour used to draw the data from this service. The colour is selected from a fixed palette.
-* TODO what does the key icon mean?
+* Layer colour: the colour used to draw the data from this service. The colour is selected from a fixed palette and the default icon is the standard "teardrop" map marker unless the service provides its own icons (in this case, the **Active Layers** panel will show a _key_ next to the layer name and the map will display the graphics provided by the service).
 * [Processing status](#processing-status): this is an animated graphic to indicate whether data is being fetched and from where (see below).
 * Layer name: obtained from the provider.
 * Visibility: toggle the check box to temporarily hide or show the layer on the map.
@@ -232,7 +228,11 @@ The download uses standard filenames for the [ZIP] files.  They are:
 
 ## Permanent Links
 
-TODO
+If you would like to save the current state of the portal, e.g. view and (some) layers, use the **Permanent Link** button at the top-right of the map to generate a special link (URL) that can be sent to other people or saved as a browser bookmark.  The link contains encoded information recording the map's viewpoint, zoom level and which layers are displayed.  An example link is:
+
+> http://portal.auscope.org /portal/gmap.html?s=XQAAAQBDAAAA9776I776J776iNyzvv783 OwsD776KbVnvvpvvv4jvv6Hvvp0m77+6S+++rTnv v60iBn/vv4bvvqDvv6gKFRlNNu++ u3zvv6pm776s 77+Geu++nu++i++/mUtX77++77+zaO+/nQA=&v=3
+
+![Warning](images/warn.png) Some layers, such as [Custom Layers](#custom-layers), cannot be saved.
 
 ## Map Navigation
 

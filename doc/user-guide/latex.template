@@ -136,7 +136,7 @@ $endif$
 \pagestyle{fancy} % Print headers again
 
 \vskip 2cm
-{\footnotesize TODO put copyright info here?}
+{\footnotesize Copyright \copyright{} \the\year{} by AuScope ( \url{http://auscope.org.au/site/copyright.php} )}
 
 %----------------------------------------------------------------------------------------
 %	CONTENTS
