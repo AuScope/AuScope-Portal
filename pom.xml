@@ -206,7 +206,7 @@
             </plugin>
         </plugins>
     </reporting>
-
+	  
     <repositories>
         <repository>
             <id>osgeo</id>
@@ -217,18 +217,7 @@
             <id>geotoolkit</id>
             <name>Geo Toolkit Repository</name>
             <url>http://maven.geotoolkit.org/</url>
-        </repository>
-        <repository>
-            <id>cgsrv8.arrc.csiro.au</id>
-            <name>AuScope Artifactory - PortalRepo</name>
-            <url>https://cgsrv8.arrc.csiro.au/artifactory/PortalRepo</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-            <releases>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-        </repository>
+        </repository>        
         <!-- This is only for the temporary usage of JClouds snapshots-->
         <repository>
             <id>apache-snapshots</id>
@@ -237,6 +226,17 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+        </repository>
+		<repository>
+            <id>cgsrv8.arrc.csiro.au</id>
+            <name>AuScope Nexus - PortalRepo</name>
+            <url>http://cgsrv8.arrc.csiro.au/nexus/content/groups/PortalRepository/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <updatePolicy>always</updatePolicy>
+            </releases>
         </repository>
     </repositories>
     <!-- Dependencies -->
