@@ -200,7 +200,7 @@ Actions:
 
 #### Downloading data
 
-If you would like to perform further analysis on the data being viewed in the portal you can download the data to your workstation by clicking the download icon ( ![download](icons/download.png) ). Depending on the type of data being provided by the service, you will have to complete a number of dialogs to identify the data you want and, possibly, the format of the data.
+If you would like to perform further analysis on the data being viewed in the portal you can download the data to your workstation by accessing the menu via right click or selecting the setting button on the layer and selecting Download Layer ( ![download](icons/download.png) ). Depending on the type of data being provided by the service, you will have to complete a number of dialogs to identify the data you want and, possibly, the format of the data.
 
 A sample sequence is show in these screenshots:
 
