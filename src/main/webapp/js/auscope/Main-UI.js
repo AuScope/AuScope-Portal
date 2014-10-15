@@ -150,6 +150,7 @@ Ext.application({
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             store : knownLayerStore,
+            activelayerstore : layerStore,
             enableBrowse : true,//VT: if true browse catalogue option will appear
             map : map,
             layerFactory : layerFactory,
@@ -167,6 +168,7 @@ Ext.application({
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered',
             store : unmappedCSWRecordStore,
+            activelayerstore : layerStore,
             tooltip : {
                 title : 'Registered Layers',
                 text : 'The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.',
@@ -181,6 +183,7 @@ Ext.application({
         var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
             title : 'Custom',
             store : customRecordStore,
+            activelayerstore : layerStore,
             tooltip : {
                 title : 'Custom Data Layers',
                 text : 'This tab allows you to create your own layers from remote data services.',
@@ -195,6 +198,7 @@ Ext.application({
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Research Data',
             store : researchDataLayerStore,
+            activelayerstore : layerStore,
             enableBrowse : false,//VT: if true browse catalogue option will appear
             map : map,
             layerFactory : layerFactory,
