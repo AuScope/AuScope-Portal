@@ -150,8 +150,7 @@ Ext.application({
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             store : knownLayerStore,
-            activelayerstore : layerStore,
-            enableBrowse : true,//VT: if true browse catalogue option will appear
+            activelayerstore : layerStore,           
             map : map,
             layerFactory : layerFactory,
             tooltip : {
@@ -182,8 +181,10 @@ Ext.application({
 
         var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
             title : 'Custom',
+            itemId : 'org-auscope-custom-record-panel',
             store : customRecordStore,
             activelayerstore : layerStore,
+            enableBrowse : true,//VT: if true browse catalogue option will appear
             tooltip : {
                 title : 'Custom Data Layers',
                 text : 'This tab allows you to create your own layers from remote data services.',
