@@ -3,3 +3,6 @@ jdk:
 #  - oraclejdk8 # disabled due to powermock not working
   - oraclejdk7
   - openjdk7
+cache:
+  directories:
+  - $HOME/.m2
