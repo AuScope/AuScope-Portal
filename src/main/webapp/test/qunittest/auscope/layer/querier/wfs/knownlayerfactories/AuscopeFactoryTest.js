@@ -12,16 +12,6 @@ test( "Test PortrayalBoreholeViewFactory", function() {
 
 });
 
-test( "Test GeodesyFactory", function() {
-    var factory = new auscope.layer.querier.wfs.knownlayerfactories.GeodesyFactory({
-        name : 'Test'
-    });
-    var knownLayer = Ext.create('portal.knownlayer.KnownLayer', {
-        id : 'geodesy:gnssstation'
-    });
-    ok(factory.supportsKnownLayer(knownLayer), 'GeodesyFactory Supports geodesy:gnssstation' );
-
-});
 
 test( "Test NVCLFactory", function() {
     var factory = new auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory({
