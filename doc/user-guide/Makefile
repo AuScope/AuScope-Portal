@@ -5,7 +5,7 @@
 
 BASE = ug
 FILES = $(BASE).md
-TITLE = 'AuScope User Guide'
+TITLE = "AuScope User Guide"
 
 define HELP_TEXT
 Targets...
@@ -14,7 +14,8 @@ Targets...
 
 	tex:     Create LaTeX file
 	pdf:     Create a PDF file, using the TeX file and LaTeX
-	html:    A HTML file
+	htm:     A portal version (to be included in the WAR)
+	html:    A standalone HTML file
 	foswiki: Foswiki markup
 
 	zip:     A zip file with all files and images
@@ -41,8 +42,12 @@ CMD = pandoc --standalone --toc --number-sections \
 LATEX_TEMP = latex.template
 LATEX_OPTS = --template=$(LATEX_TEMP) --metadata documentclass=book
 
-all: html tex pdf foswiki
+all: htm html tex pdf foswiki
 
+# Portal version
+htm: $(BASE).htm
+
+# standalone version
 html: $(BASE).html
 
 tex: $(BASE).tex
@@ -52,6 +57,10 @@ pdf: $(BASE).pdf
 foswiki: $(BASE).foswiki
 
 # --- real rules
+
+# HTML with a link to the PDF file
+%.htm: $(FILES)
+	$(CMD) --include-before-body=html-preface.txt
 
 %.html: $(FILES)
 	$(CMD)
@@ -72,6 +81,6 @@ zip: clean all
 
 # Delete all output files
 clean:
-	for x in html pdf tex zip foswiki; do \
+	for x in htm html pdf tex zip foswiki; do \
 		rm -f $(BASE).$$x ; \
 	done
