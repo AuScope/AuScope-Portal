@@ -22,7 +22,7 @@ The following sections describe the portal: the first section of this document i
 
 ## Data Services
 
-Various organisations provide data to the portal: it may be as simple as satellite imagery or a view into a geospatial database.  The data provided by these servcies are draw as _layers_ overlaying the background map.  Selecting the data to view is managed by the three panels to the left hand side of the window.
+Various organisations provide data to the portal: it may be as simple as satellite imagery or a view into a geospatial database.  The data provided by these servcies are draw as _layers_ overlaying the background map.  Selecting the data to view is managed by the panel to the left hand side of the window.
 
 ![Data service panels](images/panels.png)
 
@@ -32,15 +32,15 @@ To view a data service you have to:
 1. Optionally filter the data (for example, a specific mineral type); and
 1. Add the data as a map layer.
 
-The three panels implement these steps:
+The panel implement these steps:
 
-The _Layers_ panel lists the data services that have been registered with the portal.  The services are grouped into several different themes -- see [Layer collections](#layer-collections) below.
+The panel lists the data services that have been registered with the portal.  The services are grouped into several different themes -- see [Layer collections](#layer-collections) below.
 
-The _Filter_ panel is populated when a layer is selected.  Depending on the type or complexity of the layer's data you can filter it to obtain a subset of the original data.  If the data service provides a view into a database you will be able to filter the data by entering specific values for database fields, for example the name of the mineral being mined or selecting the data provider.  Filters include plain text and [wildcards](#wildcards) to match database fields or select lists containing data values fetched from the database or service.
+The filter display expands when a layer is selected.  Depending on the type or complexity of the layer's data you can filter it to obtain a subset of the original data.  If the data service provides a view into a database you will be able to filter the data by entering specific values for database fields, for example the name of the mineral being mined or selecting the data provider.  Filters include plain text and [wildcards](#wildcards) to match database fields or select lists containing data values fetched from the database or service.
 
-Click the **Add to map** button to apply any filters to the data and display the results on the map.
+Click the **Add layer to map** button to apply any filters to the data and display the results on the map.
 
-The _Active layers_ panel shows the layers that are displayed on the map and the order that they are drawn (top to bottom).
+The icon ![arrow](images/play_blue.png) on the layer will update accordingly to ![trash](images/trash.png) when the layer is rendered onto the map. The functionality to remove layer from map is also enabled for ![trash](images/trash.png)
 
 ![Warning](images/warn.png) Note that adding a layer may not display the data immediately: the data has to be fetched from the providers and so it may take a few minutes and be displayed in batches.
 
@@ -57,12 +57,39 @@ The map area is a standard web-based map display: showing a background map with 
 
 ### Layers
 
-Each row of the _Layers_ panel has four columns:
+Each row on the panel provides the following information
 
-* Layer description: Click the **plus sign** to display a description of the layer.  Click it a second time to hide the description.
+* ![arrow](images/play_blue.png) update to ![trash](images/trash.png) when the layer is added. This will provide an indication which layers have been added as well as provide the functionality to remove the added layer from the map.
+* [Processing status](#processing-status): this is an animated graphic to indicate whether data is being fetched and from where.
 * Layer name: obtained from the data service.
 * Layer type icon:  This indicates the type of data being provided by the organisation (see [Layer icons](#layer-icons)). Clicking on the icon will display a pop-up window with details of the data service and the data it provides.
 * Boundary: Click the **magnifying glass** to briefly display the boundary rectangle of the data on the map (the boundary will only be drawn on the map for a few seconds). If the data is provided by multiple organisations you may see several boundaries: one for each individual organisation.
+
+#### Processing status
+
+This icon is animated when data is being fetched from a provider.  If you hover your mouse over the icon a pop-up window will display details on where the data is coming from and its progress.
+
+![Adding a layer onto the map](images/panel-processing-status.png)
+
+Once the processing has completed (the animation has stopped), clicking on the icon will provide a summary of the data fetched from the provider. The summary will vary depending on what types of data is being provided.  It can include:
+
+* [Features][WFS] : points or areas on the map;
+* [Maps][WMS] : with an optional thumbnail; and
+* Other data provided by the service.
+
+#### Layer icons
+
+Layer types are identified using these icons:
+
+* ![Data](icons/binary.png) Data: this is a service that provides geospatial objects such as points and areas, which may provide fields that are used to filter the data being shown on the map.
+* ![Portrayal](icons/picture.png) [Portrayal](http://ormdev.opengeospatial.org/node/100): this service provides maps.  Maps are subdivided into tiles at different resolutions -- the mapping software will use the map's zoom level to select the resolution of the map images.
+
+Selecting Layer type icon:
+
+* If the service provides features you should see a link that will show first 5 features that were retrieved from the data service.  Clicking this link will open a new browser window or tab to show the raw [XML] retrieved from the [WFS] service.
+* Clicking on a map thumbnail will display the original image.
+
+![Layer processing status](images/panel-processing-results.png)
 
 #### Searching layers
 
@@ -89,7 +116,7 @@ Custom Layers allow you to add layers from any mapping server in the world. You 
 
 ![Custom layers](images/custom-layer.png)
 
-Press **Enter** to connect to the service and the portal will query the service's capabilities.  In the above figure [OpenWeatherMap.org](http://openweathermap.org/) provides precipitation and cloud maps amongst other weather data.  These capabilities are treated like [normal map layer](#data-services) and can be added to the map by selecting the row and click the **Add to map** button.
+Press **Enter** to connect to the service and the portal will query the service's capabilities.  In the above figure [OpenWeatherMap.org](http://openweathermap.org/) provides precipitation and cloud maps amongst other weather data.  These capabilities are treated like [normal map layer](#data-services) and can be added to the map by selecting the row and click the **Add layer to map** button.
 
 ![Warning](images/warn.png) Custom Layers are not saved -- you will have to add them again when you revisit the portal.
 
@@ -105,12 +132,6 @@ Type of data             | WMS Linky
 [OpenStreetMap] example  | http://irs.gis-lab.info/?layers=osm
 [OpenWeather]            | http://wms.openweathermap.org/service (not working)
 
-#### Layer icons
-
-Layer types are identified using these icons:
-
-* ![Data](icons/binary.png) Data: this is a service that provides geospatial objects such as points and areas, which may provide fields that are used to filter the data being shown on the map.
-* ![Portrayal](icons/picture.png) [Portrayal](http://ormdev.opengeospatial.org/node/100): this service provides maps.  Maps are subdivided into tiles at different resolutions -- the mapping software will use the map's zoom level to select the resolution of the map images.
 
 
 ### Filters
@@ -128,11 +149,10 @@ Each layer provides different ways to filter the data depending on the structure
 
 ![Alert](images/alert.png) Some layer fields are numeric, for example the amount of ore processed. There are no checks to verify that you have entered a numeric value in these fields. Entering non-numeric will result in either no data or the filter will be ignored.
 
-Click the **Add to map** button to apply any filters to the data and display the results on the map.  If the layer is already active it will be replaced by a layer with the new filter.
+Click the **Add layer to map** button to apply any filters to the data and display the results on the map.  If the layer is already active it will be replaced by a layer with the new filter.
 
 ![Warning](images/warn.png) A number of data services provide data from external sources and when they are added to the map a copyright notice will be show.
 
-Click **Reset filter** to reset the filter back to its default values, which is usually no filter.  That is, show all available data.
 
 
 #### Complex filter example
@@ -162,41 +182,14 @@ Wildcards are special characters that allow filters to match all or part of a te
 1. A "single character" wildcard (Hash: #). For example "\*9#" will match "bore 295" and "mine number 1294"
 
 
-### Active layers
+### Additional Option
 
-The _Active Layers_ panel displays the layers current shown on the map. Each row has six columns:
+Expanding the displays on the layers provide additional access to more functionality via **Option**:
 
-* Layer description: Click the **plus sign** to display a short description of the layer.  Click it a second time to hide the description.
-* Layer colour: the colour used to draw the data from this service. The colour is selected from a fixed palette and the default icon is the standard "teardrop" map marker unless the service provides its own icons (in this case, the **Active Layers** panel will show a _key_ next to the layer name and the map will display the graphics provided by the service).
-* [Processing status](#processing-status): this is an animated graphic to indicate whether data is being fetched and from where (see below).
-* Layer name: obtained from the provider.
-* Visibility: toggle the check box to temporarily hide or show the layer on the map.
+* Get Legend: A WMS layer will return a wms get legend response. Any other service will return the color of the markers used.
+* Remove Layer: Remove an added layer from the map and clear all popups.
 * [Downloading data](#downloading-data): open a pop-up window that will allow you to download the data being displayed (see below).
 
-Some layers may be dragged up or down to change their drawing order.  Click and hold the layer and move it up or down to change the drawing order.  Valid positions for the layer will be indicated as the mouse moves with a green line and arrows pointing inwards:
-
-![Reordering an active layer](images/layer-ordering.png)
-
-The "drag and drop" hint may change to indicate that you can't position the layer at the current mouse position: ![invalid move](images/layer-ordering-no.png).
-
-#### Processing status
-
-This icon is animated when data is being fetched from a provider.  If you hover your mouse over the icon a pop-up window will display details on where the data is coming from and its progress.
-
-![Adding a layer onto the map](images/panel-processing-status.png)
-
-Once the processing has completed (the animation has stopped), clicking on the icon will provide a summary of the data fetched from the provider. The summary will vary depending on what types of data is being provided.  It can include:
-
-* [Features][WFS] : points or areas on the map;
-* [Maps][WMS] : with an optional thumbnail; and
-* Other data provided by the service.
-
-Actions:
-
-* If the service provides features you should see a link that will show first 5 features that were retrieved from the data service.  Clicking this link will open a new browser window or tab to show the raw [XML] retrieved from the [WFS] service.
-* Clicking on a map thumbnail will display the original image.
-
-![Layer processing status](images/panel-processing-results.png)
 
 #### Downloading data
 
@@ -264,7 +257,7 @@ The National Virtual Core Library (NVCL) is a geospatial database holding high r
 The following steps displays the NVCL data on the portal's map and views the details for one of the core samples.
 
 1. Select the **National Virtual Core Library** from the list of [layers](#layers).
-1. Click on the **Add to Map** button to draw the data points on the map.  You may also filter the data to a subset using the options in the [filter](#filters) panel (remember to select the filters _before_ adding the layer to the map).
+1. Click on the **Add layer to Map** button to draw the data points on the map.  You may also filter the data to a subset using the options in the [filter](#filters) panel (remember to select the filters _before_ adding the layer to the map).
 
     ![Add Core Library locations to the map](images/example1a.png)
 
