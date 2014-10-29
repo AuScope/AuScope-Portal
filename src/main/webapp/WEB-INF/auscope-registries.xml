@@ -90,4 +90,10 @@
         <constructor-arg name="serviceUrl" value="http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s"/>
     </bean>
+     <bean id="cswModelLibProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswModelLibProduction"/>
+        <constructor-arg name="title" value="NSP Model Library"/>
+        <constructor-arg name="serviceUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/csw"/>
+        <constructor-arg name="recordInformationUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+    </bean>
 </beans>
