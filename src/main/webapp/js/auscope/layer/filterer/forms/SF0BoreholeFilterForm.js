@@ -15,7 +15,7 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
 
         //Set up a map of admin areas + URL's that belong to each
         var adminAreasMap = {};
-        var bbox = null;
+       
         for (var i = 0; i < cswRecords.length; i++) {
             var adminArea = cswRecords[i].get('adminArea');
             var allOnlineResources = cswRecords[i].get('onlineResources');
@@ -28,15 +28,7 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
                     adminAreasMap[adminArea] = [bhOnlineResources[j].get('url')];
                 }
             }
-            var geoEl = cswRecords[i].get('geographicElements')[0];
-            
-            if (geoEl) {
-            	if (bbox) {
-            		bbox = bbox.combine(geoEl);
-            	} else {
-            		bbox = geoEl;
-            	}
-            }
+          
         }
 
         //Set up a list of each unique admin area
@@ -101,10 +93,6 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
                 	xtype: 'hidden',
                 	name: 'postMethod',
                 	value: 'true'              	                
-                },{
-                	xtype: 'hidden',
-                	name: 'cswBbox',
-                	value: Ext.JSON.encode(bbox)
                 }]
             }]
         });

@@ -46,6 +46,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory',
         return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
             layout : 'fit',
+            tabTitle : preferredName,
             items : [{
                 xtype : 'fieldset',
                 title : 'Mining Feature Occurrence',

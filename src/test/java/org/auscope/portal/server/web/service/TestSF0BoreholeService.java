@@ -81,7 +81,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)),with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 
@@ -94,27 +94,27 @@ public class TestSF0BoreholeService extends PortalTestClass {
         Assert.assertEquals(kmlString, result.getTransformed());
         Assert.assertSame(mockMethod, result.getMethod());
     }
-    
+
 
     /**
-      * Test that SF0 filter style will return a style layer descriptor with correct feature type name
-      */
-	@Test
-	public void testSF0FilterStyle() throws Exception {
-		final String nameFilter = "filterBob";
-		final String custodianFilter = "filterCustodian";
-		final String filterDate = "1986-10-09";
-		final int maxFeatures = 10;
-		final FilterBoundingBox bbox = null;
+     * Test that SF0 filter style will return a style layer descriptor with correct feature type name
+     */
+    @Test
+    public void testSF0FilterStyle() throws Exception {
+        final String nameFilter = "filterBob";
+        final String custodianFilter = "filterCustodian";
+        final String filterDate = "1986-10-09";
+        final int maxFeatures = 10;
+        final FilterBoundingBox bbox = null;
 
-		String filter = service.getFilter(nameFilter, custodianFilter,
-				filterDate, maxFeatures, bbox, null);
+        String filter = service.getFilter(nameFilter, custodianFilter,
+                filterDate, maxFeatures, bbox, null);
 
-		String style = service.getStyle(filter, "#2242c7", null, null);
-		Assert.assertNotNull(style);
-		Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
+        String style = service.getStyle(filter, "#2242c7", null, null);
+        Assert.assertNotNull(style);
+        Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
 
-	}
+    }
 
     /**
      * Test get all boreholes bbox.
@@ -134,7 +134,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {{
 
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 
             oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
@@ -164,7 +164,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null)).getFilterStringAllRecords();
 
         context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)));will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
 
             oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
 

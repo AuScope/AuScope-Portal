@@ -8,14 +8,16 @@
          <ul >
             <li><a id="help-button">Help<span></span></a></li>
             <li><a href="http://www.auscope.org">AuScope.org<span></span></a></li>
-            <li><a href="mailto:cg-admin@csiro.au">Contact Us<span></span></a></li>
+            <li><a href="mailto:cg-portal@csiro.au">Contact Us<span></span></a></li>
             <li <%if (request.getRequestURL().toString().contains("/gmap.")) {%>class="current" <%} %>><a href="gmap.html">AuScope Discovery Portal<span></span></a></li>
+
+            <li><a href="static/user-guide/ug.htm" target="new">User Guide<span></span></a></li>
+
             <li <%if (request.getRequestURL().toString().contains("/links.")) {%>class="current" <%} %>><a href="links.html">Links<span></span></a></li>
          </ul>
       </div>
-      <span id="latlng" class="input-text"></span>
+      <span id="latlng"></span>
       <div id="permalinkicon"><a href="javascript:void(0)"><img src="img/link.png" width="16" height="16"/></a></div>
       <div id="permalink"><a href="javascript:void(0)">Permanent Link</a></div>
-
 
    </div>

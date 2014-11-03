@@ -137,7 +137,7 @@
         <!-- Registries to be listed on Custom registry handler but no in feature or register tab -->
     <bean id="cswVeglProduction" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">
         <constructor-arg name="id" value="cswVeglProduction" />
-        <constructor-arg name="title" value="SISS ANU Geonetwork" />
+        <constructor-arg name="title" value="Virtual Geophysics Laboratory Registry" />
         <constructor-arg name="serviceUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/csw" />
         <constructor-arg name="recordInformationUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/main.home?uuid=%1$s" />
     </bean>

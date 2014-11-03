@@ -132,7 +132,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
-            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results, null,null);will(returnValue(mockMethod));
 
             oneOf(mockGmlToKml).convert(responseString, serviceUrl);will(returnValue(responseKml));
 
@@ -159,7 +159,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             allowing(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
-            allowing(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, BaseWFSService.DEFAULT_SRS, ResultType.Results, null);will(returnValue(mockMethod));
+            allowing(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, BaseWFSService.DEFAULT_SRS, ResultType.Results,null, null);will(returnValue(mockMethod));
 
             allowing(mockGmlToKml).convert(responseString, serviceUrl);will(returnValue(responseKml));
         }});
@@ -185,7 +185,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(throwException(exceptionThrown));
 
-            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results, null,null);will(returnValue(mockMethod));
         }});
 
         try {
@@ -213,7 +213,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
 
-            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Results, null,null);will(returnValue(mockMethod));
         }});
 
         try {
@@ -381,7 +381,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
-            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits, null,null);will(returnValue(mockMethod));
 
             oneOf(mockMethod).releaseConnection();
         }});
@@ -406,7 +406,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(throwException(exceptionThrown));
 
-            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits, null,null);will(returnValue(mockMethod));
 
             oneOf(mockMethod).releaseConnection();
         }});
@@ -435,7 +435,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {{
             oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
 
-            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits, null);will(returnValue(mockMethod));
+            oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName, ResultType.Hits, null,null);will(returnValue(mockMethod));
 
             oneOf(mockMethod).releaseConnection();
         }});

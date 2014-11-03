@@ -30,7 +30,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         }
 
         public String getInputString() {
-           return this.getStream().toString();
+            return this.getStream().toString();
         }
     }
 
@@ -60,10 +60,10 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         context.checking(new Expectations() {{
             allowing(response).setContentType(with(any(String.class)));
             oneOf(response).getOutputStream();will(returnValue(out));
-            oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0);will(returnValue(ins));
+            oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0,null);will(returnValue(ins));
         }});
 
-        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0,this.response);
+        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0,null, this.response);
         Assert.assertTrue(out.getInputString().equals(resultXML));
 
     }
@@ -84,11 +84,11 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         context.checking(new Expectations() {{
             allowing(response).setContentType(with(any(String.class)));
             oneOf(response).getOutputStream();will(returnValue(out));
-            oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0);
-                will(throwException(new PortalServiceException(mockMethod)));
+            oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0,null);
+            will(throwException(new PortalServiceException(mockMethod)));
         }});
 
-        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0,this.response);
+        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0,null, this.response);
         Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
 
@@ -116,19 +116,19 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();will(returnValue(out));
                 oneOf(mineralOccurrenceDownloadService)
-                        .downloadMineralOccurrenceGml(serviceUrl,
-                                commodityName, measureType, minOreAmount,
-                                minOreAmountUOM, minCommodityAmount,
-                                minCommodityAmountUOM, maxFeatures, null);
+                .downloadMineralOccurrenceGml(serviceUrl,
+                        commodityName, measureType, minOreAmount,
+                        minOreAmountUOM, minCommodityAmount,
+                        minCommodityAmountUOM, maxFeatures, null,null);
                 will(returnValue(ins));
             }
         });
 
         this.earthResourcesDownloadController
-                .doMineralOccurrenceFilterDownload(serviceUrl, commodityName,
-                        measureType, minOreAmount, minOreAmountUOM,
-                        minCommodityAmount, minCommodityAmountUOM, null,
-                        maxFeatures, this.response);
+        .doMineralOccurrenceFilterDownload(serviceUrl, commodityName,
+                measureType, minOreAmount, minOreAmountUOM,
+                minCommodityAmount, minCommodityAmountUOM, null,
+                maxFeatures,null, this.response);
 
         Assert.assertTrue(out.getInputString().equals(resultXML));
     }
@@ -156,19 +156,19 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();will(returnValue(out));
                 oneOf(mineralOccurrenceDownloadService)
-                        .downloadMineralOccurrenceGml(serviceUrl,
-                                commodityName, measureType, minOreAmount,
-                                minOreAmountUOM, minCommodityAmount,
-                                minCommodityAmountUOM, maxFeatures, null);
+                .downloadMineralOccurrenceGml(serviceUrl,
+                        commodityName, measureType, minOreAmount,
+                        minOreAmountUOM, minCommodityAmount,
+                        minCommodityAmountUOM, maxFeatures, null,null);
                 will(throwException(new PortalServiceException(mockMethod)));
             }
         });
 
         this.earthResourcesDownloadController
-                .doMineralOccurrenceFilterDownload(serviceUrl, commodityName,
-                        measureType, minOreAmount, minOreAmountUOM,
-                        minCommodityAmount, minCommodityAmountUOM, null,
-                        maxFeatures, this.response);
+        .doMineralOccurrenceFilterDownload(serviceUrl, commodityName,
+                measureType, minOreAmount, minOreAmountUOM,
+                minCommodityAmount, minCommodityAmountUOM, null,
+                maxFeatures, null, this.response);
 
         Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
@@ -197,17 +197,17 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();will(returnValue(out));
                 oneOf(mineralOccurrenceDownloadService)
-                        .downloadMiningActivityGml(serviceURL, mineName,
-                                startDate, endDate, oreProcessed,
-                                producedMaterial, cutOffGrade, production,
-                                maxFeatures, null);
+                .downloadMiningActivityGml(serviceURL, mineName,
+                        startDate, endDate, oreProcessed,
+                        producedMaterial, cutOffGrade, production,
+                        maxFeatures, null,null);
                 will(returnValue(ins));
             }
         });
 
         this.earthResourcesDownloadController.doMiningActivityFilterDownload(
                 serviceURL, mineName, startDate, endDate, oreProcessed,
-                producedMaterial, cutOffGrade, production, null, maxFeatures,
+                producedMaterial, cutOffGrade, production, null, maxFeatures,null,
                 this.response);
         Assert.assertTrue(out.getInputString().equals(resultXML));
     }
@@ -238,10 +238,10 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();will(returnValue(out));
                 oneOf(mineralOccurrenceDownloadService)
-                        .downloadMiningActivityGml(serviceURL, mineName,
-                                startDate, endDate, oreProcessed,
-                                producedMaterial, cutOffGrade, production,
-                                maxFeatures, null);
+                .downloadMiningActivityGml(serviceURL, mineName,
+                        startDate, endDate, oreProcessed,
+                        producedMaterial, cutOffGrade, production,
+                        maxFeatures, null,null);
                 will(throwException(new PortalServiceException(mockMethod)));
             }
         });
@@ -249,7 +249,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         this.earthResourcesDownloadController.doMiningActivityFilterDownload(
                 serviceURL, mineName, startDate, endDate, oreProcessed,
                 producedMaterial, cutOffGrade, production, null, maxFeatures,
-                this.response);
+                null, this.response);
         Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
 

@@ -133,57 +133,9 @@ Ext.application({
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
 
-        var layersPanel = Ext.create('portal.widgets.panel.LayerPanel', {
-            id : 'auscope-layers-panel',
-            title : 'Active Layers',
-            region: 'south',
-            store : layerStore,
-            map : map,
-            flex : 2,
-            width : '100%',
-            split: true,
-            allowDebugWindow : isDebugMode,
-            listeners : {
-                itemclick : function(sm,record, eOpts){
-                    var allTabPanels = tabsPanel.items.items;
-                    for (var i=0; i< allTabPanels.length; i++){
-                        var tabPanelSelectedRecord = allTabPanels[i].getStore().getById(record.get('id'));
-                        if(tabPanelSelectedRecord){
-                            allTabPanels[i].getSelectionModel().select([tabPanelSelectedRecord], false);
-                            tabsPanel.setActiveTab(allTabPanels[i]);
-                            break;
-                        }
-                    }
-                },
-                removelayerrequest: function(sourceGrid, record) {
-                    //filterPanel.clearFilter();
-                }
-            }
-        });
+     
 
-        var handleFilterSelectionComplete =  function(){
-            var activePanel = tabsPanel.activeTab;
-            activePanel.addSelectedLayerToActive()
-        };
 
-        /**
-         * Used to show extra details for querying services
-         */
-        var filterPanel = Ext.create('portal.widgets.panel.FilterPanel', {
-            id : 'auscope-filter-panel',
-            title : 'Filter',
-            region : 'center',
-            width : '100%',
-            layerPanel : layersPanel,
-            //maxHeight : 350, //VT:settings for vbox layout
-            height : 100,
-            split: true,
-            map : map,
-            listeners : {
-                filterselectioncomplete : handleFilterSelectionComplete
-            }
-
-        });
 
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
@@ -192,76 +144,15 @@ Ext.application({
             querierFactory : Ext.create('auscope.layer.AuScopeQuerierFactory', {map: map}),
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
+     
 
-
-
-
-
-        //Utility function for adding a new layer to the map
-        //record must be a CSWRecord or KnownLayer
-        var handleAddRecordToMap = function(sourceGrid, record) {
-            if(!(record instanceof Array)){
-                record = [record];
-            }
-
-            for(var z=0; z < record.length; z++){
-                var newLayer = null;
-
-                //Ensure the layer DNE first
-                var existingRecord = layerStore.getById(record[z].get('id'));
-                if (existingRecord) {
-                    layersPanel.getSelectionModel().select([existingRecord], false);
-                    return;
-                }
-
-                //Turn our KnownLayer/CSWRecord into an actual Layer
-                if (record[z] instanceof portal.csw.CSWRecord) {
-                    newLayer = record[z].get('layer');
-                } else {
-                    newLayer = record[z].get('layer');
-                }
-
-                //if newLayer is undefined, it must have come from some other source like mastercatalogue
-                if(!newLayer){
-                    newLayer = layerFactory.generateLayerFromCSWRecord(record[z])
-                    //we want it to display immediately.
-                    newLayer.set('displayed',true);
-                }
-
-                //We may need to show a popup window with copyright info
-                var cswRecords = newLayer.get('cswRecords');
-                for (var i = 0; i < cswRecords.length; i++) {
-                    if (cswRecords[i].hasConstraints()) {
-                        var popup = Ext.create('portal.widgets.window.CSWRecordConstraintsWindow', {
-                            width : 625,
-                            cswRecords : cswRecords
-                        });
-
-                        popup.show();
-
-                        //HTML images may take a moment to load which stuffs up our layout
-                        //This is a horrible, horrible workaround.
-                        var task = new Ext.util.DelayedTask(function(){
-                            popup.doLayout();
-                        });
-                        task.delay(1000);
-
-                        break;
-                    }
-                }
-
-                layerStore.insert(0,newLayer); //this adds the layer to our store
-                layersPanel.getSelectionModel().select([newLayer], false); //this ensures it gets selected
-            }
-        };
-
-
-
+        
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             store : knownLayerStore,
-            enableBrowse : true,//VT: if true browse catalogue option will appear
+            activelayerstore : layerStore,           
             map : map,
+            layerFactory : layerFactory,
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -269,28 +160,14 @@ Ext.application({
                 showDelay : 100,
                 icon : 'img/information.png',
                 dismissDelay : 30000
-            },
-            listeners : {
-                //On selection, update our filter panel
-                select : function(rowModel, record, index) {
-                    var newLayer;
-                    if(record.get('layer')){
-                        newLayer = record.get('layer');
-                    }else{
-                        newLayer = layerFactory.generateLayerFromKnownLayer(record);
-                        record.set('layer', newLayer);
-                    }
-
-                    filterPanel.showFilterForLayer(newLayer);
-                },
-                addlayerrequest : handleAddRecordToMap
-
             }
+           
         });
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered',
             store : unmappedCSWRecordStore,
+            activelayerstore : layerStore,
             tooltip : {
                 title : 'Registered Layers',
                 text : 'The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.',
@@ -298,26 +175,16 @@ Ext.application({
                 dismissDelay : 30000
             },
             map : map,
-            listeners : {
-              //On selection, update our filter panel
-                select : function(rowModel, record, index) {
-                    var newLayer;
-                    if(record.get('layer')){
-                        newLayer = record.get('layer');
-                    }else{
-                        newLayer = layerFactory.generateLayerFromCSWRecord(record);
-                        record.set('layer', newLayer);
-                    }
-
-                    filterPanel.showFilterForLayer(newLayer);
-                },
-                addlayerrequest : handleAddRecordToMap
-            }
+            layerFactory : layerFactory
+            
         });
 
         var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
             title : 'Custom',
+            itemId : 'org-auscope-custom-record-panel',
             store : customRecordStore,
+            activelayerstore : layerStore,
+            enableBrowse : true,//VT: if true browse catalogue option will appear
             tooltip : {
                 title : 'Custom Data Layers',
                 text : 'This tab allows you to create your own layers from remote data services.',
@@ -325,47 +192,24 @@ Ext.application({
                 dismissDelay : 30000
             },
             map : map,
-            listeners : {
-                select : function(rowModel, record, index) {
-                    var newLayer;
-                    if(record.get('layer')){
-                        newLayer = record.get('layer');
-                    }else{
-                        newLayer = layerFactory.generateLayerFromCSWRecord(record);
-                        record.set('layer', newLayer);
-                    }
-
-                    filterPanel.showFilterForLayer(newLayer);
-                },
-                addlayerrequest : handleAddRecordToMap
-            }
+            layerFactory : layerFactory
+           
         });
 
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Research Data',
             store : researchDataLayerStore,
+            activelayerstore : layerStore,
             enableBrowse : false,//VT: if true browse catalogue option will appear
             map : map,
+            layerFactory : layerFactory,
             tooltip : {
                 title : 'Research Data Layers',
                 text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p1>',
                 showDelay : 100,
                 dismissDelay : 30000
-            },
-            listeners : {
-                select : function(rowModel, record, index) {
-                    var newLayer;
-                    if(record.get('layer')){
-                        newLayer = record.get('layer');
-                    }else{
-                        newLayer = layerFactory.generateLayerFromKnownLayer(record);
-                        record.set('layer', newLayer);
-                    }
-
-                    filterPanel.showFilterForLayer(newLayer);
-                },
-                addlayerrequest : handleAddRecordToMap
-            }
+            }          
+            
         });
 
         // basic tabs 1, built from existing content
@@ -373,9 +217,9 @@ Ext.application({
             id : 'auscope-tabs-panel',
             title : 'Layers',
             activeTab : 0,
-            region : 'north',
+            region : 'center',
             split : true,
-            height : 265,
+            height : '70%',
             width : '100%',
             enableTabScroll : true,
             items:[
@@ -383,23 +227,7 @@ Ext.application({
                 unmappedRecordsPanel,
                 customRecordsPanel,
                 researchDataPanel
-            ],
-            listeners : {
-                tabchange : function( tabPanel, newCard, oldCard, eOpts ){
-                    var record = newCard.getSelectionModel().getSelection()[0];
-                    if(record){
-                        var newLayer;
-                        if(record.get('layer')){
-                            newLayer = record.get('layer');
-                        }else{
-                            newLayer = layerFactory.generateLayerFromCSWRecord(record);
-                            record.set('layer', newLayer);
-                        }
-
-                        filterPanel.showFilterForLayer(newLayer);
-                    }
-                }
-            }
+            ]
         });
 
         /**
@@ -413,7 +241,7 @@ Ext.application({
             //margins: '100 0 0 0',
             margins:'100 0 0 3',
             width: 350,
-            items:[tabsPanel , filterPanel, layersPanel]
+            items:[tabsPanel]
         };
 
         /**

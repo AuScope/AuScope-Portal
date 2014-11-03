@@ -81,8 +81,8 @@ public class CSWFilterController extends BaseCSWController {
         if (westBoundLongitude != null && eastBoundLongitude != null &&
                 northBoundLatitude != null && southBoundLatitude != null) {
             filterBbox = new FilterBoundingBox("",
-                        new double[] {eastBoundLongitude, southBoundLatitude},
-                        new double[] {westBoundLongitude, northBoundLatitude});
+                    new double[] {eastBoundLongitude, southBoundLatitude},
+                    new double[] {westBoundLongitude, northBoundLatitude});
         }
 
         return filterBbox;
@@ -98,6 +98,10 @@ public class CSWFilterController extends BaseCSWController {
 
         //Simplify our service items for the view
         for (CSWServiceItem item : this.cswFilterService.getCSWServiceItems()) {
+            //VT: skip the loop if we intend to hide this from catalogue.
+            if(item.getHideFromCatalogue()){
+                continue;
+            }
             ModelMap map = new ModelMap();
 
             map.put("title", item.getTitle());
@@ -176,7 +180,7 @@ public class CSWFilterController extends BaseCSWController {
         }else{
             URI uri = new URI(cswServiceUrl);
             modelMap.put("title", uri.getHost());
-            
+
         }
 
         return generateJSONResponseMAV(true,modelMap,"success");
@@ -190,46 +194,46 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value="cswServiceIds", required=false) String[] cswServiceIds,
             @RequestParam(value="keyword", required=true,defaultValue="") String keyword){
 
-       try{
+        try{
 
-           if(cswServiceIds==null){
-               return generateJSONResponseMAV(true);
-           }
-           //VT: if the cache keyword has not been generated, generate it.
-           for(String cswServiceId:cswServiceIds){
-               if(!CSWFilterController.catalogueKeywordCache.containsKey(cswServiceId)){
-                   try{
-                       this.generateKeywordCache(cswServiceId);
-                   }catch(IllegalArgumentException ex){
-                       //VT: if the key does not exist, it does not matter.
-                       log.info(String.format("serviceId '%s' DNE", cswServiceId));
-                   }
-               }
-           }
+            if(cswServiceIds==null){
+                return generateJSONResponseMAV(true);
+            }
+            //VT: if the cache keyword has not been generated, generate it.
+            for(String cswServiceId:cswServiceIds){
+                if(!CSWFilterController.catalogueKeywordCache.containsKey(cswServiceId)){
+                    try{
+                        this.generateKeywordCache(cswServiceId);
+                    }catch(IllegalArgumentException ex){
+                        //VT: if the key does not exist, it does not matter.
+                        log.info(String.format("serviceId '%s' DNE", cswServiceId));
+                    }
+                }
+            }
 
-           List<ModelMap> resultModalMap = new ArrayList<ModelMap>();
-           KeywordCacheEntity keywordCacheEntity= new KeywordCacheEntity();
-           //VT: this is to append the results from the different registeries
-           for (String cswServiceId : cswServiceIds) {
-               if(this.catalogueKeywordCache.get(cswServiceId) != null){
-                   keywordCacheEntity.append(this.catalogueKeywordCache.get(cswServiceId));
-               }
-           }
-           //VT: if no keyword is found, just return.
-           if(keywordCacheEntity.getKeywordPair().keySet().size() <= 0){
-               return generateJSONResponseMAV(true);
-           }
+            List<ModelMap> resultModalMap = new ArrayList<ModelMap>();
+            KeywordCacheEntity keywordCacheEntity= new KeywordCacheEntity();
+            //VT: this is to append the results from the different registeries
+            for (String cswServiceId : cswServiceIds) {
+                if(this.catalogueKeywordCache.get(cswServiceId) != null){
+                    keywordCacheEntity.append(this.catalogueKeywordCache.get(cswServiceId));
+                }
+            }
+            //VT: if no keyword is found, just return.
+            if(keywordCacheEntity.getKeywordPair().keySet().size() <= 0){
+                return generateJSONResponseMAV(true);
+            }
 
-           //VT: Put the accumalated results into a ModalMap.
-           for(String key:keywordCacheEntity.getKeywordPair().keySet()){
-               if(!key.toLowerCase().contains(keyword.toLowerCase())){
-                   continue;
-               }
-               ModelMap modelMap = new ModelMap();
-               modelMap.put("keyword", key);
-               modelMap.put("count", keywordCacheEntity.getKeywordPair().get(key));
-               resultModalMap.add(modelMap);
-           }
+            //VT: Put the accumalated results into a ModalMap.
+            for(String key:keywordCacheEntity.getKeywordPair().keySet()){
+                if(!key.toLowerCase().contains(keyword.toLowerCase())){
+                    continue;
+                }
+                ModelMap modelMap = new ModelMap();
+                modelMap.put("keyword", key);
+                modelMap.put("count", keywordCacheEntity.getKeywordPair().get(key));
+                resultModalMap.add(modelMap);
+            }
 
             return generateJSONResponseMAV(true, resultModalMap, "");
         } catch (Exception ex) {
@@ -315,7 +319,7 @@ public class CSWFilterController extends BaseCSWController {
         Double southBoundLatitude = null;
 
         if(parameters.get("west")!=null && parameters.get("west").length() > 0){
-             westBoundLongitude = Double.parseDouble(parameters.get("west"));
+            westBoundLongitude = Double.parseDouble(parameters.get("west"));
         }
         if(parameters.get("east")!=null && parameters.get("east").length() > 0){
             eastBoundLongitude = Double.parseDouble(parameters.get("east"));
@@ -447,7 +451,7 @@ public class CSWFilterController extends BaseCSWController {
         }
 
         protected void addReplace(String keyword,int count){
-             keywordPair.put(keyword, count);
+            keywordPair.put(keyword, count);
         }
 
         protected HashMap<String,Integer> getKeywordPair(){

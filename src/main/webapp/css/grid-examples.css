@@ -71,6 +71,11 @@
 .remove {
     background-image:url(../img/delete.gif) !important;
 }
+
+.trash {
+    background-image:url(../img/trash.png) !important;
+}
+
 .stop{
     background-image:url(../img/drop-no.gif) !important;
 
@@ -82,6 +87,14 @@
 
 .download {
     background-image:url(../img/download.png) !important;
+}
+
+.setting {
+    background-image:url(../img/setting.png) !important;
+}
+
+.link {
+    background-image:url(../img/link.png) !important;
 }
 
 .magglass {

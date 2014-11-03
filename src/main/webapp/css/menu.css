@@ -1,7 +1,7 @@
 #menu {
 	position:fixed;
 	overflow:hidden; /* wrap floats */
-	height:40px; /* trips haslayout, wrap floats IE */
+	height:60px; /* trips haslayout, wrap floats IE */
 	list-style:none;
     top: 0px;
     right: 0px;
@@ -63,7 +63,7 @@
 
 #latlng {
 	position:absolute;
-    top: 80px;
+    top: 70px;
     right: 120px;
     color: #15428B;
     font: 12px Arial, Tahoma, Helvetica, sans-serif;
