@@ -16,10 +16,15 @@
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />
+                <ref bean="knownTypeRemanentAnomalies" />
+                <ref bean="knownTypeRemanentAnomaliesMTI" />
+                <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
+                <ref bean="knownTypeEMAGRemanentAnomalies" />
+                <ref bean="knownTypeEMAGRemanentAnomaliesMTI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
-                <ref bean="knownTypeGSMLBorehole" />                          
+                <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
@@ -57,11 +62,11 @@
                 <ref bean="knownTypeAlohGroupContent" />
                 <ref bean="knownTypeGypsumContent" />
                 <ref bean="knownTypeSilicaContent" />
-                <ref bean="knownTypeBoreholeMSCL" />                
+                <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />
                 <ref bean="knownTypeGeochron" />
-                <ref bean="knownTypeSurfaceAftershock" />             
+                <ref bean="knownTypeSurfaceAftershock" />
             </list>
         </constructor-arg>
     </bean>
@@ -72,7 +77,7 @@
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
-                <ref bean="cswAsterProduction" />               
+                <ref bean="cswAsterProduction" />
             </list>
         </constructor-arg>
     </bean>
