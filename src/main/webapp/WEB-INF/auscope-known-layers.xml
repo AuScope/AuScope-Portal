@@ -160,7 +160,7 @@
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
 
     </bean>
-   
+
     <bean id="knownTypeGeochron" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="geochronology"/>
         <constructor-arg name="knownLayerSelector">
@@ -834,6 +834,106 @@
         <property name="name" value="National ASTER Map TIR Silica index"/>
         <property name="description" value="1. Band ratio: B13/B10Blue is low silica contentRed is high silica content(potentially includes Si-rich minerals, such as quartz, feldspars, Al-clays)"/>
         <property name="group" value="National ASTER Map of Australia"/>
+    </bean>
+
+    <bean id="knownTypeRemanentAnomalies" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="remanent-anomalies"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="RemAnom:Anomaly"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://remanentanomalies.csiro.au/geoserver/wfs</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="AUS5 - Remanent Anomalies"/>
+        <property name="description" value="A collection of services publishing magnetic anomalies"/>
+        <property name="group" value="Magnetics"/>
+
+        <!-- We don't need proxyUrl as Remanent Anomalies are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
+        <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
+
+    </bean>
+
+    <bean id="knownTypeRemanentAnomaliesAutoSearch" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="remanent-anomalies-AutoSearch"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="RemAnomAutoSearch:AutoSearchAnomalies"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="AUS5 - AutoSearch Anomalies"/>
+        <property name="description" value="A collection of services publishing magnetic anomalies"/>
+        <property name="group" value="Magnetics"/>
+
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getRemanentAnomaliesAutoSearchStyle.do"/>
+        <property name="proxyDownloadUrl" value="doRemanentAnomaliesAutoSearchDownload.do"/>
+    </bean>
+
+    <bean id="knownTypeRemanentAnomaliesMTI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="remanent-anomaliesMTI"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mag:AUS5 - Magnetic Total Intensity"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="AUS5 - Magnetic Total Intensity"/>
+        <property name="description" value="Magnetic Total Intensity from Magnetic Anomaly Map of Australia (fifth edition), Geoscience Australia and other sources"/>
+        <property name="group" value="Magnetics"/>
+    </bean>
+
+    <bean id="knownTypeEMAGRemanentAnomalies" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="remanent-anomalies-EMAG"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="RemAnom:Anomaly"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://remanentanomalies.csiro.au/geoserverEMAG/wfs</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="EMAG2 - Remanent Anomalies"/>
+        <property name="description" value="A collection of services publishing magnetic anomalies from the EMAG2 layer"/>
+        <property name="group" value="Magnetics"/>
+
+        <!-- We don't need proxyUrl as Remanent Anomalies are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
+        <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
+
+    </bean>
+
+    <bean id="knownTypeEMAGRemanentAnomaliesMTI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="remanent-anomalies-EMAGMTI"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="z"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="EMAG2 - Magnetic Total Intensity"/>
+        <property name="description" value="Magnetic Total Intensity from the EMAG2 datasource.http://www.geomag.org/models/emag2.html"/>
+        <property name="group" value="Magnetics"/>
     </bean>
 
     <!-- This layer is NOT selectable, it is only used for hiding these features -->

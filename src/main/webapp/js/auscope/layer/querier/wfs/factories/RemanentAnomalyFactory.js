@@ -12,7 +12,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
     },
 
     supportsNode : function(domNode) {
-        return domNode.namespaceURI === 'http://remanentanomalies.csiro.au' && 
+        return domNode.namespaceURI === 'http://remanentanomalies.csiro.au' &&
             portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'Anomaly';
     },
 
@@ -22,17 +22,17 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
     parseNode : function(domNode, wfsUrl, rootCfg) {
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var actualId = gmlId.substring('anomaly.'.length);
-        
+
         //ASSUMPTION - image service at same host as geoserver
         var baseUrl = this._getBaseUrl(wfsUrl);
         var imgUrl = baseUrl + '/getJpeg.ashx?anomalyId=' + escape(actualId);
-                    
+
         var models = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'RemAnom:modelCollection');
         var disableModelsDownload = (models.length > 0) ? false : true;
-        
+
         var analyses = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'RemAnom:analysisCollection');
         var disableAnalysesDownload = (analyses.length > 0) ? false : true;
-        
+
         // Turn our DOM Node in an ExtJS Tree
         var rootNode = this._createTreeNode(domNode);
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
@@ -54,10 +54,11 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
                 }
             }
         }
-        
+
         var panelConfig = {
             layout : 'fit',
-            height: 300, 
+            tabTitle : gmlId,
+            height: 300,
             items : [{
                 xtype : 'tabpanel',
                 activeItem : 0,
@@ -68,7 +69,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
                     xtype : 'treepanel',
                     autoScroll : true,
                     rootVisible : true,
-                    root : rootNode               
+                    root : rootNode
                 },{
                    title : 'Image',
                    xtype : 'container',
@@ -109,7 +110,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
                 handler : function() {
                     var magEstDataUrl = baseUrl + '/getAllAnalysesForAnomaly.ashx?anomalyid=' + escape(actualId);
                     portal.util.FileDownloader.downloadFile(magEstDataUrl);
-                }                
+                }
             },{
                 text : 'Download Models',
                 iconCls : 'download',
@@ -121,9 +122,9 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
             }]
         };
 
-        return Ext.create('portal.layer.querier.BaseComponent', Ext.apply(panelConfig, rootCfg));        
+        return Ext.create('portal.layer.querier.BaseComponent', Ext.apply(panelConfig, rootCfg));
     },
-    
+
     /**
      * This is for creating a Node Objects from a DOM Node in the form
      * {
