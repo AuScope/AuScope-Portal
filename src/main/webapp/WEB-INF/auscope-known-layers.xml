@@ -161,33 +161,7 @@
 
     </bean>
 
-    <bean id="knownTypeGeochron" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="geochronology"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="Geochron:geochronology"/>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Geochronology"/>
-        <property name="description" value=""/>
-        <property name="proxyUrl" value="getAllFeatures.do"/>
-        <property name="proxyCountUrl" value="getFeatureCount.do"/>
-        <property name="proxyStyleUrl" value=""/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-    </bean>
+  
     <bean id="knownTypeGeotransects" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="ga-geotransects"/>
         <constructor-arg name="knownLayerSelector">
