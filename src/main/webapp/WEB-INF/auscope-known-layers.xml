@@ -880,15 +880,15 @@
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesAutoSearchDownload.do"/>
     </bean>
 
-    <bean id="knownTypeRemanentAnomaliesMTI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="remanent-anomaliesMTI"/>
+    <bean id="knownTypeRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="remanent-anomaliesTMI"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="mag:AUS5 - Magnetic Total Intensity"/>
+                <constructor-arg name="layerName" value="mag:AUS5 - Total Magnetic Intensity"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="AUS5 - Magnetic Total Intensity"/>
-        <property name="description" value="Magnetic Total Intensity from Magnetic Anomaly Map of Australia (fifth edition), Geoscience Australia and other sources"/>
+        <property name="name" value="AUS5 - Total Magnetic Intensity"/>
+        <property name="description" value="Total Magnetic Intensity from Magnetic Anomaly Map of Australia (fifth edition), Geoscience Australia and other sources"/>
         <property name="group" value="Magnetics"/>
     </bean>
 
@@ -918,8 +918,8 @@
 
     </bean>
 
-    <bean id="knownTypeEMAGRemanentAnomaliesMTI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="remanent-anomalies-EMAGMTI"/>
+    <bean id="knownTypeEMAGRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="remanent-anomalies-EMAGTMI"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
                 <constructor-arg name="layerName" value="z"/>
@@ -931,8 +931,8 @@
                 </constructor-arg>
             </bean>
         </constructor-arg>
-        <property name="name" value="EMAG2 - Magnetic Total Intensity"/>
-        <property name="description" value="Magnetic Total Intensity from the EMAG2 datasource.http://www.geomag.org/models/emag2.html"/>
+        <property name="name" value="EMAG2 - Total Magnetic Intensity"/>
+        <property name="description" value="Total Magnetic Intensity from the EMAG2 datasource.http://www.geomag.org/models/emag2.html"/>
         <property name="group" value="Magnetics"/>
     </bean>
 
