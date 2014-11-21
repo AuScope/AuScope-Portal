@@ -11,7 +11,7 @@
             <li><a href="mailto:cg-portal@csiro.au">Contact Us<span></span></a></li>
             <li <%if (request.getRequestURL().toString().contains("/gmap.")) {%>class="current" <%} %>><a href="gmap.html">AuScope Discovery Portal<span></span></a></li>
 
-            <li><a href="static/user-guide/ug.htm" target="new">User Guide<span></span></a></li>
+            <li><a id="hh-userGuide" href="static/user-guide/ug.htm" target="new">User Guide><span></span></a></li>
 
             <li <%if (request.getRequestURL().toString().contains("/links.")) {%>class="current" <%} %>><a href="links.html">Links<span></span></a></li>
          </ul>

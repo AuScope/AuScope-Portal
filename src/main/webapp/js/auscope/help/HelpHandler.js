@@ -86,20 +86,30 @@ Ext.define('auscope.HelpHandler', {
                 auscope.HelpHandler.manager.showInstructions([Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'auscope-tabs-panel',
                     title : 'Find data/layers',
-                    description : 'In this panel a list of all available datasets in the form of layers will be presented to you.  Select the layer you would like to visualise.<br><br>Selecting a layer will also bring up any advanced filter options in the window below. If you do not wish to filter your datasets, you can visualise the data by clicking "Add to Map" in the window below.<br/><br/>Further information about the data behind each layer can be displayed by clicking the icons alongside the layer name.'
+                    description : 'In this panel a list of all available datasets in the form of layers will be presented to you.  Select the layer you would like to visualise.<br><br>Selecting a layer will expand any advanced filter options. If you do not wish to filter your datasets, you can visualise the data by clicking "Add to Map".<br/><br/>Further information about the data behind each layer can be displayed by clicking the icons alongside the layer name.'
                 }),Ext.create('portal.util.help.Instruction', {
-                    highlightEl : 'auscope-filter-panel',
-                    title : 'Apply filters',
-                    description : 'Some layers allow you to filter what data will get visualised on the map. If the layer supports filtering, additional options will be displayed in this window. Select "Add to Map" to update the visualised data on the map'
+                    highlightEl : 'hh-searchfield',
+                    title : 'Search Layer',
+                    description : 'Allow you to filter through the layers via the layer\'s name. Enter a key and click the magnifying glass to filter'
                 }),Ext.create('portal.util.help.Instruction', {
-                    highlightEl : 'auscope-layers-panel',
-                    title : 'Manage Layers',
-                    description : 'Whenever you add a layer to the map, it will be listed in this window. Layers can be removed by selecting them and pressing "Remove Layer".<br><br> Selecting a layer will also bring up any advanced filter options in the window above.'
+                    highlightEl : 'hh-filterVisible',
+                    title : 'Visibility toggle',
+                    description : 'Provide access to filter map based on the current visible bound on the map.'
                 }),Ext.create('portal.util.help.Instruction', {
-                    highlightEl : 'center_region',
-                    anchor : 'right',
-                    title : 'Visualise Data',
-                    description : 'The map panel here is where all of the currently added layers will be visualised. You can pan and zoom the map to an area of interest if required.'
+                    highlightEl : 'latlng',
+                    anchor : 'left',
+                    title : 'Mouse Coordinate',
+                    description : 'Display the coordinate of the mouse on the map'
+                }),Ext.create('portal.util.help.Instruction', {
+                    highlightEl : 'permalinkicon',
+                    anchor : 'left',
+                    title : 'Permanent Link',
+                    description : 'Create a link that captures the current state of the user session.'
+                }),Ext.create('portal.util.help.Instruction', {
+                    highlightEl : 'hh-userGuide',
+                    anchor : 'left',
+                    title : 'User guide',
+                    description : 'For more information, refer to the user guide.'
                 })]);
             });
         }  else {
