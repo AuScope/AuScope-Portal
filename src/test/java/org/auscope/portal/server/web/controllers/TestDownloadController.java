@@ -289,11 +289,11 @@ public class TestDownloadController extends PortalTestClass {
                         with(any(HttpRequestBase.class)));
                 will(returnValue(httpResponse));
 
-                oneOf(httpResponse).getFirstHeader("Content-Type");
-                will(returnValue(null));
 
-                oneOf(httpResponse).getEntity();
+                exactly(2).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
+
+                oneOf(httpEntity).getContentType();will(returnValue(null));
 
                 oneOf(httpEntity).getContent();
                 will(returnValue(is));
@@ -353,11 +353,11 @@ public class TestDownloadController extends PortalTestClass {
                         with(any(HttpRequestBase.class)));
                 will(returnValue(httpResponse));
 
-                oneOf(httpResponse).getFirstHeader("Content-Type");
-                will(returnValue(null));
 
-                oneOf(httpResponse).getEntity();
+                exactly(2).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
+
+                oneOf(httpEntity).getContentType();will(returnValue(null));
 
                 oneOf(httpEntity).getContent();
                 will(returnValue(is));

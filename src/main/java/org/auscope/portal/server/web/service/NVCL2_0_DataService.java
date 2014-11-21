@@ -10,6 +10,7 @@ import javax.xml.xpath.XPathExpression;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.util.DOMUtil;
@@ -55,8 +56,10 @@ public class NVCL2_0_DataService{
         serviceUrl += "downloadscalars.html";
 
         HttpRequestBase method = nvclMethodMaker.getDownloadCSVMethod(serviceUrl,logIds);
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
+
 
         return new CSVDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -66,15 +69,16 @@ public class NVCL2_0_DataService{
             Integer width, Integer startSampleNo, Integer endSampleNo) throws Exception {
 
         HttpRequestBase method = nvclMethodMaker.getTrayThumbNailMethodMaker(dataSetId, serviceUrl, logId, width, startSampleNo, endSampleNo);
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
 
         return new TrayThumbNailResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
 
     }
 
 
-      /**
+    /**
      * Makes and parses a getLogCollection request to a NVCLDataService
      * @param serviceUrl The NVCLDataService url
      * @param datasetId The unique dataset ID to query

@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -194,7 +195,7 @@ public class DownloadController extends BasePortalController {
             HttpGet method = new HttpGet(serviceUrls[i]);
             HttpResponse httpResponse = serviceCaller.getMethodResponseAsHttpResponse(method);
 
-            Header contentType = httpResponse.getFirstHeader("Content-Type");
+            Header contentType = httpResponse.getEntity().getContentType();
 
             byte [] responseBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
 

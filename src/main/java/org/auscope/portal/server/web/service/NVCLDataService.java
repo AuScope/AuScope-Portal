@@ -6,9 +6,11 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
@@ -150,8 +152,10 @@ public class NVCLDataService {
     public MosaicResponse getMosaic(String serviceUrl, String logId, Integer width, Integer startSampleNo, Integer endSampleNo) throws Exception {
         HttpRequestBase method = methodMaker.getMosaicMethod(serviceUrl, logId, width, startSampleNo, endSampleNo);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
+
 
         return new MosaicResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -172,8 +176,9 @@ public class NVCLDataService {
     public PlotScalarResponse getPlotScalar(String serviceUrl, String logId, Integer startDepth, Integer endDepth, Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType,Integer legend) throws Exception {
         HttpRequestBase method = methodMaker.getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,legend);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
 
         return new PlotScalarResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -212,8 +217,10 @@ public class NVCLDataService {
         builder.setQuery(newQueryString);
         method.setURI(builder.build());
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
+
 
         return new CSVDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -238,8 +245,9 @@ public class NVCLDataService {
     public TSGDownloadResponse getTSGDownload(String serviceUrl, String email, String datasetId, String matchString, Boolean lineScan, Boolean spectra, Boolean profilometer, Boolean trayPics, Boolean mosaicPics, Boolean mapPics) throws Exception {
         HttpRequestBase method = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
 
         return new TSGDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -257,8 +265,10 @@ public class NVCLDataService {
     public TSGStatusResponse checkTSGStatus(String serviceUrl, String email) throws Exception {
         HttpRequestBase method = methodMaker.getCheckTSGStatusMethod(serviceUrl, email);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
+
 
         return new TSGStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -279,8 +289,10 @@ public class NVCLDataService {
     public WFSDownloadResponse getWFSDownload(String serviceUrl, String email, String boreholeId, String omUrl, String typeName) throws Exception {
         HttpRequestBase method = methodMaker.getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
+
 
         return new WFSDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
@@ -298,8 +310,10 @@ public class NVCLDataService {
     public WFSStatusResponse checkWFSStatus(String serviceUrl, String email) throws Exception {
         HttpRequestBase method = methodMaker.getCheckWFSStatusMethod(serviceUrl, email);
 
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Header contentHeader = method.getFirstHeader("Content-Type");
+        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
+        InputStream responseStream = httpResponse.getEntity().getContent();
+        Header contentHeader = httpResponse.getEntity().getContentType();
+
 
         return new WFSStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
