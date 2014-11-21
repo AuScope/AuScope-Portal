@@ -109,7 +109,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                     items : [
                     // Row 1:
                     emptyCell, {
-                        html : 'lat (max)'
+                        html : '<div style="background:#D9D9D9">lat (max)</div>'
                     }, emptyCell,
 
                     // Row 2:
@@ -124,10 +124,10 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
 
                     // Row 3:
                     {
-                        html : 'long (min)'
+                        html : '<div style="background:#D9D9D9">long (min)</div>'
                     },
                     emptyCell,{
-                        html : 'long (max)'
+                        html : '<div style="background:#D9D9D9">long (max)</div>'
                     },
 
                     // Row 4:
@@ -150,7 +150,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
 
                     // Row 5:
                     emptyCell, {
-                        html : 'lat (min)'
+                        html : '<div style="background:#D9D9D9">lat (min)</div>'
                     }, emptyCell,
 
                     // Row 6:
@@ -161,28 +161,6 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
                         listeners : {
                             change : Ext.bind(this._toggleSpatialBounds, this)
                         }
-                    },
-                    // Bbox preview button
-                    {
-                        xtype : 'panel',
-                        layout : 'anchor',
-                        hideBorder : true,
-                        items : [{
-                            xtype : 'button',
-                            anchor : '30%',
-                            html : this._spatialBoundsRenderer(),
-                            id : 'bboxPreviewButton',
-                            align: 'CENTER',
-                            disabled: true,
-                            tooltip : {
-                                text: 'Click to preview the bounds of this filter, double click to pan the map to those bounds.'
-                            },
-                            listeners : {
-                                click : Ext.bind(this._spatialBoundsClickHandler, this),
-                                dblclick : Ext.bind(this._spatialBoundsDoubleClickHandler, this),
-                                element : 'el'
-                            }
-                        }]
                     }]
                 }]
             }]
@@ -199,15 +177,7 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
         var lat_min = this.form._fields.get("lat_min").lastValue;
         var long_max = this.form._fields.get("long_max").lastValue;
         var long_min = this.form._fields.get("long_min").lastValue;
-
-        var previewBtn = Ext.getCmp('bboxPreviewButton');
-        // check if all fields are filled in
-         if (lat_max && lat_min && long_max && long_min) {
-            // enable spatial bounds preview
-             previewBtn.enable();
-         } else {
-             previewBtn.disable();
-         }
+        
     },
 
     /**

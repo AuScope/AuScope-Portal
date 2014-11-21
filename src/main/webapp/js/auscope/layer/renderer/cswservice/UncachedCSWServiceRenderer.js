@@ -70,7 +70,9 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
 
         var emptyFilter = Ext.create('portal.layer.filterer.Filterer', { spatialParam : wholeGlobe });
 
+        this.fireEvent('renderstarted', this, distinctCSWRecords, emptyFilter);
         this._cswRenderer.displayData(distinctCSWRecords, emptyFilter, undefined);
+        this.fireEvent('renderfinished', this);
     },
 
     /**
