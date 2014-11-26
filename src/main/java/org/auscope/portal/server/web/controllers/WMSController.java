@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -18,6 +19,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.WMSService;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.CSWGeographicBoundingBox;
 import org.auscope.portal.core.services.responses.csw.CSWGeographicElement;
@@ -29,6 +31,7 @@ import org.auscope.portal.core.services.responses.wms.GetCapabilitiesWMSLayerRec
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
+import org.auscope.portal.server.web.controllers.downloads.EarthResourcesDownloadController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -270,6 +273,61 @@ public class WMSController extends BaseCSWController {
 
         InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
+    }
+
+    @RequestMapping("/getDefaultStyle.do")
+    public void getDefaultStyle(
+            HttpServletResponse response,
+            @RequestParam("layerName") String layerName)
+                    throws Exception {
+
+
+        String style=this.getStyle(layerName, "#ed9c38");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+
+
+    public String getStyle(String name, String color){
+        //VT : This is a hack to get around using functions in feature chaining
+        // https://jira.csiro.au/browse/SISS-1374
+        // there are currently no available fix as wms request are made prior to
+        // knowing app-schema mapping.
+
+        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:mo=\"http://xmlns.geoscience.gov.au/minoccml/1.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>" + name + "</Name>"
+                + "<UserStyle>" + "<Name>portal-style</Name>"
+                + "<Title>" + name + "</Title>"
+                + "<Abstract>EarthResource</Abstract>"
+                + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>" + name + "</Name>"
+                + "<Abstract>" + name + "</Abstract>"
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">" + color + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>6</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+        return style;
     }
 
 

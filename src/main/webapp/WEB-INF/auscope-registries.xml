@@ -89,5 +89,11 @@
         <constructor-arg name="title" value="Tasmania Geonetwork"/>
         <constructor-arg name="serviceUrl" value="http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s"/>
+    </bean>
+    <bean id="cswVeglProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswVeglProduction" />
+        <constructor-arg name="title" value="Virtual Geophysics Laboratory Registry" />
+        <constructor-arg name="serviceUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/csw" />
+        <constructor-arg name="recordInformationUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/main.home?uuid=%1$s" />     
     </bean>    
 </beans>

@@ -76,7 +76,7 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
         }
 
         //otherwise let's see if we can guess an appropriate filter based on layer renderer
-        if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer) {
+        if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer || layer.get('renderer') instanceof portal.layer.renderer.wfs.FeatureWithMapRenderer) {
             baseFilterForm = Ext.create('portal.layer.filterer.forms.WMSLayerFilterForm', baseFilterFormCfg);
             //VT: Filtering is support but for WMS, we want the image to be displayed immediately after it has been added and
             //the opacity can be adjusted from there on
