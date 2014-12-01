@@ -587,6 +587,7 @@
         <property name="name" value="Unweathered Sand to Clay Index (USCI)"/>
         <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
+        <property name="feature_count" value="1" />
     </bean>
 
     <bean id="knownTypeAsterChileWaterIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -599,6 +600,7 @@
         <property name="name" value="Surface Water "/>
         <property name="description" value="Water content of the surface after removing atmospheric path-length (topography) dependent water vapour using the ASTER GDEM-2 digital elevation model.    Higher levels of surface water (warmer tones) can be related to: (i) wet soil after snow melt; (ii) green vegetation; (iii) hydroscopic minerals like illite and montmorillonite; (iii) and/or groundwater seepage."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
+        <property name="feature_count" value="1" />
     </bean>
 
 
@@ -612,6 +614,7 @@
         <property name="name" value="AlOH Group Composition "/>
         <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
+        <property name="feature_count" value="1" />
     </bean>
 
 
@@ -625,6 +628,7 @@
         <property name="name" value="False Colour Composite "/>
         <property name="description" value="Equivalent to false colour infrared photography and Landsat band colour composite  R:4; G:3; B:2. Green vegetation produces red colour."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
+        <property name="feature_count" value="1" />
     </bean>
 
 
