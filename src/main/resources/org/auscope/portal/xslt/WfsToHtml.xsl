@@ -111,7 +111,7 @@
     <!-- =============================================================== -->
     <xsl:template match="er:MiningActivity">
         <xsl:variable name="miningActivityID" select="./gml:name[@codeSpace='http://www.ietf.org/rfc/rfc2616']"/>
-        <xsl:variable name="substring" select="substring(./er:producedMaterial/er:Product/er:sourceCommodity/@xlink:href, 2)"/>
+        <xsl:variable name="substring" select="substring((./er:producedMaterial/er:Product/er:sourceCommodity/@xlink:href)[1], 2)"/>
         <xsl:variable name="commodity" select="//*[@gml:id=$substring]"/>
 
 
