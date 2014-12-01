@@ -15,7 +15,7 @@
     <xsl:param name="serviceURL"/>
     <xsl:param name="vocabserviceURL"/>
     <xsl:param name="vocabservice-reponame"/>
-    <xsl:variable name="vocab-hard-coded-lookup" select="concat('http://services.auscope.org/sissvoc/api/commodity-vocab/resource.rdf?uri=http://resource.auscope.org/classifier/GA/commodity/', '')"/>
+    <xsl:variable name="vocab-hard-coded-lookup" select="concat('http://services.auscope.org/sissvoc/commodity-vocab/resource.rdf?uri=http://resource.auscope.org/classifier/GA/commodity/', '')"/>
     <xsl:variable name="vocab-hard-coded-lookupCGI" select="concat('http://services-test.auscope.org/SISSVoc/getConceptByURI?CGI/', '')"/>
 
     <!-- Global Variables -->
@@ -474,7 +474,7 @@
                             <xsl:otherwise>
                                 <xsl:call-template name="make-popup-url">
                                     <xsl:with-param name="friendly-name" select="$commodity_name"/>
-                                    <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($commodity_name, string-length($commodity_name) - 1))"/>                                                                 
+                                    <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring-after($commodity_name, 'urn:cgi:classifier:GA:commodity:'))"/>                                                                 
                                 </xsl:call-template>
                             </xsl:otherwise>
                         </xsl:choose>
@@ -610,7 +610,7 @@
                     <td class="row header">Commodity</td>
                     <td class="row"><xsl:call-template name="make-popup-url">
                         <xsl:with-param name="friendly-name" select="$comm_name"/>
-                        <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring($comm_name, string-length($comm_name) - 1))"/>
+                        <xsl:with-param name="real-url" select="concat($vocab-hard-coded-lookup,substring-after($comm_name, 'urn:cgi:classifier:GA:commodity:'))"/>                        
                     </xsl:call-template></td>
                     <td class="row header">Id:</td>
                     <td class="row" colspan="2">
