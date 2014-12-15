@@ -15,6 +15,11 @@
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />
+                <ref bean="knownTypeRemanentAnomalies" />
+                <ref bean="knownTypeRemanentAnomaliesTMI" />
+                <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
+                <ref bean="knownTypeEMAGRemanentAnomalies" />
+                <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
