@@ -101,6 +101,18 @@ You can search for layers using their name: enter part of the name in the search
 
 To remove the search filter in order to see all layers again click the **X** button next to the search box.
 
+#### Filtering displayed layered
+
+![Filter Layer by option](images/filter-option.png)
+
+Allows the filtering of the displayed layers based on:
+
+* Visible Bound: Only display layers that intersect with the current visible map bound.
+* Active Layer: Only display layers that are currently active on the map.
+* Data Layer: Only display layers that contains data.
+* Portrayal Layer: Only display layers that contain only image data.
+
+
 #### Layer collections
 
 The tabs at the top of the _Layers_ panel separate the data services into several collections:

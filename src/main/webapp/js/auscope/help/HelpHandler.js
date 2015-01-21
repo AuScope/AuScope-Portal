@@ -92,9 +92,9 @@ Ext.define('auscope.HelpHandler', {
                     title : 'Search Layer',
                     description : 'Allow you to filter through the layers via the layer\'s name. Enter a key and click the magnifying glass to filter'
                 }),Ext.create('portal.util.help.Instruction', {
-                    highlightEl : 'hh-filterVisible-Featured',
-                    title : 'Visibility toggle',
-                    description : 'Provide access to filter map based on the current visible bound on the map.'
+                    highlightEl : 'hh-filterDisplayedLayer-Featured',
+                    title : 'Filter Display Layer Option',
+                    description : 'Provide options to filter the list of displayed layers.'
                 }),Ext.create('portal.util.help.Instruction', {
                     highlightEl : 'latlng',
                     anchor : 'left',
