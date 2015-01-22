@@ -186,6 +186,10 @@ Ext.define('auscope.layer.querier.wfs.factories.SF0BoreholeFactory', {
 
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
+            overrideInfoWindowSize : {
+                width : 600,
+                height : 400
+            },
             border : false,
             tabTitle : name,  
             header : false,
