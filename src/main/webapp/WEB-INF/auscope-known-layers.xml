@@ -141,6 +141,25 @@
             </bean>
         </property>-->
     </bean>
+    
+    <bean id="knownTypehydrogeochem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="capdf-hydrogeochem"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="capdf:hydrogeochem"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="capdf hydrogeochem"/>
+        <property name="description" value="Capricorn distal footprint hydrogeochem"/>
+        <property name="group" value="Capricorn distal footprint"/>
+
+        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getCapdfHydroGeoChemStyle.do"/>
+        <property name="proxyDownloadUrl" value="doCapdfHydroGeoChemDownload.do"/>      
+    </bean>
 
     <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="mineral-occ-view"/>
