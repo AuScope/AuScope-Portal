@@ -1,10 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 
 <html xmlns:v="urn:schemas-microsoft-com:vml">
     <head>
         <title>AuScope Discovery Portal</title>
 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="Access geoscientific information from around Australia, via AuScopes national e-Research infrastructure.">
         <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
         <meta name="author" content="AuScope">

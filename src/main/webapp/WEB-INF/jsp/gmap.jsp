@@ -1,9 +1,11 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <!-- Credits for icons from http://www.fatcow.com/free-icons/ under http://creativecommons.org/licenses/by/3.0/us/-->
 <html xmlns:v="urn:schemas-microsoft-com:vml">
    <head>
       <title>AuScope Discovery Portal</title>
 
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="description" content="Access geoscientific information from around Australia, via AuScopes national e-Research infrastructure.">
       <meta name="keywords" content="AuScope, Discovery, Resources, GeoSciML, Mineral Occurrence, Geologic Unit, Australia">
       <meta name="author" content="AuScope">

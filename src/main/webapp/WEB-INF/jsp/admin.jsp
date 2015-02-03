@@ -1,11 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
+<!DOCTYPE html>
 <!-- Credits for some icons from http://www.fatcow.com/free-icons/ under http://creativecommons.org/licenses/by/3.0/us/-->
 <html xmlns:v="urn:schemas-microsoft-com:vml">
     <head>
         <title>Administration Diagnostics</title>
-
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
         <%-- Google Maps imports --%>
         <script src="http://maps.google.com/maps?file=api&amp;v=2.X&amp;key=${googleKey}" type="text/javascript"></script>
         <script src="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js" type="text/javascript"></script>
