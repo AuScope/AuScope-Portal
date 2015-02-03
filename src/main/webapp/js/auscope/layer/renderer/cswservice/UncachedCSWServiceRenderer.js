@@ -107,7 +107,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 extraParams:cfg.extraParams,
                 reader: {
                     type: 'json',
-                    root: 'data',
+                    rootProperty: 'data',
                     successProperty: 'success',
                     totalProperty: 'totalResults'
                 }

@@ -37,7 +37,7 @@ Ext.application({
                 url : 'getUnmappedCSWRecords.do',
                 reader : {
                     type : 'json',
-                    root : 'data'
+                    rootProperty : 'data'
                 }
             },
             autoLoad : true
@@ -53,7 +53,7 @@ Ext.application({
                 url : 'getCustomLayers.do',
                 reader : {
                     type : 'json',
-                    root : 'data'
+                    rootProperty : 'data'
                 }
             },
             autoLoad : false,
@@ -90,7 +90,7 @@ Ext.application({
                 url : 'getKnownLayers.do',
                 reader : {
                     type : 'json',
-                    root : 'data'
+                    rootProperty : 'data'
                 }
             },
             autoLoad : true
@@ -105,7 +105,7 @@ Ext.application({
                 url : 'getResearchDataLayers.do',
                 reader : {
                     type : 'json',
-                    root : 'data'
+                    rootProperty : 'data'
                 }
             },
             autoLoad : true
@@ -133,7 +133,7 @@ Ext.application({
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
 
-     
+
 
 
 
@@ -144,13 +144,13 @@ Ext.application({
             querierFactory : Ext.create('auscope.layer.AuScopeQuerierFactory', {map: map}),
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
-     
 
-        
+
+
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             store : knownLayerStore,
-            activelayerstore : layerStore,           
+            activelayerstore : layerStore,
             map : map,
             layerFactory : layerFactory,
             tooltip : {
@@ -161,7 +161,7 @@ Ext.application({
                 icon : 'img/information.png',
                 dismissDelay : 30000
             }
-           
+
         });
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
@@ -176,7 +176,7 @@ Ext.application({
             },
             map : map,
             layerFactory : layerFactory
-            
+
         });
 
         var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
@@ -193,7 +193,7 @@ Ext.application({
             },
             map : map,
             layerFactory : layerFactory
-           
+
         });
 
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
@@ -208,8 +208,8 @@ Ext.application({
                 text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p1>',
                 showDelay : 100,
                 dismissDelay : 30000
-            }          
-            
+            }
+
         });
 
         // basic tabs 1, built from existing content

@@ -49,7 +49,7 @@ Ext.define('auscope.layer.filterer.forms.MinOccurViewFilterForm', {
                 url : 'getAllCommodities.do',
                 reader : {
                     type : 'array',
-                    root : 'data'
+                    rootProperty : 'data'
                 }
             },
             sorters : [{

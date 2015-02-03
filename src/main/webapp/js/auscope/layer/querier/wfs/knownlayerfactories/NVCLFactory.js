@@ -59,7 +59,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                 },
                 reader : {
                     type : 'json',
-                    root : 'data',
+                    rootProperty : 'data',
                     successProperty : 'success',
                     messageProperty : 'msg'
                 }
@@ -121,7 +121,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             },
                             reader : {
                                 type : 'json',
-                                root : 'data',
+                                rootProperty : 'data',
                                 successProperty : 'success',
                                 messageProperty : 'msg'
                             }
@@ -748,7 +748,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
 
         return Ext.create('portal.layer.querier.BaseComponent',{
-            tabTitle : 'Spectral Datasets',  
+            tabTitle : 'Spectral Datasets',
             header : false,
             layout : 'fit',
             //We only have a single child which is our grid
@@ -768,7 +768,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         },
                         reader : {
                             idProperty : 'datasetId',
-                            root : 'data',
+                            rootProperty : 'data',
                             successProperty : 'success',
                             messageProperty : 'msg'
                         }
