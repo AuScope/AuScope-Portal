@@ -237,9 +237,8 @@ Ext.application({
             layout: 'border',//VT: vbox doesn't support splitbar unless we custom it.
             region:'west',
             border: false,
-            split:true,
-            //margins: '100 0 0 0',
-            margins:'100 0 0 3',
+            split:true,            
+            margin:'100 0 0 3',
             width: 350,
             items:[tabsPanel]
         };
@@ -250,8 +249,12 @@ Ext.application({
         var centerPanel = Ext.create('Ext.panel.Panel', {
             region: 'center',
             id: 'center_region',
-            margins: '100 0 0 0',
-            cmargins:'100 0 0 0'
+            margin: '100 0 0 0'  ,          
+            listeners: {
+                afterrender: function () {    
+                    map.renderToContainer(centerPanel);   //After our centerPanel is displayed, render our map into it
+                }
+            }
         });
 
         /**
@@ -262,7 +265,7 @@ Ext.application({
             items:[westPanel, centerPanel]
         });
 
-        map.renderToContainer(centerPanel);   //After our centerPanel is displayed, render our map into it
+        
 
         //Create our permalink generation handler
         var permalinkHandler = function() {
