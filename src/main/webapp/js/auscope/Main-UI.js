@@ -248,11 +248,12 @@ Ext.application({
          */
         var centerPanel = Ext.create('Ext.panel.Panel', {
             region: 'center',
-            id: 'center_region',
-            margin: '100 0 0 0'  ,          
+            id: 'center_region',            
+            margin: '100 0 0 0'  ,    
+            html : "<div style='width:100%; height:100%' id='center_region-map'></div>",
             listeners: {
                 afterrender: function () {    
-                    map.renderToContainer(centerPanel);   //After our centerPanel is displayed, render our map into it
+                    map.renderToContainer(centerPanel,'center_region-map');   //After our centerPanel is displayed, render our map into it                                     
                 }
             }
         });
