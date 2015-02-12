@@ -13,6 +13,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpGet;
@@ -105,8 +106,10 @@ public class WMSController extends BaseCSWController {
                         continue;
                     }
 
+
                     String serviceName = rec.getTitle();
-                    String fileId = "unique-id-" + rec.getName();
+                    //VT:Ext.DomQuery.selectNode('#rowexpandercontainer-' + record.id, el.parentNode); cannot handle : and .
+                    String fileId = "unique-id-" + StringUtils.replaceEach(rec.getName(), new String[]{":","."}, new String[]{"",""});
                     String recordInfoUrl = null;
                     String dataAbstract = rec.getAbstract();
                     CSWResponsibleParty responsibleParty = new CSWResponsibleParty();
