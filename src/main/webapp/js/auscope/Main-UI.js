@@ -239,7 +239,7 @@ Ext.application({
             border: false,
             split:true,            
             margin:'100 0 0 3',
-            width: 350,
+            width: 370,
             items:[tabsPanel]
         };
 
