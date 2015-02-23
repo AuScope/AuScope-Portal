@@ -30,7 +30,8 @@
       <jsp:include page="../../jsimports.htm"/>
 
       <%-- CSS imports - relative paths back to the webapp directory--%>
-      <jsp:include page="../../portal-core/cssimports.htm"/>
+      <jsp:include page="../../portal-core/cssimports.htm"/>      
+      <jsp:include page="../../cssimports.htm"/>
 
       <script src="js/auscope/Main-UI.js" type="text/javascript"></script>
 
