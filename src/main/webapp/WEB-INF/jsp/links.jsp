@@ -10,6 +10,8 @@
         <meta name="author" content="AuScope">
 
         <jsp:include page="../../cssimports.htm"/>
+        <jsp:include page="../../portal-core/cssimports.htm"/>      
+    
     </head>
 <body>
 	    <!-- Include Navigation Header -->
