@@ -74,6 +74,10 @@ Ext.define('auscope.HelpHandler', {
 }, function() {
     Ext.onReady(function() {
         var helpButtonEl = Ext.get('help-button');
+        if(!helpButtonEl){
+            //VT: not the landing page
+            return;            
+        }
 
         //VT: I like the arrow to appear every refresh. If users prefer it only on new session, use
         //sessionStorage.

@@ -50,7 +50,7 @@ test( "Test AuScopeParser", function() {
         name : 'test',
     })
 
-   equal(auscopeklParser.factoryNames.length,5, 'Count Number of knownlayer factories configured ')
+   equal(auscopeklParser.factoryNames.length,4, 'Count Number of knownlayer factories configured ')
 
 });
 
