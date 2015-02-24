@@ -54,9 +54,9 @@ test( "Test AuScopeParser", function() {
 
 });
 
-//QUnit.jUnitReport = function(report) {
-//    console.log(report.xml);
-//};
+QUnit.jUnitReport = function(report) {
+    console.log(report.xml);
+};
 
 
 

@@ -79,3 +79,7 @@ test( "Test BaseFactory:_getBaseUrl", function() {
     equal(result,'http://google.com:8081');
 
 });
+
+QUnit.jUnitReport = function(report) {
+    console.log(report.xml);
+};
