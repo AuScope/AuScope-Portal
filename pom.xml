@@ -318,6 +318,7 @@
                         however sadly we require the portal to be published before we can test it.
                         Keep this in note because it may come in handy if we chose to change our test harness
                         to something that can run offline. for portal-core perhaps?
+                        binary found on {baseDir}/target/phantomjs-maven-plugin/phantomjs-1.9.7-linux-i686/bin
                      -->
                         <groupId>com.github.klieber</groupId>
                         <artifactId>phantomjs-maven-plugin</artifactId>
