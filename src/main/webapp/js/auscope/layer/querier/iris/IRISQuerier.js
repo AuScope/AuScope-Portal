@@ -95,7 +95,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                 allComponents.push(
                     Ext.create('portal.layer.querier.BaseComponent', {
                         border : false,
-                        tabTitle : 'IRIS Data',
+                        tabTitle : 'Station:' + station,
                         layout : 'fit',
                         items : [{
                             xtype : 'form',

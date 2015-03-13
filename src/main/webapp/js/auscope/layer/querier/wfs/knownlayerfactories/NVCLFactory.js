@@ -748,7 +748,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
 
         return Ext.create('portal.layer.querier.BaseComponent',{
-            tabTitle : 'Spectral Datasets',
+            tabTitle : featureId + ':Spectral Datasets',
             header : false,
             layout : 'fit',
             //We only have a single child which is our grid

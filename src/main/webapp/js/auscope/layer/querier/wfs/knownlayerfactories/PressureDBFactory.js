@@ -62,7 +62,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
         //The user won't be able to interact with the form prior to load due to the loading mask
         return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
-            tabTitle : 'Details',
+            tabTitle : 'Details:' + featureId,
             items : [{
                 xtype : 'form',
                 width : 300,
