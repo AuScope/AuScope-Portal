@@ -112,3 +112,7 @@
 .data {
     background-image:url(../img/binary-small.png) !important;
 }
+
+.graph {
+    background-image: url("../img/graph.png") !important
+}

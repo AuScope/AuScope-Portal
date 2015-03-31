@@ -146,7 +146,7 @@
         <constructor-arg name="id" value="capdf-hydrogeochem"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="capdf:hydrogeochem"/>
+                <constructor-arg name="featureTypeName" value="public:hydrogeochem"/>
             </bean>
         </constructor-arg>
 

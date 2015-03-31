@@ -3,12 +3,15 @@ package org.auscope.portal.server.web.controllers;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.web.entity.CapdfHydroChemColorCoding;
 import org.auscope.portal.server.web.service.CapdfHydroGeoChemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +24,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     private CapdfHydroGeoChemService capdfHydroGeoChemService;
 
-    public static final String CAPDF_HYDROGEOCHEMTYPE = "capdf:hydrogeochem";
+    public static final String CAPDF_HYDROGEOCHEMTYPE = "public:hydrogeochem";
 
     @Autowired
     public CapdfHydroGeoChemController(CapdfHydroGeoChemService capdfHydroGeoChemService) {
@@ -57,19 +60,23 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      */
     @RequestMapping("/getCapdfHydroGeoChemStyle.do")
     public void getCapdfHydroGeoChemStyle(
-            @RequestParam(required = false, value ="type") String type,
-            @RequestParam(required = false, value = "value") String value,
+            @RequestParam(required = false, value ="project") String project,
+            @RequestParam(required = false, value ="field") String field,
             HttpServletResponse response)throws Exception {
 
         //Vt: wms shouldn't need the bbox because it is tiled.
         FilterBoundingBox bbox = null;
-        String stylefilter=this.capdfHydroGeoChemService.getHydroGeoChemFilterWithStyling(type,value); //VT:get filter from service
 
-        String filter=this.capdfHydroGeoChemService.getHydroGeoChemFilter(bbox); //VT:get filter from service
+        String style="";
 
-        String style=this.getPolygonStyle(stylefilter, filter,CAPDF_HYDROGEOCHEMTYPE, "#00FF00","#00FF00");
-
-
+        if(!field.isEmpty() && field != null){
+            CapdfHydroChemColorCoding ccq=new CapdfHydroChemColorCoding(field);
+            List<IFilter> stylefilterRules=this.capdfHydroGeoChemService.getHydroGeoChemFilterWithColorCoding(project,ccq); //VT:get filter from service
+            style=this.getColorCodedStyle(stylefilterRules,ccq,CAPDF_HYDROGEOCHEMTYPE);
+        }else{
+            String stylefilterRules=this.capdfHydroGeoChemService.getHydroGeoChemFilter(project,bbox); //VT:get filter from service
+            style=this.getStyle(stylefilterRules,CAPDF_HYDROGEOCHEMTYPE,"#DB70B8");
+        }
 
         response.setContentType("text/xml");
 
@@ -84,13 +91,66 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
 
-    public String getPolygonStyle(String stylefilter,String filter, String name, String color,String borderColor){
+    public String getColorCodedStyle(List<IFilter> stylefilterRules,CapdfHydroChemColorCoding ccq,String name){
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                 "<StyledLayerDescriptor version=\"1.0.0\" "+
                 "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" "+
                 "xmlns=\"http://www.opengis.net/sld\" "+
-                "xmlns:capdf=\"http://capdf.csiro.au/\" " +
+                "xmlns:public=\"http://capdf.csiro.au/\" " +
+                "xmlns:gml=\"http://www.opengis.net/gml\" " +
+                "xmlns:ogc=\"http://www.opengis.net/ogc\" "+
+                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" "+
+                "xmlns:ows=\"http://www.opengis.net/ows\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
+                "<NamedLayer>" +
+                "<Name>" + name + "</Name>" +
+                "<UserStyle>" +
+                "<Title>default Title</Title>" +
+                "<Abstract>default abstract</Abstract>" +
+                "<FeatureTypeStyle>";
+
+        for(int i=0;i<stylefilterRules.size();i++){
+
+            style += "<Rule>" +
+                    "<Name>Hydrogeo Chemistry</Name>" +
+                    "<Title>Hydrogeo Chemistry</Title>" +
+                    "<Abstract>Light purple square boxes</Abstract>" +
+                    stylefilterRules.get(i).getFilterStringAllRecords() +
+                    "<PointSymbolizer>" +
+                    "<Graphic>" +
+                    "<Mark>" +
+                    "<WellKnownName>square</WellKnownName>" +
+                    "<Fill>" +
+                    "<CssParameter name=\"fill\">" + ccq.getShades()[i] + "</CssParameter>" +
+                    "</Fill>" +
+                    "</Mark>" +
+                    "<Size>6</Size>" +
+                    "</Graphic>" +
+                    "</PointSymbolizer>" +
+                    "</Rule>" ;
+        }
+
+
+
+
+        style +="</FeatureTypeStyle>" +
+                "</UserStyle>" +
+                "</NamedLayer>" +
+                "</StyledLayerDescriptor>";
+
+        System.out.println(style);
+        return style;
+    }
+
+    public String getStyle(String stylefilterRules,String name,String color){
+
+        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
+                "<StyledLayerDescriptor version=\"1.0.0\" "+
+                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" "+
+                "xmlns=\"http://www.opengis.net/sld\" "+
+                "xmlns:public=\"http://capdf.csiro.au/\" " +
+                "xmlns:gml=\"http://www.opengis.net/gml\" " +
                 "xmlns:ogc=\"http://www.opengis.net/ogc\" "+
                 "xmlns:xlink=\"http://www.w3.org/1999/xlink\" "+
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
@@ -104,39 +164,26 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 "<Rule>" +
                 "<Name>Hydrogeo Chemistry</Name>" +
                 "<Title>Hydrogeo Chemistry</Title>" +
-                "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
-                filter +
-                "<PolygonSymbolizer>" +
+                "<Abstract>Light purple square boxes</Abstract>" +
+                stylefilterRules +
+                "<PointSymbolizer>" +
+                "<Graphic>" +
+                "<Mark>" +
+                "<WellKnownName>square</WellKnownName>" +
                 "<Fill>" +
                 "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
                 "</Fill>" +
-                "<Stroke>" +
-                "<CssParameter name=\"stroke\">" + borderColor + "</CssParameter>" +
-                "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                "</Stroke>" +
-                "</PolygonSymbolizer>" +
-                "</Rule>" +
-                "<Rule>" +
-                "<Name>Polygon for mineral tenement</Name>" +
-                "<Title>Active Tenement</Title>" +
-                "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
-                stylefilter +
-                "<PolygonSymbolizer>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">" + "#6666FF" + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                "</Fill>" +
-                "<Stroke>" +
-                "<CssParameter name=\"stroke\">" + "#6666FF" + "</CssParameter>" +
-                "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                "</Stroke>" +
-                "</PolygonSymbolizer>" +
+                "</Mark>" +
+                "<Size>6</Size>" +
+                "</Graphic>" +
+                "</PointSymbolizer>" +
                 "</Rule>" +
                 "</FeatureTypeStyle>" +
                 "</UserStyle>" +
                 "</NamedLayer>" +
                 "</StyledLayerDescriptor>";
+
+        System.out.println(style);
         return style;
     }
 

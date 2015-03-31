@@ -72,6 +72,9 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             case 'remanent-anomalies-EMAG':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
+            case 'capdf-hydrogeochem':
+                baseFilterForm = Ext.create('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', baseFilterFormCfg);
+                return this._generateResult(baseFilterForm, true);    
             }
         }
 

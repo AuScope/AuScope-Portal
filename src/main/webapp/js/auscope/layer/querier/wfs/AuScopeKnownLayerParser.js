@@ -24,7 +24,7 @@ Ext.define('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {
                 'auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory',
                 'auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory',                
                 'auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory',
-                'auscope.layer.querier.wfs.knownlayerfactories.PortrayalBoreholeViewFactory'
+                'auscope.layer.querier.wfs.knownlayerfactories.PortrayalBoreholeViewFactory'                
             ]
         });
         this.callParent(arguments);

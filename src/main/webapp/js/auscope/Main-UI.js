@@ -149,6 +149,7 @@ Ext.application({
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
+            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
             store : knownLayerStore,
             activelayerstore : layerStore,
             map : map,

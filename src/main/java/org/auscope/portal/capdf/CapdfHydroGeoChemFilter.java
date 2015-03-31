@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.server.web.entity.CapdfHydroChemColorCoding;
 
 
 /**
@@ -24,29 +25,22 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public CapdfHydroGeoChemFilter() {
+    public CapdfHydroGeoChemFilter(String projectName,CapdfHydroChemColorCoding ccq,int min, int max) {
 
         fragments = new ArrayList<String>();
-        //        if (name != null && !name.isEmpty()) {
-        //            fragments.add(this.generatePropertyIsLikeFragment("mt:name", name));
-        //        }
-        //        if (tenementType != null && !tenementType.isEmpty()) {
-        //            fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
-        //        }
-        //
-        //        if (owner != null && !owner.isEmpty()) {
-        //            fragments.add(this.generatePropertyIsLikeFragment("mt:owner", owner));
-        //        }
-        //
-        //        if (size != null && !size.isEmpty()) {
-        //            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("mt:area", size));
-        //        }
-        //
+        if (projectName != null && !projectName.isEmpty()) {
+            fragments.add(this.generatePropertyIsLikeFragment("public:project", projectName));
+        }
 
+        if (ccq != null && min != -1) {
+            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(ccq.getField(), Integer.toString(min)));
+        }
+
+        if (ccq != null && max != -1) {
+            fragments.add(this.generatePropertyIsLessThan(ccq.getField(), Integer.toString(max)));
+        }
 
     }
-
-
 
 
     @Override
@@ -58,18 +52,11 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
     public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
 
         List<String> localFragment = new ArrayList<String>(fragments);
-        localFragment.add(this.generateBboxFragment(bbox, "capdf:geom"));
+        localFragment.add(this.generateBboxFragment(bbox, "public:geom"));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment.size()])));
     }
 
-    public String getFilterWithAdditionalStyle(String type,String value) {
-
-        List<String> localFragment = new ArrayList<String>(fragments);
-        localFragment.add(this.generatePropertyIsGreaterThanOrEqualTo(type, value));
-
-        return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment.size()])));
-    }
 
 }
 
