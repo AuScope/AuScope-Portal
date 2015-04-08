@@ -35,11 +35,11 @@ Ext.define('auscope.layer.querier.wfs.factories.CapdfHydroGeoChemFactory', {
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
             border : false,
-            tabTitle: sampleId,
+            tabTitle: sampleId,           
             layout : 'fit',
             items : [{
                 xtype : 'fieldset',
-                title : 'Mineral Tenement',
+                title : 'Capricorn Distal Hydrochemistry',
                 labelWidth : 75,
                 autoScroll : true,
                 items : [{
@@ -61,11 +61,11 @@ Ext.define('auscope.layer.querier.wfs.factories.CapdfHydroGeoChemFactory', {
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'wt',
-                    value : wt
+                    value : (wt?wt:'N/A')
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'sd',
-                    value : sd
+                    value : (sd?sd:'N/A')
                 },{
                     xtype : 'displayfield',
                     fieldLabel : 'ph',

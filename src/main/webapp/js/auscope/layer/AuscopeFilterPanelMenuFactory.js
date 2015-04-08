@@ -12,24 +12,20 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     },
 
     /**
-     * Given an portal.layer.Layer, work out whether there is an appropriate portal.layer.filterer.BaseFilterForm to show
-     *
-     * Returns a response in the form
-     * {
-     *    form : Ext.FormPanel - the formpanel to be displayed when this layer is selected (can be EmptyFilterForm)
-     *    supportsFiltering : boolean - whether this formpanel supports the usage of the filter button
-     *    layer : portal.layer.Layer that was used to generate this object
-     * }
+     * Given an portal.layer.Layer, check if there are any additional action to display
+     * 
+     * returns an array of menu action items.
      *
      */
     appendAdditionalActions : function(menuItems,layer,group) {
-                               
+         //VT:  link layer to VGL if contain under the Analytic grouping                      
         if(group && group.indexOf('Analytic') >= 0){
             menuItems.push(this._getAnalyticLink(layer));
         }
-        
-        if(layer.id='capdf-hydrogeochem'){
-            menuItems.push(this._getlayerGraphing(layer));
+        //VT: check for any layer specific analytic function
+        var analytics = this._getlayerAnalytics(layer)
+        if(analytics){
+            menuItems.push(analytics);
         }
         
         
@@ -72,15 +68,22 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     },
     
     
-    _getlayerGraphing : function(layer,map){    
+    _getlayerAnalytics : function(layer){    
+        var me = this;
+        if( auscope.layer.analytic.AnalyticFormFactory.supportLayer(layer)){
+            return new Ext.Action({
+                text : 'Graph',
+                iconCls : 'graph',
+                handler : function(){   
+                    var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
+                    win.show();
+                }
+            });
+        }else{
+            return null;
+        }
         
-        return new Ext.Action({
-            text : 'Graph',
-            iconCls : 'graph',
-            handler : function(){                                                
-                
-            }
-        });
+       
         
     }
     
