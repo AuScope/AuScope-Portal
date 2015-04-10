@@ -11,7 +11,8 @@
     <!-- All elements must be of type org.auscope.portal.server.web.KnownLayer -->
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
-            <list>
+            <list>                
+                <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
@@ -28,7 +29,7 @@
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
-                <ref bean="knownTypeYilgarnGeochemistry"/>
+                <!-- ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
@@ -65,9 +66,9 @@
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />             
-                <ref bean="knownTypeSurfaceAftershock" />
+                <ref bean="knownTypeSurfaceAftershock" /-->
                 <!-- Analytics -->
-                <ref bean="knownTypeBouguerGeodetic" />
+                <!-- ref bean="knownTypeBouguerGeodetic" />
                 <ref bean="knownTypeGravAnomalyGeodetic" />
                 <ref bean="knownTypeRadMapTotaldose" />
                 <ref bean="knownTypeMagMap" />
@@ -84,7 +85,7 @@
                 <ref bean="knownTypeGAGravitySurvey" />
                 <ref bean="knownTypeMusgraveAem" />
                 <ref bean="knownTypeWesternAreaAem" />
-                <ref bean="knownTypeAshburtonAem" />
+                <ref bean="knownTypeAshburtonAem" /-->
                 <!-- End Analytics -->
             </list>
         </constructor-arg>
@@ -94,10 +95,10 @@
         <constructor-arg>
             <list>
                 <ref bean="cswAuscopeTest" />
-                <ref bean="cswInSarProduction" />
-                <ref bean="cswMDUTest" />
-                <ref bean="cswAsterProduction" />
-                <ref bean="cswVeglProduction" />
+                <!-- ref bean="cswInSarProduction" /-->
+                <!-- ref bean="cswMDUTest" /-->
+                <!-- ref bean="cswAsterProduction" /-->
+                <!-- ref bean="cswVeglProduction" /-->
             </list>
         </constructor-arg>
     </bean>

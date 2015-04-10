@@ -1,5 +1,5 @@
 /**
- * A factory for parsing WFS features from the National Virtual Core Library known layer.
+ * Produce a form for graphing Capricorn distal footprint 
  */
 Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
     extend : 'Ext.window.Window',
@@ -16,8 +16,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         var boxLayer = this.initMap();
         var me=this;
         
-        this.bboxButton = Ext.create('Ext.Button',{           
-            toggle : true,
+        this.bboxButton = Ext.create('Ext.Button',{                      
             text: 'Draw Bounds',
             handler: function() { 
                 var myMap = me.map.map;                                        
@@ -30,116 +29,174 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             height: 600,
             width: 600,     
             collapsible : true,
-            layout: 'vbox',
-            align : 'stretch',
-            pack  : 'start',
+            layout: 'fit',           
             listeners : {
                 close : function(panel,opts){
                     var myMap = me.map.map;
                     for(var i in myMap.controls){
                         if(myMap.controls[i] instanceof OpenLayers.Control.DrawFeature){                                                     
                            boxLayer.removeAllFeatures();                                
-                           myMap.controls[i].deactivate();                           
+                           myMap.controls[i].deactivate();     
+                           myMap.removeControl(myMap.controls[i]);
                         }
                     }
+                    this.map.map.removeLayer(boxLayer);
+                    this.bboxButton.destroy();
                 }
             },
-            items : [{
-                xtype : 'fieldset',
-                itemId : 'cswspatialfiltercoordfieldset',
-                title : 'Coordinates',
-                width: '100%',
-                
-                flex :1,
-                items : [{
-                    xtype : 'textfield',
-                    name : 'north',
-                    itemId : 'north',
-                    fieldLabel : 'North'
-                },{
-                    xtype : 'textfield',
-                    name : 'south',
-                    itemId : 'south',
-                    fieldLabel : 'South'
-                },{
-                    xtype : 'textfield',
-                    name : 'east',
-                    itemId : 'east',
-                    fieldLabel : 'East'
-                },{
-                    xtype : 'textfield',
-                    name : 'west',
-                    itemId : 'west',
-                    fieldLabel : 'West'
+            items : {
+                xtype :'form',               
+                frame : true,
+                layout: 'anchor',
+                // these are applied to columns
+                defaults:{                    
+                    anchor: '100%',
+                    hideLabels  : true,
+                    border      : false,
+                    bodyStyle   : 'padding:10px'                   
                 },
-                    this.bboxButton
-                ]
-              },{     
-                  xtype : 'fieldset',                  
-                  title : 'Observation',
-                  flex :2,
-                  width: '100%',
-                  
-                  items : {
-                    xtype : 'checkboxgroup',                              
-                    allowBlank : false,
-                    fieldLabel : 'Results',
-                    allowBlank : false,
-                    blankText : 'Select at 2 checkbox',
-                    validateOnChange : false,
-                    // Arrange radio buttons into two columns, distributed vertically
-                    columns : 4,
-                    vertical : true,
-                    msgTarget: 'under',
-                    invalidCls: Ext.baseCSSPrefix + 'form-invalid',
-                    items : [ {
-                        boxLabel : 'k',
-                        name : 'resultField',
-                        inputValue : 'k'                       
-                    }, {
-                        boxLabel : 'mg',
-                        name : 'resultField',
-                        inputValue : 'mg'                        
-                    }, {
-                        boxLabel : 'ca',
-                        name : 'resultField',
-                        inputValue : 'ca'                     
-                    }, {
-                        boxLabel : 'mg',
-                        name : 'resultField',
-                        inputValue : 'mg'               
-                    }, {
-                        boxLabel : 'na',
-                        name : 'resultField',
-                        inputValue : 'na'         
-                    }, {
-                        boxLabel : 'sr',
-                        name : 'resultField',
-                        inputValue : 'sr'                   
-                    }, {
-                        boxLabel : 'mnl',
-                        name : 'resultField',
-                        inputValue : 'mnl'               
-                    }, {
-                        boxLabel : 'mnh',
-                        name : 'resultField',
-                        inputValue : 'mnh'                     
-                    } ],
-                    listeners: {
-                        change: function(form,newValue,oldValue) {
-                            if(Ext.isArray(newValue.resultField)) {
-                                if(newValue.resultField.length != 2){                                   
-                                    form.markInvalid(['Select exactly 2 observation field']);                                   
-                                } else {                                   
-                                   form.clearInvalid(); 
+                items :[{                    
+                        xtype : 'fieldset',
+                        itemId : 'cswspatialfiltercoordfieldset',
+                        title : 'Coordinates',
+                        
+                                                
+                        items : [{
+                            xtype : 'textfield',
+                            name : 'north',
+                            itemId : 'north',
+                            fieldLabel : 'North'
+                        },{
+                            xtype : 'textfield',
+                            name : 'south',
+                            itemId : 'south',
+                            fieldLabel : 'South'
+                        },{
+                            xtype : 'textfield',
+                            name : 'east',
+                            itemId : 'east',
+                            fieldLabel : 'East'
+                        },{
+                            xtype : 'textfield',
+                            name : 'west',
+                            itemId : 'west',
+                            fieldLabel : 'West'
+                        },
+                            this.bboxButton
+                        ]
+                      },{     
+                          xtype : 'fieldset',                  
+                          title : 'Observation',
+                          
+                          
+                          
+                          items : {
+                            xtype : 'checkboxgroup',                              
+                            allowBlank : false,
+                            fieldLabel : 'Results',
+                            allowBlank : false,
+                            blankText : 'Select at 2 checkbox',
+                            validateOnChange : false,
+                            // Arrange radio buttons into two columns, distributed vertically
+                            columns : 4,
+                            vertical : true,
+                            msgTarget: 'under',
+                            invalidCls: Ext.baseCSSPrefix + 'form-invalid',
+                            items : [ {
+                                boxLabel : 'k',
+                                name : 'resultField',
+                                inputValue : 'k'                       
+                            }, {
+                                boxLabel : 'mg',
+                                name : 'resultField',
+                                inputValue : 'mg'                        
+                            }, {
+                                boxLabel : 'ca',
+                                name : 'resultField',
+                                inputValue : 'ca'                     
+                            }, {
+                                boxLabel : 'mg',
+                                name : 'resultField',
+                                inputValue : 'mg'               
+                            }, {
+                                boxLabel : 'na',
+                                name : 'resultField',
+                                inputValue : 'na'         
+                            }, {
+                                boxLabel : 'sr',
+                                name : 'resultField',
+                                inputValue : 'sr'                   
+                            }, {
+                                boxLabel : 'mnl',
+                                name : 'resultField',
+                                inputValue : 'mnl'               
+                            }, {
+                                boxLabel : 'mnh',
+                                name : 'resultField',
+                                inputValue : 'mnh'                     
+                            } ],
+                            listeners: {
+                                change: function(form,newValue,oldValue) {
+                                    if(Ext.isArray(newValue.resultField)) {
+                                        if(newValue.resultField.length != 2){                                   
+                                            form.markInvalid(['Select exactly 2 observation field']);                                   
+                                        } else {                                   
+                                           form.clearInvalid(); 
+                                        }
+                                    } else {                               
+                                        form.markInvalid(['Select exactly 2 observation field']);
+                                    }
                                 }
-                            } else {                               
-                                form.markInvalid(['Select exactly 2 observation field']);
                             }
-                        }
+                         }
                     }
-                 }
-            }]
+                ],
+                buttons : [{
+                    text : 'plot',
+                    handler : function(){
+                        Ext.Ajax.request({
+                            url: 'doCapdfHydroScatterPlotList.do',
+                            scope : this,
+                            params: {
+                                xaxis : 'br',
+                                yaxis : 'sc'
+                            },
+                            callback : function(options, success, response) {
+                              if(success){
+                                  var jsonObj = Ext.JSON.decode(response.responseText);
+                                  me.scatterPlot(jsonObj.data.series);
+                              }else{
+                                  alert('Failed');
+                              }
+
+                            }
+                        });
+                    }
+                },{
+                    text : 'plot3D',
+                    handler : function(){
+                        Ext.Ajax.request({
+                            url: 'doCapdfHydro3DScatterPlotList.do',
+                            scope : this,
+                            params: {
+                                xaxis : 'br',
+                                yaxis : 'sc',
+                                zaxis : 'z'
+                            },
+                            callback : function(options, success, response) {
+                              if(success){
+                                  var jsonObj = Ext.JSON.decode(response.responseText);
+                                  me.scatter3DPlot(jsonObj.data.series);
+                              }else{
+                                  alert('Failed');
+                              }
+
+                            }
+                        });
+                    }
+                }]
+                                
+            }
         });
 
         Ext.tip.QuickTipManager.init();        
@@ -148,9 +205,47 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
 
 
    
-    display : function(layer) {
+    scatterPlot : function(series) {
+       var splot = Ext.create('auscope.chart.scatterplot',{
+           targetWidth : 680,
+           targetHeight : 450
+       });
+      
+       
+       Ext.create('Ext.window.Window', {
+           title: 'Scatter Plot',
+           height: 500,
+           width: 700,
+           layout: 'fit',
+           items: splot
+       }).show();
+       
+       splot.plot(series);
         
     },
+    
+    scatter3DPlot : function(series) {
+        var splot = Ext.create('portal.charts.3DScatterPlot',{
+               xAttr : 'br',
+               xLabel : 'br',                          
+               yAttr : 'sc',
+               yLabel : 'sc',               
+               valueAttr : 'highlight',
+               valueLabel : 'highlight'               
+        });
+       
+        
+        Ext.create('Ext.window.Window', {
+            title: 'Scatter Plot',
+            height: 500,
+            width: 700,
+            layout: 'fit',
+            items: splot
+        }).show();
+        
+        splot.plot(series);
+         
+     },
     
     initMap : function(){
         var myMap = this.map.map;
@@ -174,20 +269,24 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         
         
         box.events.register('featureadded', {}, Ext.bind(function(e,c){
+            
+            c.expand();
+            c.setTitle('Capricorn distal Footprint');
+            
             var ctrl = e.object;
             var feature = e.feature;
 
             //raise the data selection event
             var originalBounds = feature.geometry.getBounds();
             var bounds = originalBounds.transform('EPSG:3857','EPSG:4326').toArray();
-            var spatialCoordFieldSet = c.getComponent('cswspatialfiltercoordfieldset');
-            spatialCoordFieldSet.getComponent('north').setValue(bounds[3]);
-            spatialCoordFieldSet.getComponent('south').setValue(bounds[1]);
-            spatialCoordFieldSet.getComponent('east').setValue(bounds[2]);
-            spatialCoordFieldSet.getComponent('west').setValue(bounds[0]);
-
-            c.toggleCollapse();
-            c.setTitle('Capricorn distal Footprint');
+           
+            c.on('expand',function(panel,opts){
+                var spatialCoordFieldSet = c.down('form').getComponent('cswspatialfiltercoordfieldset');
+                spatialCoordFieldSet.getComponent('north').setValue(bounds[3]);
+                spatialCoordFieldSet.getComponent('south').setValue(bounds[1]);
+                spatialCoordFieldSet.getComponent('east').setValue(bounds[2]);
+                spatialCoordFieldSet.getComponent('west').setValue(bounds[0]);
+            })
             
             //Because click events are still 'caught' even if the click control is deactive, the click event
             //still gets fired. To work around this, add a tiny delay to when we reactivate click events
@@ -209,26 +308,23 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         for(var i in myMap.controls){
             if(myMap.controls[i] instanceof OpenLayers.Control.DrawFeature){
                 //VT : get a hold of the DrawFeature and toggle it.
-                if(button.toggle == true){     
-                    button.toggle = false;
+                if(window.getCollapsed() == false && button.getText() != 'Clear bounds'){                         
                     button.setText('Clear bounds')
                     myMap.controls[i].activate();                                  
-                    window.toggleCollapse();
+                    window.collapse();
                     window.setTitle('Select Area on Map to reactivate window');
                 }else{
-                    button.toggle=true;
+                   
                     window.setTitle('Capricorn distal Footprint');
                     button.setText('Draw Bounds')
-                    boxLayer.removeAllFeatures();
+                    boxLayer.removeAllFeatures();                    
                     button.ownerCt.getComponent('north').setValue('');
                     button.ownerCt.getComponent('south').setValue('');
                     button.ownerCt.getComponent('east').setValue('');
                     button.ownerCt.getComponent('west').setValue('');
                     myMap.controls[i].deactivate();
                     
-                    if(window.getCollapsed()){
-                        window.toggleCollapse();
-                    }
+                   window.expand()
                     
                 }
 

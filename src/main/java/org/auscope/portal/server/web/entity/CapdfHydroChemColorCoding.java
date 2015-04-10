@@ -30,9 +30,9 @@ public class CapdfHydroChemColorCoding {
     public CapdfHydroChemColorCoding(String field) {
         this.setField(field);
         fieldConfigMap=new HashMap<String,FieldConfigObj>();
-        fieldConfigMap.put("public:elev", new FieldConfigObj(SHADES.RED,200,400));
-        fieldConfigMap.put("public:wt", new FieldConfigObj(SHADES.BLUE,1,20));
-        fieldConfigMap.put("public:sd", new FieldConfigObj(SHADES.GREEN,1,20));
+        fieldConfigMap.put("elev", new FieldConfigObj(SHADES.RED,200,600));
+        fieldConfigMap.put("wt", new FieldConfigObj(SHADES.BLUE,1,20));
+        fieldConfigMap.put("sd", new FieldConfigObj(SHADES.GREEN,1,20));
     }
 
     public String[] getShades(SHADES s){

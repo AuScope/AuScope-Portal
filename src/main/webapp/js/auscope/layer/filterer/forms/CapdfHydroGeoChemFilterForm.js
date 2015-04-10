@@ -13,9 +13,9 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
         var fieldStore = Ext.create('Ext.data.Store', {
             fields: ['field', 'value'],
             data : [
-                {"field":"elev", "value":"public:elev"},
-                {"field":"wt", "value":"public:wt"},
-                {"field":"sd", "value":"public:sd"}            
+                {"field":"elev", "value":"elev"},
+                {"field":"wt", "value":"wt"},
+                {"field":"sd", "value":"sd"}            
             ]
         });
 
