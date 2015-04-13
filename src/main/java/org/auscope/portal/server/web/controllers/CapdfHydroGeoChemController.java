@@ -14,8 +14,9 @@ import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.util.FileIOUtil;
-import org.auscope.portal.server.web.entity.CapdfHydroChemColorCoding;
 import org.auscope.portal.server.web.service.CapdfHydroGeoChemService;
+import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
+import org.auscope.portal.service.colorcoding.ColorCodingConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -138,44 +139,31 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     @RequestMapping("/doCapdfHydroBoxPlotList.do")
     public ModelAndView doCapdfHydroBoxPlotList(
-            @RequestParam("project") String project,
-            @RequestParam("axis") final String axis,
+            @RequestParam(required = false, value = "project") String project,
+            @RequestParam("box1") final String box1,
+            @RequestParam("box2") final String box2,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             HttpServletResponse response)throws Exception {
 
-        int [] xValue;
-
-        if(bboxJson.isEmpty()){
-            int [] x = {4,2,7,8,9,11,5,18};
-            xValue = x;
-        }else{
-            int [] x = {4,2,7,8,9};
-            xValue = x;
-        }
+        int [] b1Value = {4,2,7,8,9,11,5,18};
+        int [] b2Value = {43,22,17,40,19,11,35,18};
 
         ArrayList<ModelMap> series = new ArrayList<ModelMap>();
 
         ModelMap relatedValues = null;
 
 
-        for (int i = 0; i < xValue.length; i++) {
+        for (int i = 0; i < b1Value.length; i++) {
             relatedValues = new ModelMap();
-            relatedValues.put(axis, xValue[i]);
+            relatedValues.put(box1, b1Value[i]);
+            relatedValues.put(box2, b2Value[i]);
             series.add(relatedValues);
         }
 
-        Collections.<ModelMap>sort(series, new Comparator<ModelMap>() {
-            @Override
-            public int compare(ModelMap o1, ModelMap o2) {
-                // Just use float's comparison implementation:
-                return ((Float) o1.get(axis)).compareTo((Float) o2.get(axis));
-            }
-        });
-
         ModelMap data = new ModelMap();
+
         data.put("series", series);
         return generateJSONResponseMAV(true, data, null);
-
     }
 
     /**
@@ -203,7 +191,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
         if(!field.isEmpty() && field != null){
             CapdfHydroChemColorCoding ccq=new CapdfHydroChemColorCoding(field);
             List<IFilter> stylefilterRules=this.capdfHydroGeoChemService.getHydroGeoChemFilterWithColorCoding(project,ccq); //VT:get filter from service
-            style=this.getColorCodedStyle(stylefilterRules,ccq,CAPDF_HYDROGEOCHEMTYPE);
+            style=this.getColorCodedStyle(stylefilterRules,ccq.getColorCodingConfig(),CAPDF_HYDROGEOCHEMTYPE);
         }else{
             String stylefilterRules=this.capdfHydroGeoChemService.getHydroGeoChemFilter(project,bbox); //VT:get filter from service
             style=this.getStyle(stylefilterRules,CAPDF_HYDROGEOCHEMTYPE,"#DB70B8");
@@ -222,7 +210,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
 
-    public String getColorCodedStyle(List<IFilter> stylefilterRules,CapdfHydroChemColorCoding ccq,String name){
+    public String getColorCodedStyle(List<IFilter> stylefilterRules,ColorCodingConfig ccc,String name){
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                 "<StyledLayerDescriptor version=\"1.0.0\" "+
@@ -253,7 +241,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                     "<Mark>" +
                     "<WellKnownName>square</WellKnownName>" +
                     "<Fill>" +
-                    "<CssParameter name=\"fill\">" + ccq.getShades()[i] + "</CssParameter>" +
+                    "<CssParameter name=\"fill\">" + ccc.getColor(i) + "</CssParameter>" +
                     "</Fill>" +
                     "</Mark>" +
                     "<Size>6</Size>" +

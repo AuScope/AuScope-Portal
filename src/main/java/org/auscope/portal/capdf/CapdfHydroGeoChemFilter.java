@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.server.web.entity.CapdfHydroChemColorCoding;
+import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
 
 
 /**
@@ -25,18 +25,18 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public CapdfHydroGeoChemFilter(String projectName,CapdfHydroChemColorCoding ccq,int min, int max) {
+    public CapdfHydroGeoChemFilter(String projectName,CapdfHydroChemColorCoding ccq,Integer min, Integer max) {
 
         fragments = new ArrayList<String>();
         if (projectName != null && !projectName.isEmpty()) {
             fragments.add(this.generatePropertyIsLikeFragment("public:project", projectName));
         }
 
-        if (ccq != null && min != -1) {
+        if (ccq != null && min != null) {
             fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(ccq.getField(), Integer.toString(min)));
         }
 
-        if (ccq != null && max != -1) {
+        if (ccq != null && max != null) {
             fragments.add(this.generatePropertyIsLessThan(ccq.getField(), Integer.toString(max)));
         }
 

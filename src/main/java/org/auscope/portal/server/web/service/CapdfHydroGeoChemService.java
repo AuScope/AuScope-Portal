@@ -1,9 +1,8 @@
 package org.auscope.portal.server.web.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.naming.OperationNotSupportedException;
 
 import org.auscope.portal.capdf.CapdfHydroGeoChemFilter;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
@@ -11,7 +10,8 @@ import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
-import org.auscope.portal.server.web.entity.CapdfHydroChemColorCoding;
+import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
+import org.auscope.portal.service.colorcoding.ColorCodingConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +65,11 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
         ArrayList<IFilter> result = new ArrayList<IFilter>();
 
-        for(int iteration = 0; iteration < ccq.getShades().length; iteration++){
-            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(project,ccq,ccq.getMin(iteration),ccq.getMax(iteration));
+        ColorCodingConfig  ccc= ccq.getColorCodingConfig();
+
+        for(int iteration = 0; iteration < ccc.getIntervals(); iteration++){
+            HashMap<String,Integer> config = ccc.getIteration(iteration);
+            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(project,ccq,config.get("lowerBound"),config.get("upperBound"));
             result.add(filter);
         }
 

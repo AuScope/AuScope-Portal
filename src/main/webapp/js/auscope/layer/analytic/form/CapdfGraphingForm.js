@@ -194,6 +194,27 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                             }
                         });
                     }
+                },{
+                    text : 'Box Plot',
+                    handler : function(){
+                        Ext.Ajax.request({
+                            url: 'doCapdfHydroBoxPlotList.do',
+                            scope : this,
+                            params: {
+                                box1 : 'box1',
+                                box2 : 'box2'
+                            },
+                            callback : function(options, success, response) {
+                              if(success){
+                                  var jsonObj = Ext.JSON.decode(response.responseText);
+                                  me.boxPlot(jsonObj.data.series);
+                              }else{
+                                  alert('Failed');
+                              }
+
+                            }
+                        });
+                    }
                 }]
                                 
             }
@@ -223,6 +244,25 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
        splot.plot(series);
         
     },
+    
+    boxPlot : function(series) {
+        var splot = Ext.create('auscope.chart.boxPlot',{
+            targetWidth : 680,
+            targetHeight : 450
+        });
+       
+        
+        Ext.create('Ext.window.Window', {
+            title: 'Scatter Plot',
+            height: 500,
+            width: 700,
+            layout: 'fit',
+            items: splot
+        }).show();
+        
+        splot.plot(series);
+         
+     },
     
     scatter3DPlot : function(series) {
         var splot = Ext.create('portal.charts.3DScatterPlot',{
