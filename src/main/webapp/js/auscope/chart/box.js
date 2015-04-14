@@ -22,6 +22,14 @@ d3.box = function() {
       //var boxIndex = 1;
       var d = data[1].sort(d3.ascending);
       
+      var dataAvg = 0;
+      
+      for(var z=0; z < d.length; z++){
+          dataAvg = dataAvg + d[z];
+      }
+      
+      dataAvg = dataAvg / d.length;
+      
      // console.log(boxIndex); 
       //console.log(d); 
       
@@ -188,6 +196,39 @@ d3.box = function() {
           .attr("cy", function(i) { return x1(d[i]); })
           .style("opacity", 1e-6)
           .remove();
+      
+      //----------VT:AVERAGE---------------------
+      var average = g.selectAll("circle.average")
+      .data([dataAvg]);
+
+      average.enter().insert("circle", "text")
+          .attr("class", "average")
+          .attr("r", 5)
+          .attr("cx", width / 2)
+          .attr("cy", function(i) { 
+              return x0(i); })
+          .style("opacity", 1e-6)
+        .transition()
+          .duration(duration)
+          .attr("cy", function(i) { return x1(i); })
+          .style("opacity", 1)
+          .style("fill", 'black');
+          
+      
+      average.transition()
+      .duration(duration)
+      .attr("cy", function(i) { return x1(i); })
+      .style("opacity", 1)
+      .style("fill", 'black');
+      
+      average.exit().transition()
+      .duration(duration)
+      .attr("cy", function(i) { return x1(i); })
+      .style("opacity", 1e-6)
+      .style("fill", 'black')
+      .remove();
+      
+      //----------VT:AVERAGE END---------------------
 
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(8);

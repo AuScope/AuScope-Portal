@@ -29,7 +29,7 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
 
         fragments = new ArrayList<String>();
         if (projectName != null && !projectName.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("public:project", projectName));
+            fragments.add(this.generatePropertyIsLikeFragment("project", projectName));
         }
 
         if (ccq != null && min != null) {
@@ -52,7 +52,7 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
     public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
 
         List<String> localFragment = new ArrayList<String>(fragments);
-        localFragment.add(this.generateBboxFragment(bbox, "public:geom"));
+        localFragment.add(this.generateBboxFragment(bbox, "geom"));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment.size()])));
     }

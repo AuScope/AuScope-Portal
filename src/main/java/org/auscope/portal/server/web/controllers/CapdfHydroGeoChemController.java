@@ -41,16 +41,23 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     @RequestMapping("/doCapdfHydroGeoChemDownload.do")
     public void doCapdfHydroGeoChemDownload(
-            @RequestParam("name") String name,
-            @RequestParam(required = false, value = "tenementType") String tenementType,
-            @RequestParam("owner") String owner,
-            @RequestParam(required = false, value = "size") String size,
-            @RequestParam(required = false, value = "endDate") String endDate,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value ="project") String project,
+            @RequestParam(required = false, value = "bbox" , defaultValue="") String bboxJson,
             HttpServletResponse response)throws Exception {
 
 
+        //Vt: wms shouldn't need the bbox because it is tiled.
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
+        String filter=this.capdfHydroGeoChemService.getHydroGeoChemFilter(project,bbox);
+
+        response.setContentType("text/xml");
+        OutputStream outputStream = response.getOutputStream();
+
+        InputStream results = this.capdfHydroGeoChemService.downloadWFS(serviceUrl, CAPDF_HYDROGEOCHEMTYPE, filter, null);
+        FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
+        outputStream.close();
 
     }
 
@@ -63,8 +70,6 @@ public class CapdfHydroGeoChemController extends BasePortalController {
             @RequestParam("yaxis") String yaxis,
             @RequestParam(required = false, value = "bbox" , defaultValue="") String bboxJson,
             HttpServletResponse response)throws Exception {
-
-
 
 
         int [] xValue = {4,2,7,8,9,11,5,18};

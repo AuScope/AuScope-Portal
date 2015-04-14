@@ -319,14 +319,14 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             //raise the data selection event
             var originalBounds = feature.geometry.getBounds();
             var bounds = originalBounds.transform('EPSG:3857','EPSG:4326').toArray();
-           
-            c.on('expand',function(panel,opts){
-                var spatialCoordFieldSet = c.down('form').getComponent('cswspatialfiltercoordfieldset');
-                spatialCoordFieldSet.getComponent('north').setValue(bounds[3]);
-                spatialCoordFieldSet.getComponent('south').setValue(bounds[1]);
-                spatialCoordFieldSet.getComponent('east').setValue(bounds[2]);
-                spatialCoordFieldSet.getComponent('west').setValue(bounds[0]);
-            })
+
+
+            var spatialCoordFieldSet = c.down('form').getComponent('cswspatialfiltercoordfieldset');
+            spatialCoordFieldSet.getComponent('north').setValue(bounds[3]);
+            spatialCoordFieldSet.getComponent('south').setValue(bounds[1]);
+            spatialCoordFieldSet.getComponent('east').setValue(bounds[2]);
+            spatialCoordFieldSet.getComponent('west').setValue(bounds[0]);
+          
             
             //Because click events are still 'caught' even if the click control is deactive, the click event
             //still gets fired. To work around this, add a tiny delay to when we reactivate click events
