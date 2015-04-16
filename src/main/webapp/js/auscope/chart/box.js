@@ -17,10 +17,18 @@ d3.box = function() {
   // For each small multiple…
   function box(g) {
     g.each(function(data, i) {
+       var dataClean = [];
+       
+       for(var i =0; i < data[1].length;i++){
+           if(data[1][i]!= 2147483646){
+               dataClean.push(data[1][i]); 
+           }
+       }
+        
       //d = d.map(value).sort(d3.ascending);
       //var boxIndex = data[0];
       //var boxIndex = 1;
-      var d = data[1].sort(d3.ascending);
+      var d = dataClean.sort(d3.ascending);
       
       var dataAvg = 0;
       

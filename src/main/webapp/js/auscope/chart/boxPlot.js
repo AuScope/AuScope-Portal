@@ -1,3 +1,7 @@
+/**
+ * Create box plot. This require the data to be grided however null values can be substituted with 2147483646 in replacement and it will be ignored.
+ * This is not to be used if the value of your data reaches max integer.
+ */
 Ext.define('auscope.chart.boxPlot', {
     extend : 'portal.charts.BaseD3Chart',
     
@@ -55,9 +59,43 @@ Ext.define('auscope.chart.boxPlot', {
                     v4 = Math.floor(x.y2)
                   
                     // add more variables if your csv file has more columns
+                    //2147483646
                     
-                var rowMax = Math.max(v1, Math.max(v2, Math.max(v3,v4)));
-                var rowMin = Math.min(v1, Math.min(v2, Math.min(v3,v4)));
+                    
+                var rowMax = -2147483646
+                for(var i = 0; i < 4; i++){
+                    if(v1 > rowMax && v1 != 2147483646){
+                        rowMax=v1;
+                    }
+                    if(v2 > rowMax && v2 != 2147483646){
+                        rowMax=v2;
+                    }
+                    if(v3 > rowMax && v3 != 2147483646){
+                        rowMax=v3;
+                    }
+                    if(v4 > rowMax && v4 != 2147483646){
+                        rowMax=v4;
+                    }
+                }
+                
+                
+                var rowMin = 2147483646
+                for(var i = 0; i < 4; i++){
+                    if(v1 < rowMin && v1 != 2147483646){
+                        rowMin=v1;
+                    }
+                    if(v2 < rowMin && v2 != 2147483646){
+                        rowMin=v2;
+                    }
+                    if(v3 < rowMin && v3 != 2147483646){
+                        rowMin=v3;
+                    }
+                    if(v4 < rowMin && v4 != 2147483646){
+                        rowMin=v4;
+                    }
+                }
+               
+                
 
                 data[0][1].push(v1);
                 data[1][1].push(v2);
@@ -143,7 +181,7 @@ Ext.define('auscope.chart.boxPlot', {
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
                 .style("font-size", "16px") 
-                .text("Observations"); 
+                .text("Obs"); 
       
 
         // Returns a function to compute the interquartile range.

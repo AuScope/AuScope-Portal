@@ -230,7 +230,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 relatedValues.put("x1", x1Value.get(i));
                 series.add(relatedValues);
             }else{
-                relatedValues.put("x1", 0);
+                relatedValues.put("x1", 2147483646);
                 series.add(relatedValues);
             }
 
@@ -239,7 +239,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 relatedValues.put("y1", y1Value.get(i));
                 series.add(relatedValues);
             }else{
-                relatedValues.put("y1", 0);
+                relatedValues.put("y1", 2147483646);
                 series.add(relatedValues);
             }
 
@@ -248,7 +248,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 relatedValues.put("x2", x2Value.get(i));
                 series.add(relatedValues);
             }else{
-                relatedValues.put("x2", 0);
+                relatedValues.put("x2", 2147483646);
                 series.add(relatedValues);
             }
             //VT: set y2 value
@@ -256,7 +256,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 relatedValues.put("y2", y2Value.get(i));
                 series.add(relatedValues);
             }else{
-                relatedValues.put("y2", 0);
+                relatedValues.put("y2", 2147483646);
                 series.add(relatedValues);
             }
         }
