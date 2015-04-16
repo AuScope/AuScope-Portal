@@ -7,7 +7,7 @@ Ext.define('auscope.chart.scatterplot', {
      * function(data)
      * data - Object -  
      */
-    plot : function(data){
+    plot : function(data,xaxis,yaxis){
         this.d3=d3;
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
         width = this.targetWidth - margin.left - margin.right,
@@ -39,10 +39,10 @@ Ext.define('auscope.chart.scatterplot', {
             
     
           x.domain(d3.extent(data, function(d) { 
-              return d.br; 
+              return d.xaxis; 
               })).nice();
           y.domain(d3.extent(data, function(d) { 
-              return d.sc; 
+              return d.yaxis; 
               })).nice();
     
           svg.append("g")
@@ -54,7 +54,7 @@ Ext.define('auscope.chart.scatterplot', {
               .attr("x", width)
               .attr("y", -6)
               .style("text-anchor", "end")
-              .text("BR");
+              .text(xaxis);
     
           svg.append("g")
               .attr("class", "y axis")
@@ -65,15 +65,15 @@ Ext.define('auscope.chart.scatterplot', {
               .attr("y", 6)
               .attr("dy", ".71em")
               .style("text-anchor", "end")
-              .text("SC")
+              .text(yaxis)
     
           svg.selectAll(".dot")
               .data(data)
             .enter().append("circle")
               .attr("class", "dot")
               .attr("r", 3.5)
-              .attr("cx", function(d) { return x(d.br); })
-              .attr("cy", function(d) { return y(d.sc); })
+              .attr("cx", function(d) { return x(d.xaxis); })
+              .attr("cy", function(d) { return y(d.yaxis); })
               .style("fill", function(d) { return color(d.highlight); });
     
           var legend = svg.selectAll(".legend")

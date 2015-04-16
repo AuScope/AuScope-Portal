@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
+import org.auscope.portal.core.util.CSVUtil;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.web.service.CapdfHydroGeoChemService;
 import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
 import org.auscope.portal.service.colorcoding.ColorCodingConfig;
@@ -61,36 +64,64 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     }
 
-
-
+    /**
+     * Returns a list of values for graphing scatter plot
+     * @param serviceUrl - serviceUrl
+     * @param xaxis - x axis value
+     * @param yaxis - y axis value
+     * @param project
+     * @param bboxJson - the bounding box the user is interested in
+     * @param obboxJson - the bounding box of the map viewport.
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/doCapdfHydroScatterPlotList.do")
     public ModelAndView doCapdfHydroScatterPlotList(
-            @RequestParam(required = false, value = "project") String project,
+            @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("xaxis") String xaxis,
             @RequestParam("yaxis") String yaxis,
+            @RequestParam(required = false, value = "project") String project,
+            @RequestParam(required = false, value = "obbox" , defaultValue="") String obboxJson,
             @RequestParam(required = false, value = "bbox" , defaultValue="") String bboxJson,
             HttpServletResponse response)throws Exception {
 
+        FilterBoundingBox obbox = FilterBoundingBox.attemptParseFromJSON(obboxJson);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
-        int [] xValue = {4,2,7,8,9,11,5,18};
-        int [] yValue = {7,4,9,11,14,3,2,7};
-
-        boolean [] highlight ={true,false,false,true,true,false,false,true};
+        String filter=this.capdfHydroGeoChemService.getHydroGeoChemFilter(project,obbox);
+        String filterWithBbox=this.capdfHydroGeoChemService.getHydroGeoChemFilter(project,bbox);
 
 
+        CSVUtil csv = new CSVUtil(this.capdfHydroGeoChemService.downloadCSV(serviceUrl, CAPDF_HYDROGEOCHEMTYPE, filter, null));
 
+        CSVUtil csvWithBoundFilter = new CSVUtil(this.capdfHydroGeoChemService.downloadCSV(serviceUrl, CAPDF_HYDROGEOCHEMTYPE, filterWithBbox, null));
+
+        HashMap<String, ArrayList<String>> csvMap = csv.getColumnOfInterest(new String []{"geom",xaxis,yaxis});
+
+        HashMap<String, ArrayList<String>> csvMapWithBoundFilter = csvWithBoundFilter.getColumnOfInterest(new String []{"geom"});
+
+        ArrayList<String> xValue = csvMap.get(xaxis);
+        ArrayList<String> yValue = csvMap.get(yaxis);
+        ArrayList<String> geom = csvMap.get("geom");
+        ArrayList<String> boundFilterGeom = csvMapWithBoundFilter.get("geom");
 
         ArrayList<ModelMap> series = new ArrayList<ModelMap>();
 
         ModelMap relatedValues = null;
 
-
-        for (int i = 0; i < xValue.length; i++) {
+        for (int i = 0; i < xValue.size(); i++) {
             relatedValues = new ModelMap();
-            relatedValues.put(xaxis, xValue[i]);
-            relatedValues.put(yaxis, yValue[i]);
-            relatedValues.put("highlight",highlight[i]);
-            series.add(relatedValues);
+            if(!(xValue.get(i).isEmpty() || yValue.get(i).isEmpty())){
+                relatedValues.put("xaxis", xValue.get(i));
+                relatedValues.put("yaxis", yValue.get(i));
+                if(boundFilterGeom.contains(geom.get(i))){
+                    relatedValues.put("highlight","Inside Bound");
+                }else{
+                    relatedValues.put("highlight","Outside Bound");
+                }
+                series.add(relatedValues);
+            }
         }
 
         ModelMap data = new ModelMap();
@@ -141,32 +172,96 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     }
 
-
+    /**
+     * Returns a list of values for graphing scatter plot
+     * @param serviceUrl - serviceUrl
+     * @param box1 - b1 axis value
+     * @param box2 - b2 axis value
+     * @param project
+     * @param bboxJson - the bounding box the user is interested in
+     * @param obboxJson - the bounding box of the map viewport.
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/doCapdfHydroBoxPlotList.do")
     public ModelAndView doCapdfHydroBoxPlotList(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("box1") String box1,
+            @RequestParam("box2") String box2,
             @RequestParam(required = false, value = "project") String project,
-            @RequestParam("box1") final String box1,
-            @RequestParam("box2") final String box2,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "obbox" , defaultValue="") String obboxJson,
+            @RequestParam(required = false, value = "bbox" , defaultValue="") String bboxJson,
             HttpServletResponse response)throws Exception {
 
-        int [] b1Value = {4,2,7,8,9,11,5,18};
-        int [] b2Value = {43,22,17,40,19,11,35,18};
+        FilterBoundingBox obbox = FilterBoundingBox.attemptParseFromJSON(obboxJson);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+
+        String filter=this.capdfHydroGeoChemService.getHydroGeoChemFilter(project,obbox);
+        String filterWithBbox=this.capdfHydroGeoChemService.getHydroGeoChemFilter(project,bbox);
+
+
+        CSVUtil csv = new CSVUtil(this.capdfHydroGeoChemService.downloadCSV(serviceUrl, CAPDF_HYDROGEOCHEMTYPE, filter, null));
+
+        CSVUtil csvWithBoundFilter = new CSVUtil(this.capdfHydroGeoChemService.downloadCSV(serviceUrl, CAPDF_HYDROGEOCHEMTYPE, filterWithBbox, null));
+
+        HashMap<String, ArrayList<String>> csvMap = csv.getColumnOfInterest(new String []{box1,box2});
+        HashMap<String, ArrayList<String>> csvMapWithBound = csvWithBoundFilter.getColumnOfInterest(new String []{box1,box2});
+
+
+
+        ArrayList<String> x1Value = csvMap.get(box1);
+        ArrayList<String> y1Value = csvMap.get(box2);
+
+        ArrayList<String> x2Value = csvMapWithBound.get(box1);
+        ArrayList<String> y2Value = csvMapWithBound.get(box2);
+
+
 
         ArrayList<ModelMap> series = new ArrayList<ModelMap>();
 
+
         ModelMap relatedValues = null;
 
-
-        for (int i = 0; i < b1Value.length; i++) {
+        for (int i = 0; i < x1Value.size(); i++) {
             relatedValues = new ModelMap();
-            relatedValues.put(box1, b1Value[i]);
-            relatedValues.put(box2, b2Value[i]);
-            series.add(relatedValues);
+            //VT: set x1 value
+            if(i < x1Value.size() && !x1Value.get(i).isEmpty()){
+                relatedValues.put("x1", x1Value.get(i));
+                series.add(relatedValues);
+            }else{
+                relatedValues.put("x1", 0);
+                series.add(relatedValues);
+            }
+
+            //VT: set y1 value
+            if(i < y1Value.size() && !y1Value.get(i).isEmpty()){
+                relatedValues.put("y1", y1Value.get(i));
+                series.add(relatedValues);
+            }else{
+                relatedValues.put("y1", 0);
+                series.add(relatedValues);
+            }
+
+            //VT: set x2 value
+            if(i < x2Value.size() && !x2Value.get(i).isEmpty()){
+                relatedValues.put("x2", x2Value.get(i));
+                series.add(relatedValues);
+            }else{
+                relatedValues.put("x2", 0);
+                series.add(relatedValues);
+            }
+            //VT: set y2 value
+            if(i < y2Value.size() && !y2Value.get(i).isEmpty()){
+                relatedValues.put("y2", y2Value.get(i));
+                series.add(relatedValues);
+            }else{
+                relatedValues.put("y2", 0);
+                series.add(relatedValues);
+            }
         }
 
         ModelMap data = new ModelMap();
-
         data.put("series", series);
         return generateJSONResponseMAV(true, data, null);
     }

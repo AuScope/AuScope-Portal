@@ -7,6 +7,8 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
     layer : null,
     map : null,
     bboxButton : null,
+    serviceUrl : null,
+    
 
     constructor : function(cfg) {
         
@@ -15,6 +17,26 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         //VT: return a reference to boxLayer so we can manipulate it
         var boxLayer = this.initMap();
         var me=this;
+                                      
+        var wfsresource = portal.csw.OnlineResource.getFilteredFromArray(this.layer.getAllOnlineResources(), portal.csw.OnlineResource.WFS);
+        //VT: for the time being we assumed that is only one service endpoint.
+        wfsresource = wfsresource[0];
+        this.serviceUrl = wfsresource.get('url');
+        
+       
+        
+        
+     // The data store containing the list of states
+        var observationStore = Ext.create('Ext.data.Store', {
+            fields: ['display', 'value'],
+            data : [
+                {"display":"elev", "value":"elev"},
+                {"display":"wt", "value":"wt"},
+                {"display":"sd", "value":"sd"}
+            ]
+        });
+
+        
         
         this.bboxButton = Ext.create('Ext.Button',{                      
             text: 'Draw Bounds',
@@ -27,7 +49,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         Ext.apply(cfg, {
             title: 'Capricorn distal Footprint',
             height: 600,
-            width: 600,     
+            width: 400,     
             collapsible : true,
             layout: 'fit',           
             listeners : {
@@ -45,7 +67,8 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                 }
             },
             items : {
-                xtype :'form',               
+                xtype :'form', 
+                itemId : 'capdfGraphingForm',
                 frame : true,
                 layout: 'anchor',
                 // these are applied to columns
@@ -86,87 +109,70 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                         ]
                       },{     
                           xtype : 'fieldset',                  
-                          title : 'Observation',
-                          
-                          
-                          
-                          items : {
-                            xtype : 'checkboxgroup',                              
-                            allowBlank : false,
-                            fieldLabel : 'Results',
-                            allowBlank : false,
-                            blankText : 'Select at 2 checkbox',
-                            validateOnChange : false,
-                            // Arrange radio buttons into two columns, distributed vertically
-                            columns : 4,
-                            vertical : true,
-                            msgTarget: 'under',
-                            invalidCls: Ext.baseCSSPrefix + 'form-invalid',
-                            items : [ {
-                                boxLabel : 'k',
-                                name : 'resultField',
-                                inputValue : 'k'                       
-                            }, {
-                                boxLabel : 'mg',
-                                name : 'resultField',
-                                inputValue : 'mg'                        
-                            }, {
-                                boxLabel : 'ca',
-                                name : 'resultField',
-                                inputValue : 'ca'                     
-                            }, {
-                                boxLabel : 'mg',
-                                name : 'resultField',
-                                inputValue : 'mg'               
-                            }, {
-                                boxLabel : 'na',
-                                name : 'resultField',
-                                inputValue : 'na'         
-                            }, {
-                                boxLabel : 'sr',
-                                name : 'resultField',
-                                inputValue : 'sr'                   
-                            }, {
-                                boxLabel : 'mnl',
-                                name : 'resultField',
-                                inputValue : 'mnl'               
-                            }, {
-                                boxLabel : 'mnh',
-                                name : 'resultField',
-                                inputValue : 'mnh'                     
-                            } ],
-                            listeners: {
-                                change: function(form,newValue,oldValue) {
-                                    if(Ext.isArray(newValue.resultField)) {
-                                        if(newValue.resultField.length != 2){                                   
-                                            form.markInvalid(['Select exactly 2 observation field']);                                   
-                                        } else {                                   
-                                           form.clearInvalid(); 
-                                        }
-                                    } else {                               
-                                        form.markInvalid(['Select exactly 2 observation field']);
-                                    }
-                                }
-                            }
-                         }
+                          title : 'Observation',                                                   
+                          items : [{
+                              xtype : 'combo',
+                              itemId : 'xaxis',
+                              name : 'xaxis',
+                              fieldLabel: 'x-axis',
+                              store: observationStore,
+                              queryMode: 'local',
+                              displayField: 'display',
+                              valueField: 'value',
+                         },{
+                             xtype : 'combo',
+                             itemId : 'yaxis',
+                             name : 'yaxis',
+                             fieldLabel: 'y-axis',
+                             store: observationStore,
+                             queryMode: 'local',
+                             displayField: 'display',
+                             valueField: 'value',
+                        }]
                     }
                 ],
                 buttons : [{
                     text : 'plot',
                     handler : function(){
+                        
+                        var myMask = new Ext.LoadMask({
+                            msg    : 'Please wait...',
+                            target : me
+                        }).show();
+                        
+                       var customRegistryForm = me.query('form[itemId=capdfGraphingForm]')[0]
+                       var formValues =  customRegistryForm.getValues()
+                       var xaxis = formValues.xaxis
+                       var yaxis = formValues.yaxis
+                       
+                       var bbox = Ext.create('portal.util.BBox', {
+                           northBoundLatitude : formValues.north,
+                           southBoundLatitude : formValues.south,
+                           eastBoundLongitude : formValues.east,
+                           westBoundLongitude : formValues.west,
+                           crs : 'EPSG:4326'
+                       });
+                       
+                       var parameters=me.layer.get('filterer').getParameters()
+                    
                         Ext.Ajax.request({
                             url: 'doCapdfHydroScatterPlotList.do',
                             scope : this,
                             params: {
-                                xaxis : 'br',
-                                yaxis : 'sc'
+                                serviceUrl: me.serviceUrl,
+                                xaxis : xaxis,
+                                yaxis : yaxis,                                                                
+                                bbox : Ext.JSON.encode(bbox),
+                                obbox : parameters.bbox,
+                                project : parameters.project
                             },
                             callback : function(options, success, response) {
+                              myMask.hide();
                               if(success){
                                   var jsonObj = Ext.JSON.decode(response.responseText);
-                                  me.scatterPlot(jsonObj.data.series);
+                                  me.scatterPlot(jsonObj.data.series,xaxis,yaxis);
                               }else{
-                                  alert('Failed');
+                                  alert('Failed to load resource');                                 
                               }
 
                             }
@@ -197,19 +203,48 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                 },{
                     text : 'Box Plot',
                     handler : function(){
+                        
+                       var myMask = new Ext.LoadMask({
+                           msg    : 'Please wait...',
+                           target : me
+                       }).show();
+                        
+                       var customRegistryForm = me.query('form[itemId=capdfGraphingForm]')[0]
+                       var formValues =  customRegistryForm.getValues()
+                       var box1 = formValues.xaxis
+                       var box2 = formValues.yaxis
+                       
+                       var bbox = Ext.create('portal.util.BBox', {
+                           northBoundLatitude : formValues.north,
+                           southBoundLatitude : formValues.south,
+                           eastBoundLongitude : formValues.east,
+                           westBoundLongitude : formValues.west,
+                           crs : 'EPSG:4326'
+                       });
+                       
+                       var parameters=me.layer.get('filterer').getParameters()
+                        
+                        
+                        
+                        
                         Ext.Ajax.request({
                             url: 'doCapdfHydroBoxPlotList.do',
                             scope : this,
                             params: {
-                                box1 : 'box1',
-                                box2 : 'box2'
+                                serviceUrl: me.serviceUrl,
+                                box1 : box1,
+                                box2 : box2,
+                                bbox : Ext.JSON.encode(bbox),
+                                obbox : parameters.bbox,
+                                project : parameters.project
                             },
                             callback : function(options, success, response) {
+                              myMask.hide();
                               if(success){
                                   var jsonObj = Ext.JSON.decode(response.responseText);
-                                  me.boxPlot(jsonObj.data.series);
+                                  me.boxPlot(jsonObj.data.series,box1,box2);
                               }else{
-                                  alert('Failed');
+                                  alert('Failed to load resource');
                               }
 
                             }
@@ -226,14 +261,14 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
 
 
    
-    scatterPlot : function(series) {
+    scatterPlot : function(series,xaxis,yaxis) {
        var splot = Ext.create('auscope.chart.scatterplot',{
            targetWidth : 680,
            targetHeight : 450
        });
       
        
-       Ext.create('Ext.window.Window', {
+       var win = Ext.create('Ext.window.Window', {
            title: 'Scatter Plot',
            height: 500,
            width: 700,
@@ -241,18 +276,24 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
            items: splot
        }).show();
        
-       splot.plot(series);
-        
+       var myMask = new Ext.LoadMask({
+           msg    : 'Rendering...',
+           target : win
+       }).show();
+       
+       splot.plot(series,xaxis,yaxis);
+       
+       myMask.hide();   
     },
     
-    boxPlot : function(series) {
+    boxPlot : function(series,box1,box2) {
         var splot = Ext.create('auscope.chart.boxPlot',{
             targetWidth : 680,
             targetHeight : 450
         });
        
         
-        Ext.create('Ext.window.Window', {
+        var win = Ext.create('Ext.window.Window', {
             title: 'Scatter Plot',
             height: 500,
             width: 700,
@@ -260,7 +301,14 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             items: splot
         }).show();
         
-        splot.plot(series);
+        var myMask = new Ext.LoadMask({
+            msg    : 'Rendering...',
+            target : win
+        }).show();
+        
+        splot.plot(series,box1,box2);
+        
+        myMask.hide();   
          
      },
     

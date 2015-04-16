@@ -7,7 +7,7 @@ Ext.define('auscope.chart.boxPlot', {
      * function(data)
      * data - Object -  
      */
-    plot : function(csv){
+    plot : function(csv,x,y){
         this.d3=d3;
         var labels = true; // show the text labels beside individual boxplots?
 
@@ -29,30 +29,40 @@ Ext.define('auscope.chart.boxPlot', {
             var data = [];
             data[0] = [];
             data[1] = [];
+            data[2] = [];
+            data[3] = [];
             
             // add more rows if your csv file has more columns
 
             // add here the header of the csv file
-            data[0][0] = "box1";
-            data[1][0] = "box2";
+            data[0][0] = x;
+            data[1][0] = y;
+            data[2][0] = x + "-bounded";
+            data[3][0] = y + "-bounded";
            
             // add more rows if your csv file has more columns
 
             data[0][1] = [];
             data[1][1] = [];
+            data[2][1] = [];
+            data[3][1] = [];
          
           
             csv.forEach(function(x) {
-                var v1 = Math.floor(x.box1),
-                    v2 = Math.floor(x.box2)
+                var v1 = Math.floor(x.x1),
+                    v2 = Math.floor(x.y1),
+                    v3 = Math.floor(x.x2),
+                    v4 = Math.floor(x.y2)
                   
                     // add more variables if your csv file has more columns
                     
-                var rowMax = Math.max(v1,v2 );
-                var rowMin = Math.min(v1,v2 );
+                var rowMax = Math.max(v1, Math.max(v2, Math.max(v3,v4)));
+                var rowMin = Math.min(v1, Math.min(v2, Math.min(v3,v4)));
 
                 data[0][1].push(v1);
                 data[1][1].push(v2);
+                data[2][1].push(v3);
+                data[3][1].push(v4);
               
                  // add more rows if your csv file has more columns
                  
@@ -108,7 +118,7 @@ Ext.define('auscope.chart.boxPlot', {
                 .attr("text-anchor", "middle")  
                 .style("font-size", "18px") 
                 //.style("text-decoration", "underline")  
-                .text("Test Box Plot");
+                .text("Capdf Box Plot");
          
              // draw y axis
             svg.append("g")
@@ -120,7 +130,7 @@ Ext.define('auscope.chart.boxPlot', {
                   .attr("dy", ".71em")
                   .style("text-anchor", "end")
                   .style("font-size", "16px") 
-                  .text("Test Values");        
+                  .text("Values");        
             
             // draw x axis  
             svg.append("g")
@@ -133,7 +143,7 @@ Ext.define('auscope.chart.boxPlot', {
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
                 .style("font-size", "16px") 
-                .text("Boxes"); 
+                .text("Observations"); 
       
 
         // Returns a function to compute the interquartile range.
