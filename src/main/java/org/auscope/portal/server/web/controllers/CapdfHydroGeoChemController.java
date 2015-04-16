@@ -97,13 +97,15 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
         CSVUtil csvWithBoundFilter = new CSVUtil(this.capdfHydroGeoChemService.downloadCSV(serviceUrl, CAPDF_HYDROGEOCHEMTYPE, filterWithBbox, null));
 
-        HashMap<String, ArrayList<String>> csvMap = csv.getColumnOfInterest(new String []{"geom",xaxis,yaxis});
+        HashMap<String, ArrayList<String>> csvMap = csv.getColumnOfInterest(new String []{"geom",xaxis,yaxis,"station","name"});
 
         HashMap<String, ArrayList<String>> csvMapWithBoundFilter = csvWithBoundFilter.getColumnOfInterest(new String []{"geom"});
 
         ArrayList<String> xValue = csvMap.get(xaxis);
         ArrayList<String> yValue = csvMap.get(yaxis);
         ArrayList<String> geom = csvMap.get("geom");
+        ArrayList<String> station = csvMap.get("station");
+        ArrayList<String> name = csvMap.get("name");
         ArrayList<String> boundFilterGeom = csvMapWithBoundFilter.get("geom");
 
         ArrayList<ModelMap> series = new ArrayList<ModelMap>();
@@ -115,6 +117,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
             if(!(xValue.get(i).isEmpty() || yValue.get(i).isEmpty())){
                 relatedValues.put("xaxis", xValue.get(i));
                 relatedValues.put("yaxis", yValue.get(i));
+                relatedValues.put("tooltip", "Station:" + (station.get(i).isEmpty()?"unknown":station.get(i)) + "<br>name:" + (name.get(i).isEmpty()?"unknown":name.get(i)) );
                 if(boundFilterGeom.contains(geom.get(i))){
                     relatedValues.put("highlight","Inside Bound");
                 }else{

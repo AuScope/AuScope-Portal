@@ -158,6 +158,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                         Ext.Ajax.request({
                             url: 'doCapdfHydroScatterPlotList.do',
                             scope : this,
+                            timeout : 60000,
                             params: {
                                 serviceUrl: me.serviceUrl,
                                 xaxis : xaxis,
@@ -223,13 +224,11 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                        });
                        
                        var parameters=me.layer.get('filterer').getParameters()
-                        
-                        
-                        
-                        
+
                         Ext.Ajax.request({
                             url: 'doCapdfHydroBoxPlotList.do',
                             scope : this,
+                            timeout : 60000,
                             params: {
                                 serviceUrl: me.serviceUrl,
                                 box1 : box1,
@@ -276,14 +275,11 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
            items: splot
        }).show();
        
-       var myMask = new Ext.LoadMask({
-           msg    : 'Rendering...',
-           target : win
-       }).show();
+       splot.mask("Rendering...");
        
        splot.plot(series,xaxis,yaxis);
        
-       myMask.hide();   
+       splot.maskClear();   
     },
     
     boxPlot : function(series,box1,box2) {
@@ -301,14 +297,11 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             items: splot
         }).show();
         
-        var myMask = new Ext.LoadMask({
-            msg    : 'Rendering...',
-            target : win
-        }).show();
+        splot.mask("Rendering...");
         
         splot.plot(series,box1,box2);
         
-        myMask.hide();   
+        splot.maskClear();
          
      },
     

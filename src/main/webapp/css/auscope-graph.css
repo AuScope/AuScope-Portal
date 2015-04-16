@@ -35,3 +35,25 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+.dot {
+  stroke: #000;
+}
+
+.graphTooltip {
+  position: absolute;           
+  text-align: center;           
+  width: 200px;                  
+  height: 75px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 0px;      
+  border-radius: 8px;
+  z-index:999999;           
+  pointer-events: none;   
+
+}
+
+
+
