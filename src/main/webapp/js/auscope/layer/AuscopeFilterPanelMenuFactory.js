@@ -68,17 +68,29 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     },
     
     
-    _getlayerAnalytics : function(layer){    
+    _getlayerAnalytics : function(layer){ 
         var me = this;
         if( auscope.layer.analytic.AnalyticFormFactory.supportLayer(layer)){
-            return new Ext.Action({
-                text : 'Graph',
-                iconCls : 'graph',
-                handler : function(){   
-                    var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
-                    win.show();
-                }
-            });
+            
+            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active')){            
+                return new Ext.Action({
+                    text : 'Graph',
+                    iconCls : 'graph',                    
+                    handler : function(){   
+                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
+                        win.show();
+                    }
+                });
+            }else{
+                return new Ext.Action({
+                    text : '<span data-qtip="Add layer to map to enable this function">' + 'Graph',
+                    disabled : true,
+                    iconCls : 'graph',                    
+                    handler : function(){   
+                        Ext.Msg.alert('Alert', 'Add layer to map first.');
+                    }
+                });
+            }
         }else{
             return null;
         }
