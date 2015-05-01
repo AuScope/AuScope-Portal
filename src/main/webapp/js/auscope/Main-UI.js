@@ -129,6 +129,8 @@ Ext.application({
             }
         };
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
+        
+        
         var map = null;
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
@@ -266,7 +268,28 @@ Ext.application({
             layout:'border',
             items:[westPanel, centerPanel]
         });
-
+        
+        if(urlParams.kml){            
+            Ext.Ajax.request({
+                url: 'addKMLUrl.do',
+                params:{
+                  url : urlParams.kml 
+                },
+                waitMsg: 'Adding KML Layer...',
+                success: function(response) {
+                   var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+                   var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
+                   tabpanel.setActiveTab(customPanel);                   
+                   var responseObj = Ext.JSON.decode(response.responseText);                   
+                   var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);  
+                   Ext.Msg.alert('Status', 'KML layer has been successfully added to the Custom panel. Expand the row by clicking on it and select add layer to map');
+                   
+                },
+                failure : function(fp,action){
+                    Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file.');
+                }
+            });
+        }
         
 
         //Create our permalink generation handler
