@@ -133,6 +133,10 @@
         </constructor-arg>
         <constructor-arg name="baseUrl" value="${HOST.vocabService.url}"/>
     </bean>
+    
+    <bean id="fileDownloadService" class="org.auscope.portal.core.server.http.download.FileDownloadService">
+        <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
+    </bean>
 
         <!-- Registries to be listed on Custom registry handler but not in feature or register tab -->
     <!--bean id="cswVeglProduction" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">
