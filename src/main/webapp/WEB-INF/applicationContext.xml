@@ -133,8 +133,12 @@
         </constructor-arg>
         <constructor-arg name="baseUrl" value="${HOST.vocabService.url}"/>
     </bean>
-    
+
     <bean id="fileDownloadService" class="org.auscope.portal.core.server.http.download.FileDownloadService">
+        <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
+    </bean>
+
+    <bean id="customKMLController" class="org.auscope.portal.core.server.http.download.FileDownloadService">
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
     </bean>
 

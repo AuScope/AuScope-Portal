@@ -117,11 +117,11 @@ Ext.application({
 
         //We need something to handle the clicks on the map
         var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {});
-                
+
         //Create our map implementations
         var mapCfg = {
             container : null,   //We will be performing a delayed render of this map
-            layerStore : layerStore,            
+            layerStore : layerStore,
             listeners : {
                 query : function(mapWrapper, queryTargets) {
                     queryTargetHandler.handleQueryTargets(mapWrapper, queryTargets);
@@ -129,12 +129,12 @@ Ext.application({
             }
         };
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
-        
-        
+
+
         var map = null;
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-        
+
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
             formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
@@ -144,7 +144,7 @@ Ext.application({
         });
 
 
-       
+
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
@@ -179,7 +179,7 @@ Ext.application({
 
         });
 
-        var customRecordsPanel = Ext.create('portal.widgets.panel.CustomRecordPanel', {
+        var customRecordsPanel = Ext.create('auscope.widgets.CustomRecordPanel', {
             title : 'Custom',
             itemId : 'org-auscope-custom-record-panel',
             store : customRecordStore,
@@ -237,7 +237,7 @@ Ext.application({
             layout: 'border',//VT: vbox doesn't support splitbar unless we custom it.
             region:'west',
             border: false,
-            split:true,            
+            split:true,
             margin:'100 0 0 3',
             width: 370,
             items:[tabsPanel]
@@ -248,12 +248,12 @@ Ext.application({
          */
         var centerPanel = Ext.create('Ext.panel.Panel', {
             region: 'center',
-            id: 'center_region',            
-            margin: '100 0 0 0'  ,    
+            id: 'center_region',
+            margin: '100 0 0 0'  ,
             html : "<div style='width:100%; height:100%' id='center_region-map'></div>",
             listeners: {
-                afterrender: function () {    
-                    map.renderToContainer(centerPanel,'center_region-map');   //After our centerPanel is displayed, render our map into it                                     
+                afterrender: function () {
+                    map.renderToContainer(centerPanel,'center_region-map');   //After our centerPanel is displayed, render our map into it
                 }
             }
         });
@@ -265,13 +265,13 @@ Ext.application({
             layout:'border',
             items:[westPanel, centerPanel]
         });
-        
-        if(urlParams.kml){   
-                                     
+
+        if(urlParams.kml){
+
             Ext.Ajax.request({
                 url: 'addKMLUrl.do',
                 params:{
-                    url : urlParams.kml 
+                    url : urlParams.kml
                     },
                 waitMsg: 'Adding KML Layer...',
                 success: function(response) {
@@ -281,19 +281,19 @@ Ext.application({
                    }else{
                        var tabpanel =  Ext.getCmp('auscope-tabs-panel');
                        var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
-                       tabpanel.setActiveTab(customPanel);                                                             
-                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                     
+                       tabpanel.setActiveTab(customPanel);
+                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);
                        layerStore.insert(0,cswRecord);
                    }
-                       
+
                 },
                 failure : function(fp,action){
                     Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file.');
                 }
             });
-            
+
         }
-        
+
 
         //Create our permalink generation handler
         var permalinkHandler = function() {
