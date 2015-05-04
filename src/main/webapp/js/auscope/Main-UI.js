@@ -266,26 +266,32 @@ Ext.application({
             items:[westPanel, centerPanel]
         });
         
-        if(urlParams.kml){            
+        if(urlParams.kml){   
+                                     
             Ext.Ajax.request({
                 url: 'addKMLUrl.do',
                 params:{
-                  url : urlParams.kml 
-                },
+                    url : urlParams.kml 
+                    },
                 waitMsg: 'Adding KML Layer...',
                 success: function(response) {
-                   var tabpanel =  Ext.getCmp('auscope-tabs-panel');
-                   var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
-                   tabpanel.setActiveTab(customPanel);                   
-                   var responseObj = Ext.JSON.decode(response.responseText);                   
-                   var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                     
-                   layerStore.insert(0,cswRecord);
-                   
+                   var responseObj = Ext.JSON.decode(response.responseText);
+                   if(responseObj.data.file.indexOf('<kml') ==-1){
+                       Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file and URL is properly encoded');
+                   }else{
+                       var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+                       var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
+                       tabpanel.setActiveTab(customPanel);                                                             
+                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                     
+                       layerStore.insert(0,cswRecord);
+                   }
+                       
                 },
                 failure : function(fp,action){
                     Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file.');
                 }
             });
+            
         }
         
 
