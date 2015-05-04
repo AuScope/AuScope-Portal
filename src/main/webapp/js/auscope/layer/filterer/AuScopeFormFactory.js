@@ -77,6 +77,10 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
                 return this._generateResult(baseFilterForm, true);    
             }
         }
+        
+        if (layer.get('sourceType') === portal.layer.Layer.KNOWN_LAYER){
+            return this._generateResult(Ext.create('portal.layer.filterer.forms.EmptyFilterForm', baseFilterFormCfg), false);
+        }
 
         //otherwise let's see if we can guess an appropriate filter based on layer renderer
         if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer || layer.get('renderer') instanceof portal.layer.renderer.wfs.FeatureWithMapRenderer) {

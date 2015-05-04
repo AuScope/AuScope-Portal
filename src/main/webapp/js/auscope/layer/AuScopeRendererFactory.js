@@ -97,5 +97,14 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
         var irisResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.IRIS);
 
         return this._generateRenderer(wfsResources, wmsResources, irisResources, undefined);
+    },
+    
+    /**
+     * See parent class for defn
+     */
+    buildFromKMLRecord : function(cswRecord){
+        return Ext.create('portal.layer.renderer.csw.KMLRenderer', {
+            map : this.map   
+        });
     }
 });

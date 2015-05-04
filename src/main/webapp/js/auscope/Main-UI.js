@@ -117,11 +117,11 @@ Ext.application({
 
         //We need something to handle the clicks on the map
         var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {});
-
+                
         //Create our map implementations
         var mapCfg = {
             container : null,   //We will be performing a delayed render of this map
-            layerStore : layerStore,
+            layerStore : layerStore,            
             listeners : {
                 query : function(mapWrapper, queryTargets) {
                     queryTargetHandler.handleQueryTargets(mapWrapper, queryTargets);
@@ -129,14 +129,12 @@ Ext.application({
             }
         };
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
+        
+        
         var map = null;
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-
-
-
-
-
+        
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
             formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
@@ -146,6 +144,7 @@ Ext.application({
         });
 
 
+       
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
@@ -266,7 +265,34 @@ Ext.application({
             layout:'border',
             items:[westPanel, centerPanel]
         });
-
+        
+        if(urlParams.kml){   
+                                     
+            Ext.Ajax.request({
+                url: 'addKMLUrl.do',
+                params:{
+                    url : urlParams.kml 
+                    },
+                waitMsg: 'Adding KML Layer...',
+                success: function(response) {
+                   var responseObj = Ext.JSON.decode(response.responseText);
+                   if(responseObj.data.file.indexOf('<kml') ==-1){
+                       Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file and URL is properly encoded');
+                   }else{
+                       var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+                       var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
+                       tabpanel.setActiveTab(customPanel);                                                             
+                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                     
+                       layerStore.insert(0,cswRecord);
+                   }
+                       
+                },
+                failure : function(fp,action){
+                    Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file.');
+                }
+            });
+            
+        }
         
 
         //Create our permalink generation handler
