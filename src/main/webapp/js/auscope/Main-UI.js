@@ -283,7 +283,11 @@ Ext.application({
                        var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
                        tabpanel.setActiveTab(customPanel);
                        var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);
-                       layerStore.insert(0,cswRecord);
+                       var newLayer = layerFactory.generateLayerFromCSWRecord(cswRecord);
+                       cswRecord.set('layer',newLayer);
+                       var filterForm = newLayer.get('filterForm');
+                       filterForm.setLayer(newLayer);
+                       layerStore.insert(0,newLayer);
                    }
 
                 },
