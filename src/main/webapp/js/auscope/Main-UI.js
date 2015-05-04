@@ -117,11 +117,11 @@ Ext.application({
 
         //We need something to handle the clicks on the map
         var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {});
-
+                
         //Create our map implementations
         var mapCfg = {
             container : null,   //We will be performing a delayed render of this map
-            layerStore : layerStore,
+            layerStore : layerStore,            
             listeners : {
                 query : function(mapWrapper, queryTargets) {
                     queryTargetHandler.handleQueryTargets(mapWrapper, queryTargets);
@@ -134,11 +134,7 @@ Ext.application({
         var map = null;
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-
-
-
-
-
+        
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
             formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
@@ -148,6 +144,7 @@ Ext.application({
         });
 
 
+       
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
@@ -281,8 +278,8 @@ Ext.application({
                    var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
                    tabpanel.setActiveTab(customPanel);                   
                    var responseObj = Ext.JSON.decode(response.responseText);                   
-                   var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);  
-                   Ext.Msg.alert('Status', 'KML layer has been successfully added to the Custom panel. Expand the row by clicking on it and select add layer to map');
+                   var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                     
+                   layerStore.insert(0,cswRecord);
                    
                 },
                 failure : function(fp,action){
