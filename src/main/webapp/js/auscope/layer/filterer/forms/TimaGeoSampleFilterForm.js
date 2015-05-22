@@ -1,7 +1,7 @@
 /**
  * Builds a form panel for Mine filters
  */
-Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
+Ext.define('auscope.layer.filterer.forms.TimaGeoSampleFilterForm', {
     extend: 'portal.layer.filterer.BaseFilterForm',
 
     /**
@@ -34,30 +34,23 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             items: [{
                 xtype:'fieldset',
                 title: '<span data-qtip="Please enter the filter constraints then hit \'Show Results\'">' +
-                           'Geochemistry Filter Properties' +
+                           'Geo sample Filter Properties' +
                        '</span>',
                 autoHeight: true,
                 items: [{
                     anchor: '100%',
                     xtype: 'textfield',
                     fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
-                                    'Project Name' +
+                                    'Name' +
                                 '</span>',
-                    name: 'project'
+                    name: 'sampleName'
                 },{
-                    xtype: 'combo',
                     anchor: '100%',
-                    itemId: 'serviceFilter-field',
-                    fieldLabel: 'Field of Interest',
-                    name: 'field',
-                    typeAhead: true,
-                    triggerAction: 'all',
-                    lazyRender:true,
-                    mode: 'local',
-                    store: fieldStore,
-                    valueField: 'value',
-                    displayField: 'field',
-                    hiddenName: 'value'
+                    xtype: 'textfield',
+                    fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
+                                    'IGSN' +
+                                '</span>',
+                    name: 'igsn'
                 }]
             }]
         });

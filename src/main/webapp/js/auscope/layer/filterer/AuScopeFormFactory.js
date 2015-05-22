@@ -74,7 +74,10 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
                 return this._generateResult(baseFilterForm, true);
             case 'capdf-hydrogeochem':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', baseFilterFormCfg);
-                return this._generateResult(baseFilterForm, true);    
+                return this._generateResult(baseFilterForm, true); 
+            case 'tima-geosample':
+                baseFilterForm = Ext.create('auscope.layer.filterer.forms.TimaGeoSampleFilterForm', baseFilterFormCfg);
+                return this._generateResult(baseFilterForm, true);     
             }
         }
         

@@ -28,8 +28,9 @@
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypeInSarReports" />
-                <ref bean="knownTypeGeotransects" />
-                <!-- ref bean="knownTypeYilgarnGeochemistry"/>
+                <ref bean="knownTypeGeotransects" /-->
+                <ref bean="knownTypeTimaGeoSample" />
+                <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
@@ -95,9 +96,9 @@
         <constructor-arg>
             <list>
                 <ref bean="cswAuscopeTest" />
-                <!-- ref bean="cswInSarProduction" /-->
-                <!-- ref bean="cswMDUTest" /-->
-                <!-- ref bean="cswAsterProduction" /-->
+                <ref bean="cswInSarProduction" />
+                <ref bean="cswMDUTest" />
+                <ref bean="cswAsterProduction" />
                 <!-- ref bean="cswVeglProduction" /-->
             </list>
         </constructor-arg>

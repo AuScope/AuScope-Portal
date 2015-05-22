@@ -18,6 +18,8 @@
       <script src="portal-core/js/threejs/three.min.js" type="text/javascript"></script>
       <script src="portal-core/js/threejs/controls/OrbitControls.js" type="text/javascript"></script>
       <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+      <script src="portal-core/js/d3Legends/d3.legend.js" type="text/javascript"></script>
+      
       
       
 

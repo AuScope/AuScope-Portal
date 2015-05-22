@@ -151,8 +151,8 @@
         </constructor-arg>
 
         <property name="name" value="capdf hydrogeochem"/>
-        <property name="description" value="Capricorn distal footprint hydrogeochem"/>
-        <property name="group" value="Capricorn distal footprint"/>
+        <property name="description" value="Capricorn Distal Footprints hydrogeochem"/>
+        <property name="group" value="Capricorn Distal Footprint"/>
 
         <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
@@ -317,6 +317,33 @@
         <property name="proxyUrl" value="doNVCLFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+    </bean>
+    
+     <bean id="knownTypeTimaGeoSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="tima-geosample"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="tima:geosample_and_mineralogy"/>                           
+            </bean>
+        </constructor-arg>
+        <property name="name" value="TIMA Geosample and Mineralogy"/>
+        <property name="group" value="TIMA"/>
+        <property name="description" value="A collection of the results published from TIMA"/>
+        <property name="proxyUrl" value="doTIMAGeoSample.do"/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-circle.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
                 <constructor-arg index="0" value="16"/>
