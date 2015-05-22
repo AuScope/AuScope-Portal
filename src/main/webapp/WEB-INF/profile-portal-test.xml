@@ -28,7 +28,7 @@
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypeInSarReports" />
-                <ref bean="knownTypeGeotransects" /-->
+                <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeTimaGeoSample" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
@@ -67,7 +67,7 @@
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />             
-                <ref bean="knownTypeSurfaceAftershock" /-->
+                <ref bean="knownTypeSurfaceAftershock" />
                 <!-- Analytics -->
                 <!-- ref bean="knownTypeBouguerGeodetic" />
                 <ref bean="knownTypeGravAnomalyGeodetic" />
