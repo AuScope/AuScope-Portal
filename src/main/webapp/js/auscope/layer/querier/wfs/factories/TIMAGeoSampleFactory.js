@@ -31,6 +31,7 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
         var imageWidth = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:image_width_px');
         var imageHeight = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:image_height_px');
         var sampleDiameter = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:sample_diameter_um');
+        var dataUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:data_url');
         
         
         var pie = Ext.create('auscope.chart.pieChart',{
@@ -87,6 +88,10 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                         xtype : 'displayfield',
                         fieldLabel : 'IGSN',
                         value : igsn
+                    },{
+                        xtype : 'displayfield',
+                        fieldLabel : 'Data Url',
+                        value : '<a href="' + dataUrl + '" target="_blank">Link to dataset</a>'
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Software Version',
