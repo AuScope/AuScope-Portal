@@ -26,14 +26,19 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
 
         var name = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gml:name');
         var igsn = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:igsn');
+        var igsnUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:igsn_url');
+        var mountTypeName = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:mount_type_name');
+        var sampleCustodian = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:sample_custodian');
+        var sampleCustodianUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:sample_custodian_url');
+        var collectionUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:collection_url');
+        var instrumentName = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:instrument_name');
         var softwareVersion = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:software_version');
-        var viewField = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:view_field_um');
-        var imageWidth = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:image_width_px');
-        var imageHeight = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:image_height_px');
-        var sampleDiameter = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:sample_diameter_um');
         var dataUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:data_url');
-        
-        
+        var imageUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:image_url');
+        var analysedBy = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:analysed_by');
+        var analysedByUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:analysed_by_url');
+        var analysisDate = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:analysis_date').substr(0, 10);
+
         var pie = Ext.create('auscope.chart.pieChart',{
             targetWidth : 650,
             targetHeight : 400
@@ -87,38 +92,51 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'IGSN',
-                        value : igsn
+                        value : '<a href="' + igsnUrl + '" target="_blank">' + igsn + '</a>'
                     },{
                         xtype : 'displayfield',
-                        fieldLabel : 'Data Url',
-                        value : '<a href="' + dataUrl + '" target="_blank">Link to dataset</a>'
+                        fieldLabel : 'Mount Type',
+                        value : mountTypeName
+                    },{
+                        xtype : 'displayfield',
+                        fieldLabel : 'Sample Custodian',
+                        value : '<a href="' + sampleCustodianUrl + '" target="_blank">' + sampleCustodian + '</a>'
+                    },{
+                        xtype : 'displayfield',
+                        fieldLabel : 'Collection Metadata',
+                        value : '<a href="' + collectionUrl + '" target="_blank">click here</a>'
+                    },{
+                        xtype : 'displayfield',
+                        fieldLabel : 'Instrument Name',
+                        value : instrumentName
+                    },{
+                        xtype : 'displayfield',
+                        fieldLabel : 'Data',
+                        value : '<a href="' + dataUrl + '" target="_blank">click here</a>'
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Software Version',
                         value : softwareVersion
                     },{
                         xtype : 'displayfield',
-                        fieldLabel : 'View Field',
-                        value : viewField
+                        fieldLabel : 'Analysed By',
+                        value : '<a href="' + analysedByUrl + '" target="_blank">' + analysedBy + '</a>'
                     },{
                         xtype : 'displayfield',
-                        fieldLabel : 'Image Width',
-                        value : imageWidth
-                    },{
-                        xtype : 'displayfield',
-                        fieldLabel : 'Image Height',
-                        value : imageHeight
-                    },{
-                        xtype : 'displayfield',
-                        fieldLabel : 'Sample Diameter',
-                        value : sampleDiameter
+                        fieldLabel : 'Analysis Date',
+                        value : analysisDate
                     }]
                 },{
-                   title : 'Graph',
-                   xtype : 'container',
-                   autoScroll : true,                   
-                   items : pie
-                }]
+                    title : 'Graph',
+                    xtype : 'container',
+                    autoScroll : true,                   
+                    items : pie
+                 }/*,{
+                     title : 'Classification Panorama',
+                     xtype : 'container',
+                     autoScroll : true,
+                     items : ???? Victor: I'd like to have a thumbnail of {imageUrl} here which people can click to see the full version
+                  }*/]
             }],
             buttonAlign : 'right',
             buttons : [{
