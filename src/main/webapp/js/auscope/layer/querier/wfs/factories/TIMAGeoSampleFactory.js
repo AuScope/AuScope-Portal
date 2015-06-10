@@ -35,6 +35,7 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
         var softwareVersion = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:software_version');
         var dataUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:data_url');
         var imageUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:image_url');
+        var imageThumbnailUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:image_thumbnail_url');
         var analysedBy = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:analysed_by');
         var analysedByUrl = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:analysed_by_url');
         var analysisDate = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'tima:analysis_date').substr(0, 10);
@@ -131,12 +132,12 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                     xtype : 'container',
                     autoScroll : true,                   
                     items : pie
-                 }/*,{
-                     title : 'Classification Panorama',
-                     xtype : 'container',
-                     autoScroll : true,
-                     items : ???? Victor: I'd like to have a thumbnail of {imageUrl} here which people can click to see the full version
-                  }*/]
+                },{
+                    title : 'Classification Panorama',
+                    xtype : 'container',
+                    autoScroll : true,
+                    html : '<a href="' + imageUrl + '"><img width="300" height="300" src="' + imageThumbnailUrl + '"/></a>'
+                }]
             }],
             buttonAlign : 'right',
             buttons : [{
