@@ -79,7 +79,7 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                 items : [{
                     xtype : 'fieldset',
                     title : 'TIMA Geosample',
-                    labelWidth : 75,
+                    labelWidth : 100,
                     autoScroll : true,
                     items : [{
                         xtype : 'displayfield',
@@ -100,11 +100,11 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Sample Custodian',
-                        value : '<a href="' + sampleCustodianUrl + '" target="_blank">' + sampleCustodian + '</a>'
+                        value : sampleCustodianUrl?('<a href="' + sampleCustodianUrl + '" target="_blank">' + sampleCustodian + '</a>'):'Not Available'
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Collection Metadata',
-                        value : '<a href="' + collectionUrl + '" target="_blank">click here</a>'
+                        value : collectionUrl?('<a href="' + collectionUrl + '" target="_blank">click here</a>'):'Not Available'
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Instrument Name',
@@ -112,7 +112,7 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Data',
-                        value : '<a href="' + dataUrl + '" target="_blank">click here</a>'
+                        value : dataUrl?('<a href="' + dataUrl + '" target="_blank">click here</a>'):'Not Available'
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Software Version',
@@ -120,7 +120,7 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Analysed By',
-                        value : '<a href="' + analysedByUrl + '" target="_blank">' + analysedBy + '</a>'
+                        value : analysedByUrl?('<a href="' + analysedByUrl + '" target="_blank">' + analysedBy + '</a>'):'Not Available'
                     },{
                         xtype : 'displayfield',
                         fieldLabel : 'Analysis Date',
