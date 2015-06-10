@@ -338,8 +338,8 @@
                 <constructor-arg name="featureTypeName" value="tima:geosample_and_mineralogy"/>                           
             </bean>
         </constructor-arg>
-        <property name="name" value="TIMA Geosample and Mineralogy"/>
-        <property name="group" value="TIMA"/>
+        <property name="name" value="TESCAN TIMA"/>
+        <property name="group" value="JDLC Mineralogy Library"/>
         <property name="description" value="A collection of the results published from TIMA"/>
         <property name="proxyUrl" value="doTIMAGeoSample.do"/>
         <property name="proxyCountUrl" value=""/>
