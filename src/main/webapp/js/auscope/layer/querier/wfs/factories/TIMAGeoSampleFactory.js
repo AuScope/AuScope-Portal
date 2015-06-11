@@ -136,7 +136,7 @@ Ext.define('auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory', {
                     title : 'Classification Panorama',
                     xtype : 'container',
                     autoScroll : true,
-                    html : '<a href="' + imageUrl + '"><img width="300" height="300" src="' + imageThumbnailUrl + '"/></a>'
+                    html : '<a href="' + imageUrl + '" target="_blank"><img width="300" height="300" src="' + imageThumbnailUrl + '"/></a>'
                 }]
             }],
             buttonAlign : 'right',
