@@ -339,7 +339,7 @@
             </bean>
         </constructor-arg>
         <property name="name" value="TESCAN TIMA"/>
-        <property name="group" value="JDLC Mineralogy Library"/>
+        <property name="group" value="JdLC Mineralogy Library"/>
         <property name="description" value="A collection of the results published from TIMA"/>
         <property name="proxyUrl" value="doTIMAGeoSample.do"/>
         <property name="proxyCountUrl" value=""/>
