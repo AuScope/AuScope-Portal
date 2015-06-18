@@ -751,7 +751,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
         request.open("GET", ('getNVCLDatasets.do?serviceUrl=' + escape(nvclDataServiceUrl) + '&holeIdentifier=' + featureId.replace('gsml.borehole.', '')), false); //<-- false makes it a synchonous request!
         request.send(null);
         var responseObject=Ext.decode(request.responseText);
-        if(responseObject.data.length==0){
+        if(!responseObject.data || responseObject.data.length==0){
             return null;
         }
 
