@@ -58,7 +58,9 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
                 polygonColor: this.polygonColor
             });
         }
-
+        //VT: Perhaps UncachedCSWService should have been extended rather than creating a delegation.
+        //VT: to avoid losing reference to the original primitiveManager.
+        this._cswRenderer.primitiveManager = this.parentLayer.get('renderer').primitiveManager;
         this._cswRenderer.parentLayer = this.parentLayer;
 
         var wholeGlobe = Ext.create('portal.util.BBox', {
@@ -177,35 +179,13 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
         anyText += (anyText.length > 0 && anyTextFilter.length > 0 ? " " : '') + anyTextFilter;
 
 
-        // get bounding box fields and pass them on if all filled in
-        var north = NaN;
-        var east = NaN;
-        var south = NaN;
-        var west = NaN;
-
-        if (filterer.parameters.lat_max.length > 0 && filterer.parameters.long_max.length > 0
-                && filterer.parameters.lat_min.length > 0 && filterer.parameters.long_min.length > 0) {
-            north = Number(filterer.parameters.lat_max);
-            east = Number(filterer.parameters.long_max);
-            south = Number(filterer.parameters.lat_min);
-            west = Number(filterer.parameters.long_min);
-
-            // validate against non numerical values
-            if (isNaN(north) || isNaN(east) || isNaN(south) || isNaN(west)) {
-                alert("You have entered invalid bounding box filter values! Please re-enter and try again.");
-                return;
-            }
-        }
+        
 
         var configuration = Ext.apply({}, {
                 extraParams : {
                     cswServiceUrl : resources[0].data.url,
                     recordInfoUrl : cswRecord.recordInfoUrl,
-                    bbox : Ext.JSON.encode(filterer.spatialParam),
-                    northBoundLatitude : north,
-                    eastBoundLongitude : east,
-                    southBoundLatitude : south,
-                    westBoundLongitude : west,
+                    bbox : Ext.JSON.encode(filterer.spatialParam),               
                     anyText : anyText,
                     title : filterer.parameters.title,
                     abstract_ : filterer.parameters.abstract,

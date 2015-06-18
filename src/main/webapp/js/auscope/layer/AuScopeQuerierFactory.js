@@ -21,6 +21,7 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
                 property : 'GPSSITEID'
             });
         }
+        
         if(wfsResources.length > 0 && wmsResources.length > 0){
             cfg.parser = Ext.create('auscope.layer.querier.wfs.AuScopeParser', {});
             cfg.knownLayerParser = Ext.create('auscope.layer.querier.wfs.AuScopeKnownLayerParser', {});
@@ -42,10 +43,13 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
 
             for (var i = 0; i < wmsResources.length; i++) {
                 if (wmsResources[i].get('name') === 'FalseColour123-gamma1.0') {
-                    return Ext.create('portal.layer.querier.wms.AsterChileWMS', cfg);
+                    return Ext.create('portal.layer.querier.wms.WMSXMLFormatQuerier', cfg);
                 }
             }
 
+            if (knownLayer && knownLayer.get('id') === 'remanent-anomalies-EMAGTMI') {
+                return Ext.create('portal.layer.querier.wms.WMSXMLFormatQuerier', cfg);
+            }
 
             //Or just the plain old WMS querier
             return Ext.create('portal.layer.querier.wms.WMSQuerier', cfg);

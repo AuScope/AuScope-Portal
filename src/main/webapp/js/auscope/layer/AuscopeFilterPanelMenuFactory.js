@@ -18,6 +18,15 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
      *
      */
     appendAdditionalActions : function(menuItems,layer,group) {
+        
+ 
+        //VT:Should have a download action except for Insar data.
+        if((layer.get('cswRecords').length > 0 &&
+                layer.get('cswRecords')[0].get('noCache')==false) && layer.id != 'portal-reports' ){
+                 menuItems.push(this._getDownloadAction(layer));
+        }
+        
+        
          //VT:  link layer to VGL if contain under the Analytic grouping                      
         if(group && group.indexOf('Analytic') >= 0){
             menuItems.push(this._getAnalyticLink(layer));
@@ -29,6 +38,37 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         }
         
         
+    },
+    
+    _getDownloadAction : function(layer){
+        var me = this;
+        var downloadLayerAction = new Ext.Action({
+            text : 'Download Layer',
+            iconCls : 'download',
+            handler : function(){              
+                var downloader = layer.get('downloader');
+                var renderer = layer.get('renderer');
+                if (downloader) {// && renderer.getHasData() -> VT: It is too confusing when the download will be active. We will treat it as always active to 
+                                 // make it easier for the user.
+                    //We need a copy of the current filter object (in case the user
+                    //has filled out filter options but NOT hit apply filter) and
+                    //the original filter objects
+                    var renderedFilterer = layer.get('filterer').clone();
+                    var currentFilterer = Ext.create('portal.layer.filterer.Filterer', {});
+                    var currentFilterForm = layer.get('filterForm');
+
+                    currentFilterer.setSpatialParam(me.map.getVisibleMapBounds(), true);
+                    currentFilterForm.writeToFilterer(currentFilterer);
+
+                    //Finally pass off the download handling to the appropriate downloader (if it exists)
+                    var onlineResources = layer.getAllOnlineResources();
+                    downloader.downloadData(layer, onlineResources, renderedFilterer, currentFilterer);
+
+                }
+            }
+        });
+        
+        return downloadLayerAction
     },
     
    

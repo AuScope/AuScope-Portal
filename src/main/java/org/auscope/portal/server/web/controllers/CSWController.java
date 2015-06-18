@@ -47,13 +47,13 @@ public class CSWController extends BaseCSWController {
     private DateTime stringToDateTime(String dateString, boolean endOfDay) {
         String[] date = dateString.split("/");
         return new DateTime(
-            Integer.parseInt(date[2]), // year
-            Integer.parseInt(date[1]), // monthOfYear
-            Integer.parseInt(date[0]), // dayOfMonth
-            endOfDay ? 23 : 0, // hourOfDay
-            endOfDay ? 59 : 0, // minuteOfHour
-            endOfDay ? 59 : 0, // secondOfMinute
-            endOfDay ? 999 : 0); // millisOfSecond
+                Integer.parseInt(date[2]), // year
+                Integer.parseInt(date[1]), // monthOfYear
+                Integer.parseInt(date[0]), // dayOfMonth
+                endOfDay ? 23 : 0, // hourOfDay
+                        endOfDay ? 59 : 0, // minuteOfHour
+                                endOfDay ? 59 : 0, // secondOfMinute
+                                        endOfDay ? 999 : 0); // millisOfSecond
     }
 
     /**
@@ -83,7 +83,7 @@ public class CSWController extends BaseCSWController {
         }
 
     }
-    
+
     /**
      * use for testing a csw connection
      * @param cswServiceUrl
@@ -98,7 +98,7 @@ public class CSWController extends BaseCSWController {
             HttpGet method = new HttpGet(serviceUrl);
             URIBuilder builder= new URIBuilder(serviceUrl);
             // test request=GetCapabilities&service=CSW&acceptVersions=2.0.2&acceptFormats=application%2Fxml
-            builder.addParameter("request", "GetCapabilities");           
+            builder.addParameter("request", "GetCapabilities");
             method.setURI(builder.build());
             this.serviceCaller.getMethodResponseAsString(method);
 
@@ -142,10 +142,10 @@ public class CSWController extends BaseCSWController {
             @RequestParam(value="start", required = false) int start,
             @RequestParam(value="limit", required = false) int limit,
             @RequestParam(value="bbox", required = false) String bbox,
-            @RequestParam(value="northBoundLatitude", required = false) double northBoundLatitude,
-            @RequestParam(value="eastBoundLongitude", required = false) double eastBoundLongitude,
-            @RequestParam(value="southBoundLatitude", required = false) double southBoundLatitude,
-            @RequestParam(value="westBoundLongitude", required = false) double westBoundLongitude,
+            @RequestParam(value="northBoundLatitude", defaultValue="NaN", required = false) double northBoundLatitude,
+            @RequestParam(value="eastBoundLongitude", defaultValue="NaN", required = false) double eastBoundLongitude,
+            @RequestParam(value="southBoundLatitude", defaultValue="NaN", required = false) double southBoundLatitude,
+            @RequestParam(value="westBoundLongitude", defaultValue="NaN", required = false) double westBoundLongitude,
             @RequestParam(value="anyText", required = false) String anyText,
             @RequestParam(value="title", required = false) String title,
             @RequestParam(value="abstract_", required = false) String abstract_,

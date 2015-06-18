@@ -91,7 +91,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                               '"></iframe>',
                         listeners : {
                             afterrender : function(comp, eOpts){
-                                var myMask = new Ext.LoadMask(comp, {msg:"Downloading Images..."});
+                                var myMask = new Ext.LoadMask({
+                                    msg    : 'Downloading Images...',
+                                    target : comp
+                                });                                                           
                                 myMask.show();
                                 var el = Ext.get('nvcl-iframe-nav');
                                 el.on('load',function(){
@@ -509,7 +512,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     var winStat = new Ext.Window({
                                         autoScroll  : true,
                                         border      : true,
-                                        autoLoad    : Ext.util.Format.format('getNVCLTSGDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                        loader: {
+                                            url: Ext.util.Format.format('getNVCLTSGDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                            autoLoad: true
+                                        },
                                         id          : 'dwldStatusWindow',
                                         layout      : 'fit',
                                         modal       : true,
@@ -618,8 +624,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('tsgEmailAddress').setValue(sEmail);
                                     var winStat = Ext.create('Ext.Window' , {
                                         autoScroll  : true,
-                                        border      : true,
-                                        autoLoad    : Ext.util.Format.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                        border      : true,                                     
+                                        loader: {
+                                            url: Ext.util.Format.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
+                                            autoLoad: true
+                                        },
                                         id          : 'omDwldStatusWindow',
                                         layout      : 'fit',
                                         modal       : true,

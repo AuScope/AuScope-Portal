@@ -62,8 +62,9 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
             layout : 'fit',
             listeners : {
                 afterrender : function(cmp) {
-                    var loadMask = new Ext.LoadMask(cmp.getEl(), {
-                        removeMask : true
+                    var loadMask = new Ext.LoadMask({
+                        target : cmp,
+                        msg : 'loading...'
                     });
                     loadMask.show();
                     Ext.Ajax.request( {
@@ -112,7 +113,7 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
                 xtype : 'grid',
                 store : locSpecStore,
                 features : [groupingFeature],
-                frame : true,
+                frame : false,
                 columnLines : true,
                 iconCls : 'icon-grid',
                 columns: [{

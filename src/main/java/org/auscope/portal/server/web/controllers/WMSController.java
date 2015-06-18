@@ -263,7 +263,7 @@ public class WMSController extends BaseCSWController {
 
         String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857", Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
                 Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude), Double.parseDouble(latitude),
-                (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldBody,postMethod,version,feature_count);
+                (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldBody,postMethod,version,feature_count,true);
         //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
         //VT : GA style sheet also mess up the portal styling of tables as well.
         if(responseString.contains("table, th, td {")){

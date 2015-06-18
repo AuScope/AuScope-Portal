@@ -65,11 +65,14 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
             tabTitle : 'Details:' + featureId,
             items : [{
                 xtype : 'form',
-                width : 300,
+                width : 400,
                 autoHeight : true,
                 listeners : {
                     afterrender : function(form) {
-                        form.loadMask = new Ext.LoadMask(form.el, {});
+                        form.loadMask = new Ext.LoadMask({
+                            msg    : 'Updating from the service',
+                            target : form
+                        });
                         form.loadMask.show();
                         me.retrieveAvailableOM(form, actualFeatureId, pressureDbUrl);
                     }

@@ -81,10 +81,10 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             }
         }
         
-        if (layer.get('sourceType') === portal.layer.Layer.KNOWN_LAYER){
+        if (layer.get('sourceType') === portal.layer.Layer.KML_RECORD){
             return this._generateResult(Ext.create('portal.layer.filterer.forms.EmptyFilterForm', baseFilterFormCfg), false);
         }
-
+                
         //otherwise let's see if we can guess an appropriate filter based on layer renderer
         if (layer.get('renderer') instanceof portal.layer.renderer.wms.LayerRenderer || layer.get('renderer') instanceof portal.layer.renderer.wfs.FeatureWithMapRenderer) {
             baseFilterForm = Ext.create('portal.layer.filterer.forms.WMSLayerFilterForm', baseFilterFormCfg);
@@ -92,6 +92,8 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             //the opacity can be adjusted from there on
             return this._generateResult(baseFilterForm, false);
         }
+        
+        
 
         // TODO: Can I get rid of containsCSWService and make this check the renderer like the example above?
         // don't forget this method is used in AuScopeRendererFactory.js, too.
