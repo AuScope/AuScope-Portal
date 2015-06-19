@@ -13,10 +13,12 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
     initialChartHeight = 500;
 
     // Define the model:
-    Ext.define('DynamicModel', {
-        extend : 'Ext.data.Model',
-        fields : observationsToReturn.concat('depth')
-    });
+    if(Ext.ClassManager.isCreated('DynamicModel')!=true){
+        Ext.define('DynamicModel', {
+            extend : 'Ext.data.Model',
+            fields : observationsToReturn.concat('depth')
+        });
+    }
 
     Ext.Ajax.request({
         url : 'getMsclObservationsForGraph.do',
@@ -93,7 +95,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     store : store,
                     axes : [ {
                         title : first ? 'Depth (m)' : false, // Only the first chart will have a depth label.
-                        type : 'Numeric',
+                        type : 'numeric',
                         position : 'left',
                         fields : [ 'depth' ],
                         minorTickSteps : 1
@@ -109,7 +111,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         // End ReverseAxisIssue.
                     }, {
                         title : xAxisTitle,
-                        type : 'Numeric',
+                        type : 'numeric',
                         position : 'top',
                         fields : [ observationsToReturn[i] ],
                         minorTickSteps : 1
@@ -168,7 +170,10 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
             graphWindow.center();
 
             // Remove the load mask once the window has been rendered:
-            maskedElement.setLoading(false);
+            maskedElement.unmask();
+        },
+        failure: function(){
+            maskedElement.unmask();
         }
     });
 }
@@ -266,7 +271,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.MSCLFactory', {
                         handler : function() {
                             var formValues = this.up('form').getForm().getValues();
                             var fieldset = this.up('fieldset');
-                            fieldset.setLoading("Loading...");
+                            fieldset.getEl().mask('Loading');
                             drawGraph(parentOnlineResource.get('url'),
                                     featureId, formValues.startDepth,
                                     formValues.endDepth,
