@@ -32,6 +32,15 @@ Ext.define('auscope.layer.AuScopeRendererFactory', {
             anchorOffsetX : iconAnchor ? iconAnchor.x : 16,
             anchorOffsetY : iconAnchor ? iconAnchor.y : 32
         });
+        
+        if(knownLayer != undefined && knownLayer.get('id')=='capdf-hydrogeochem'){
+            return Ext.create('portal.layer.renderer.capdf.CapdfRenderer', {
+                map : this.map,
+                icon : icon,
+                proxyUrl : proxyUrl ? proxyUrl : 'getAllFeatures.do',
+                proxyCountUrl : proxyCountUrl
+            });
+        }
 
         if(wmsResources.length > 0 && wfsResources.length > 0){
             return Ext.create('portal.layer.renderer.wfs.FeatureWithMapRenderer', {
