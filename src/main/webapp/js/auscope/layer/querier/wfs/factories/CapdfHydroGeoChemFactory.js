@@ -27,10 +27,10 @@ Ext.define('auscope.layer.querier.wfs.factories.CapdfHydroGeoChemFactory', {
         var sampleId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:sample_id');
         var project = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:project');
         var elev = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:elev');
-        var wt = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:wt');
-        var sd = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:sd');
-        var ph = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:ph');
-        var eh = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:eh');           
+        var name = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gml:name');
+        var custodian = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:custodian');
+        var dt = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:dt');
+        var batch = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'public:batch_id');           
     
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
@@ -48,6 +48,10 @@ Ext.define('auscope.layer.querier.wfs.factories.CapdfHydroGeoChemFactory', {
                     value : gmlId
                 },{
                     xtype : 'displayfield',
+                    fieldLabel : 'batch',
+                    value : (batch?batch:'N/A')
+                },{
+                    xtype : 'displayfield',
                     fieldLabel : 'Sample ID',
                     value : sampleId
                 },{
@@ -60,20 +64,16 @@ Ext.define('auscope.layer.querier.wfs.factories.CapdfHydroGeoChemFactory', {
                     value : elev
                 },{
                     xtype : 'displayfield',
-                    fieldLabel : 'wt',
-                    value : (wt?wt:'N/A')
+                    fieldLabel : 'name',
+                    value : (name?name:'N/A')
                 },{
                     xtype : 'displayfield',
-                    fieldLabel : 'sd',
-                    value : (sd?sd:'N/A')
+                    fieldLabel : 'custodian',
+                    value : (custodian?custodian:'N/A')
                 },{
                     xtype : 'displayfield',
-                    fieldLabel : 'ph',
-                    value : (ph?ph:'N/A')
-                },{
-                    xtype : 'displayfield',
-                    fieldLabel : 'eh',
-                    value : (eh?eh:'N/A')
+                    fieldLabel : 'dt',
+                    value : (dt?dt:'N/A')
                 }]
             }],
             buttonAlign : 'right',

@@ -15,7 +15,7 @@ import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
  * @author Victor Tey
  * @version
  */
-public class CapdfHydroGeoChemFilter extends AbstractFilter {
+public class CapdfMeasurementLimitFilter extends AbstractFilter {
     List<String> fragments;
 
     /**
@@ -25,19 +25,11 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public CapdfHydroGeoChemFilter(String batchid,CapdfHydroChemColorCoding ccq,Double min, Double max) {
+    public CapdfMeasurementLimitFilter(String group) {
 
         fragments = new ArrayList<String>();
-        if (batchid != null && !batchid.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("batch_id", batchid));
-        }
-
-        if (ccq != null && min != null) {
-            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(ccq.getPOI(), Double.toString(min)));
-        }
-
-        if (ccq != null && max != null) {
-            fragments.add(this.generatePropertyIsLessThan(ccq.getPOI(), Double.toString(max)));
+        if (group != null && !group.isEmpty()) {
+            fragments.add(this.generatePropertyIsLikeFragment("group", group));
         }
 
     }
@@ -48,14 +40,16 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
         return this.generateFilter(this.generateAndComparisonFragment(fragments.toArray(new String[fragments.size()])));
     }
 
+
     @Override
     public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
-
         List<String> localFragment = new ArrayList<String>(fragments);
         localFragment.add(this.generateBboxFragment(bbox, "geom"));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment.size()])));
     }
+
+
 
 
 }

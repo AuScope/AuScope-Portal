@@ -1,42 +1,55 @@
 package org.auscope.portal.service.colorcoding;
 
-
-import java.util.Hashtable;
-
 public class CapdfHydroChemColorCoding {
 
-    private String field;
-    CapdfConfigObject capdfConfigObject;
+    private String poi;
+    ColorCoding capdfConfigObject;
 
-    public CapdfHydroChemColorCoding(String field) {
-        this.field=field;
-        this.capdfConfigObject = new CapdfConfigObject(field);
+    public CapdfHydroChemColorCoding(String poi,double min, double max) {
+        this.poi=poi;
+        this.capdfConfigObject = new ColorCoding(min,max);
     }
 
 
-    public String getField() {
-        return field;
+    public String getPOI() {
+        return poi;
     }
 
     public ColorCodingConfig getColorCodingConfig() {
         return capdfConfigObject.getColorCodingConfig();
     }
 
-    public class CapdfConfigObject{
-        ColorCodingConfig colorConfig;
-        String field;
-        Hashtable<String,ColorCodingConfig> colorMap;
+    //VT: this is only used in Capricorn. However, should future use arrived for this, this inner class
+    //VT: should be refactor into portal-core along with ColorCodingConfig.java.
+    public class ColorCoding{
 
-        public CapdfConfigObject(String field){
-            colorMap = new Hashtable<String,ColorCodingConfig>();
-            colorMap.put("elev",new ColorCodingConfig(200,600,10,ColorCodingConfig.COLOR.RED));
-            colorMap.put("wt",new ColorCodingConfig(5,20,10,ColorCodingConfig.COLOR.BLUE));
-            colorMap.put("sd",new ColorCodingConfig(5,20,10,ColorCodingConfig.COLOR.GREEN));
-            this.field=field;
+        ColorCodingConfig colorConfig;
+        private final int DEFAULT_INTERVAL=10;
+
+
+        public ColorCoding(double min, double max,int interval, ColorCodingConfig.COLOR color){
+            this.colorConfig=new ColorCodingConfig(min,max,interval,color);;
         }
 
+        public ColorCoding(double min, double max, ColorCodingConfig.COLOR color){
+            this.colorConfig=new ColorCodingConfig(min,max,DEFAULT_INTERVAL, color);;
+        }
+
+        public ColorCoding(double min, double max){
+            //VT: random color
+            this.colorConfig=new ColorCodingConfig(min,max,DEFAULT_INTERVAL);
+        }
+
+
+
+        public ColorCoding(ColorCodingConfig ccc){
+            this.colorConfig=ccc;
+        }
+
+
+
         public ColorCodingConfig getColorCodingConfig(){
-            return this.colorMap.get(this.field);
+            return this.colorConfig;
         }
 
 

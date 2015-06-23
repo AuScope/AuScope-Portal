@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.auscope.portal.capdf.CapdfHydroGeoChemFilter;
+import org.auscope.portal.capdf.CapdfMeasurementLimitFilter;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
@@ -54,13 +55,25 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
      * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
      */
-    public String getHydroGeoChemFilter(String project,FilterBoundingBox bbox) {
-        CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(project,null,-1,-1);
+    public String getHydroGeoChemFilter(String batchid,FilterBoundingBox bbox) {
+        CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid,null,null,null);
         return generateFilterString(filter,bbox);
     }
 
 
-    public List<IFilter> getHydroGeoChemFilterWithColorCoding(String project, CapdfHydroChemColorCoding ccq)
+    /**
+     * Utility for turning a filter and optional bounding box into a OGC filter string
+     * @param filter The filter
+     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @return
+     */
+    public String getMeasurementLimits(String group) {
+        CapdfMeasurementLimitFilter filter = new CapdfMeasurementLimitFilter(group);
+        return generateFilterString(filter,null);
+    }
+
+
+    public List<IFilter> getHydroGeoChemFilterWithColorCoding(String batchid, CapdfHydroChemColorCoding ccq)
             throws Exception {
 
         ArrayList<IFilter> result = new ArrayList<IFilter>();
@@ -68,8 +81,8 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
         ColorCodingConfig  ccc= ccq.getColorCodingConfig();
 
         for(int iteration = 0; iteration < ccc.getIntervals(); iteration++){
-            HashMap<String,Integer> config = ccc.getIteration(iteration);
-            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(project,ccq,config.get("lowerBound"),config.get("upperBound"));
+            HashMap<String,Double> config = ccc.getIteration(iteration);
+            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid,ccq,config.get("lowerBound"),config.get("upperBound"));
             result.add(filter);
         }
 

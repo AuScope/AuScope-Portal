@@ -7,20 +7,74 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
     /**
      * Accepts a config for portal.layer.filterer.BaseFilterForm
      */
-    constructor : function(config) {       
-
-     // The data store containing the list of states
-        var fieldStore = Ext.create('Ext.data.Store', {
-            fields: ['field', 'value'],
-            data : [
-                {"field":"elev", "value":"elev"},
-                {"field":"wt", "value":"wt"},
-                {"field":"sd", "value":"sd"}            
-            ]
+    constructor : function(config) {      
+        
+        var wfsresource = portal.csw.OnlineResource.getFilteredFromArray(config.layer.getAllOnlineResources(), portal.csw.OnlineResource.WFS);
+        //VT: for the time being we assumed that is only one service endpoint.
+        wfsresource = wfsresource[0];
+        this.serviceUrl = wfsresource.get('url');
+        var me = this;
+      
+        var groupStore = Ext.create('Ext.data.Store', {
+            fields : ['groupName', 'groupValue'],
+            proxy : {
+                type : 'ajax',
+                url : 'doGetGroupOfInterest.do',
+                extraParams: {
+                    serviceUrl: this.serviceUrl
+                },
+                reader : {
+                    type : 'array',
+                    rootProperty : 'data'
+                }
+            },
+            autoLoad : true
+        });  
+        
+         this.parameterCombo = Ext.create('Ext.form.ComboBox', {           
+            anchor: '100%',
+            itemId: 'aoiParam',
+            disabled :  true,
+            fieldLabel: '<span data-qtip="Select the parameter of interest">' + 'Parameter of Interest' + '</span>',
+            labelAlign: 'right',
+            name: 'poi',
+            typeAhead: true,
+            triggerAction: 'all',
+            lazyRender:true,
+            queryMode: 'local',
+            typeAheadDelay: 500,            
+            valueField: 'classifier',
+            displayField: 'classifier', 
+            listConfig: {
+                itemTpl: [
+                    '<div data-qtip="{pref_name}">{classifier}-({pref_name})</div>'
+                ]
+            },
+            listeners: {
+                select : function(combo, record, eOpts){
+                    me.updateMinMaxSlider(record.get('min'),record.get('max'));
+                }
+            }
         });
+         
+         this.minMaxSlider = Ext.create('Ext.slider.Multi', {           
+             anchor: '100%',
+             itemId: 'minMaxSlider',
+             disabled :  true,
+             fieldLabel: '<span data-qtip="Select the min and max value for color coding">' + 'Min/Max Color Code' + '</span>',
+             labelAlign: 'right',
+             name: 'minMax',
+             decimalPrecision : 3,
+             values: [25, 50],
+             minValue:0,
+             maxValue:100,
+             
+                               
+         });
+            
 
         Ext.apply(config, {
-            delayedFormLoading: false,
+            delayedFormLoading: true,
             border: false,
             autoScroll: true,
             hideMode:'offsets',
@@ -39,31 +93,87 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                 autoHeight: true,
                 items: [{
                     anchor: '100%',
+                    labelAlign: 'right',
                     xtype: 'textfield',
                     fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
-                                    'Project Name' +
+                                    'Batch Id' +
                                 '</span>',
-                    name: 'project'
+                    name: 'batchid'
                 },{
                     xtype: 'combo',
                     anchor: '100%',
-                    itemId: 'serviceFilter-field',
-                    fieldLabel: 'Field of Interest',
-                    name: 'field',
+                    itemId: 'aoi',
+                    fieldLabel: '<span data-qtip="Select the group of interest">' + 'Group of Interest' + '</span>',
+                    labelAlign: 'right',
+                    name: 'featureType',
                     typeAhead: true,
                     triggerAction: 'all',
                     lazyRender:true,
-                    mode: 'local',
-                    store: fieldStore,
-                    valueField: 'value',
-                    displayField: 'field',
-                    hiddenName: 'value'
-                }]
+                    queryMode: 'local',
+                    typeAheadDelay: 500,
+                    store: groupStore,
+                    valueField: 'groupValue',
+                    displayField: 'groupName',                    
+                    listeners : {
+                        select : function(combo, record, eOpts){
+                            me.updateParameterCombo(record.get('groupValue'));
+                            
+                        }
+                    }
+                },this.parameterCombo, this.minMaxSlider]
             }]
         });
+        
+       
+     
 
         Ext.tip.QuickTipManager.init();
         this.callParent(arguments);
+        
+        //load our commodity store
+        var callingInstance = this;
+        groupStore.load( {
+            callback : function() {
+                //It's very important that once all of our stores are loaded we fire the formloaded event
+                //because we are setting the delayedFormLoading parameter to true in our constructor
+                callingInstance.setIsFormLoaded(true);
+                callingInstance.fireEvent('formloaded');
+            }
+        });
+    },
+    
+    
+    updateParameterCombo : function(featureType){
+        var aoiParamStore = Ext.create('Ext.data.Store', {
+            fields : ['classifier', 'pref_name','min','max'],
+            proxy : {
+                type : 'ajax',
+                url : 'doGetAOIParam.do',
+                extraParams: {
+                    serviceUrl: this.serviceUrl,
+                    featureType : featureType
+                },
+                reader : {
+                    type : 'array',
+                    rootProperty : 'data'
+                }
+            },
+            autoLoad : true
+        });
+        
+        this.parameterCombo.setStore(aoiParamStore);        
+        this.parameterCombo.setDisabled(false);
+        
+        
+    },
+    
+    updateMinMaxSlider : function(min,max){
+      var min=parseFloat(min),
+          max=parseFloat(max)
+      this.minMaxSlider.setMinValue(min);
+      this.minMaxSlider.setMaxValue(max);
+      this.minMaxSlider.setValue([min,max],true);
+      this.minMaxSlider.setDisabled(false);
     }
 });
 

@@ -180,28 +180,6 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                         });
                     }
                 },{
-                    text : 'plot3D',
-                    handler : function(){
-                        Ext.Ajax.request({
-                            url: 'doCapdfHydro3DScatterPlotList.do',
-                            scope : this,
-                            params: {
-                                xaxis : 'br',
-                                yaxis : 'sc',
-                                zaxis : 'z'
-                            },
-                            callback : function(options, success, response) {
-                              if(success){
-                                  var jsonObj = Ext.JSON.decode(response.responseText);
-                                  me.scatter3DPlot(jsonObj.data.series);
-                              }else{
-                                  alert('Failed');
-                              }
-
-                            }
-                        });
-                    }
-                },{
                     text : 'Box Plot',
                     handler : function(){
                         
@@ -305,28 +283,6 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
          
      },
     
-    scatter3DPlot : function(series) {
-        var splot = Ext.create('portal.charts.3DScatterPlot',{
-               xAttr : 'br',
-               xLabel : 'br',                          
-               yAttr : 'sc',
-               yLabel : 'sc',               
-               valueAttr : 'highlight',
-               valueLabel : 'highlight'               
-        });
-       
-        
-        Ext.create('Ext.window.Window', {
-            title: 'Scatter Plot',
-            height: 500,
-            width: 700,
-            layout: 'fit',
-            items: splot
-        }).show();
-        
-        splot.plot(series);
-         
-     },
     
     initMap : function(){
         var myMap = this.map.map;
