@@ -112,7 +112,7 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         var me = this;
         if( auscope.layer.analytic.AnalyticFormFactory.supportLayer(layer)){
             
-            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active')){            
+            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active') && layer.get('filterer').parameters.featureType){            
                 return new Ext.Action({
                     text : 'Graph',
                     iconCls : 'graph',                    
@@ -123,7 +123,7 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                 });
             }else{
                 return new Ext.Action({
-                    text : '<span data-qtip="Add layer to map to enable this function">' + 'Graph',
+                    text : '<span data-qtip="Add layer to map and select \'Group of Interest\' to enable this function">' + 'Graph',
                     disabled : true,
                     iconCls : 'graph',                    
                     handler : function(){   

@@ -44,10 +44,9 @@ Ext.define('portal.layer.renderer.capdf.CapdfRenderer', {
             home=home.replace("localhost",LOCALHOST);
         }
         for (var i = 0; i < wmsResources.length; i++) {
+            
             var wmsUrl = wmsResources[i].get('url');
-            // VT: Instead of rendering the WMS url in the status, it is neater to display the wfs url
-
-            var wmsLayer = filterer.parameters.featureType;
+            var wmsLayer = (filterer.parameters.featureType?filterer.parameters.featureType: wmsResources[i].get('name'));
             var wmsOpacity = filterer.getParameter('opacity');
            
 

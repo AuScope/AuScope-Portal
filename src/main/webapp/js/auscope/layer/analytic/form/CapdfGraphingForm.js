@@ -14,6 +14,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         
         this.layer=cfg.layer;
         this.map=cfg.map;
+        this.featureType = this.layer.get('filterer').parameters.featureType
         //VT: return a reference to boxLayer so we can manipulate it
         var boxLayer = this.initMap();
         var me=this;
@@ -23,20 +24,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         wfsresource = wfsresource[0];
         this.serviceUrl = wfsresource.get('url');
         
-       
-        
-        
-     // The data store containing the list of states
-        var observationStore = Ext.create('Ext.data.Store', {
-            fields: ['display', 'value'],
-            data : [
-                {"display":"elev", "value":"elev"},
-                {"display":"wt", "value":"wt"},
-                {"display":"sd", "value":"sd"}
-            ]
-        });
 
-        
         
         this.bboxButton = Ext.create('Ext.Button',{                      
             text: 'Draw Bounds',
@@ -45,10 +33,71 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                 me._toggleMapDraw(myMap,me,this,boxLayer);
             }
         })
+        
+        
+         var groupStore = Ext.create('Ext.data.Store', {
+            fields : ['groupName', 'groupValue'],
+            proxy : {
+                type : 'ajax',
+                url : 'doGetGroupOfInterest.do',
+                extraParams: {
+                    serviceUrl: this.serviceUrl
+                },
+                reader : {
+                    type : 'array',
+                    rootProperty : 'data'
+                }
+            },
+            autoLoad : true
+        });  
+        
+        this.parameterXCombo = Ext.create('Ext.form.ComboBox', {           
+            anchor: '100%',
+            itemId: 'xparam',
+            disabled :  true,
+            fieldLabel: '<span data-qtip="Select the x axis">' + 'x-axis' + '</span>',         
+            name: 'xaxis',
+            typeAhead: true,
+            triggerAction: 'all',
+            lazyRender:true,
+            queryMode: 'local',
+            typeAheadDelay: 500,            
+            valueField: 'classifier',
+            displayField: 'classifier', 
+            listConfig: {
+                itemTpl: [
+                    '<div data-qtip="{pref_name}">{classifier}-({pref_name})</div>'
+                ]
+            }
+           
+        });
+        
+        this.parameterYCombo = Ext.create('Ext.form.ComboBox', {           
+            anchor: '100%',
+            itemId: 'yparam',
+            disabled :  true,
+            fieldLabel: '<span data-qtip="Select the y axis">' + 'y-axis' + '</span>',          
+            name: 'yaxis',
+            typeAhead: true,
+            triggerAction: 'all',
+            lazyRender:true,
+            queryMode: 'local',
+            typeAheadDelay: 500,            
+            valueField: 'classifier',
+            displayField: 'classifier', 
+            listConfig: {
+                itemTpl: [
+                    '<div data-qtip="{pref_name}">{classifier}-({pref_name})</div>'
+                ]
+            }
+           
+        });
+        
+        
 
         Ext.apply(cfg, {
             title: 'Capricorn distal Footprint',
-            height: 600,
+            height: 500,
             width: 400,     
             collapsible : true,
             layout: 'fit',           
@@ -78,61 +127,68 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                     border      : false,
                     bodyStyle   : 'padding:10px'                   
                 },
-                items :[{                    
-                        xtype : 'fieldset',
+                items :[{
+                         xtype : 'label',
+                         html: '<p>Selected:<strong>' + this.featureType + '</strong></p>'
+                                            
+                      },{xtype : 'fieldset',
                         itemId : 'cswspatialfiltercoordfieldset',
                         title : 'Coordinates',
-                        
-                                                
+                                                         
                         items : [{
                             xtype : 'textfield',
                             name : 'north',
                             itemId : 'north',
+                            allowBlank : false,
                             fieldLabel : 'North'
                         },{
                             xtype : 'textfield',
                             name : 'south',
                             itemId : 'south',
+                            allowBlank : false,
                             fieldLabel : 'South'
                         },{
                             xtype : 'textfield',
                             name : 'east',
                             itemId : 'east',
+                            allowBlank : false,
                             fieldLabel : 'East'
                         },{
                             xtype : 'textfield',
                             name : 'west',
                             itemId : 'west',
+                            allowBlank : false,
                             fieldLabel : 'West'
-                        },
-                            this.bboxButton
-                        ]
+                        },{
+                          xtype: 'label',
+                          html : '<p><font size="0.7" color="red">CSV download is based on the group of Interest selected as well as the bound select. Return all if bounds are not selected.<font></p>'
+                        },{
+                            xtype : 'container',
+                            layout : 'hbox',
+                            pack: 'start',
+                            align: 'stretch',
+                            items :[
+                                    this.bboxButton,
+                            {
+                                xtype:'tbspacer'
+                               
+                            },{
+                                text : 'CSV',
+                                xtype : 'button',
+                                iconCls : 'download',
+                                handler: function() {
+                                    me.downloadCSV(me.layer);
+                                }
+                            }]
+                        }]
                       },{     
                           xtype : 'fieldset',                  
-                          title : 'Observation',                                                   
-                          items : [{
-                              xtype : 'combo',
-                              itemId : 'xaxis',
-                              name : 'xaxis',
-                              fieldLabel: 'x-axis',
-                              store: observationStore,
-                              queryMode: 'local',
-                              displayField: 'display',
-                              valueField: 'value',
-                         },{
-                             xtype : 'combo',
-                             itemId : 'yaxis',
-                             name : 'yaxis',
-                             fieldLabel: 'y-axis',
-                             store: observationStore,
-                             queryMode: 'local',
-                             displayField: 'display',
-                             valueField: 'value',
-                        }]
+                          title : 'Select axis',                                                   
+                          items : [this.parameterXCombo,this.parameterYCombo]
                     }
                 ],
                 buttons : [{
-                    text : 'plot',
+                    text : 'scatter plot',
                     handler : function(){
                         
                         var myMask = new Ext.LoadMask({
@@ -140,10 +196,11 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                             target : me
                         }).show();
                         
-                       var customRegistryForm = me.query('form[itemId=capdfGraphingForm]')[0]
-                       var formValues =  customRegistryForm.getValues()
+                       var graphingForm = me.query('form[itemId=capdfGraphingForm]')[0]
+                       var formValues =  graphingForm.getValues()
                        var xaxis = formValues.xaxis
                        var yaxis = formValues.yaxis
+                      
                        
                        var bbox = Ext.create('portal.util.BBox', {
                            northBoundLatitude : formValues.north,
@@ -162,10 +219,11 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                             params: {
                                 serviceUrl: me.serviceUrl,
                                 xaxis : xaxis,
-                                yaxis : yaxis,                                                                
+                                yaxis : yaxis,   
+                                featureType : me.featureType,
                                 bbox : Ext.JSON.encode(bbox),
                                 obbox : parameters.bbox,
-                                project : parameters.project
+                                batchid : parameters.batchid
                             },
                             callback : function(options, success, response) {
                               myMask.hide();
@@ -188,10 +246,11 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                            target : me
                        }).show();
                         
-                       var customRegistryForm = me.query('form[itemId=capdfGraphingForm]')[0]
-                       var formValues =  customRegistryForm.getValues()
+                       var graphingForm = me.query('form[itemId=capdfGraphingForm]')[0]
+                       var formValues =  graphingForm.getValues()
                        var box1 = formValues.xaxis
                        var box2 = formValues.yaxis
+                      
                        
                        var bbox = Ext.create('portal.util.BBox', {
                            northBoundLatitude : formValues.north,
@@ -211,9 +270,10 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                                 serviceUrl: me.serviceUrl,
                                 box1 : box1,
                                 box2 : box2,
+                                featureType:me.featureType,
                                 bbox : Ext.JSON.encode(bbox),
                                 obbox : parameters.bbox,
-                                project : parameters.project
+                                batchid : parameters.batchid
                             },
                             callback : function(options, success, response) {
                               myMask.hide();
@@ -232,6 +292,9 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             }
         });
 
+        if(this.featureType){
+            this.updateParameterCombo(this.featureType);
+        }
         Ext.tip.QuickTipManager.init();        
         this.callParent(arguments);
     },
@@ -354,11 +417,12 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                    
                     window.setTitle('Capricorn distal Footprint');
                     button.setText('Draw Bounds')
-                    boxLayer.removeAllFeatures();                    
-                    button.ownerCt.getComponent('north').setValue('');
-                    button.ownerCt.getComponent('south').setValue('');
-                    button.ownerCt.getComponent('east').setValue('');
-                    button.ownerCt.getComponent('west').setValue('');
+                    boxLayer.removeAllFeatures();  
+                    
+                    button.up('fieldset').getComponent('north').setValue('');
+                    button.up('fieldset').getComponent('south').setValue('');
+                    button.up('fieldset').getComponent('east').setValue('');
+                    button.up('fieldset').getComponent('west').setValue('');
                     myMap.controls[i].deactivate();
                     
                    window.expand()
@@ -367,6 +431,73 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
 
             }
         }
+    },
+    
+    updateParameterCombo : function(featureType){
+        var aoiParamStore = Ext.create('Ext.data.Store', {
+            fields : ['classifier', 'pref_name','min','max'],
+            proxy : {
+                type : 'ajax',
+                url : 'doGetAOIParam.do',
+                extraParams: {
+                    serviceUrl: this.serviceUrl,
+                    featureType : featureType
+                },
+                reader : {
+                    type : 'array',
+                    rootProperty : 'data'
+                }
+            },
+            autoLoad : true
+        });
+        
+        this.parameterXCombo.setStore(aoiParamStore);
+        this.parameterXCombo.setDisabled(false);
+        
+        this.parameterYCombo.setStore(aoiParamStore);
+        this.parameterYCombo.setDisabled(false);
+        
+        var me = this;
+        
+        aoiParamStore.on('load',function(store, records, successful, eOpts ){
+            if(successful){
+                me.parameterXCombo.setSelection(records[0]);
+                me.parameterYCombo.setSelection(records[0]);
+            }
+        })
+    },
+    
+    downloadCSV : function(layer){
+
+        var filterer = layer.get('filterer')
+        var filterParam = filterer.getParameters();
+        var serviceUrl = portal.csw.OnlineResource.getFilteredFromArray(this.layer.getAllOnlineResources(), portal.csw.OnlineResource.WFS)[0].get('url')
+        
+          var graphingForm = this.query('form[itemId=capdfGraphingForm]')[0]
+          var formValues =  graphingForm.getValues()
+          
+          var bbox = filterer.getSpatialParam()
+          
+          if(formValues.north && formValues.south && formValues.east && formValues.west){
+              bbox = Ext.create('portal.util.BBox', {
+                  northBoundLatitude : formValues.north,
+                  southBoundLatitude : formValues.south,
+                  eastBoundLongitude : formValues.east,
+                  westBoundLongitude : formValues.west,
+                  crs : 'EPSG:4326'
+              });
+          }
+       
+      
+        portal.util.FileDownloader.downloadFile('getCapdfCSVDownload.do', {
+            serviceUrl : serviceUrl,
+            batchid : filterParam.batchid,         
+            north : bbox.northBoundLatitude,
+            south : bbox.southBoundLatitude,
+            east : bbox.eastBoundLongitude,
+            west : bbox.westBoundLongitude,
+            featureType:this.featureType
+        });
     }
     
    

@@ -100,27 +100,35 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                                 '</span>',
                     name: 'batchid'
                 },{
-                    xtype: 'combo',
-                    anchor: '100%',
-                    itemId: 'aoi',
-                    fieldLabel: '<span data-qtip="Select the group of interest">' + 'Group of Interest' + '</span>',
-                    labelAlign: 'right',
-                    name: 'featureType',
-                    typeAhead: true,
-                    triggerAction: 'all',
-                    lazyRender:true,
-                    queryMode: 'local',
-                    typeAheadDelay: 500,
-                    store: groupStore,
-                    valueField: 'groupValue',
-                    displayField: 'groupName',                    
-                    listeners : {
-                        select : function(combo, record, eOpts){
-                            me.updateParameterCombo(record.get('groupValue'));
-                            
+                    xtype:'fieldset',
+                    title: '<span data-qtip="Please enter your color coding selection">' +
+                        'Color Coding Filter' +
+                        '</span>',
+                    autoHeight:true,                   
+                    collapsible:true,
+                    items:[{
+                        xtype: 'combo',
+                        anchor: '100%',
+                        itemId: 'aoi',
+                        fieldLabel: '<span data-qtip="Select the group of interest">' + 'Group of Interest' + '</span>',
+                        labelAlign: 'right',
+                        name: 'featureType',
+                        typeAhead: true,
+                        triggerAction: 'all',
+                        lazyRender:true,
+                        queryMode: 'local',
+                        typeAheadDelay: 500,
+                        store: groupStore,
+                        valueField: 'groupValue',
+                        displayField: 'groupName',                    
+                        listeners : {
+                            select : function(combo, record, eOpts){
+                                me.updateParameterCombo(record.get('groupValue'));
+                                
+                            }
                         }
-                    }
-                },this.parameterCombo, this.minMaxSlider]
+                    },this.parameterCombo, this.minMaxSlider]
+                }]
             }]
         });
         
@@ -161,10 +169,15 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             autoLoad : true
         });
         
-        this.parameterCombo.setStore(aoiParamStore);        
+        this.parameterCombo.setStore(aoiParamStore);
         this.parameterCombo.setDisabled(false);
+        var me = this;
         
-        
+        aoiParamStore.on('load',function(store, records, successful, eOpts ){
+            if(successful){
+                me.parameterCombo.setSelection(records[0]);
+            }
+        })
     },
     
     updateMinMaxSlider : function(min,max){
