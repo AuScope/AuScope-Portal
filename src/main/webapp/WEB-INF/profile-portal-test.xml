@@ -13,7 +13,7 @@
         <constructor-arg>
             <list>                
                 <ref bean="knownTypehydrogeochem" />
-                <!-- ref bean="knownTypeMine" />
+                <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />
@@ -67,7 +67,7 @@
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />             
-                <ref bean="knownTypeSurfaceAftershock" /-->
+                <ref bean="knownTypeSurfaceAftershock" />
                 <!-- Analytics -->
                 <!-- ref bean="knownTypeBouguerGeodetic" />
                 <ref bean="knownTypeGravAnomalyGeodetic" />
@@ -96,10 +96,10 @@
         <constructor-arg>
             <list>
                 <ref bean="cswAuscopeTest" />
-                <!-- ref bean="cswInSarProduction" />
+                <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswAsterProduction" />
-                <ref bean="cswVeglProduction" /-->
+                <!-- ref bean="cswVeglProduction" /-->
             </list>
         </constructor-arg>
     </bean>
