@@ -82,7 +82,7 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
         for(int iteration = 0; iteration < ccc.getIntervals(); iteration++){
             HashMap<String,Double> config = ccc.getIteration(iteration);
-            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid,ccq,config.get("lowerBound"),config.get("upperBound"));
+            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid,ccq,ccc.getIterationLowerBound(config),ccc.getIterationUpperBound(config));
             result.add(filter);
         }
 

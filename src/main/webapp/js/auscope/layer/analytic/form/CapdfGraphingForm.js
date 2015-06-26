@@ -161,7 +161,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                             fieldLabel : 'West'
                         },{
                           xtype: 'label',
-                          html : '<p><font size="0.7" color="red">CSV download is based on the group of Interest selected as well as the bound select. Return all if bounds are not selected.<font></p>'
+                          html : '<p><font size="0.7" color="red">CSV download is based on the \'Group of Interest\' selected as well as the bound selected. Return all results if bounds are not selected.<font></p>'
                         },{
                             xtype : 'container',
                             layout : 'hbox',
@@ -209,6 +209,12 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                            westBoundLongitude : formValues.west,
                            crs : 'EPSG:4326'
                        });
+                       
+                       if(!bbox.northBoundLatitude || !bbox.southBoundLatitude || !bbox.eastBoundLongitude || !bbox.westBoundLongitude){
+                           myMask.hide();
+                           alert('Click on \'Draw Bounds\' to select the area for graph comparison');
+                           return;
+                       }
                        
                        var parameters=me.layer.get('filterer').getParameters()
                     
@@ -259,6 +265,12 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                            westBoundLongitude : formValues.west,
                            crs : 'EPSG:4326'
                        });
+                       
+                       if(!bbox.northBoundLatitude || !bbox.southBoundLatitude || !bbox.eastBoundLongitude || !bbox.westBoundLongitude){
+                           myMask.hide();
+                           alert('Click on \'Draw Bounds\' to select the area for graph comparison');
+                           return;
+                       }
                        
                        var parameters=me.layer.get('filterer').getParameters()
 
