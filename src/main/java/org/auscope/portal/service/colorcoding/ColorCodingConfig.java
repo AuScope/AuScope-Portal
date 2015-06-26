@@ -9,6 +9,9 @@ public class ColorCodingConfig {
     int intervals;
     COLOR color;
 
+    final String UPPERBOUND="upperBound";
+    final String LOWERBOUND="lowerBound";
+
 
 
     public enum COLOR {
@@ -61,20 +64,28 @@ public class ColorCodingConfig {
 
         int minIteration = iteration -1;
         if(minIteration < 0){
-            result.put("lowerBound", null);
+            result.put(LOWERBOUND, null);
         }else{
-            result.put("lowerBound", (minIteration * avg) + this.min);
+            result.put(LOWERBOUND, (minIteration * avg) + this.min);
         }
 
         double upperBound = (iteration * avg) + this.min;
 
         if(iteration > this.intervals){
-            result.put("upperBound", null);
+            result.put(UPPERBOUND, null);
         }else{
-            result.put("upperBound",upperBound);
+            result.put(UPPERBOUND,upperBound);
         }
 
         return result;
+    }
+
+    public Double getIterationUpperBound(HashMap<String,Double> iteration){
+        return iteration.get(UPPERBOUND);
+    }
+
+    public Double getIterationLowerBound(HashMap<String,Double> iteration){
+        return iteration.get(LOWERBOUND);
     }
 
     public String getColor(int iteration){
