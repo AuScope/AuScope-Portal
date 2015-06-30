@@ -150,9 +150,9 @@
             </bean>
         </constructor-arg>
 
-        <property name="name" value="capdf hydrogeochem"/>
+        <property name="name" value="Hydrogeochemistry"/>
         <property name="description" value="Capricorn Distal Footprints hydrogeochem"/>
-        <property name="group" value="Capricorn Distal Footprint"/>
+        <property name="group" value="Capricorn Distal Footprints"/>
 
         <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
