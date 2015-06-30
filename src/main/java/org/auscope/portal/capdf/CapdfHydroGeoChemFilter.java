@@ -19,8 +19,7 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
     List<String> fragments;
 
     /**
-     * Given a mine name, this object will build a filter to a wild card search
-     * for mine names
+     * generate the filter required for color coding filter
      *
      * @param mineName
      *            the main name
