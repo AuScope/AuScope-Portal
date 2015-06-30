@@ -151,8 +151,8 @@
         </constructor-arg>
 
         <property name="name" value="Hydrogeochemistry"/>
-        <property name="description" value="Capricorn Distal Footprints hydrogeochem"/>
-        <property name="group" value="Capricorn Distal Footprints"/>
+        <property name="description" value="Northern Yilgarn Hydrogeochemistry "/>
+        <property name="group" value="Northern Yilgarn Hydrogeochemistry "/>
 
         <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
