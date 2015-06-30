@@ -65,6 +65,9 @@
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />
+                <ref bean="knownTypehydrogeochem" />
+                <ref bean="knownTypeTimaGeoSample" />
+                
             </list>
         </constructor-arg>
     </bean>

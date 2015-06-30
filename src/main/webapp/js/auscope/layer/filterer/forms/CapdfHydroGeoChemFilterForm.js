@@ -36,7 +36,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             itemId: 'aoiParam',
             disabled :  true,
             fieldLabel: '<span data-qtip="Select the parameter of interest">' + 'Parameter of Interest' + '</span>',
-            labelAlign: 'right',
+            labelAlign: 'left',
             name: 'poi',
             typeAhead: true,
             triggerAction: 'all',
@@ -62,7 +62,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
              itemId: 'minMaxSlider',
              disabled :  true,
              fieldLabel: '<span data-qtip="Select the min and max value for color coding">' + 'Min/Max Color Code' + '</span>',
-             labelAlign: 'right',
+             labelAlign: 'left',
              name: 'minMax',
              decimalPrecision : 3,
              values: [25, 50],
@@ -80,7 +80,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             hideMode:'offsets',
             width:'100%',
             buttonAlign:'right',
-            labelAlign:'right',
+            labelAlign:'left',
             labelWidth: 70,
             timeout: 180, //should not time out before the server does
             bodyStyle:'padding:5px',
@@ -93,7 +93,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                 autoHeight: true,
                 items: [{
                     anchor: '100%',
-                    labelAlign: 'right',
+                    labelAlign: 'left',
                     xtype: 'textfield',
                     fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
                                     'Batch Id' +
@@ -111,7 +111,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                         anchor: '100%',
                         itemId: 'aoi',
                         fieldLabel: '<span data-qtip="Select the group of interest">' + 'Group of Interest' + '</span>',
-                        labelAlign: 'right',
+                        labelAlign: 'left',
                         name: 'featureType',
                         typeAhead: true,
                         triggerAction: 'all',
@@ -173,7 +173,15 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
         this.parameterCombo.setDisabled(false);
         var me = this;
         
+        var myMask = new Ext.LoadMask({
+            msg    : 'Please wait...',
+            target : this.parameterCombo.up('fieldset')
+        });
+
+        myMask.show();
+        
         aoiParamStore.on('load',function(store, records, successful, eOpts ){
+            myMask.hide();
             if(successful){
                 me.parameterCombo.setSelection(records[0]);
             }
