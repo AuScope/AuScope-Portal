@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Manages mineral tenement queries
+ * Manage Capricorn distal footprint services
  *
  * @author VictorTey
  * @version
@@ -51,7 +51,7 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
+     * @param batch The  batchid filter
      * @param bbox [Optional] the spatial bounds to constrain the result set
      * @return
      */
@@ -63,9 +63,8 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
-     * @return
+     * @param group The filter
+     * @return String - the filter string
      */
     public String getMeasurementLimits(String group) {
         CapdfMeasurementLimitFilter filter = new CapdfMeasurementLimitFilter(group);
@@ -73,6 +72,13 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
     }
 
 
+    /**
+     * Generate a list of filters for color coding sld rules
+     * @param batchid - filter
+     * @param ccq - CapdfHydroChemColorCoding manager
+     * @return
+     * @throws Exception
+     */
     public List<IFilter> getHydroGeoChemFilterWithColorCoding(String batchid, CapdfHydroChemColorCoding ccq)
             throws Exception {
 

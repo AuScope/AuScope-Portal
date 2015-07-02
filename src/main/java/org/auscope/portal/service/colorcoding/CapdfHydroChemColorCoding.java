@@ -1,5 +1,9 @@
 package org.auscope.portal.service.colorcoding;
-
+/**
+ * Capdf Hydrochemistry specific color coding manager.
+ * @author tey006
+ *
+ */
 public class CapdfHydroChemColorCoding {
 
     private String poi;

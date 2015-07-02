@@ -42,7 +42,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Node;
-
+/**
+ * Controller for Capricorn distal footprint layer
+ *
+ */
 
 @Controller
 public class CapdfHydroGeoChemController extends BasePortalController {
@@ -72,6 +75,16 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
 
+    /**
+     * Handler for the download of the hydrochemistry data.
+     *
+     * @param serviceUrl the url of the service to query
+     * @param batchid   filter the batchid parameter
+     * @param response    the HTTP client response
+     * @param bbox bounding box
+     * @return null: writes to the response stream.
+     * @throws Exception
+     */
     @RequestMapping("/doCapdfHydroGeoChemDownload.do")
     public void doCapdfHydroGeoChemDownload(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -93,7 +106,19 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     }
 
-
+    /**
+     * Handler for the download of the hydrochemistry data in CSV format
+     *
+     * @param serviceUrl the url of the service to query
+     * @param batchid   filter the batchid parameter
+     * @param response    the HTTP client response
+     * @param north bounding box - north
+     * @param south bounding box - south
+     * @param east bounding box - east
+     * @param west bounding box - west
+     * @return null: writes to the response stream.
+     * @throws Exception
+     */
     @RequestMapping("/getCapdfCSVDownload.do")
     public void getCapdfCSVDownload(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -125,6 +150,13 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
 
+    /**
+     * Handler to retrieve grouping of the dataset. This is currently hardcoded as the service itself does not provide
+     * this information. This will hopefully change in the future.
+     *
+     * @param serviceUrl the url of the service to query
+     *
+     */
     @RequestMapping("/doGetGroupOfInterest")
     public ModelAndView doGetGroupOfInterest(@RequestParam("serviceUrl") String serviceUrl){
         JSONArray dataItems = new JSONArray();
@@ -145,6 +177,14 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
 
+    /**
+     * Handler for the download of the hydrochemistry data in CSV format
+     *
+     * @param serviceUrl the url of the service to query
+     * @param featureType The grouping of the dataset correlate to the featureType.
+     * @return ModelAndView
+     * @throws IOException,PortalServiceException
+     */
     @RequestMapping("/doGetAOIParam")
     public ModelAndView doGetAOIParam(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -344,15 +384,15 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
     /**
-     * Handles getting the style of the mineral tenement filter queries.
+     * Handles getting the style of the hydrochemistry
      * (If the bbox elements are specified, they will limit the output response to 200 records implicitly)
      *
-     * @param serviceUrl
-     * @param name
+     * @param batchid
+     * @param featureType
      * @param tenementType
-     * @param owner
-     * @param status
-     * @throws Exception
+     * @param poi - parameter of interest
+     * @param minMax - in a csv format, eg 15,30 for min 15 and max 30
+     *
      */
     @RequestMapping("/getCapdfHydroGeoChemStyle.do")
     public void getCapdfHydroGeoChemStyle(
@@ -390,6 +430,13 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
 
+    /**
+     * Returns the style for color coding.
+     * @param stylefilterRules - filter rules for color coding
+     * @param ccc - ColorCodingConfig object
+     * @param name - the name of the layer.
+     * @return
+     */
     public String getColorCodedStyle(List<IFilter> stylefilterRules,ColorCodingConfig ccc,String name){
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
@@ -439,6 +486,12 @@ public class CapdfHydroGeoChemController extends BasePortalController {
         return style;
     }
 
+    /**
+     * Returns the style for wms request.
+     * @param stylefilterRules - filter rules for color coding
+     * @param name - the name of the layer.
+     * @return String the style sld.
+     */
     public String getStyle(String stylefilterRules,String name,String color){
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +

@@ -2,7 +2,11 @@ package org.auscope.portal.service.colorcoding;
 
 import java.util.HashMap;
 import java.util.Random;
-
+/**
+ * Configuration object used in calculating and storing color coding and calculations.
+ * @author tey006
+ *
+ */
 public class ColorCodingConfig {
 
     double max,min;
@@ -56,7 +60,13 @@ public class ColorCodingConfig {
         return this.intervals + 2;
     }
 
-
+    /**
+     * Based on the given iteration cycle, return upper and lower bound.Use this in conjunction with
+     * getIterationUpperBound and getIterationLowerBound.
+     *
+     * @param iteration
+     * @return
+     */
     public HashMap<String,Double> getIteration(int iteration){
         HashMap<String,Double> result=new HashMap<String,Double>();
 
@@ -88,6 +98,11 @@ public class ColorCodingConfig {
         return iteration.get(LOWERBOUND);
     }
 
+    /**
+     * Based on the given iteration, retrieve the color accordingly in the scale.
+     * @param iteration
+     * @return - color in hex
+     */
     public String getColor(int iteration){
         return (this.color.getColor())[iteration];
     }
