@@ -46,9 +46,13 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             valueField: 'classifier',
             displayField: 'classifier', 
             listConfig: {
-                itemTpl: [
-                    '<div data-qtip="{pref_name}">{classifier}-({pref_name})</div>'
-                ]
+                itemTpl:  Ext.create('Ext.XTemplate',
+                        '<tpl if="pref_name == null || pref_name == \'\'">',
+                        '<div data-qtip="{pref_name}"><b>{classifier}</b></div>',
+                        '<tpl else>',
+                        '<div data-qtip="{pref_name}"><b>{classifier}</b> ({pref_name})</div>',
+                        '</tpl>'
+                )
             },
             listeners: {
                 select : function(combo, record, eOpts){

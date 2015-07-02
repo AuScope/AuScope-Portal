@@ -1,5 +1,5 @@
 /**
- * Produce a form for graphing Capricorn distal footprint 
+ * Produce a form for graphing Northern Yilgarn Hydrogeochemistry footprint 
  */
 Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
     extend : 'Ext.window.Window',
@@ -65,9 +65,13 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             valueField: 'classifier',
             displayField: 'classifier', 
             listConfig: {
-                itemTpl: [
-                    '<div data-qtip="{pref_name}">{classifier}-({pref_name})</div>'
-                ]
+                itemTpl:  Ext.create('Ext.XTemplate',
+                        '<tpl if="pref_name == null || pref_name == \'\'">',
+                        '<div data-qtip="{pref_name}"><b>{classifier}</b></div>',
+                        '<tpl else>',
+                        '<div data-qtip="{pref_name}"><b>{classifier}</b> ({pref_name})</div>',
+                        '</tpl>'
+                )
             }
            
         });
@@ -86,9 +90,13 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             valueField: 'classifier',
             displayField: 'classifier', 
             listConfig: {
-                itemTpl: [
-                    '<div data-qtip="{pref_name}">{classifier}-({pref_name})</div>'
-                ]
+                itemTpl:  Ext.create('Ext.XTemplate',
+                        '<tpl if="pref_name == null || pref_name == \'\'">',
+                        '<div data-qtip="{pref_name}"><b>{classifier}</b></div>',
+                        '<tpl else>',
+                        '<div data-qtip="{pref_name}"><b>{classifier}</b> ({pref_name})</div>',
+                        '</tpl>'
+                )
             }
            
         });
@@ -96,7 +104,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         
 
         Ext.apply(cfg, {
-            title: 'Capricorn distal Footprint',
+            title: 'Northern Yilgarn Hydrogeochemistry',
             height: 500,
             width: 400,     
             collapsible : true,
@@ -188,7 +196,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                     }
                 ],
                 buttons : [{
-                    text : 'scatter plot',
+                    text : 'Scatter Plot',
                     handler : function(){
                         
                         var myMask = new Ext.LoadMask({
@@ -391,7 +399,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         box.events.register('featureadded', {}, Ext.bind(function(e,c){
             
             c.expand();
-            c.setTitle('Capricorn distal Footprint');
+            c.setTitle('Northern Yilgarn Hydrogeochemistry');
             
             var ctrl = e.object;
             var feature = e.feature;
@@ -435,7 +443,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
                     window.setTitle('Select Area on Map to reactivate window');
                 }else{
                    
-                    window.setTitle('Capricorn distal Footprint');
+                    window.setTitle('Northern Yilgarn Hydrogeochemistry');
                     button.setText('Draw Bounds')
                     boxLayer.removeAllFeatures();  
                     

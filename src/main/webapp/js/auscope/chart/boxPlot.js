@@ -156,7 +156,7 @@ Ext.define('auscope.chart.boxPlot', {
                 .attr("text-anchor", "middle")  
                 .style("font-size", "18px") 
                 //.style("text-decoration", "underline")  
-                .text("Capdf Box Plot");
+                .text("Box Plot");
          
              // draw y axis
             svg.append("g")
