@@ -4,7 +4,7 @@
     <groupId>org.auscope.portal</groupId>
     <artifactId>AuScope-Portal</artifactId>
     <packaging>war</packaging>
-    <version>4.2.0-SNAPSHOT</version>
+    <version>4.1.0</version>
     <name>AuScope-Portal</name>
     <description>AuScopes flagship demonstration tool</description>
     <url>http://portal.auscope.org</url>
@@ -36,7 +36,7 @@
         <spring.version>3.0.5.RELEASE</spring.version>
         <spring.security.version>3.0.5.RELEASE</spring.security.version>
         <geotools.version>2.6.5</geotools.version>
-        <portal.core.version>1.4.0-SNAPSHOT</portal.core.version>
+        <portal.core.version>1.3.0</portal.core.version>
     </properties>
     <build>    
         <plugins>        
@@ -235,7 +235,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>        			        
+                    </plugin>                           
                 </plugins>
             </build>
         </profile>
@@ -368,7 +368,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-		<repository>
+        <repository>
             <id>cgsrv8.arrc.csiro.au</id>
             <name>AuScope Nexus - PortalRepo</name>
             <url>http://cgsrv8.arrc.csiro.au/nexus/content/groups/PortalRepository/</url>
