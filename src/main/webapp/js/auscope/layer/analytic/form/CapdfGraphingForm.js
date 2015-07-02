@@ -332,7 +332,11 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
        
        splot.plot(series,xaxis,yaxis);
        
-       splot.maskClear();   
+       splot.maskClear();  
+       
+       this.on('close',function(){
+           win.close();
+       })
     },
     
     boxPlot : function(series,box1,box2) {
@@ -355,6 +359,10 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
         splot.plot(series,box1,box2);
         
         splot.maskClear();
+        
+        this.on('close',function(){
+            win.close();
+        })
          
      },
     

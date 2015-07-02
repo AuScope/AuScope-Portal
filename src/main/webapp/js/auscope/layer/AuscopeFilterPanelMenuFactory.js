@@ -6,6 +6,7 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
  
     map : null,
     
+    
     constructor : function(config) {
         this.map = config.map;
         this.callParent(arguments);
@@ -38,6 +39,10 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         }
         
         
+    },
+    
+    layerRemoveHandler : function(layer){
+        this.fireEvent('removelayer', layer);
     },
     
     _getDownloadAction : function(layer){
@@ -117,8 +122,13 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                     text : 'Graph',
                     iconCls : 'graph',                    
                     handler : function(){   
-                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
+                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)                        
                         win.show();
+                        me.on('removelayer',function(closeLayer){
+                            if(closeLayer.get('id')==layer.get('id')){
+                                win.close();
+                            }                            
+                        })                                               
                     }
                 });
             }else{
