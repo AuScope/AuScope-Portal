@@ -482,7 +482,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 "</NamedLayer>" +
                 "</StyledLayerDescriptor>";
 
-        logger.info(style);
+        logger.debug(style);
         return style;
     }
 
