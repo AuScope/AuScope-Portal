@@ -22,15 +22,18 @@ public class MineralTenementService extends BaseWFSService {
 
     @Autowired
     public MineralTenementService(
-                        HttpServiceCaller httpServiceCaller,
-                        WFSGetFeatureMethodMaker methodMaker) {
+            HttpServiceCaller httpServiceCaller,
+            WFSGetFeatureMethodMaker methodMaker) {
         super(httpServiceCaller, methodMaker);
     }
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * 
+     * @param filter
+     *            The filter
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
     public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
@@ -44,35 +47,37 @@ public class MineralTenementService extends BaseWFSService {
         return filterString;
     }
 
-    public String getMineralTenementFilter(String name, String tenementType, String owner,String size, String endDate,FilterBoundingBox bbox)
+    public String getMineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,
+            FilterBoundingBox bbox)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name,tenementType,owner,size,endDate);
-        return generateFilterString(filter,bbox);
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate);
+        return generateFilterString(filter, bbox);
     }
 
-
-    public String getMineralTenementWithStyling(String name, String tenementType, String owner,String size, String endDate)
+    public String getMineralTenementWithStyling(String name, String tenementType, String owner, String size,
+            String endDate)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name,tenementType,owner,size,endDate);
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate);
         return generateAdditionalStyleFilter(filter);
     }
 
     /**
      * Utility for turning a filter and add additional styling to the filter.
-     * @param filter The filter
+     * 
+     * @param filter
+     *            The filter
      * @return
      * @throws OperationNotSupportedException
      */
     public static String generateAdditionalStyleFilter(IFilter filter) throws OperationNotSupportedException {
-        if(filter instanceof MineralTenementFilter){
-            MineralTenementFilter mtFilter=(MineralTenementFilter)filter;
+        if (filter instanceof MineralTenementFilter) {
+            MineralTenementFilter mtFilter = (MineralTenementFilter) filter;
             return mtFilter.getFilterWithAdditionalStyle();
-        }else{
-            throw new OperationNotSupportedException("Only MineralTenementFilter supports the use of additional style filtering");
+        } else {
+            throw new OperationNotSupportedException(
+                    "Only MineralTenementFilter supports the use of additional style filtering");
         }
 
     }
-
-
 
 }

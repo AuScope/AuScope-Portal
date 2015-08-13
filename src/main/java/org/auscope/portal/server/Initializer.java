@@ -9,11 +9,12 @@ import org.auscope.portal.core.util.FileIOUtil;
 
 public class Initializer {
     private final Log log = LogFactory.getLog(getClass());
-    public Initializer(){
+
+    public Initializer() {
 
     }
 
-    public void run(){
+    public void run() {
         this.cleanUpTempDirectory();
 
     }
@@ -27,9 +28,9 @@ public class Initializer {
                 throw new InitializationException(
                         "Error in cleaning up temp files");
             } else {
-                File [] files = dir.listFiles();
-                for(int i=0;i<files.length;i++){
-                    if(files[i].getName().startsWith("APT_")){
+                File[] files = dir.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    if (files[i].getName().startsWith("APT_")) {
                         FileIOUtil.deleteFilesRecursive(files[i]);
                     }
                 }
@@ -40,6 +41,5 @@ public class Initializer {
         }
 
     }
-
 
 }

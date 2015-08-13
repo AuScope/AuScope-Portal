@@ -51,23 +51,34 @@ public class TestErmlVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository works as expected - returning all english GA concepts
+     * 
      * @throws Exception
      */
     @Test
     public void testGetEnglishCommodityConcepts() throws Exception {
-        final InputStream rs1 = ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_MoreData.xml");
-        final InputStream rs2 = ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_NoMoreData.xml");
+        final InputStream rs1 = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_MoreData.xml");
+        final InputStream rs2 = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_NoMoreData.xml");
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf, service.getPageSize(), 0, ErmlVocabService.GA_URN_PATTERN);will(returnValue(mockMethod));
-            oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf, service.getPageSize(), 1, ErmlVocabService.GA_URN_PATTERN);will(returnValue(mockMethod2));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf,
+                        service.getPageSize(), 0, ErmlVocabService.GA_URN_PATTERN);
+                will(returnValue(mockMethod));
+                oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf,
+                        service.getPageSize(), 1, ErmlVocabService.GA_URN_PATTERN);
+                will(returnValue(mockMethod2));
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(rs1));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);will(returnValue(rs2));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(rs1));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);
+                will(returnValue(rs2));
 
-            oneOf(mockMethod).releaseConnection();
-            oneOf(mockMethod2).releaseConnection();
-        }});
+                oneOf(mockMethod).releaseConnection();
+                oneOf(mockMethod2).releaseConnection();
+            }
+        });
 
         Map<String, String> result = service.getGaCommodityConcepts("en");
         Assert.assertNotNull(result);
@@ -79,23 +90,34 @@ public class TestErmlVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository works as expected - returning only a single french term
+     * 
      * @throws Exception
      */
     @Test
     public void testGetFrenchCommodityConcepts() throws Exception {
-        final InputStream rs1 = ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_MoreData.xml");
-        final InputStream rs2 = ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_NoMoreData.xml");
+        final InputStream rs1 = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_MoreData.xml");
+        final InputStream rs2 = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/vocab/SISSVoc3_Concepts_NoMoreData.xml");
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf, service.getPageSize(), 0, ErmlVocabService.GA_URN_PATTERN);will(returnValue(mockMethod));
-            oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf, service.getPageSize(), 1, ErmlVocabService.GA_URN_PATTERN);will(returnValue(mockMethod2));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf,
+                        service.getPageSize(), 0, ErmlVocabService.GA_URN_PATTERN);
+                will(returnValue(mockMethod));
+                oneOf(mockMethodMaker).getCommoditiesMatchingUrn(baseUrl, ErmlVocabService.REPOSITORY_NAME, Format.Rdf,
+                        service.getPageSize(), 1, ErmlVocabService.GA_URN_PATTERN);
+                will(returnValue(mockMethod2));
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(rs1));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);will(returnValue(rs2));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(rs1));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);
+                will(returnValue(rs2));
 
-            oneOf(mockMethod).releaseConnection();
-            oneOf(mockMethod2).releaseConnection();
-        }});
+                oneOf(mockMethod).releaseConnection();
+                oneOf(mockMethod2).releaseConnection();
+            }
+        });
 
         Map<String, String> result = service.getGaCommodityConcepts("fr");
         Assert.assertNotNull(result);

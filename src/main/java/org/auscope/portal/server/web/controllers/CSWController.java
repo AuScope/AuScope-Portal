@@ -38,10 +38,10 @@ public class CSWController extends BaseCSWController {
 
     /**
      *
-     * @param dateString in format: 28/02/2013
+     * @param dateString
+     *            in format: 28/02/2013
      * @param endOfDay
-     * false means the time will be 00:00:00:000
-     * true means the time will be 23:59:59:999
+     *            false means the time will be 00:00:00:000 true means the time will be 23:59:59:999
      * @return
      */
     private DateTime stringToDateTime(String dateString, boolean endOfDay) {
@@ -51,13 +51,14 @@ public class CSWController extends BaseCSWController {
                 Integer.parseInt(date[1]), // monthOfYear
                 Integer.parseInt(date[0]), // dayOfMonth
                 endOfDay ? 23 : 0, // hourOfDay
-                        endOfDay ? 59 : 0, // minuteOfHour
-                                endOfDay ? 59 : 0, // secondOfMinute
-                                        endOfDay ? 999 : 0); // millisOfSecond
+                endOfDay ? 59 : 0, // minuteOfHour
+                endOfDay ? 59 : 0, // secondOfMinute
+                endOfDay ? 999 : 0); // millisOfSecond
     }
 
     /**
      * use for testing a csw connection
+     * 
      * @param cswServiceUrl
      * @return
      * @throws Exception
@@ -65,10 +66,10 @@ public class CSWController extends BaseCSWController {
      */
     @RequestMapping("/testCSWConnection.do")
     public ModelAndView testConnection(
-            @RequestParam(value="cswServiceUrl", required = true) String cswServiceUrl) throws Exception{
-        try{
+            @RequestParam(value = "cswServiceUrl", required = true) String cswServiceUrl) throws Exception {
+        try {
             HttpGet method = new HttpGet(cswServiceUrl);
-            URIBuilder builder= new URIBuilder(cswServiceUrl);
+            URIBuilder builder = new URIBuilder(cswServiceUrl);
             // test request=GetCapabilities&service=CSW&acceptVersions=2.0.2&acceptFormats=application%2Fxml
             builder.addParameter("request", "GetCapabilities");
             builder.addParameter("service", "CSW");
@@ -78,7 +79,7 @@ public class CSWController extends BaseCSWController {
             this.serviceCaller.getMethodResponseAsString(method);
 
             return generateJSONResponseMAV(true);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
 
@@ -86,6 +87,7 @@ public class CSWController extends BaseCSWController {
 
     /**
      * use for testing a csw connection
+     * 
      * @param cswServiceUrl
      * @return
      * @throws Exception
@@ -93,27 +95,25 @@ public class CSWController extends BaseCSWController {
      */
     @RequestMapping("/testServiceGetCap.do")
     public ModelAndView testServiceGetCap(
-            @RequestParam(value="serviceUrl", required = true) String serviceUrl) throws Exception{
-        try{
+            @RequestParam(value = "serviceUrl", required = true) String serviceUrl) throws Exception {
+        try {
             HttpGet method = new HttpGet(serviceUrl);
-            URIBuilder builder= new URIBuilder(serviceUrl);
+            URIBuilder builder = new URIBuilder(serviceUrl);
             // test request=GetCapabilities&service=CSW&acceptVersions=2.0.2&acceptFormats=application%2Fxml
             builder.addParameter("request", "GetCapabilities");
             method.setURI(builder.build());
             this.serviceCaller.getMethodResponseAsString(method);
 
             return generateJSONResponseMAV(true);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
 
     }
 
     /**
-     * Requests CSW records from the cswServiceUrl provided.
-     * The results will be filtered by the CQL Text and the filter options.
-     * Records will be returned from the starting point (where 1 is the first record, not 0)
-     * and the number of records retrieved will not exceed maxRecords.
+     * Requests CSW records from the cswServiceUrl provided. The results will be filtered by the CQL Text and the filter options. Records will be returned from
+     * the starting point (where 1 is the first record, not 0) and the number of records retrieved will not exceed maxRecords.
      *
      * @param cswServiceUrl
      * @param recordInfoUrl
@@ -128,31 +128,28 @@ public class CSWController extends BaseCSWController {
      * @param metadataDateTo
      * @param temporalExtentFrom
      * @param temporalExtentTo
-     * @return
-     * Example:
-     * "data":[portal.csw.CSWRecord], // These are anonymous objects, you can use them as the config for portal.csw.CSWRecord.
-     * "msg":"No errors",
-     * "totalResults":18, // This is not the number of results returned, it is the number of results the query matched.
-     * "success":true
+     * @return Example: "data":[portal.csw.CSWRecord], // These are anonymous objects, you can use them as the config for portal.csw.CSWRecord.
+     *         "msg":"No errors", "totalResults":18, // This is not the number of results returned, it is the number of results the query matched.
+     *         "success":true
      */
     @RequestMapping("/getUncachedCSWRecords.do")
     public ModelAndView getUncachedCSWRecords(
-            @RequestParam(value="cswServiceUrl", required = false) String cswServiceUrl,
-            @RequestParam(value="recordInfoUrl", required = false) String recordInfoUrl,
-            @RequestParam(value="start", required = false) int start,
-            @RequestParam(value="limit", required = false) int limit,
-            @RequestParam(value="bbox", required = false) String bbox,
-            @RequestParam(value="northBoundLatitude", defaultValue="NaN", required = false) double northBoundLatitude,
-            @RequestParam(value="eastBoundLongitude", defaultValue="NaN", required = false) double eastBoundLongitude,
-            @RequestParam(value="southBoundLatitude", defaultValue="NaN", required = false) double southBoundLatitude,
-            @RequestParam(value="westBoundLongitude", defaultValue="NaN", required = false) double westBoundLongitude,
-            @RequestParam(value="anyText", required = false) String anyText,
-            @RequestParam(value="title", required = false) String title,
-            @RequestParam(value="abstract_", required = false) String abstract_,
-            @RequestParam(value="metadataDateFrom", required = false) String metadataDateFrom,
-            @RequestParam(value="metadataDateTo", required = false) String metadataDateTo,
-            @RequestParam(value="temporalExtentFrom", required = false) String temporalExtentFrom,
-            @RequestParam(value="temporalExtentTo", required = false) String temporalExtentTo) {
+            @RequestParam(value = "cswServiceUrl", required = false) String cswServiceUrl,
+            @RequestParam(value = "recordInfoUrl", required = false) String recordInfoUrl,
+            @RequestParam(value = "start", required = false) int start,
+            @RequestParam(value = "limit", required = false) int limit,
+            @RequestParam(value = "bbox", required = false) String bbox,
+            @RequestParam(value = "northBoundLatitude", defaultValue = "NaN", required = false) double northBoundLatitude,
+            @RequestParam(value = "eastBoundLongitude", defaultValue = "NaN", required = false) double eastBoundLongitude,
+            @RequestParam(value = "southBoundLatitude", defaultValue = "NaN", required = false) double southBoundLatitude,
+            @RequestParam(value = "westBoundLongitude", defaultValue = "NaN", required = false) double westBoundLongitude,
+            @RequestParam(value = "anyText", required = false) String anyText,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "abstract_", required = false) String abstract_,
+            @RequestParam(value = "metadataDateFrom", required = false) String metadataDateFrom,
+            @RequestParam(value = "metadataDateTo", required = false) String metadataDateTo,
+            @RequestParam(value = "temporalExtentFrom", required = false) String temporalExtentFrom,
+            @RequestParam(value = "temporalExtentTo", required = false) String temporalExtentTo) {
         CSWServiceItem endpoint = new CSWServiceItem(
                 "", // This ID won't actually be used so we can just leave it blank.
                 cswServiceUrl,
@@ -176,8 +173,8 @@ public class CSWController extends BaseCSWController {
             } else {
                 spatialBounds = new FilterBoundingBox(
                         "EPSG:4326",
-                        new double[] { eastBoundLongitude, southBoundLatitude },
-                        new double[] { westBoundLongitude, northBoundLatitude });
+                        new double[] {eastBoundLongitude, southBoundLatitude},
+                        new double[] {westBoundLongitude, northBoundLatitude});
             }
 
             CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(
@@ -220,7 +217,5 @@ public class CSWController extends BaseCSWController {
 
         return generateJSONResponseMAV(false);
     }
-
-
 
 }

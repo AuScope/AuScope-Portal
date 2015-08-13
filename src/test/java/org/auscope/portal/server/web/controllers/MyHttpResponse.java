@@ -11,10 +11,11 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.params.HttpParams;
 
-public class MyHttpResponse implements HttpResponse{
+public class MyHttpResponse implements HttpResponse {
     InputStream content;
-    public MyHttpResponse(InputStream is){
-        this.content=is;
+
+    public MyHttpResponse(InputStream is) {
+        this.content = is;
     }
 
     @Override
@@ -157,7 +158,7 @@ public class MyHttpResponse implements HttpResponse{
 
     @Override
     public HttpEntity getEntity() {
-        MyHttpEntity entity=new MyHttpEntity(this.content);
+        MyHttpEntity entity = new MyHttpEntity(this.content);
         return entity;
     }
 

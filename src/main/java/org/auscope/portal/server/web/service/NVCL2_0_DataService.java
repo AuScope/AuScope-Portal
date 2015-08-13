@@ -26,7 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 @Service
-public class NVCL2_0_DataService{
+public class NVCL2_0_DataService {
 
     private final Log log = LogFactory.getLog(getClass());
     private NVCL2_0_DataServiceMethodMaker nvclMethodMaker;
@@ -35,40 +35,40 @@ public class NVCL2_0_DataService{
     @Autowired
     public NVCL2_0_DataService(HttpServiceCaller httpServiceCaller,
             NVCL2_0_DataServiceMethodMaker nvclMethodMaker) {
-        this.nvclMethodMaker=nvclMethodMaker;
-        this.httpServiceCaller=httpServiceCaller;
+        this.nvclMethodMaker = nvclMethodMaker;
+        this.httpServiceCaller = httpServiceCaller;
     }
-
 
     /**
      * Makes a CSV download request from NVCL 2.0 service and returns the resulting data in a CSVDownloadResponse
      *
      * Response should be a stream of bytes for a CSV file
      *
-     * @param serviceUrl The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
-     * @param datasetId The dataset to download
+     * @param serviceUrl
+     *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
+     * @param datasetId
+     *            The dataset to download
      * @return
      * @throws Exception
      */
 
-    public CSVDownloadResponse getNVCL2_0_CSVDownload(String serviceUrl, String [] logIds) throws Exception {
+    public CSVDownloadResponse getNVCL2_0_CSVDownload(String serviceUrl, String[] logIds) throws Exception {
 
         serviceUrl += "downloadscalars.html";
 
-        HttpRequestBase method = nvclMethodMaker.getDownloadCSVMethod(serviceUrl,logIds);
+        HttpRequestBase method = nvclMethodMaker.getDownloadCSVMethod(serviceUrl, logIds);
         HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
         InputStream responseStream = httpResponse.getEntity().getContent();
         Header contentHeader = httpResponse.getEntity().getContentType();
 
-
         return new CSVDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
 
-
-    public TrayThumbNailResponse getTrayThumbNail(String dataSetId, String serviceUrl,String logId,
+    public TrayThumbNailResponse getTrayThumbNail(String dataSetId, String serviceUrl, String logId,
             Integer width, Integer startSampleNo, Integer endSampleNo) throws Exception {
 
-        HttpRequestBase method = nvclMethodMaker.getTrayThumbNailMethodMaker(dataSetId, serviceUrl, logId, width, startSampleNo, endSampleNo);
+        HttpRequestBase method = nvclMethodMaker.getTrayThumbNailMethodMaker(dataSetId, serviceUrl, logId, width,
+                startSampleNo, endSampleNo);
         HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
         InputStream responseStream = httpResponse.getEntity().getContent();
         Header contentHeader = httpResponse.getEntity().getContentType();
@@ -77,15 +77,19 @@ public class NVCL2_0_DataService{
 
     }
 
-
     /**
      * Makes and parses a getLogCollection request to a NVCLDataService
-     * @param serviceUrl The NVCLDataService url
-     * @param datasetId The unique dataset ID to query
-     * @param forMosaicService [Optional] indicates if the getLogCollection service should generate a result specifically for the use of a Mosaic Service
+     * 
+     * @param serviceUrl
+     *            The NVCLDataService url
+     * @param datasetId
+     *            The unique dataset ID to query
+     * @param forMosaicService
+     *            [Optional] indicates if the getLogCollection service should generate a result specifically for the use of a Mosaic Service
      * @throws Exception
      */
-    public List<GetLogCollectionResponse> getLogCollection(String serviceUrl, String datasetId, Boolean forMosaicService) throws Exception {
+    public List<GetLogCollectionResponse> getLogCollection(String serviceUrl, String datasetId, Boolean forMosaicService)
+            throws Exception {
         HttpRequestBase method = nvclMethodMaker.getLogCollectionMethod(serviceUrl, datasetId, forMosaicService);
 
         //Make our request, parse it into a DOM document
@@ -118,6 +122,5 @@ public class NVCL2_0_DataService{
 
         return responseObjs;
     }
-
 
 }

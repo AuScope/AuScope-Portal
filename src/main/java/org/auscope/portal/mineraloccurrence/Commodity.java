@@ -16,15 +16,16 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * User: Michael Stegherr
- * Date: 27/03/2009
+ * User: Michael Stegherr Date: 27/03/2009
+ * 
  * @version $Id$
  */
 public class Commodity {
     private final Log log = LogFactory.getLog(getClass());
     private Node commodityNode;
 
-    public Commodity(Node commodityNode) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
+    public Commodity(Node commodityNode) throws IOException, SAXException, ParserConfigurationException,
+            XPathExpressionException {
         this.commodityNode = commodityNode;
     }
 
@@ -35,9 +36,10 @@ public class Commodity {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr = xPath.compile("gml:name");
-            NodeList list = (NodeList)expr.evaluate(commodityNode, XPathConstants.NODESET);
+            NodeList list = (NodeList) expr.evaluate(commodityNode, XPathConstants.NODESET);
             for (int i = 0; i < list.getLength(); i++) {
-                if (list.item(i).getAttributes().getNamedItem("codeSpace").getNodeValue().compareTo("http://www.ietf.org/rfc/rfc2141") == 0) {
+                if (list.item(i).getAttributes().getNamedItem("codeSpace").getNodeValue()
+                        .compareTo("http://www.ietf.org/rfc/rfc2141") == 0) {
                     result = list.item(i).getTextContent();
                 }
             }
@@ -55,8 +57,8 @@ public class Commodity {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr = xPath.compile("er:commodityName");
-            Node result = (Node)expr.evaluate(commodityNode, XPathConstants.NODE);
-            log.trace("commodity class to get text commodity name "+ result.getTextContent() +"was the content");
+            Node result = (Node) expr.evaluate(commodityNode, XPathConstants.NODE);
+            log.trace("commodity class to get text commodity name " + result.getTextContent() + "was the content");
             return result.getTextContent();
         } catch (Exception e) {
             return "";
@@ -70,8 +72,8 @@ public class Commodity {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr = xPath.compile("er:commodityImportance");
-            Node result = (Node)expr.evaluate(commodityNode, XPathConstants.NODE);
-            log.trace("commodity class to getCommodityImportance"+ result.getTextContent() +"was the content");
+            Node result = (Node) expr.evaluate(commodityNode, XPathConstants.NODE);
+            log.trace("commodity class to getCommodityImportance" + result.getTextContent() + "was the content");
             return result.getTextContent();
         } catch (Exception e) {
             return "";
@@ -85,10 +87,10 @@ public class Commodity {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr = xPath.compile("er:source");
-            Node result = (Node)expr.evaluate(commodityNode, XPathConstants.NODE);
-            String search  = "urn:cgi";
+            Node result = (Node) expr.evaluate(commodityNode, XPathConstants.NODE);
+            String search = "urn:cgi";
             String s = result.getAttributes().getNamedItem("xlink:href").getTextContent();
-            log.trace("commodity class to getSource"+ s.substring(s.indexOf(search)) +"was the content");
+            log.trace("commodity class to getSource" + s.substring(s.indexOf(search)) + "was the content");
             return s.substring(s.indexOf(search));
         } catch (Exception e) {
             return "";

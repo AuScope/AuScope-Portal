@@ -1,10 +1,7 @@
 package org.auscope.portal.server.web;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Mathew Wyatt
- * Date: Jun 4, 2009
- * Time: 3:16:09 PM
+ * Created by IntelliJ IDEA. User: Mathew Wyatt Date: Jun 4, 2009 Time: 3:16:09 PM
  */
 public class ErrorMessages {
     public static final String OPERATION_FAILED = "The operation performed did not complete successfully.";

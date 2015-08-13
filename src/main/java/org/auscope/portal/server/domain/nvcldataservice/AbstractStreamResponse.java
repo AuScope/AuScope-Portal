@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 /**
  * Abstract parts common to a typical HTTP Stream response
+ * 
  * @author Josh Vote
  *
  */
@@ -13,8 +14,11 @@ public abstract class AbstractStreamResponse {
 
     /**
      * Prepares a AbstractStreamResponse
-     * @param response The raw binary response
-     * @param contentType The content type as a MIME string (expect either html or image MIME's).
+     * 
+     * @param response
+     *            The raw binary response
+     * @param contentType
+     *            The content type as a MIME string (expect either html or image MIME's).
      */
     protected AbstractStreamResponse(InputStream response, String contentType) {
         this.response = response;
@@ -23,6 +27,7 @@ public abstract class AbstractStreamResponse {
 
     /**
      * Gets the raw response stream
+     * 
      * @return
      */
     public InputStream getResponse() {
@@ -31,6 +36,7 @@ public abstract class AbstractStreamResponse {
 
     /**
      * Sets the response
+     * 
      * @param response
      */
     public void setResponse(InputStream response) {
@@ -39,6 +45,7 @@ public abstract class AbstractStreamResponse {
 
     /**
      * Gets the content type of the response as a MIME string
+     * 
      * @return
      */
     public String getContentType() {
@@ -47,12 +54,11 @@ public abstract class AbstractStreamResponse {
 
     /**
      * Sets the content type of the response as a MIME string
+     * 
      * @param contentType
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
-
-
 
 }

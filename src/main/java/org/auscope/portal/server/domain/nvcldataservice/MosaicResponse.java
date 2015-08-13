@@ -14,8 +14,11 @@ public class MosaicResponse extends AbstractStreamResponse {
 
     /**
      * Creates a GetMosaicResponse
-     * @param response The raw binary response
-     * @param contentType The content type as a MIME string (expect either html or image MIME's).
+     * 
+     * @param response
+     *            The raw binary response
+     * @param contentType
+     *            The content type as a MIME string (expect either html or image MIME's).
      */
     public MosaicResponse(InputStream response, String contentType) {
         super(response, contentType);

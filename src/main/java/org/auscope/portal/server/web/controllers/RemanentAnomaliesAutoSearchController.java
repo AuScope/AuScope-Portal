@@ -28,27 +28,27 @@ public class RemanentAnomaliesAutoSearchController extends BasePortalController 
 
     @RequestMapping("/doRemanentAnomaliesAutoSearchDownload.do")
     public void doRemanentAnomaliesAutoSearchDownload(
-                        @RequestParam("serviceUrl") String serviceUrl,
-                        @RequestParam(required = false, value ="name") String name,
-                        @RequestParam(required = false, value = "bbox") String bboxJson,
-                        HttpServletResponse response)throws Exception {
-
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "name") String name,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            HttpServletResponse response) throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        String filter=this.remanentAnomaliesAutoSearchService.getRemanentAnomaliesAutoSearchFilter(bbox);
+        String filter = this.remanentAnomaliesAutoSearchService.getRemanentAnomaliesAutoSearchFilter(bbox);
 
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
 
-        InputStream results = this.remanentAnomaliesAutoSearchService.downloadWFS(serviceUrl, REMANENT_ANOMALIESAUTOSEARCH_TYPE, filter, null);
+        InputStream results = this.remanentAnomaliesAutoSearchService.downloadWFS(serviceUrl,
+                REMANENT_ANOMALIESAUTOSEARCH_TYPE, filter, null);
         FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
         outputStream.close();
 
     }
 
     /**
-     * Handles getting the style of the Remanent Anomalies filter queries.
-     * (If the bbox elements are specified, they will limit the output response to 200 records implicitly)
+     * Handles getting the style of the Remanent Anomalies filter queries. (If the bbox elements are specified, they will limit the output response to 200
+     * records implicitly)
      *
      * @param serviceUrl
      * @param name
@@ -56,24 +56,23 @@ public class RemanentAnomaliesAutoSearchController extends BasePortalController 
      */
     @RequestMapping("/getRemanentAnomaliesAutoSearchStyle.do")
     public void doRemanentAnomaliesAutoSearchStyle(
-                        @RequestParam(required = false,value="serviceUrl") String serviceUrl,
-                        HttpServletResponse response)throws Exception {
+            @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
+            HttpServletResponse response) throws Exception {
 
         //Vt: wms shouldn't need the bbox because it is tiled.
         FilterBoundingBox bbox = null;
         //String stylefilter=this.remanentAnomaliesService.getRemanentAnomaliesWithStyling(name); //VT:get filter from service
 
-        String filter=this.remanentAnomaliesAutoSearchService.getRemanentAnomaliesAutoSearchFilter(bbox); //VT:get filter from service
+        String filter = this.remanentAnomaliesAutoSearchService.getRemanentAnomaliesAutoSearchFilter(bbox); //VT:get filter from service
 
-        String style=this.getStyle(filter, "#0000FF");
-
+        String style = this.getStyle(filter, "#0000FF");
 
         response.setContentType("text/xml");
 
         ByteArrayInputStream styleStream = new ByteArrayInputStream(style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
         outputStream.close();

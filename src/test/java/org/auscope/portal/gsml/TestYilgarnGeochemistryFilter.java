@@ -15,7 +15,7 @@ public class TestYilgarnGeochemistryFilter extends PortalTestClass {
     @Test
     public void testNullName() {
         YilgarnGeochemistryFilter filter = new YilgarnGeochemistryFilter(null);
-        FilterBoundingBox bbox = new FilterBoundingBox("srs", new double[] {1,2}, new double[] {3,4});
+        FilterBoundingBox bbox = new FilterBoundingBox("srs", new double[] {1, 2}, new double[] {3, 4});
 
         Assert.assertNotNull(filter.getFilterStringAllRecords());
         Assert.assertNotNull(filter.getFilterStringBoundingBox(bbox));

@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
+
 /**
  * Unit tests for GSMLController
  *
@@ -30,7 +31,6 @@ public class TestWfsController extends PortalTestClass {
      * The controller to test
      */
     private WFSController wfsController;
-
 
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
@@ -56,11 +56,16 @@ public class TestWfsController extends PortalTestClass {
         final String srs = null; //dont specify this
         final String bboxJsonString = null;
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)),
+                        with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));
+                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
-        }});
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI("http://service.wfs/wfs")));
+            }
+        });
 
         ModelAndView modelAndView = wfsController.requestAllFeatures(wfsUrl, featureType, bboxJsonString, maxFeatures);
         ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
@@ -80,11 +85,16 @@ public class TestWfsController extends PortalTestClass {
         final String srs = null; //dont specify this
         final String bboxJsonString = "{\"bboxSrs\":\"http://www.opengis.net/gml/srs/epsg.xml%234326\",\"lowerCornerPoints\":[-5,-6],\"upperCornerPoints\":[7,8]}";
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)),
+                        with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));
+                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
-        }});
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI("http://service.wfs/wfs")));
+            }
+        });
 
         ModelAndView modelAndView = wfsController.requestAllFeatures(wfsUrl, featureType, bboxJsonString, maxFeatures);
         ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
@@ -102,11 +112,15 @@ public class TestWfsController extends PortalTestClass {
         final String featureType = "type:name";
         final String featureId = "feature-id";
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, featureId);will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, featureId);
+                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
-        }});
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI("http://service.wfs/wfs")));
+            }
+        });
 
         ModelAndView modelAndView = wfsController.requestFeature(wfsUrl, featureType, featureId);
         ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
@@ -125,15 +139,21 @@ public class TestWfsController extends PortalTestClass {
         final String featureProperty = "feature/property";
         final String propertyValue = "comparison value";
 
-        final String filterString = new SimplePropertyFilter(featureProperty, propertyValue).getFilterStringAllRecords();
+        final String filterString = new SimplePropertyFilter(featureProperty, propertyValue)
+                .getFilterStringAllRecords();
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, filterString, null, null);will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, filterString, null, null);
+                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI("http://service.wfs/wfs")));
-        }});
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI("http://service.wfs/wfs")));
+            }
+        });
 
-        ModelAndView modelAndView = wfsController.requestFeatureByProperty(wfsUrl, featureType, featureProperty, propertyValue);
+        ModelAndView modelAndView = wfsController.requestFeatureByProperty(wfsUrl, featureType, featureProperty,
+                propertyValue);
         ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
@@ -143,6 +163,7 @@ public class TestWfsController extends PortalTestClass {
 
     /**
      * Tests get feature count works as expected
+     * 
      * @throws Exception
      */
     @Test
@@ -153,9 +174,13 @@ public class TestWfsController extends PortalTestClass {
         final int maxFeatures = 12315;
         final int featureCount = 21;
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsFeatureCount(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal((String) null)));will(returnValue(new WFSCountResponse(featureCount)));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsFeatureCount(with(equal(wfsUrl)), with(equal(featureType)),
+                        with(any(String.class)), with(equal(maxFeatures)), with(equal((String) null)));
+                will(returnValue(new WFSCountResponse(featureCount)));
+            }
+        });
         ModelAndView modelAndView = wfsController.requestFeatureCount(wfsUrl, featureType, bboxJsonString, maxFeatures);
         Integer dataObj = (Integer) modelAndView.getModel().get("data");
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
@@ -165,6 +190,7 @@ public class TestWfsController extends PortalTestClass {
 
     /**
      * Tests get feature count works as expected
+     * 
      * @throws Exception
      */
     @Test
@@ -174,16 +200,20 @@ public class TestWfsController extends PortalTestClass {
         final String bboxJsonString = "{\"bboxSrs\":\"http://www.opengis.net/gml/srs/epsg.xml%234326\",\"lowerCornerPoints\":[-5,-6],\"upperCornerPoints\":[7,8]}";
         final int maxFeatures = 12315;
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsFeatureCount(with(equal(wfsUrl)), with(equal(featureType)), with(any(String.class)), with(equal(maxFeatures)), with(equal((String)null)));will(throwException(new PortalServiceException("")));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsFeatureCount(with(equal(wfsUrl)), with(equal(featureType)),
+                        with(any(String.class)), with(equal(maxFeatures)), with(equal((String) null)));
+                will(throwException(new PortalServiceException("")));
+            }
+        });
         ModelAndView modelAndView = wfsController.requestFeatureCount(wfsUrl, featureType, bboxJsonString, maxFeatures);
         Assert.assertFalse((Boolean) modelAndView.getModel().get("success"));
     }
 
-
     /**
      * Test wfsFeaturePopup will all optional parameters specified
+     * 
      * @throws Exception
      */
     @Test
@@ -193,17 +223,23 @@ public class TestWfsController extends PortalTestClass {
         final String featureId = "idString";
         final String convertedData = "gmlToKMLResult";
         final String wfsResponse = "wfsResponseString";
-        final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(convertedData.getBytes().length);
+        final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(
+                convertedData.getBytes().length);
 
-        context.checking(new Expectations() {{
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceUrl)));
+        context.checking(new Expectations() {
+            {
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI(serviceUrl)));
 
-            allowing(mockResponse).setContentType(with(any(String.class)));
+                allowing(mockResponse).setContentType(with(any(String.class)));
 
-            oneOf(mockWfsService).getWfsResponseAsHtml(serviceUrl, typeName, featureId);will(returnValue(new WFSTransformedResponse(wfsResponse, convertedData, mockMethod)));
+                oneOf(mockWfsService).getWfsResponseAsHtml(serviceUrl, typeName, featureId);
+                will(returnValue(new WFSTransformedResponse(wfsResponse, convertedData, mockMethod)));
 
-            oneOf(mockResponse).getOutputStream();will(returnValue(outputStream));
-        }});
+                oneOf(mockResponse).getOutputStream();
+                will(returnValue(outputStream));
+            }
+        });
 
         wfsController.wfsFeaturePopup(mockResponse, serviceUrl, typeName, featureId);
 
@@ -212,6 +248,7 @@ public class TestWfsController extends PortalTestClass {
 
     /**
      * Tests wfsFeaturePopup with only a URL
+     * 
      * @throws Exception
      */
     @Test
@@ -221,15 +258,20 @@ public class TestWfsController extends PortalTestClass {
         final String featureId = null;
         final String convertedData = "gmlToKMLResult";
         final String wfsResponse = "wfsResponseString";
-        final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(convertedData.getBytes().length);
+        final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(
+                convertedData.getBytes().length);
 
-        context.checking(new Expectations() {{
-            allowing(mockResponse).setContentType(with(any(String.class)));
+        context.checking(new Expectations() {
+            {
+                allowing(mockResponse).setContentType(with(any(String.class)));
 
-            oneOf(mockWfsService).getWfsResponseAsHtml(serviceUrl);will(returnValue(new WFSTransformedResponse(wfsResponse, convertedData, mockMethod)));
+                oneOf(mockWfsService).getWfsResponseAsHtml(serviceUrl);
+                will(returnValue(new WFSTransformedResponse(wfsResponse, convertedData, mockMethod)));
 
-            oneOf(mockResponse).getOutputStream();will(returnValue(outputStream));
-        }});
+                oneOf(mockResponse).getOutputStream();
+                will(returnValue(outputStream));
+            }
+        });
 
         wfsController.wfsFeaturePopup(mockResponse, serviceUrl, typeName, featureId);
 

@@ -1,6 +1,5 @@
 package org.auscope.portal.server.web.controllers;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -29,65 +28,74 @@ public class TestGetCapabilitiesController extends PortalTestClass {
     private WMSController controller;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         service = context.mock(WMSService.class);
 
-        controller = new WMSController(service, viewCswFactory, viewKlFactory,null);
+        controller = new WMSController(service, viewCswFactory, viewKlFactory, null);
     }
 
     @Test
-    public void testGetCustomLayers() throws Exception{
+    public void testGetCustomLayers() throws Exception {
         //GetCapabilititesControllerWMSResponse.xml
-        final String serviceUrl="http://example.com";
-        InputStream is= ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/wms/GetCapabilitiesControllerWMSResponse_1_1_1.xml");
-        try{
+        final String serviceUrl = "http://example.com";
+        InputStream is = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/core/test/responses/wms/GetCapabilitiesControllerWMSResponse_1_1_1.xml");
+        try {
             final GetCapabilitiesRecord record = new GetCapabilitiesRecord_1_1_1(is);
 
-            context.checking(new Expectations() {{
-                oneOf(service).getWmsCapabilities(serviceUrl,null);will(returnValue(record));
+            context.checking(new Expectations() {
+                {
+                    oneOf(service).getWmsCapabilities(serviceUrl, null);
+                    will(returnValue(record));
 
-                exactly(21).of(viewCswFactory).toView(with(any(CSWRecord.class)));will(returnValue(new ModelMap()));
-            }});
+                    exactly(21).of(viewCswFactory).toView(with(any(CSWRecord.class)));
+                    will(returnValue(new ModelMap()));
+                }
+            });
 
             Assert.assertNotNull(is);
-            ModelAndView mv=controller.getCustomLayers(serviceUrl);
+            ModelAndView mv = controller.getCustomLayers(serviceUrl);
             Assert.assertNotNull(mv);
-            List ls=(List) mv.getModelMap().get("data");
-            Assert.assertEquals(21,ls.size());
-        }finally{
-            try{
+            List ls = (List) mv.getModelMap().get("data");
+            Assert.assertEquals(21, ls.size());
+        } finally {
+            try {
                 is.close();
-            }catch(IOException e){
+            } catch (IOException e) {
                 //Not important if the stream can't be closed in unit test
                 e.printStackTrace();
             }
         }
     }
 
-
     @Test
-    public void test_1_3_0_GetCustomLayers() throws Exception{
+    public void test_1_3_0_GetCustomLayers() throws Exception {
         //GetCapabilititesControllerWMSResponse.xml
-        final String serviceUrl="http://example.com";
-        InputStream is= ResourceUtil.loadResourceAsStream("org/auscope/portal/core/test/responses/wms/GetCapabilitiesControllerWMSResponse_1_3_0.xml");
-        try{
+        final String serviceUrl = "http://example.com";
+        InputStream is = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/core/test/responses/wms/GetCapabilitiesControllerWMSResponse_1_3_0.xml");
+        try {
             final GetCapabilitiesRecord record = new GetCapabilitiesRecord_1_3_0(is);
 
-            context.checking(new Expectations() {{
-                oneOf(service).getWmsCapabilities(serviceUrl,null);will(returnValue(record));
+            context.checking(new Expectations() {
+                {
+                    oneOf(service).getWmsCapabilities(serviceUrl, null);
+                    will(returnValue(record));
 
-                exactly(1).of(viewCswFactory).toView(with(any(CSWRecord.class)));will(returnValue(new ModelMap()));
-            }});
+                    exactly(1).of(viewCswFactory).toView(with(any(CSWRecord.class)));
+                    will(returnValue(new ModelMap()));
+                }
+            });
 
             Assert.assertNotNull(is);
-            ModelAndView mv=controller.getCustomLayers(serviceUrl);
+            ModelAndView mv = controller.getCustomLayers(serviceUrl);
             Assert.assertNotNull(mv);
-            List ls=(List) mv.getModelMap().get("data");
-            Assert.assertEquals(1,ls.size());
-        }finally{
-            try{
+            List ls = (List) mv.getModelMap().get("data");
+            Assert.assertEquals(1, ls.size());
+        } finally {
+            try {
                 is.close();
-            }catch(IOException e){
+            } catch (IOException e) {
                 //Not important if the stream can't be closed in unit test
                 e.printStackTrace();
             }

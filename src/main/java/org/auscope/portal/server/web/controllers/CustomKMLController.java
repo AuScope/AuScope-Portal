@@ -23,39 +23,38 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
-
 @Controller
 public class CustomKMLController extends BasePortalController {
     FileDownloadService fileDownloadService;
 
     @Autowired
-    public CustomKMLController(FileDownloadService fileDownloadService){
+    public CustomKMLController(FileDownloadService fileDownloadService) {
         this.fileDownloadService = fileDownloadService;
     }
 
     @RequestMapping("/addKMLLayer.do")
-    public @ResponseBody String addKMLLayer( FileUploadBean uploadItem, BindingResult result,HttpServletResponse response){
-        try{
+    public @ResponseBody String addKMLLayer(FileUploadBean uploadItem, BindingResult result,
+            HttpServletResponse response) {
+        try {
             CommonsMultipartFile file = uploadItem.getFile();
             ModelMap model = new ModelMap();
             model.put("success", true);
             model.put("file", IOUtils.toString(file.getInputStream()));
             model.put("name", file.getOriginalFilename());
             return new Gson().toJson(model);
-        }catch(Exception e){
+        } catch (Exception e) {
             ModelMap model = new ModelMap();
             model.put("success", false);
             return new Gson().toJson(model);
         }
     }
 
-
     @RequestMapping("/addKMLUrl.do")
     public ModelAndView addKMLUrl(
             @RequestParam("url") String url,
-            HttpServletResponse response) throws IOException{
+            HttpServletResponse response) throws IOException {
 
-        try{
+        try {
 
             DownloadResponse dlRes = this.fileDownloadService.singleFileDownloadFromURL(url);
 
@@ -70,12 +69,12 @@ public class CustomKMLController extends BasePortalController {
             model.put("file", IOUtils.toString(dlRes.getResponseAsStream()));
             model.put("name", uri.getHost() + fileExtension);
 
-            return generateJSONResponseMAV(true,model,"success");
+            return generateJSONResponseMAV(true, model, "success");
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", url, e));
             log.debug("Exception: ", e);
-            return generateJSONResponseMAV(false,null,e.getMessage());
+            return generateJSONResponseMAV(false, null, e.getMessage());
 
         }
 

@@ -3,8 +3,8 @@ package org.auscope.portal.mineraloccurrence;
 import org.auscope.portal.core.services.namespaces.IterableNamespace;
 
 /**
- * User: Mathew Wyatt
- * Date: 24/03/2009
+ * User: Mathew Wyatt Date: 24/03/2009
+ * 
  * @version $Id$
  */
 public class MineralOccurrenceNamespaceContext extends IterableNamespace {

@@ -20,8 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Manages mineral occurrence download queries. As the size of the data can be big, we
- * handle all responses as stream to avoid oom issues.
+ * Manages mineral occurrence download queries. As the size of the data can be big, we handle all responses as stream to avoid oom issues.
  *
  * @version $Id$
  */
@@ -36,12 +35,6 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
     public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";
     public static final int DEFAULT_TIMEOUT = 60 * 60 * 1000; //VT: we give 1 hour to download per service location
 
-
-
-
-
-
-
     // ----------------------------------------------------------- Constructors
 
     @Autowired
@@ -49,13 +42,15 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
             WFSGetFeatureMethodMaker methodMaker) {
         super(httpServiceCaller, methodMaker);
 
-
     }
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * 
+     * @param filter
+     *            The filter
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
     public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
@@ -71,20 +66,27 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
 
     /**
      * Gets the GML response for all mines matching the specified parameters
-     * @param serviceUrl a Web Feature Service URL
-     * @param mineName [Optional] The mine name to constrain the result set
-     * @param bbox [Optional] the spatial bounds to constrain the result set
-     * @param maxFeatures The maximum number of features to request
+     * 
+     * @param serviceUrl
+     *            a Web Feature Service URL
+     * @param mineName
+     *            [Optional] The mine name to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
+     * @param maxFeatures
+     *            The maximum number of features to request
      * @return
      * @throws PortalServiceException
      */
-    public InputStream downloadMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures,String startIndex) throws PortalServiceException {
+    public InputStream downloadMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures,
+            String startIndex) throws PortalServiceException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
         HttpRequestBase method = null;
         try {
-            method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results,null,startIndex);
+            method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null,
+                    ResultType.Results, null, startIndex);
             return httpServiceCaller.getMethodResponseAsStream(method);
 
         } catch (Exception ex) {
@@ -92,11 +94,9 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
         }
     }
 
-
-
-
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
+     * 
      * @param serviceURL
      * @param commodityName
      * @param measureType
@@ -106,7 +106,8 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
      * @param minCommodityAmountUOM
      * @param cutOffGrade
      * @param cutOffGradeUOM
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      * @throws URISyntaxException
      */
@@ -130,21 +131,19 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
 
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results,null,startIndex);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
+                maxFeatures, null, ResultType.Results, null, startIndex);
         try {
             return httpServiceCaller.getMethodResponseAsStream(method);
-
 
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }
     }
 
-
-
-
     /**
      * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
+     * 
      * @param serviceURL
      * @param mineName
      * @param startDate
@@ -154,7 +153,8 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
      * @param cutOffGrade
      * @param production
      * @param maxFeatures
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      * @throws Exception
      */
@@ -172,10 +172,12 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
             ) throws Exception {
 
         //create the filter
-        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed,
+                producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results,null,startIndex);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
+                maxFeatures, null, ResultType.Results, null, startIndex);
         try {
             return httpServiceCaller.getMethodResponseAsStream(method);
         } catch (Exception ex) {

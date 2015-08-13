@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * The Class TestNVCLController.
+ * 
  * @version: $Id$
  */
 @SuppressWarnings("rawtypes")
@@ -29,7 +30,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
 
     /** The portrayal borehole view controller. */
     private SF0BoreholeController sf0BoreholeController;
-    
+
     /** The mock csw service. */
     private CSWCacheService mockCSWService;
 
@@ -47,7 +48,8 @@ public class TestSF0BoreholeController extends PortalTestClass {
     /**
      * Tests to ensure that a non hylogger request calls the correct functions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testNonHyloggerFilter() throws Exception {
@@ -56,22 +58,27 @@ public class TestSF0BoreholeController extends PortalTestClass {
         final String custodianFilter = "filterCustodian";
         final String filterDate = "1986-10-09";
         final int maxFeatures = 10;
-        final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3,4});
+        final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final String sf0BoreholeWfsResponse = "wfsResponse";
         final String sf0BoreholeKmlResponse = "kmlResponse";
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
-        context.checking(new Expectations() {{
-            oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, null);
-            will(returnValue(new WFSTransformedResponse(sf0BoreholeWfsResponse, sf0BoreholeKmlResponse, mockHttpMethodBase)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
+                        maxFeatures, null);
+                will(returnValue(new WFSTransformedResponse(sf0BoreholeWfsResponse, sf0BoreholeKmlResponse,
+                        mockHttpMethodBase)));
 
-            allowing(mockHttpMethodBase).getURI();
-            will(returnValue(httpMethodURI));
+                allowing(mockHttpMethodBase).getURI();
+                will(returnValue(httpMethodURI));
 
-        }});
+            }
+        });
 
-        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, null);
+        ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
+                filterDate, maxFeatures, null);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");

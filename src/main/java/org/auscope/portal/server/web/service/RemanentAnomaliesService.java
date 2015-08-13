@@ -1,6 +1,5 @@
 package org.auscope.portal.server.web.service;
 
-
 import javax.naming.OperationNotSupportedException;
 
 import org.auscope.portal.core.server.http.HttpServiceCaller;
@@ -23,15 +22,18 @@ public class RemanentAnomaliesService extends BaseWFSService {
 
     @Autowired
     public RemanentAnomaliesService(
-                    HttpServiceCaller httpServiceCaller,
-                    WFSGetFeatureMethodMaker methodMaker) {
+            HttpServiceCaller httpServiceCaller,
+            WFSGetFeatureMethodMaker methodMaker) {
         super(httpServiceCaller, methodMaker);
     }
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * 
+     * @param filter
+     *            The filter
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
     public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
@@ -48,27 +50,30 @@ public class RemanentAnomaliesService extends BaseWFSService {
     public String getRemanentAnomaliesFilter(String name, FilterBoundingBox bbox)
             throws Exception {
         RemanentAnomaliesFilter filter = new RemanentAnomaliesFilter(name);
-        return generateFilterString(filter,bbox);
+        return generateFilterString(filter, bbox);
     }
 
     public String getRemanentAnomaliesWithStyling(String name)
-            throws Exception{
+            throws Exception {
         RemanentAnomaliesFilter filter = new RemanentAnomaliesFilter(name);
         return generateAdditionalStyleFilter(filter);
     }
 
     /**
      * Utility for turning a filter and add additional styling to the filter.
-     * @param filter The filter
+     * 
+     * @param filter
+     *            The filter
      * @return
      * @throws OperationNotSupportedException
      */
     public static String generateAdditionalStyleFilter(IFilter filter) throws OperationNotSupportedException {
-        if(filter instanceof  RemanentAnomaliesFilter){
-            RemanentAnomaliesFilter remanomFilter=( RemanentAnomaliesFilter)filter;
+        if (filter instanceof RemanentAnomaliesFilter) {
+            RemanentAnomaliesFilter remanomFilter = (RemanentAnomaliesFilter) filter;
             return remanomFilter.getFilterWithAdditionalStyle();
-        }else{
-            throw new OperationNotSupportedException("Only MineralTenementFilter supports the use of additional style filtering");
+        } else {
+            throw new OperationNotSupportedException(
+                    "Only MineralTenementFilter supports the use of additional style filtering");
         }
 
     }

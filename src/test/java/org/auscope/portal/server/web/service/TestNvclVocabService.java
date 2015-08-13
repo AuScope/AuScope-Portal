@@ -33,23 +33,34 @@ public class TestNvclVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository works as expected - returning all scalars
+     * 
      * @throws Exception
      */
     @Test
     public void testGetScalars() throws Exception {
-        final InputStream rs1 = ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/vocab/NVCL_Concepts_MoreData.xml");
-        final InputStream rs2 = ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/vocab/NVCL_Concepts_NoMoreData.xml");
+        final InputStream rs1 = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/vocab/NVCL_Concepts_MoreData.xml");
+        final InputStream rs2 = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/vocab/NVCL_Concepts_NoMoreData.xml");
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).getAllScalars(baseUrl, NvclVocabService.NVCL_VOCAB_REPOSITORY, Format.Rdf, service.getPageSize(), 0);will(returnValue(mockMethod));
-            oneOf(mockMethodMaker).getAllScalars(baseUrl, NvclVocabService.NVCL_VOCAB_REPOSITORY, Format.Rdf, service.getPageSize(), 1);will(returnValue(mockMethod2));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).getAllScalars(baseUrl, NvclVocabService.NVCL_VOCAB_REPOSITORY, Format.Rdf,
+                        service.getPageSize(), 0);
+                will(returnValue(mockMethod));
+                oneOf(mockMethodMaker).getAllScalars(baseUrl, NvclVocabService.NVCL_VOCAB_REPOSITORY, Format.Rdf,
+                        service.getPageSize(), 1);
+                will(returnValue(mockMethod2));
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(rs1));
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);will(returnValue(rs2));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(rs1));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);
+                will(returnValue(rs2));
 
-            oneOf(mockMethod).releaseConnection();
-            oneOf(mockMethod2).releaseConnection();
-        }});
+                oneOf(mockMethod).releaseConnection();
+                oneOf(mockMethod2).releaseConnection();
+            }
+        });
 
         Model result = service.getAllScalarConcepts();
         Assert.assertNotNull(result);
@@ -58,20 +69,27 @@ public class TestNvclVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository by label works as expected - returning only a single term
+     * 
      * @throws Exception
      */
     @Test
     public void testGetScalarsByLabel() throws Exception {
         final String label = "TSA_S_Mineral2";
-        final InputStream rs1 = ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/vocab/NVCL_Concepts_NoMoreData.xml");
+        final InputStream rs1 = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/vocab/NVCL_Concepts_NoMoreData.xml");
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).getScalarsByLabel(baseUrl, NvclVocabService.NVCL_VOCAB_REPOSITORY, label, Format.Rdf, service.getPageSize(), 0);will(returnValue(mockMethod));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).getScalarsByLabel(baseUrl, NvclVocabService.NVCL_VOCAB_REPOSITORY, label,
+                        Format.Rdf, service.getPageSize(), 0);
+                will(returnValue(mockMethod));
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(rs1));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(rs1));
 
-            oneOf(mockMethod).releaseConnection();
-        }});
+                oneOf(mockMethod).releaseConnection();
+            }
+        });
 
         List<String> defns = service.getScalarDefinitionsByLabel(label);
         Assert.assertNotNull(defns);

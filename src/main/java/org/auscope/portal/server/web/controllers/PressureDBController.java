@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * A controller class containing methods for supporting the Pressure DB layer and associated dataservice
+ * 
  * @author Josh Vote
  *
  */
@@ -31,7 +32,6 @@ public class PressureDBController extends BasePortalController {
 
     private int BUFFERSIZE = 1024 * 32;
 
-	
     @Autowired
     public PressureDBController(PressureDBService pressureDBService) {
         this.pressureDBService = pressureDBService;
@@ -41,6 +41,7 @@ public class PressureDBController extends BasePortalController {
      * Handles requests for the getAvailableOM method
      *
      * Will return a JSON encoded AvailableOMResponse
+     * 
      * @param serviceUrl
      * @param wellID
      * @return
@@ -49,11 +50,12 @@ public class PressureDBController extends BasePortalController {
     public ModelAndView getAvailableOM(String serviceUrl, String wellID) {
 
         try {
-           AvailableOMResponse response = pressureDBService.makeGetAvailableOMRequest(wellID, serviceUrl);
+            AvailableOMResponse response = pressureDBService.makeGetAvailableOMRequest(wellID, serviceUrl);
 
-           return generateJSONResponseMAV(true, new AvailableOMResponse[] {response}, "");
+            return generateJSONResponseMAV(true, new AvailableOMResponse[] {response}, "");
         } catch (Exception e) {
-            log.warn(String.format("Error making pressure-db service request for '%1$s' to '%2$s': %3$s", wellID, serviceUrl, e));
+            log.warn(String.format("Error making pressure-db service request for '%1$s' to '%2$s': %3$s", wellID,
+                    serviceUrl, e));
             log.debug("Exception: ", e);
             return generateJSONResponseMAV(false, null, "Failure communicating with Pressure DB data service");
         }
@@ -63,20 +65,23 @@ public class PressureDBController extends BasePortalController {
      * Handles requests for the download method
      *
      * Will return a stream directly from the service
+     * 
      * @param serviceUrl
      * @param wellID
      * @return
      * @throws IOException
      */
     @RequestMapping("/pressuredb-download.do")
-    public void download(String serviceUrl, String wellID, String[] feature, HttpServletResponse response) throws IOException {
+    public void download(String serviceUrl, String wellID, String[] feature, HttpServletResponse response)
+            throws IOException {
 
         //Make our request and get our inputstream
         InputStream inputStream = null;
         try {
-           inputStream = pressureDBService.makeDownloadRequest(wellID, serviceUrl, feature);
+            inputStream = pressureDBService.makeDownloadRequest(wellID, serviceUrl, feature);
         } catch (Exception e) {
-            log.warn(String.format("Error making pressure-db download request for '%1$s' to '%2$s': %3$s",wellID, serviceUrl, e));
+            log.warn(String.format("Error making pressure-db download request for '%1$s' to '%2$s': %3$s", wellID,
+                    serviceUrl, e));
             log.debug("Exception: ", e);
             response.sendError(HttpStatus.INTERNAL_SERVER_ERROR.value());
             return;
@@ -84,7 +89,7 @@ public class PressureDBController extends BasePortalController {
 
         //pipe our input into our output
         response.setContentType("application/zip");
-        response.setHeader("Content-Disposition",String.format("inline; filename=PressureDB-%1$s.zip;", wellID));
+        response.setHeader("Content-Disposition", String.format("inline; filename=PressureDB-%1$s.zip;", wellID));
         ServletOutputStream outputStream = response.getOutputStream();
         byte[] buffer = new byte[BUFFERSIZE];
         int numRead;
@@ -94,6 +99,5 @@ public class PressureDBController extends BasePortalController {
         outputStream.flush();
         outputStream.close();
     }
-
 
 }

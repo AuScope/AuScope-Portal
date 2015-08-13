@@ -13,15 +13,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Contains methods for requesting the list of known feature types
+ * 
  * @author Josh Vote
  *
  */
 @Controller
 public class KnownLayerController extends BaseCSWController {
 
-    /** Used for requesting groupings of CSWRecords under known layers*/
+    /** Used for requesting groupings of CSWRecords under known layers */
     private KnownLayerService knownLayerService;
-    /** Used for converting data to something the view can understand*/
+    /** Used for converting data to something the view can understand */
     private ViewKnownLayerFactory viewKnownLayerFactory;
 
     @Autowired
@@ -35,6 +36,7 @@ public class KnownLayerController extends BaseCSWController {
      * Gets a JSON response which contains the representations of each and every "KnownFeatureTypeDefinition".
      *
      * Each KnownFeatureTypeDefinition will map [0, N] CSWRecords with display information.
+     * 
      * @return
      */
     @RequestMapping("getKnownLayers.do")
@@ -48,6 +50,7 @@ public class KnownLayerController extends BaseCSWController {
      * Gets a JSON response which contains the representations of each and every "KnownFeatureTypeDefinition".
      *
      * Each KnownFeatureTypeDefinition will map [0, N] CSWRecords with display information.
+     * 
      * @return
      */
     @RequestMapping("getUnmappedCSWRecords.do")
@@ -56,12 +59,11 @@ public class KnownLayerController extends BaseCSWController {
 
         return generateCSWRecordResponse(grouping.getUnmappedRecords());
     }
-    
+
     /**
-     * Gets a JSON response which contains the representations of all the research data
-     * layers.
-     * @return
-     *      The ModelAndView object containing any known layers of type ResearchDataLayer.
+     * Gets a JSON response which contains the representations of all the research data layers.
+     * 
+     * @return The ModelAndView object containing any known layers of type ResearchDataLayer.
      */
     @RequestMapping("getResearchDataLayers.do")
     public ModelAndView getResearchDataLayers() {

@@ -36,20 +36,15 @@ public class MenuController {
 
     @RequestMapping("/gmap.html")
     public ModelAndView gmap() {
-        String googleKey
-        = hostConfigurer.resolvePlaceholder("HOST.googlemap.key");
-        String vocabServiceUrl
-        = hostConfigurer.resolvePlaceholder("HOST.vocabService.url");
-        String maxFeatureValue
-        = hostConfigurer.resolvePlaceholder("HOST.maxFeatures.value");
-        String analyticKey
-        = hostConfigurer.resolvePlaceholder("HOST.google.analytics.key");
-        String piwikSiteId
-        = hostConfigurer.resolvePlaceholder("HOST.piwik.site.id");
-        String localhost=null;
-        try{
+        String googleKey = hostConfigurer.resolvePlaceholder("HOST.googlemap.key");
+        String vocabServiceUrl = hostConfigurer.resolvePlaceholder("HOST.vocabService.url");
+        String maxFeatureValue = hostConfigurer.resolvePlaceholder("HOST.maxFeatures.value");
+        String analyticKey = hostConfigurer.resolvePlaceholder("HOST.google.analytics.key");
+        String piwikSiteId = hostConfigurer.resolvePlaceholder("HOST.piwik.site.id");
+        String localhost = null;
+        try {
             localhost = InetAddress.getLocalHost().getCanonicalHostName();
-        }catch(UnknownHostException e){
+        } catch (UnknownHostException e) {
             logger.warn(e);
             return null;
         }
@@ -79,23 +74,21 @@ public class MenuController {
 
     @RequestMapping("/mosaic_image.html")
     public ModelAndView mosaic_image() {
-        String googleKey
-        = hostConfigurer.resolvePlaceholder("HOST.googlemap.key");
+        String googleKey = hostConfigurer.resolvePlaceholder("HOST.googlemap.key");
         logger.debug(googleKey);
 
         ModelAndView mav = new ModelAndView("mosaic_image");
-        mav.addObject("googleKey",googleKey);
+        mav.addObject("googleKey", googleKey);
         return mav;
     }
 
     @RequestMapping("/plotted_images.html")
     public ModelAndView plotted_images() {
-        String googleKey
-        = hostConfigurer.resolvePlaceholder("HOST.googlemap.key");
+        String googleKey = hostConfigurer.resolvePlaceholder("HOST.googlemap.key");
         logger.debug(googleKey);
 
         ModelAndView mav = new ModelAndView("plotted_images");
-        mav.addObject("googleKey",googleKey);
+        mav.addObject("googleKey", googleKey);
         return mav;
     }
 
@@ -116,7 +109,7 @@ public class MenuController {
 
     private ModelAndView generateViewFromManifest(HttpServletRequest request, String viewName) {
         String appServerHome = request.getSession().getServletContext().getRealPath("/");
-        File manifestFile = new File(appServerHome,"META-INF/MANIFEST.MF");
+        File manifestFile = new File(appServerHome, "META-INF/MANIFEST.MF");
         Manifest mf = new Manifest();
         ModelAndView mav = new ModelAndView(viewName);
         try {

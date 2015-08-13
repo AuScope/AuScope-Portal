@@ -19,9 +19,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
- * User: Michael Stegherr
- * Date: 30/03/2009
- * Time: 3:14:31 PM
+ * User: Michael Stegherr Date: 30/03/2009 Time: 3:14:31 PM
  */
 public class TestCommodity extends PortalTestClass {
 
@@ -31,17 +29,19 @@ public class TestCommodity extends PortalTestClass {
     @Before
     public void setUp() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
         //create updateCSWRecords valid commodity
-        Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/commodity/commodityNodeValid.xml"));
+        Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/commodity/commodityNodeValid.xml"));
 
         XPathExpression expr = DOMUtil.compileXPathExpr("/er:Commodity", new MineralOccurrenceNamespaceContext());
-        Node commodityNode = (Node)expr.evaluate(mineDocument, XPathConstants.NODE);
+        Node commodityNode = (Node) expr.evaluate(mineDocument, XPathConstants.NODE);
         validCommodity = new Commodity(commodityNode);
 
         //create an invalid commodity
-        Document mineDocument2 = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/commodity/commodityNodeInvalid.xml"));
+        Document mineDocument2 = DOMUtil.buildDomFromStream(ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/commodity/commodityNodeInvalid.xml"));
 
         XPathExpression expr2 = DOMUtil.compileXPathExpr("/er:Commodity", new MineralOccurrenceNamespaceContext());
-        Node commodityNode2 = (Node)expr2.evaluate(mineDocument2, XPathConstants.NODE);
+        Node commodityNode2 = (Node) expr2.evaluate(mineDocument2, XPathConstants.NODE);
         invalidCommodity = new Commodity(commodityNode2);
 
     }
@@ -53,7 +53,8 @@ public class TestCommodity extends PortalTestClass {
 
     @Test
     public void testGetSourcevalid() throws XPathExpressionException {
-        Assert.assertEquals("URI is: urn:cgi:feature:GSV:MineralOccurrence:361169", "urn:cgi:feature:GSV:MineralOccurrence:361169", validCommodity.getSource());
+        Assert.assertEquals("URI is: urn:cgi:feature:GSV:MineralOccurrence:361169",
+                "urn:cgi:feature:GSV:MineralOccurrence:361169", validCommodity.getSource());
     }
 
     @Test

@@ -39,7 +39,6 @@ public class MineralOccurrenceService extends BaseWFSService {
     public static final String MINERAL_OCCURRENCE_FEATURE_TYPE = "gsml:MappedFeature";
     public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";
 
-
     // ----------------------------------------------------- Instance variables
 
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
@@ -49,9 +48,9 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     @Autowired
     public MineralOccurrenceService(HttpServiceCaller httpServiceCaller,
-                                     MineralOccurrencesResponseHandler respHandler,
-                                     WFSGetFeatureMethodMaker methodMaker,
-                                     WfsToKmlTransformer gmlToKml) {
+            MineralOccurrencesResponseHandler respHandler,
+            WFSGetFeatureMethodMaker methodMaker,
+            WfsToKmlTransformer gmlToKml) {
         super(httpServiceCaller, methodMaker);
         this.mineralOccurrencesResponseHandler = respHandler;
         this.gmlToKml = gmlToKml;
@@ -60,8 +59,11 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * 
+     * @param filter
+     *            The filter
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
     public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
@@ -77,20 +79,27 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Gets the GML/KML response for all mines matching the specified parameters
-     * @param serviceUrl a Web Feature Service URL
-     * @param mineName [Optional] The mine name to constrain the result set
-     * @param bbox [Optional] the spatial bounds to constrain the result set
-     * @param maxFeatures The maximum number of features to request
+     * 
+     * @param serviceUrl
+     *            a Web Feature Service URL
+     * @param mineName
+     *            [Optional] The mine name to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
+     * @param maxFeatures
+     *            The maximum number of features to request
      * @return
      * @throws PortalServiceException
      */
-    public WFSTransformedResponse getMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException {
+    public WFSTransformedResponse getMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox,
+            int maxFeatures) throws PortalServiceException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
         HttpRequestBase method = null;
         try {
-            method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+            method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null,
+                    ResultType.Results);
             String responseGml = httpServiceCaller.getMethodResponseAsString(method);
             String responseKml = gmlToKml.convert(responseGml, serviceUrl);
 
@@ -102,19 +111,26 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Gets the parsed Mine response for all mines matching the specified parameters
-     * @param serviceUrl a Web Feature Service URL
-     * @param mineName [Optional] The mine name to constrain the result set
-     * @param bbox [Optional] the spatial bounds to constrain the result set
-     * @param maxFeatures The maximum number of features to request
+     * 
+     * @param serviceUrl
+     *            a Web Feature Service URL
+     * @param mineName
+     *            [Optional] The mine name to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
+     * @param maxFeatures
+     *            The maximum number of features to request
      * @return
      * @throws PortalServiceException
      * @throws URISyntaxException
      */
-    public List<Mine> getMines(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException, URISyntaxException {
+    public List<Mine> getMines(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures)
+            throws PortalServiceException, URISyntaxException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures,
+                null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
             return mineralOccurrencesResponseHandler.getMines(response);
@@ -125,24 +141,32 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Gets the count of all mines matching the specified parameters
-     * @param serviceUrl a Web Feature Service URL
-     * @param mineName [Optional] The mine name to constrain the result set
-     * @param bbox [Optional] the spatial bounds to constrain the result set
-     * @param maxFeatures The maximum number of features to request
+     * 
+     * @param serviceUrl
+     *            a Web Feature Service URL
+     * @param mineName
+     *            [Optional] The mine name to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
+     * @param maxFeatures
+     *            The maximum number of features to request
      * @return
      * @throws PortalServiceException
      * @throws URISyntaxException
      */
-    public WFSCountResponse getMinesCount(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures) throws PortalServiceException, URISyntaxException {
+    public WFSCountResponse getMinesCount(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures)
+            throws PortalServiceException, URISyntaxException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures,
+                null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
 
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
+     * 
      * @param serviceURL
      * @param commodityName
      * @param measureType
@@ -152,30 +176,32 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param minCommodityAmountUOM
      * @param cutOffGrade
      * @param cutOffGradeUOM
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      * @throws URISyntaxException
      */
     public WFSTransformedResponse getMineralOccurrenceGml(String serviceURL,
-                                           String commodityName,
-                                           String measureType,
-                                           String minOreAmount,
-                                           String minOreAmountUOM,
-                                           String minCommodityAmount,
-                                           String minCommodityAmountUOM,
-                                           int maxFeatures,
-                                           FilterBoundingBox bbox) throws PortalServiceException, URISyntaxException {
+            String commodityName,
+            String measureType,
+            String minOreAmount,
+            String minOreAmountUOM,
+            String minCommodityAmount,
+            String minCommodityAmountUOM,
+            int maxFeatures,
+            FilterBoundingBox bbox) throws PortalServiceException, URISyntaxException {
 
         MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,
-                                           measureType,
-                                           minOreAmount,
-                                           minOreAmountUOM,
-                                           minCommodityAmount,
-                                           minCommodityAmountUOM);
+                measureType,
+                minOreAmount,
+                minOreAmountUOM,
+                minCommodityAmount,
+                minCommodityAmountUOM);
 
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
+                maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
             String kml = gmlToKml.convert(response, serviceURL);
@@ -187,6 +213,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the count of Mineral Occurrence GML
+     * 
      * @param serviceURL
      * @param commodityName
      * @param measureType
@@ -196,35 +223,37 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param minCommodityAmountUOM
      * @param cutOffGrade
      * @param cutOffGradeUOM
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      * @throws URISyntaxException
      */
     public WFSCountResponse getMineralOccurrenceCount(String serviceURL,
-                                           String commodityName,
-                                           String measureType,
-                                           String minOreAmount,
-                                           String minOreAmountUOM,
-                                           String minCommodityAmount,
-                                           String minCommodityAmountUOM,
-                                           int maxFeatures,
-                                           FilterBoundingBox bbox) throws PortalServiceException, URISyntaxException {
+            String commodityName,
+            String measureType,
+            String minOreAmount,
+            String minOreAmountUOM,
+            String minCommodityAmount,
+            String minCommodityAmountUOM,
+            int maxFeatures,
+            FilterBoundingBox bbox) throws PortalServiceException, URISyntaxException {
 
         MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,
-                                           measureType,
-                                           minOreAmount,
-                                           minOreAmountUOM,
-                                           minCommodityAmount,
-                                           minCommodityAmountUOM);
+                measureType,
+                minOreAmount,
+                minOreAmountUOM,
+                minCommodityAmount,
+                minCommodityAmountUOM);
 
         String filterString = generateFilterString(filter, bbox);
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
+                maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
 
-
     /**
      * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
+     * 
      * @param serviceURL
      * @param mineName
      * @param startDate
@@ -234,27 +263,30 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param cutOffGrade
      * @param production
      * @param maxFeatures
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      * @throws Exception
      */
     public WFSTransformedResponse getMiningActivityGml(String serviceURL,
-                                        String mineName,
-                                        String startDate,
-                                        String endDate,
-                                        String oreProcessed,
-                                        String producedMaterial,
-                                        String cutOffGrade,
-                                        String production,
-                                        int maxFeatures,
-                                        FilterBoundingBox bbox
-                                        ) throws Exception {
+            String mineName,
+            String startDate,
+            String endDate,
+            String oreProcessed,
+            String producedMaterial,
+            String cutOffGrade,
+            String production,
+            int maxFeatures,
+            FilterBoundingBox bbox
+            ) throws Exception {
 
         //create the filter
-        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed,
+                producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Results);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
+                maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
             String kml = gmlToKml.convert(response, serviceURL);
@@ -266,6 +298,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the count of Mineral Activity features
+     * 
      * @param serviceURL
      * @param mineName
      * @param startDate
@@ -275,31 +308,32 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @param cutOffGrade
      * @param production
      * @param maxFeatures
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      * @throws Exception
      */
     public WFSCountResponse getMiningActivityCount(String serviceURL,
-                                        String mineName,
-                                        String startDate,
-                                        String endDate,
-                                        String oreProcessed,
-                                        String producedMaterial,
-                                        String cutOffGrade,
-                                        String production,
-                                        int maxFeatures,
-                                        FilterBoundingBox bbox
-                                        ) throws Exception {
+            String mineName,
+            String startDate,
+            String endDate,
+            String oreProcessed,
+            String producedMaterial,
+            String cutOffGrade,
+            String production,
+            int maxFeatures,
+            FilterBoundingBox bbox
+            ) throws Exception {
 
         //create the filter
-        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production);
+        MiningActivityFilter filter = new MiningActivityFilter(mineName, startDate, endDate, oreProcessed,
+                producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString, maxFeatures, null, ResultType.Hits);
+        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
+                maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
-
-
 
     public String getMiningActivityFilter(String mineName, String startDate,
             String endDate, String oreProcessed, String producedMaterial,
@@ -319,18 +353,15 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     public String getMineralOccurrenceFilter(String commodityName, FilterBoundingBox bbox)
             throws Exception {
-        MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName,"","","","","");
+        MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName, "", "", "", "", "");
         return generateFilterString(filter, bbox);
     }
 
-
-
-    public String getMinOccurViewFilter(String commodityName,String minOreAmount,String minReserves,String minResources, FilterBoundingBox bbox)
+    public String getMinOccurViewFilter(String commodityName, String minOreAmount, String minReserves,
+            String minResources, FilterBoundingBox bbox)
             throws Exception {
-        MinOccurViewFilter filter = new MinOccurViewFilter(commodityName,minOreAmount, minReserves, minResources);
+        MinOccurViewFilter filter = new MinOccurViewFilter(commodityName, minOreAmount, minReserves, minResources);
         return generateFilterString(filter, bbox);
     }
-
-
 
 }

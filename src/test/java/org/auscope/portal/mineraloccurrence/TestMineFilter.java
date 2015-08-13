@@ -10,9 +10,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 /**
- * User: Mathew Wyatt
- * Date: 25/03/2009
- * Time: 8:23:09 AM
+ * User: Mathew Wyatt Date: 25/03/2009 Time: 8:23:09 AM
  */
 public class TestMineFilter extends PortalTestClass {
 
@@ -24,11 +22,13 @@ public class TestMineFilter extends PortalTestClass {
         MineFilter mineFilter = new MineFilter("");
 
         String filter = mineFilter.getFilterStringAllRecords();
-        Assert.assertEquals("<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>er:specification/er:Mine/gml:name</ogc:PropertyName><ogc:Literal>*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>", filter);
+        Assert.assertEquals(
+                "<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>er:specification/er:Mine/gml:name</ogc:PropertyName><ogc:Literal>*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>",
+                filter);
     }
 
     /**
-     *  Test with a mine name. A filter query should be generated searching for mines with the given name.
+     * Test with a mine name. A filter query should be generated searching for mines with the given name.
      */
     @Test
     public void testWithAMineName() throws Exception {
@@ -53,7 +53,8 @@ public class TestMineFilter extends PortalTestClass {
 
         String filter = mineFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
-        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/@matchCase", new String[] {"false"}, 1);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/@matchCase",
+                new String[] {"false"}, 1);
     }
 
 }

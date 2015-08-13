@@ -4,13 +4,13 @@ import org.auscope.portal.core.services.namespaces.IterableNamespace;
 
 /**
  * Namespace context for NVCL feature types
+ * 
  * @author Josh Vote
  *
  */
 public class NVCLNamespaceContext extends IterableNamespace {
 
     public static final String PUBLISHED_DATASETS_TYPENAME = "nvcl:ScannedBoreholeCollection";
-
 
     public NVCLNamespaceContext() {
         map.put("ogc", "http://www.opengis.net/ogc");

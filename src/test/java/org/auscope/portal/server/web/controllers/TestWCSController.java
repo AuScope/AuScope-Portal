@@ -30,7 +30,6 @@ public class TestWCSController extends PortalTestClass {
 
     private HttpServletResponse mockResponse = context.mock(HttpServletResponse.class);
 
-
     /**
      * Needed so we can check the contents of our zip file after it is written
      */
@@ -46,22 +45,25 @@ public class TestWCSController extends PortalTestClass {
         }
     };
 
-
     @Test
     public void testBadTimePositions() throws Exception {
         try {
             final String[] timePositions = new String[] {"1986-10-09 12:34:56 FAIL"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, timePositions, null, null, null, null, "", mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3,
+                    4, timePositions, null, null, null, null, "", mockResponse);
             Assert.fail("Should've failed to parse time");
-        } catch (ParseException ex) { }
+        } catch (ParseException ex) {
+        }
 
         try {
             final String[] timePositions = new String[] {"1986-10-09 12:99:56"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, timePositions, null, null, null, null, "", mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3,
+                    4, timePositions, null, null, null, null, "", mockResponse);
             Assert.fail("Should've failed to parse time");
-        } catch (ParseException ex) { }
+        } catch (ParseException ex) {
+        }
     }
 
     @Test
@@ -69,23 +71,29 @@ public class TestWCSController extends PortalTestClass {
         try {
             final String[] customParamValue = new String[] {"param1=1/a/3", "param2=4", "param1=5"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue, "", mockResponse); 
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3,
+                    4, null, null, null, null, customParamValue, "", mockResponse);
             Assert.fail("Should've failed to parse custom params");
-        } catch (IllegalArgumentException ex) { }
+        } catch (IllegalArgumentException ex) {
+        }
 
         try {
             final String[] customParamValue = new String[] {"param1=1/2/3", "param2=a", "param1=5"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue, "", mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3,
+                    4, null, null, null, null, customParamValue, "", mockResponse);
             Assert.fail("Should've failed to parse custom params");
-        } catch (IllegalArgumentException ex) { }
+        } catch (IllegalArgumentException ex) {
+        }
 
         try {
             final String[] customParamValue = new String[] {"param1=a/2/3", "param2=2", "param1=5"};
             WCSController controller = new WCSController(wcsService);
-            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3, 4, null, null, null, null, customParamValue, "", mockResponse);
+            controller.downloadWCSAsZip("url", "layer", "GeoTIFF", "inputCrs", 1, 1, null, null, "outputCrs", 1, 2, 3,
+                    4, null, null, null, null, customParamValue, "", mockResponse);
             Assert.fail("Should've failed to parse custom params");
-        } catch (IllegalArgumentException ex) { }
+        } catch (IllegalArgumentException ex) {
+        }
     }
 
     @Test
@@ -112,28 +120,33 @@ public class TestWCSController extends PortalTestClass {
 
         outStream = new MyServletOutputStream();
 
-        context.checking(new Expectations() {{
-            //Our method maker call should be passed all the correct variables
-            oneOf(wcsService).getCoverage(with(serviceUrl),
-                    with(layerName),
-                    with(format),
-                    with(equal(new Dimension(outputWidth, outputHeight))),
-                    with((Resolution) null),
-                    with(outputCrs),
-                    with(inputCrs),
-                    with(any(CSWGeographicBoundingBox.class)),
-                    with(any(TimeConstraint.class)),
-                    with(aMap(new String[] {"param1", "param2"}, new String[] {"1/2/3,5", "4"})));
-            will(returnValue(new ByteArrayInputStream(geotiffData)));
+        context.checking(new Expectations() {
+            {
+                //Our method maker call should be passed all the correct variables
+                oneOf(wcsService).getCoverage(with(serviceUrl),
+                        with(layerName),
+                        with(format),
+                        with(equal(new Dimension(outputWidth, outputHeight))),
+                        with((Resolution) null),
+                        with(outputCrs),
+                        with(inputCrs),
+                        with(any(CSWGeographicBoundingBox.class)),
+                        with(any(TimeConstraint.class)),
+                        with(aMap(new String[] {"param1", "param2"}, new String[] {"1/2/3,5", "4"})));
+                will(returnValue(new ByteArrayInputStream(geotiffData)));
 
-            //This is so we can inject our own fake output stream so we can inspect the result
-            oneOf(mockResponse).getOutputStream(); will(returnValue(outStream));
-            oneOf(mockResponse).setContentType("application/zip");
-            allowing(mockResponse).setHeader(with(any(String.class)), with(any(String.class)));
-         }});
+                //This is so we can inject our own fake output stream so we can inspect the result
+                oneOf(mockResponse).getOutputStream();
+                will(returnValue(outStream));
+                oneOf(mockResponse).setContentType("application/zip");
+                allowing(mockResponse).setHeader(with(any(String.class)), with(any(String.class)));
+            }
+        });
 
         WCSController controller = new WCSController(wcsService);
-        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX, outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions, timePeriodFrom, timePeriodTo,timePeriodResolution, customParamValue, "", mockResponse);
+        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX,
+                outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions,
+                timePeriodFrom, timePeriodTo, timePeriodResolution, customParamValue, "", mockResponse);
     }
 
     @Test
@@ -161,31 +174,36 @@ public class TestWCSController extends PortalTestClass {
 
         outStream = new MyServletOutputStream();
 
-        context.checking(new Expectations() {{
-            //Our method maker call should be passed all the correct variables
-            oneOf(wcsService).getCoverage(with(serviceUrl),
-                    with(equal(layerName)),
-                    with(equal(format)),
-                    with(equal((Dimension) null)),
-                    //with(any(Dimension.class)),
-                    with(equal(new Resolution(outputResX, outputResY))),
-                    //with(any(Resolution.class)),
-                    with(equal(outputCrs)),
-                    with(equal(inputCrs)),
-                    with(any(CSWGeographicBoundingBox.class)),
-                    with(equal(wcsTime)),
-                    //with(any(TimeConstraint.class)),
-                    with(any(Map.class)));
-            will(returnValue(new ByteArrayInputStream(netCdfData)));
+        context.checking(new Expectations() {
+            {
+                //Our method maker call should be passed all the correct variables
+                oneOf(wcsService).getCoverage(with(serviceUrl),
+                        with(equal(layerName)),
+                        with(equal(format)),
+                        with(equal((Dimension) null)),
+                        //with(any(Dimension.class)),
+                        with(equal(new Resolution(outputResX, outputResY))),
+                        //with(any(Resolution.class)),
+                        with(equal(outputCrs)),
+                        with(equal(inputCrs)),
+                        with(any(CSWGeographicBoundingBox.class)),
+                        with(equal(wcsTime)),
+                        //with(any(TimeConstraint.class)),
+                        with(any(Map.class)));
+                will(returnValue(new ByteArrayInputStream(netCdfData)));
 
-            //This is so we can inject our own fake output stream so we can inspect the result
-            oneOf(mockResponse).getOutputStream(); will(returnValue(outStream));
-            oneOf(mockResponse).setContentType("application/zip");
-            allowing(mockResponse).setHeader(with(any(String.class)), with(any(String.class)));
-         }});
+                //This is so we can inject our own fake output stream so we can inspect the result
+                oneOf(mockResponse).getOutputStream();
+                will(returnValue(outStream));
+                oneOf(mockResponse).setContentType("application/zip");
+                allowing(mockResponse).setHeader(with(any(String.class)), with(any(String.class)));
+            }
+        });
 
         WCSController controller = new WCSController(wcsService);
-        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX, outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions, timePeriodFrom, timePeriodTo,timePeriodResolution, customParams, "", mockResponse);
+        controller.downloadWCSAsZip(serviceUrl, layerName, format, inputCrs, outputWidth, outputHeight, outputResX,
+                outputResY, outputCrs, northBoundLat, southBoundLat, eastBoundLng, westBoundLng, timePositions,
+                timePeriodFrom, timePeriodTo, timePeriodResolution, customParams, "", mockResponse);
 
         ZipInputStream zip = outStream.getZipInputStream();
         ZipEntry ze = zip.getNextEntry();
@@ -205,10 +223,12 @@ public class TestWCSController extends PortalTestClass {
         final String layerName = "layer_name";
         final DescribeCoverageRecord[] records = new DescribeCoverageRecord[0];
 
-        context.checking(new Expectations() {{
-            oneOf(wcsService).describeCoverage(serviceUrl, layerName);
-            will(returnValue(records));
-         }});
+        context.checking(new Expectations() {
+            {
+                oneOf(wcsService).describeCoverage(serviceUrl, layerName);
+                will(returnValue(records));
+            }
+        });
 
         WCSController controller = new WCSController(wcsService);
         ModelAndView mav = controller.describeCoverage(serviceUrl, layerName);

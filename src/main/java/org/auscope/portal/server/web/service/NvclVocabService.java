@@ -22,8 +22,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /**
- * A specialisation of the SISSVoc3Service to add additional
- * NVCL vocab specific functions
+ * A specialisation of the SISSVoc3Service to add additional NVCL vocab specific functions
  *
  * @author Josh Vote
  */
@@ -37,8 +36,8 @@ public class NvclVocabService extends SISSVoc3Service {
     }
 
     /**
-     * Gets all RDF concepts at the specified repository as a single JENA Model. The results
-     * will be requested page by page until the entire repository has been traversed.
+     * Gets all RDF concepts at the specified repository as a single JENA Model. The results will be requested page by page until the entire repository has been
+     * traversed.
      *
      * @return
      * @throws PortalServiceException
@@ -51,7 +50,8 @@ public class NvclVocabService extends SISSVoc3Service {
 
         //Request each page in turn - put the results into Model
         do {
-            HttpRequestBase method = ((NvclVocabMethodMaker)sissVocMethodMaker).getAllScalars(getBaseUrl(), getRepository(), Format.Rdf, pageSize, pageNumber);
+            HttpRequestBase method = ((NvclVocabMethodMaker) sissVocMethodMaker).getAllScalars(getBaseUrl(),
+                    getRepository(), Format.Rdf, pageSize, pageNumber);
             if (requestPageOfConcepts(method, model)) {
                 pageNumber++;
             } else {
@@ -64,7 +64,9 @@ public class NvclVocabService extends SISSVoc3Service {
 
     /**
      * Gets every Jena resource that references the specified label
-     * @param label The label to lookup
+     * 
+     * @param label
+     *            The label to lookup
      * @return
      * @throws PortalServiceException
      * @throws URISyntaxException
@@ -76,7 +78,8 @@ public class NvclVocabService extends SISSVoc3Service {
 
         //Request each page in turn - put the results into Model
         do {
-            HttpRequestBase method = ((NvclVocabMethodMaker)sissVocMethodMaker).getScalarsByLabel(getBaseUrl(), getRepository(), label, Format.Rdf, pageSize, pageNumber);
+            HttpRequestBase method = ((NvclVocabMethodMaker) sissVocMethodMaker).getScalarsByLabel(getBaseUrl(),
+                    getRepository(), label, Format.Rdf, pageSize, pageNumber);
             if (requestPageOfConcepts(method, model)) {
                 pageNumber++;
             } else {
@@ -91,10 +94,11 @@ public class NvclVocabService extends SISSVoc3Service {
     }
 
     /**
-     * Gets every Jena resource that references the specified label. Then the underlying
-     * resources will be queried for their skos:definition. The resulting array of strings will be returned
+     * Gets every Jena resource that references the specified label. Then the underlying resources will be queried for their skos:definition. The resulting
+     * array of strings will be returned
      *
-     * @param label The label to lookup
+     * @param label
+     *            The label to lookup
      * @return
      * @throws PortalServiceException
      * @throws URISyntaxException

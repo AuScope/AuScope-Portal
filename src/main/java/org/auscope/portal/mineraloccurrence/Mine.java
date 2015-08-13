@@ -17,8 +17,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-
-
 // TODO: Auto-generated Javadoc
 /**
  * This class is a wrapper for er:Mine XML feature.
@@ -36,22 +34,27 @@ public class Mine {
     /**
      * Instantiates a new mine.
      *
-     * @param mineNode the mine node
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws SAXException the sAX exception
-     * @throws ParserConfigurationException the parser configuration exception
-     * @throws XPathExpressionException the x path expression exception
+     * @param mineNode
+     *            the mine node
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws SAXException
+     *             the sAX exception
+     * @throws ParserConfigurationException
+     *             the parser configuration exception
+     * @throws XPathExpressionException
+     *             the x path expression exception
      */
     public Mine(Node mineNode) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
         this.mineNode = mineNode;
     }
 
-
     /**
      * Gets the mine name preffered or first name in the list..
      *
      * @return the mine name preffered
-     * @throws XPathExpressionException the x path expression exception
+     * @throws XPathExpressionException
+     *             the x path expression exception
      */
     public String getMineNamePreffered() throws XPathExpressionException {
         XPath xPath = XPathFactory.newInstance().newXPath();
@@ -83,7 +86,7 @@ public class Mine {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr = xPath.compile("er:occurrence/er:MiningFeatureOccurrence/er:specification");
-            Node result = (Node)expr.evaluate(mineNode, XPathConstants.NODE);
+            Node result = (Node) expr.evaluate(mineNode, XPathConstants.NODE);
             return result.getAttributes().getNamedItem("xlink:href").getTextContent();
         } catch (Exception e) {
             return "";
@@ -104,14 +107,14 @@ public class Mine {
             XPathExpression expr = xPath.compile("er:relatedActivity/er:MiningActivity/er:occurrence/@xlink:href");
             Object relatedNodes = expr.evaluate(mineNode, XPathConstants.NODESET);
             NodeList nodes = (NodeList) relatedNodes;
-            String search  = "urn:cgi";
+            String search = "urn:cgi";
             String s;
             int j;
 
             for (int i = 0; i < nodes.getLength(); i++) {
                 s = nodes.item(i).getNodeValue();
                 j = s.indexOf(search);
-                if (j!=-1)
+                if (j != -1)
                     result.add(s.substring(j));
             }
 
@@ -120,7 +123,6 @@ public class Mine {
             return result;
         }
     }
-
 
     /**
      * Gets the related mining activities.
@@ -134,7 +136,8 @@ public class Mine {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             // Deal with local pointer reference eg. xlink:href="#er.mine.361023
-            XPathExpression expr = xPath.compile("er:occurrence/er:MiningFeatureOccurrence/er:specification[starts-with(@xlink:href,'#']");
+            XPathExpression expr = xPath
+                    .compile("er:occurrence/er:MiningFeatureOccurrence/er:specification[starts-with(@xlink:href,'#']");
             Object relatedNodes = expr.evaluate(mineNode, XPathConstants.NODESET);
             NodeList nodes = (NodeList) relatedNodes;
 

@@ -64,7 +64,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
     @Test
     public void testParamValidity_GetPlotScalar() throws Exception {
         //Mandatory
-        URI uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, null, null, null, null, null, null,0).getURI();
+        URI uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, null, null, null, null, null, null, 0)
+                .getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertDoesntContainURLParam(uri, "startdepth");
         assertDoesntContainURLParam(uri, "enddepth");
@@ -75,7 +76,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "legend", "0");
 
         //Optional (also test the various PlotScalarGraphType mappins)
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.LineChart,0).getURI();
+        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5,
+                PlotScalarGraphType.LineChart, 0).getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertContainsURLParam(uri, "startdepth", "10");
         assertContainsURLParam(uri, "enddepth", "20");
@@ -85,7 +87,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "graphtype", "3");
         assertContainsURLParam(uri, "legend", "0");
 
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.ScatteredChart,1).getURI();
+        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5,
+                PlotScalarGraphType.ScatteredChart, 1).getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertContainsURLParam(uri, "startdepth", "10");
         assertContainsURLParam(uri, "enddepth", "20");
@@ -95,7 +98,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "graphtype", "2");
         assertContainsURLParam(uri, "legend", "1");
 
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5, PlotScalarGraphType.StackedBarChart,1).getURI();
+        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5,
+                PlotScalarGraphType.StackedBarChart, 1).getURI();
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertContainsURLParam(uri, "startdepth", "10");
         assertContainsURLParam(uri, "enddepth", "20");
@@ -124,18 +128,20 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
 
     /**
      * Ensure we don't allow a download request with no ID/filter
+     * 
      * @throws Exception
      */
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetTSGDownloadNoID() throws Exception {
         methodMaker.getDownloadTSGMethod(serviceUrl, email, null, null, null, null, null, null, null, null);
     }
 
     /**
      * Ensure we don't allow a download request with both an ID/filter
+     * 
      * @throws Exception
      */
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetTSGDownloadBothIDs() throws Exception {
         methodMaker.getDownloadTSGMethod(serviceUrl, email, "test", "test", null, null, null, null, null, null);
     }
@@ -143,7 +149,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
     @Test
     public void testParamValidity_TSGDownload() throws Exception {
         //Mandatory only
-        URI uri = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, null, null, null, null, null, null, null).getURI();
+        URI uri = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, null, null, null, null, null, null,
+                null).getURI();
         assertContainsURLParam(uri, "datasetid", datasetId);
         assertContainsURLParam(uri, "email", email);
         assertDoesntContainURLParam(uri, "match_string");
@@ -155,7 +162,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertDoesntContainURLParam(uri, "mappics");
 
         //Optional
-        uri = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, null, false, true, false, true, false, true).getURI();
+        uri = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, null, false, true, false, true, false,
+                true).getURI();
         assertContainsURLParam(uri, "datasetid", datasetId);
         assertContainsURLParam(uri, "email", email);
         assertDoesntContainURLParam(uri, "match_string");
@@ -166,7 +174,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "mospic", "no");
         assertContainsURLParam(uri, "mappics", "yes");
 
-        uri = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, null, true, false, true, false, true, false).getURI();
+        uri = methodMaker.getDownloadTSGMethod(serviceUrl, email, datasetId, null, true, false, true, false, true,
+                false).getURI();
         assertContainsURLParam(uri, "datasetid", datasetId);
         assertContainsURLParam(uri, "email", email);
         assertDoesntContainURLParam(uri, "match_string");
@@ -188,7 +197,8 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
     @Test
     public void testParamValidity_WFSDownload() throws Exception {
         //Mandatory only
-        URI uri = methodMaker.getDownloadWFSMethod(serviceUrl, email, "borehole-id", "http://om.service.url", "type:Name").getURI();
+        URI uri = methodMaker.getDownloadWFSMethod(serviceUrl, email, "borehole-id", "http://om.service.url",
+                "type:Name").getURI();
         assertContainsURLParam(uri, "email", email);
         assertContainsURLParam(uri, "boreholeid", "borehole-id");
         assertContainsURLParam(uri, "serviceurl", "http://om.service.url");

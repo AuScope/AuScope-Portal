@@ -3,47 +3,46 @@ package org.auscope.portal.server.web.controllers.sessonobject;
 import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.springframework.core.convert.converter.Converter;
 
-public class StringArrayToCustomRegistry implements Converter<String[],CustomRegistryInt>{
+public class StringArrayToCustomRegistry implements Converter<String[], CustomRegistryInt> {
 
     @Override
     public CustomRegistryInt convert(String[] source) {
         return new CustomRegistry(source);
     }
 
-
-    private final class CustomRegistry implements CustomRegistryInt{
+    private final class CustomRegistry implements CustomRegistryInt {
         private String id;
-        private String title,serviceUrl;
+        private String title, serviceUrl;
         private String recordInformationUrl;
 
-        public CustomRegistry(String id,String title,String serviceUrl,String recordInformationUrl){
+        public CustomRegistry(String id, String title, String serviceUrl, String recordInformationUrl) {
             this.setId(id);
             this.setTitle(title);
-            if(!serviceUrl.endsWith("csw")){
+            if (!serviceUrl.endsWith("csw")) {
                 this.setServiceUrl(serviceUrl + "/csw");
-            }else{
+            } else {
                 this.setServiceUrl(serviceUrl);
             }
 
-            if(!recordInformationUrl.endsWith("uuid=%1$s")){
+            if (!recordInformationUrl.endsWith("uuid=%1$s")) {
                 this.setRecordInformationUrl(recordInformationUrl + "?uuid=%1$s");
-            }else{
+            } else {
                 this.setRecordInformationUrl(recordInformationUrl);
             }
         }
 
-        public CustomRegistry(String [] registryInfo){
-            this(registryInfo[0],registryInfo[1],registryInfo[2],registryInfo[3]);
+        public CustomRegistry(String[] registryInfo) {
+            this(registryInfo[0], registryInfo[1], registryInfo[2], registryInfo[3]);
         }
 
         @Override
         public boolean isEmpty() {
             //VT: All info are crucial therefore we don't recognize this registry if it is missing any information.
-           if(id.isEmpty() || title.isEmpty() || serviceUrl.isEmpty() || recordInformationUrl.isEmpty()){
-               return true;
-           }else{
-               return false;
-           }
+            if (id.isEmpty() || title.isEmpty() || serviceUrl.isEmpty() || recordInformationUrl.isEmpty()) {
+                return true;
+            } else {
+                return false;
+            }
 
         }
 
@@ -55,7 +54,8 @@ public class StringArrayToCustomRegistry implements Converter<String[],CustomReg
         }
 
         /**
-         * @param recordInformationUrl the recordInformationUrl to set
+         * @param recordInformationUrl
+         *            the recordInformationUrl to set
          */
         public void setRecordInformationUrl(String recordInformationUrl) {
             this.recordInformationUrl = recordInformationUrl;
@@ -69,7 +69,8 @@ public class StringArrayToCustomRegistry implements Converter<String[],CustomReg
         }
 
         /**
-         * @param serviceUrl the serviceUrl to set
+         * @param serviceUrl
+         *            the serviceUrl to set
          */
         public void setServiceUrl(String serviceUrl) {
             this.serviceUrl = serviceUrl;
@@ -83,7 +84,8 @@ public class StringArrayToCustomRegistry implements Converter<String[],CustomReg
         }
 
         /**
-         * @param title the title to set
+         * @param title
+         *            the title to set
          */
         public void setTitle(String title) {
             this.title = title;
@@ -97,17 +99,13 @@ public class StringArrayToCustomRegistry implements Converter<String[],CustomReg
         }
 
         /**
-         * @param id the id to set
+         * @param id
+         *            the id to set
          */
         public void setId(String id) {
             this.id = id;
         }
 
-
-
     }
-
-
-
 
 }

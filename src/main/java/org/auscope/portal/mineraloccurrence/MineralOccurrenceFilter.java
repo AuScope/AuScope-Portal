@@ -17,7 +17,9 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
  */
 public class MineralOccurrenceFilter extends AbstractFilter {
 
-    public enum MeasureTypes { ENDOWMENT, RESERVE, RESOURCE, ANY, NONE }
+    public enum MeasureTypes {
+        ENDOWMENT, RESERVE, RESOURCE, ANY, NONE
+    }
 
     /** Log object for this class. */
     private final Log log = LogFactory.getLog(getClass());
@@ -35,20 +37,20 @@ public class MineralOccurrenceFilter extends AbstractFilter {
      * C'tor
      */
     public MineralOccurrenceFilter(String commodityName,
-                                    String measureType,
-                                    String minOreAmount,
-                                    String minOreAmountUOM,
-                                    String minCommodityAmount,
-                                    String minCommodityAmountUOM) {
-        this.commodityName         = commodityName == null ? "" : commodityName;
-        this.minOreAmount          = minOreAmount;
-        this.minOreAmountUOM       = minOreAmountUOM;
-        this.minCommodityAmount    = minCommodityAmount;
+            String measureType,
+            String minOreAmount,
+            String minOreAmountUOM,
+            String minCommodityAmount,
+            String minCommodityAmountUOM) {
+        this.commodityName = commodityName == null ? "" : commodityName;
+        this.minOreAmount = minOreAmount;
+        this.minOreAmountUOM = minOreAmountUOM;
+        this.minCommodityAmount = minCommodityAmount;
         this.minCommodityAmountUOM = minCommodityAmountUOM;
 
-        this.measureType           = getMeasureType(measureType);
-        this.paramsCount           = getParameterCount();
-        this.filterStr             = makeFilter();
+        this.measureType = getMeasureType(measureType);
+        this.paramsCount = getParameterCount();
+        this.filterStr = makeFilter();
     }
 
     @Override
@@ -58,21 +60,21 @@ public class MineralOccurrenceFilter extends AbstractFilter {
 
     @Override
     public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
-
-
+        //@formatter:off
         return this.generateFilter(
                 this.generateAndComparisonFragment(
                         this.generateBboxFragment(bbox, "gsml:shape"),
                         this.filterStr));
+        //@formatter:on
     }
 
     /**
-     * Constructs WFS MineralOccurence filter query string based
-     * on user parameters.
+     * Constructs WFS MineralOccurence filter query string based on user parameters.
+     *
      * @return Filter query string for sending as a POST request
      */
     private String makeFilter() {
-
+        //@formatter:off
         // Case 1. Get All Query
         if ((this.measureType == MeasureTypes.NONE) && commodityName.isEmpty()) {
             return "";
@@ -142,34 +144,52 @@ public class MineralOccurrenceFilter extends AbstractFilter {
             }
         }
 
+        //@formatter:on
         return "";
     }
-
 
     /*
      * Appends search commodity and amount parameters entered by user
      */
-    private String generateCommodityAndParametersFragment(String commodityName,  String measure) {
+    private String generateCommodityAndParametersFragment(String commodityName, String measure) {
         List<String> fragments = new ArrayList<String>();
 
-        fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:measureDetails/er:CommodityMeasure/er:commodityOfInterest/er:Commodity/er:commodityName", commodityName));
+        fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                + measure
+                + "/er:measureDetails/er:CommodityMeasure/er:commodityOfInterest/er:Commodity/er:commodityName",
+                commodityName));
 
         if (!this.minOreAmount.isEmpty()) {
-            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
+            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(
+                    "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
+                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
         }
         if (!this.minOreAmountUOM.isEmpty()) {
-            fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
+            fragments.add(this.generatePropertyIsEqualToFragment(
+                    "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
+                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
         }
         if (!this.minCommodityAmount.isEmpty()) {
-            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue", this.minCommodityAmount));
+            fragments
+                    .add(this
+                            .generatePropertyIsGreaterThanOrEqualTo(
+                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                            + measure
+                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue",
+                                    this.minCommodityAmount));
         }
         if (!this.minCommodityAmountUOM.isEmpty()) {
-            fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minCommodityAmountUOM));
+            fragments
+                    .add(this
+                            .generatePropertyIsEqualToFragment(
+                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                            + measure
+                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+                                    this.minCommodityAmountUOM));
         }
 
         return this.generateAndComparisonFragment(fragments.toArray(new String[fragments.size()]));
     }
-
 
     /*
      * Generates a large <ogc:And> fragment consisiting of all the parameters specified
@@ -178,21 +198,36 @@ public class MineralOccurrenceFilter extends AbstractFilter {
         List<String> fragments = new ArrayList<String>();
 
         if (!this.minOreAmount.isEmpty()) {
-            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
+            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(
+                    "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
+                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
         }
         if (!this.minOreAmountUOM.isEmpty()) {
-            fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
+            fragments.add(this.generatePropertyIsEqualToFragment(
+                    "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
+                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
         }
         if (!this.minCommodityAmount.isEmpty()) {
-            fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue", this.minCommodityAmount));
+            fragments
+                    .add(this
+                            .generatePropertyIsEqualToFragment(
+                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                            + measure
+                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue",
+                                    this.minCommodityAmount));
         }
         if (!this.minCommodityAmountUOM.isEmpty()) {
-            fragments.add(this.generatePropertyIsEqualToFragment("gsml:specification/er:MineralOccurrence/er:oreAmount/"+measure+"/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minCommodityAmountUOM));
+            fragments
+                    .add(this
+                            .generatePropertyIsEqualToFragment(
+                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                            + measure
+                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+                                    this.minCommodityAmountUOM));
         }
 
         return this.generateAndComparisonFragment(fragments.toArray(new String[fragments.size()]));
     }
-
 
     /*
      * Converts measure type string displayed in combobox into respective
@@ -217,7 +252,6 @@ public class MineralOccurrenceFilter extends AbstractFilter {
         }
     }
 
-
     /*
      * Returns number of Amount Measure parameters submitted by user
      */
@@ -237,20 +271,24 @@ public class MineralOccurrenceFilter extends AbstractFilter {
         return count;
     }
 
-
     /**
      * Returns the measure type tag for building up the filter property name
-     * @param type the measure type
+     *
+     * @param type
+     *            the measure type
      * @return measure type tag as a String
      */
     public String getMeasureTypeTag(MeasureTypes type) {
         switch (type) {
-            case ENDOWMENT : return "er:Endowment";
-            case RESOURCE  : return "er:Resource";
-            case RESERVE   : return "er:Reserve";
-            default        : return ""; // Shouldn't go here
+        case ENDOWMENT:
+            return "er:Endowment";
+        case RESOURCE:
+            return "er:Resource";
+        case RESERVE:
+            return "er:Reserve";
+        default:
+            return ""; // Shouldn't go here
         }
     }
-
 
 }

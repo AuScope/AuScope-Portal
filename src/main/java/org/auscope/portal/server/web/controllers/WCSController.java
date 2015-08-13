@@ -40,13 +40,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class WCSController extends BasePortalController {
     private final Log logger = LogFactory.getLog(getClass());
 
-    /** The format string view's are expected to use when working with this controller*/
+    /** The format string view's are expected to use when working with this controller */
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss z";
 
     private WCSService wcsService;
 
     private int BUFFERSIZE = 1024 * 1024;
-
 
     @Autowired
     public WCSController(WCSService wcsService) {
@@ -63,8 +62,8 @@ public class WCSController extends BasePortalController {
     }
 
     /**
-     * Parses an array of date strings that are conforming to DATE_FORMAT
-     * into date objects
+     * Parses an array of date strings that are conforming to DATE_FORMAT into date objects
+     * 
      * @param dateStrings
      * @return
      * @throws ParseException
@@ -81,8 +80,8 @@ public class WCSController extends BasePortalController {
     }
 
     /**
-     * Attempts to parse a time constraint from the listed time information.
-     * Returns null if no constraint can be generated
+     * Attempts to parse a time constraint from the listed time information. Returns null if no constraint can be generated
+     * 
      * @param timePositions
      * @param timePeriodFrom
      * @param timePeriodTo
@@ -91,14 +90,15 @@ public class WCSController extends BasePortalController {
      * @throws ParseException
      */
     private TimeConstraint parseTimeConstraint(final String[] timePositions,
-                                 final String timePeriodFrom,
-                                 final String timePeriodTo,
-                                 final String timePeriodResolution) throws ParseException {
+            final String timePeriodFrom,
+            final String timePeriodTo,
+            final String timePeriodResolution) throws ParseException {
         //We will receive a list of time positions
         if (timePositions != null && timePositions.length > 0) {
             return TimeConstraint.parseTimeConstraint(parseDates(timePositions));
-        //or an actual time period
-        } else if (timePeriodFrom != null && timePeriodTo != null && !timePeriodFrom.isEmpty() && !timePeriodTo.isEmpty()) {
+            //or an actual time period
+        } else if (timePeriodFrom != null && timePeriodTo != null && !timePeriodFrom.isEmpty()
+                && !timePeriodTo.isEmpty()) {
             DateFormat inputFormat = new SimpleDateFormat(DATE_FORMAT);
             Date from = inputFormat.parse(timePeriodFrom);
             Date to = inputFormat.parse(timePeriodTo);
@@ -111,8 +111,10 @@ public class WCSController extends BasePortalController {
 
     /**
      *
-     * @param customParamValues a list of PARAMETER=VALUE
-     * @param customParamIntervals a list of PARAMETER=MIN/MAX/RESOLUTION
+     * @param customParamValues
+     *            a list of PARAMETER=VALUE
+     * @param customParamIntervals
+     *            a list of PARAMETER=MIN/MAX/RESOLUTION
      * @return
      */
     private Map<String, String> generateCustomParamMap(final String[] customParamValues) {
@@ -130,7 +132,8 @@ public class WCSController extends BasePortalController {
                     try {
                         Double.parseDouble(value);
                     } catch (Exception ex) {
-                        throw new IllegalArgumentException(String.format("Couldnt parse double from '%1$s' in customParam '%2$s'", value, kvpString));
+                        throw new IllegalArgumentException(String.format(
+                                "Couldnt parse double from '%1$s' in customParam '%2$s'", value, kvpString));
                     }
                 }
 
@@ -149,8 +152,7 @@ public class WCSController extends BasePortalController {
     }
 
     /**
-     * A function that given the parameters for a WCS GetCovereage request will make the request
-     * on behalf of the user and return the results in a zipped file.
+     * A function that given the parameters for a WCS GetCovereage request will make the request on behalf of the user and return the results in a zipped file.
      *
      * One set of outputWidth/outputHeight or outputResX/outputResy must be specified
      *
@@ -158,50 +160,73 @@ public class WCSController extends BasePortalController {
      *
      * You cannot specify both a TIMEPERIOD and TIMEPOSITION constraint
      *
-     * @param serviceUrl The remote URL to query
-     * @param layerName The coverage layername to request
-     * @param downloadFormat Either [GeoTIFF, NetCDF]
-     * @param inputCrs the coordinate reference system to query
-     * @param outputWidth [Optional] Width of output dataset (Not compatible with outputResX/outputResY)
-     * @param outputHeight [Optional] Height of output dataset (Not compatible with outputResX/outputResY)
-     * @param outputResX [Optional] When requesting a georectified grid coverage, this requests a subset with a specific spatial resolution (Not compatible with outputWidth/outputHeight)
-     * @param outputResY [Optional] When requesting a georectified grid coverage, this requests a subset with a specific spatial resolution (Not compatible with outputWidth/outputHeight)
-     * @param outputCrs [Optional] The Coordinate reference system of the output data
-     * @param northBoundLatitude [Optional] [BBOX] A point on the bounding box
-     * @param southBoundLatitude [Optional] [BBOX] A point on the bounding box
-     * @param eastBoundLongitude [Optional] [BBOX] A point on the bounding box
-     * @param westBoundLongitude [Optional] [BBOX] A point on the bounding box
-     * @param timePositions [Optional] [TIMEPOSITION] A list of time positions to query for. Format YYYY-MM-DD HH:MM:SS GMT
-     * @param timePeriodFrom [Optional] [TIMEPERIOD] a time range start. Format YYYY-MM-DD HH:MM:SS GMT
-     * @param timePeriodTo [Optional] [TIMEPERIOD] a time range end. Format YYYY-MM-DD HH:MM:SS GMT
-     * @param timePeriodResolution [Optional] [TIMEPERIOD] a time range resolution (not required for time period)
-     * @param customParamValue [Optional] A list of strings in the form "PARAMETER=VALUE" or "PARAMETER=MIN/MAX/RES" which will be used for compound parameter filtering in the request
+     * @param serviceUrl
+     *            The remote URL to query
+     * @param layerName
+     *            The coverage layername to request
+     * @param downloadFormat
+     *            Either [GeoTIFF, NetCDF]
+     * @param inputCrs
+     *            the coordinate reference system to query
+     * @param outputWidth
+     *            [Optional] Width of output dataset (Not compatible with outputResX/outputResY)
+     * @param outputHeight
+     *            [Optional] Height of output dataset (Not compatible with outputResX/outputResY)
+     * @param outputResX
+     *            [Optional] When requesting a georectified grid coverage, this requests a subset with a specific spatial resolution (Not compatible with
+     *            outputWidth/outputHeight)
+     * @param outputResY
+     *            [Optional] When requesting a georectified grid coverage, this requests a subset with a specific spatial resolution (Not compatible with
+     *            outputWidth/outputHeight)
+     * @param outputCrs
+     *            [Optional] The Coordinate reference system of the output data
+     * @param northBoundLatitude
+     *            [Optional] [BBOX] A point on the bounding box
+     * @param southBoundLatitude
+     *            [Optional] [BBOX] A point on the bounding box
+     * @param eastBoundLongitude
+     *            [Optional] [BBOX] A point on the bounding box
+     * @param westBoundLongitude
+     *            [Optional] [BBOX] A point on the bounding box
+     * @param timePositions
+     *            [Optional] [TIMEPOSITION] A list of time positions to query for. Format YYYY-MM-DD HH:MM:SS GMT
+     * @param timePeriodFrom
+     *            [Optional] [TIMEPERIOD] a time range start. Format YYYY-MM-DD HH:MM:SS GMT
+     * @param timePeriodTo
+     *            [Optional] [TIMEPERIOD] a time range end. Format YYYY-MM-DD HH:MM:SS GMT
+     * @param timePeriodResolution
+     *            [Optional] [TIMEPERIOD] a time range resolution (not required for time period)
+     * @param customParamValue
+     *            [Optional] A list of strings in the form "PARAMETER=VALUE" or "PARAMETER=MIN/MAX/RES" which will be used for compound parameter filtering in
+     *            the request
      * @param response
      * @throws Exception
      */
     @RequestMapping("/downloadWCSAsZip.do")
-    public void downloadWCSAsZip(@RequestParam("serviceUrl") final String serviceUrl,
-                                 @RequestParam("layerName") final String layerName,
-                                 @RequestParam("downloadFormat") final String downloadFormat,
-                                 @RequestParam("inputCrs") final String inputCrs,
-                                 @RequestParam(required = false, value = "outputWidth") final Integer outputWidth,
-                                 @RequestParam(required = false, value = "outputHeight") final Integer outputHeight,
-                                 @RequestParam(required = false, value = "outputResX") final Double outputResX,
-                                 @RequestParam(required = false, value = "outputResY") final Double outputResY,
-                                 @RequestParam(required = false, value = "outputCrs") final String outputCrs,
-                                 @RequestParam(required = false, defaultValue="0",  value="northBoundLatitude") final double northBoundLatitude,
-                                 @RequestParam(required = false, defaultValue="0", value="southBoundLatitude") final double southBoundLatitude,
-                                 @RequestParam(required = false, defaultValue="0", value="eastBoundLongitude") final double eastBoundLongitude,
-                                 @RequestParam(required = false, defaultValue="0", value="westBoundLongitude") final double westBoundLongitude,
-                                 @RequestParam(required = false, value = "timePosition") final String[] timePositions,
-                                 @RequestParam(required = false, value = "timePeriodFrom") final String timePeriodFrom,
-                                 @RequestParam(required = false, value = "timePeriodTo") final String timePeriodTo,
-                                 @RequestParam(required = false, value = "timePeriodResolution") final String timePeriodResolution,
-                                 @RequestParam(required = false, value = "customParamValue") final String[] customParamValues,
-                                 @RequestParam(required = false, value = "ftpURL") final String ftpURL,
-                                HttpServletResponse response) throws Exception {
+    public void downloadWCSAsZip(
+            @RequestParam("serviceUrl") final String serviceUrl,
+            @RequestParam("layerName") final String layerName,
+            @RequestParam("downloadFormat") final String downloadFormat,
+            @RequestParam("inputCrs") final String inputCrs,
+            @RequestParam(required = false, value = "outputWidth") final Integer outputWidth,
+            @RequestParam(required = false, value = "outputHeight") final Integer outputHeight,
+            @RequestParam(required = false, value = "outputResX") final Double outputResX,
+            @RequestParam(required = false, value = "outputResY") final Double outputResY,
+            @RequestParam(required = false, value = "outputCrs") final String outputCrs,
+            @RequestParam(required = false, defaultValue = "0", value = "northBoundLatitude") final double northBoundLatitude,
+            @RequestParam(required = false, defaultValue = "0", value = "southBoundLatitude") final double southBoundLatitude,
+            @RequestParam(required = false, defaultValue = "0", value = "eastBoundLongitude") final double eastBoundLongitude,
+            @RequestParam(required = false, defaultValue = "0", value = "westBoundLongitude") final double westBoundLongitude,
+            @RequestParam(required = false, value = "timePosition") final String[] timePositions,
+            @RequestParam(required = false, value = "timePeriodFrom") final String timePeriodFrom,
+            @RequestParam(required = false, value = "timePeriodTo") final String timePeriodTo,
+            @RequestParam(required = false, value = "timePeriodResolution") final String timePeriodResolution,
+            @RequestParam(required = false, value = "customParamValue") final String[] customParamValues,
+            @RequestParam(required = false, value = "ftpURL") final String ftpURL,
+            HttpServletResponse response) throws Exception {
         String outFileName = generateOutputFilename(layerName, downloadFormat);
-        TimeConstraint timeConstraint = parseTimeConstraint(timePositions, timePeriodFrom, timePeriodTo, timePeriodResolution);
+        TimeConstraint timeConstraint = parseTimeConstraint(timePositions, timePeriodFrom, timePeriodTo,
+                timePeriodResolution);
         Map<String, String> customParams = generateCustomParamMap(customParamValues);
         Dimension outputSize = null;
         Resolution outputResolution = null;
@@ -217,8 +242,7 @@ public class WCSController extends BasePortalController {
         CSWGeographicBoundingBox bbox = null;
         if (!(eastBoundLongitude == 0 &&
                 westBoundLongitude == 0 &&
-                northBoundLatitude == 0 &&
-                southBoundLatitude == 0)) {
+                northBoundLatitude == 0 && southBoundLatitude == 0)) {
             bbox = new CSWGeographicBoundingBox();
             bbox.setEastBoundLongitude(eastBoundLongitude);
             bbox.setSouthBoundLatitude(southBoundLatitude);
@@ -226,7 +250,8 @@ public class WCSController extends BasePortalController {
             bbox.setWestBoundLongitude(westBoundLongitude);
         }
 
-        logger.debug(String.format("serviceUrl='%1$s' bbox='%2$s' timeString='%3$s' layerName='%4$s'", serviceUrl, bbox, timeConstraint, layerName));
+        logger.debug(String.format("serviceUrl='%1$s' bbox='%2$s' timeString='%3$s' layerName='%4$s'", serviceUrl,
+                bbox, timeConstraint, layerName));
 
         // AUS-2287
         // The rest of this method will result in one of three outcomes:
@@ -238,31 +263,38 @@ public class WCSController extends BasePortalController {
         ServletOutputStream servletOutputStream = response.getOutputStream();
 
         try {
-            dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution, outputCrs, inputCrs, bbox, timeConstraint, customParams);
+            dataStream = wcsService.getCoverage(serviceUrl, layerName, downloadFormat, outputSize, outputResolution,
+                    outputCrs, inputCrs, bbox, timeConstraint, customParams);
         } catch (PortalServiceException ex) {
             Throwable cause = ex.getCause();
             String causeMessage = cause == null ? "" : cause.getMessage();
 
-            if (causeMessage==null || causeMessage.contains("<ServiceException>Unknown problem</ServiceException>")){
+            if (causeMessage == null || causeMessage.contains("<ServiceException>Unknown problem</ServiceException>")) {
 
-                if(causeMessage==null){
-                    causeMessage=ex.getMessage();
+                if (causeMessage == null) {
+                    causeMessage = ex.getMessage();
                 }
 
                 // Outcome 2:
 
                 // If we have an FTP URL we can add a link to it in the error message:
                 String ftpMessage = ftpURL != null && ftpURL.compareTo("") != 0 ?
-                        String.format("<br/>Alternatively, you can download the data directly from <a href=\"%s\">here</a>.", ftpURL) : "";
+                        String.format(
+                                "<br/>Alternatively, you can download the data directly from <a href=\"%s\">here</a>.",
+                                ftpURL) : "";
 
-                String messageString=String.format(
-                        "<html>Error message: "+ causeMessage +"<br/>Your request has failed by unexpected reasons.%s</html>",
+                String messageString = String.format(
+                        "<html>Error message: " + causeMessage
+                                + "<br/>Your request has failed by unexpected reasons.%s</html>",
                         ftpMessage);
 
                 //VT: Note Http 400 is a valid response from the service. https://jira.csiro.au/browse/AUS-2421
-                messageString = String.format(
-                      "<html>Error message: "+ causeMessage +"<br/>Your request has failed. This is likely due to the requested data exceeding the server&apos;s size limit.<br/>Please adjust your query and try again.%s</html>",
-                          ftpMessage);
+                messageString = String
+                        .format(
+                                "<html>Error message: "
+                                        + causeMessage
+                                        + "<br/>Your request has failed. This is likely due to the requested data exceeding the server&apos;s size limit.<br/>Please adjust your query and try again.%s</html>",
+                                ftpMessage);
 
                 servletOutputStream.write(messageString.getBytes());
                 servletOutputStream.close();
@@ -275,7 +307,7 @@ public class WCSController extends BasePortalController {
 
         // At this point we know we're going to be sending back a zip file:
         response.setContentType("application/zip");
-        response.setHeader("Content-Disposition","inline; filename=WCSDownload.zip;");
+        response.setHeader("Content-Disposition", "inline; filename=WCSDownload.zip;");
         ZipOutputStream zout = new ZipOutputStream(servletOutputStream);
 
         if (dataStream != null) {
@@ -295,12 +327,8 @@ public class WCSController extends BasePortalController {
     /**
      * Returns a DescribeCoverageRecord as a JSON Response representing the response
      *
-     *  {
-     *      success : true/false
-     *      errorMsg : ''
-     *      rawXml : [Can be null] <Set to the raw XML string returned from the DescribeCoverageResponse>
-     *      records : [Can be null] <Set to the DescribeCoverageRecord list parsed from the rawXml>
-     *  }
+     * { success : true/false errorMsg : '' rawXml : [Can be null] <Set to the raw XML string returned from the DescribeCoverageResponse> records : [Can be
+     * null] <Set to the DescribeCoverageRecord list parsed from the rawXml> }
      *
      * @param serviceUrl
      * @param layerName
@@ -313,7 +341,8 @@ public class WCSController extends BasePortalController {
             records = wcsService.describeCoverage(serviceUrl, layerName);
         } catch (Exception ex) {
             logger.error("Error describing coverage", ex);
-            return generateJSONResponseMAV(false, null, "Error occured whilst communicating to remote service: " + ex.getMessage());
+            return generateJSONResponseMAV(false, null,
+                    "Error occured whilst communicating to remote service: " + ex.getMessage());
         }
 
         return generateJSONResponseMAV(true, records, "");

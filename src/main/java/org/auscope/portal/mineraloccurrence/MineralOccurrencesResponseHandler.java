@@ -23,8 +23,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Handler for typed responses from mineral occurrences WFS queries.
- * Id: $$
+ * Handler for typed responses from mineral occurrences WFS queries. Id: $$
  */
 @Repository
 public class MineralOccurrencesResponseHandler {
@@ -35,9 +34,11 @@ public class MineralOccurrencesResponseHandler {
     /**
      * Gets the mines.
      *
-     * @param mineResponse the mine response
+     * @param mineResponse
+     *            the mine response
      * @return the mines
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     public List<Mine> getMines(String mineResponse) throws Exception {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -51,7 +52,8 @@ public class MineralOccurrencesResponseHandler {
         //Do some rudimentary error testing
         OWSExceptionParser.checkForExceptionResponse(mineDocument);
 
-        XPathExpression expr = xPath.compile("/wfs:FeatureCollection/gml:featureMember/er:MiningFeatureOccurrence/er:specification/er:Mine | /wfs:FeatureCollection/gml:featureMembers/er:MiningFeatureOccurrence/er:specification/er:Mine");
+        XPathExpression expr = xPath
+                .compile("/wfs:FeatureCollection/gml:featureMember/er:MiningFeatureOccurrence/er:specification/er:Mine | /wfs:FeatureCollection/gml:featureMembers/er:MiningFeatureOccurrence/er:specification/er:Mine");
         NodeList mineNodes = (NodeList) expr.evaluate(mineDocument, XPathConstants.NODESET);
         ArrayList<Mine> mines = new ArrayList<Mine>();
 
@@ -64,9 +66,11 @@ public class MineralOccurrencesResponseHandler {
     /**
      * Gets the commodities.
      *
-     * @param commodityResponse the commodity response
+     * @param commodityResponse
+     *            the commodity response
      * @return the commodities
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     public Collection<Commodity> getCommodities(String commodityResponse) throws Exception {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -94,9 +98,11 @@ public class MineralOccurrencesResponseHandler {
     /**
      * Gets the number of features - returns 0 unless it found something.
      *
-     * @param mineralOccurrenceResponse the mineral occurrence response
+     * @param mineralOccurrenceResponse
+     *            the mineral occurrence response
      * @return the number of features
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     public int getNumberOfFeatures(String mineralOccurrenceResponse) throws Exception {
         int numberOfFeatures = 0;
@@ -104,7 +110,8 @@ public class MineralOccurrencesResponseHandler {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true); // never forget this!
         DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document mineralOccurrenceDocument = builder.parse(new ByteArrayInputStream(mineralOccurrenceResponse.getBytes("UTF-8")));
+        Document mineralOccurrenceDocument = builder.parse(new ByteArrayInputStream(mineralOccurrenceResponse
+                .getBytes("UTF-8")));
 
         XPath xPath = XPathFactory.newInstance().newXPath();
         xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
@@ -116,7 +123,7 @@ public class MineralOccurrencesResponseHandler {
             XPathExpression expr = xPath.compile("/wfs:FeatureCollection/@numberOfFeatures");
             Node result = (Node) expr.evaluate(mineralOccurrenceDocument, XPathConstants.NODE);
             numberOfFeatures = Integer.parseInt(result.getTextContent());
-        }  catch (XPathExpressionException  e) {
+        } catch (XPathExpressionException e) {
             log.debug("unable to compile xpath:" + e.getMessage());
         } catch (DOMException e) {
             log.debug("unable to evaluate xpath:" + e.getMessage());

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-
 /**
  * Controller that handles all Earth Resource related requests
  * <p>
@@ -49,14 +48,15 @@ public class EarthResourcesFilterController extends BasePortalController {
 
     // ------------------------------------------- Property Setters and Getters
 
-
     /**
-     * Handles the Earth Resource Mine filter queries.
-     * (If the bbox elements are specified, they will limit the output response to 200 records implicitly)
+     * Handles the Earth Resource Mine filter queries. (If the bbox elements are specified, they will limit the output response to 200 records implicitly)
      *
-     * @param serviceUrl the url of the service to query
-     * @param mineName   the name of the mine to query for
-     * @param request    the HTTP client request
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param mineName
+     *            the name of the mine to query for
+     * @param request
+     *            the HTTP client request
      * @return a WFS response converted into KML
      * @throws Exception
      */
@@ -65,14 +65,16 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("mineName") String mineName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures) throws Exception {
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
         try {
-            WFSTransformedResponse response = this.mineralOccurrenceService.getMinesGml(serviceUrl, mineName, bbox, maxFeatures);
+            WFSTransformedResponse response = this.mineralOccurrenceService.getMinesGml(serviceUrl, mineName, bbox,
+                    maxFeatures);
 
             return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
@@ -83,12 +85,15 @@ public class EarthResourcesFilterController extends BasePortalController {
     }
 
     /**
-     * Handles getting the count of the Earth Resource Mine filter queries.
-     * (If the bbox elements are specified, they will limit the output response to 200 records implicitly)
+     * Handles getting the count of the Earth Resource Mine filter queries. (If the bbox elements are specified, they will limit the output response to 200
+     * records implicitly)
      *
-     * @param serviceUrl the url of the service to query
-     * @param mineName   the name of the mine to query for
-     * @param request    the HTTP client request
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param mineName
+     *            the name of the mine to query for
+     * @param request
+     *            the HTTP client request
      * @return a WFS response converted into KML
      * @throws Exception
      */
@@ -97,14 +102,16 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("mineName") String mineName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures) throws Exception {
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
         try {
-            WFSCountResponse response = this.mineralOccurrenceService.getMinesCount(serviceUrl, mineName, bbox, maxFeatures);
+            WFSCountResponse response = this.mineralOccurrenceService.getMinesCount(serviceUrl, mineName, bbox,
+                    maxFeatures);
             return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
@@ -112,7 +119,6 @@ public class EarthResourcesFilterController extends BasePortalController {
             return this.generateExceptionResponse(e, serviceUrl);
         }
     }
-
 
     /**
      * Handles the Earth Resource MineralOccerrence filter queries.
@@ -124,22 +130,24 @@ public class EarthResourcesFilterController extends BasePortalController {
      * @param minOreAmountUOM
      * @param minCommodityAmount
      * @param minCommodityAmountUOM
-     * @param request                the HTTP client request
+     * @param request
+     *            the HTTP client request
      *
      * @return a WFS response converted into KML
      * @throws Exception
      */
     @RequestMapping("/doMineralOccurrenceFilter.do")
     public ModelAndView doMineralOccurrenceFilter(
-        @RequestParam(value = "serviceUrl",            required = false) String serviceUrl,
-        @RequestParam(value = "commodityName",         required = false) String commodityName,
-        @RequestParam(value = "measureType",           required = false) String measureType,
-        @RequestParam(value = "minOreAmount",          required = false) String minOreAmount,
-        @RequestParam(value = "minOreAmountUOM",       required = false) String minOreAmountUOM,
-        @RequestParam(value = "minCommodityAmount",    required = false) String minCommodityAmount,
-        @RequestParam(value = "minCommodityAmountUOM", required = false) String minCommodityAmountUOM,
-        @RequestParam(required = false, value = "bbox") String bboxJson,
-        @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures) throws Exception {
+            @RequestParam(value = "serviceUrl", required = false) String serviceUrl,
+            @RequestParam(value = "commodityName", required = false) String commodityName,
+            @RequestParam(value = "measureType", required = false) String measureType,
+            @RequestParam(value = "minOreAmount", required = false) String minOreAmount,
+            @RequestParam(value = "minOreAmountUOM", required = false) String minOreAmountUOM,
+            @RequestParam(value = "minCommodityAmount", required = false) String minCommodityAmount,
+            @RequestParam(value = "minCommodityAmountUOM", required = false) String minCommodityAmountUOM,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
         //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -176,22 +184,24 @@ public class EarthResourcesFilterController extends BasePortalController {
      * @param minOreAmountUOM
      * @param minCommodityAmount
      * @param minCommodityAmountUOM
-     * @param request                the HTTP client request
+     * @param request
+     *            the HTTP client request
      *
      * @return Returns Integer count
      * @throws Exception
      */
     @RequestMapping("/doMineralOccurrenceFilterCount.do")
     public ModelAndView doMineralOccurrenceFilterCount(
-        @RequestParam(value="serviceUrl",            required=false) String serviceUrl,
-        @RequestParam(value="commodityName",         required=false) String commodityName,
-        @RequestParam(value="measureType",           required=false) String measureType,
-        @RequestParam(value="minOreAmount",          required=false) String minOreAmount,
-        @RequestParam(value="minOreAmountUOM",       required=false) String minOreAmountUOM,
-        @RequestParam(value="minCommodityAmount",    required=false) String minCommodityAmount,
-        @RequestParam(value="minCommodityAmountUOM", required=false) String minCommodityAmountUOM,
-        @RequestParam(required = false, value = "bbox") String bboxJson,
-        @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures) throws Exception {
+            @RequestParam(value = "serviceUrl", required = false) String serviceUrl,
+            @RequestParam(value = "commodityName", required = false) String commodityName,
+            @RequestParam(value = "measureType", required = false) String measureType,
+            @RequestParam(value = "minOreAmount", required = false) String minOreAmount,
+            @RequestParam(value = "minOreAmountUOM", required = false) String minOreAmountUOM,
+            @RequestParam(value = "minCommodityAmount", required = false) String minCommodityAmount,
+            @RequestParam(value = "minCommodityAmountUOM", required = false) String minCommodityAmountUOM,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
         //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -218,10 +228,8 @@ public class EarthResourcesFilterController extends BasePortalController {
         }
     }
 
-
     /**
-     * Handles Mining Activity filter queries
-     * Returns WFS response converted into KML.
+     * Handles Mining Activity filter queries Returns WFS response converted into KML.
      *
      * @param serviceUrl
      * @param mineName
@@ -237,17 +245,17 @@ public class EarthResourcesFilterController extends BasePortalController {
      */
     @RequestMapping("/doMiningActivityFilter.do")
     public ModelAndView doMiningActivityFilter(
-            @RequestParam("serviceUrl")       String serviceUrl,
-            @RequestParam(required = false, value = "mineName", defaultValue = "")         String mineName,
-            @RequestParam(required = false, value = "startDate", defaultValue = "")        String startDate,
-            @RequestParam(required = false, value = "endDate", defaultValue = "")          String endDate,
-            @RequestParam(required = false, value = "oreProcessed", defaultValue = "")     String oreProcessed,
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
+            @RequestParam(required = false, value = "startDate", defaultValue = "") String startDate,
+            @RequestParam(required = false, value = "endDate", defaultValue = "") String endDate,
+            @RequestParam(required = false, value = "oreProcessed", defaultValue = "") String oreProcessed,
             @RequestParam(required = false, value = "producedMaterial", defaultValue = "") String producedMaterial,
-            @RequestParam(required = false, value = "cutOffGrade", defaultValue = "")      String cutOffGrade,
-            @RequestParam(required = false, value = "production", defaultValue = "")       String production,
-            @RequestParam(required = false, value = "bbox", defaultValue = "")             String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0")     int maxFeatures)
-    throws Exception
+            @RequestParam(required = false, value = "cutOffGrade", defaultValue = "") String cutOffGrade,
+            @RequestParam(required = false, value = "production", defaultValue = "") String production,
+            @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception
     {
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -275,8 +283,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     }
 
     /**
-     * Handles counting the number Mining Activities matched by a filter
-     * Returns Integer count
+     * Handles counting the number Mining Activities matched by a filter Returns Integer count
      *
      * @param serviceUrl
      * @param mineName
@@ -292,16 +299,17 @@ public class EarthResourcesFilterController extends BasePortalController {
      */
     @RequestMapping("/doMiningActivityFilterCount.do")
     public ModelAndView doMiningActivityFilterCount(
-            @RequestParam("serviceUrl")       String serviceUrl,
-            @RequestParam(required = false, value = "mineName", defaultValue = "")         String mineName,
-            @RequestParam(required = false, value = "startDate", defaultValue = "")        String startDate,
-            @RequestParam(required = false, value = "endDate", defaultValue = "")          String endDate,
-            @RequestParam(required = false, value = "oreProcessed", defaultValue = "")     String oreProcessed,
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
+            @RequestParam(required = false, value = "startDate", defaultValue = "") String startDate,
+            @RequestParam(required = false, value = "endDate", defaultValue = "") String endDate,
+            @RequestParam(required = false, value = "oreProcessed", defaultValue = "") String oreProcessed,
             @RequestParam(required = false, value = "producedMaterial", defaultValue = "") String producedMaterial,
-            @RequestParam(required = false, value = "cutOffGrade", defaultValue = "")      String cutOffGrade,
-            @RequestParam(required = false, value = "production", defaultValue = "")       String production,
-            @RequestParam(required = false, value = "bbox")                              String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0")     int maxFeatures) throws Exception {
+            @RequestParam(required = false, value = "cutOffGrade", defaultValue = "") String cutOffGrade,
+            @RequestParam(required = false, value = "production", defaultValue = "") String production,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -328,10 +336,8 @@ public class EarthResourcesFilterController extends BasePortalController {
         }
     }
 
-
     /**
-     * Handles Mining Activity Style request queries
-     * Returns WFS response converted into KML.
+     * Handles Mining Activity Style request queries Returns WFS response converted into KML.
      *
      * @param mineName
      * @param startDate
@@ -364,7 +370,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 mineName, startDate, endDate, oreProcessed, producedMaterial,
                 cutOffGrade, production, maxFeatures, bbox);
 
-        String style=this.getStyle(filter, "er:MiningFeatureOccurrence", "#FF9900");
+        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "#FF9900");
 
         response.setContentType("text/xml");
 
@@ -372,17 +378,18 @@ public class EarthResourcesFilterController extends BasePortalController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
         outputStream.close();
     }
 
     /**
-     * Handles getting the style of the Earth Resource Mine filter queries.
-     * (If the bbox elements are specified, they will limit the output response to 200 records implicitly)
+     * Handles getting the style of the Earth Resource Mine filter queries. (If the bbox elements are specified, they will limit the output response to 200
+     * records implicitly)
      *
-     * @param mineName   the name of the mine to query for
+     * @param mineName
+     *            the name of the mine to query for
      * @param bbox
      * @param maxFeatures
      * @throws Exception
@@ -400,8 +407,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMineFilter(mineName,
                 bbox);
 
-        String style=this.getStyle(filter, "er:MiningFeatureOccurrence", "#AA0078");
-
+        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "#AA0078");
 
         response.setContentType("text/xml");
 
@@ -409,7 +415,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
         outputStream.close();
@@ -427,21 +433,21 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMineralOccurrenceFilterStyle.do")
     public void doMineralOccurrenceFilterStyle(
             HttpServletResponse response,
-            @RequestParam(value="commodityName",         required=false) String commodityName,
+            @RequestParam(value = "commodityName", required = false) String commodityName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
         // Get the mining activities
-        String unescapeCommodityName="";
-        if(commodityName!=null){
-            unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
+        String unescapeCommodityName = "";
+        if (commodityName != null) {
+            unescapeCommodityName = URLDecoder.decode(commodityName, "UTF-8");
         }
         String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(unescapeCommodityName,
                 bbox);
 
-        String style=this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
+        String style = this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
 
         response.setContentType("text/xml");
 
@@ -449,7 +455,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
         outputStream.close();
@@ -467,7 +473,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMinOccurViewFilterStyle.do")
     public void doMinOccurViewFilterStyle(
             HttpServletResponse response,
-            @RequestParam(value="commodityName",         required=false) String commodityName,
+            @RequestParam(value = "commodityName", required = false) String commodityName,
             @RequestParam(required = false, value = "size") String size,
             @RequestParam(required = false, value = "minOreAmount") String minOreAmount,
             @RequestParam(required = false, value = "minReserves") String minReserves,
@@ -478,13 +484,14 @@ public class EarthResourcesFilterController extends BasePortalController {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
         // Get the mining activities
-        String unescapeCommodityName="";
-        if(commodityName!=null){
-            unescapeCommodityName=URLDecoder.decode(commodityName,"UTF-8");
+        String unescapeCommodityName = "";
+        if (commodityName != null) {
+            unescapeCommodityName = URLDecoder.decode(commodityName, "UTF-8");
         }
-        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName,minOreAmount,minReserves,minResources, bbox);
+        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName, minOreAmount,
+                minReserves, minResources, bbox);
 
-        String style=this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "#ed9c38");
+        String style = this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "#ed9c38");
 
         response.setContentType("text/xml");
 
@@ -492,14 +499,13 @@ public class EarthResourcesFilterController extends BasePortalController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
         outputStream.close();
     }
 
-
-    public String getStyle(String filter, String name, String color){
+    public String getStyle(String filter, String name, String color) {
         //VT : This is a hack to get around using functions in feature chaining
         // https://jira.csiro.au/browse/SISS-1374
         // there are currently no available fix as wms request are made prior to
@@ -507,7 +513,8 @@ public class EarthResourcesFilterController extends BasePortalController {
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:mo=\"http://xmlns.geoscience.gov.au/minoccml/1.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-                + "<NamedLayer>" + "<Name>" + name + "</Name>"
+                + "<NamedLayer>" + "<Name>"
+                + name + "</Name>"
                 + "<UserStyle>" + "<Name>portal-style</Name>"
                 + "<Title>" + name + "</Title>"
                 + "<Abstract>EarthResource</Abstract>"
