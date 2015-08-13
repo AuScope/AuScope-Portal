@@ -34,13 +34,16 @@ public class TestPressureDBController extends PortalTestClass {
         final String serviceUrl = "http://example.com";
         final PortalServiceException exception = new PortalServiceException("");
 
-        context.checking(new Expectations() {{
-            oneOf(mockService).makeGetAvailableOMRequest(wellID, serviceUrl);will(throwException(exception));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockService).makeGetAvailableOMRequest(wellID, serviceUrl);
+                will(throwException(exception));
+            }
+        });
 
         ModelAndView mav = controller.getAvailableOM(serviceUrl, wellID);
         Assert.assertNotNull(mav);
-        Assert.assertFalse((Boolean)mav.getModel().get("success"));
+        Assert.assertFalse((Boolean) mav.getModel().get("success"));
     }
 
     @Test
@@ -49,14 +52,17 @@ public class TestPressureDBController extends PortalTestClass {
         final String serviceUrl = "http://example.com";
         final AvailableOMResponse response = new AvailableOMResponse();
 
-        context.checking(new Expectations() {{
-            oneOf(mockService).makeGetAvailableOMRequest(wellID, serviceUrl);will(returnValue(response));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockService).makeGetAvailableOMRequest(wellID, serviceUrl);
+                will(returnValue(response));
+            }
+        });
 
         ModelAndView mav = controller.getAvailableOM(serviceUrl, wellID);
         Assert.assertNotNull(mav);
-        Assert.assertTrue((Boolean)mav.getModel().get("success"));
-        Assert.assertSame(response, ((Object[])mav.getModel().get("data"))[0]);
+        Assert.assertTrue((Boolean) mav.getModel().get("success"));
+        Assert.assertSame(response, ((Object[]) mav.getModel().get("data"))[0]);
     }
 
     @Test
@@ -64,7 +70,7 @@ public class TestPressureDBController extends PortalTestClass {
         final String wellID = "1234";
         final String serviceUrl = "http://example.com";
         final String[] features = new String[] {"a", "b", "c"};
-        final byte[] expectedData = new byte[1024*1024];
+        final byte[] expectedData = new byte[1024 * 1024];
         final InputStream responseStream = new ByteArrayInputStream(expectedData);
         final ByteBufferedServletOutputStream output = new ByteBufferedServletOutputStream(expectedData.length);
 
@@ -72,13 +78,17 @@ public class TestPressureDBController extends PortalTestClass {
             expectedData[i] = (byte) (i % 256);
         }
 
-        context.checking(new Expectations() {{
-            oneOf(mockService).makeDownloadRequest(wellID, serviceUrl, features);will(returnValue(responseStream));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockService).makeDownloadRequest(wellID, serviceUrl, features);
+                will(returnValue(responseStream));
 
-            allowing(mockServletResponse).setContentType(with(any(String.class)));
-            allowing(mockServletResponse).setHeader(with(any(String.class)), with(any(String.class)));
-            oneOf(mockServletResponse).getOutputStream();will(returnValue(output));
-        }});
+                allowing(mockServletResponse).setContentType(with(any(String.class)));
+                allowing(mockServletResponse).setHeader(with(any(String.class)), with(any(String.class)));
+                oneOf(mockServletResponse).getOutputStream();
+                will(returnValue(output));
+            }
+        });
 
         controller.download(serviceUrl, wellID, features, mockServletResponse);
 
@@ -92,11 +102,14 @@ public class TestPressureDBController extends PortalTestClass {
         final String[] features = new String[] {"a", "b", "c"};
         final IOException exception = new IOException();
 
-        context.checking(new Expectations() {{
-            oneOf(mockService).makeDownloadRequest(wellID, serviceUrl, features);will(throwException(exception));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockService).makeDownloadRequest(wellID, serviceUrl, features);
+                will(throwException(exception));
 
-            oneOf(mockServletResponse).sendError(with(any(Integer.class)));
-        }});
+                oneOf(mockServletResponse).sendError(with(any(Integer.class)));
+            }
+        });
 
         controller.download(serviceUrl, wellID, features, mockServletResponse);
     }

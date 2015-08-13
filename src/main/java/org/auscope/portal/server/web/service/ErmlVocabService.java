@@ -24,8 +24,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /**
- * An specialisation of a SISSVoc3Service to better deal with
- * an Earth Resource Markup Language commodity vocabulary.
+ * An specialisation of a SISSVoc3Service to better deal with an Earth Resource Markup Language commodity vocabulary.
+ * 
  * @author Josh Vote
  *
  */
@@ -40,8 +40,8 @@ public class ErmlVocabService extends SISSVoc3Service {
     }
 
     /**
-     * Gets all RDF concepts at the specified repository as a single JENA Model. The results
-     * will be requested page by page until the entire repository has been traversed.
+     * Gets all RDF concepts at the specified repository as a single JENA Model. The results will be requested page by page until the entire repository has been
+     * traversed.
      *
      * @return
      * @throws PortalServiceException
@@ -54,7 +54,8 @@ public class ErmlVocabService extends SISSVoc3Service {
 
         //Request each page in turn - put the results into Model
         do {
-            HttpRequestBase method = ((CommodityVocabMethodMaker)sissVocMethodMaker).getAllCommodities(getBaseUrl(), getRepository(), Format.Rdf, pageSize, pageNumber);
+            HttpRequestBase method = ((CommodityVocabMethodMaker) sissVocMethodMaker).getAllCommodities(getBaseUrl(),
+                    getRepository(), Format.Rdf, pageSize, pageNumber);
             if (requestPageOfConcepts(method, model)) {
                 pageNumber++;
             } else {
@@ -65,18 +66,18 @@ public class ErmlVocabService extends SISSVoc3Service {
         return model;
     }
 
-
     /**
-     * Gets a Map of all commodity names keyed by their commodity URI's. The commodity
-     * names will be restricted to a specific language.
+     * Gets a Map of all commodity names keyed by their commodity URI's. The commodity names will be restricted to a specific language.
      *
      * Only the original GA URNs will be returned
      *
-     * @param language The language prefix (eg 'en') that the preferred names will be drawn from
+     * @param language
+     *            The language prefix (eg 'en') that the preferred names will be drawn from
      * @return
      * @throws URISyntaxException
      */
-    public Map<String, String> getGaCommodityConcepts(String language) throws PortalServiceException, URISyntaxException {
+    public Map<String, String> getGaCommodityConcepts(String language) throws PortalServiceException,
+            URISyntaxException {
         Map<String, String> result = new HashMap<String, String>();
 
         Model model = ModelFactory.createDefaultModel();
@@ -85,7 +86,8 @@ public class ErmlVocabService extends SISSVoc3Service {
 
         //Request each of the GA commodity names
         do {
-            HttpRequestBase method = ((CommodityVocabMethodMaker)sissVocMethodMaker).getCommoditiesMatchingUrn(getBaseUrl(), getRepository(), Format.Rdf, pageSize, pageNumber, GA_URN_PATTERN);
+            HttpRequestBase method = ((CommodityVocabMethodMaker) sissVocMethodMaker).getCommoditiesMatchingUrn(
+                    getBaseUrl(), getRepository(), Format.Rdf, pageSize, pageNumber, GA_URN_PATTERN);
             if (requestPageOfConcepts(method, model)) {
                 pageNumber++;
             } else {

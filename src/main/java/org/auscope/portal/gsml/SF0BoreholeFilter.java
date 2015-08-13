@@ -6,21 +6,20 @@ import java.util.List;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.springframework.stereotype.Service;
 
-
 /**
  * A class for filter SF0 Borehole web service
+ * 
  * @author Florence Tan
  *
  */
 @Service
-
 public class SF0BoreholeFilter extends BoreholeFilter {
 
     // ----------------------------------------------------------- Constructors
 
     public SF0BoreholeFilter() {
         // test
-    	super(null, null, null, null);
+        super(null, null, null, null);
     }
 
     public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling, List<String> ids) {
@@ -43,7 +42,7 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                                 "gsmlp:shape"),
                         this.generateFilterFragment()));
     }
-    
+
     @Override
     protected String generateFilterFragment() {
         List<String> parameterFragments = new ArrayList<String>();
@@ -65,7 +64,7 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                     "gsmlp:drillStartDate",
                     this.dateOfDrilling));
         }
-        
+
         if (this.restrictToIDList != null && !this.restrictToIDList.isEmpty()) {
             List<String> idFragments = new ArrayList<String>();
             for (String id : restrictToIDList) {
@@ -77,7 +76,6 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                     .generateOrComparisonFragment(idFragments
                             .toArray(new String[idFragments.size()])));
         }
-
 
         return this.generateAndComparisonFragment(this
                 .generateAndComparisonFragment(parameterFragments

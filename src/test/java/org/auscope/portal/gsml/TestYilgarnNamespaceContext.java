@@ -7,11 +7,10 @@ import junit.framework.Assert;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.junit.Test;
 
-
 /**
  * The Class TestYilgarnNamespaceContext.
  */
-public class TestYilgarnNamespaceContext extends PortalTestClass  {
+public class TestYilgarnNamespaceContext extends PortalTestClass {
 
     /** The TEST prefix. */
     private static final String TESTPREFIX = "ogc";
@@ -21,7 +20,6 @@ public class TestYilgarnNamespaceContext extends PortalTestClass  {
 
     /** The namespace uri. */
     private static final String TESTNAMESPACEURI = "http://www.opengis.net/ogc";
-
 
     /**
      * Test context.

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Utility class for converting Gml to a 'pretty' HTML representation
+ * 
  * @author Josh Vote
  *
  */
@@ -24,8 +25,10 @@ public class GmlToHtml extends PortalXSLTTransformer {
     /**
      * Utility method to transform a WFS response into HTML
      *
-     * @param wfs WFS response to be transformed
-     * @param serviceUrl The WFS URL where the response came from
+     * @param wfs
+     *            WFS response to be transformed
+     * @param serviceUrl
+     *            The WFS URL where the response came from
      * @return Kml output string
      */
     public String convert(String wfs, String serviceUrl) {
@@ -35,8 +38,10 @@ public class GmlToHtml extends PortalXSLTTransformer {
     /**
      * Utility method to transform a WFS response into HTML
      *
-     * @param wfs WFS response to be transformed
-     * @param serviceUrl The WFS URL where the response came from
+     * @param wfs
+     *            WFS response to be transformed
+     * @param serviceUrl
+     *            The WFS URL where the response came from
      * @return Xml output string
      */
     public String convert(InputStream wfs, String serviceUrl) {
@@ -46,8 +51,10 @@ public class GmlToHtml extends PortalXSLTTransformer {
     /**
      * Utility method to transform a WFS response into HTML
      *
-     * @param wfs WFS response to be transformed
-     * @param serviceUrl The WFS URL where the response came from
+     * @param wfs
+     *            WFS response to be transformed
+     * @param serviceUrl
+     *            The WFS URL where the response came from
      * @return Xml output string
      */
     public String convert(StreamSource wfs, String serviceUrl) {

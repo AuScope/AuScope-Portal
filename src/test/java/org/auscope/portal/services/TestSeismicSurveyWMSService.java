@@ -28,6 +28,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for GetCapabilitiesService
+ * 
  * @author Josh Vote
  *
  */
@@ -36,7 +37,6 @@ public class TestSeismicSurveyWMSService extends PortalTestClass {
     private SeismicSurveyWMSService service;
     private HttpServiceCaller mockServiceCaller;
 
-
     @Before
     public void setup() throws Exception {
         List<WMSMethodMakerInterface> methodMaker = new ArrayList<WMSMethodMakerInterface>();
@@ -44,30 +44,32 @@ public class TestSeismicSurveyWMSService extends PortalTestClass {
         service = new SeismicSurveyWMSService(mockServiceCaller);
     }
 
-
     /**
      * Test that the function is able to actually load CSW records from multiple services
+     * 
      * @throws Exception
      */
     @Test
     public void testGetCSWRecord() throws Exception {
-        final String docString = ResourceUtil.loadResourceAsString("org/auscope/portal/GASeismicSurvey/SeismicSurvey.xml");
+        final String docString = ResourceUtil
+                .loadResourceAsString("org/auscope/portal/GASeismicSurvey/SeismicSurvey.xml");
         final ByteArrayInputStream is1 = new ByteArrayInputStream(docString.getBytes());
-        final String mockUrl="http://example";
+        final String mockUrl = "http://example";
 
-        context.checking(new Expectations() {{
+        context.checking(new Expectations() {
+            {
 
-            oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, mockUrl, null)));will(returnValue(is1));
-        }});
+                oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, mockUrl, null)));
+                will(returnValue(is1));
+            }
+        });
 
-      CSWRecord record =  service.getCSWRecord(mockUrl);
-      Assert.assertEquals("Canberra", record.getContact().getContactInfo().getAddressCity());
-      Assert.assertEquals("ACT", record.getContact().getContactInfo().getAddressAdministrativeArea());
-      Assert.assertEquals("c523c6bc-29be-21dd-e044-00144fdd4fa6", record.getFileIdentifier());
-      Assert.assertEquals(22, record.getOnlineResources().length);
-
+        CSWRecord record = service.getCSWRecord(mockUrl);
+        Assert.assertEquals("Canberra", record.getContact().getContactInfo().getAddressCity());
+        Assert.assertEquals("ACT", record.getContact().getContactInfo().getAddressAdministrativeArea());
+        Assert.assertEquals("c523c6bc-29be-21dd-e044-00144fdd4fa6", record.getFileIdentifier());
+        Assert.assertEquals(22, record.getOnlineResources().length);
 
     }
-
 
 }

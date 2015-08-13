@@ -14,15 +14,16 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Class for making HTTP methods tailored to pressure DB webservice requests
+ * 
  * @author Josh Vote
  *
  */
 @Repository
 public class PressureDBMethodMaker extends AbstractMethodMaker {
 
-
     /**
      * Makes a HTTP method for a pressure db getAvailableOM request.
+     * 
      * @param serviceUrl
      * @param wellID
      * @return
@@ -41,14 +42,16 @@ public class PressureDBMethodMaker extends AbstractMethodMaker {
 
     /**
      * Makes a HTTP method for a pressure db download request.
+     * 
      * @param serviceUrl
      * @param wellID
      * @return
      * @throws URISyntaxException
      */
-    public HttpRequestBase makeDownloadMethod(String serviceUrl, String wellID, String[] features) throws URISyntaxException {
+    public HttpRequestBase makeDownloadMethod(String serviceUrl, String wellID, String[] features)
+            throws URISyntaxException {
         HttpGet method = new HttpGet();
-        URIBuilder builder= new URIBuilder(urlPathConcat(serviceUrl, "download.html"));
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "download.html"));
         builder.setParameter("wellid", wellID);
 
         for (String feature : features) {

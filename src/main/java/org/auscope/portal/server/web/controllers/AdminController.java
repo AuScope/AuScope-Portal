@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Provides a controller interface into some basic administration functionality/tests
+ * 
  * @author Josh Vote
  *
  */
@@ -33,15 +34,12 @@ public class AdminController {
 
     private final Log log = LogFactory.getLog(getClass());
 
-    /** For accessing the various CSW's*/
+    /** For accessing the various CSW's */
     private List<CSWServiceItem> cswServiceList;
-    /** for checking config options*/
+    /** for checking config options */
     private PortalPropertyPlaceholderConfigurer portalProperties;
-    /** for actually performing diagnostics*/
+    /** for actually performing diagnostics */
     private AuScopeAdminService adminService;
-
-
-
 
     /**
      * Creates a new instance of this class
@@ -60,7 +58,9 @@ public class AdminController {
 
     /**
      * Generates a ModelAndView JSON response with the specified params
-     * @param response a response from the AdminService
+     * 
+     * @param response
+     *            a response from the AdminService
      * @return
      */
     private ModelAndView generateTestResponse(AdminDiagnosticResponse response) {
@@ -78,14 +78,16 @@ public class AdminController {
 
     /**
      * Performs an external connectivity test through the HttpServiceCaller
+     * 
      * @return
-     * @throws MalformedURLException Should never occur
+     * @throws MalformedURLException
+     *             Should never occur
      */
     @RequestMapping("/testExternalConnectivity.diag")
     public ModelAndView testExternalConnectivity() throws MalformedURLException {
         URL[] urlsToTest = new URL[] {
-            new URL("http://www.google.com"),
-            new URL("https://www.google.com")
+                new URL("http://www.google.com"),
+                new URL("https://www.google.com")
         };
 
         AdminDiagnosticResponse response = adminService.externalConnectivity(urlsToTest);
@@ -94,6 +96,7 @@ public class AdminController {
 
     /**
      * Performs an external connectivity test to the various CSW's through the HttpServiceCaller
+     * 
      * @return
      */
     @RequestMapping("/testCSWConnectivity.diag")
@@ -104,6 +107,7 @@ public class AdminController {
 
     /**
      * Tests that the Vocabulary service is up and running
+     * 
      * @return
      */
     @RequestMapping("/testVocabulary.diag")
@@ -115,7 +119,8 @@ public class AdminController {
             new URL(vocabServiceUrl);
         } catch (Exception ex) {
             AdminDiagnosticResponse error = new AdminDiagnosticResponse();
-            error.addError(String.format("HOST.vocabService.url resolves into an invalid URL '%1$s'. Exception - %2$s", vocabServiceUrl, ex));
+            error.addError(String.format("HOST.vocabService.url resolves into an invalid URL '%1$s'. Exception - %2$s",
+                    vocabServiceUrl, ex));
             return generateTestResponse(error); // no point proceeding in this case
         }
 
@@ -128,8 +133,10 @@ public class AdminController {
      *
      * Duplicates are NOT included.
      *
-     * @param endpoints The URL endpoints. Must be the same length as selectors
-     * @param selectors The selector (WFS type name, WMS layer name etc). Must be the same length as endpoints
+     * @param endpoints
+     *            The URL endpoints. Must be the same length as selectors
+     * @param selectors
+     *            The selector (WFS type name, WMS layer name etc). Must be the same length as endpoints
      * @return
      */
     private List<EndpointAndSelector> parseEndpointAndSelectors(String[] endpoints, String[] selectors) {
@@ -156,19 +163,21 @@ public class AdminController {
      * Any duplicated serviceUrl + typename combos will be culled
      *
      * This method is intentionally avoiding the WFSService to focus on the WFS request/response (ignoring the XSLT pipeline)
+     * 
      * @return
      * @throws URISyntaxException
      */
     @RequestMapping("/testWFS.diag")
     public ModelAndView testWFS(@RequestParam("serviceUrls") String[] serviceUrls,
-                                @RequestParam("typeNames") String[] typeNames,
-                                @RequestParam("bbox") String bboxJson) throws URISyntaxException {
+            @RequestParam("typeNames") String[] typeNames,
+            @RequestParam("bbox") String bboxJson) throws URISyntaxException {
 
         //No point in proceeding with test without a valid bbox
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         if (bbox == null) {
             AdminDiagnosticResponse error = new AdminDiagnosticResponse();
-            error.addError(String.format("The backend cannot parse the provided bbox string into a FilterBoundingBox - %1$s", bboxJson));
+            error.addError(String.format(
+                    "The backend cannot parse the provided bbox string into a FilterBoundingBox - %1$s", bboxJson));
             return generateTestResponse(error);
         }
 
@@ -184,19 +193,21 @@ public class AdminController {
      * Tests that all serviceUrls + layerNames are accessible via WMS. There must be a 1-1 correspondence between serviceUrls and layerNames
      *
      * Any duplicated serviceUrl + layer name combos will be culled
+     * 
      * @return
      * @throws URISyntaxException
      */
     @RequestMapping("/testWMS.diag")
     public ModelAndView testWMS(@RequestParam("serviceUrls") String[] serviceUrls,
-                                @RequestParam("layerNames") String[] layerNames,
-                                @RequestParam("bbox") String bboxJson) throws URISyntaxException {
+            @RequestParam("layerNames") String[] layerNames,
+            @RequestParam("bbox") String bboxJson) throws URISyntaxException {
 
         //No point in proceeding with test without a valid bbox
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         if (bbox == null) {
             AdminDiagnosticResponse error = new AdminDiagnosticResponse();
-            error.addError(String.format("The backend cannot parse the provided bbox string into a FilterBoundingBox - %1$s", bboxJson));
+            error.addError(String.format(
+                    "The backend cannot parse the provided bbox string into a FilterBoundingBox - %1$s", bboxJson));
             return generateTestResponse(error);
         }
 

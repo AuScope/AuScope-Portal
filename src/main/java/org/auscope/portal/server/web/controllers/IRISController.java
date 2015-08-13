@@ -49,7 +49,9 @@ public class IRISController extends BasePortalController {
 
     /**
      * Makes sure that a string has a trailing forward slash.
-     * @param string The string that you want to have a trailing forward slash.
+     * 
+     * @param string
+     *            The string that you want to have a trailing forward slash.
      * @return The original string, modified if required, with a trailing forward slash.
      */
     private String ensureTrailingForwardslash(String string) {
@@ -65,7 +67,7 @@ public class IRISController extends BasePortalController {
     @Autowired
     public IRISController(HttpServiceCaller httpService) {
         this.xPath = XPathFactory.newInstance().newXPath();
-        this.httpService=httpService;
+        this.httpService = httpService;
         this.xPath.setNamespaceContext(new IterableNamespace() {
             {
                 map.put("default", "http://www.fdsn.org/xml/station/1");
@@ -75,7 +77,9 @@ public class IRISController extends BasePortalController {
 
     /**
      * Downloads a resource from a URL and returns it as Document object.
-     * @param queryUrl The URL of the resource you require.
+     * 
+     * @param queryUrl
+     *            The URL of the resource you require.
      * @return The resource at the URL requested, converted to a Document object.
      * @throws IOException
      * @throws ParserConfigurationException
@@ -92,7 +96,9 @@ public class IRISController extends BasePortalController {
 
     /**
      * Downloads a resource from a URL and returns it as a String object.
-     * @param queryUrl The URL of the resource you require.
+     * 
+     * @param queryUrl
+     *            The URL of the resource you require.
      * @return The resource at the requested URL, as a String object.
      * @throws IOException
      */
@@ -109,22 +115,22 @@ public class IRISController extends BasePortalController {
     }
 
     /**
-     * Makes a request to the IRIS service specified, for all the stations
-     * on the network code provided.
+     * Makes a request to the IRIS service specified, for all the stations on the network code provided.
      *
-     * The response is converted to some KML points to be rendered on the
-     * map.
+     * The response is converted to some KML points to be rendered on the map.
      *
      * The request will look something like this: http://service.iris.edu/fdsnws/station/1/query?net=S
      *
-     * @param serviceUrl The IRIS web service URL.
-     * @param networkCode The network code that you're interested in.
+     * @param serviceUrl
+     *            The IRIS web service URL.
+     * @param networkCode
+     *            The network code that you're interested in.
      * @return a JSONResponseMAV containing KML points of each station.
      */
     @RequestMapping("/getIRISStations.do")
     public ModelAndView getIRISStations(
-        @RequestParam("serviceUrl") String serviceUrl,
-        @RequestParam("networkCode") String networkCode) {
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("networkCode") String networkCode) {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
 
         try {
@@ -137,7 +143,8 @@ public class IRISController extends BasePortalController {
             XPathExpression latExpression = xPath.compile("default:Latitude/text()");
             XPathExpression lonExpression = xPath.compile("default:Longitude/text()");
 
-            StringBuilder kml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><name>GML Links to KML</name><description><![CDATA[GeoSciML data converted to KML]]></description>");
+            StringBuilder kml = new StringBuilder(
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><name>GML Links to KML</name><description><![CDATA[GeoSciML data converted to KML]]></description>");
 
             // For each station:
             for (int i = 0; i < stations.getLength(); i++) {
@@ -145,8 +152,9 @@ public class IRISController extends BasePortalController {
                 Node staCode = station.getAttributes().getNamedItem("code");
                 kml.append(
                         String.format(
-                                "<Placemark><name>%s</name><description><![CDATA[GENERIC_PARSER:%s]]></description>" +
-                                "<MultiGeometry><Point><coordinates>%s,%s,0</coordinates></Point></MultiGeometry></Placemark>",
+                                "<Placemark><name>%s</name><description><![CDATA[GENERIC_PARSER:%s]]></description>"
+                                        +
+                                        "<MultiGeometry><Point><coordinates>%s,%s,0</coordinates></Point></MultiGeometry></Placemark>",
                                 nameExpression.evaluate(station, XPathConstants.STRING),
                                 staCode.getTextContent(),
                                 lonExpression.evaluate(station, XPathConstants.STRING),
@@ -166,20 +174,23 @@ public class IRISController extends BasePortalController {
      *
      * The request will look something like this: http://www.iris.edu/ws/station/query?net=S&station=AUDAR&level=chan
      *
-     * @param serviceUrl The IRIS web service URL.
-     * @param networkCode The network code that you're interested in.
-     * @param stationCode The code of the station to interrogate.
-     * @return a JSONResponseMAV containing the start and end dates of the site and
-     * a collection of channel codes.
+     * @param serviceUrl
+     *            The IRIS web service URL.
+     * @param networkCode
+     *            The network code that you're interested in.
+     * @param stationCode
+     *            The code of the station to interrogate.
+     * @return a JSONResponseMAV containing the start and end dates of the site and a collection of channel codes.
      */
     @RequestMapping("/getStationChannels.do")
     public ModelAndView getStationChannels(
-        @RequestParam("serviceUrl") String serviceUrl,
-        @RequestParam("networkCode") String networkCode,
-        @RequestParam("stationCode") String stationCode) {
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("networkCode") String networkCode,
+            @RequestParam("stationCode") String stationCode) {
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
         try {
-            Document irisDoc = getDocumentFromURL(serviceUrl + "fdsnws/station/1/query?net=" + networkCode + "&sta=" + stationCode + "&level=chan");
+            Document irisDoc = getDocumentFromURL(serviceUrl + "fdsnws/station/1/query?net=" + networkCode + "&sta="
+                    + stationCode + "&level=chan");
 
             NodeList channels = irisDoc.getDocumentElement().getElementsByTagName("Channel");
 
@@ -191,8 +202,11 @@ public class IRISController extends BasePortalController {
                 channelCodes[i] = channel.getAttributes().getNamedItem("code").getTextContent();
             }
 
-            String startDate = xPath.compile("//default:Station[@code='" + stationCode + "']/default:Channel/@startDate").evaluate(irisDoc, XPathConstants.STRING).toString();
-            String endDate = xPath.compile("//default:Station[@code='" + stationCode + "']/default:Channel/@endDate").evaluate(irisDoc, XPathConstants.STRING).toString();
+            String startDate = xPath
+                    .compile("//default:Station[@code='" + stationCode + "']/default:Channel/@startDate")
+                    .evaluate(irisDoc, XPathConstants.STRING).toString();
+            String endDate = xPath.compile("//default:Station[@code='" + stationCode + "']/default:Channel/@endDate")
+                    .evaluate(irisDoc, XPathConstants.STRING).toString();
 
             ModelMap channelInfo = new ModelMap();
             channelInfo.put("start_date", startDate);
@@ -207,17 +221,17 @@ public class IRISController extends BasePortalController {
 
     @RequestMapping("/getTimeseriesUrl.do")
     public ModelAndView getTimeseriesUrl(
-        @RequestParam("serviceUrl") String serviceUrl,
-        @RequestParam("networkCode") String networkCode,
-        @RequestParam("stationCode") String stationCode,
-        @RequestParam("channel") String channel,
-        @RequestParam("start") String start,
-        @RequestParam("duration") String duration,
-        @RequestParam("output") String output,
-        HttpServletResponse response) throws ServletException {
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("networkCode") String networkCode,
+            @RequestParam("stationCode") String stationCode,
+            @RequestParam("channel") String channel,
+            @RequestParam("start") String start,
+            @RequestParam("duration") String duration,
+            @RequestParam("output") String output,
+            HttpServletResponse response) throws ServletException {
 
         serviceUrl = ensureTrailingForwardslash(serviceUrl);
-        String url= serviceUrl + "irisws/timeseries/1/query?net=" + networkCode +
+        String url = serviceUrl + "irisws/timeseries/1/query?net=" + networkCode +
                 "&sta=" + stationCode +
                 "&cha=" + channel +
                 "&starttime=" + start +

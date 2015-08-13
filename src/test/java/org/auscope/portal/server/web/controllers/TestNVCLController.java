@@ -39,11 +39,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * The Class TestNVCLController.
+ * 
  * @version: $Id$
  */
 @SuppressWarnings("rawtypes")
 public class TestNVCLController extends PortalTestClass {
-
 
     /** The mock http response. */
     private HttpServletResponse mockHttpResponse;
@@ -54,7 +54,7 @@ public class TestNVCLController extends PortalTestClass {
     /** The mock borehole service. */
     private BoreholeService mockBoreholeService;
 
-    /** The mock dataservice*/
+    /** The mock dataservice */
     private NVCLDataService mockDataService;
 
     /** Mock data service */
@@ -62,8 +62,6 @@ public class TestNVCLController extends PortalTestClass {
 
     /** The nvcl controller. */
     private NVCLController nvclController;
-
-
 
     /**
      * Setup.
@@ -75,13 +73,15 @@ public class TestNVCLController extends PortalTestClass {
         this.mockCSWService = context.mock(CSWCacheService.class);
         this.mockDataService = context.mock(NVCLDataService.class);
         this.mock2_0_DataService = context.mock(NVCL2_0_DataService.class);
-        this.nvclController = new NVCLController(this.mockBoreholeService, this.mockCSWService, this.mockDataService,this.mock2_0_DataService);
+        this.nvclController = new NVCLController(this.mockBoreholeService, this.mockCSWService, this.mockDataService,
+                this.mock2_0_DataService);
     }
 
     /**
      * Tests to ensure that a non hylogger request calls the correct functions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testNonHyloggerFilter() throws Exception {
@@ -90,23 +90,27 @@ public class TestNVCLController extends PortalTestClass {
         final String custodianFilter = "filterCustodian";
         final String filterDate = "1986-10-09";
         final int maxFeatures = 10;
-        final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3,4});
+        final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final String nvclWfsResponse = "wfsResponse";
         final String nvclKmlResponse = "kmlResponse";
         final boolean onlyHylogger = false;
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
-        context.checking(new Expectations() {{
-            oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, null);
-            will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
+                        maxFeatures, bbox, null);
+                will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
-            allowing(mockHttpMethodBase).getURI();
-            will(returnValue(httpMethodURI));
+                allowing(mockHttpMethodBase).getURI();
+                will(returnValue(httpMethodURI));
 
-        }});
+            }
+        });
 
-        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
+                filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -118,7 +122,8 @@ public class TestNVCLController extends PortalTestClass {
     /**
      * Tests that hylogger filter uses the correct functions.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHyloggerFilter() throws Exception {
@@ -135,18 +140,23 @@ public class TestNVCLController extends PortalTestClass {
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
-        context.checking(new Expectations() {{
-            oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),with(any(CSWRecordsFilterVisitor.class)));
-            will(returnValue(restrictedIds));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),
+                        with(any(CSWRecordsFilterVisitor.class)));
+                will(returnValue(restrictedIds));
 
-            oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, restrictedIds);
-            will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
+                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
+                        maxFeatures, bbox, restrictedIds);
+                will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
-            allowing(mockHttpMethodBase).getURI();
-            will(returnValue(httpMethodURI));
-        }});
+                allowing(mockHttpMethodBase).getURI();
+                will(returnValue(httpMethodURI));
+            }
+        });
 
-        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
+                filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -158,7 +168,8 @@ public class TestNVCLController extends PortalTestClass {
     /**
      * Tests that hylogger filter uses the correct functions when the underlying hylogger lookup fails.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHyloggerFilterError() throws Exception {
@@ -172,22 +183,27 @@ public class TestNVCLController extends PortalTestClass {
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
-        context.checking(new Expectations() {{
-            oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),with(any(CSWRecordsFilterVisitor.class)));
-            will(throwException(new ConnectException()));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),
+                        with(any(CSWRecordsFilterVisitor.class)));
+                will(throwException(new ConnectException()));
 
-            allowing(mockHttpMethodBase).getURI();
-            will(returnValue(httpMethodURI));
-        }});
+                allowing(mockHttpMethodBase).getURI();
+                will(returnValue(httpMethodURI));
+            }
+        });
 
-        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
+                filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
     /**
      * Tests that hylogger filter uses the correct functions when the underlying hylogger lookup returns no results.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testHyloggerFilterNoDatasets() throws Exception {
@@ -201,40 +217,50 @@ public class TestNVCLController extends PortalTestClass {
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
-        context.checking(new Expectations() {{
-            oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),with(any(CSWRecordsFilterVisitor.class)));
-            will(returnValue(new ArrayList<String>()));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockBoreholeService).discoverHyloggerBoreholeIDs(with(equal(mockCSWService)),
+                        with(any(CSWRecordsFilterVisitor.class)));
+                will(returnValue(new ArrayList<String>()));
 
-            allowing(mockHttpMethodBase).getURI();
-            will(returnValue(httpMethodURI));
-        }});
+                allowing(mockHttpMethodBase).getURI();
+                will(returnValue(httpMethodURI));
+            }
+        });
 
-        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, bbox, onlyHylogger);
+        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
+                filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
     /**
      * Tests getting dataset collection succeeds if underlying service succeeds.
+     * 
      * @throws Exception
      */
     @Test
     public void testGetDatasetCollection() throws Exception {
         final String serviceUrl = "http://example/url";
         final String holeIdentifier = "unique-id";
-        final List<GetDatasetCollectionResponse> responseObjs = Arrays.asList(context.mock(GetDatasetCollectionResponse.class));
+        final List<GetDatasetCollectionResponse> responseObjs = Arrays.asList(context
+                .mock(GetDatasetCollectionResponse.class));
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getDatasetCollection(serviceUrl, holeIdentifier);will(returnValue(responseObjs));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getDatasetCollection(serviceUrl, holeIdentifier);
+                will(returnValue(responseObjs));
+            }
+        });
 
         ModelAndView response = this.nvclController.getNVCLDatasets(serviceUrl, holeIdentifier);
         Assert.assertNotNull(response);
-        Assert.assertTrue((Boolean)response.getModel().get("success"));
+        Assert.assertTrue((Boolean) response.getModel().get("success"));
         Assert.assertSame(responseObjs, response.getModel().get("data"));
     }
 
     /**
      * Tests getting dataset collection fails if underlying service fails.
+     * 
      * @throws Exception
      */
     @Test
@@ -242,17 +268,21 @@ public class TestNVCLController extends PortalTestClass {
         final String serviceUrl = "http://example/url";
         final String holeIdentifier = "unique-id";
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getDatasetCollection(serviceUrl, holeIdentifier);will(throwException(new ConnectException()));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getDatasetCollection(serviceUrl, holeIdentifier);
+                will(throwException(new ConnectException()));
+            }
+        });
 
         ModelAndView response = this.nvclController.getNVCLDatasets(serviceUrl, holeIdentifier);
         Assert.assertNotNull(response);
-        Assert.assertFalse((Boolean)response.getModel().get("success"));
+        Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
     /**
      * Tests getting dataset collection succeeds if underlying service succeeds.
+     * 
      * @throws Exception
      */
     @Test
@@ -262,18 +292,22 @@ public class TestNVCLController extends PortalTestClass {
         final Boolean mosaicService = true;
         final List<GetLogCollectionResponse> responseObjs = Arrays.asList(context.mock(GetLogCollectionResponse.class));
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getLogCollection(serviceUrl, datasetId, mosaicService);will(returnValue(responseObjs));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getLogCollection(serviceUrl, datasetId, mosaicService);
+                will(returnValue(responseObjs));
+            }
+        });
 
         ModelAndView response = this.nvclController.getNVCLLogs(serviceUrl, datasetId, mosaicService);
         Assert.assertNotNull(response);
-        Assert.assertTrue((Boolean)response.getModel().get("success"));
+        Assert.assertTrue((Boolean) response.getModel().get("success"));
         Assert.assertSame(responseObjs, response.getModel().get("data"));
     }
 
     /**
      * Tests getting dataset collection fails if underlying service fails.
+     * 
      * @throws Exception
      */
     @Test
@@ -282,17 +316,21 @@ public class TestNVCLController extends PortalTestClass {
         final String datasetIdentifier = "unique-id";
         final Boolean mosaicService = false;
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getLogCollection(serviceUrl, datasetIdentifier, mosaicService);will(throwException(new ConnectException()));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getLogCollection(serviceUrl, datasetIdentifier, mosaicService);
+                will(throwException(new ConnectException()));
+            }
+        });
 
         ModelAndView response = this.nvclController.getNVCLLogs(serviceUrl, datasetIdentifier, mosaicService);
         Assert.assertNotNull(response);
-        Assert.assertFalse((Boolean)response.getModel().get("success"));
+        Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
     /**
      * Tests getting mosaic.
+     * 
      * @throws Exception
      */
     @Test
@@ -302,22 +340,28 @@ public class TestNVCLController extends PortalTestClass {
         final Integer width = 1;
         final Integer start = 2;
         final Integer end = 3;
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "image/jpeg";
         final MosaicResponse mockMosaicResponse = context.mock(MosaicResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getMosaic(serviceUrl, logId, width, start, end);will(returnValue(mockMosaicResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getMosaic(serviceUrl, logId, width, start, end);
+                will(returnValue(mockMosaicResponse));
 
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockMosaicResponse).getContentType();will(returnValue(contentType));
-            allowing(mockMosaicResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockMosaicResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockMosaicResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
         this.nvclController.getNVCLMosaic(serviceUrl, logId, width, start, end, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
@@ -325,6 +369,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting mosaic fails gracefully when the service fails.
+     * 
      * @throws Exception
      */
     @Test
@@ -335,17 +380,21 @@ public class TestNVCLController extends PortalTestClass {
         final Integer start = 2;
         final Integer end = 3;
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getMosaic(serviceUrl, logId, width, start, end);will(throwException(new ConnectException()));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getMosaic(serviceUrl, logId, width, start, end);
+                will(throwException(new ConnectException()));
 
-            oneOf(mockHttpResponse).sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-        }});
+                oneOf(mockHttpResponse).sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            }
+        });
 
         this.nvclController.getNVCLMosaic(serviceUrl, logId, width, start, end, mockHttpResponse);
     }
 
     /**
      * Tests getting PlotScalar.
+     * 
      * @throws Exception
      */
     @Test
@@ -359,29 +408,38 @@ public class TestNVCLController extends PortalTestClass {
         final Double samplingInterval = 1.5;
         final Integer graphTypeInt = 2;
         final PlotScalarGraphType graphType = PlotScalarGraphType.ScatteredChart;
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "image/jpeg";
         final PlotScalarResponse mockPlotScalarResponse = context.mock(PlotScalarResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);will(returnValue(mockPlotScalarResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height,
+                        samplingInterval, graphType, 0);
+                will(returnValue(mockPlotScalarResponse));
 
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockPlotScalarResponse).getContentType();will(returnValue(contentType));
-            allowing(mockPlotScalarResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockPlotScalarResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockPlotScalarResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
-        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphTypeInt,0, mockHttpResponse);
+        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval,
+                graphTypeInt, 0, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
     }
 
     /**
      * Tests getting PlotScalar fails correctly.
+     * 
      * @throws Exception
      */
     @Test
@@ -396,40 +454,53 @@ public class TestNVCLController extends PortalTestClass {
         final Integer graphTypeInt = 1;
         final PlotScalarGraphType graphType = PlotScalarGraphType.StackedBarChart;
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,0);will(throwException(new ConnectException()));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height,
+                        samplingInterval, graphType, 0);
+                will(throwException(new ConnectException()));
 
-            oneOf(mockHttpResponse).sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-        }});
+                oneOf(mockHttpResponse).sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            }
+        });
 
-        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphTypeInt,0, mockHttpResponse);
+        this.nvclController.getNVCLPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval,
+                graphTypeInt, 0, mockHttpResponse);
     }
 
     /**
      * Tests a CSV download calls the underlying service correctly
+     * 
      * @throws Exception
      */
     @Test
     public void testCSVDownload() throws Exception {
         final String serviceUrl = "http://example/url";
         final String datasetId = "unique-id";
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "text/csv";
         final CSVDownloadResponse mockResponse = context.mock(CSVDownloadResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getCSVDownload(serviceUrl, datasetId);will(returnValue(mockResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getCSVDownload(serviceUrl, datasetId);
+                will(returnValue(mockResponse));
 
-            oneOf(mockHttpResponse).setHeader("Content-Disposition", "attachment; filename=GETPUBLISHEDSYSTEMTSA.csv");//ensure we set our content disposition so the end user doesn't get an ambiguous download
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setHeader("Content-Disposition",
+                        "attachment; filename=GETPUBLISHEDSYSTEMTSA.csv");//ensure we set our content disposition so the end user doesn't get an ambiguous download
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockResponse).getContentType();will(returnValue(contentType));
-            allowing(mockResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
         this.nvclController.getNVCLCSVDownload(serviceUrl, datasetId, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
@@ -437,6 +508,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a TSG download calls the underlying service correctly
+     * 
      * @throws Exception
      */
     @Test
@@ -451,29 +523,38 @@ public class TestNVCLController extends PortalTestClass {
         final Boolean trayPics = true;
         final Boolean mosaicPics = false;
         final Boolean mapPics = true;
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "text/html";
         final TSGDownloadResponse mockResponse = context.mock(TSGDownloadResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);will(returnValue(mockResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra,
+                        profilometer, trayPics, mosaicPics, mapPics);
+                will(returnValue(mockResponse));
 
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockResponse).getContentType();will(returnValue(contentType));
-            allowing(mockResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
-        this.nvclController.getNVCLTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics, mockHttpResponse);
+        this.nvclController.getNVCLTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra,
+                profilometer, trayPics, mosaicPics, mapPics, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
     }
 
     /**
      * Tests a workaround for spring framework combining multiple parameters (of the same name) into a CSV
+     * 
      * @throws Exception
      */
     @Test
@@ -489,51 +570,66 @@ public class TestNVCLController extends PortalTestClass {
         final Boolean trayPics = true;
         final Boolean mosaicPics = false;
         final Boolean mapPics = true;
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "text/html";
         final TSGDownloadResponse mockResponse = context.mock(TSGDownloadResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);will(returnValue(mockResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra,
+                        profilometer, trayPics, mosaicPics, mapPics);
+                will(returnValue(mockResponse));
 
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockResponse).getContentType();will(returnValue(contentType));
-            allowing(mockResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
-        this.nvclController.getNVCLTSGDownload(serviceUrl, emailString, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics, mockHttpResponse);
+        this.nvclController.getNVCLTSGDownload(serviceUrl, emailString, datasetId, matchString, lineScan, spectra,
+                profilometer, trayPics, mosaicPics, mapPics, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
     }
 
     /**
      * Tests a TSG download status calls the underlying service correctly
+     * 
      * @throws Exception
      */
     @Test
     public void testTSGDownloadStatus() throws Exception {
         final String serviceUrl = "http://example/url";
         final String email = "unique@email";
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "text/html";
         final TSGStatusResponse mockResponse = context.mock(TSGStatusResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).checkTSGStatus(serviceUrl, email);will(returnValue(mockResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).checkTSGStatus(serviceUrl, email);
+                will(returnValue(mockResponse));
 
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockResponse).getContentType();will(returnValue(contentType));
-            allowing(mockResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
         this.nvclController.getNVCLTSGDownloadStatus(serviceUrl, email, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
@@ -541,6 +637,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a WFS download calls the underlying service correctly
+     * 
      * @throws Exception
      */
     @Test
@@ -550,22 +647,28 @@ public class TestNVCLController extends PortalTestClass {
         final String boreholeId = "bid";
         final String omUrl = "http://test/wfs";
         final String typeName = "type:Name";
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "text/html";
         final WFSDownloadResponse mockResponse = context.mock(WFSDownloadResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).getWFSDownload(serviceUrl, email, boreholeId, omUrl, typeName);will(returnValue(mockResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).getWFSDownload(serviceUrl, email, boreholeId, omUrl, typeName);
+                will(returnValue(mockResponse));
 
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockResponse).getContentType();will(returnValue(contentType));
-            allowing(mockResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
         this.nvclController.getNVCLWFSDownload(serviceUrl, email, boreholeId, omUrl, typeName, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
@@ -573,28 +676,35 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a WFS download status calls the underlying service correctly
+     * 
      * @throws Exception
      */
     @Test
     public void testWFSDownloadStatus() throws Exception {
         final String serviceUrl = "http://example/url";
         final String email = "unique@email";
-        final byte[] data = new byte[] {0,1,2,3,4,5,6,7,8,9};
+        final byte[] data = new byte[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         final String contentType = "text/html";
         final WFSStatusResponse mockResponse = context.mock(WFSStatusResponse.class);
 
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         final ByteBufferedServletOutputStream outputStream = new ByteBufferedServletOutputStream(data.length);
 
-        context.checking(new Expectations() {{
-            oneOf(mockDataService).checkWFSStatus(serviceUrl, email);will(returnValue(mockResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockDataService).checkWFSStatus(serviceUrl, email);
+                will(returnValue(mockResponse));
 
-            oneOf(mockHttpResponse).setContentType(contentType);
-            oneOf(mockHttpResponse).getOutputStream();will(returnValue(outputStream));
+                oneOf(mockHttpResponse).setContentType(contentType);
+                oneOf(mockHttpResponse).getOutputStream();
+                will(returnValue(outputStream));
 
-            allowing(mockResponse).getContentType();will(returnValue(contentType));
-            allowing(mockResponse).getResponse();will(returnValue(inputStream));
-        }});
+                allowing(mockResponse).getContentType();
+                will(returnValue(contentType));
+                allowing(mockResponse).getResponse();
+                will(returnValue(inputStream));
+            }
+        });
 
         this.nvclController.getNVCLWFSDownloadStatus(serviceUrl, email, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
@@ -603,12 +713,13 @@ public class TestNVCLController extends PortalTestClass {
     /**
      * Tests to ensure that a serviceFilter request returns correctly.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testServiceFilterReturns() throws Exception {
         final String serviceUrl = "http://fake.com/wfs";
-        final String serviceFilter="http://fake.com";
+        final String serviceFilter = "http://fake.com";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
         final String filterDate = "1986-10-09";
@@ -619,15 +730,19 @@ public class TestNVCLController extends PortalTestClass {
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
-        context.checking(new Expectations() {{
-            oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures, null, null);
-            will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
+                        maxFeatures, null, null);
+                will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
-            allowing(mockHttpMethodBase).getURI();
-            will(returnValue(httpMethodURI));
-        }});
+                allowing(mockHttpMethodBase).getURI();
+                will(returnValue(httpMethodURI));
+            }
+        });
 
-        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures,"", onlyHylogger,serviceFilter);
+        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
+                filterDate, maxFeatures, "", onlyHylogger, serviceFilter);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -639,17 +754,17 @@ public class TestNVCLController extends PortalTestClass {
     @Test
     public void testServiceFilterReturnsEmptyMAV() throws Exception {
         final String serviceUrl = "http://fake.com/wfs";
-        final String serviceFilter="http://fakeNOT.com";
+        final String serviceFilter = "http://fakeNOT.com";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
         final String filterDate = "1986-10-09";
         final int maxFeatures = 10;
         final String onlyHylogger = "off";
 
-        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter, filterDate, maxFeatures,"", onlyHylogger,serviceFilter);
+        ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
+                filterDate, maxFeatures, "", onlyHylogger, serviceFilter);
         Map data = (Map) response.getModel().get("data");
         Assert.assertNull(data);
     }
-
 
 }

@@ -1,13 +1,11 @@
 package org.auscope.portal.capdf;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
-
 
 /**
  * Class that represents ogc:Filter markup for capricorn distal footprint queries
@@ -20,6 +18,7 @@ public class CapdfMeasurementLimitFilter extends AbstractFilter {
 
     /**
      * Construct an object the aids in generating filter object for the capricorn distal measurement limit filter
+     * 
      * @param group
      */
     public CapdfMeasurementLimitFilter(String group) {
@@ -31,23 +30,18 @@ public class CapdfMeasurementLimitFilter extends AbstractFilter {
 
     }
 
-
     @Override
     public String getFilterStringAllRecords() {
         return this.generateFilter(this.generateAndComparisonFragment(fragments.toArray(new String[fragments.size()])));
     }
-
 
     @Override
     public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
         List<String> localFragment = new ArrayList<String>(fragments);
         localFragment.add(this.generateBboxFragment(bbox, "geom"));
 
-        return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment.size()])));
+        return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment
+                .size()])));
     }
 
-
-
-
 }
-

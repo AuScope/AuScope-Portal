@@ -9,11 +9,8 @@ import org.auscope.portal.server.domain.ogc.AbstractFilterTestUtilities;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-
 /**
- * User: Michael Stegherr
- * Date: 30/03/2009
- * Time: 3:14:31 PM
+ * User: Michael Stegherr Date: 30/03/2009 Time: 3:14:31 PM
  */
 public class TestCommodityFilter extends PortalTestClass {
 
@@ -28,23 +25,22 @@ public class TestCommodityFilter extends PortalTestClass {
                 commodityFilter.getFilterString().replace("\n", "").replace(" ", ""));
     }*/
 
-
     /**
-     *  Test with a commodity name. A filter query should be generated searching for commodities with the given name.
+     * Test with a commodity name. A filter query should be generated searching for commodities with the given name.
      */
     @Test
     public void testWithACommodityName() throws IOException {
         //CommodityFilter commodityFilter = new CommodityFilter("Gold");
         Assert.assertEquals(
-                1,1 // Commented out as it fails - it can't find 'Util.loadXML' class
-                //Util.loadXML("src/test/resources/GetCommoditiesWithSpecifiedName.xml").replace("\n", "").replace(" ", ""),
-                //commodityFilter.getFilterString().replace("\n", "").replace(" ", "")
-                );
+                1, 1 // Commented out as it fails - it can't find 'Util.loadXML' class
+        //Util.loadXML("src/test/resources/GetCommoditiesWithSpecifiedName.xml").replace("\n", "").replace(" ", ""),
+        //commodityFilter.getFilterString().replace("\n", "").replace(" ", "")
+        );
     }
-
 
     /**
      * Tests that matchCase is explicitly set to false
+     * 
      * @throws Exception
      */
     public void testMatchCaseDefault() throws Exception {
@@ -52,6 +48,7 @@ public class TestCommodityFilter extends PortalTestClass {
 
         String filter = commodityFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
-        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/@matchCase", new String[] {"false"}, 1);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/@matchCase",
+                new String[] {"false"}, 1);
     }
 }

@@ -14,6 +14,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for Admin Service
+ * 
  * @author Josh Vote
  *
  */
@@ -23,25 +24,33 @@ public class TestAuScopeAdminService extends PortalTestClass {
 
     /**
      * Tests that the vocab diagnostics correctly handle responses
+     * 
      * @throws Exception
      */
     @Test
     public void testVocab() throws Exception {
         final String vocabUrl = "http://fake.vocab/url";
-        final String vocabResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocResponse.xml");
-        final String repoInfoResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocRepositoryInfoResponse.xml");
+        final String vocabResponse = ResourceUtil
+                .loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocResponse.xml");
+        final String repoInfoResponse = ResourceUtil
+                .loadResourceAsString("org/auscope/portal/core/test/responses/sissvoc/SISSVocRepositoryInfoResponse.xml");
         final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
-
         //Our vocab test fires off 2 requests
-        context.checking(new Expectations() {{
+        context.checking(new Expectations() {
+            {
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
-            will(returnValue(repoInfoResponse));
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(),
+                                null)));
+                will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
-            will(returnValue(vocabResponse));
-        }});
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker
+                                .getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
+                will(returnValue(vocabResponse));
+            }
+        });
 
         //Our only restriction is asserting no errors
         AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);
@@ -52,6 +61,7 @@ public class TestAuScopeAdminService extends PortalTestClass {
 
     /**
      * Tests that the vocab diagnostics correctly handle responses with malformed XML
+     * 
      * @throws Exception
      */
     @Test
@@ -61,15 +71,20 @@ public class TestAuScopeAdminService extends PortalTestClass {
         final String repoInfoResponse = "<invalid></xml>";
         final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
-
         //Our vocab test fires off 2 requests
-        context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
-            will(returnValue(repoInfoResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(),
+                                null)));
+                will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
-            will(returnValue(vocabResponse));
-        }});
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker
+                                .getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
+                will(returnValue(vocabResponse));
+            }
+        });
 
         //Our only restriction is asserting errors
         AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);
@@ -80,6 +95,7 @@ public class TestAuScopeAdminService extends PortalTestClass {
 
     /**
      * Tests that the vocab diagnostics correctly handle responses with bad XML
+     * 
      * @throws Exception
      */
     @Test
@@ -89,15 +105,20 @@ public class TestAuScopeAdminService extends PortalTestClass {
         final String repoInfoResponse = "<validButUnknownXml/>";
         final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
-
         //Our vocab test fires off 2 requests
-        context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
-            will(returnValue(repoInfoResponse));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(),
+                                null)));
+                will(returnValue(repoInfoResponse));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
-            will(returnValue(vocabResponse));
-        }});
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker
+                                .getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
+                will(returnValue(vocabResponse));
+            }
+        });
 
         //Our only restriction is asserting errors (the first test will succeed because we don't test its validity)
         AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);
@@ -108,6 +129,7 @@ public class TestAuScopeAdminService extends PortalTestClass {
 
     /**
      * Tests that the vocab diagnostics correctly handle connection errors
+     * 
      * @throws Exception
      */
     @Test
@@ -115,15 +137,20 @@ public class TestAuScopeAdminService extends PortalTestClass {
         final String vocabUrl = "http://fake.vocab/url";
         final SISSVoc2MethodMaker methodMaker = new SISSVoc2MethodMaker();
 
-
         //Our vocab test fires off 2 requests
-        context.checking(new Expectations() {{
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(), null)));
-            will(throwException(new ConnectException()));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker.getRepositoryInfoMethod(vocabUrl).getURI().toString(),
+                                null)));
+                will(throwException(new ConnectException()));
 
-            oneOf(mockServiceCaller).getMethodResponseAsString(with(aHttpMethodBase(null, methodMaker.getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
-            will(throwException(new ConnectException()));
-        }});
+                oneOf(mockServiceCaller).getMethodResponseAsString(
+                        with(aHttpMethodBase(null, methodMaker
+                                .getConceptByLabelMethod(vocabUrl, "commodity_vocab", "*").getURI().toString(), null)));
+                will(throwException(new ConnectException()));
+            }
+        });
 
         //Our only restriction is asserting errors
         AdminDiagnosticResponse response = adminService.sissVoc2Connectivity(vocabUrl);

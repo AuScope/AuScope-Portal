@@ -21,11 +21,8 @@ import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
-
 /**
- * User: Michael Stegherr
- * Date: Sep 14, 2009
- * Time: 11:28:47 AM.
+ * User: Michael Stegherr Date: Sep 14, 2009 Time: 11:28:47 AM.
  */
 public class TestVocabController extends PortalTestClass {
 
@@ -40,7 +37,8 @@ public class TestVocabController extends PortalTestClass {
     /**
      * Setup.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -54,14 +52,17 @@ public class TestVocabController extends PortalTestClass {
         final String label = "label";
         final List<String> defns = Arrays.asList("defn");
 
-        context.checking(new Expectations() {{
-            oneOf(mockNvclVocabService).getScalarDefinitionsByLabel(label);will(returnValue(defns));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockNvclVocabService).getScalarDefinitionsByLabel(label);
+                will(returnValue(defns));
+            }
+        });
 
         ModelAndView mav = vocabController.getScalarQuery(repository, label);
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
-        ModelMap data = (ModelMap)mav.getModel().get("data");
+        ModelMap data = (ModelMap) mav.getModel().get("data");
         Assert.assertNotNull(data);
         Assert.assertEquals(label, data.get("label"));
         Assert.assertEquals(defns.get(0), data.get("definition"));
@@ -74,9 +75,12 @@ public class TestVocabController extends PortalTestClass {
         final String repository = "repo";
         final String label = "label";
 
-        context.checking(new Expectations() {{
-            oneOf(mockNvclVocabService).getScalarDefinitionsByLabel(label);will(throwException(new PortalServiceException("")));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockNvclVocabService).getScalarDefinitionsByLabel(label);
+                will(throwException(new PortalServiceException("")));
+            }
+        });
 
         ModelAndView mav = vocabController.getScalarQuery(repository, label);
         Assert.assertNotNull(mav);
@@ -90,10 +94,12 @@ public class TestVocabController extends PortalTestClass {
         serviceResult.put("urn:1", "label1");
         serviceResult.put("urn:2", "label2");
 
-
-        context.checking(new Expectations() {{
-            oneOf(mockErmlVocabService).getGaCommodityConcepts("en");will(returnValue(serviceResult));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockErmlVocabService).getGaCommodityConcepts("en");
+                will(returnValue(serviceResult));
+            }
+        });
 
         ModelAndView mav = vocabController.getAllCommodities();
         Assert.assertNotNull(mav);
@@ -114,14 +120,18 @@ public class TestVocabController extends PortalTestClass {
             serviceResult.remove(urn);
         }
 
-        Assert.assertEquals("Service result contains items that were NOT included in the JSON array response", 0, serviceResult.size());
+        Assert.assertEquals("Service result contains items that were NOT included in the JSON array response", 0,
+                serviceResult.size());
     }
 
     @Test
     public void testGetErmlCommodituesError() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(mockErmlVocabService).getGaCommodityConcepts("en");will(throwException(new PortalServiceException("")));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockErmlVocabService).getGaCommodityConcepts("en");
+                will(throwException(new PortalServiceException("")));
+            }
+        });
 
         ModelAndView mav = vocabController.getAllCommodities();
         Assert.assertNotNull(mav);

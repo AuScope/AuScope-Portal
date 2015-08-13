@@ -5,8 +5,8 @@ import java.util.Arrays;
 import org.auscope.portal.core.server.PortalProfileXmlWebApplicationContext;
 
 /**
- * A Web Application Context that extends the PortalProfileXmlWebApplicationContext
- * with new config locations
+ * A Web Application Context that extends the PortalProfileXmlWebApplicationContext with new config locations
+ * 
  * @author Josh Vote
  *
  */
@@ -16,7 +16,7 @@ public class AuScopeWebAppContext extends PortalProfileXmlWebApplicationContext 
         String[] locations = super.getDefaultConfigLocations();
 
         //VT --perform some initalizing sequence. Could not find a more suitable place for this
-        Initializer init=new Initializer();
+        Initializer init = new Initializer();
         init.run();
         //--  end of initialization
 

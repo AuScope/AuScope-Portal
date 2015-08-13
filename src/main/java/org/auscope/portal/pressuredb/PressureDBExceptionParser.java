@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Static utility class for parsing possible exception responses from the pressure db dataservices
+ * 
  * @author JoshVote
  *
  */
@@ -25,6 +26,7 @@ public class PressureDBExceptionParser {
      * Will attempt to parse an <DataServiceError> element
      *
      * Will throw an PressureDBException if document does contain an <DataServiceError>, otherwise it will do nothing
+     * 
      * @param doc
      * @throws PressureDBException
      */
@@ -33,11 +35,11 @@ public class PressureDBExceptionParser {
 
         try {
             //Check for an exception response
-            NodeList exceptionNodes = (NodeList)xPath.evaluate("/DataServiceError", doc, XPathConstants.NODESET);
+            NodeList exceptionNodes = (NodeList) xPath.evaluate("/DataServiceError", doc, XPathConstants.NODESET);
             if (exceptionNodes.getLength() > 0) {
                 Node exceptionNode = exceptionNodes.item(0);
 
-                throw new PortalServiceException((HttpRequestBase)null, exceptionNode.getTextContent());
+                throw new PortalServiceException((HttpRequestBase) null, exceptionNode.getTextContent());
             }
         } catch (XPathExpressionException ex) {
             //This should *hopefully* never occur

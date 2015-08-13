@@ -34,8 +34,11 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * 
+     * @param filter
+     *            The filter
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
     public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
@@ -51,31 +54,37 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param batch The  batchid filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * 
+     * @param batch
+     *            The batchid filter
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
-    public String getHydroGeoChemFilter(String batchid,FilterBoundingBox bbox) {
-        CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid,null,null,null);
-        return generateFilterString(filter,bbox);
+    public String getHydroGeoChemFilter(String batchid, FilterBoundingBox bbox) {
+        CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid, null, null, null);
+        return generateFilterString(filter, bbox);
     }
-
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param group The filter
+     * 
+     * @param group
+     *            The filter
      * @return String - the filter string
      */
     public String getMeasurementLimits(String group) {
         CapdfMeasurementLimitFilter filter = new CapdfMeasurementLimitFilter(group);
-        return generateFilterString(filter,null);
+        return generateFilterString(filter, null);
     }
-
 
     /**
      * Generate a list of filters for color coding sld rules
-     * @param batchid - filter
-     * @param ccq - CapdfHydroChemColorCoding manager
+     * 
+     * @param batchid
+     *            - filter
+     * @param ccq
+     *            - CapdfHydroChemColorCoding manager
      * @return
      * @throws Exception
      */
@@ -84,17 +93,16 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
         ArrayList<IFilter> result = new ArrayList<IFilter>();
 
-        ColorCodingConfig  ccc= ccq.getColorCodingConfig();
+        ColorCodingConfig ccc = ccq.getColorCodingConfig();
 
-        for(int iteration = 0; iteration < ccc.getIntervals(); iteration++){
-            HashMap<String,Double> config = ccc.getIteration(iteration);
-            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid,ccq,ccc.getIterationLowerBound(config),ccc.getIterationUpperBound(config));
+        for (int iteration = 0; iteration < ccc.getIntervals(); iteration++) {
+            HashMap<String, Double> config = ccc.getIteration(iteration);
+            CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid, ccq,
+                    ccc.getIterationLowerBound(config), ccc.getIterationUpperBound(config));
             result.add(filter);
         }
 
         return result;
     }
-
-
 
 }

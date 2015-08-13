@@ -35,20 +35,29 @@ public class YilgarnObservationRecord {
     /** The uom. */
     private String uom;
 
-
-
     /**
      * Generates a new Located Specimen Record
-     * @param serviceName service name
-     * @param date date
-     * @param observedMineralName observed mineral name
-     * @param preparationDetails preparation details
-     * @param labDetails lab details
-     * @param analyticalMethod analytical method
-     * @param observedProperty observed property
-     * @param analyteName analyte name
-     * @param analyteValue analyte value
-     * @param uom unit of measure
+     * 
+     * @param serviceName
+     *            service name
+     * @param date
+     *            date
+     * @param observedMineralName
+     *            observed mineral name
+     * @param preparationDetails
+     *            preparation details
+     * @param labDetails
+     *            lab details
+     * @param analyticalMethod
+     *            analytical method
+     * @param observedProperty
+     *            observed property
+     * @param analyteName
+     *            analyte name
+     * @param analyteValue
+     *            analyte value
+     * @param uom
+     *            unit of measure
      */
     public YilgarnObservationRecord(String serviceName, String date,
             String observedMineralName, String preparationDetails,
@@ -171,6 +180,5 @@ public class YilgarnObservationRecord {
                 + analyteName + ", analyteValue=" + analyteValue + ", uom="
                 + uom + "]";
     }
-
 
 }

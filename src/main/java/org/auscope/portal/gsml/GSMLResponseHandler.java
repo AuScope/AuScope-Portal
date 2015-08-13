@@ -38,7 +38,7 @@ public class GSMLResponseHandler {
 
         try {
             XPathExpression expr = xPath.compile("/wfs:FeatureCollection");
-            Node result = (Node)expr.evaluate(yilgarnDoc, XPathConstants.NODE);
+            Node result = (Node) expr.evaluate(yilgarnDoc, XPathConstants.NODE);
             return Integer.parseInt(result.getAttributes().getNamedItem("numberOfFeatures").getTextContent());
         } catch (Exception e) {
             logger.warn(e.getMessage());

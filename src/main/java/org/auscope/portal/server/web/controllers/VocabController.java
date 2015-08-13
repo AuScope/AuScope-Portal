@@ -29,6 +29,7 @@ public class VocabController extends BasePortalController {
 
     /**
      * Construct
+     * 
      * @param
      */
     @Autowired
@@ -39,20 +40,16 @@ public class VocabController extends BasePortalController {
     }
 
     /**
-     * Performs a query to the vocabulary service on behalf of the client and returns a JSON Map
-     * success: Set to either true or false
-     * data: The raw XML response
-     * scopeNote: The scope note element from the response
-     * label: The label element from the response
+     * Performs a query to the vocabulary service on behalf of the client and returns a JSON Map success: Set to either true or false data: The raw XML response
+     * scopeNote: The scope note element from the response label: The label element from the response
+     * 
      * @param repository
      * @param label
      * @return
      */
     @RequestMapping("/getScalar.do")
     public ModelAndView getScalarQuery(@RequestParam("repository") final String repository,
-                                        @RequestParam("label") final String label) throws Exception {
-
-
+            @RequestParam("label") final String label) throws Exception {
 
         //Attempt to request and parse our response
         try {
@@ -64,11 +61,12 @@ public class VocabController extends BasePortalController {
             String definitionString = null;
             if (definitions != null && definitions.size() > 0) {
                 labelString = label;
-                scopeNoteString = definitions.get(0);  //this is for legacy support
+                scopeNoteString = definitions.get(0); //this is for legacy support
                 definitionString = definitions.get(0);
             }
 
-            return generateJSONResponseMAV(true, createScalarQueryModel(scopeNoteString, labelString, definitionString), "");
+            return generateJSONResponseMAV(true,
+                    createScalarQueryModel(scopeNoteString, labelString, definitionString), "");
         } catch (Exception ex) {
             //On error, just return failure JSON (and the response string if any)
             log.error("getVocabQuery ERROR: " + ex.getMessage());

@@ -16,14 +16,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * User: Michael Stegherr
- * Date: 30/03/2009
- * Time: 3:27:26 PM
+ * User: Michael Stegherr Date: 30/03/2009 Time: 3:27:26 PM
  */
 public class MineralOccurrence {
     private Node mineralOccurrenceNode;
 
-    public MineralOccurrence(Node mineralOccurrenceNode) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
+    public MineralOccurrence(Node mineralOccurrenceNode) throws IOException, SAXException,
+            ParserConfigurationException, XPathExpressionException {
         this.mineralOccurrenceNode = mineralOccurrenceNode;
     }
 
@@ -33,7 +32,7 @@ public class MineralOccurrence {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr = xPath.compile("gml:name");
-            NodeList nameNodes = (NodeList)expr.evaluate(mineralOccurrenceNode, XPathConstants.NODESET);
+            NodeList nameNodes = (NodeList) expr.evaluate(mineralOccurrenceNode, XPathConstants.NODESET);
 
             // TODO is there updateCSWRecords better way to get the URN than updateCSWRecords string compare?
             for (int i = 0; i < nameNodes.getLength(); i++)
@@ -54,7 +53,7 @@ public class MineralOccurrence {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr = xPath.compile("er:type");
-            Node result = (Node)expr.evaluate(mineralOccurrenceNode, XPathConstants.NODE);
+            Node result = (Node) expr.evaluate(mineralOccurrenceNode, XPathConstants.NODE);
             return result.getTextContent();
         } catch (Exception e) {
             return "";
@@ -68,8 +67,8 @@ public class MineralOccurrence {
             xPath.setNamespaceContext(new MineralOccurrenceNamespaceContext());
 
             XPathExpression expr =
-                xPath.compile("er:classification/er:MineralDepositModel/er:mineralDepositGroup");
-            Node result = (Node)expr.evaluate(mineralOccurrenceNode, XPathConstants.NODE);
+                    xPath.compile("er:classification/er:MineralDepositModel/er:mineralDepositGroup");
+            Node result = (Node) expr.evaluate(mineralOccurrenceNode, XPathConstants.NODE);
             return result.getTextContent();
         } catch (Exception e) {
             return "";
@@ -89,7 +88,7 @@ public class MineralOccurrence {
 
             for (int i = 0; i < commodityNodes.getLength(); i++) {
                 String urn =
-                    commodityNodes.item(i).getAttributes().getNamedItem("xlink:href").getTextContent();
+                        commodityNodes.item(i).getAttributes().getNamedItem("xlink:href").getTextContent();
 
                 commodityDescriptionURNs.add(urn);
             }

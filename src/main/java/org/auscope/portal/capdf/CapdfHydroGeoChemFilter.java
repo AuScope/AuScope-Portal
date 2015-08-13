@@ -1,13 +1,11 @@
 package org.auscope.portal.capdf;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
-
 
 /**
  * Class that represents ogc:Filter markup for capricorn distal footprint queries
@@ -24,7 +22,7 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public CapdfHydroGeoChemFilter(String batchid,CapdfHydroChemColorCoding ccq,Double min, Double max) {
+    public CapdfHydroGeoChemFilter(String batchid, CapdfHydroChemColorCoding ccq, Double min, Double max) {
 
         fragments = new ArrayList<String>();
         if (batchid != null && !batchid.isEmpty()) {
@@ -41,7 +39,6 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
 
     }
 
-
     @Override
     public String getFilterStringAllRecords() {
         return this.generateFilter(this.generateAndComparisonFragment(fragments.toArray(new String[fragments.size()])));
@@ -53,9 +50,8 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
         List<String> localFragment = new ArrayList<String>(fragments);
         localFragment.add(this.generateBboxFragment(bbox, "geom"));
 
-        return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment.size()])));
+        return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment
+                .size()])));
     }
 
-
 }
-

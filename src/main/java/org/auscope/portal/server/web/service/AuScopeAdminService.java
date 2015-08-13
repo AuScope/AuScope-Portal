@@ -20,8 +20,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- * Service class providing access into some portal low level functionality purely for the purposes
- * of getting diagnostic information
+ * Service class providing access into some portal low level functionality purely for the purposes of getting diagnostic information
+ * 
  * @author Josh Vote
  *
  */
@@ -30,7 +30,9 @@ public class AuScopeAdminService extends AdminService {
 
     /**
      * Creates a new AdminService
-     * @param serviceCaller For testing basic requests
+     * 
+     * @param serviceCaller
+     *            For testing basic requests
      */
     @Autowired
     public AuScopeAdminService(HttpServiceCaller serviceCaller) {
@@ -39,7 +41,9 @@ public class AuScopeAdminService extends AdminService {
 
     /**
      * Tests connectivity to a particular SISSVoc service - also tests some basic SISSVoc requests
-     * @param vocabServiceUrl The SISSVoc endpoint
+     * 
+     * @param vocabServiceUrl
+     *            The SISSVoc endpoint
      * @return
      * @throws URISyntaxException
      */
@@ -54,19 +58,24 @@ public class AuScopeAdminService extends AdminService {
             try {
                 DOMUtil.buildDomFromString(serviceResponse);
             } catch (Exception ex) {
-                diagnosticResponse.addError(String.format("Unable to XML parse a repository info response from '%1$s'. Exception - %2$s", vocabServiceUrl, ex));
+                diagnosticResponse.addError(String.format(
+                        "Unable to XML parse a repository info response from '%1$s'. Exception - %2$s",
+                        vocabServiceUrl, ex));
             }
         } catch (Exception ex) {
-            diagnosticResponse.addError(String.format("Unable to query for repository info '%1$s'. Exception - %2$s", vocabServiceUrl, ex));
+            diagnosticResponse.addError(String.format("Unable to query for repository info '%1$s'. Exception - %2$s",
+                    vocabServiceUrl, ex));
         }
 
         //Is the commodity vocab up and running (does it have any concepts?)
         //We want a pretty good level of error granularity here (hence the nested try-catch blocks)
         method = methodMaker.getConceptByLabelMethod(vocabServiceUrl, "commodity_vocab", "*");
         try {
-            diagnosticResponse.addDetail(String.format("Test commodities URL has been resolved as '%1$s'", method.getURI()));
+            diagnosticResponse.addDetail(String.format("Test commodities URL has been resolved as '%1$s'",
+                    method.getURI()));
         } catch (Exception ex) {
-            diagnosticResponse.addDetail(String.format("Test commodities URL has been resolved as UNRESOLVABLE - '%1$s'", ex));
+            diagnosticResponse.addDetail(String.format(
+                    "Test commodities URL has been resolved as UNRESOLVABLE - '%1$s'", ex));
         }
         try {
             String serviceResponse = serviceCaller.getMethodResponseAsString(method);
@@ -85,19 +94,30 @@ public class AuScopeAdminService extends AdminService {
                     try {
                         Description[] description = df.parseFromRDF(rdfNode);
                         if (description == null || description.length == 0) {
-                            diagnosticResponse.addWarning(String.format("commodities - cannot parse descriptions - The service returned valid XML but no descriptions could be parsed. No Exceptions"));
+                            diagnosticResponse
+                                    .addWarning(String
+                                            .format("commodities - cannot parse descriptions - The service returned valid XML but no descriptions could be parsed. No Exceptions"));
                         }
                     } catch (Exception ex) {
-                        diagnosticResponse.addError(String.format("commodities - cannot parse descriptions - The service returned valid XML but it couldn't be turned into a set of Description objects. Exception - %1$s", ex));
+                        diagnosticResponse
+                                .addError(String
+                                        .format("commodities - cannot parse descriptions - The service returned valid XML but it couldn't be turned into a set of Description objects. Exception - %1$s",
+                                                ex));
                     }
                 } catch (Exception ex) {
-                    diagnosticResponse.addError(String.format("commodities - cannot parse descriptions - The service returned valid XML but it didn't contain a root RDF node. Exception - %1$s", ex));
+                    diagnosticResponse
+                            .addError(String
+                                    .format("commodities - cannot parse descriptions - The service returned valid XML but it didn't contain a root RDF node. Exception - %1$s",
+                                            ex));
                 }
             } catch (Exception ex) {
-                diagnosticResponse.addError(String.format("commodities - cannot parse descriptions - The service returned invalid XML. Exception - %1$s", ex));
+                diagnosticResponse.addError(String.format(
+                        "commodities - cannot parse descriptions - The service returned invalid XML. Exception - %1$s",
+                        ex));
             }
         } catch (Exception ex) {
-            diagnosticResponse.addError(String.format("commodities - cannot get response from service. Exception - %1$s", ex));
+            diagnosticResponse.addError(String.format(
+                    "commodities - cannot get response from service. Exception - %1$s", ex));
         }
 
         return diagnosticResponse;

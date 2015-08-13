@@ -41,22 +41,23 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /** The mock method maker. */
     private WFSGetFeatureMethodMaker mockMethodMaker = context.mock(WFSGetFeatureMethodMaker.class);
 
-    /** The mock HTTP method*/
+    /** The mock HTTP method */
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
-    /** The mock GML transformer*/
+    /** The mock GML transformer */
     private WfsToKmlTransformer mockGmlToKml = context.mock(WfsToKmlTransformer.class);
 
     /** The Constant GETSCANNEDBOREHOLEXML. */
     private static final String GETSCANNEDBOREHOLEXML = "org/auscope/portal/nvcl/GetScannedBorehole.xml";
 
     /** The Constant HOLEIDS. */
-    private static final String[] HOLEIDS =  new String[] {"WTB5", "GSDD006", "GDDH7"};
+    private static final String[] HOLEIDS = new String[] {"WTB5", "GSDD006", "GDDH7"};
 
     /**
      * Setup.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Before
     public void setUp() throws Exception {
@@ -66,7 +67,8 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /**
      * Test get all boreholes no bbox.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetAllBoreholesNoBbox() throws Exception {
@@ -79,22 +81,29 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String gmlString = "xmlString";
         final String kmlString = "kmlString";
 
-        context.checking(new Expectations() {{
+        context.checking(new Expectations() {
+            {
 
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)),with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
+                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")),
+                        with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)),
+                        with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));
+                will(returnValue(mockMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
+                oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
+                will(returnValue(gmlString));
 
-            oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
-        }});
+                oneOf(mockGmlToKml).convert(gmlString, serviceURL);
+                will(returnValue(kmlString));
+            }
+        });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
+                maxFeatures, bbox);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
         Assert.assertEquals(kmlString, result.getTransformed());
         Assert.assertSame(mockMethod, result.getMethod());
     }
-
 
     /**
      * Test that SF0 filter style will return a style layer descriptor with correct feature type name
@@ -119,7 +128,8 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /**
      * Test get all boreholes bbox.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetAllBoreholesBbox() throws Exception {
@@ -132,15 +142,23 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String gmlString = "xmlString";
         final String kmlString = "kmlString";
 
-        context.checking(new Expectations() {{
+        context.checking(new Expectations() {
+            {
 
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
+                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")),
+                        with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)),
+                        with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));
+                will(returnValue(mockMethod));
+                oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
+                will(returnValue(gmlString));
 
-            oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
-        }});
+                oneOf(mockGmlToKml).convert(gmlString, serviceURL);
+                will(returnValue(kmlString));
+            }
+        });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
+                maxFeatures, bbox);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
         Assert.assertEquals(kmlString, result.getTransformed());
@@ -150,7 +168,8 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /**
      * Test get restricted boreholes bbox.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetRestrictedBoreholesBbox() throws Exception {
@@ -161,17 +180,26 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String dateOfDrilling = "2010-01-02";
         final String gmlString = "xmlString";
         final String kmlString = "kmlString";
-        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null)).getFilterStringAllRecords();
+        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null))
+                .getFilterStringAllRecords();
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")), with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)), with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));will(returnValue(mockMethod));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")),
+                        with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)),
+                        with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));
+                will(returnValue(mockMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));will(returnValue(gmlString));
+                oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
+                will(returnValue(gmlString));
 
-            oneOf(mockGmlToKml).convert(gmlString, serviceURL);will(returnValue(kmlString));
-        }});
+                oneOf(mockGmlToKml).convert(gmlString, serviceURL);
+                will(returnValue(kmlString));
+            }
+        });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling, maxFeatures, null);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
+                maxFeatures, null);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
         Assert.assertEquals(kmlString, result.getTransformed());
@@ -181,7 +209,8 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /**
      * Tests that the service correctly parses a response from an NVCL WFS.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetHyloggerIDs() throws Exception {
@@ -189,33 +218,39 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final CSWRecord mockRecord2 = context.mock(CSWRecord.class, "mockRecord2"); //has the wrong wfs
         final CSWRecord mockRecord3 = context.mock(CSWRecord.class, "mockRecord3"); //has no wfs
         final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
-        final CSWRecordsHostFilter hostFilter=new CSWRecordsHostFilter("");
-        final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", "dne", "description");
-        final AbstractCSWOnlineResource mockRecord1Resource2 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.2"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
+        final CSWRecordsHostFilter hostFilter = new CSWRecordsHostFilter("");
+        final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL(
+                "http://record.1.resource.1"), "wfs", "dne", "description");
+        final AbstractCSWOnlineResource mockRecord1Resource2 = new CSWOnlineResourceImpl(new URL(
+                "http://record.1.resource.2"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
 
-        final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", "dne", "description");
+        final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL(
+                "http://record.2.resource.1"), "wfs", "dne", "description");
 
         final String successResponse = ResourceUtil.loadResourceAsString(GETSCANNEDBOREHOLEXML);
 
-        context.checking(new Expectations() {{
-            oneOf(mockCSWService).getWFSRecords();
-            will(returnValue(Arrays.asList(mockRecord1, mockRecord2, mockRecord3)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockCSWService).getWFSRecords();
+                will(returnValue(Arrays.asList(mockRecord1, mockRecord2, mockRecord3)));
 
-            oneOf(mockRecord1).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord1Resource1, mockRecord1Resource2}));
+                oneOf(mockRecord1).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {mockRecord1Resource1, mockRecord1Resource2}));
 
-            oneOf(mockRecord2).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
+                oneOf(mockRecord2).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
 
-            oneOf(mockRecord3).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {}));
+                oneOf(mockRecord3).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {}));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), (Integer) null, null);
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
-            will(returnValue(successResponse));
-        }});
+                oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(),
+                        mockRecord1Resource2.getName(), (Integer) null, null);
+                oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
+                will(returnValue(successResponse));
+            }
+        });
 
-        List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService,hostFilter);
+        List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService, hostFilter);
         Assert.assertNotNull(restrictedIDs);
         Assert.assertArrayEquals(HOLEIDS, restrictedIDs.toArray(new String[restrictedIDs.size()]));
     }
@@ -223,7 +258,8 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /**
      * Tests that the service correctly parses a response from an NVCL WFS (even when there is an error).
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetHyloggerIDsWithError() throws Exception {
@@ -232,36 +268,42 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
         final HttpRequestBase mockRecord1Method = context.mock(HttpRequestBase.class, "rec1method");
         final HttpRequestBase mockRecord2Method = context.mock(HttpRequestBase.class, "rec2method");
-        final CSWRecordsHostFilter hostFilter=new CSWRecordsHostFilter("");
-        final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
-        final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
+        final CSWRecordsHostFilter hostFilter = new CSWRecordsHostFilter("");
+        final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL(
+                "http://record.1.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
+        final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL(
+                "http://record.2.resource.1"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
 
         final String successResponse = ResourceUtil.loadResourceAsString(GETSCANNEDBOREHOLEXML);
 
-        context.checking(new Expectations() {{
-            oneOf(mockCSWService).getWFSRecords();
-            will(returnValue(Arrays.asList(mockRecord1, mockRecord2)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockCSWService).getWFSRecords();
+                will(returnValue(Arrays.asList(mockRecord1, mockRecord2)));
 
-            oneOf(mockRecord1).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord1Resource1}));
+                oneOf(mockRecord1).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {mockRecord1Resource1}));
 
-            oneOf(mockRecord2).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
+                oneOf(mockRecord2).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource1.getLinkage().toString(), mockRecord1Resource1.getName(), (Integer) null, null);
-            will(returnValue(mockRecord1Method));
+                oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource1.getLinkage().toString(),
+                        mockRecord1Resource1.getName(), (Integer) null, null);
+                will(returnValue(mockRecord1Method));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord2Resource1.getLinkage().toString(), mockRecord2Resource1.getName(), (Integer) null, null);
-            will(returnValue(mockRecord2Method));
+                oneOf(mockMethodMaker).makeGetMethod(mockRecord2Resource1.getLinkage().toString(),
+                        mockRecord2Resource1.getName(), (Integer) null, null);
+                will(returnValue(mockRecord2Method));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord1Method);
-            will(throwException(new Exception("I'm an exception!")));
+                oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord1Method);
+                will(throwException(new Exception("I'm an exception!")));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord2Method);
-            will(returnValue(successResponse));
-        }});
+                oneOf(mockHttpServiceCaller).getMethodResponseAsString(mockRecord2Method);
+                will(returnValue(successResponse));
+            }
+        });
 
-        List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService,hostFilter);
+        List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService, hostFilter);
         Assert.assertNotNull(restrictedIDs);
         Assert.assertArrayEquals(HOLEIDS, restrictedIDs.toArray(new String[restrictedIDs.size()]));
     }
@@ -269,7 +311,8 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /**
      * Tests that the service correctly parses a response from an NVCL WFS.
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testGetHyloggerWithOWSError() throws Exception {
@@ -277,33 +320,40 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final CSWRecord mockRecord2 = context.mock(CSWRecord.class, "mockRecord2"); //has the wrong wfs
         final CSWRecord mockRecord3 = context.mock(CSWRecord.class, "mockRecord3"); //has no wfs
         final CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
-        final CSWRecordsHostFilter hostFilter=new CSWRecordsHostFilter("");
-        final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.1"), "wfs", "dne", "description");
-        final AbstractCSWOnlineResource mockRecord1Resource2 = new CSWOnlineResourceImpl(new URL("http://record.1.resource.2"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
+        final CSWRecordsHostFilter hostFilter = new CSWRecordsHostFilter("");
+        final AbstractCSWOnlineResource mockRecord1Resource1 = new CSWOnlineResourceImpl(new URL(
+                "http://record.1.resource.1"), "wfs", "dne", "description");
+        final AbstractCSWOnlineResource mockRecord1Resource2 = new CSWOnlineResourceImpl(new URL(
+                "http://record.1.resource.2"), "wfs", NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME, "description");
 
-        final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL("http://record.2.resource.1"), "wfs", "dne", "description");
+        final AbstractCSWOnlineResource mockRecord2Resource1 = new CSWOnlineResourceImpl(new URL(
+                "http://record.2.resource.1"), "wfs", "dne", "description");
 
-        final String owsErrorResponse = ResourceUtil.loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
+        final String owsErrorResponse = ResourceUtil
+                .loadResourceAsString("org/auscope/portal/core/test/responses/ows/OWSExceptionSample1.xml");
 
-        context.checking(new Expectations() {{
-            oneOf(mockCSWService).getWFSRecords();
-            will(returnValue(Arrays.asList(mockRecord1, mockRecord2, mockRecord3)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockCSWService).getWFSRecords();
+                will(returnValue(Arrays.asList(mockRecord1, mockRecord2, mockRecord3)));
 
-            oneOf(mockRecord1).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord1Resource1, mockRecord1Resource2}));
+                oneOf(mockRecord1).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {mockRecord1Resource1, mockRecord1Resource2}));
 
-            oneOf(mockRecord2).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
+                oneOf(mockRecord2).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {mockRecord2Resource1}));
 
-            oneOf(mockRecord3).getOnlineResourcesByType(hostFilter,OnlineResourceType.WFS);
-            will(returnValue(new AbstractCSWOnlineResource[] {}));
+                oneOf(mockRecord3).getOnlineResourcesByType(hostFilter, OnlineResourceType.WFS);
+                will(returnValue(new AbstractCSWOnlineResource[] {}));
 
-            oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(), mockRecord1Resource2.getName(), (Integer) null, null);
-            oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
-            will(returnValue(owsErrorResponse));
-        }});
+                oneOf(mockMethodMaker).makeGetMethod(mockRecord1Resource2.getLinkage().toString(),
+                        mockRecord1Resource2.getName(), (Integer) null, null);
+                oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
+                will(returnValue(owsErrorResponse));
+            }
+        });
 
-        List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService,hostFilter);
+        List<String> restrictedIDs = service.discoverHyloggerBoreholeIDs(mockCSWService, hostFilter);
         Assert.assertNotNull(restrictedIDs);
         Assert.assertEquals(0, restrictedIDs.size());
     }

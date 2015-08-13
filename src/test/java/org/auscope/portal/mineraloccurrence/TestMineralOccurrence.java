@@ -20,9 +20,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
- * User: Michael Stegherr
- * Date: 30/03/2009
- * Time: 3:27:26 PM
+ * User: Michael Stegherr Date: 30/03/2009 Time: 3:27:26 PM
  */
 public class TestMineralOccurrence extends PortalTestClass {
 
@@ -32,23 +30,28 @@ public class TestMineralOccurrence extends PortalTestClass {
     @BeforeClass
     public static void setUp() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
         //create updateCSWRecords valid mineral occurrence
-        Document mineralOccurrenceDocument = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/minocc/mineralOccurrenceNodeValid.xml"));
-        XPathExpression expr = DOMUtil.compileXPathExpr("/er:MineralOccurrence", new MineralOccurrenceNamespaceContext());
+        Document mineralOccurrenceDocument = DOMUtil.buildDomFromStream(ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/minocc/mineralOccurrenceNodeValid.xml"));
+        XPathExpression expr = DOMUtil.compileXPathExpr("/er:MineralOccurrence",
+                new MineralOccurrenceNamespaceContext());
 
-        Node mineralOccurrenceNode = (Node)expr.evaluate(mineralOccurrenceDocument, XPathConstants.NODE);
+        Node mineralOccurrenceNode = (Node) expr.evaluate(mineralOccurrenceDocument, XPathConstants.NODE);
         validMineralOccurrence = new MineralOccurrence(mineralOccurrenceNode);
 
         //create an invalid mineral occurrence
-        Document mineralOccurrenceDocument2 = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream("org/auscope/portal/erml/minocc/mineralOccurrenceNodeInvalid.xml"));
-        XPathExpression expr2 = DOMUtil.compileXPathExpr("/er:MineralOccurrence", new MineralOccurrenceNamespaceContext());
+        Document mineralOccurrenceDocument2 = DOMUtil.buildDomFromStream(ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/erml/minocc/mineralOccurrenceNodeInvalid.xml"));
+        XPathExpression expr2 = DOMUtil.compileXPathExpr("/er:MineralOccurrence",
+                new MineralOccurrenceNamespaceContext());
 
-        Node mineralOccurrenceNode2 = (Node)expr2.evaluate(mineralOccurrenceDocument2, XPathConstants.NODE);
+        Node mineralOccurrenceNode2 = (Node) expr2.evaluate(mineralOccurrenceDocument2, XPathConstants.NODE);
         invalidMineralOccurrence = new MineralOccurrence(mineralOccurrenceNode2);
     }
 
     @Test
     public void testGetURNValid() throws XPathExpressionException {
-        Assert.assertEquals("URN is: urn:cgi:feature:PIRSA:MineralOccurrence:394deposit", "urn:cgi:feature:PIRSA:MineralOccurrence:394deposit", validMineralOccurrence.getURN());
+        Assert.assertEquals("URN is: urn:cgi:feature:PIRSA:MineralOccurrence:394deposit",
+                "urn:cgi:feature:PIRSA:MineralOccurrence:394deposit", validMineralOccurrence.getURN());
     }
 
     @Test
@@ -62,7 +65,7 @@ public class TestMineralOccurrence extends PortalTestClass {
                 "watery fluids of diverse origin, temperature range 50-7000C, generally below 4000C, " +
                 "pressure 1-3 kbar",
                 "Hydrothermal: precipitation of ore and gangue from watery fluids of diverse origin, " +
-                "temperature range 50-7000C, generally below 4000C, pressure 1-3 kbar",
+                        "temperature range 50-7000C, generally below 4000C, pressure 1-3 kbar",
                 validMineralOccurrence.getMineralDepositGroup());
     }
 

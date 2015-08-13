@@ -27,9 +27,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * This class handles requests for MSCL observation data; it does so without
- * requiring the same to have defined SRSs. This is important as the GML Point,
- * into which the observation depths are encoded, doesn't have an SRS set.
+ * This class handles requests for MSCL observation data; it does so without requiring the same to have defined SRSs. This is important as the GML Point, into
+ * which the observation depths are encoded, doesn't have an SRS set.
  * 
  * @author bro879
  * 
@@ -56,15 +55,12 @@ public class MSCLController extends BasePortalController {
     /**
      * 
      * @param serviceUrl
-     *            The URL of the WFS's endpoint. It should be of the form:
-     *            http://{domain}:{port}/{path}/wfs
+     *            The URL of the WFS's endpoint. It should be of the form: http://{domain}:{port}/{path}/wfs
      * @param featureType
-     *            The name of the feature type you wish to request (including
-     *            its prefix if necessary).
+     *            The name of the feature type you wish to request (including its prefix if necessary).
      * @param featureId
      *            The ID of the feature you want to return.
-     * @return A ModelAndView object encapsulating the WFS response along with
-     *         an indicator of success or failure.
+     * @return A ModelAndView object encapsulating the WFS response along with an indicator of success or failure.
      * @throws Exception
      */
     @RequestMapping("/getMsclObservations.do")
@@ -94,7 +90,7 @@ public class MSCLController extends BasePortalController {
             @RequestParam("startDepth") final String startDepth,
             @RequestParam("endDepth") final String endDepth,
             @RequestParam("observationsToReturn") final String[] observationsToReturn) {
-        
+
         try {
             String wfsResponse = msclWfsService.getObservations(serviceUrl, boreholeHeaderId, startDepth, endDepth);
 
@@ -122,26 +118,26 @@ public class MSCLController extends BasePortalController {
             // Do some rudimentary error testing:
             OWSExceptionParser.checkForExceptionResponse(msclDoc);
             ModelMap data = new ModelMap();
-            
+
             // Build the XPath, always including depth:
             StringBuilder xPathString = new StringBuilder("//mscl:scanned_data/mscl:depth");
             for (int i = 0; i < observationsToReturn.length; i++) {
                 xPathString.append(" | //mscl:scanned_data/mscl:" + observationsToReturn[i]);
             }
-            
+
             XPathExpression expr = xPath.compile(xPathString.toString());
             NodeList results = (NodeList) expr.evaluate(msclDoc, XPathConstants.NODESET);
             ArrayList<ModelMap> series = new ArrayList<ModelMap>();
-            
+
             ModelMap relatedValues = null;
             Node targetParentNode = null;
-            
+
             for (int i = 0; i < results.getLength(); i++) {
                 Node result = results.item(i);
-                Node currentParentNode = result.getParentNode(); 
+                Node currentParentNode = result.getParentNode();
                 if (!currentParentNode.equals(targetParentNode)) {
                     targetParentNode = currentParentNode;
-                    
+
                     // relatedValues will be null on the first entry so we don't add it.
                     // We also don't want to add it if it only has one value; if this has
                     // occurred it basically means that we have a depth but no observations.
@@ -153,8 +149,8 @@ public class MSCLController extends BasePortalController {
 
                 relatedValues.put(result.getLocalName(), Float.parseFloat(result.getTextContent()));
             }
-            
-            Collections.<ModelMap>sort(series, new Comparator<ModelMap>() {
+
+            Collections.<ModelMap> sort(series, new Comparator<ModelMap>() {
                 public int compare(ModelMap o1, ModelMap o2) {
                     // Just use float's comparison implementation:
                     return ((Float) o1.get("depth")).compareTo((Float) o2.get("depth"));

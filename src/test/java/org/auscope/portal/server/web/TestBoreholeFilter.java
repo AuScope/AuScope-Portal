@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 
 /**
  * Unit tests for BoreholeFilter
+ * 
  * @author Josh Vote
  *
  */
@@ -35,6 +36,7 @@ public class TestBoreholeFilter extends PortalTestClass {
 
     /**
      * Tests that the non ID string comparisons will ALWAYS use matchCase=false
+     * 
      * @throws Exception
      */
     @Test
@@ -43,6 +45,7 @@ public class TestBoreholeFilter extends PortalTestClass {
         String filterString = filter.getFilterStringAllRecords();
 
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filterString);
-        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/@matchCase", new String[] {"false"}, 2);
+        AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/@matchCase",
+                new String[] {"false"}, 2);
     }
 }

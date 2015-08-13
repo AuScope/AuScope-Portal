@@ -40,7 +40,7 @@ public class TestIRISController extends PortalTestClass {
         ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/stationResponse.xml", "");
 
         // Assert
-        Assert.assertTrue((Boolean)result.getModel().get("success"));
+        Assert.assertTrue((Boolean) result.getModel().get("success"));
     }
 
     @Test
@@ -49,7 +49,11 @@ public class TestIRISController extends PortalTestClass {
         ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/stationResponse.xml", "");
 
         // Assert
-        Assert.assertTrue(result.getModel().toString().contains("kml=<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\">"));
+        Assert.assertTrue(result
+                .getModel()
+                .toString()
+                .contains(
+                        "kml=<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\">"));
     }
 
     @Test
@@ -58,7 +62,7 @@ public class TestIRISController extends PortalTestClass {
         ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/stationResponseBad.xml", "");
 
         // Assert
-        Assert.assertFalse((Boolean)result.getModel().get("success"));
+        Assert.assertFalse((Boolean) result.getModel().get("success"));
     }
 
     @Test
@@ -67,7 +71,7 @@ public class TestIRISController extends PortalTestClass {
         ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/channelResponse.xml", "");
 
         // Assert
-        Assert.assertTrue((Boolean)result.getModel().get("success"));
+        Assert.assertTrue((Boolean) result.getModel().get("success"));
     }
 
     @Test
@@ -76,7 +80,11 @@ public class TestIRISController extends PortalTestClass {
         ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/channelResponse.xml", "");
 
         // Assert
-        Assert.assertTrue(result.getModel().toString().contains("kml=<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\">"));
+        Assert.assertTrue(result
+                .getModel()
+                .toString()
+                .contains(
+                        "kml=<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\">"));
     }
 
     @Test
@@ -85,6 +93,6 @@ public class TestIRISController extends PortalTestClass {
         ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/channelResponseBad.xml", "");
 
         // Assert
-        Assert.assertFalse((Boolean)result.getModel().get("success"));
+        Assert.assertFalse((Boolean) result.getModel().get("success"));
     }
 }

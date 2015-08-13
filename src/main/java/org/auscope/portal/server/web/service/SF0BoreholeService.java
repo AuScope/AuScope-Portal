@@ -13,8 +13,10 @@ import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 /**
  * A service class for making requests to the SF0 Borehole web service
+ * 
  * @author Florence Tan
  *
  */
@@ -29,24 +31,27 @@ public class SF0BoreholeService extends BoreholeService {
     // ----------------------------------------------------------- Constructors
 
     @Autowired
-    public SF0BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker, WfsToKmlTransformer wfsToKml) {
+    public SF0BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker,
+            WfsToKmlTransformer wfsToKml) {
         super(serviceCaller, methodMaker, wfsToKml);
         this.wfsToKml = wfsToKml;
     }
 
     // --------------------------------------------------------- Public Methods
 
-
-
     /**
      * Get all SF0 Boreholes from a given service url and return the response
+     * 
      * @param serviceURL
-     * @param bbox Set to the bounding box in which to fetch results, otherwise set it to null
-     * @param restrictToIDList [Optional] A list of gml:id values that the resulting filter should restrict its search space to
+     * @param bbox
+     *            Set to the bounding box in which to fetch results, otherwise set it to null
+     * @param restrictToIDList
+     *            [Optional] A list of gml:id values that the resulting filter should restrict its search space to
      * @return
      * @throws Exception
      */
-    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian, String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox) throws Exception {
+    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+            String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox) throws Exception {
         String filterString;
         SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null);
         if (bbox == null) {
@@ -58,7 +63,8 @@ public class SF0BoreholeService extends BoreholeService {
         HttpRequestBase method = null;
         try {
             // Create a GetFeature request with an empty filter - get all
-            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null, ResultType.Results);
+            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
+                    ResultType.Results);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
             String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
 
@@ -68,22 +74,21 @@ public class SF0BoreholeService extends BoreholeService {
         }
     }
 
-
     @Override
     public String getFilter(String boreholeName, String custodian, String dateOfDrilling,
             int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
         SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, ids);
         return generateFilterString(filter, bbox);
     }
-    
+
     @Override
     public String getTypeName() {
-    	return "gsmlp:BoreholeView";
+        return "gsmlp:BoreholeView";
     }
-    
+
     @Override
     public String getGeometryName() {
-    	return "gsmlp:shape";
+        return "gsmlp:shape";
     }
 
 }

@@ -29,11 +29,11 @@ public class SeismicSurveyWMSService {
     @Autowired
     public SeismicSurveyWMSService(HttpServiceCaller serviceCaller) {
         this.serviceCaller = serviceCaller;
-        this.transformerFactory=new CSWRecordTransformerFactory();
+        this.transformerFactory = new CSWRecordTransformerFactory();
 
     }
 
-    public CSWRecord getCSWRecord(String httpUrl) throws Exception{
+    public CSWRecord getCSWRecord(String httpUrl) throws Exception {
         HttpGet get = new HttpGet(httpUrl);
         InputStream responseString = this.serviceCaller.getMethodResponseAsStream(get);
         Document responseDoc = DOMUtil.buildDomFromStream(responseString);

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Unit tests for AdminController
+ * 
  * @author Josh Vote
  *
  */
@@ -43,6 +44,7 @@ public class TestAdminController extends PortalTestClass {
 
     /**
      * Tests the vocab diagnostic test is initialised succesfully
+     * 
      * @throws Exception
      */
     @Test
@@ -50,13 +52,15 @@ public class TestAdminController extends PortalTestClass {
         final String vocabUrl = "http://fake.vocab/url";
         final AdminDiagnosticResponse response = new AdminDiagnosticResponse();
 
-        context.checking(new Expectations() {{
-            oneOf(mockProperties).resolvePlaceholder("HOST.vocabService.url");
-            will(returnValue(vocabUrl));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockProperties).resolvePlaceholder("HOST.vocabService.url");
+                will(returnValue(vocabUrl));
 
-            oneOf(mockService).sissVoc2Connectivity(vocabUrl);
-            will(returnValue(response));
-        }});
+                oneOf(mockService).sissVoc2Connectivity(vocabUrl);
+                will(returnValue(response));
+            }
+        });
 
         ModelAndView mav = controller.testVocabulary();
         Assert.assertNotNull(mav);
@@ -65,6 +69,7 @@ public class TestAdminController extends PortalTestClass {
 
     /**
      * Tests that duplicate WFS + typename combinations are removed before calling the admin service
+     * 
      * @throws Exception
      */
     @Test
@@ -75,18 +80,19 @@ public class TestAdminController extends PortalTestClass {
         final List<EndpointAndSelector> expected = new ArrayList<EndpointAndSelector>();
         final AdminDiagnosticResponse response = new AdminDiagnosticResponse();
 
-
         //We lose #3 and #5 to duplicates
         expected.addAll(Arrays.asList(
-            new EndpointAndSelector(serviceUrls[0], typeNames[0]),
-            new EndpointAndSelector(serviceUrls[1], typeNames[1]),
-            new EndpointAndSelector(serviceUrls[2], typeNames[2]),
-            new EndpointAndSelector(serviceUrls[4], typeNames[4])));
+                new EndpointAndSelector(serviceUrls[0], typeNames[0]),
+                new EndpointAndSelector(serviceUrls[1], typeNames[1]),
+                new EndpointAndSelector(serviceUrls[2], typeNames[2]),
+                new EndpointAndSelector(serviceUrls[4], typeNames[4])));
 
-
-        context.checking(new Expectations() {{
-            oneOf(mockService).wfsConnectivity(with(equal(expected)), with(any(FilterBoundingBox.class)));will(returnValue(response));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockService).wfsConnectivity(with(equal(expected)), with(any(FilterBoundingBox.class)));
+                will(returnValue(response));
+            }
+        });
 
         ModelAndView mav = controller.testWFS(serviceUrls, typeNames, bboxJson);
         Assert.assertNotNull(mav);
@@ -95,6 +101,7 @@ public class TestAdminController extends PortalTestClass {
 
     /**
      * Tests that duplicate WMS + layer name combinations are removed before calling the admin service
+     * 
      * @throws Exception
      */
     @Test
@@ -105,18 +112,19 @@ public class TestAdminController extends PortalTestClass {
         final List<EndpointAndSelector> expected = new ArrayList<EndpointAndSelector>();
         final AdminDiagnosticResponse response = new AdminDiagnosticResponse();
 
-
         //We lose #3 and #5 to duplicates
         expected.addAll(Arrays.asList(
-            new EndpointAndSelector(serviceUrls[0], layerNames[0]),
-            new EndpointAndSelector(serviceUrls[1], layerNames[1]),
-            new EndpointAndSelector(serviceUrls[2], layerNames[2]),
-            new EndpointAndSelector(serviceUrls[4], layerNames[4])));
+                new EndpointAndSelector(serviceUrls[0], layerNames[0]),
+                new EndpointAndSelector(serviceUrls[1], layerNames[1]),
+                new EndpointAndSelector(serviceUrls[2], layerNames[2]),
+                new EndpointAndSelector(serviceUrls[4], layerNames[4])));
 
-
-        context.checking(new Expectations() {{
-            oneOf(mockService).wmsConnectivity(with(equal(expected)), with(any(FilterBoundingBox.class)));will(returnValue(response));
-        }});
+        context.checking(new Expectations() {
+            {
+                oneOf(mockService).wmsConnectivity(with(equal(expected)), with(any(FilterBoundingBox.class)));
+                will(returnValue(response));
+            }
+        });
 
         ModelAndView mav = controller.testWMS(serviceUrls, layerNames, bboxJson);
         Assert.assertNotNull(mav);

@@ -31,15 +31,20 @@ public class TestPressureDBService extends PortalTestClass {
     public void testMakeOMRequest() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
-        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/pressuredb/PressureDB-getAvailableOMResponse.xml");
+        final InputStream responseStream = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/pressuredb/PressureDB-getAvailableOMResponse.xml");
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);
+                will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(responseStream));
+                oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
+                will(returnValue(responseStream));
 
-            oneOf(mockHttpMethod).releaseConnection();
-        }});
+                oneOf(mockHttpMethod).releaseConnection();
+            }
+        });
 
         //Make our response and have it parsed
         AvailableOMResponse response = service.makeGetAvailableOMRequest(wellID, serviceUrl);
@@ -63,37 +68,46 @@ public class TestPressureDBService extends PortalTestClass {
         Assert.assertEquals(true, response.isTemperatureT());
     }
 
-    @Test(expected=PortalServiceException.class)
+    @Test(expected = PortalServiceException.class)
     public void testMakeOMRequestParserError() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
-        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/pressuredb/PressureDB-errorResponse.xml");
+        final InputStream responseStream = ResourceUtil
+                .loadResourceAsStream("org/auscope/portal/pressuredb/PressureDB-errorResponse.xml");
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);
+                will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(responseStream));
+                oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
+                will(returnValue(responseStream));
 
-            oneOf(mockHttpMethod).releaseConnection();
-        }});
+                oneOf(mockHttpMethod).releaseConnection();
+            }
+        });
 
         //Make our response and have it parsed - it should result in a parser exception
         service.makeGetAvailableOMRequest(wellID, serviceUrl);
     }
 
-    @Test(expected=PortalServiceException.class)
+    @Test(expected = PortalServiceException.class)
     public void testMakeOMRequestIOError() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
         final IOException exception = new IOException();
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);will(returnValue(mockHttpMethod));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).makeGetAvailableOMMethod(serviceUrl, wellID);
+                will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(throwException(exception));
+                oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
+                will(throwException(exception));
 
-            oneOf(mockHttpMethod).releaseConnection();
-        }});
+                oneOf(mockHttpMethod).releaseConnection();
+            }
+        });
 
         //make the request - it should throw an exception
         service.makeGetAvailableOMRequest(wellID, serviceUrl);
@@ -105,29 +119,37 @@ public class TestPressureDBService extends PortalTestClass {
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
         final String[] features = new String[] {"a", "b", "c"};
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeDownloadMethod(serviceUrl, wellID, features);will(returnValue(mockHttpMethod));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).makeDownloadMethod(serviceUrl, wellID, features);
+                will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(returnValue(mockStream));
-        }});
+                oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
+                will(returnValue(mockStream));
+            }
+        });
 
         //make the request - it should return a stream
         InputStream result = service.makeDownloadRequest(wellID, serviceUrl, features);
         Assert.assertSame(mockStream, result);
     }
 
-    @Test(expected=IOException.class)
+    @Test(expected = IOException.class)
     public void testDownloadError() throws Exception {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
         final String[] features = new String[] {"a", "b", "c"};
         final IOException exception = new IOException();
 
-        context.checking(new Expectations() {{
-            oneOf(mockMethodMaker).makeDownloadMethod(serviceUrl, wellID, features);will(returnValue(mockHttpMethod));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockMethodMaker).makeDownloadMethod(serviceUrl, wellID, features);
+                will(returnValue(mockHttpMethod));
 
-            oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);will(throwException(exception));
-        }});
+                oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
+                will(throwException(exception));
+            }
+        });
 
         //make the request - it should throw an exception
         service.makeDownloadRequest(wellID, serviceUrl, features);

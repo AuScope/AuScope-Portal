@@ -13,7 +13,7 @@ public class TestInitializer {
     public void testCleanUpTempDirectory() throws IOException {
 
         String tempDir = System.getProperty("java.io.tmpdir");
-        File tempDirFile=new File(tempDir);
+        File tempDirFile = new File(tempDir);
         File f = File.createTempFile("APT_", ".xml");
         Assert.assertTrue(f.getParentFile().getName().equals(tempDirFile.getName()));
 

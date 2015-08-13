@@ -49,9 +49,9 @@ import org.springframework.web.servlet.ModelAndView;
  * @version $Id$
  */
 @Controller
-@Scope("session")//this can't be a singleton as each request by a user may be targeting a specific wms version
+@Scope("session")
+//this can't be a singleton as each request by a user may be targeting a specific wms version
 public class WMSController extends BaseCSWController {
-
 
     // ----------------------------------------------------- Instance variables
 
@@ -63,18 +63,17 @@ public class WMSController extends BaseCSWController {
     // ----------------------------------------------------------- Constructors
 
     @Autowired
-    public WMSController(WMSService wmsService, ViewCSWRecordFactory viewCSWRecordFactory, ViewKnownLayerFactory knownLayerFact,HttpServiceCaller serviceCaller) {
+    public WMSController(WMSService wmsService, ViewCSWRecordFactory viewCSWRecordFactory,
+            ViewKnownLayerFactory knownLayerFact, HttpServiceCaller serviceCaller) {
         super(viewCSWRecordFactory, knownLayerFact);
         this.wmsService = wmsService;
-        this.serviceCaller=serviceCaller;
+        this.serviceCaller = serviceCaller;
     }
-
 
     // ------------------------------------------- Property Setters and Getters
 
     /**
-     * Gets all WMS data records from a discovery service, and then
-     * creates JSON response for the WMS layers list in the portal
+     * Gets all WMS data records from a discovery service, and then creates JSON response for the WMS layers list in the portal
      *
      * @return a JSON representation of the CSWRecord equivalent records
      *
@@ -88,7 +87,7 @@ public class WMSController extends BaseCSWController {
         try {
             //VT:We have absolutely no way of finding out wms version in custom layer so we have to
             //guess the version by setting version to null.
-            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl,null);
+            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl, null);
 
             List<CSWRecord> cswRecords = new ArrayList<CSWRecord>();
 
@@ -96,8 +95,9 @@ public class WMSController extends BaseCSWController {
                 //Make a best effort of parsing a WMS into a CSWRecord
                 for (GetCapabilitiesWMSLayerRecord rec : capabilitiesRec.getLayers()) {
                     //to check if layers are EPSG: 4326 SRS
-                    String[] uniqueSRSList = getSRSList(capabilitiesRec.getLayerSRS() , rec.getChildLayerSRS());
-                    if (!((Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0 || (Arrays.binarySearch(uniqueSRSList, "epsg:4326")) >= 0)) {
+                    String[] uniqueSRSList = getSRSList(capabilitiesRec.getLayerSRS(), rec.getChildLayerSRS());
+                    if (!((Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0 || (Arrays.binarySearch(uniqueSRSList,
+                            "epsg:4326")) >= 0)) {
                         invalidLayerCount += 1;
                         continue;
                     }
@@ -106,10 +106,10 @@ public class WMSController extends BaseCSWController {
                         continue;
                     }
 
-
                     String serviceName = rec.getTitle();
                     //VT:Ext.DomQuery.selectNode('#rowexpandercontainer-' + record.id, el.parentNode); cannot handle : and .
-                    String fileId = "unique-id-" + StringUtils.replaceEach(rec.getName(), new String[]{":","."}, new String[]{"",""});
+                    String fileId = "unique-id-"
+                            + StringUtils.replaceEach(rec.getName(), new String[] {":", "."}, new String[] {"", ""});
                     String recordInfoUrl = null;
                     String dataAbstract = rec.getAbstract();
                     CSWResponsibleParty responsibleParty = new CSWResponsibleParty();
@@ -123,39 +123,37 @@ public class WMSController extends BaseCSWController {
 
                     AbstractCSWOnlineResource[] onlineResources = new AbstractCSWOnlineResource[1];
 
-                    if(capabilitiesRec.getVersion().equals("1.3.0")){
+                    if (capabilitiesRec.getVersion().equals("1.3.0")) {
                         onlineResources[0] = new CSWOnlineResourceImpl(new URL(capabilitiesRec.getMapUrl()),
                                 "OGC:WMS-1.3.0-http-get-map",
                                 rec.getName(),
                                 rec.getTitle());
-                    }else{
+                    } else {
                         onlineResources[0] = new CSWOnlineResourceImpl(new URL(capabilitiesRec.getMapUrl()),
                                 "OGC:WMS-1.1.1-http-get-map",
                                 rec.getName(),
                                 rec.getTitle());
                     }
 
-                    CSWRecord newRecord = new CSWRecord(serviceName, fileId, recordInfoUrl, dataAbstract, onlineResources, geoEls);
+                    CSWRecord newRecord = new CSWRecord(serviceName, fileId, recordInfoUrl, dataAbstract,
+                            onlineResources, geoEls);
                     newRecord.setContact(responsibleParty);
                     cswRecords.add(newRecord);
-
 
                 }
             }
             //generate the same response from a getCachedCSWRecords call
             records = cswRecords.toArray(new CSWRecord[cswRecords.size()]);
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             log.debug(e.getMessage());
             return generateJSONResponseMAV(false, "URL not well formed", null);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.debug(e.getMessage());
             return generateJSONResponseMAV(false, "Unable to process request", null);
         }
 
-        if(records.length==0){
-            return generateJSONResponseMAV(false,"No records that supports EPSG:3857 was found",null);
+        if (records.length == 0) {
+            return generateJSONResponseMAV(false, "No records that supports EPSG:3857 was found", null);
         }
 
         ModelAndView mav = generateJSONResponseMAV(records);
@@ -164,7 +162,7 @@ public class WMSController extends BaseCSWController {
     }
 
     public String[] getSRSList(String[] layerSRS, String[] childLayerSRS) {
-        try{
+        try {
             int totalLength = layerSRS.length;
             totalLength += childLayerSRS.length;
             String[] totalSRS = new String[totalLength];
@@ -174,7 +172,7 @@ public class WMSController extends BaseCSWController {
 
             int k = 0;
             for (int i = 0; i < totalSRS.length; i++) {
-                if (i > 0 && totalSRS[i].equals(totalSRS[i-1])) {
+                if (i > 0 && totalSRS[i].equals(totalSRS[i - 1])) {
                     continue;
                 }
                 totalSRS[k++] = totalSRS[i];
@@ -195,13 +193,15 @@ public class WMSController extends BaseCSWController {
 
     /**
      * Gets all the valid GetMap formats that a service defines
-     * @param serviceUrl The WMS URL to query
+     * 
+     * @param serviceUrl
+     *            The WMS URL to query
      */
     @RequestMapping("/getLayerFormats.do")
     public ModelAndView getLayerFormats(@RequestParam("serviceUrl") String serviceUrl) throws Exception {
         try {
 
-            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl,null);
+            GetCapabilitiesRecord capabilitiesRec = wmsService.getWmsCapabilities(serviceUrl, null);
 
             List<ModelMap> data = new ArrayList<ModelMap>();
             for (String format : capabilitiesRec.getGetMapFormats()) {
@@ -228,16 +228,20 @@ public class WMSController extends BaseCSWController {
      * @param queryLayers
      * @param x
      * @param y
-     * @param bbox A CSV string formatted in the form - longitude,latitude,longitude,latitude
+     * @param bbox
+     *            A CSV string formatted in the form - longitude,latitude,longitude,latitude
      * @param width
      * @param height
      * @param infoFormat
-     * @param sld_body - sld_body
-     * @param postMethod Use getfeatureinfo POST method rather then GET
-     * @param version - the wms version to use
+     * @param sld_body
+     *            - sld_body
+     * @param postMethod
+     *            Use getfeatureinfo POST method rather then GET
+     * @param version
+     *            - the wms version to use
      * @throws Exception
      */
-    @RequestMapping(value = "/wmsMarkerPopup.do",  method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/wmsMarkerPopup.do", method = {RequestMethod.GET, RequestMethod.POST})
     public void wmsUnitPopup(HttpServletRequest request,
             HttpServletResponse response,
             @RequestParam("WMS_URL") String wmsUrl,
@@ -251,9 +255,9 @@ public class WMSController extends BaseCSWController {
             @RequestParam("HEIGHT") String height,
             @RequestParam("INFO_FORMAT") String infoFormat,
             @RequestParam("SLD_BODY") String sldBody,
-            @RequestParam(value="postMethod", defaultValue = "false") Boolean  postMethod,
+            @RequestParam(value = "postMethod", defaultValue = "false") Boolean postMethod,
             @RequestParam("version") String version,
-            @RequestParam(value ="feature_count", defaultValue="0") String feature_count) throws Exception {
+            @RequestParam(value = "feature_count", defaultValue = "0") String feature_count) throws Exception {
 
         String[] bboxParts = bbox.split(",");
         double lng1 = Double.parseDouble(bboxParts[0]);
@@ -261,19 +265,22 @@ public class WMSController extends BaseCSWController {
         double lat1 = Double.parseDouble(bboxParts[1]);
         double lat2 = Double.parseDouble(bboxParts[3]);
 
-        String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857", Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
-                Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude), Double.parseDouble(latitude),
-                (int)(Double.parseDouble(x)), (int)(Double.parseDouble(y)), "",sldBody,postMethod,version,feature_count,true);
+        String responseString = wmsService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857",
+                Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
+                Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude),
+                Double.parseDouble(latitude),
+                (int) (Double.parseDouble(x)), (int) (Double.parseDouble(y)), "", sldBody, postMethod, version,
+                feature_count, true);
         //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
         //VT : GA style sheet also mess up the portal styling of tables as well.
-        if(responseString.contains("table, th, td {")){
+        if (responseString.contains("table, th, td {")) {
             responseString = responseString.replaceFirst("font-size: 80%", "font-size: 90%");
-            responseString = responseString.replaceFirst("table, th, td \\{", "table.ausga, table.ausga th, table.ausga td {");
+            responseString = responseString.replaceFirst("table, th, td \\{",
+                    "table.ausga, table.ausga th, table.ausga td {");
             responseString = responseString.replaceFirst("th, td \\{", "table.ausga th, table.ausga td {");
             responseString = responseString.replaceFirst("th \\{", "table.ausga th {");
             responseString = responseString.replaceFirst("<table", "<table class='ausga'");
         }
-
 
         InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
@@ -283,10 +290,9 @@ public class WMSController extends BaseCSWController {
     public void getDefaultStyle(
             HttpServletResponse response,
             @RequestParam("layerName") String layerName)
-                    throws Exception {
+            throws Exception {
 
-
-        String style=this.getStyle(layerName, "#ed9c38");
+        String style = this.getStyle(layerName, "#ed9c38");
 
         response.setContentType("text/xml");
 
@@ -294,14 +300,13 @@ public class WMSController extends BaseCSWController {
                 style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
         outputStream.close();
     }
 
-
-    public String getStyle(String name, String color){
+    public String getStyle(String name, String color) {
         //VT : This is a hack to get around using functions in feature chaining
         // https://jira.csiro.au/browse/SISS-1374
         // there are currently no available fix as wms request are made prior to
@@ -309,7 +314,8 @@ public class WMSController extends BaseCSWController {
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:mo=\"http://xmlns.geoscience.gov.au/minoccml/1.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-                + "<NamedLayer>" + "<Name>" + name + "</Name>"
+                + "<NamedLayer>" + "<Name>"
+                + name + "</Name>"
                 + "<UserStyle>" + "<Name>portal-style</Name>"
                 + "<Title>" + name + "</Title>"
                 + "<Abstract>EarthResource</Abstract>"
@@ -333,6 +339,5 @@ public class WMSController extends BaseCSWController {
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
         return style;
     }
-
 
 }

@@ -1,6 +1,5 @@
 package org.auscope.portal.server.web.controllers;
 
-
 import java.io.IOException;
 
 import javax.servlet.ServletOutputStream;
@@ -20,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-
 /**
  * Acts as a proxy to WFS's
  *
  * User: Mathew Wyatt
+ * 
  * @version $Id$
  */
 
@@ -39,8 +38,8 @@ public class WFSController extends BasePortalController {
     }
 
     /**
-     * Given a service Url and a feature type this will query for all of the features, then convert them into KML,
-     * to be displayed, assuming that the response will be complex feature GeoSciML
+     * Given a service Url and a feature type this will query for all of the features, then convert them into KML, to be displayed, assuming that the response
+     * will be complex feature GeoSciML
      *
      * @param serviceUrl
      * @param featureType
@@ -50,10 +49,10 @@ public class WFSController extends BasePortalController {
      */
     @RequestMapping("/getAllFeatures.do")
     public ModelAndView requestAllFeatures(@RequestParam("serviceUrl") final String serviceUrl,
-                                           @RequestParam("typeName") final String featureType,
-                                           @RequestParam(required = false, value = "bbox") final String bboxJSONString,
-                                           @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
-
+            @RequestParam("typeName") final String featureType,
+            @RequestParam(required = false, value = "bbox") final String bboxJSONString,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJSONString);
 
@@ -78,10 +77,10 @@ public class WFSController extends BasePortalController {
         return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
     }
 
-
     /**
-     * Given a service Url, a feature type and a specific feature ID, this function will fetch the specific feature and
-     * then convert it into KML to be displayed, assuming that the response will be complex feature GeoSciML
+     * Given a service Url, a feature type and a specific feature ID, this function will fetch the specific feature and then convert it into KML to be
+     * displayed, assuming that the response will be complex feature GeoSciML
+     * 
      * @param serviceUrl
      * @param featureType
      * @param featureId
@@ -90,13 +89,14 @@ public class WFSController extends BasePortalController {
      */
     @RequestMapping("/requestFeature.do")
     public ModelAndView requestFeature(@RequestParam("serviceUrl") final String serviceUrl,
-                                       @RequestParam("typeName") final String featureType,
-                                       @RequestParam("featureId") final String featureId) throws Exception {
+            @RequestParam("typeName") final String featureType,
+            @RequestParam("featureId") final String featureId) throws Exception {
         WFSTransformedResponse response = null;
         try {
             response = wfsService.getWfsResponseAsKml(serviceUrl, featureType, featureId);
         } catch (Exception ex) {
-            log.warn(String.format("Exception getting '%2$s' with id '%4$s' from '%1$s': %3$s", serviceUrl, featureType, ex, featureId));
+            log.warn(String.format("Exception getting '%2$s' with id '%4$s' from '%1$s': %3$s", serviceUrl,
+                    featureType, ex, featureId));
             log.debug("Exception: ", ex);
             return generateExceptionResponse(ex, serviceUrl);
         }
@@ -105,11 +105,12 @@ public class WFSController extends BasePortalController {
     }
 
     /**
-     * Given a service Url, a feature type and a property + value to filter by, this function will fetch the specific feature and
-     * then convert it into KML to be displayed, assuming that the response will be complex feature GeoSciML
+     * Given a service Url, a feature type and a property + value to filter by, this function will fetch the specific feature and then convert it into KML to be
+     * displayed, assuming that the response will be complex feature GeoSciML
      *
-     * This function exists to workaround some WFS instances whose featureId lookups do not work as required (such as
-     * Geoserver simple feature WFS sourced from data with no primary keys)
+     * This function exists to workaround some WFS instances whose featureId lookups do not work as required (such as Geoserver simple feature WFS sourced from
+     * data with no primary keys)
+     * 
      * @param serviceUrl
      * @param featureType
      * @param featureId
@@ -118,15 +119,17 @@ public class WFSController extends BasePortalController {
      */
     @RequestMapping("/requestFeatureByProperty.do")
     public ModelAndView requestFeatureByProperty(@RequestParam("serviceUrl") final String serviceUrl,
-                                       @RequestParam("typeName") final String featureType,
-                                       @RequestParam("property") final String property,
-                                       @RequestParam("value") final String value) throws Exception {
+            @RequestParam("typeName") final String featureType,
+            @RequestParam("property") final String property,
+            @RequestParam("value") final String value) throws Exception {
         SimplePropertyFilter filter = new SimplePropertyFilter(property, value);
         WFSTransformedResponse response = null;
         try {
-            response = wfsService.getWfsResponseAsKml(serviceUrl, featureType, filter.getFilterStringAllRecords(), null, null);
+            response = wfsService.getWfsResponseAsKml(serviceUrl, featureType, filter.getFilterStringAllRecords(),
+                    null, null);
         } catch (Exception ex) {
-            log.warn(String.format("Exception getting '%2$s' with property '%4$s' equal to '%5$s' '%1$s': %3$s", serviceUrl, featureType, ex, property, value));
+            log.warn(String.format("Exception getting '%2$s' with property '%4$s' equal to '%5$s' '%1$s': %3$s",
+                    serviceUrl, featureType, ex, property, value));
             log.debug("Exception: ", ex);
             return generateExceptionResponse(ex, serviceUrl);
         }
@@ -135,19 +138,23 @@ public class WFSController extends BasePortalController {
     }
 
     /**
-     * Given a WFS service Url and a feature type this will query for the count of all of the features
-     * that optionally lie within a bounding box
+     * Given a WFS service Url and a feature type this will query for the count of all of the features that optionally lie within a bounding box
      *
-     * @param serviceUrl The WFS endpoint
-     * @param featureType The feature type name to query
-     * @param boundingBox [Optional] A JSON encoding of a FilterBoundingBox instance
-     * @param maxFeatures [Optional] The maximum number of features to query
+     * @param serviceUrl
+     *            The WFS endpoint
+     * @param featureType
+     *            The feature type name to query
+     * @param boundingBox
+     *            [Optional] A JSON encoding of a FilterBoundingBox instance
+     * @param maxFeatures
+     *            [Optional] The maximum number of features to query
      */
     @RequestMapping("/getFeatureCount.do")
     public ModelAndView requestFeatureCount(@RequestParam("serviceUrl") final String serviceUrl,
-                                           @RequestParam("typeName") final String featureType,
-                                           @RequestParam(required = false, value = "bbox") final String bboxJSONString,
-                                           @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures) throws Exception {
+            @RequestParam("typeName") final String featureType,
+            @RequestParam(required = false, value = "bbox") final String bboxJSONString,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJSONString);
         SimpleBBoxFilter filter = new SimpleBBoxFilter();
@@ -169,22 +176,24 @@ public class WFSController extends BasePortalController {
 
         return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
     }
-    
+
     /**
-     * This method can be utilised by specifying a WFS url, typeName and featureId (in which a WFS request will be generated)
-     * OR just by specifying a URL which will be resolved (such as in the case of a resolvable URN which maps to a WFS request
-     * at a remote server).
-     * @param serviceUrl Can either be a WFS endpoint OR a URL that when resolved returns a WFS response
-     * @param typeName [Optional] If specified a WFS request will be generated
-     * @param featureId [Optional] If specified a WFS request will be generated
+     * This method can be utilised by specifying a WFS url, typeName and featureId (in which a WFS request will be generated) OR just by specifying a URL which
+     * will be resolved (such as in the case of a resolvable URN which maps to a WFS request at a remote server).
+     * 
+     * @param serviceUrl
+     *            Can either be a WFS endpoint OR a URL that when resolved returns a WFS response
+     * @param typeName
+     *            [Optional] If specified a WFS request will be generated
+     * @param featureId
+     *            [Optional] If specified a WFS request will be generated
      * @throws IOException
      */
     @RequestMapping("wfsFeaturePopup.do")
     public void wfsFeaturePopup(HttpServletResponse response,
-                                 @RequestParam("url") String serviceUrl,
-                                 @RequestParam(required = false, value = "typeName") String typeName,
-                                 @RequestParam(required = false, value = "featureId") String featureId) throws IOException {
-
+            @RequestParam("url") String serviceUrl,
+            @RequestParam(required = false, value = "typeName") String typeName,
+            @RequestParam(required = false, value = "featureId") String featureId) throws IOException {
 
         response.setContentType("text/html; charset=utf-8");
         ServletOutputStream outputStream = response.getOutputStream();
@@ -200,7 +209,8 @@ public class WFSController extends BasePortalController {
 
             outputStream.write(htmlResponse.getTransformed().getBytes());
         } catch (Exception ex) {
-            log.warn(String.format("Internal error requesting/writing popup for '%1$s' from '%2$s': %3$s",typeName, serviceUrl, ex));
+            log.warn(String.format("Internal error requesting/writing popup for '%1$s' from '%2$s': %3$s", typeName,
+                    serviceUrl, ex));
             log.debug("Exception: ", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         }

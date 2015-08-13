@@ -4,9 +4,8 @@ import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 
 /**
- * User: Michael Stegherr
- * Date: 23/03/2009
- * Time: 1:59:02 PM
+ * User: Michael Stegherr Date: 23/03/2009 Time: 1:59:02 PM
+ * 
  * @version $Id$
  */
 public class CommodityFilter extends AbstractFilter {
@@ -19,7 +18,6 @@ public class CommodityFilter extends AbstractFilter {
         else
             this.filterFragment = "";
     }
-
 
     public String getFilterStringAllRecords() {
         return this.generateFilter(filterFragment);

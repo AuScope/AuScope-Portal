@@ -38,8 +38,6 @@ public class TestNVCL2_0_DataServiceMethodMaker extends PortalTestClass {
         Assert.assertFalse(uri.getQuery().contains(paramName));
     }
 
-
-
     @Test
     public void testParamValidity_GetLogCollection() throws Exception {
         //Mandatory only
@@ -57,32 +55,28 @@ public class TestNVCL2_0_DataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "mosaicsvc", "no");
     }
 
-
-
     @Test
     public void testParamValidity_getTrayThumbNailMethodMaker() throws Exception {
         //Mandatory only
-        URI uri = methodMaker.getTrayThumbNailMethodMaker(datasetId, serviceUrl, logIdentifier, null, null, null).getURI();
+        URI uri = methodMaker.getTrayThumbNailMethodMaker(datasetId, serviceUrl, logIdentifier, null, null, null)
+                .getURI();
         assertContainsURLParam(uri, "datasetid", datasetId);
         assertContainsURLParam(uri, "logid", logIdentifier);
         assertDoesntContainURLParam(uri, "width");
         assertDoesntContainURLParam(uri, "startsampleno");
         assertDoesntContainURLParam(uri, "endsampleno");
 
-
     }
 
     /**
      * Ensure we don't allow a download request with no ID/filter
+     * 
      * @throws Exception
      */
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testGetDownloadCSVMethod() throws Exception {
-        String [] logids = {"id1","id2"};
-        methodMaker.getDownloadCSVMethod(null,logids);
+        String[] logids = {"id1", "id2"};
+        methodMaker.getDownloadCSVMethod(null, logids);
     }
-
-
-
 
 }

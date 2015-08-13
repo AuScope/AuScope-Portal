@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * A service class encapsulating high level access to a remote Web Feature Service
+ * 
  * @author Josh Vote
  *
  */
@@ -30,10 +31,15 @@ public class WFSService extends BaseWFSService {
 
     /**
      * Creates a new instance of this class with the specified dependencies
-     * @param httpServiceCaller Will be used for making requests
-     * @param wfsMethodMaker Will be used for generating WFS methods
-     * @param gmlToKml Will be used for transforming GML (WFS responses) into KML
-     * @param gmlToHtml Will be used for transforming GML (WFS responses) into HTML
+     * 
+     * @param httpServiceCaller
+     *            Will be used for making requests
+     * @param wfsMethodMaker
+     *            Will be used for generating WFS methods
+     * @param gmlToKml
+     *            Will be used for transforming GML (WFS responses) into KML
+     * @param gmlToHtml
+     *            Will be used for transforming GML (WFS responses) into HTML
      */
     @Autowired
     public WFSService(HttpServiceCaller httpServiceCaller,
@@ -44,7 +50,8 @@ public class WFSService extends BaseWFSService {
         this.gmlToHtml = gmlToHtml;
     }
 
-    private WFSTransformedResponse doRequestAndKmlTransform(HttpRequestBase method, String serviceUrl) throws PortalServiceException {
+    private WFSTransformedResponse doRequestAndKmlTransform(HttpRequestBase method, String serviceUrl)
+            throws PortalServiceException {
         try {
             String wfs = httpServiceCaller.getMethodResponseAsString(method);
             OWSExceptionParser.checkForExceptionResponse(wfs);
@@ -56,7 +63,8 @@ public class WFSService extends BaseWFSService {
         }
     }
 
-    private WFSTransformedResponse doRequestAndHtmlTransform(HttpRequestBase method, String serviceUrl) throws PortalServiceException {
+    private WFSTransformedResponse doRequestAndHtmlTransform(HttpRequestBase method, String serviceUrl)
+            throws PortalServiceException {
         try {
             String wfs = httpServiceCaller.getMethodResponseAsString(method);
             OWSExceptionParser.checkForExceptionResponse(wfs);
@@ -72,14 +80,19 @@ public class WFSService extends BaseWFSService {
      * Makes a WFS GetFeature request constrained by the specified parameters
      *
      * The response is returned as a String in both GML and KML forms.
-     * @param wfsUrl the web feature service url
-     * @param featureType the type name
-     * @param featureId A unique ID of a single feature type to query
+     * 
+     * @param wfsUrl
+     *            the web feature service url
+     * @param featureType
+     *            the type name
+     * @param featureId
+     *            A unique ID of a single feature type to query
      * @return
      * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String featureId) throws PortalServiceException, URISyntaxException {
+    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String featureId)
+            throws PortalServiceException, URISyntaxException {
         HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
         return doRequestAndKmlTransform(method, wfsUrl);
     }
@@ -88,35 +101,50 @@ public class WFSService extends BaseWFSService {
      * Makes a WFS GetFeature request constrained by the specified parameters
      *
      * The response is returned as a String in both GML and KML forms.
-     * @param wfsUrl the web feature service url
-     * @param featureType the type name
-     * @param filterString A OGC filter string to constrain the request
-     * @param maxFeatures  A maximum number of features to request
-     * @param srs [Optional] The spatial reference system the response should be encoded to @param srsName - will use BaseWFSService.DEFAULT_SRS if unspecified
+     * 
+     * @param wfsUrl
+     *            the web feature service url
+     * @param featureType
+     *            the type name
+     * @param filterString
+     *            A OGC filter string to constrain the request
+     * @param maxFeatures
+     *            A maximum number of features to request
+     * @param srs
+     *            [Optional] The spatial reference system the response should be encoded to @param srsName - will use BaseWFSService.DEFAULT_SRS if unspecified
      * @return
      * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srs) throws PortalServiceException, URISyntaxException {
-        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srs, ResultType.Results);
+    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String filterString,
+            Integer maxFeatures, String srs) throws PortalServiceException, URISyntaxException {
+        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srs,
+                ResultType.Results);
         return doRequestAndKmlTransform(method, wfsUrl);
     }
 
     /**
-     * Makes a WFS GetFeature request constrained by the specified parameters. Instead
-     * of returning the full response only the count of features will be returned.
+     * Makes a WFS GetFeature request constrained by the specified parameters. Instead of returning the full response only the count of features will be
+     * returned.
      *
-     * @param wfsUrl the web feature service url
-     * @param featureType the type name
-     * @param filterString A OGC filter string to constrain the request
-     * @param maxFeatures  A maximum number of features to request
-     * @param srsName [Optional] the SRS to make the WFS request using - will use BaseWFSService.DEFAULT_SRS if unspecified
+     * @param wfsUrl
+     *            the web feature service url
+     * @param featureType
+     *            the type name
+     * @param filterString
+     *            A OGC filter string to constrain the request
+     * @param maxFeatures
+     *            A maximum number of features to request
+     * @param srsName
+     *            [Optional] the SRS to make the WFS request using - will use BaseWFSService.DEFAULT_SRS if unspecified
      * @return
      * @throws PortalServiceException
      * @throws URISyntaxException
      */
-    public WFSCountResponse getWfsFeatureCount(String wfsUrl, String featureType, String filterString, Integer maxFeatures, String srsName) throws PortalServiceException, URISyntaxException {
-        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srsName, ResultType.Hits);
+    public WFSCountResponse getWfsFeatureCount(String wfsUrl, String featureType, String filterString,
+            Integer maxFeatures, String srsName) throws PortalServiceException, URISyntaxException {
+        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srsName,
+                ResultType.Hits);
         return getWfsFeatureCount(method);
     }
 
@@ -124,14 +152,19 @@ public class WFSService extends BaseWFSService {
      * Makes a WFS GetFeature request constrained by the specified parameters
      *
      * The response is returned as a String in both GML and HTML forms.
-     * @param wfsUrl the web feature service url
-     * @param featureType the type name
-     * @param featureId A unique ID of a single feature type to query
+     * 
+     * @param wfsUrl
+     *            the web feature service url
+     * @param featureType
+     *            the type name
+     * @param featureId
+     *            A unique ID of a single feature type to query
      * @return
      * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsHtml(String wfsUrl, String featureType, String featureId) throws PortalServiceException, URISyntaxException {
+    public WFSTransformedResponse getWfsResponseAsHtml(String wfsUrl, String featureType, String featureId)
+            throws PortalServiceException, URISyntaxException {
         HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
         return doRequestAndHtmlTransform(method, wfsUrl);
     }
@@ -140,9 +173,13 @@ public class WFSService extends BaseWFSService {
      * Makes a HTTP Get request to the specified URL.
      *
      * The response is returned as a String in both GML and HTML forms.
-     * @param wfsUrl the web feature service url
-     * @param featureType the type name
-     * @param featureId A unique ID of a single feature type to query
+     * 
+     * @param wfsUrl
+     *            the web feature service url
+     * @param featureType
+     *            the type name
+     * @param featureId
+     *            A unique ID of a single feature type to query
      * @return
      * @throws Exception
      */

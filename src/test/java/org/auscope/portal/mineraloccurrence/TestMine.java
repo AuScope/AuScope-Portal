@@ -23,34 +23,35 @@ import org.xml.sax.SAXException;
  *
  * @version $Id$
  *
- * User: Mathew Wyatt
- * Date: 24/03/2009
- * Time: 9:01:48 AM
+ *          User: Mathew Wyatt Date: 24/03/2009 Time: 9:01:48 AM
  */
 public class TestMine extends PortalTestClass {
-    /** The Document  */
+    /** The Document */
     private static final String MINEDOCUMENT = "org/auscope/portal/erml/mine/mineNode.xml";
 
     @Test
-    public void testGetPrefferedName() throws XPathExpressionException, ParserConfigurationException, UnsupportedEncodingException, SAXException, IOException {
+    public void testGetPrefferedName() throws XPathExpressionException, ParserConfigurationException,
+            UnsupportedEncodingException, SAXException, IOException {
         Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream(MINEDOCUMENT));
 
         XPathExpression expr = DOMUtil.compileXPathExpr("/er:Mine", new MineralOccurrenceNamespaceContext());
-        Node mineNode = (Node)expr.evaluate(mineDocument, XPathConstants.NODE);
+        Node mineNode = (Node) expr.evaluate(mineDocument, XPathConstants.NODE);
         Mine mine = new Mine(mineNode);
 
         Assert.assertEquals("Preferred mine name is Good Hope", "Good Hope", mine.getMineNamePreffered());
     }
 
     @Test
-    public void testGetURI() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException, IOException {
+    public void testGetURI() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException,
+            IOException {
         Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil.loadResourceAsStream(MINEDOCUMENT));
         XPathExpression expr = DOMUtil.compileXPathExpr("/er:Mine", new MineralOccurrenceNamespaceContext());
 
         Node mineNode = (Node) expr.evaluate(mineDocument, XPathConstants.NODE);
         Mine mine = new Mine(mineNode);
 
-        Assert.assertEquals("URI should be urn:cgi:feature:GSV:Mine:361068", "urn:cgi:feature:GSV:Mine:361068", mine.getMineNameURI());
+        Assert.assertEquals("URI should be urn:cgi:feature:GSV:Mine:361068", "urn:cgi:feature:GSV:Mine:361068",
+                mine.getMineNameURI());
     }
 
 }

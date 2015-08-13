@@ -29,8 +29,11 @@ public class RemanentAnomaliesAutoSearchService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * @param filter The filter
-     * @param bbox [Optional] the spatial bounds to constrain the result set
+     * 
+     * @param filter
+     *            The filter
+     * @param bbox
+     *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
     public static String generateFilterString(IFilter filter, FilterBoundingBox bbox) {
@@ -47,27 +50,30 @@ public class RemanentAnomaliesAutoSearchService extends BaseWFSService {
     public String getRemanentAnomaliesAutoSearchFilter(FilterBoundingBox bbox)
             throws Exception {
         RemanentAnomaliesAutoSearchFilter filter = new RemanentAnomaliesAutoSearchFilter();
-        return generateFilterString(filter,bbox);
+        return generateFilterString(filter, bbox);
     }
 
     public String getRemanentAnomaliesAutoSearchWithStyling(String name)
-            throws Exception{
+            throws Exception {
         RemanentAnomaliesAutoSearchFilter filter = new RemanentAnomaliesAutoSearchFilter();
         return generateAdditionalStyleFilter(filter);
     }
 
     /**
      * Utility for turning a filter and add additional styling to the filter.
-     * @param filter The filter
+     * 
+     * @param filter
+     *            The filter
      * @return
      * @throws OperationNotSupportedException
      */
     public static String generateAdditionalStyleFilter(IFilter filter) throws OperationNotSupportedException {
-        if(filter instanceof  RemanentAnomaliesAutoSearchFilter){
-            RemanentAnomaliesAutoSearchFilter remanomFilter=( RemanentAnomaliesAutoSearchFilter)filter;
+        if (filter instanceof RemanentAnomaliesAutoSearchFilter) {
+            RemanentAnomaliesAutoSearchFilter remanomFilter = (RemanentAnomaliesAutoSearchFilter) filter;
             return remanomFilter.getFilterWithAdditionalStyle();
-        }else{
-            throw new OperationNotSupportedException("Only MineralTenementFilter supports the use of additional style filtering");
+        } else {
+            throw new OperationNotSupportedException(
+                    "Only MineralTenementFilter supports the use of additional style filtering");
         }
 
     }

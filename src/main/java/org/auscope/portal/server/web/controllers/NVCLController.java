@@ -42,6 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller for handling requests for the NVCL boreholes
+ * 
  * @author Josh Vote
  *
  */
@@ -53,46 +54,48 @@ public class NVCLController extends BasePortalController {
     private NVCL2_0_DataService dataService2_0;
     private CSWCacheService cswService;
 
-
     private int BUFFERSIZE = 1024 * 1024;
-
 
     @Autowired
     public NVCLController(BoreholeService boreholeService,
-                            CSWCacheService cswService,
-                            NVCLDataService dataService,
-                            NVCL2_0_DataService dataService2_0) {
+            CSWCacheService cswService,
+            NVCLDataService dataService,
+            NVCL2_0_DataService dataService2_0) {
 
         this.boreholeService = boreholeService;
         this.cswService = cswService;
         this.dataService = dataService;
-        this.dataService2_0=dataService2_0;
+        this.dataService2_0 = dataService2_0;
 
     }
 
     /**
      * Handles the borehole filter queries.
      *
-     * @param serviceUrl the url of the service to query
-     * @param mineName   the name of the mine to query for
-     * @param request    the HTTP client request
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param mineName
+     *            the name of the mine to query for
+     * @param request
+     *            the HTTP client request
      * @return a WFS response converted into KML
      * @throws Exception
      */
     @RequestMapping("/doBoreholeFilter.do")
     public ModelAndView doBoreholeFilter(@RequestParam("serviceUrl") String serviceUrl,
-                                      @RequestParam(required = false, value = "boreholeName", defaultValue="")     String boreholeName,
-                                      @RequestParam(required = false, value = "custodian", defaultValue="")        String custodian,
-                                      @RequestParam(required = false, value = "dateOfDrilling", defaultValue="")   String dateOfDrilling,
-                                      @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures,
-                                      @RequestParam(required = false, value = "bbox") String bboxJson,
-                                      @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
-                                      @RequestParam(required = false, value = "serviceFilter", defaultValue="") String serviceFilter) throws Exception {
+            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
+            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
+            throws Exception {
 
-        String [] serviceFilterArray=serviceFilter.split(",");
+        String[] serviceFilterArray = serviceFilter.split(",");
 
-        if (!serviceFilter.equals("") && !(HttpUtil.containHost(serviceUrl,serviceFilterArray))) {
-            return this.generateJSONResponseMAV(false,null,"Not Queried");
+        if (!serviceFilter.equals("") && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
+            return this.generateJSONResponseMAV(false, null, "Not Queried");
         }
 
         boolean onlyHylogger = false;
@@ -106,32 +109,36 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
-        return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, maxFeatures,bbox, onlyHylogger);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, onlyHylogger);
     }
 
     /**
      * Handles the borehole filter queries.
      *
-     * @param serviceUrl the url of the service to query
-     * @param mineName   the name of the mine to query for
-     * @param request    the HTTP client request
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param mineName
+     *            the name of the mine to query for
+     * @param request
+     *            the HTTP client request
      * @return a WFS response converted into KML
      * @throws Exception
      */
     @RequestMapping("/doNVCLFilter.do")
     public ModelAndView doNVCLFilter(@RequestParam("serviceUrl") String serviceUrl,
-                                      @RequestParam(required = false, value = "boreholeName", defaultValue="")     String boreholeName,
-                                      @RequestParam(required = false, value = "custodian", defaultValue="")        String custodian,
-                                      @RequestParam(required = false, value = "dateOfDrilling", defaultValue="")   String dateOfDrilling,
-                                      @RequestParam(required = false, value = "maxFeatures", defaultValue="0") int maxFeatures,
-                                      @RequestParam(required = false, value = "bbox") String bboxJson,
-                                      @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
-                                      @RequestParam(required = false, value = "serviceFilter", defaultValue="") String serviceFilter) throws Exception {
+            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
+            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
+            throws Exception {
 
-        String [] serviceFilterArray=serviceFilter.split(",");
+        String[] serviceFilterArray = serviceFilter.split(",");
 
-        if (!serviceFilter.equals("") && !(HttpUtil.containHost(serviceUrl,serviceFilterArray))) {
-            return this.generateJSONResponseMAV(false,null,"Not Queried");
+        if (!serviceFilter.equals("") && !(HttpUtil.containHost(serviceUrl, serviceFilterArray))) {
+            return this.generateJSONResponseMAV(false, null, "Not Queried");
         }
 
         boolean onlyHylogger = false;
@@ -145,31 +152,35 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         // show all NVCL boreholes
-        return doBoreholeFilter(serviceUrl,boreholeName, custodian, dateOfDrilling, -1,bbox, onlyHylogger);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrilling, -1, bbox, onlyHylogger);
     }
-
-
 
     /**
      * Handles the borehole filter queries.
      *
-     * @param serviceUrl the url of the service to query
-     * @param mineName   the name of the mine to query for
-     * @param request    the HTTP client request
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param mineName
+     *            the name of the mine to query for
+     * @param request
+     *            the HTTP client request
      * @return a WFS response converted into KML
      * @throws Exception
      */
-    public ModelAndView doBoreholeFilter(String serviceUrl,String boreholeName,String custodian,
-                                        String dateOfDrilling,int maxFeatures,FilterBoundingBox bbox,
-                                        boolean onlyHylogger) throws Exception {
+    public ModelAndView doBoreholeFilter(String serviceUrl, String boreholeName, String custodian,
+            String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox,
+            boolean onlyHylogger) throws Exception {
         List<String> hyloggerBoreholeIDs = null;
         if (onlyHylogger) {
             try {
-                hyloggerBoreholeIDs = this.boreholeService.discoverHyloggerBoreholeIDs(this.cswService,new CSWRecordsHostFilter(serviceUrl));
+                hyloggerBoreholeIDs = this.boreholeService.discoverHyloggerBoreholeIDs(this.cswService,
+                        new CSWRecordsHostFilter(serviceUrl));
             } catch (Exception e) {
-                log.warn(String.format("Error requesting list of hylogger borehole ID's from %1$s: %2$s",serviceUrl, e));
+                log.warn(String
+                        .format("Error requesting list of hylogger borehole ID's from %1$s: %2$s", serviceUrl, e));
                 log.debug("Exception:", e);
-                return generateJSONResponseMAV(false, null, "Failure when identifying which boreholes have Hylogger data.");
+                return generateJSONResponseMAV(false, null,
+                        "Failure when identifying which boreholes have Hylogger data.");
             }
 
             if (hyloggerBoreholeIDs.size() == 0) {
@@ -179,7 +190,8 @@ public class NVCLController extends BasePortalController {
         }
 
         try {
-            WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
+            WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
+                    dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
             return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             return this.generateExceptionResponse(e, serviceUrl);
@@ -188,8 +200,11 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Gets the list of datasets for given borehole from the specified NVCL dataservice url.
-     * @param serviceUrl The URL of an NVCL Data service
-     * @param holeIdentifier The unique ID of a borehole
+     * 
+     * @param serviceUrl
+     *            The URL of an NVCL Data service
+     * @param holeIdentifier
+     *            The unique ID of a borehole
      * @return
      */
     @RequestMapping("getNVCLDatasets.do")
@@ -201,7 +216,8 @@ public class NVCLController extends BasePortalController {
 
             return generateJSONResponseMAV(true, responseObjs, "");
         } catch (Exception ex) {
-            log.warn(String.format("Error requesting dataset collection for hole '%1$s' from %2$s: %3$s", holeIdentifier, serviceUrl, ex));
+            log.warn(String.format("Error requesting dataset collection for hole '%1$s' from %2$s: %3$s",
+                    holeIdentifier, serviceUrl, ex));
             log.debug("Exception:", ex);
             return generateJSONResponseMAV(false);
         }
@@ -209,8 +225,11 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Gets the list of logs for given NVCL dataset from the specified NVCL dataservice url.
-     * @param serviceUrl The URL of an NVCL Data service
-     * @param datasetId The unique ID of a dataset
+     * 
+     * @param serviceUrl
+     *            The URL of an NVCL Data service
+     * @param datasetId
+     *            The unique ID of a dataset
      * @return
      */
     @RequestMapping("getNVCLLogs.do")
@@ -223,17 +242,20 @@ public class NVCLController extends BasePortalController {
 
             return generateJSONResponseMAV(true, responseObjs, "");
         } catch (Exception ex) {
-            log.warn(String.format("Error requesting log collection for dataset '%1$s' from %2$s: %3$s", datasetId, serviceUrl, ex));
+            log.warn(String.format("Error requesting log collection for dataset '%1$s' from %2$s: %3$s", datasetId,
+                    serviceUrl, ex));
             log.debug("Exception:", ex);
             return generateJSONResponseMAV(false);
         }
     }
 
-
     /**
      * Gets the list of logs for given NVCL dataset from the specified NVCL dataservice url.
-     * @param serviceUrl The URL of an NVCL Data service
-     * @param datasetId The unique ID of a dataset
+     * 
+     * @param serviceUrl
+     *            The URL of an NVCL Data service
+     * @param datasetId
+     *            The unique ID of a dataset
      * @return
      */
     @RequestMapping("getNVCL2_0_Logs.do")
@@ -246,17 +268,18 @@ public class NVCLController extends BasePortalController {
 
             return generateJSONResponseMAV(true, responseObjs, "");
         } catch (Exception ex) {
-            log.warn(String.format("Error requesting log collection for dataset '%1$s' from %2$s: %3$s", datasetId, serviceUrl, ex));
+            log.warn(String.format("Error requesting log collection for dataset '%1$s' from %2$s: %3$s", datasetId,
+                    serviceUrl, ex));
             log.debug("Exception:", ex);
             return generateJSONResponseMAV(false);
         }
     }
 
-
     /**
      * Utility function for piping the contents of serviceResponse to servletResponse
      */
-    private void writeStreamResponse(HttpServletResponse servletResponse, AbstractStreamResponse serviceResponse) throws IOException {
+    private void writeStreamResponse(HttpServletResponse servletResponse, AbstractStreamResponse serviceResponse)
+            throws IOException {
         InputStream serviceInputStream = serviceResponse.getResponse();
         OutputStream responseOutput = null;
 
@@ -275,16 +298,19 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of an NVCL Data service
-     * @param logId The unique ID of a log (from a getNVCLLogs.do request)
+     * 
+     * @param serviceUrl
+     *            The URL of an NVCL Data service
+     * @param logId
+     *            The unique ID of a log (from a getNVCLLogs.do request)
      * @return
      */
     @RequestMapping("getNVCLMosaic.do")
     public void getNVCLMosaic(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("logId") String logId,
-            @RequestParam(required=false,value="width") Integer width,
-            @RequestParam(required=false,value="startSampleNo") Integer startSampleNo,
-            @RequestParam(required=false,value="endSampleNo") Integer endSampleNo,
+            @RequestParam(required = false, value = "width") Integer width,
+            @RequestParam(required = false, value = "startSampleNo") Integer startSampleNo,
+            @RequestParam(required = false, value = "endSampleNo") Integer endSampleNo,
             HttpServletResponse response) throws Exception {
 
         //Make our request
@@ -301,26 +327,29 @@ public class NVCLController extends BasePortalController {
         writeStreamResponse(response, serviceResponse);
     }
 
-
     /**
      * Proxies a NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of an NVCL Data service
-     * @param logId The unique ID of a log (from a getNVCLLogs.do request)
+     * 
+     * @param serviceUrl
+     *            The URL of an NVCL Data service
+     * @param logId
+     *            The unique ID of a log (from a getNVCLLogs.do request)
      * @return
      */
     @RequestMapping("getNVCL2_0_Thumbnail.do")
     public void getNVCL2_0_Thumbnail(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("dataSetId") String dataSetId,
             @RequestParam("logId") String logId,
-            @RequestParam(required=false,value="width") Integer width,
-            @RequestParam(required=false,value="startSampleNo") Integer startSampleNo,
-            @RequestParam(required=false,value="endSampleNo") Integer endSampleNo,
+            @RequestParam(required = false, value = "width") Integer width,
+            @RequestParam(required = false, value = "startSampleNo") Integer startSampleNo,
+            @RequestParam(required = false, value = "endSampleNo") Integer endSampleNo,
             HttpServletResponse response) throws Exception {
 
         //Make our request
         TrayThumbNailResponse serviceResponse = null;
         try {
-            serviceResponse = this.dataService2_0.getTrayThumbNail(dataSetId,serviceUrl, logId, width, startSampleNo, endSampleNo);
+            serviceResponse = this.dataService2_0.getTrayThumbNail(dataSetId, serviceUrl, logId, width, startSampleNo,
+                    endSampleNo);
         } catch (Exception ex) {
             log.warn(String.format("Error requesting mosaic for logid '%1$s' from %2$s: %3$s", logId, serviceUrl, ex));
             log.debug("Exception:", ex);
@@ -328,45 +357,46 @@ public class NVCLController extends BasePortalController {
             return;
         }
 
+        response.setContentType(serviceResponse.getContentType());
+        //vt:we have to hack the response because the html response has relative url and when
+        //the result is proxied, the service url becomes portal's url.
+        String stringResponse = IOUtils.toString(serviceResponse.getResponse());
+        stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "Display_Tray_Thumb.html");
+        if (!stringResponse.contains("style=\"max-width: 33%")) {
+            stringResponse = stringResponse.replace("<img",
+                    "<img style=\"max-width: 33%;height: auto;width: auto\\9;\" ");
+        }
 
-            response.setContentType(serviceResponse.getContentType());
-            //vt:we have to hack the response because the html response has relative url and when
-            //the result is proxied, the service url becomes portal's url.
-            String stringResponse = IOUtils.toString(serviceResponse.getResponse());
-            stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "Display_Tray_Thumb.html");
-            if(!stringResponse.contains("style=\"max-width: 33%")){
-                stringResponse = stringResponse.replace("<img", "<img style=\"max-width: 33%;height: auto;width: auto\\9;\" ");
-            }
-
-            FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
-
-
+        FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()),
+                response.getOutputStream(), BUFFERSIZE, true);
 
     }
 
-
     /**
      * Proxies a NVCL Plot Scalar request. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of an NVCL Data service
-     * @param logId The unique ID of a log (from a getNVCLLogs.do request)
+     * 
+     * @param serviceUrl
+     *            The URL of an NVCL Data service
+     * @param logId
+     *            The unique ID of a log (from a getNVCLLogs.do request)
      * @return
      */
     @RequestMapping("getNVCLPlotScalar.do")
     public void getNVCLPlotScalar(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("logId") String logId,
-            @RequestParam(required=false,value="startDepth") Integer startDepth,
-            @RequestParam(required=false,value="endDepth") Integer endDepth,
-            @RequestParam(required=false,value="width") Integer width,
-            @RequestParam(required=false,value="height") Integer height,
-            @RequestParam(required=false,value="samplingInterval") Double samplingInterval,
-            @RequestParam(required=false,value="graphType") Integer graphTypeInt,
-            @RequestParam(value="legend",defaultValue = "0") Integer legend,
+            @RequestParam(required = false, value = "startDepth") Integer startDepth,
+            @RequestParam(required = false, value = "endDepth") Integer endDepth,
+            @RequestParam(required = false, value = "width") Integer width,
+            @RequestParam(required = false, value = "height") Integer height,
+            @RequestParam(required = false, value = "samplingInterval") Double samplingInterval,
+            @RequestParam(required = false, value = "graphType") Integer graphTypeInt,
+            @RequestParam(value = "legend", defaultValue = "0") Integer legend,
             HttpServletResponse response) throws Exception {
 
         //Parse our graph type
         NVCLDataServiceMethodMaker.PlotScalarGraphType graphType = null;
         if (graphTypeInt != null) {
-            switch(graphTypeInt) {
+            switch (graphTypeInt) {
             case 1:
                 graphType = PlotScalarGraphType.StackedBarChart;
                 break;
@@ -386,9 +416,11 @@ public class NVCLController extends BasePortalController {
         //Make our request
         PlotScalarResponse serviceResponse = null;
         try {
-            serviceResponse = dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType, legend);
+            serviceResponse = dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height,
+                    samplingInterval, graphType, legend);
         } catch (Exception ex) {
-            log.warn(String.format("Error requesting scalar plot for logid '%1$s' from %2$s: %3$s", logId, serviceUrl, ex));
+            log.warn(String.format("Error requesting scalar plot for logid '%1$s' from %2$s: %3$s", logId, serviceUrl,
+                    ex));
             log.debug("Exception:", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
@@ -399,8 +431,11 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a CSV download request to a WFS. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
-     * @param datasetId The dataset to download
+     * 
+     * @param serviceUrl
+     *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
+     * @param datasetId
+     *            The dataset to download
      * @return
      */
     @RequestMapping("getNVCLCSVDownload.do")
@@ -413,25 +448,29 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.getCSVDownload(serviceUrl, datasetId);
         } catch (Exception ex) {
-            log.warn(String.format("Error requesting csw download for datasetId '%1$s' from %2$s: %3$s", datasetId, serviceUrl, ex));
+            log.warn(String.format("Error requesting csw download for datasetId '%1$s' from %2$s: %3$s", datasetId,
+                    serviceUrl, ex));
             log.debug("Exception:", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
-        response.setHeader("Content-Disposition","attachment; filename=GETPUBLISHEDSYSTEMTSA.csv");
+        response.setHeader("Content-Disposition", "attachment; filename=GETPUBLISHEDSYSTEMTSA.csv");
         writeStreamResponse(response, serviceResponse);
     }
 
     /**
      * Proxies a CSV download request to a WFS from a NVCL 2.0 service. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
-     * @param datasetId The dataset to download
+     * 
+     * @param serviceUrl
+     *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
+     * @param datasetId
+     *            The dataset to download
      * @return
      */
     @RequestMapping("getNVCL2_0_CSVDownload.do")
     public void getNVCL2_0_CSVDownload(@RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam("logIds") String [] logIds,
+            @RequestParam("logIds") String[] logIds,
             HttpServletResponse response) throws Exception {
 
         //Make our request
@@ -439,21 +478,25 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService2_0.getNVCL2_0_CSVDownload(serviceUrl, logIds);
         } catch (Exception ex) {
-            log.warn(String.format("Error requesting csw download for logId '%1$s' from %2$s: %3$s", logIds, serviceUrl, ex));
+            log.warn(String.format("Error requesting csw download for logId '%1$s' from %2$s: %3$s", logIds,
+                    serviceUrl, ex));
             log.debug("Exception:", ex);
-            if(ex.getMessage().contains("404")){
-                String htmlMessage = "<html><head><title>Error 404</title></head>" +
-                                     "<body><h1>HTTP Status 404 - </h1><p>You could be seeing this error because the service does not support this operation</p>" +
-                                     "</body></html>";
+            if (ex.getMessage().contains("404")) {
+                String htmlMessage = "<html><head><title>Error 404</title></head>"
+                        +
+                        "<body><h1>HTTP Status 404 - </h1><p>You could be seeing this error because the service does not support this operation</p>"
+                        +
+                        "</body></html>";
 
-                FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(htmlMessage.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
+                FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(htmlMessage.getBytes()),
+                        response.getOutputStream(), BUFFERSIZE, true);
                 return;
-            }else{
+            } else {
                 throw new ServletException(ex);
             }
         }
 
-        response.setHeader("Content-Disposition","attachment; filename=downloadScalar.csv");
+        response.setHeader("Content-Disposition", "attachment; filename=downloadScalar.csv");
         writeStreamResponse(response, serviceResponse);
     }
 
@@ -462,16 +505,26 @@ public class NVCLController extends BasePortalController {
      *
      * One of (but not both) datasetId and matchString must be specified
      *
-     * @param serviceUrl The URL of the NVCLDataService
-     * @param email The user's email address
-     * @param datasetId [Optional] a dataset id chosen by user (list of dataset id can be obtained thru calling the get log collection service)
-     * @param matchString [Optional] Its value is part or all of a proper drillhole name. The first dataset found to match in the database is downloaded
-     * @param lineScan [Optional] yes or no. If no then the main image component is not downloaded. The default is yes.
-     * @param spectra [Optional] yes or no. If no then the spectral component is not downloaded. The default is yes.
-     * @param profilometer [Optional] yes or no. If no then the profilometer component is not downloaded. The default is yes.
-     * @param trayPics [Optional] yes or no. If no then the individual tray pictures are not downloaded. The default is yes.
-     * @param mosaicPics [Optional] yes or no. If no then the hole mosaic picture is not downloaded. The default is yes.
-     * @param mapPics [Optional] yes or no. If no then the map pictures are not downloaded. The default is yes.
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param email
+     *            The user's email address
+     * @param datasetId
+     *            [Optional] a dataset id chosen by user (list of dataset id can be obtained thru calling the get log collection service)
+     * @param matchString
+     *            [Optional] Its value is part or all of a proper drillhole name. The first dataset found to match in the database is downloaded
+     * @param lineScan
+     *            [Optional] yes or no. If no then the main image component is not downloaded. The default is yes.
+     * @param spectra
+     *            [Optional] yes or no. If no then the spectral component is not downloaded. The default is yes.
+     * @param profilometer
+     *            [Optional] yes or no. If no then the profilometer component is not downloaded. The default is yes.
+     * @param trayPics
+     *            [Optional] yes or no. If no then the individual tray pictures are not downloaded. The default is yes.
+     * @param mosaicPics
+     *            [Optional] yes or no. If no then the hole mosaic picture is not downloaded. The default is yes.
+     * @param mapPics
+     *            [Optional] yes or no. If no then the map pictures are not downloaded. The default is yes.
      * @return
      */
     @RequestMapping("getNVCLTSGDownload.do")
@@ -494,10 +547,12 @@ public class NVCLController extends BasePortalController {
         //Make our request
         TSGDownloadResponse serviceResponse = null;
         try {
-            serviceResponse = dataService.getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra, profilometer, trayPics, mosaicPics, mapPics);
+            serviceResponse = dataService.getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan, spectra,
+                    profilometer, trayPics, mosaicPics, mapPics);
         } catch (Exception ex) {
-            if(ex.getMessage().contains("404 Not Found")){
-                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+            if (ex.getMessage().contains("404 Not Found")) {
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(),
+                        BUFFERSIZE, true);
                 return;
             }
             log.warn(String.format("Error requesting tsg download from %1$s: %2$s", serviceUrl, ex));
@@ -510,14 +565,18 @@ public class NVCLController extends BasePortalController {
         String stringResponse = IOUtils.toString(serviceResponse.getResponse());
         stringResponse = stringResponse.replace("downloadtsg.html", serviceUrl + "downloadtsg.html");
 
-        FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
+        FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()),
+                response.getOutputStream(), BUFFERSIZE, true);
 
     }
 
     /**
      * Proxies a NVCL TSG status request. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of the NVCLDataService
-     * @param email The user's email address
+     * 
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param email
+     *            The user's email address
      * @return
      */
     @RequestMapping("getNVCLTSGDownloadStatus.do")
@@ -530,8 +589,9 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.checkTSGStatus(serviceUrl, email);
         } catch (Exception ex) {
-            if(ex.getMessage().contains("404 Not Found")){
-                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+            if (ex.getMessage().contains("404 Not Found")) {
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(),
+                        BUFFERSIZE, true);
                 return;
             }
             log.warn(String.format("Error requesting tsg status from %1$s: %2$s", serviceUrl, ex));
@@ -545,18 +605,25 @@ public class NVCLController extends BasePortalController {
         stringResponse = stringResponse.replace("downloadtsg.html", serviceUrl + "downloadtsg.html");
         stringResponse = stringResponse.replace("href", " target='_blank' href");
 
-        FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()), response.getOutputStream(), BUFFERSIZE, true);
+        FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()),
+                response.getOutputStream(), BUFFERSIZE, true);
 
         //writeStreamResponse(response, serviceResponse);
     }
 
     /**
      * Proxies a NVCL WFS download request. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of the NVCLDataService
-     * @param email The user's email address
-     * @param boreholeId selected borehole id (use as feature id for filtering purpose)
-     * @param omUrl The valid url for the Observations and Measurements WFS
-     * @param typeName The url parameter for the wfs request
+     * 
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param email
+     *            The user's email address
+     * @param boreholeId
+     *            selected borehole id (use as feature id for filtering purpose)
+     * @param omUrl
+     *            The valid url for the Observations and Measurements WFS
+     * @param typeName
+     *            The url parameter for the wfs request
      * @return
      */
     @RequestMapping("getNVCLWFSDownload.do")
@@ -572,11 +639,14 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.getWFSDownload(serviceUrl, email, boreholeId, omUrl, typeName);
         } catch (Exception ex) {
-            if(ex.getMessage().contains("404 Not Found")){
-                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+            if (ex.getMessage().contains("404 Not Found")) {
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(),
+                        BUFFERSIZE, true);
                 return;
             }
-            log.warn(String.format("Error requesting %1$s download from omUrl '%2$s' for borehole '%3$s' and nvcl dataservice %4$s: %5$s", typeName,omUrl, boreholeId, serviceUrl, ex));
+            log.warn(String
+                    .format("Error requesting %1$s download from omUrl '%2$s' for borehole '%3$s' and nvcl dataservice %4$s: %5$s",
+                            typeName, omUrl, boreholeId, serviceUrl, ex));
             log.debug("Exception:", ex);
             response.sendError(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             return;
@@ -587,8 +657,11 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL WFS status request. Writes directly to the HttpServletResponse
-     * @param serviceUrl The URL of the NVCLDataService
-     * @param email The user's email address
+     * 
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param email
+     *            The user's email address
      * @return
      */
     @RequestMapping("getNVCLWFSDownloadStatus.do")
@@ -601,8 +674,9 @@ public class NVCLController extends BasePortalController {
         try {
             serviceResponse = dataService.checkWFSStatus(serviceUrl, email);
         } catch (Exception ex) {
-            if(ex.getMessage().contains("404 Not Found")){
-                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(), BUFFERSIZE, true);
+            if (ex.getMessage().contains("404 Not Found")) {
+                FileIOUtil.writeInputToOutputStream(NVCLController.get404HTMLError(), response.getOutputStream(),
+                        BUFFERSIZE, true);
                 return;
             }
             log.warn(String.format("Error requesting wfs status from %1$s: %2$s", serviceUrl, ex));
@@ -614,8 +688,7 @@ public class NVCLController extends BasePortalController {
         writeStreamResponse(response, serviceResponse);
     }
 
-
-    private static InputStream get404HTMLError() throws IOException{
+    private static InputStream get404HTMLError() throws IOException {
         InputStream input = NVCLController.class.getResourceAsStream("/htmlerror/NVCL404Response.htm");
         return input;
     }

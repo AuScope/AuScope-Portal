@@ -9,14 +9,13 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 /**
  * @author
  *
- * @version $Id: YilgarnGeochemistryFilter.java 1233 2010-10-20   $
+ * @version $Id: YilgarnGeochemistryFilter.java 1233 2010-10-20 $
  */
 
 public class YilgarnGeochemistryFilter extends AbstractFilter {
     private String geologicName;
 
     // -------------------------------------------------------------- Constants
-
 
     // ----------------------------------------------------------- Constructors
 
@@ -39,7 +38,6 @@ public class YilgarnGeochemistryFilter extends AbstractFilter {
                         this.generateBboxFragment(bbox, "gsml:occurrence/gsml:MappedFeature/gsml:shape"),
                         this.generateFilterFragment()));
     }
-
 
     // -------------------------------------------------------- Private Methods
     private String generateFilterFragment() {

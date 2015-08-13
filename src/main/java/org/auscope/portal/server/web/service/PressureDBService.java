@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 
 /**
  * A service class for making requests to the pressure DB web service
+ * 
  * @author Josh Vote
  *
  */
@@ -70,6 +71,7 @@ public class PressureDBService {
 
     /**
      * Shorthand method for extracting boolean responses from an Xpath content.
+     * 
      * @param xPathString
      * @param node
      * @return
@@ -87,7 +89,8 @@ public class PressureDBService {
      * @return
      * @throws Exception
      */
-    public AvailableOMResponse makeGetAvailableOMRequest(String wellID, String serviceUrl) throws PortalServiceException {
+    public AvailableOMResponse makeGetAvailableOMRequest(String wellID, String serviceUrl)
+            throws PortalServiceException {
 
         //Generate and then make the request
         HttpRequestBase method = null;
@@ -111,9 +114,10 @@ public class PressureDBService {
         AvailableOMResponse response = new AvailableOMResponse();
         try {
 
-
-            response.setWellID((String) DOMUtil.compileXPathExpr("AvailableOM/Observations/@Well__Id").evaluate(doc, XPathConstants.STRING));
-            response.setOmUrl((String) DOMUtil.compileXPathExpr("AvailableOM/Observations/omUrl").evaluate(doc, XPathConstants.STRING));
+            response.setWellID((String) DOMUtil.compileXPathExpr("AvailableOM/Observations/@Well__Id").evaluate(doc,
+                    XPathConstants.STRING));
+            response.setOmUrl((String) DOMUtil.compileXPathExpr("AvailableOM/Observations/omUrl").evaluate(doc,
+                    XPathConstants.STRING));
             response.setObsTemperature(extractBooleanXPath("AvailableOM/Observations/temperature", doc));
             response.setObsPressureData(extractBooleanXPath("AvailableOM/Observations/pressureData", doc));
             response.setObsSalinity(extractBooleanXPath("AvailableOM/Observations/salinity", doc));

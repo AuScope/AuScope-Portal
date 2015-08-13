@@ -27,13 +27,14 @@ public class CSWCacheController extends BaseCSWController {
 
     /**
      * Constructor
+     * 
      * @param
      */
     @Autowired
     public CSWCacheController(CSWCacheService cswService,
-                         ViewCSWRecordFactory viewCSWRecordFactory,
-                         ViewKnownLayerFactory viewKnownLayerFactory,
-                         PortalPropertyPlaceholderConfigurer propertyResolver) {
+            ViewCSWRecordFactory viewCSWRecordFactory,
+            ViewKnownLayerFactory viewKnownLayerFactory,
+            PortalPropertyPlaceholderConfigurer propertyResolver) {
 
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswService = cswService;
@@ -43,6 +44,7 @@ public class CSWCacheController extends BaseCSWController {
 
     /**
      * This controller method returns a representation of each and every CSWRecord from the internal cache
+     * 
      * @throws Exception
      */
     @RequestMapping("/getCSWRecords.do")
@@ -60,6 +62,7 @@ public class CSWCacheController extends BaseCSWController {
 
     /**
      * This controller method is for forcing the internal cache of CSWRecords to invalidate and update.
+     * 
      * @return
      */
     @RequestMapping("/updateCSWCache.do")
@@ -76,6 +79,7 @@ public class CSWCacheController extends BaseCSWController {
 
     /**
      * Requests every keyword as cached by
+     * 
      * @return
      */
     @RequestMapping("/getCSWKeywords.do")

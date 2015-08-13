@@ -1,6 +1,5 @@
 package org.auscope.portal.server.web.controllers;
 
-
 import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.List;
@@ -27,14 +26,13 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class TestYilgarnGeochemistryController extends PortalTestClass {
 
-
-    /** Mock geochemistry service*/
+    /** Mock geochemistry service */
     private YilgarnGeochemistryService mockGeochemService = context.mock(YilgarnGeochemistryService.class);
 
-    /** The mock Web Feature Service request Service*/
+    /** The mock Web Feature Service request Service */
     private WFSService mockWfsService = context.mock(WFSService.class);
 
-    /** The mock method*/
+    /** The mock method */
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
     /** The yilgarn loc specimen controller. */
@@ -48,7 +46,8 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
     /**
      * Test located specimen feature can do a basic transform
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testLocatedSpecimenFeature_SimpleTransform() throws Exception {
@@ -59,12 +58,17 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
         final YilgarnObservationRecord[] mockObservations = new YilgarnObservationRecord[] {};
         final YilgarnLocatedSpecimenRecord mockLocSpecRecord = context.mock(YilgarnLocatedSpecimenRecord.class);
 
-        context.checking(new Expectations() {{
-            oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);will(returnValue(mockLocSpecRecord));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);
+                will(returnValue(mockLocSpecRecord));
 
-            allowing(mockLocSpecRecord).getMaterialClass();will(returnValue(materialClass));
-            allowing(mockLocSpecRecord).getRelatedObservations();will(returnValue(mockObservations));
-        }});
+                allowing(mockLocSpecRecord).getMaterialClass();
+                will(returnValue(materialClass));
+                allowing(mockLocSpecRecord).getRelatedObservations();
+                will(returnValue(mockObservations));
+            }
+        });
 
         ModelAndView modelAndView = controller.doLocatedSpecimenFeature(serviceUrl, featureId);
         Assert.assertNotNull(modelAndView);
@@ -79,7 +83,8 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
     /**
      * Test located specimen feature. only returns observations with unique names
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testLocatedSpecimenFeature_UniqueObservations() throws Exception {
@@ -95,18 +100,28 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
                 context.mock(YilgarnObservationRecord.class, "obs4")};
         final YilgarnLocatedSpecimenRecord mockLocSpecRecord = context.mock(YilgarnLocatedSpecimenRecord.class);
 
-        context.checking(new Expectations() {{
-            oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);will(returnValue(mockLocSpecRecord));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);
+                will(returnValue(mockLocSpecRecord));
 
-            allowing(mockLocSpecRecord).getMaterialClass();will(returnValue(materialClass));
-            allowing(mockLocSpecRecord).getRelatedObservations();will(returnValue(mockObservations));
+                allowing(mockLocSpecRecord).getMaterialClass();
+                will(returnValue(materialClass));
+                allowing(mockLocSpecRecord).getRelatedObservations();
+                will(returnValue(mockObservations));
 
-            allowing(mockObservations[0]).getAnalyteName();will(returnValue("nacl"));
-            allowing(mockObservations[1]).getAnalyteName();will(returnValue("au"));
-            allowing(mockObservations[2]).getAnalyteName();will(returnValue("au"));
-            allowing(mockObservations[3]).getAnalyteName();will(returnValue("nacl"));
-            allowing(mockObservations[4]).getAnalyteName();will(returnValue("ag"));
-        }});
+                allowing(mockObservations[0]).getAnalyteName();
+                will(returnValue("nacl"));
+                allowing(mockObservations[1]).getAnalyteName();
+                will(returnValue("au"));
+                allowing(mockObservations[2]).getAnalyteName();
+                will(returnValue("au"));
+                allowing(mockObservations[3]).getAnalyteName();
+                will(returnValue("nacl"));
+                allowing(mockObservations[4]).getAnalyteName();
+                will(returnValue("ag"));
+            }
+        });
 
         ModelAndView modelAndView = controller.doLocatedSpecimenFeature(serviceUrl, featureId);
         Assert.assertNotNull(modelAndView);
@@ -128,7 +143,8 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
     /**
      * Test located specimen feature can handle exceptions from the underlying service
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testLocatedSpecimenFeature_ServiceException() throws Exception {
@@ -139,12 +155,17 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
         final YilgarnObservationRecord[] mockObservations = new YilgarnObservationRecord[] {};
         final YilgarnLocatedSpecimenRecord mockLocSpecRecord = context.mock(YilgarnLocatedSpecimenRecord.class);
 
-        context.checking(new Expectations() {{
-            oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);will(throwException(new ConnectException()));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);
+                will(throwException(new ConnectException()));
 
-            allowing(mockLocSpecRecord).getMaterialClass();will(returnValue(materialClass));
-            allowing(mockLocSpecRecord).getRelatedObservations();will(returnValue(mockObservations));
-        }});
+                allowing(mockLocSpecRecord).getMaterialClass();
+                will(returnValue(materialClass));
+                allowing(mockLocSpecRecord).getRelatedObservations();
+                will(returnValue(mockObservations));
+            }
+        });
 
         ModelAndView modelAndView = controller.doLocatedSpecimenFeature(serviceUrl, featureId);
         Map<String, Object> model = modelAndView.getModel();
@@ -155,7 +176,8 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
     /**
      * Test located specimen feature can handle the underlying service returning null (indicating no results)
      *
-     * @throws Exception the exception
+     * @throws Exception
+     *             the exception
      */
     @Test
     public void testLocatedSpecimenFeature_NoResults() throws Exception {
@@ -166,12 +188,17 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
         final YilgarnObservationRecord[] mockObservations = new YilgarnObservationRecord[] {};
         final YilgarnLocatedSpecimenRecord mockLocSpecRecord = context.mock(YilgarnLocatedSpecimenRecord.class);
 
-        context.checking(new Expectations() {{
-            oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);will(returnValue(null));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockGeochemService).getLocatedSpecimens(serviceUrl, featureId);
+                will(returnValue(null));
 
-            allowing(mockLocSpecRecord).getMaterialClass();will(returnValue(materialClass));
-            allowing(mockLocSpecRecord).getRelatedObservations();will(returnValue(mockObservations));
-        }});
+                allowing(mockLocSpecRecord).getMaterialClass();
+                will(returnValue(materialClass));
+                allowing(mockLocSpecRecord).getRelatedObservations();
+                will(returnValue(mockObservations));
+            }
+        });
 
         ModelAndView modelAndView = controller.doLocatedSpecimenFeature(serviceUrl, featureId);
         Map<String, Object> model = modelAndView.getModel();
@@ -183,7 +210,7 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
      * Test doing geochemistry filter and getting all values
      */
     @Test
-    public void testYilgarnGeochemistryFilter() throws Exception{
+    public void testYilgarnGeochemistryFilter() throws Exception {
         final String kmlBlob = "kmlBlob";
         final String serviceUrl = "http://service/wfs";
         final String geologicName = "filter info";
@@ -191,11 +218,16 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
         final String bbox = null;
         final String expectedGML = "<gml/>";
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsResponseAsKml(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")), with(any(String.class)), with(equal(maxFeatures)), with(equal((String)null)));will(returnValue(new WFSTransformedResponse(expectedGML, kmlBlob, mockMethod)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsResponseAsKml(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")),
+                        with(any(String.class)), with(equal(maxFeatures)), with(equal((String) null)));
+                will(returnValue(new WFSTransformedResponse(expectedGML, kmlBlob, mockMethod)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceUrl, true)));
-        }});
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI(serviceUrl, true)));
+            }
+        });
         ModelAndView modelAndView = controller.doYilgarnGeochemistryFilter(serviceUrl, geologicName, bbox, maxFeatures);
         Assert.assertNotNull(modelAndView);
         Map<String, Object> model = modelAndView.getModel();
@@ -203,23 +235,27 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
         Assert.assertNotNull(model.get("data"));
     }
 
-
     /**
      * Test doing geochemistry filter and getting the count of all values
      */
     @Test
-    public void testYilgarnGeochemistryFilterCount() throws Exception{
+    public void testYilgarnGeochemistryFilterCount() throws Exception {
         final String serviceUrl = "http://service/wfs";
         final String geologicName = "filter info";
         final int maxFeatures = 134;
         final String bbox = null;
         final int numberOfFeatures = 123;
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsFeatureCount(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")), with(any(String.class)), with(equal(maxFeatures)), with((String) null));will(returnValue(new WFSCountResponse(numberOfFeatures)));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsFeatureCount(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")),
+                        with(any(String.class)), with(equal(maxFeatures)), with((String) null));
+                will(returnValue(new WFSCountResponse(numberOfFeatures)));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceUrl, true)));
-        }});
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI(serviceUrl, true)));
+            }
+        });
         ModelAndView modelAndView = controller.doYilgarnGeochemistryCount(serviceUrl, geologicName, bbox, maxFeatures);
         Assert.assertNotNull(modelAndView);
         Map<String, Object> model = modelAndView.getModel();
@@ -232,22 +268,25 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
      * Test doing geochemistry filter and getting the count of all values fails gracefully
      */
     @Test
-    public void testYilgarnGeochemistryFilterCountError() throws Exception{
+    public void testYilgarnGeochemistryFilterCountError() throws Exception {
         final String serviceUrl = "http://service/wfs";
         final String geologicName = "filter info";
         final int maxFeatures = 134;
         final String bbox = null;
 
-        context.checking(new Expectations() {{
-            oneOf(mockWfsService).getWfsFeatureCount(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")), with(any(String.class)), with(equal(maxFeatures)), with((String) null));will(throwException(new PortalServiceException(mockMethod, new ConnectException())));
+        context.checking(new Expectations() {
+            {
+                oneOf(mockWfsService).getWfsFeatureCount(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")),
+                        with(any(String.class)), with(equal(maxFeatures)), with((String) null));
+                will(throwException(new PortalServiceException(mockMethod, new ConnectException())));
 
-            allowing(mockMethod).getURI();will(returnValue(new URI(serviceUrl, true)));
-        }});
+                allowing(mockMethod).getURI();
+                will(returnValue(new URI(serviceUrl, true)));
+            }
+        });
         ModelAndView modelAndView = controller.doYilgarnGeochemistryCount(serviceUrl, geologicName, bbox, maxFeatures);
         Assert.assertNotNull(modelAndView);
         Map<String, Object> model = modelAndView.getModel();
         Assert.assertEquals(false, model.get("success"));
     }
 }
-
-

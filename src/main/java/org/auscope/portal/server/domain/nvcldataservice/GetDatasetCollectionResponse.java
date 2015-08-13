@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * A POJO representation of the response from a NVCLDataService getDatasetCollection request
+ * 
  * @author Josh Vote
  *
  */
@@ -18,9 +19,13 @@ public class GetDatasetCollectionResponse implements Serializable {
 
     /**
      * Creates a new instance of this class
-     * @param datasetId The datasetId (use for future requests)
-     * @param datasetName The dataset name (human readable)
-     * @param omUrl The observations and measurements WFS URL
+     * 
+     * @param datasetId
+     *            The datasetId (use for future requests)
+     * @param datasetName
+     *            The dataset name (human readable)
+     * @param omUrl
+     *            The observations and measurements WFS URL
      */
     public GetDatasetCollectionResponse(String datasetId, String datasetName,
             String omUrl) {
@@ -31,6 +36,7 @@ public class GetDatasetCollectionResponse implements Serializable {
 
     /**
      * Gets the datasetId (use for future requests)
+     * 
      * @return
      */
     public String getDatasetId() {
@@ -39,6 +45,7 @@ public class GetDatasetCollectionResponse implements Serializable {
 
     /**
      * Sets the datasetId (use for future requests)
+     * 
      * @param datasetId
      */
     public void setDatasetId(String datasetId) {
@@ -47,6 +54,7 @@ public class GetDatasetCollectionResponse implements Serializable {
 
     /**
      * Gets the dataset name (human readable)
+     * 
      * @return
      */
     public String getDatasetName() {
@@ -55,6 +63,7 @@ public class GetDatasetCollectionResponse implements Serializable {
 
     /**
      * Sets the dataset name (human readable)
+     * 
      * @param datasetName
      */
     public void setDatasetName(String datasetName) {
@@ -63,6 +72,7 @@ public class GetDatasetCollectionResponse implements Serializable {
 
     /**
      * Gets the observations and measurements WFS URL
+     * 
      * @return
      */
     public String getOmUrl() {
@@ -71,11 +81,11 @@ public class GetDatasetCollectionResponse implements Serializable {
 
     /**
      * Sets the observations and measurements WFS URL
+     * 
      * @param omUrl
      */
     public void setOmUrl(String omUrl) {
         this.omUrl = omUrl;
     }
-
 
 }
