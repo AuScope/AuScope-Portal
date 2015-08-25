@@ -42,8 +42,6 @@
                 <ref bean="knownTypeHighPSitePhosLayer"/>
                 <ref bean="knownTypePortals"/>
                 <ref bean="knownTypeGeoNetworks"/>
-                <ref bean="knownTypeGeologicalProvinceContact" />
-                <ref bean="knownTypeGeologicalProvinceMetallogenic" />
                 <ref bean="knownTypeAster" />
                 <ref bean="knownTypeAsterAloh" />
                 <ref bean="knownTypeAsterFerrous" />
@@ -97,8 +95,6 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-                <!-- <ref bean="cswGeoscienceLocal" /> -->
-                <ref bean="cswGeoscienceDev" />
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
