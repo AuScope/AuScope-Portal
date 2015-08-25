@@ -182,7 +182,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
-		<property name="order" value="4" />
+        <property name="order" value="4" />
     </bean>
 
   
@@ -283,7 +283,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-		<property name="order" value="430" />
+        <property name="order" value="430" />
     </bean>
     <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="nvcl-borehole"/>
@@ -921,7 +921,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
-		<property name="order" value="80" />
+        <property name="order" value="80" />
     </bean>
 
     <bean id="knownTypeRemanentAnomaliesAutoSearch" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -979,7 +979,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
-		<property name="order" value="83" />
+        <property name="order" value="83" />
     </bean>
 
     <bean id="knownTypeEMAGRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
