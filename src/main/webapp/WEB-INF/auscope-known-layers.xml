@@ -602,37 +602,6 @@
         <property name="order" value="53" />
     </bean>
 
-    <bean id="knownTypeGeologicalProvinceContact" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="geologicalProvinceContacts"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="ProvinceContacts"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Province Contacts"/>
-        <property name="description" value="Contacts (boundaries) of the full spatial extent of Australia's geological provinces. 
-        	Where possible, the contacts of provinces have been attributed with information about the source, accuracy, and observation method of those lines."/>
-        <property name="group" value="Geological Provinces"/>
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="order" value="240" />
-    </bean>
-    
-    <bean id="knownTypeGeologicalProvinceMetallogenic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="geologicalProvinceMetallogenic"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="MetallogenicProvinces"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Metallogenic Provinces"/>
-        <property name="description" value="Descriptions and spatial extents of metallogenic provinces of the Australian continent."/>
-        <property name="group" value="Geological Provinces"/>
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="order" value="241" />
-    </bean>
-
     <bean id="knownTypeAster" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="aster-main"/>
         <constructor-arg name="knownLayerSelector">
