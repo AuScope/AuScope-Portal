@@ -283,7 +283,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="430" />
+		<property name="order" value="430" />
     </bean>
     <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="nvcl-borehole"/>
@@ -882,7 +882,7 @@
         <property name="name" value="National ASTER Map TIR Gypsum index"/>
         <property name="description" value="1. Band ratio: (B10+B12)/B11Blue is low gypsum contentRed is high gypsum content"/>
         <property name="group" value="National ASTER Map of Australia"/>
-        <property name="order" value="76" />
+		<property name="order" value="76" />
     </bean>
 
     <bean id="knownTypeSilicaContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
