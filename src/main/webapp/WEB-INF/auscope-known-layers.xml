@@ -37,6 +37,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="1" />
     </bean>
     <bean id="knownTypeMineralOccurrence" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-mineraloccurrence"/>
@@ -72,6 +73,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="2" />
     </bean>
     <bean id="knownTypeMiningActivity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-miningactivity"/>
@@ -107,6 +109,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="3" />
     </bean>
 
 
@@ -140,6 +143,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>-->
+        <property name="order" value="150" />
     </bean>
     
     <bean id="knownTypehydrogeochem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -158,7 +162,8 @@
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getCapdfHydroGeoChemStyle.do"/>
-        <property name="proxyDownloadUrl" value="doCapdfHydroGeoChemDownload.do"/>     
+        <property name="proxyDownloadUrl" value="doCapdfHydroGeoChemDownload.do"/>
+        <property name="order" value="160" />   
     </bean>
 
     <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -177,7 +182,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
-
+        <property name="order" value="4" />
     </bean>
 
   
@@ -192,6 +197,7 @@
         <property name="id" value="ga-geotransects"/>
         <property name="name" value="GA Onshore Seismic Surveys"/>
         <property name="description" value="The Onshore Seismic Data of Australia is a collection of all land seismic traverses cross the Australian continent and its margins. The data includes raw and processed data in SEGY format. The metadata includes acquisition reports, processing reports, processed images, logs, and so on. The data acquisition was carried out in Australia from 1949-2012 by Geoscience Australia and various partners. The set of reflection and refraction data comprises over 12,000 km of coverage, and provides an insight into the variations in crustal architecture in the varied geological domains. The complete processed dataset was first available for public access in Oct 2013 (http://www.ga.gov.au/minerals/projects/current-projects/seismic-acquisition-processing.html ). The location of seismic traverses is shown by the Gallery link on the webpage. The new survey data will be updated on the webpage by the official data release date. The attribute structure of the dataset has also been revised to be more compatible with the GeoSciML data standard, published by the IUGS Commission for Geoscience Information. The onshore seismic data were collected with partner organizations: Australian Geodynamics Cooperative Research Centre, National Research Facility for Earth Sounding, Australian Nuclear Science and Technology Organisation, Cooperative Research Centre for Greenhouse Gas Technologies, Curtin University of Technology, Geological Survey of New South Wales, NSW Department of Mineral Resources, NSW Department of Primary Industries Mineral Resources, An organisation for a National Earth Science Infrastructure Program, Geological Survey Western Australia, Northern Territory Geological Survey, Primary Industries and Resources South Australia, Predictive Mineral Discovery Cooperative Research Centre, Queensland Geological Survey, GeoScience Victoria Department of Primary Industries, Tasmania Development and Resources, University of Western Australia."/>
+        <property name="order" value="400" />
     </bean>
     <bean id="knownTypeReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="portal-reports"/>
@@ -216,6 +222,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="410" />
     </bean>
     <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="portal-InSar-reports"/>
@@ -228,7 +235,7 @@
         <property name="name" value="Synthetic Aperture Radar data"/><!-- INSAR -->
         <property name="description" value="Raw Synthetic Aperture Radar (SAR) data from ERS-1 and ERS-2 satellites. Data is provided in the standardised CEOS format under licence from the European Space Agency (ESA)."/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-stars.png"/>
-         <property name="polygonColor" value="#FE2A00,#FF694C" />
+        <property name="polygonColor" value="#FE2A00,#FF694C" />
         <property name="iconAnchor">
             <bean class="java.awt.Point">
                 <constructor-arg index="0" value="16"/>
@@ -241,6 +248,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="420" />
     </bean>
     <bean id="knownTypeYilgarnGeochemistry" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="yilgarn-geochem"/>
@@ -275,7 +283,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-
+        <property name="order" value="430" />
     </bean>
     <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="nvcl-borehole"/>
@@ -329,6 +337,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="50" />
     </bean>
     
      <bean id="knownTypeTimaGeoSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -356,6 +365,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="180" />
     </bean>
 
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -411,6 +421,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="51" />
     </bean>
 
     <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">
@@ -451,6 +462,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="200" />
     </bean>
 
     <bean id="knownTypeSurfaceAftershock" class="org.auscope.portal.view.ResearchDataLayer">
@@ -482,6 +494,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="201" />
     </bean>
 
     <bean id="knownTypeSeismologyInSchool" class="org.auscope.portal.view.ResearchDataLayer">
@@ -507,6 +520,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="300" />
     </bean>
 
     <bean id="knownTypeBoreholePressureDB" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -556,6 +570,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="52"/>
     </bean>
     <bean id="knownTypeGSMLBorehole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="gsml-borehole"/>
@@ -584,6 +599,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="53" />
     </bean>
 
     <bean id="knownTypeGeologicalProvinceContact" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -599,6 +615,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="order" value="310" />
     </bean>
     
     <bean id="knownTypeGeologicalProvinceMetallogenic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -613,9 +630,10 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="order" value="311" />
     </bean>
 
-    <bean id="knownTypeAster" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+   <bean id="knownTypeAster" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="aster-main"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
@@ -626,6 +644,7 @@
         <property name="description" value="This is the parent datafile of a datset that comprises a set of 14+ geoscience products made up of mosaiced ASTER scenes across Australia."/>
         <property name="group" value="National ASTER Map of Australia"/>
         <property name="hidden" value="true"/>
+        <property name="order" value="60" />
     </bean>
 
     <bean id="knownTypeAsterAloh" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -638,6 +657,7 @@
         <property name="name" value="National ASTER Map AlOH group composition"/>
         <property name="description" value="1. Band ratio: B5/B7Blue is well ordered kaolinite, Al-rich muscovite/illite, paragonite, pyrophyllite Red is Al-poor (Si-rich) muscovite (phengite)"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="61" />
     </bean>
 
     <bean id="knownTypeAsterFerrous" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -650,6 +670,7 @@
         <property name="name" value="National ASTER Map Ferrous iron index"/>
         <property name="description" value="1. Band ratio: B5/B4Blue is low abundance, Red is high abundance"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="62" />
     </bean>
 
     <bean id="knownTypeAsterChileSandToClay" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -663,6 +684,7 @@
         <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
         <property name="feature_count" value="1" />
+        <property name="order" value="210" />
     </bean>
 
     <bean id="knownTypeAsterChileWaterIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -676,6 +698,7 @@
         <property name="description" value="Water content of the surface after removing atmospheric path-length (topography) dependent water vapour using the ASTER GDEM-2 digital elevation model.    Higher levels of surface water (warmer tones) can be related to: (i) wet soil after snow melt; (ii) green vegetation; (iii) hydroscopic minerals like illite and montmorillonite; (iii) and/or groundwater seepage."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
         <property name="feature_count" value="1" />
+        <property name="order" value="211" />
     </bean>
 
 
@@ -690,6 +713,7 @@
         <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
         <property name="feature_count" value="1" />
+        <property name="order" value="212" />
     </bean>
 
 
@@ -704,6 +728,7 @@
         <property name="description" value="Equivalent to false colour infrared photography and Landsat band colour composite  R:4; G:3; B:2. Green vegetation produces red colour."/>
         <property name="group" value="Chile Region IV ASTER Map "/>
         <property name="feature_count" value="1" />
+        <property name="order" value="213" />
     </bean>
 
 
@@ -719,6 +744,7 @@
         <property name="name" value="National ASTER Map Opaque index"/>
         <property name="description" value="1. Band ratio: B1/B4Blue is low abundance, Red is high abundance(potentially includes  carbon black (e.g. ash), magnetite, Mn oxides, and sulphides in unoxidised envornments"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="63" />
     </bean>
 
     <bean id="knownTypeAsterFerricOxideContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -731,6 +757,7 @@
         <property name="name" value="National ASTER Map Ferric oxide content"/>
         <property name="description" value="1. Band ratio: B4/B3Blue is low abundance, Red is high abundance"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="64" />
     </bean>
 
     <bean id="knownTypeAsterFeoh" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -743,6 +770,7 @@
         <property name="name" value="National ASTER Map FeOH group content"/>
         <property name="description" value="1. Band ratio: (B6+B8)/B7Blue is low content, Red is high content(potentially includes: chlorite, epidote, jarosite, nontronite, gibbsite, gypsum, opal-chalcedony)"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="65" />
     </bean>
 
     <bean id="knownTypeFerricOxideComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -755,6 +783,7 @@
         <property name="name" value="National ASTER Map Ferric oxide composition"/>
         <property name="description" value="1. Band ratio: B2/B1Blue-cyan is goethite rich, Green is hematite-goethite, Red-yellow is hematite-rich"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="66" />
     </bean>
 
     <bean id="knownTypeGroupIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -767,6 +796,7 @@
         <property name="name" value="National ASTER Map Kaolin group index"/>
         <property name="description" value="B6/B5(potential includes: pyrophyllite, alunite, well-ordered kaolinite)Blue is low content, Red is high content"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="67" />
     </bean>
 
     <bean id="knownTypeQuartzIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -779,6 +809,7 @@
         <property name="name" value="National ASTER Map TIR Quartz index"/>
         <property name="description" value="1. Band ratio: B11/(B10+B12)Blue is low quartz contentRed is high quartz content"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="68" />
     </bean>
 
     <bean id="knownTypeMgohContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -791,6 +822,7 @@
         <property name="name" value="National ASTER Map MgOH group content"/>
         <property name="description" value="1. Band ratio: (B6+B9/(B7+B8)Blue is low content, Red is high content(potentially includes: calcite, dolomite, magnesite, chlorite, epidote, amphibole, talc, serpentine)"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="69" />
     </bean>
 
     <bean id="knownTypeGreenVeg" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -803,6 +835,7 @@
         <property name="name" value="National ASTER Map green vegetation content"/>
         <property name="description" value="Band ratio: B3/B2 Blue is low contentRed is high content"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="70" />
     </bean>
 
     <bean id="knownTypeFerrCarb" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -815,6 +848,7 @@
         <property name="name" value="National ASTER Map Ferrous iron content in MgOH/carbonate"/>
         <property name="description" value="1. Band ratio: B5/B4Blue is low ferrous iron content in carbonate and MgOH minerals like talc and tremolite.Red is high ferrous iron content in carbonate and MgOH minerals like chlorite and actinolite."/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="71" />
     </bean>
 
     <bean id="knownTypeMgohGroupComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -827,6 +861,7 @@
         <property name="name" value="National ASTER Map MgOH group composition"/>
         <property name="description" value="1. Band ratio: B7/B8Blue-cyan is magnesite-dolomite, amphibole, chlorite\tRed is calcite, epidote, amphibole"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="72" />
     </bean>
 
     <bean id="knownTypeFalseColor" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -839,6 +874,7 @@
         <property name="name" value="National ASTER Map false colour mosaic"/>
         <property name="description" value="1. False colour RGB composite Red: B3Green: B2Blue: B1(red = green vegetation)"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="73" />
     </bean>
 
     <bean id="knownTypeRegolithRatios" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -851,6 +887,7 @@
         <property name="name" value="National ASTER Map Regolith Ratios"/>
         <property name="description" value="1. 3 band RGB composite Red: B3/B2Green: B3/B7Blue: B4/B7(white = green vegetation)"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="74" />
     </bean>
 
     <bean id="knownTypeAlohGroupContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -863,6 +900,7 @@
         <property name="name" value="National ASTER Map AlOH group content"/>
         <property name="description" value="1. Band ratio: (B5+B7)/B6Blue is low abundance, Red is high abundance potentially includes: phengite, muscovite, paragonite, lepidolite, illite, brammalite, montmorillonite, beidellite, kaolinite, dickite"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="75" />
     </bean>
 
     <bean id="knownTypeGypsumContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -875,6 +913,7 @@
         <property name="name" value="National ASTER Map TIR Gypsum index"/>
         <property name="description" value="1. Band ratio: (B10+B12)/B11Blue is low gypsum contentRed is high gypsum content"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="76" />
     </bean>
 
     <bean id="knownTypeSilicaContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -887,6 +926,7 @@
         <property name="name" value="National ASTER Map TIR Silica index"/>
         <property name="description" value="1. Band ratio: B13/B10Blue is low silica contentRed is high silica content(potentially includes Si-rich minerals, such as quartz, feldspars, Al-clays)"/>
         <property name="group" value="National ASTER Map of Australia"/>
+        <property name="order" value="77" />
     </bean>
 
     <bean id="knownTypeRemanentAnomalies" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -912,7 +952,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
-
+        <property name="order" value="80" />
     </bean>
 
     <bean id="knownTypeRemanentAnomaliesAutoSearch" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -931,6 +971,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getRemanentAnomaliesAutoSearchStyle.do"/>
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesAutoSearchDownload.do"/>
+        <property name="order" value="81" />
     </bean>
 
     <bean id="knownTypeRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -943,6 +984,7 @@
         <property name="name" value="AUS5 - Total Magnetic Intensity"/>
         <property name="description" value="Total Magnetic Intensity from Magnetic Anomaly Map of Australia (fifth edition), Geoscience Australia and other sources"/>
         <property name="group" value="Magnetics"/>
+        <property name="order" value="82" />
     </bean>
 
     <bean id="knownTypeEMAGRemanentAnomalies" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -968,7 +1010,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
-
+        <property name="order" value="83" />
     </bean>
 
     <bean id="knownTypeEMAGRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -987,6 +1029,7 @@
         <property name="name" value="EMAG2 - Total Magnetic Intensity"/>
         <property name="description" value="Total Magnetic Intensity from the EMAG2 datasource.http://www.geomag.org/models/emag2.html"/>
         <property name="group" value="Magnetics"/>
+        <property name="order" value="84" />
     </bean>
 
     <!-- This layer is NOT selectable, it is only used for hiding these features -->
@@ -998,9 +1041,11 @@
             </bean>
         </constructor-arg>
         <property name="hidden" value="true"/>
+        <property name="order" value="450" />
     </bean>
     <!-- This layer is NOT selectable, it is only used for hiding these features -->
-    <bean id="knownTypeFeatureCollection" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <bean id="knownTypeFeatureCollection"
+    	class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="notused-featurecollection"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
@@ -1008,6 +1053,7 @@
             </bean>
         </constructor-arg>
         <property name="hidden" value="true"/>
+        
     </bean>
     <!-- This layer is NOT selectable, it is only used for hiding these features -->
     <bean id="knownTypeLateriteYilgarnGeoChem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1111,6 +1157,7 @@
         <property name="name" value="Onshore Only Bouguer Geodetic"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - Geoscience Australia Coverages"/>
+        <property name="order" value="110" />
     </bean>
 
     <bean id="knownTypeGravAnomalyGeodetic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1123,6 +1170,7 @@
         <property name="name" value="Onshore and Offshore Gravity Anomaly Geodetic"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - Geoscience Australia Coverages"/>
+        <property name="order" value="111" />
     </bean>
 
     <bean id="knownTypeMagMap" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1135,6 +1183,7 @@
         <property name="name" value="MagMap V5 2010"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - Geoscience Australia Coverages"/>
+        <property name="order" value="112" />
     </bean>
 
     <bean id="knownTypeRadMapTotaldose" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1147,6 +1196,7 @@
         <property name="name" value="RadMap Totaldose"/>
         <property name="description" value=""/>
         <property name="group" value="Geoscience Australia Coverages"/>
+        <property name="order" value="120" />
     </bean>
 
     <bean id="knownTypeGocadModels" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1172,6 +1222,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="130" />
     </bean>
 
     <bean id="KnownTypeGeophysicsDatasets" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1197,6 +1248,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
+        <property name="order" value="131" />
     </bean>
 
     <bean id="knownTypeGswaMagMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1209,6 +1261,7 @@
         <property name="name" value="Magnetic anomaly grid (80m)"/>
         <property name="description" value="This grid combines merged magnetic anomaly data from onshore and offshore WA. It is generated from Federal and State government data sets acquired with a line spacing of 500 metres or less and over 800 open file Company data sets at various line spacings"/>
         <property name="group" value="Analytic - Geological Survey of Western Australia"/>
+        <property name="order" value="230" />
     </bean>
 
     <bean id="knownTypeGswaUMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1221,6 +1274,7 @@
         <property name="name" value="Uranium Radiometrics anomaly grid (100m)"/>
         <property name="description" value="This radioelement grid is generated from Federal and State government data sets acquired with a line spacing of 500 metres or less and selected open file data sets."/>
         <property name="group" value="Analytic - Geological Survey of Western Australia"/>
+        <property name="order" value="231" />
     </bean>
 
     <bean id="knownTypeGswaThMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1233,6 +1287,7 @@
         <property name="name" value="Thorium Radiometrics anomaly grid (100m)"/>
         <property name="description" value="This radioelement grid is generated from Federal and State government data sets acquired with a line spacing of 500 metres or less and selected open file data sets."/>
         <property name="group" value="Analytic - Geological Survey of Western Australia"/>
+        <property name="order" value="232" />
     </bean>
 
     <bean id="knownTypeGswaTcMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1245,6 +1300,7 @@
         <property name="name" value="Ternary Radiometrics anomaly grid (100m)"/>
         <property name="description" value="This merged K, U, Th radioelement grid is generated from Federal and State government data sets acquired with a line spacing of 500 metres or less and selected open file data sets."/>
         <property name="group" value="Analytic - Geological Survey of Western Australia"/>
+        <property name="order" value="233" />
     </bean>
 
     <bean id="knownTypeGswaKMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1257,6 +1313,7 @@
         <property name="name" value="Potassium Radiometrics anomaly grid (100m)"/>
         <property name="description" value="This radioelement grid is generated from Federal and State government data sets acquired with a line spacing of 500 metres or less and selected open file data sets."/>
         <property name="group" value="Analytic - Geological Survey of Western Australia"/>
+        <property name="order" value="234" />
     </bean>
 
      <bean id="knownTypeGAAemSurvey" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1269,6 +1326,7 @@
         <property name="name" value="Paterson Airbone Electromagnetic Survey"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - Geoscience Australia"/>
+        <property name="order" value="132" />
     </bean>
 
     <bean id="knownTypeGARumJungleAEM" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1281,6 +1339,7 @@
         <property name="name" value="Rum Jungle Airbone Electromagnetic Survey"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - Geoscience Australia"/>
+        <property name="order" value="133" />
     </bean>
 
     <bean id="knownTypeGAWoolnerAEM" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1293,6 +1352,7 @@
         <property name="name" value="Woolner Airbone Electromagnetic Survey"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - Geoscience Australia"/>
+        <property name="order" value="134" />
     </bean>
 
     <bean id="knownTypeGAGravitySurvey" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1305,6 +1365,7 @@
         <property name="name" value="Australian Point Gravity"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - Geoscience Australia"/>
+        <property name="order" value="135" />
     </bean>
     
     <bean id="knownTypeMusgraveAem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1317,6 +1378,7 @@
         <property name="name" value="Musgrave Airbone Electromagnetic Survey"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - CSIRO"/>
+        <property name="order" value="140" />
     </bean>
     
     <bean id="knownTypeWesternAreaAem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1329,6 +1391,7 @@
         <property name="name" value="Western Area Airbone Electromagnetic Survey"/>
         <property name="description" value="Western Area 70001"/>
         <property name="group" value="Analytic - CSIRO"/>
+        <property name="order" value="141" />
     </bean>
     
     <bean id="knownTypeAshburtonAem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1341,6 +1404,7 @@
         <property name="name" value="Ashburton Airbone Electromagnetic Survey"/>
         <property name="description" value=""/>
         <property name="group" value="Analytic - CSIRO"/>
+        <property name="order" value="142" />
     </bean>
     <!-- End of Analytic layer -->
 
