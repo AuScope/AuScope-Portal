@@ -62,7 +62,7 @@
                 <ref bean="knownTypeSedimentaryBasinsArcheanPaleoproterozoic" />                               
                 <ref bean="knownTypeTectonicProvincesArcheanProterozoic" />    
                 <ref bean="knownTypeCrustalElements" />
-				<ref bean="knownTypeAllGeologicalProvinces" />
+                <ref bean="knownTypeAllGeologicalProvinces" />
                 <ref bean="knownTypeAster" />
                 <ref bean="knownTypeAsterAloh" />
                 <ref bean="knownTypeAsterFerrous" />
