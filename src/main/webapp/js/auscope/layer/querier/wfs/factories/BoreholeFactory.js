@@ -35,7 +35,7 @@ Ext.define('auscope.layer.querier.wfs.factories.BoreholeFactory', {
         var startPoint = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:indexData/gsml:BoreholeDetails/gsml:startPoint');
 
         if(drillingDate){
-            drillingDate = new Date(drillingDate.replace("Z", '')).toDateString();
+            drillingDate = new Date(drillingDate).toUTCString();
         }else{
             drillingDate = "";
         }
