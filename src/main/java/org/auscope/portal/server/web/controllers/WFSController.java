@@ -219,35 +219,31 @@ public class WFSController extends BasePortalController {
     }
     
     /**
-     * Gets the Layer Abstract  from the getCapabilities record if it is defined there.    
+     * Gets the Abstract  from the getCapabilities record if it is defined there.    
      * The version is currently hardcoded in the WFSGetFeaturemethodMaker class.
      * 
      * @param serviceUrl The WMS URL to query
      * @param version the version of the WFS to request
      * @param name the name of the feature
      */
-    @RequestMapping("/getWFSLayerAbstract.do")
-    public ModelAndView getWFSLayerAbstract(
+    @RequestMapping("/getWFSFeatureAbstract.do")
+    public ModelAndView getWFSFeatureAbstract(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("version") String version,
             @RequestParam("name") String name) throws Exception {
 
         try {
-            /* 
-             * It might be preferable to create a nicer way of getting the data for the specific layer
-             * This implementation just loops through the whole capabilities document looking for the layer.
-             */
             String decodedServiceURL = URLDecoder.decode(serviceUrl, "UTF-8");
             
             WFSGetCapabilitiesResponse getCapabilitiesRecord = 
                     wfsService.getCapabilitiesResponse(decodedServiceURL);           
             
-            String layerAbstract = getCapabilitiesRecord.getFeatureAbstracts().get(name);
+            String featureAbstract = getCapabilitiesRecord.getFeatureAbstracts().get(name);
             
-            return generateJSONResponseMAV(true, layerAbstract, "");
+            return generateJSONResponseMAV(true, featureAbstract, "");
 
         } catch (Exception e) {
-            log.warn(String.format("Unable to download WFS Layer Abstract for '%1$s'", serviceUrl));
+            log.warn(String.format("Unable to download WFS Feature Abstract for '%1$s'", serviceUrl));
             log.debug(e);
             return generateJSONResponseMAV(false, "", null);
         }
