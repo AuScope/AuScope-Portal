@@ -91,11 +91,9 @@ Ext.application({
         })
         var layersGrouper = new Ext.util.Grouper({
             groupFn: function(item) {
-                console.log("layersGrouper - groupFn: ",item.data.group)
                 return item.data.group;
             },
             sorterFn: function(record1, record2) {
-                console.log("layersGrouper - sorterFn rec1: ",record1.data.name, ", rec2: ",record2.data.name);
                 var order1 = record1.data.order;
                     order2 = record2.data.order;
                 return order1 > order2 ? 1 : (order1 < order2 ? -1 : 0);
@@ -165,9 +163,6 @@ Ext.application({
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
 
-
-
-
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
@@ -175,6 +170,7 @@ Ext.application({
             activelayerstore : layerStore,
             map : map,
             layerFactory : layerFactory,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -183,13 +179,14 @@ Ext.application({
                 icon : 'img/information.png',
                 dismissDelay : 30000
             }
-
+        
         });
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered',
             store : unmappedCSWRecordStore,
             activelayerstore : layerStore,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 title : 'Registered Layers',
                 text : 'The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.',
@@ -206,6 +203,7 @@ Ext.application({
             itemId : 'org-auscope-custom-record-panel',
             store : customRecordStore,
             activelayerstore : layerStore,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             enableBrowse : true,//VT: if true browse catalogue option will appear
             tooltip : {
                 title : 'Custom Data Layers',
@@ -225,6 +223,7 @@ Ext.application({
             enableBrowse : false,//VT: if true browse catalogue option will appear
             map : map,
             layerFactory : layerFactory,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 title : 'Research Data Layers',
                 text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p1>',
