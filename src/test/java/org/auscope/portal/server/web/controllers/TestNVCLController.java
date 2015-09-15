@@ -39,7 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * The Class TestNVCLController.
- * 
+ *
  * @version: $Id$
  */
 @SuppressWarnings("rawtypes")
@@ -88,7 +88,8 @@ public class TestNVCLController extends PortalTestClass {
         final String serviceUrl = "http://fake.com/wfs";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final String nvclWfsResponse = "wfsResponse";
@@ -99,8 +100,8 @@ public class TestNVCLController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
-                        maxFeatures, bbox, null);
+                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
+                        filterDateStart, filterDateEnd, maxFeatures, bbox, null);
                 will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();
@@ -110,7 +111,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDate, maxFeatures, bbox, onlyHylogger);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -130,7 +131,8 @@ public class TestNVCLController extends PortalTestClass {
         final String serviceUrl = "http://fake.com/wfs";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final String nvclWfsResponse = "wfsResponse";
@@ -146,8 +148,8 @@ public class TestNVCLController extends PortalTestClass {
                         with(any(CSWRecordsFilterVisitor.class)));
                 will(returnValue(restrictedIds));
 
-                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
-                        maxFeatures, bbox, restrictedIds);
+                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
+                        filterDateStart, filterDateEnd, maxFeatures, bbox, restrictedIds);
                 will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();
@@ -156,7 +158,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDate, maxFeatures, bbox, onlyHylogger);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -176,7 +178,8 @@ public class TestNVCLController extends PortalTestClass {
         final String serviceUrl = "http://fake.com/wfs";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final boolean onlyHylogger = true;
@@ -195,7 +198,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDate, maxFeatures, bbox, onlyHylogger);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
@@ -210,7 +213,8 @@ public class TestNVCLController extends PortalTestClass {
         final String serviceUrl = "http://fake.com/wfs";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1., 2.}, new double[] {3., 4.});
         final boolean onlyHylogger = true;
@@ -229,13 +233,13 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDate, maxFeatures, bbox, onlyHylogger);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
     /**
      * Tests getting dataset collection succeeds if underlying service succeeds.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -260,7 +264,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting dataset collection fails if underlying service fails.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -282,7 +286,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting dataset collection succeeds if underlying service succeeds.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -307,7 +311,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting dataset collection fails if underlying service fails.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -330,7 +334,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting mosaic.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -369,7 +373,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting mosaic fails gracefully when the service fails.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -394,7 +398,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting PlotScalar.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -439,7 +443,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests getting PlotScalar fails correctly.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -470,7 +474,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a CSV download calls the underlying service correctly
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -508,7 +512,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a TSG download calls the underlying service correctly
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -554,7 +558,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a workaround for spring framework combining multiple parameters (of the same name) into a CSV
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -601,7 +605,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a TSG download status calls the underlying service correctly
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -637,7 +641,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a WFS download calls the underlying service correctly
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -676,7 +680,7 @@ public class TestNVCLController extends PortalTestClass {
 
     /**
      * Tests a WFS download status calls the underlying service correctly
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -722,7 +726,8 @@ public class TestNVCLController extends PortalTestClass {
         final String serviceFilter = "http://fake.com";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = -1;
         final String nvclWfsResponse = "wfsResponse";
         final String nvclKmlResponse = "kmlResponse";
@@ -732,8 +737,8 @@ public class TestNVCLController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
-                        maxFeatures, null, null);
+                oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
+                        filterDateStart, filterDateEnd, maxFeatures, null, null);
                 will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();
@@ -742,7 +747,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDate, maxFeatures, "", onlyHylogger, serviceFilter);
+                filterDateStart, filterDateEnd, maxFeatures, "", onlyHylogger, serviceFilter);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -757,12 +762,13 @@ public class TestNVCLController extends PortalTestClass {
         final String serviceFilter = "http://fakeNOT.com";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = 10;
         final String onlyHylogger = "off";
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDate, maxFeatures, "", onlyHylogger, serviceFilter);
+                filterDateStart, filterDateEnd, maxFeatures, "", onlyHylogger, serviceFilter);
         Map data = (Map) response.getModel().get("data");
         Assert.assertNull(data);
     }
