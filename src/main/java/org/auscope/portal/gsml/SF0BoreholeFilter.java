@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * A class for filter SF0 Borehole web service
- * 
+ *
  * @author Florence Tan
  *
  */
@@ -19,11 +19,11 @@ public class SF0BoreholeFilter extends BoreholeFilter {
 
     public SF0BoreholeFilter() {
         // test
-        super(null, null, null, null);
+        super(null, null, null, null, null);
     }
 
-    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling, List<String> ids) {
-        super(boreholeName, custodian, dateOfDrilling, ids);
+    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,List<String> ids) {
+        super(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -59,10 +59,10 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                                     this.custodian));
         }
 
-        if (dateOfDrilling != null && !dateOfDrilling.isEmpty()) {
+        if (dateOfDrillingStart != null && !dateOfDrillingStart.isEmpty()) {
             parameterFragments.add(this.generatePropertyIsLikeFragment(
                     "gsmlp:drillStartDate",
-                    this.dateOfDrilling));
+                    this.dateOfDrillingStart));
         }
 
         if (this.restrictToIDList != null && !this.restrictToIDList.isEmpty()) {

@@ -68,11 +68,19 @@ Ext.define('auscope.layer.filterer.forms.BoreholeFilterForm', {
                 },{                   	
                     xtype: 'datefield',
                     anchor: '95%',
-                    itemId: 'drillingdate-field',
-                    fieldLabel: 'Drill Date',
+                    itemId: 'drillingdateStart-field',
+                    fieldLabel: 'Drill Date Start',
                     format: "Y-m-d",
                     value: '',
-                    name: 'dateOfDrilling'
+                    name: 'dateOfDrillingStart'
+                },{                     
+                    xtype: 'datefield',
+                    anchor: '95%',
+                    itemId: 'drillingdateEnd-field',
+                    fieldLabel: 'Drill Date End',
+                    format: "Y-m-d",
+                    value: '',
+                    name: 'dateOfDrillingEnd'
                 },{
                     xtype: 'combo',
                     anchor: '95%',
