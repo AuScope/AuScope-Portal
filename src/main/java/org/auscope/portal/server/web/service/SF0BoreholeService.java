@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * A service class for making requests to the SF0 Borehole web service
- * 
+ *
  * @author Florence Tan
  *
  */
@@ -41,7 +41,7 @@ public class SF0BoreholeService extends BoreholeService {
 
     /**
      * Get all SF0 Boreholes from a given service url and return the response
-     * 
+     *
      * @param serviceURL
      * @param bbox
      *            Set to the bounding box in which to fetch results, otherwise set it to null
@@ -51,9 +51,9 @@ public class SF0BoreholeService extends BoreholeService {
      * @throws Exception
      */
     public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
-            String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox) throws Exception {
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox) throws Exception {
         String filterString;
-        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null);
+        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, null);
         if (bbox == null) {
             filterString = sf0BoreholeFilter.getFilterStringAllRecords();
         } else {
@@ -75,9 +75,9 @@ public class SF0BoreholeService extends BoreholeService {
     }
 
     @Override
-    public String getFilter(String boreholeName, String custodian, String dateOfDrilling,
+    public String getFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,
             int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
-        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, ids);
+        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids);
         return generateFilterString(filter, bbox);
     }
 

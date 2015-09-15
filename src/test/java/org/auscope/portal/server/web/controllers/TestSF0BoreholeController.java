@@ -19,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * The Class TestNVCLController.
- * 
+ *
  * @version: $Id$
  */
 @SuppressWarnings("rawtypes")
@@ -56,7 +56,8 @@ public class TestSF0BoreholeController extends PortalTestClass {
         final String serviceUrl = "http://fake.com/wfs";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final String sf0BoreholeWfsResponse = "wfsResponse";
@@ -66,8 +67,8 @@ public class TestSF0BoreholeController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
-                        maxFeatures, null);
+                oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
+                        filterDateStart, filterDateEnd, maxFeatures, null);
                 will(returnValue(new WFSTransformedResponse(sf0BoreholeWfsResponse, sf0BoreholeKmlResponse,
                         mockHttpMethodBase)));
 
@@ -78,7 +79,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
         });
 
         ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDate, maxFeatures, null);
+                filterDateStart, filterDateEnd, maxFeatures, null);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
