@@ -92,15 +92,15 @@ public class BoreholeFilter extends AbstractFilter {
                     .forPattern("yyyy-MM-dd HH:mm:ss");
             String utcDateofDrillingStart = outFormatter.print(dtStart);
             String utcDateofDrillingEnd = outFormatter.print(dtEnd);
-            parameterFragments.add(this.generatePropertyIsGreaterThan(
-                    "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",
-                    this.generateFunctionDateParse(utcDateofDrillingStart),true));
+            parameterFragments.add(this.generateDatePropertyIsGreaterThan(
+                    "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",false,
+                    this.generateFunctionDateParse(utcDateofDrillingStart)));
 
             parameterFragments
                     .add(this
-                            .generatePropertyIsLessThan(
-                                    "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",
-                                    this.generateFunctionDateParse(utcDateofDrillingEnd),true));
+                            .generateDatePropertyIsLessThan(
+                                    "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",false,
+                                    this.generateFunctionDateParse(utcDateofDrillingEnd)));
 
         }
 
