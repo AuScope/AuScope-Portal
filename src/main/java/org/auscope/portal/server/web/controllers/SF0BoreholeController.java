@@ -80,7 +80,8 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "serviceUrl", defaultValue = "") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
             @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
-            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
@@ -110,11 +111,11 @@ public class SF0BoreholeController extends BasePortalController {
         //		}
 
         String filter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrilling, dateOfDrilling, maxFeatures, bbox,
+                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
                 null);
 
         String hyloggerFilter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrilling, dateOfDrilling, maxFeatures, bbox,
+                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
                 hyloggerBoreholeIDs);
 
         String style = this.boreholeService.getStyle(filter, (color.isEmpty() ? "#2242c7" : color), hyloggerFilter,

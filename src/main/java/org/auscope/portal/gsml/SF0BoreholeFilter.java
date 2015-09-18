@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 
 /**
@@ -59,10 +62,31 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                                     this.custodian));
         }
 
-        if (dateOfDrillingStart != null && !dateOfDrillingStart.isEmpty()) {
-            parameterFragments.add(this.generatePropertyIsLikeFragment(
-                    "gsmlp:drillStartDate",
-                    this.dateOfDrillingStart));
+        if (dateOfDrillingStart != null && !dateOfDrillingStart.isEmpty()
+                && dateOfDrillingEnd != null && !dateOfDrillingEnd.isEmpty()) {
+            // AUS-2595 Due to the date compare does not like the
+            // PropertyIsLike, it was change to use PropertyIsGreaterThan & PropertyIsLessThan.
+            DateTimeFormatter formatter = DateTimeFormat
+                    .forPattern("yyyy-MM-dd");
+            DateTime dtStart = formatter
+                    .parseDateTime(this.dateOfDrillingStart);
+            DateTime dtEnd = formatter.parseDateTime(this.dateOfDrillingEnd);
+            // LJ: Need to minus 1 second for startDate to cover the time of
+            // 00:00:00
+            // Need to plus 1 second for endDate to cover the time of 00:00:00
+            dtStart = dtStart.minusSeconds(1);
+            dtEnd = dtEnd.plusSeconds(1);
+            DateTimeFormatter outFormatter = DateTimeFormat
+                    .forPattern("yyyy-MM-dd HH:mm:ss");
+            String utcDateofDrillingStart = outFormatter.print(dtStart);
+            String utcDateofDrillingEnd = outFormatter.print(dtEnd);
+            parameterFragments.add(this.generateDatePropertyIsGreaterThan(
+                    "gsmlp:drillStartDate",false,
+                    this.generateFunctionDateParse(utcDateofDrillingStart)));
+
+            parameterFragments.add(this.generateDatePropertyIsLessThan(
+                    "gsmlp:drillStartDate",false,
+                    this.generateFunctionDateParse(utcDateofDrillingEnd)));
         }
 
         if (this.restrictToIDList != null && !this.restrictToIDList.isEmpty()) {
