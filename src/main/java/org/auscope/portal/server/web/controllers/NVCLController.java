@@ -42,7 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller for handling requests for the NVCL boreholes
- * 
+ *
  * @author Josh Vote
  *
  */
@@ -85,7 +85,8 @@ public class NVCLController extends BasePortalController {
     public ModelAndView doBoreholeFilter(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
             @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
-            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
@@ -109,7 +110,7 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
-        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, onlyHylogger);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, onlyHylogger);
     }
 
     /**
@@ -128,7 +129,8 @@ public class NVCLController extends BasePortalController {
     public ModelAndView doNVCLFilter(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
             @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
-            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
@@ -152,7 +154,7 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         // show all NVCL boreholes
-        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrilling, -1, bbox, onlyHylogger);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, -1, bbox, onlyHylogger);
     }
 
     /**
@@ -168,7 +170,7 @@ public class NVCLController extends BasePortalController {
      * @throws Exception
      */
     public ModelAndView doBoreholeFilter(String serviceUrl, String boreholeName, String custodian,
-            String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox,
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox,
             boolean onlyHylogger) throws Exception {
         List<String> hyloggerBoreholeIDs = null;
         if (onlyHylogger) {
@@ -191,7 +193,7 @@ public class NVCLController extends BasePortalController {
 
         try {
             WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
-                    dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
+                    dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, hyloggerBoreholeIDs);
             return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             return this.generateExceptionResponse(e, serviceUrl);
@@ -200,7 +202,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Gets the list of datasets for given borehole from the specified NVCL dataservice url.
-     * 
+     *
      * @param serviceUrl
      *            The URL of an NVCL Data service
      * @param holeIdentifier
@@ -225,7 +227,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Gets the list of logs for given NVCL dataset from the specified NVCL dataservice url.
-     * 
+     *
      * @param serviceUrl
      *            The URL of an NVCL Data service
      * @param datasetId
@@ -251,7 +253,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Gets the list of logs for given NVCL dataset from the specified NVCL dataservice url.
-     * 
+     *
      * @param serviceUrl
      *            The URL of an NVCL Data service
      * @param datasetId
@@ -298,7 +300,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of an NVCL Data service
      * @param logId
@@ -329,7 +331,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of an NVCL Data service
      * @param logId
@@ -374,7 +376,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL Plot Scalar request. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of an NVCL Data service
      * @param logId
@@ -431,7 +433,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a CSV download request to a WFS. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
      * @param datasetId
@@ -461,7 +463,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a CSV download request to a WFS from a NVCL 2.0 service. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
      * @param datasetId
@@ -572,7 +574,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL TSG status request. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of the NVCLDataService
      * @param email
@@ -613,7 +615,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL WFS download request. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of the NVCLDataService
      * @param email
@@ -657,7 +659,7 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Proxies a NVCL WFS status request. Writes directly to the HttpServletResponse
-     * 
+     *
      * @param serviceUrl
      *            The URL of the NVCLDataService
      * @param email
