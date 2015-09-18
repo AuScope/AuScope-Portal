@@ -52,12 +52,12 @@ public class SF0BoreholeController extends BasePortalController {
      */
     @RequestMapping("/doBoreholeViewFilter.do")
     public ModelAndView doBoreholeFilter(String serviceUrl, String boreholeName, String custodian,
-            String dateOfDrilling, int maxFeatures, String bbox) throws Exception {
+            String dateOfDrillingStart, String dateOfDrillingEnd, int maxFeatures, String bbox) throws Exception {
 
         try {
             FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox);
             WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
-                    dateOfDrilling, maxFeatures, box);
+                    dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, box);
             return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             return this.generateExceptionResponse(e, serviceUrl);
@@ -80,7 +80,8 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "serviceUrl", defaultValue = "") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
             @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
-            @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
@@ -94,7 +95,7 @@ public class SF0BoreholeController extends BasePortalController {
         List<String> hyloggerBoreholeIDs = null;
         // AUS-2445
         // RA: we can't show WMS for NVCL for now because the way GeoServer filter WMS isn't very efficient and
-        // it will cause services with a lot of scanned boreholes (e.g. SA) to run out of memory!		
+        // it will cause services with a lot of scanned boreholes (e.g. SA) to run out of memory!
         //		try {
         //			// don't get hylogger IDs if this is only to populate the legend
         //			if (!serviceUrl.isEmpty()) {
@@ -110,11 +111,11 @@ public class SF0BoreholeController extends BasePortalController {
         //		}
 
         String filter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrilling, maxFeatures, bbox,
+                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
                 null);
 
         String hyloggerFilter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrilling, maxFeatures, bbox,
+                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
                 hyloggerBoreholeIDs);
 
         String style = this.boreholeService.getStyle(filter, (color.isEmpty() ? "#2242c7" : color), hyloggerFilter,

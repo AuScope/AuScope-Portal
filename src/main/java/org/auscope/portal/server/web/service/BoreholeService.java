@@ -64,7 +64,7 @@ public class BoreholeService extends BaseWFSService {
 
     /**
      * Get all boreholes from a given service url and return the response
-     * 
+     *
      * @param serviceURL
      * @param bbox
      *            Set to the bounding box in which to fetch results, otherwise set it to null
@@ -74,10 +74,10 @@ public class BoreholeService extends BaseWFSService {
      * @throws Exception
      */
     public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
-            String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
             throws Exception {
         String filterString;
-        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictToIDList);
+        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
         if (bbox == null) {
             filterString = nvclFilter.getFilterStringAllRecords();
         } else {
@@ -164,15 +164,15 @@ public class BoreholeService extends BaseWFSService {
         return ids;
     }
 
-    public String getFilter(String boreholeName, String custodian, String dateOfDrilling,
+    public String getFilter(String boreholeName, String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,
             int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
-        BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling, ids);
+        BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, ids);
         return generateFilterString(filter, bbox);
     }
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param filter
      *            The filter
      * @param bbox

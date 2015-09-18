@@ -77,7 +77,8 @@ public class TestBoreholeService extends PortalTestClass {
         final int maxFeatures = 45;
         final String boreholeName = "borehole-name";
         final String custodian = "custodian";
-        final String dateOfDrilling = "2011-01-01";
+        final String dateOfDrillingStart = "2011-01-01";
+        final String dateOfDrillingEnd = "2011-01-02";
         final String gmlString = "xmlString";
         final String kmlString = "kmlString";
         final List<String> restrictedIds = null;
@@ -98,8 +99,8 @@ public class TestBoreholeService extends PortalTestClass {
             }
         });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
-                maxFeatures, bbox, restrictedIds);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, restrictedIds);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
         Assert.assertEquals(kmlString, result.getTransformed());
@@ -119,7 +120,8 @@ public class TestBoreholeService extends PortalTestClass {
         final int maxFeatures = 45;
         final String boreholeName = "borehole-name";
         final String custodian = "custodian";
-        final String dateOfDrilling = "2011-01-01";
+        final String dateOfDrillingStart = "2011-01-01";
+        final String dateOfDrillingEnd = "2011-01-02";
         final String gmlString = "xmlString";
         final String kmlString = "kmlString";
         final List<String> restrictedIds = null;
@@ -139,8 +141,8 @@ public class TestBoreholeService extends PortalTestClass {
             }
         });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
-                maxFeatures, bbox, restrictedIds);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, restrictedIds);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
         Assert.assertEquals(kmlString, result.getTransformed());
@@ -154,12 +156,13 @@ public class TestBoreholeService extends PortalTestClass {
     public void testFilterStyle() throws Exception {
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String filterDateStart = "1986-10-09";
+        final String filterDateEnd = "1986-10-10";
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = null;
 
         String filter = service.getFilter(nameFilter, custodianFilter,
-                filterDate, maxFeatures, bbox, null);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, null);
 
         String style = service.getStyle(filter, "#2242c7", null, null);
         Assert.assertNotNull(style);
@@ -180,11 +183,13 @@ public class TestBoreholeService extends PortalTestClass {
         final int maxFeatures = 45;
         final String boreholeName = "asda";
         final String custodian = "shaksdhska";
-        final String dateOfDrilling = "2010-01-02";
+        final String dateOfDrillingStart = "2010-01-02";
+        final String dateOfDrillingEnd = "2010-01-03";
         final String gmlString = "xmlString";
         final String kmlString = "kmlString";
         final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
-        final String filterString = (new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictedIds))
+        final String filterString = (new BoreholeFilter(boreholeName, custodian,
+                dateOfDrillingStart, dateOfDrillingEnd, restrictedIds))
                 .getFilterStringAllRecords();
 
         context.checking(new Expectations() {
@@ -202,8 +207,8 @@ public class TestBoreholeService extends PortalTestClass {
             }
         });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
-                maxFeatures, null, restrictedIds);
+        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, null, restrictedIds);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getGml());
         Assert.assertEquals(kmlString, result.getTransformed());
