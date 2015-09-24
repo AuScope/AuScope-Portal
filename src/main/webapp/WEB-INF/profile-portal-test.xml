@@ -117,7 +117,8 @@
         <constructor-arg>
             <list>
                 <!-- <ref bean="cswGeoscienceLocal" /> -->
-                <ref bean="cswGeoscienceDev" />
+                <ref bean="cswGaDev" />
+                <ref bean="cswGswaDev" />
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
