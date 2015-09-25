@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.auscope.portal.core.services.CSWFilterService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
-import org.auscope.portal.core.services.csw.custom.CustomRegistry;
 import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
@@ -122,7 +121,7 @@ public class TestCSWFilterController extends PortalTestClass {
             }
         });
 
-        ModelAndView mav = controller.getFilteredCSWRecords(key, value, maxRecords, startPosition, customRegistry);
+        ModelAndView mav = controller.getFilteredCSWRecords(key, value, maxRecords, startPosition, customRegistry, "auscope");
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
@@ -180,7 +179,7 @@ public class TestCSWFilterController extends PortalTestClass {
             }
         });
 
-        ModelAndView mav = controller.getFilteredCSWRecords(key, value, maxRecords, startPosition, customRegistry);
+        ModelAndView mav = controller.getFilteredCSWRecords(key, value, maxRecords, startPosition, customRegistry, "auscope");
         Assert.assertNotNull(mav);
         Assert.assertFalse((Boolean) mav.getModel().get("success"));
     }
@@ -242,7 +241,7 @@ public class TestCSWFilterController extends PortalTestClass {
             }
         });
 
-        ModelAndView mav = controller.getFilteredCSWRecords(key, value, maxRecords, startPosition, customRegistry);
+        ModelAndView mav = controller.getFilteredCSWRecords(key, value, maxRecords, startPosition, customRegistry, "auscope");
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
         Collection<ModelMap> dataRecs = (Collection<ModelMap>) mav.getModel().get("data");
