@@ -7,15 +7,11 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 
     enableBrowse : false,
 
-
     constructor : function(cfg) {
         this.callParent(arguments);
         this.on('afterrender', this._loadQueryBar, this);
         this.enableBrowse = cfg.enableBrowse;
-
-
     },
-
 
     _loadQueryBar : function() {
         this._updateSearchBar(false);
@@ -63,14 +59,13 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                 }]
             });
         }
-
     },
 
     _getRegistryAction : function(){
         var baseform = this.filterForm;
 
         var me = this;
-
+        
         return new Ext.Action({
             xtype : 'button',
             text:'Registry',
@@ -83,6 +78,10 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                 if(me.browseCatalogueDNSMessage==true){
                     var cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                         name : 'CSW Filter',
+                        id : 'cswFilterWindow',
+                        cswFilterFormPanel:  new auscope.widgets.GAAdvancedSearchPanel({
+                            name : 'Filter Form'
+                        }),
                         listeners : {
                             filterselectcomplete : Ext.bind(me.handleFilterSelectComplete, me)
                         }
@@ -101,6 +100,10 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                                 }
                                 var cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                                     name : 'CSW Filter',
+                                    id : 'cswFilterWindow',
+                                    cswFilterFormPanel: new auscope.widgets.GAAdvancedSearchPanel({
+                                        name : 'Filter Form'
+                                    }),
                                     listeners : {
                                         filterselectcomplete : Ext.bind(me.handleFilterSelectComplete, me)
                                     }
