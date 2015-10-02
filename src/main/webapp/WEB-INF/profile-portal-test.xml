@@ -12,7 +12,6 @@
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
             <list>                
-<<<<<<< HEAD
                 <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
