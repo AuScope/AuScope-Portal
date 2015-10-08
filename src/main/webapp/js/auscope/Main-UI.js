@@ -1,3 +1,12 @@
+Ext.Loader.setConfig({
+    enabled: true,
+//    paths: {
+//        'AM': 'app'
+//    }
+});
+
+Ext.require('portal.events.AppEvents');
+
 Ext.application({
     name : 'portal',
 
@@ -154,7 +163,7 @@ Ext.application({
         var map = null;
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-
+        
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
             formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
@@ -171,6 +180,27 @@ Ext.application({
             map : map,
             layerFactory : layerFactory,
             onlineResourcePanelType : 'gaonlineresourcespanel',
+            tooltip : {
+                anchor : 'top',
+                title : 'Featured Layers',
+                text : '<p1>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p1>',
+                showDelay : 100,
+                icon : 'img/information.png',
+                dismissDelay : 30000
+            }
+        
+        });
+
+        //Create our store for holding the set of active layers that have been added to the map
+        var activeLayerStore = Ext.create('auscope.layer.ActiveLayerStore', {});
+
+        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
+            //title : 'Featured2',
+            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
+            store : activeLayerStore,
+            //activelayerstore : layerStore,
+            map : map,
+            layerFactory : layerFactory,
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -280,6 +310,50 @@ Ext.application({
         });
 
         /**
+         * Add panel for the Active Layers and Controls (GPT-40)
+         */
+        var body = Ext.getBody();
+
+        // Render Active Layers into divId
+        var renderActiveLayers = function(divId) {
+            console.log("renderActiveLayers - divId: "+divId);
+        }
+
+        var mpc = Ext.create('Ext.panel.Panel', {
+            id : 'activeLayersPanel',
+            title : 'Active Layers',
+             layout: {
+                 type: 'vbox',         // Arrange child items vertically
+                 align: 'stretch',     // Each takes up full width
+                 padding: 1
+             },
+             renderTo: body,
+             items : [
+                  activeLayersPanel,     //activeLayerDisplay,
+                  {
+                     xtype : 'label',
+                     id : 'baseMap',
+                     html : '<div id="baseMap"></div>',
+                     listeners: {
+                         afterrender: function (view) {
+                             map.renderBaseMap('baseMap');
+                         }
+                     }
+                  }
+             ],
+             height: 500,
+             width: 500,
+             collapsible: true,
+             animCollapse : true,
+             collapseDirection : 'top',
+             collapsed : false,
+        });
+
+        mpc.show();
+        mpc.setZIndex(40000);
+        mpc.anchorTo(body, 'tr-tr', [0, 100], true);
+        
+        /**
          * Add all the panels to the viewport
          */
         var viewport = Ext.create('Ext.container.Viewport', {
@@ -357,7 +431,5 @@ Ext.application({
             });
 
         }
-
-
-    }
+    },
 });
