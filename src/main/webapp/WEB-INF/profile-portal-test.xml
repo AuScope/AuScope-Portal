@@ -116,14 +116,8 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-                <!-- <ref bean="cswGeoscienceLocal" /> -->
                 <ref bean="cswGaDev" />
                 <ref bean="cswGswaDev" />
-                <ref bean="cswAuscopeTest" />
-                <ref bean="cswInSarProduction" />
-                <ref bean="cswMDUTest" />
-                <ref bean="cswAsterProduction" />
-                <!-- ref bean="cswVeglProduction" /-->
             </list>
         </constructor-arg>
     </bean>
