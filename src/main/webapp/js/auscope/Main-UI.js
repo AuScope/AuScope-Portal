@@ -188,11 +188,9 @@ Ext.application({
                 icon : 'img/information.png',
                 dismissDelay : 30000
             }
-        
         });
 
         var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
-            //title : 'Featured2',
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
             store : layerStore,
             map : map,
@@ -205,7 +203,6 @@ Ext.application({
                 icon : 'img/information.png',
                 dismissDelay : 30000
             }
-        
         });
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
