@@ -4,15 +4,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.MissingResourceException;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.services.CSWFilterService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
-import org.auscope.portal.core.services.csw.custom.CustomRegistry;
 import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
@@ -23,6 +19,7 @@ import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -61,7 +58,7 @@ public class CSWFilterController extends BaseCSWController {
     @Autowired
     public CSWFilterController(CSWFilterService cswFilterService,
             ViewCSWRecordFactory viewCSWRecordFactory,
-            ViewKnownLayerFactory viewKnownLayerFactory, List<CustomRegistryInt> customRegistries) {
+            ViewKnownLayerFactory viewKnownLayerFactory, @Qualifier("customRegistryList") ArrayList<CustomRegistryInt> customRegistries) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswFilterService = cswFilterService;
         this.catalogueOnlyRegistries = customRegistries;
