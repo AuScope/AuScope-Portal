@@ -22,12 +22,14 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     map : null,
     activelayerstore : null,
     menuFactory : null,
+    onlineResourcePanelType : null,
 
     constructor : function(cfg) {
         var me = this;
         this.map = cfg.map;
         this.menuFactory = cfg.menuFactory;
         this.activelayerstore = cfg.activelayerstore;
+        me.onlineResourcePanelType = cfg.onlineResourcePanelType;
         var groupingFeature = Ext.create('Ext.grid.feature.Grouping',{
             groupHeaderTpl: '{name} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
             startCollapsed : true
@@ -598,19 +600,20 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     /**
      * Show a popup containing info about the services that 'power' this layer
      */
-    _serviceInformationClickHandler : function(record) {  //column, record, rowIndex, colIndex) {
+    _serviceInformationClickHandler : function(record) {
         var cswRecords = this.getCSWRecordsForRecord(record);
         if (!cswRecords || cswRecords.length === 0) {
             return;
         }
 
         var popup = Ext.create('portal.widgets.window.CSWRecordDescriptionWindow', {
-            cswRecords : cswRecords
+            cswRecords : cswRecords,
+            parentRecord : record,
+            onlineResourcePanelType : this.onlineResourcePanelType
         });
 
         popup.show();
     },
-
 
     /**
      * On single click, show a highlight of all BBoxes
