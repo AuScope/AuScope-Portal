@@ -188,17 +188,11 @@ Ext.application({
                 icon : 'img/information.png',
                 dismissDelay : 30000
             }
-        
         });
 
-        //Create our store for holding the set of active layers that have been added to the map
-        var activeLayerStore = Ext.create('auscope.layer.ActiveLayerStore', {});
-
         var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
-            //title : 'Featured2',
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
-            store : activeLayerStore,
-            //activelayerstore : layerStore,
+            store : layerStore,
             map : map,
             layerFactory : layerFactory,
             tooltip : {
@@ -209,7 +203,6 @@ Ext.application({
                 icon : 'img/information.png',
                 dismissDelay : 30000
             }
-        
         });
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {

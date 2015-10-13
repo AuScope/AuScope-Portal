@@ -48,6 +48,13 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 plugins: {
                     ptype: 'gridviewdragdrop',
                     dragText: 'Drag and drop to reorganize'
+                },
+                listeners: {
+                    drop: function(node, data, overModel, dropPosition,  dropFunction,  eOpts ){
+                        me.map.updateLayerIndex();
+                        // Request the redraw of the layers
+                        AppEvents.broadcast('layerindexchanged', {});
+                    }
                 }
             },          
             columns : [{
