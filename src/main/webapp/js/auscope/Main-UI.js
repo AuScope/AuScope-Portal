@@ -193,6 +193,7 @@ Ext.application({
         var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
             store : layerStore,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             map : map,
             layerFactory : layerFactory,
             tooltip : {
