@@ -7,68 +7,6 @@
 Ext.define('auscope.HelpHandler', {
     statics : {
         manager : Ext.create('portal.util.help.InstructionManager', {}),
-
-        /**
-         * Asynchronously start an animation (with the specified delay in ms) that will highlight
-         * the specified element with an animated arrow
-         *
-         * @param delay The delay in milli seconds
-         * @param element An Ext.Element to highlight
-         */
-        highlightElement : function(delay, element) {
-            var task = new Ext.util.DelayedTask(function() {
-                var arrowEl = Ext.getBody().createChild({
-                    tag : 'img',
-                    src : 'img/right-arrow.png',
-                    width : '32',
-                    height : '32',
-                    style : {
-                        'z-index' : 999999
-                    }
-                });
-
-                //Figure out the x location of the element (in absolute page coords)
-                var xLocation = element.getLeft();
-
-                Ext.create('Ext.fx.Animator', {
-                    target: arrowEl,
-                    duration: 7000,
-                    keyframes: {
-                        0: {
-                            opacity: 1
-                        },
-                        20: {
-                            x: xLocation - 32
-                        },
-                        30: {
-                            x: xLocation - 52
-                        },
-                        40: {
-                            x: xLocation - 32
-                        },
-                        50: {
-                            x: xLocation - 52
-                        },
-                        60: {
-                            x: xLocation - 32
-                        },
-                        120: {
-
-                        },
-                        160: {
-                            opacity : 0
-                        }
-                    },
-                    listeners : {
-                        afteranimate : Ext.bind(function(arrowEl) {
-                            arrowEl.destroy();
-                        }, this, [arrowEl])
-                    }
-                });
-            });
-
-            task.delay(delay);
-        }
     }
 
 }, function() {
@@ -78,11 +16,6 @@ Ext.define('auscope.HelpHandler', {
             //VT: not the landing page
             return;            
         }
-
-        //VT: I like the arrow to appear every refresh. If users prefer it only on new session, use
-        //sessionStorage.
-        auscope.HelpHandler.highlightElement(5000, helpButtonEl);
-
 
         //Load help for main page
         if (window.location.pathname.endsWith('/gmap.html')) {
