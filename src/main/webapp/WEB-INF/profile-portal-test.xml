@@ -134,6 +134,7 @@
             <list>
                 <ref bean="cswGaDev" />
                 <ref bean="cswGswaDev" />
+                <ref bean="cswMineralResourcesTasmaniaDev" />
             </list>
         </constructor-arg>
     </bean>
