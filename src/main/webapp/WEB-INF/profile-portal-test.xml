@@ -125,6 +125,11 @@
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Lithology"/> -->
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Age"/> -->
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Lithostratigraphy"/> -->
+				<!-- Group: Topography and Infrastructure -->
+				<ref bean="knownTypePopulatedPlaces1to8" />
+				<ref bean="knownTypeCoastlines" />
+				<ref bean="knownTypeRivers" />
+				<ref bean="knownTypeRoads1to4" />
             </list>
         </constructor-arg>
     </bean>
@@ -132,9 +137,10 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-                <ref bean="cswGaDev" />
-                <ref bean="cswGswaDev" />
-                <ref bean="cswMineralResourcesTasmaniaDev" />
+<!--                 <ref bean="cswGaDev" /> -->
+<!--                 <ref bean="cswGswaDev" /> -->
+<!--                 <ref bean="cswMineralResourcesTasmaniaDev" /> -->
+                <ref bean="cswGeoscienceLocal" />
             </list>
         </constructor-arg>
     </bean>
