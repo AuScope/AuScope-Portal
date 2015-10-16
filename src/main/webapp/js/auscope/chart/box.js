@@ -1,7 +1,7 @@
 (function() {
 
 // Inspired by http://informationandvisualization.de/blog/box-plot
-d3_box = function() {
+d3.box = function() {
   var width = 1,
       height = 1,
       duration = 0,
