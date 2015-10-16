@@ -22,6 +22,7 @@ import org.auscope.portal.core.util.Portal;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -61,8 +62,7 @@ public class CSWFilterController extends BaseCSWController {
     @Autowired
     public CSWFilterController(CSWFilterService cswFilterService,
             ViewCSWRecordFactory viewCSWRecordFactory,
-            ViewKnownLayerFactory viewKnownLayerFactory, 
-            List<CustomRegistryInt> customRegistries) {
+            ViewKnownLayerFactory viewKnownLayerFactory, @Qualifier("customRegistryList") ArrayList<CustomRegistryInt> customRegistries) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswFilterService = cswFilterService;
         this.catalogueOnlyRegistries = customRegistries;
