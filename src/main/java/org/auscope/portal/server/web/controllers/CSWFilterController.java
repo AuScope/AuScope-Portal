@@ -1,5 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
+import static org.auscope.portal.core.util.DateUtil.stringYearToDate;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,10 +41,11 @@ public class CSWFilterController extends BaseCSWController {
     public static final int DEFAULT_MAX_RECORDS = 100;
     private CSWFilterService cswFilterService;
     protected static ConcurrentHashMap<String, KeywordCacheEntity> catalogueKeywordCache;
+
     protected List<CustomRegistryInt> catalogueOnlyRegistries;
     @Autowired
     private ConversionService converter;
-
+   
     static {
         catalogueKeywordCache = new ConcurrentHashMap<String, KeywordCacheEntity>();
     }
@@ -58,16 +61,15 @@ public class CSWFilterController extends BaseCSWController {
     @Autowired
     public CSWFilterController(CSWFilterService cswFilterService,
             ViewCSWRecordFactory viewCSWRecordFactory,
-            ViewKnownLayerFactory viewKnownLayerFactory, List<CustomRegistryInt> customRegistries) {
+            ViewKnownLayerFactory viewKnownLayerFactory, 
+            List<CustomRegistryInt> customRegistries) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswFilterService = cswFilterService;
         this.catalogueOnlyRegistries = customRegistries;
-
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.setConversionService(converter);
     }
 
@@ -163,7 +165,7 @@ public class CSWFilterController extends BaseCSWController {
         this.catalogueKeywordCache.put(cswServiceId, keywordCacheEntity);
 
     }
-
+    
     /**
      * Returns getCapabilities result. For the moment we only require the title but more can be added on as needed.
      * 
@@ -245,8 +247,8 @@ public class CSWFilterController extends BaseCSWController {
             return generateJSONResponseMAV(false, null, "Error Generating keyword");
         }
 
-    }
-
+    } 
+    
     /**
      * Gets a list of CSWRecord view objects filtered by the specified values from all internal CSW's
      * 
@@ -280,14 +282,14 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition,
             @RequestParam(value = "customregistries", required = false) CustomRegistryInt customRegistries,
             @RequestParam(value = "portalName", required = false) String portalName) {
-        
+
         if (startPosition != null) {
             startPosition++;
         }
 
         HashMap<String, String> parameters = this.arrayPairtoMap(keys, values);
         String cswServiceId = parameters.get("cswServiceId");
-        
+
         CSWGetDataRecordsFilter filter;
         if (Portal.isGeosciencePortal(portalName)) {
             filter = getGAAdvancedSearchFilter(parameters);
@@ -363,17 +365,27 @@ public class CSWFilterController extends BaseCSWController {
         String sensor = parameters.get("sensor");
         String titleOrAbstract = parameters.get("titleOrAbstract");
         String authorSurname = parameters.get("authorSurname");
+        String publicationDateFrom = parameters.get("publicationDateFrom");
+        String publicationDateTo = parameters.get("publicationDateTo");
 
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
 
         CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter();
+        if (filterBbox != null) {
+            filter.setSpatialBounds(filterBbox);
+        }        
         filter.setKeywordMatchType(keywordMatchType);
         filter.setKeywords(keywords);
         filter.setTitleOrAbstract(titleOrAbstract != null ? titleOrAbstract.trim() : null);
         filter.setAuthorSurname(authorSurname != null ? authorSurname.trim() : null);
-        
+
+        filter.setPublicationDateFrom(
+                publicationDateFrom != null ? stringYearToDate(publicationDateFrom.trim(), false) : null);
+        filter.setPublicationDateTo(
+                publicationDateTo != null ? stringYearToDate(publicationDateTo.trim(), true) : null);
+
         log.debug(String.format("filter '%1$s'", filter));
         return filter;
     }
@@ -428,7 +440,7 @@ public class CSWFilterController extends BaseCSWController {
         log.debug(String.format("filter '%1$s'", filter));
         return filter;
     }
-    
+
     private HashMap<String, String> arrayPairtoMap(String[] keys, String[] values) {
         HashMap<String, String> results = new HashMap<String, String>();
         if (keys == null) {
