@@ -332,7 +332,19 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                             width: 300,
                             hideLabel: true,
                             listeners: {
-                                select: this.populateCoordinatesFromAreaMap
+                                select: this.populateCoordinatesFromAreaMap,
+                                keyup: function(combo, event) {
+                                    var key = String.fromCharCode(event.getKey()),
+                                        boundList = combo.getPicker(),
+                                        store = boundList.getStore(),
+                                        record = store.findRecord(combo.displayField, key);
+                                    if (record) {
+                                        boundList.highlightItem(boundList.getNode(record));
+                                        this.populateCoordinatesFromAreaMap(combo, record);
+                                    } else {
+                                    	combno.value = '';
+                                    }
+                                }
                             }
                         }, {
                             xtype: 'panel',
@@ -467,7 +479,7 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
     /* Fills the bounding box fields with coordinates from a 1:250K Area Map 
      * TODO might be nice to highlight the rectangle on the map (briefly) as well 
      */
-    populateCoordinatesFromAreaMap : function(combo, record, index) {
+    populateCoordinatesFromAreaMap : function(combo, record) {
         
         // compute the south and east points based these maps being 1.5 degrees longitude-wide and 1 degree latitude-tall
         var west = record.data['WestLong'];
