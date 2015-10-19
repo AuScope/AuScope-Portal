@@ -219,10 +219,12 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                         items : [{
                             xtype : 'textfield',
                             name : 'titleOrAbstract',
+                            itemId: 'titleOrAbstract',
                             fieldLabel : 'Title/Abstract'
                         },{
                             xtype : 'tagfield',
                             fieldLabel : 'Keyword(s)',
+                            itemId: 'keywords',
                             filterPicklist : true,
                             name : 'keywords',
                             queryMode : 'remote',
@@ -238,6 +240,7 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                         {
                             xtype : 'textfield',
                             name : 'authorSurname',
+                            itemId: 'authorSurname',
                             fieldLabel : 'Author surname'
                         },
                         {                        
@@ -369,7 +372,7 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                         }]  
                     }
                     ]
-                }
+                }              
               ]
         };
 
@@ -476,6 +479,19 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
         Ext.ComponentQuery.query('#east')[0].setValue(east); 
         Ext.ComponentQuery.query('#south')[0].setValue(south); 
         Ext.ComponentQuery.query('#west')[0].setValue(west);          
-    }
+    },
+    
+    resetForm : function() {
+        Ext.ComponentQuery.query('#titleOrAbstract')[0].setValue(''); 
+        Ext.ComponentQuery.query('#keywords')[0].setValue(''); 
+        Ext.ComponentQuery.query('#authorSurname')[0].setValue(''); 
+        Ext.ComponentQuery.query('#publicationDateStart')[0].setValue(''); 
+        Ext.ComponentQuery.query('#publicationDateEnd')[0].setValue('');                         
+        Ext.ComponentQuery.query('#mapAreaSelect')[0].setValue('');  
+        Ext.ComponentQuery.query('#north')[0].setValue(''); 
+        Ext.ComponentQuery.query('#south')[0].setValue(''); 
+        Ext.ComponentQuery.query('#east')[0].setValue(''); 
+        Ext.ComponentQuery.query('#west')[0].setValue(''); 
+    } 
     
 });
