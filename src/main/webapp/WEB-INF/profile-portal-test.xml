@@ -137,10 +137,31 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-<!--                 <ref bean="cswGaDev" /> -->
-<!--                 <ref bean="cswGswaDev" /> -->
+                <ref bean="cswGaDev" />
+                <ref bean="cswGswaDev" />
 <!--                 <ref bean="cswMineralResourcesTasmaniaDev" /> -->
-                <ref bean="cswGeoscienceLocal" />
+<!--                 <ref bean="cswGeoscienceLocal" /> -->
+<!--                 <ref bean="darwinDev" /> -->
+<!-- 					<ref bean="cswAuscopeTest" /> -->
+<!--         			<ref bean="cswAuscopeProduction"/> -->
+<!--         			<ref bean="cswMDUTest"/>	 -->
+<!-- 				<ref bean="cswMDUProduction"/> -->
+<!-- 				<ref bean="cswAsterProduction"/> -->
+<!-- 				<ref bean="cswInSarProduction" /> -->
+				<!--  try below -->
+<!-- 				<ref bean="cswGswaDev" />  -->
+<!-- <!-- 				<ref bean="cswMineralResourcesTasmaniaDev" /> X --> -->
+<!-- 				<ref bean="cswAuscopeTest" />  -->
+<!-- 				<ref bean="cswAuscopeProduction" />  -->
+<!-- 				<ref bean="cswMDUTest" /> -->
+<!-- 				<ref bean="cswMDUProduction" /> -->
+<!-- 				<ref bean="cswSissANUProduction" /> -->
+<!-- 				<ref bean="cswGAPetroleumTest" /> -->
+<!-- 				<ref bean="cswInSarTest" /> -->
+<!-- 				<ref bean="cswInSarProduction" /> -->
+<!-- 				<ref bean="cswMRTTest" /> -->
+<!-- 				<ref bean="cswMRTProduction" /> -->
+<!-- 				<ref bean="cswVeglProduction" /> -->
             </list>
         </constructor-arg>
     </bean>
