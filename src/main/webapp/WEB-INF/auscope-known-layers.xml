@@ -1807,4 +1807,95 @@
     </bean>
 
 <!-- END: GPT-41 - Surface Geology Layers -->
+<!-- START: GPT-74 - Topology and Infrastructure -->
+
+    <!-- Populated_Places_ 1 to 8 (AND) -->
+    <bean id="knownTypePopulatedPlaces1to8" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="populatedPlaces" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                        <value>Populated_Places_1</value>
+                        <value>Populated_Places_2</value>
+                        <value>Populated_Places_3</value>
+                        <value>Populated_Places_4</value>
+                        <value>Populated_Places_5</value>
+                        <value>Populated_Places_6</value>
+                        <value>Populated_Places_7</value>
+                        <value>Populated_Places_8</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Populated Places"/>
+        <property name="description" value="Combined (AND) - Topography and Infrastructure - Populated Places 1 to 8."/>
+        <property name="group" value="Topography and Infrastructure"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="500" />
+    </bean>
+	<!-- Coastlines (AND) -->
+    <bean id="knownTypeCoastlines" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="coastlines" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                        <value>AUS_GA_2500k_MiscLines</value>
+                        <value>AUS_GA_1M_MiscLines</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Coastlines"/>
+        <property name="description" value="Combined (AND) - Topography and Infrastructure - Coastlines."/>
+        <property name="group" value="Topography and Infrastructure"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="505" />
+    </bean>
+	<!-- AusHydro -->
+    <bean id="knownTypeRivers" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="Rivers" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="AusHydro_Canal_Line"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Rivers"/>
+        <property name="description" value="Combined (AND) - Topography and Infrastructure - Rivers"/>
+        <property name="group" value="Topography and Infrastructure"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="510" />
+    </bean>
+    <!-- Roads 1 to 4 (AND) -->
+    <bean id="knownTypeRoads1to4" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="Roads" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                        <value>Roads_1</value>
+                        <value>Roads_2</value>
+                        <value>Roads_3</value>
+                        <value>Roads_4</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Roads"/>
+        <property name="description" value="Combined (AND) - Topography and Infrastructure - Roads 1 to 4."/>
+        <property name="group" value="Topography and Infrastructure"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="515" />
+    </bean>
+    
+<!-- END: GPT-74 - Topology and Infrastructure -->
+
 </beans>
