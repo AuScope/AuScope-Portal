@@ -139,7 +139,7 @@
             <list>
                 <ref bean="cswGaDev" />
                 <ref bean="cswGswaDev" />
-<!--                 <ref bean="cswMineralResourcesTasmaniaDev" /> -->
+                <ref bean="cswMineralResourcesTasmaniaDev" />
 <!--                 <ref bean="cswGeoscienceLocal" /> -->
 <!--                 <ref bean="darwinDev" /> -->
 <!-- 					<ref bean="cswAuscopeTest" /> -->
