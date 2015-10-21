@@ -150,7 +150,7 @@
 <!-- 				<ref bean="cswInSarProduction" /> -->
 				<!--  try below -->
 <!-- 				<ref bean="cswGswaDev" />  -->
-<!-- <!-- 				<ref bean="cswMineralResourcesTasmaniaDev" /> X --> -->
+<!--  				<ref bean="cswMineralResourcesTasmaniaDev" /> -->
 <!-- 				<ref bean="cswAuscopeTest" />  -->
 <!-- 				<ref bean="cswAuscopeProduction" />  -->
 <!-- 				<ref bean="cswMDUTest" /> -->
