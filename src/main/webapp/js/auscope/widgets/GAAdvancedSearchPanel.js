@@ -5,7 +5,6 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
     extend : 'Ext.form.Panel',
     alias: 'widget.gaadvancedsearchpanel',
     map : null,
-    keywordStore : null,
     areaMapStore : null,
     yearStore : null,
     keywordIDCounter : 0,
@@ -13,34 +12,12 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
     miniMap : null,
     boxLayer : null,
     me: null,
-    /*
-     * in order to apply a different filter from the Portal-Core default, we
-     * specify the name of the portal
-     */
-    portalName : 'geoscience',
-
+    
     constructor : function(cfg){   
         
         me = this;
         
-        this.map = cfg.map;
-        
-        this.keywordStore = new Ext.data.Store({
-            autoload: true,
-            fields: ['keyword', 'count'],
-            proxy : {
-                type : 'ajax',
-                url : 'getFilteredCSWKeywords.do', 
-                extraParams : {
-                    cswServiceIds : []
-                 },
-                reader : {
-                    type : 'json',
-                    rootProperty : 'data'
-                }
-            }
-
-        });       
+        this.map = cfg.map;      
         
         this.areaMapStore = new Ext.data.Store({
             autoload: true,
@@ -59,7 +36,6 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
             }
         });
  
-
         var years = [];
 
         y = 1900
@@ -152,14 +128,7 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                     allowBlank : 'false',
                     fieldLabel: 'Registries',
                     columns: 1,
-                    vertical: true,
-                    listeners : {
-                        change : function(scope,newValue, oldValue, eOpts ){
-                            me.keywordStore.getProxy().extraParams = {
-                                cswServiceIds : scope.getValue().cswServiceId
-                            };
-                        }
-                    }
+                    vertical: true                    
                 }]
         };
 
@@ -188,10 +157,6 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                     }
                     var registry=Ext.getCmp('registryTabCheckboxGroup');
                     registry.add(checkBoxItems);
-
-                    me.keywordStore.getProxy().extraParams = {
-                        cswServiceIds : registry.getValue().cswServiceId
-                    };
                 }
             }
 
@@ -222,22 +187,11 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                             itemId: 'titleOrAbstract',
                             fieldLabel : 'Title/Abstract'
                         },{
-                            xtype : 'tagfield',
-                            fieldLabel : 'Keyword(s)',
-                            itemId: 'keywords',
-                            filterPicklist : true,
+                            xtype : 'textareafield',
                             name : 'keywords',
-                            queryMode : 'remote',
-                            displayField:'keyword',
-                            valueField: 'keyword',
-                            store : this.keywordStore,
-                            tpl: Ext.create('Ext.XTemplate',
-                                '<tpl for=".">',
-                                    '<div class="x-boundlist-item">{keyword} - <b>({count})</b></div>',
-                                '</tpl>'
-                            )
-                        },
-                        {
+                            itemId: 'keywords',
+                            fieldLabel : 'Keyword(s)',     
+                        },{
                             xtype : 'textfield',
                             name : 'authorSurname',
                             itemId: 'authorSurname',
@@ -382,8 +336,42 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                             }
                             ]
                         }]  
-                    }
-                    ]
+                    },
+                    {
+                        xtype: 'box',
+                        width: 400,
+                        autoEl: {
+                            tag: 'hr',
+                            style: 'border:1px gray dashed'
+                        }
+                    },
+                    {
+
+                        xtype: 'radiofield',
+                        name: 'sortType',
+                        inputValue: 'serviceDefault',
+                        itemId: 'defaultSortTypeRadio',
+                        fieldLabel: 'Sort results by',
+                        boxLabel: 'Best match (default)',
+                        value: true
+                    }, {
+                        xtype: 'radiofield',
+                        name: 'sortType',
+                        inputValue: 'title',
+                        fieldLabel: '',
+                        labelSeparator: '',
+                        hideEmptyLabel: false,
+                        boxLabel: 'Title (A - Z)'
+                    },
+                    {
+                        xtype: 'radiofield',
+                        name: 'sortType',
+                        inputValue: 'publicationDate',
+                        fieldLabel: '',
+                        labelSeparator: '',
+                        hideEmptyLabel: false,
+                        boxLabel: 'Publication date (newest first)'
+                    }]
                 }              
               ]
         };
@@ -504,6 +492,7 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
         Ext.ComponentQuery.query('#south')[0].setValue(''); 
         Ext.ComponentQuery.query('#east')[0].setValue(''); 
         Ext.ComponentQuery.query('#west')[0].setValue(''); 
+        Ext.ComponentQuery.query('#defaultSortTypeRadio')[0].setValue(true);  
     } 
     
 });

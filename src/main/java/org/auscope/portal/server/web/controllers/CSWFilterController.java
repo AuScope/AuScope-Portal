@@ -15,10 +15,10 @@ import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
+import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.SortType;
 import org.auscope.portal.core.services.responses.csw.CSWGetCapabilities;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
-import org.auscope.portal.core.util.Portal;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -281,8 +281,7 @@ public class CSWFilterController extends BaseCSWController {
             @RequestParam(value = "value", required = false) String[] values,
             @RequestParam(value = "limit", required = false) Integer maxRecords,
             @RequestParam(value = "start", required = false, defaultValue = "1") Integer startPosition,
-            @RequestParam(value = "customregistries", required = false) CustomRegistryInt customRegistries,
-            @RequestParam(value = "portalName", required = false) String portalName) {
+            @RequestParam(value = "customregistries", required = false) CustomRegistryInt customRegistries) {
 
         if (startPosition != null) {
             startPosition++;
@@ -291,12 +290,7 @@ public class CSWFilterController extends BaseCSWController {
         HashMap<String, String> parameters = this.arrayPairtoMap(keys, values);
         String cswServiceId = parameters.get("cswServiceId");
 
-        CSWGetDataRecordsFilter filter;
-        if (Portal.isGeosciencePortal(portalName)) {
-            filter = getGAAdvancedSearchFilter(parameters);
-        } else {
-            filter = this.getFilter(parameters);
-        }
+        CSWGetDataRecordsFilter filter = this.getFilter(parameters);
 
         //Then make our requests to all of CSW's
         List<CSWRecord> records = null;
@@ -335,10 +329,8 @@ public class CSWFilterController extends BaseCSWController {
     /*
      * Geoscience Portal version of the getFilter to support our idea of the advanced search dialog.
      */
-    private CSWGetDataRecordsFilter getGAAdvancedSearchFilter(HashMap<String, String> parameters) {
+    private CSWGetDataRecordsFilter getFilter(HashMap<String, String> parameters) {
 
-        // todo remove the fields we don't need for GA Portal and add the fields we do 
-        String anyText = parameters.get("anyText");
         Double westBoundLongitude = null;
         Double eastBoundLongitude = null;
         Double northBoundLatitude = null;
@@ -359,11 +351,9 @@ public class CSWFilterController extends BaseCSWController {
 
         String[] keywords = null;
         if (parameters.get("keywords") != null) {
-            keywords = parameters.get("keywords").split(",");
+            keywords = parameters.get("keywords").split(" ");
         }
         KeywordMatchType keywordMatchType = KeywordMatchType.Any;
-        String capturePlatform = parameters.get("capturePlatform");
-        String sensor = parameters.get("sensor");
         String titleOrAbstract = parameters.get("titleOrAbstract");
         String authorSurname = parameters.get("authorSurname");
         String publicationDateFrom = parameters.get("publicationDateFrom");
@@ -374,11 +364,14 @@ public class CSWFilterController extends BaseCSWController {
                 northBoundLatitude, southBoundLatitude);
 
         CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter();
+        
         if (filterBbox != null) {
             filter.setSpatialBounds(filterBbox);
         }        
         filter.setKeywordMatchType(keywordMatchType);
+        filter.setKeywordWildcards(true);
         filter.setKeywords(keywords);
+        
         filter.setTitleOrAbstract(titleOrAbstract != null ? titleOrAbstract.trim() : null);
         filter.setAuthorSurname(authorSurname != null ? authorSurname.trim() : null);
 
@@ -386,61 +379,14 @@ public class CSWFilterController extends BaseCSWController {
                 publicationDateFrom != null ? stringYearToDate(publicationDateFrom.trim(), false) : null);
         filter.setPublicationDateTo(
                 publicationDateTo != null ? stringYearToDate(publicationDateTo.trim(), true) : null);
-
+       
+        filter.setSortType(SortType.getByStringValue(parameters.get("sortType")));
+        
         log.debug(String.format("filter '%1$s'", filter));
         return filter;
     }
 
-    /*
-     * This is the base Auscope Portal version of the getFilter method
-     */
-    private CSWGetDataRecordsFilter getFilter(HashMap<String, String> parameters) {
-
-        String anyText = parameters.get("anyText");
-        Double westBoundLongitude = null;
-        Double eastBoundLongitude = null;
-        Double northBoundLatitude = null;
-        Double southBoundLatitude = null;
-
-        if (parameters.get("west") != null && parameters.get("west").length() > 0) {
-            westBoundLongitude = Double.parseDouble(parameters.get("west"));
-        }
-        if (parameters.get("east") != null && parameters.get("east").length() > 0) {
-            eastBoundLongitude = Double.parseDouble(parameters.get("east"));
-        }
-        if (parameters.get("north") != null && parameters.get("north").length() > 0) {
-            northBoundLatitude = Double.parseDouble(parameters.get("north"));
-        }
-        if (parameters.get("south") != null && parameters.get("south").length() > 0) {
-            southBoundLatitude = Double.parseDouble(parameters.get("south"));
-        }
-
-        String[] keywords = null;
-        if (parameters.get("keywords") != null) {
-            keywords = parameters.get("keywords").split(",");
-        }
-        KeywordMatchType keywordMatchType = null;
-        String capturePlatform = parameters.get("capturePlatform");
-        String sensor = parameters.get("sensor");
-        String abstrac = parameters.get("abstract");
-        String title = parameters.get("title");
-
-        if (parameters.get("keywordMatchType") != null) {
-            if (parameters.get("keywordMatchType").toLowerCase().equals("any")) {
-                keywordMatchType = KeywordMatchType.Any;
-            } else {
-                keywordMatchType = KeywordMatchType.All;
-            }
-        }
-
-        //Firstly generate our filter
-        FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
-                northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform,
-                sensor, keywordMatchType, abstrac, title, CSWGetDataRecordsFilter.Type.dataset);
-        log.debug(String.format("filter '%1$s'", filter));
-        return filter;
-    }
+   
 
     private HashMap<String, String> arrayPairtoMap(String[] keys, String[] values) {
         HashMap<String, String> results = new HashMap<String, String>();
@@ -494,7 +440,7 @@ public class CSWFilterController extends BaseCSWController {
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
         CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform,
-                sensor, keywordMatchType, null, null, CSWGetDataRecordsFilter.Type.dataset);
+                sensor, keywordMatchType, null, null, null);
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
