@@ -369,7 +369,6 @@ public class CSWFilterController extends BaseCSWController {
             filter.setSpatialBounds(filterBbox);
         }        
         filter.setKeywordMatchType(keywordMatchType);
-        filter.setKeywordWildcards(true);
         filter.setKeywords(keywords);
         
         filter.setTitleOrAbstract(titleOrAbstract != null ? titleOrAbstract.trim() : null);
