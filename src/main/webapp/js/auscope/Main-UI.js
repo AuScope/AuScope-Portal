@@ -34,6 +34,7 @@ Ext.application({
         //IF END
 
 
+        var currentExtent = map
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var isDebugMode = urlParams.debug;
 
@@ -189,6 +190,7 @@ Ext.application({
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
+            id: 'knownLayersPanel',
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
             store : knownLayerStore,
             activelayerstore : layerStore,
@@ -401,7 +403,34 @@ Ext.application({
             });
 
         }
-  
+
+        //Create our Print Map handler
+        var printMapHandler = function() {
+            map.once('postcompose', function(event) {
+                var canvas = event.context.canvas;
+                exportPNGElement.href = canvas.toDataURL('image/png');
+              });
+              map.renderSync();
+        };
+        Ext.get('print-map-link').on('click', printMapHandler);
+        
+        //Create our Reset Map handler
+        // revert to the default zoom level, map extent and remove all our layers
+        var resetMapHandler = function() {
+            map.map.zoomTo(4); 
+            var center = new OpenLayers.LonLat(133.3, -26).transform('EPSG:4326', 'EPSG:3857');
+            map.map.setCenter(center);
+            
+            // remove all of the layers we have added
+            var items = map.layerStore.data.items;    
+            for (i = items.length-1; i >=0; --i) {
+                var layer = items[i];        
+                AppEvents.broadcast('removelayer', {layer:layer});
+            }
+            layerStore = Ext.create('portal.layer.LayerStore', {});
+        };
+        Ext.get('reset-map-link').on('click', resetMapHandler);     
+        
         //Create our permalink generation handler
         var permalinkHandler = function() {
             var mss = Ext.create('portal.util.permalink.MapStateSerializer');

@@ -28,8 +28,8 @@
    <div id="menu-bar">
        <ul>
            <li><a href="mailto:cg-portal@csiro.au"><img src="img/home.png" width="16" height="16"/>AUSGIN HOME</a></li>
-           <li><a href="#auscope-tabs-panel"><img src="img/print.png" width="16" height="16"/>PRINT MAP</a></li>
-           <li><a href="#auscope-tabs-panel"><img src="img/reset.png" width="16" height="16"/>RESET MAP</a></li>
+           <li><a id="print-map-link" href="#auscope-tabs-panel"><img src="img/print.png" width="16" height="16"/>PRINT MAP</a></li>
+           <li><a id="reset-map-link" href="#auscope-tabs-panel"><img src="img/reset.png" width="16" height="16"/>RESET MAP</a></li>
            
            <li>
                <span id="permanent-link">
