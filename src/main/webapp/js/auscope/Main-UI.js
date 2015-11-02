@@ -51,6 +51,21 @@ Ext.application({
             },
             autoLoad : true
         });
+        
+        // data store for service endpoints available for searching for CSW records
+        var cswServiceItemStore = new Ext.data.Store({
+            model   : 'portal.widgets.model.CSWServices',
+            proxy : {
+                type : 'ajax',
+                url : 'getCSWServices.do',
+                reader : {
+                    type : 'json',
+                    rootProperty : 'data'
+                }
+            },
+            autoLoad : true
+        });
+        
 
         //Our custom record store holds layers that the user has
         //added to the map using a OWS URL entered through the
@@ -183,7 +198,7 @@ Ext.application({
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
-                text : '<p1>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p1>',
+                text : '<p>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p>',
                 showDelay : 100,
                 icon : 'img/information.png',
                 dismissDelay : 30000
@@ -199,7 +214,7 @@ Ext.application({
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
-                text : '<p1>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p1>',
+                text : '<p>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p>',
                 showDelay : 100,
                 icon : 'img/information.png',
                 dismissDelay : 30000
@@ -213,7 +228,7 @@ Ext.application({
             onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 title : 'Registered Layers',
-                text : 'The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.',
+                text : '<p>The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.</p>',
                 showDelay : 100,
                 dismissDelay : 30000
             },
@@ -231,7 +246,7 @@ Ext.application({
             enableBrowse : true,//VT: if true browse catalogue option will appear
             tooltip : {
                 title : 'Custom Data Layers',
-                text : 'This tab allows you to create your own layers from remote data services.',
+                text : '<p>This tab allows you to create your own layers from remote data services.</p>',
                 showDelay : 100,
                 dismissDelay : 30000
             },
@@ -250,7 +265,7 @@ Ext.application({
             onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 title : 'Research Data Layers',
-                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p1>',
+                text : '<p>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p>',
                 showDelay : 100,
                 dismissDelay : 30000
             }
@@ -386,8 +401,7 @@ Ext.application({
             });
 
         }
-
-
+  
         //Create our permalink generation handler
         var permalinkHandler = function() {
             var mss = Ext.create('portal.util.permalink.MapStateSerializer');
@@ -404,9 +418,196 @@ Ext.application({
                 popup.show();
             });
         };
-        Ext.get('permalink').on('click', permalinkHandler);
-        Ext.get('permalinkicon').on('click', permalinkHandler);
+        Ext.get('permanent-link').on('click', permalinkHandler);
 
+        //Create our advanced search control handler
+        var advancedSearchLinkHandler = function() {
+        	
+            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+        	if (!cswFilterWindow) {
+        		cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
+	                name : 'CSW Filter',
+	                id : 'cswFilterWindow',
+	                cswFilterFormPanel:  new auscope.widgets.GAAdvancedSearchPanel({
+	                    name : 'Filter Form',
+	                    map: this.map
+	                }),
+	                listeners : {
+	                    filterselectcomplete : function(filteredResultPanels) {
+	                        var cswSelectionWindow = new CSWSelectionWindow({
+	                            title : 'CSW Record Selection',
+	                            id: 'cswSelectionWindow',
+	                            resultpanels : filteredResultPanels,
+	                            listeners : {
+	                                selectioncomplete : function(csws){  
+	                                    var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+	                                    var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
+	                                    tabpanel.setActiveTab(customPanel);
+	                                    if(!(csws instanceof Array)){
+	                                        csws = [csws];
+	                                    }
+	                                    for(var i=0; i < csws.length; i++){
+	                                        csws[i].set('customlayer',true);
+	                                        customPanel.getStore().insert(0,csws[i]);
+	                                    }
+	                                    
+	                                }
+	                            }
+	                        });
+	                        cswSelectionWindow.show();
+	                    }
+	                }
+	            });
+        	}
+        	
+        	var basicSearchInput = Ext.get('basic-search-input');
+        	if (basicSearchInput) {
+        		//basicSearchInput.dom.disabled = 'true';
+        		basicSearchInput.dom.value = '';
+        	}        	
+        	
+        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
+        	if (cswSelectionWindow) {
+        		cswSelectionWindow.destroy();
+        	}        	
+        	
+            cswFilterWindow.show();
+        };
+        Ext.get('advanced-search-link').on('click', advancedSearchLinkHandler);
+
+        //Create our 'Basic Search' handler
+        var basicSearchButtonHandler = function() {
+
+        	var basicSearchInput = Ext.get('basic-search-input');
+        	
+        	// hmmm... validate empty input or just ignore it?
+        	if (!basicSearchInput) {
+        		return false;
+			}  
+        	
+        	if (basicSearchInput.dom.value === '') {
+        		Ext.Msg.alert('Search Term Required', 'Please enter a search term in the provided input field.');
+        		return false;
+        	}
+                        
+            var filteredResultPanels=[];
+
+            for(arrayIndex in cswServiceItemStore.data.items){
+                filteredResultPanels.push(getTabPanels(cswServiceItemStore.data.items[arrayIndex].data, basicSearchInput.dom.value));                
+            }
+            
+            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+        	if (cswFilterWindow) {
+        		cswFilterWindow.destroy();
+        	}
+        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
+        	if (!cswSelectionWindow) {
+        		cswSelectionWindow = new CSWSelectionWindow({
+                    title : 'CSW Record Selection',
+                    id: 'cswSelectionWindow',
+                    resultpanels : filteredResultPanels,
+                    showControlButtons : false,
+                    listeners : {
+                        selectioncomplete : function(csws){  
+                            var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+                            var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
+                            tabpanel.setActiveTab(customPanel);
+                            if(!(csws instanceof Array)){
+                                csws = [csws];
+                            }
+                            for(var i=0; i < csws.length; i++){
+                                csws[i].set('customlayer',true);
+                                customPanel.getStore().insert(0,csws[i]);
+                            }
+                            
+                        }
+                    }
+                });
+        	}
+        	cswSelectionWindow.show();     	        	
+        };
+        Ext.get('basic-search-button').on('click', basicSearchButtonHandler);
+        
+        /**
+         * Return configuration for the tabpanels in the basic search results
+         *
+         * params - the parameter used to filter results for each tab panel
+         * cswServiceId - The id of the csw registry.
+         */
+        var getTabPanels = function(cswService,basicSearchValue) {
+            //Convert our keys/values into a form the controller can read
+            var keys = [];
+            var values = [];
+            var customRegistries=[];
+
+            keys.push("basicSearchTerm");
+            values.push(basicSearchValue);
+            
+            keys.push('cswServiceId');
+            values.push(cswService.id);
+            
+            //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
+            var filterCSWStore = Ext.create('Ext.data.Store', {
+                model : 'portal.csw.CSWRecord',
+                pageSize: 35,
+                autoLoad: false,
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                proxy : {
+                    type : 'ajax',
+                    url : 'getFilteredCSWRecords.do',
+                    reader : {
+                        type : 'json',
+                        rootProperty : 'data',
+                        successProperty: 'success',
+                        totalProperty: 'totalResults'
+                    },
+                    extraParams: {
+                        key : keys,
+                        value : values
+                    }
+
+                }
+
+            });
+            
+            tabTitle = cswService.title || 'Error retrieving title';
+
+            var result={
+                    title : tabTitle,
+                    xtype: 'cswrecordpagingpanel',
+                    layout : 'fit',
+                    store : filterCSWStore
+                };
+
+            return result;
+        };
+        
+        //Create our 'Clear Search' handler
+        var clearSearchLinkHandler = function() {
+            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+        	if (cswFilterWindow) {
+        		cswFilterWindow.destroy();
+        	}
+        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
+        	if (cswSelectionWindow) {
+        		cswSelectionWindow.destroy();
+        	}
+        	
+        	var basicSearchInput = Ext.get('basic-search-input');
+        	if (basicSearchInput) {
+        		basicSearchInput.dom.value = '';
+        	}
+        };
+        Ext.get('clear-search-link').on('click', clearSearchLinkHandler);
+        
+        //Create our 'Simple Search' handler for the Enter key. 
+        var simpleSearchSubmitHandler = function(e) {
+        	if (e.getKey() == e.ENTER) {
+        		basicSearchButtonHandler();
+        	}
+        };
+        Ext.get('basic-search-input').on('keyup', simpleSearchSubmitHandler);   
+        
         //Handle deserialisation -- ONLY if we have a uri param called "state".
         var deserializationHandler;
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
@@ -425,5 +626,6 @@ Ext.application({
             });
 
         }
-    },
+    }
+    
 });

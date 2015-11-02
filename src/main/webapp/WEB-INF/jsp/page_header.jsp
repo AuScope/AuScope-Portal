@@ -1,23 +1,47 @@
+   <!-- The header section - the big black banner at the top of screen -->
    <div id="header-container">
-      <div id="logo">
-         <h1>
-            <a href="#" onclick="window.open('about.html','AboutWin','toolbar=no, menubar=no,location=no,resizable=no,scrollbars=yes,statusbar=no,top=100,left=200,height=650,width=450');return false"><img alt="" src="img/img-auscope-banner.gif"></a>
-         </h1>
-      </div>
-      <div id="menu">
-         <ul >
-            <li><a id="help-button">Help</a></li>
-            <li><a href="http://www.auscope.org">AuScope.org</a></li>
-            <li><a href="mailto:cg-portal@csiro.au">Contact Us</a></li>
-            <li><a href="gmap.html">GA Discovery Portal</a></li>
 
-            <li><a id="hh-userGuide" href="static/user-guide/ug.htm" target="new">User Guide<span></span></a></li>
+       <!-- A thin strip containing some small controls at the top right -->
+       <div id="header-controls">
+           <ul>
+               <li><a href="mailto:cg-portal@csiro.au">Contact Us</a></li>
+               <li><a href="#auscope-tabs-panel">Skip to Content</a></li>
+               <!-- TODO check with Ollie whether we can leave out this awful feature 
+                   <li><a id="resize-link" href="#auscope-tabs-panel">A <span class="smaller">A</span></a></li>             
+               --> 
+           </ul>    
+       </div>         
 
-            <li><a href="links.html">Links<span></span></a></li>
-         </ul>
-      </div>
-      <span id="latlng"></span>
-      <div id="permalinkicon"><a href="javascript:void(0)"><img src="img/link.png" width="16" height="16"/></a></div>
-      <div id="permalink"><a href="javascript:void(0)">Permanent Link</a></div>
+	    <span id="ausgin-header">AUSGIN</span> 
+	    <span class="ga-portal-header">GEOSCIENCE PORTAL</span> 
+	             
+        <label for="basic-search-input">Search for data and publications</label>
+        <div class="search-input-wrapper">
+            <input type="text" id="basic-search-input" name="searchBox" maxlength="50"/>
+            <button id="basic-search-button"/>
+        </div>
+        <a id="advanced-search-link" href="javascript:void(0)">Advanced Search</a>
+        <a id="clear-search-link" href="javascript:void(0)">Clear Search</a>
 
+   </div>
+   
+   <div id="menu-bar">
+       <ul>
+           <li><a href="mailto:cg-portal@csiro.au"><img src="img/home.png" width="16" height="16"/>AUSGIN HOME</a></li>
+           <li><a href="#auscope-tabs-panel"><img src="img/print.png" width="16" height="16"/>PRINT MAP</a></li>
+           <li><a href="#auscope-tabs-panel"><img src="img/reset.png" width="16" height="16"/>RESET MAP</a></li>
+           
+           <li>
+               <span id="permanent-link">
+               <a href="javascript:void(0)">
+                   <img src="img/link.png" width="16" height="16"/>
+                   PERMANENT LINK
+               </a>
+               </span>
+           </li>
+           
+           <li><a id="help-button"><img src="img/help.png" width="16" height="16"/>HELP</a></li>          
+           
+           <span id="latlng"></span>     
+       </ul>   
    </div>

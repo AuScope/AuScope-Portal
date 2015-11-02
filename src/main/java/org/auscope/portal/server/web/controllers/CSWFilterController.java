@@ -297,7 +297,7 @@ public class CSWFilterController extends BaseCSWController {
         int matchedResults = 0;
         try {
             //We may be requesting from all CSW's or just a specific one
-            if (!customRegistries.isEmpty()) {
+            if (customRegistries != null && !customRegistries.isEmpty()) {
                 records = new ArrayList<CSWRecord>();
                 CSWGetRecordResponse response = cswFilterService.getFilteredRecords(customRegistries, filter,
                         maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords, startPosition);
@@ -307,6 +307,7 @@ public class CSWFilterController extends BaseCSWController {
 
             } else {
                 CSWGetRecordResponse response = null;
+                                
                 //VT: if it returns an exception, try finding it in the customRegistry
                 try {
                     response = cswFilterService.getFilteredRecords(cswServiceId, filter,
@@ -364,6 +365,8 @@ public class CSWFilterController extends BaseCSWController {
                 northBoundLatitude, southBoundLatitude);
 
         CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter();
+        
+        filter.setBasicSearchTerm(parameters.get("basicSearchTerm"));
         
         if (filterBbox != null) {
             filter.setSpatialBounds(filterBbox);
