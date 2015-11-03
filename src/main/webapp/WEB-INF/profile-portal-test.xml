@@ -130,6 +130,7 @@
 				<ref bean="knownTypeCoastlines" />
 				<ref bean="knownTypeRivers" />
 				<ref bean="knownTypeRoads1to4" />
+				<ref bean="knownTypeOil" />				
             </list>
         </constructor-arg>
     </bean>
@@ -140,17 +141,17 @@
                 <ref bean="cswGaDev" />
                 <ref bean="cswGswaDev" />
                 <ref bean="cswMineralResourcesTasmaniaDev" />
-<!--                 <ref bean="cswGeoscienceLocal" /> -->
+                <ref bean="cswGeoscienceLocal" />
 <!--                 <ref bean="darwinDev" /> -->
-<!-- 					<ref bean="cswAuscopeTest" /> -->
-<!--         			<ref bean="cswAuscopeProduction"/> -->
-<!--         			<ref bean="cswMDUTest"/>	 -->
+				<ref bean="cswAuscopeTest" />
+      			<ref bean="cswAuscopeProduction"/>
+      			<ref bean="cswMDUTest"/>	
 <!-- 				<ref bean="cswMDUProduction"/> -->
 <!-- 				<ref bean="cswAsterProduction"/> -->
 <!-- 				<ref bean="cswInSarProduction" /> -->
 				<!--  try below -->
 <!-- 				<ref bean="cswGswaDev" />  -->
-<!-- <!-- 				<ref bean="cswMineralResourcesTasmaniaDev" /> X --> -->
+<!-- 				<ref bean="cswMineralResourcesTasmaniaDev" /> -->
 <!-- 				<ref bean="cswAuscopeTest" />  -->
 <!-- 				<ref bean="cswAuscopeProduction" />  -->
 <!-- 				<ref bean="cswMDUTest" /> -->

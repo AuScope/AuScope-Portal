@@ -1,6 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
-import org.auscope.portal.core.server.GeoServerType;
+import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
@@ -42,8 +42,8 @@ public class TIMAController extends BasePortalController {
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures)
             throws Exception {
 
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,ogcServiceProviderType);
 
         //Build our filter details
         String filterString = generateGeoSampleFilter(sampleName, igsn, bbox);
@@ -69,8 +69,8 @@ public class TIMAController extends BasePortalController {
      * @return
      */
     private String generateGeoSampleFilter(String name, String igsn, FilterBoundingBox bbox) {
-//        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-//      FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxString,geoServerType);
+//        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+//      FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxString,OgcServiceProviderType);
         TIMAGeosampleFilter timaGeosampleFilter = new TIMAGeosampleFilter(name, igsn);
         if (bbox == null) {
             return timaGeosampleFilter.getFilterStringAllRecords();

@@ -18,7 +18,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.core.server.GeoServerType;
+import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
@@ -89,8 +89,8 @@ public class CapdfHydroGeoChemController extends BasePortalController {
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             HttpServletResponse response) throws Exception {
 
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
 
         String filter = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, bbox);
 
@@ -137,9 +137,9 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
         FilterBoundingBox bbox = null;
         if (!(north.isEmpty() && south.isEmpty() && east.isEmpty() && west.isEmpty())) {
-            GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
+            OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
             bbox = FilterBoundingBox.parseFromValues("EPSG:4326", Double.parseDouble(north), Double.parseDouble(south),
-                    Double.parseDouble(east), Double.parseDouble(west), geoServerType);
+                    Double.parseDouble(east), Double.parseDouble(west), ogcServiceProviderType);
         }
 
         String filter = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, bbox);
@@ -253,9 +253,9 @@ public class CapdfHydroGeoChemController extends BasePortalController {
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             HttpServletResponse response) throws Exception {
 
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox obbox = FilterBoundingBox.attemptParseFromJSON(obboxJson, geoServerType);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox obbox = FilterBoundingBox.attemptParseFromJSON(obboxJson, ogcServiceProviderType);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
 
         String filter = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, obbox);
         String filterWithBbox = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, bbox);
@@ -334,9 +334,9 @@ public class CapdfHydroGeoChemController extends BasePortalController {
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             HttpServletResponse response) throws Exception {
 
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox obbox = FilterBoundingBox.attemptParseFromJSON(obboxJson, geoServerType);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox obbox = FilterBoundingBox.attemptParseFromJSON(obboxJson, ogcServiceProviderType);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
 
         String filter = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, obbox);
         String filterWithBbox = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, bbox);

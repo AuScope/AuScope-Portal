@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.auscope.portal.core.server.GeoServerType;
+import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
@@ -55,8 +55,8 @@ public class SF0BoreholeController extends BasePortalController {
             String dateOfDrilling, int maxFeatures, String bbox) throws Exception {
 
         try {
-            GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-            FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox, geoServerType);
+            OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+            FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox, ogcServiceProviderType);
             WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
                     dateOfDrilling, maxFeatures, box);
             return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());

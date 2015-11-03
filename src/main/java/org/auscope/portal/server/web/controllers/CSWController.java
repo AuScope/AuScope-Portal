@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.auscope.portal.core.server.GeoServerType;
+import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWService;
@@ -169,8 +169,8 @@ public class CSWController extends BaseCSWController {
                     || Double.isNaN(southBoundLatitude)
                     || Double.isNaN(eastBoundLongitude)
                     || Double.isNaN(westBoundLongitude)) {
-                GeoServerType geoServerType = GeoServerType.parseUrl(cswServiceUrl);
-                spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox, geoServerType);
+                OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(cswServiceUrl);
+                spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox, ogcServiceProviderType);
             } else {
                 spatialBounds = new FilterBoundingBox(
                         "EPSG:4326",

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.core.server.GeoServerType;
+import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.util.FileIOUtil;
@@ -62,8 +62,8 @@ public class EarthResourcesDownloadController extends BasePortalController {
             @RequestParam(required = false, value = "startIndex") String startIndex,
             HttpServletResponse response) throws Exception {
         
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,ogcServiceProviderType);
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //The presence of a startIndex assume paging and if maxFeature is 0, we will default it to 200.
         //This will in turn limit the number of points returned to 200
@@ -127,8 +127,8 @@ public class EarthResourcesDownloadController extends BasePortalController {
             @RequestParam(required = false, value = "startIndex") String startIndex,
             HttpServletResponse response) throws Exception {
 
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,ogcServiceProviderType);
         //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
         //The presence of a startIndex assume paging and if maxFeature is 0, we will default it to 200.
         //This will in turn limit the number of points returned to 200
@@ -201,8 +201,8 @@ public class EarthResourcesDownloadController extends BasePortalController {
             throws Exception
     {
 
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,ogcServiceProviderType);
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //The presence of a startIndex assume paging and if maxFeature is 0, we will default it to 200.
         //This will in turn limit the number of points returned to 200
@@ -264,8 +264,8 @@ public class EarthResourcesDownloadController extends BasePortalController {
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {
 
-        GeoServerType geoServerType = GeoServerType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,geoServerType);
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson,ogcServiceProviderType);
 
         String unescapeCommodityName = "";
         if (commodityName != null) {
