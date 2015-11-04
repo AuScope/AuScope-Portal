@@ -125,11 +125,12 @@
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Lithology"/> -->
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Age"/> -->
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Lithostratigraphy"/> -->
-				<!-- Group: Topography and Infrastructure -->
-				<ref bean="knownTypePopulatedPlaces1to8" />
-				<ref bean="knownTypeCoastlines" />
-				<ref bean="knownTypeRivers" />
-				<ref bean="knownTypeRoads1to4" />
+                <!-- Group: Topography and Infrastructure -->
+                <ref bean="knownTypePopulatedPlaces1to8" />
+                <ref bean="knownTypeCoastlines" />
+                <ref bean="knownTypeRivers" />
+                <ref bean="knownTypeRoads1to4" />
+                <ref bean="knownTypeOil" />             
             </list>
         </constructor-arg>
     </bean>
@@ -140,28 +141,28 @@
                 <ref bean="cswGaDev" />
                 <ref bean="cswGswaDev" />
                 <ref bean="cswMineralResourcesTasmaniaDev" />
-<!--                 <ref bean="cswGeoscienceLocal" /> -->
+                <!-- <ref bean="cswGeoscienceLocal" /> -->
 <!--                 <ref bean="darwinDev" /> -->
-<!-- 					<ref bean="cswAuscopeTest" /> -->
-<!--         			<ref bean="cswAuscopeProduction"/> -->
-<!--         			<ref bean="cswMDUTest"/>	 -->
-<!-- 				<ref bean="cswMDUProduction"/> -->
-<!-- 				<ref bean="cswAsterProduction"/> -->
-<!-- 				<ref bean="cswInSarProduction" /> -->
-				<!--  try below -->
-<!-- 				<ref bean="cswGswaDev" />  -->
-<!--  				<ref bean="cswMineralResourcesTasmaniaDev" /> -->
-<!-- 				<ref bean="cswAuscopeTest" />  -->
-<!-- 				<ref bean="cswAuscopeProduction" />  -->
-<!-- 				<ref bean="cswMDUTest" /> -->
-<!-- 				<ref bean="cswMDUProduction" /> -->
-<!-- 				<ref bean="cswSissANUProduction" /> -->
-<!-- 				<ref bean="cswGAPetroleumTest" /> -->
-<!-- 				<ref bean="cswInSarTest" /> -->
-<!-- 				<ref bean="cswInSarProduction" /> -->
-<!-- 				<ref bean="cswMRTTest" /> -->
-<!-- 				<ref bean="cswMRTProduction" /> -->
-<!-- 				<ref bean="cswVeglProduction" /> -->
+                <!-- <ref bean="cswAuscopeTest" /> -->
+                <!-- <ref bean="cswAuscopeProduction"/> -->
+                <!-- <ref bean="cswMDUTest"/>     -->
+<!--                <ref bean="cswMDUProduction"/> -->
+<!--                <ref bean="cswAsterProduction"/> -->
+<!--                <ref bean="cswInSarProduction" /> -->
+                <!--  try below -->
+<!--                <ref bean="cswGswaDev" />  -->
+<!--                <ref bean="cswMineralResourcesTasmaniaDev" /> -->
+<!--                <ref bean="cswAuscopeTest" />  -->
+<!--                <ref bean="cswAuscopeProduction" />  -->
+<!--                <ref bean="cswMDUTest" /> -->
+<!--                <ref bean="cswMDUProduction" /> -->
+<!--                <ref bean="cswSissANUProduction" /> -->
+<!--                <ref bean="cswGAPetroleumTest" /> -->
+<!--                <ref bean="cswInSarTest" /> -->
+<!--                <ref bean="cswInSarProduction" /> -->
+<!--                <ref bean="cswMRTTest" /> -->
+<!--                <ref bean="cswMRTProduction" /> -->
+<!--                <ref bean="cswVeglProduction" /> -->
             </list>
         </constructor-arg>
     </bean>

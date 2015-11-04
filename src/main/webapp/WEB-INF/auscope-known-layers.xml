@@ -1895,7 +1895,54 @@
         <property name="proxyCountUrl" value=""/>
         <property name="order" value="515" />
     </bean>
-    
-<!-- END: GPT-74 - Topology and Infrastructure -->
+    <!-- Railways 1 to 3 (AND) -->
+    <bean id="knownTypeRailways1to3" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="Railways" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                        <value>Railways_1</value>
+                        <value>Railways_2</value>
+                        <value>Railways_3</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Railways"/>
+        <property name="description" value="Combined (AND) - Topography and Infrastructure - Railways 1 to 3."/>
+        <property name="group" value="Topography and Infrastructure"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="520" />
+    </bean>
+    <!-- Oil WFS -->
+    <bean id="knownTypeOil" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="oil"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="topography_National_Onshore_Gas_Pipelines:Gas_Pipelines"/>
+                <property name="relatedFeatureTypeNames">
+                    <list>
+                        <value>er:Mine</value>
+                        <value>gsml:MappedFeature</value>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Oil"/>
+        <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
+        <property name="group" value="Topography and Infrastructure"/>
+
+        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
+        <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/> <!-- doMineralTenementDownload.do"/ -->
+        <property name="order" value="525" />
+    </bean>
+    <!-- END: GPT-74 - Topology and Infrastructure -->
 
 </beans>
