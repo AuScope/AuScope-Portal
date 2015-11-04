@@ -128,7 +128,7 @@
 				<!-- Group: Topography and Infrastructure -->
 				<ref bean="knownTypePopulatedPlaces1to8" />
 				<ref bean="knownTypeCoastlines" />
-				<ref bean="knownTypeRivers" />
+				<ref bean="knownTypeRiversAndLakes" />
 				<ref bean="knownTypeRoads1to4" />
 				<ref bean="knownTypeOil" />				
             </list>

@@ -1858,14 +1858,28 @@
         <property name="order" value="505" />
     </bean>
 	<!-- AusHydro -->
-    <bean id="knownTypeRivers" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <bean id="knownTypeRiversAndLakes" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="Rivers" />
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="AusHydro_Canal_Line"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                		<value>AusHydro_PondageAreas_2</value>
+                		<value>AusHydro_PondageAreas_1</value>
+                		<value>AusHydro_Lakes_3</value>
+                		<value>AusHydro_Lakes_2</value>
+                		<value>AusHydro_Lakes_1</value>
+                		<value>AusHydro_WatercourseAreas_2</value>
+                		<value>AusHydro_WatercourseAreas_1</value>
+                		<value>AusHydro_Rivers_3</value>
+                		<value>AusHydro_Rivers_2</value>
+                		<value>AusHydro_Rivers_1</value>
+                	</list>
+                </constructor-arg>
             </bean>
         </constructor-arg>
-        <property name="name" value="Rivers"/>
+        <property name="name" value="Rivers and Lakes"/>
         <property name="description" value="Combined (AND) - Topography and Infrastructure - Rivers"/>
         <property name="group" value="Topography and Infrastructure"/>
         <property name="proxyUrl" value=""/>
@@ -1932,7 +1946,7 @@
             </bean>
         </constructor-arg>
 
-        <property name="name" value="Oil"/>
+        <property name="name" value="Oil Pipelines"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
         <property name="group" value="Topography and Infrastructure"/>
 
