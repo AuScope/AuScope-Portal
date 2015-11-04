@@ -38,7 +38,7 @@ Ext.define('auscope.HelpHandler', {
                     title : 'Mouse Coordinate',
                     description : 'Display the coordinate of the mouse on the map'
                 }),Ext.create('portal.util.help.Instruction', {
-                    highlightEl : 'permalinkicon',
+                    highlightEl : 'permanent-link',
                     anchor : 'left',
                     title : 'Permanent Link',
                     description : 'Create a link that captures the current state of the user session.'
