@@ -162,9 +162,17 @@
     </bean>
     -->
 
+    <bean id="cswGARegistry" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">
+        <constructor-arg name="id" value="cswGARegistry" />
+        <constructor-arg name="title" value="Geoscience Australia" />
+        <constructor-arg name="serviceUrl" value="http://www.ga.gov.au/darwin-geonetwork/srv/en/csw" />
+        <constructor-arg name="recordInformationUrl" value="http://www.ga.gov.au/darwin-geonetwork/srv/en/main.home?uuid=%1$s" />
+    </bean>
+
     <bean id="customRegistryList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
+                <ref bean="cswGARegistry"/>
             </list>
         </constructor-arg>
     </bean>

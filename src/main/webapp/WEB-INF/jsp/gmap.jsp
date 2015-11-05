@@ -82,11 +82,12 @@
       
       
    </head>
-
-    <body>
+    
+   <body>
       <!-- Include Navigation Header -->
       <%@ include file="page_header.jsp" %>
+      
+      <!-- TODO Include Footer -->
    </body>
-
 
 </html>

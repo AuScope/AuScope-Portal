@@ -1,5 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
+import static org.auscope.portal.core.util.DateUtil.stringYearToDate;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +15,7 @@ import org.auscope.portal.core.services.csw.custom.CustomRegistryInt;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter;
 import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.KeywordMatchType;
+import org.auscope.portal.core.services.methodmakers.filter.csw.CSWGetDataRecordsFilter.SortType;
 import org.auscope.portal.core.services.responses.csw.CSWGetCapabilities;
 import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
@@ -39,10 +42,11 @@ public class CSWFilterController extends BaseCSWController {
     public static final int DEFAULT_MAX_RECORDS = 100;
     private CSWFilterService cswFilterService;
     protected static ConcurrentHashMap<String, KeywordCacheEntity> catalogueKeywordCache;
+
     protected List<CustomRegistryInt> catalogueOnlyRegistries;
     @Autowired
     private ConversionService converter;
-
+   
     static {
         catalogueKeywordCache = new ConcurrentHashMap<String, KeywordCacheEntity>();
     }
@@ -58,16 +62,15 @@ public class CSWFilterController extends BaseCSWController {
     @Autowired
     public CSWFilterController(CSWFilterService cswFilterService,
             ViewCSWRecordFactory viewCSWRecordFactory,
-            ViewKnownLayerFactory viewKnownLayerFactory, @Qualifier("customRegistryList") ArrayList<CustomRegistryInt> customRegistries) {
+            ViewKnownLayerFactory viewKnownLayerFactory,
+            @Qualifier("customRegistryList") ArrayList<CustomRegistryInt> customRegistries) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.cswFilterService = cswFilterService;
         this.catalogueOnlyRegistries = customRegistries;
-
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder)
-    {
+    public void initBinder(WebDataBinder binder) {
         binder.setConversionService(converter);
     }
 
@@ -163,7 +166,7 @@ public class CSWFilterController extends BaseCSWController {
         this.catalogueKeywordCache.put(cswServiceId, keywordCacheEntity);
 
     }
-
+    
     /**
      * Returns getCapabilities result. For the moment we only require the title but more can be added on as needed.
      * 
@@ -213,9 +216,9 @@ public class CSWFilterController extends BaseCSWController {
                 }
             }
 
-            List<ModelMap> resultModalMap = new ArrayList<ModelMap>();
+            List<ModelMap> resultModelMap = new ArrayList<ModelMap>();
             KeywordCacheEntity keywordCacheEntity = new KeywordCacheEntity();
-            //VT: this is to append the results from the different registeries
+            //VT: this is to append the results from the different registries
             for (String cswServiceId : cswServiceIds) {
                 if (this.catalogueKeywordCache.get(cswServiceId) != null) {
                     keywordCacheEntity.append(this.catalogueKeywordCache.get(cswServiceId));
@@ -226,7 +229,7 @@ public class CSWFilterController extends BaseCSWController {
                 return generateJSONResponseMAV(true);
             }
 
-            //VT: Put the accumalated results into a ModalMap.
+            //VT: Put the accumulated results into a ModalMap.
             for (String key : keywordCacheEntity.getKeywordPair().keySet()) {
                 if (!key.toLowerCase().contains(keyword.toLowerCase())) {
                     continue;
@@ -234,10 +237,10 @@ public class CSWFilterController extends BaseCSWController {
                 ModelMap modelMap = new ModelMap();
                 modelMap.put("keyword", key);
                 modelMap.put("count", keywordCacheEntity.getKeywordPair().get(key));
-                resultModalMap.add(modelMap);
+                resultModelMap.add(modelMap);
             }
 
-            return generateJSONResponseMAV(true, resultModalMap, "");
+            return generateJSONResponseMAV(true, resultModelMap, "");
         } catch (Exception ex) {
             log.warn(String.format("Error updating keyword cache", ex));
             log.warn("Exception: ", ex);
@@ -245,8 +248,8 @@ public class CSWFilterController extends BaseCSWController {
             return generateJSONResponseMAV(false, null, "Error Generating keyword");
         }
 
-    }
-
+    } 
+    
     /**
      * Gets a list of CSWRecord view objects filtered by the specified values from all internal CSW's
      * 
@@ -294,7 +297,7 @@ public class CSWFilterController extends BaseCSWController {
         int matchedResults = 0;
         try {
             //We may be requesting from all CSW's or just a specific one
-            if (!customRegistries.isEmpty()) {
+            if (customRegistries != null && !customRegistries.isEmpty()) {
                 records = new ArrayList<CSWRecord>();
                 CSWGetRecordResponse response = cswFilterService.getFilteredRecords(customRegistries, filter,
                         maxRecords == null ? DEFAULT_MAX_RECORDS : maxRecords, startPosition);
@@ -304,6 +307,7 @@ public class CSWFilterController extends BaseCSWController {
 
             } else {
                 CSWGetRecordResponse response = null;
+                                
                 //VT: if it returns an exception, try finding it in the customRegistry
                 try {
                     response = cswFilterService.getFilteredRecords(cswServiceId, filter,
@@ -323,9 +327,11 @@ public class CSWFilterController extends BaseCSWController {
         }
     }
 
+    /*
+     * Geoscience Portal version of the getFilter to support our idea of the advanced search dialog.
+     */
     private CSWGetDataRecordsFilter getFilter(HashMap<String, String> parameters) {
 
-        String anyText = parameters.get("anyText");
         Double westBoundLongitude = null;
         Double eastBoundLongitude = null;
         Double northBoundLatitude = null;
@@ -346,30 +352,43 @@ public class CSWFilterController extends BaseCSWController {
 
         String[] keywords = null;
         if (parameters.get("keywords") != null) {
-            keywords = parameters.get("keywords").split(",");
+            keywords = parameters.get("keywords").split(" ");
         }
-        KeywordMatchType keywordMatchType = null;
-        String capturePlatform = parameters.get("capturePlatform");
-        String sensor = parameters.get("sensor");
-        String abstrac = parameters.get("abstract");
-        String title = parameters.get("title");
-
-        if (parameters.get("keywordMatchType") != null) {
-            if (parameters.get("keywordMatchType").toLowerCase().equals("any")) {
-                keywordMatchType = KeywordMatchType.Any;
-            } else {
-                keywordMatchType = KeywordMatchType.All;
-            }
-        }
+        KeywordMatchType keywordMatchType = KeywordMatchType.Any;
+        String titleOrAbstract = parameters.get("titleOrAbstract");
+        String authorSurname = parameters.get("authorSurname");
+        String publicationDateFrom = parameters.get("publicationDateFrom");
+        String publicationDateTo = parameters.get("publicationDateTo");
 
         //Firstly generate our filter
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
-        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform,
-                sensor, keywordMatchType, abstrac, title, CSWGetDataRecordsFilter.Type.dataset);
+
+        CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter();
+        
+        filter.setBasicSearchTerm(parameters.get("basicSearchTerm"));
+        
+        if (filterBbox != null) {
+            filter.setSpatialBounds(filterBbox);
+        }        
+        filter.setKeywordMatchType(keywordMatchType);
+        filter.setKeywords(keywords);
+        
+        filter.setTitleOrAbstract(titleOrAbstract != null ? titleOrAbstract.trim() : null);
+        filter.setAuthorSurname(authorSurname != null ? authorSurname.trim() : null);
+
+        filter.setPublicationDateFrom(
+                publicationDateFrom != null ? stringYearToDate(publicationDateFrom.trim(), false) : null);
+        filter.setPublicationDateTo(
+                publicationDateTo != null ? stringYearToDate(publicationDateTo.trim(), true) : null);
+       
+        filter.setSortType(SortType.getByStringValue(parameters.get("sortType")));
+        
         log.debug(String.format("filter '%1$s'", filter));
         return filter;
     }
+
+   
 
     private HashMap<String, String> arrayPairtoMap(String[] keys, String[] values) {
         HashMap<String, String> results = new HashMap<String, String>();
@@ -423,7 +442,7 @@ public class CSWFilterController extends BaseCSWController {
         FilterBoundingBox filterBbox = attemptParseBBox(westBoundLongitude, eastBoundLongitude,
                 northBoundLatitude, southBoundLatitude);
         CSWGetDataRecordsFilter filter = new CSWGetDataRecordsFilter(anyText, filterBbox, keywords, capturePlatform,
-                sensor, keywordMatchType, null, null, CSWGetDataRecordsFilter.Type.dataset);
+                sensor, keywordMatchType, null, null, null);
         log.debug(String.format("filter '%1$s'", filter));
 
         //Then make our requests to all of CSW's
