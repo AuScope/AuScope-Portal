@@ -405,13 +405,32 @@ Ext.application({
         }
 
         //Create our Print Map handler
-        var printMapHandler = function() {
-            map.once('postcompose', function(event) {
-                var canvas = event.context.canvas;
-                exportPNGElement.href = canvas.toDataURL('image/png');
-              });
-              map.renderSync();
-        };
+        var printMapHandler = function() {                    
+            // get the html of the map div and write it to a new window then call the browser print function            
+            var divToPrint = Ext.get('center_region');
+            
+            // hide the controls
+            Ext.get('center_region-map').select('.olButton').hide();
+            Ext.get('center_region-map').select('.olAlphaImg').hide();
+            
+            var html = divToPrint.dom.innerHTML;
+            
+            // show the controls
+            Ext.get('center_region-map').select('.olButton').show();
+            Ext.get('center_region-map').select('.olAlphaImg').show();
+            
+            var printWindow = window.open('', '', 
+                    'width=' + divToPrint.dom.style.width 
+                    + ',height=' + divToPrint.dom.style.height 
+                    + ',top=0,left=0,toolbars=no,scrollbars=yes,status=no,resizable=yes');
+            printWindow.document.writeln(html);
+            
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();            
+        };        
+        
         Ext.get('print-map-link').on('click', printMapHandler);
         
         //Create our Reset Map handler
