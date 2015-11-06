@@ -1836,7 +1836,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="order" value="500" />
     </bean>
-	<!-- Coastlines (AND) -->
+    <!-- Coastlines (AND) -->
     <bean id="knownTypeCoastlines" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="coastlines" />
         <constructor-arg name="knownLayerSelector">
@@ -1857,15 +1857,29 @@
         <property name="proxyCountUrl" value=""/>
         <property name="order" value="505" />
     </bean>
-	<!-- AusHydro -->
-    <bean id="knownTypeRivers" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <!-- AusHydro -->
+    <bean id="knownTypeRiversAndLakes" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="Rivers" />
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="AusHydro_Canal_Line"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                        <value>AusHydro_PondageAreas_2</value>
+                        <value>AusHydro_PondageAreas_1</value>
+                        <value>AusHydro_Lakes_3</value>
+                        <value>AusHydro_Lakes_2</value>
+                        <value>AusHydro_Lakes_1</value>
+                        <value>AusHydro_WatercourseAreas_2</value>
+                        <value>AusHydro_WatercourseAreas_1</value>
+                        <value>AusHydro_Rivers_3</value>
+                        <value>AusHydro_Rivers_2</value>
+                        <value>AusHydro_Rivers_1</value>
+                    </list>
+                </constructor-arg>
             </bean>
         </constructor-arg>
-        <property name="name" value="Rivers"/>
+        <property name="name" value="Rivers and Lakes"/>
         <property name="description" value="Combined (AND) - Topography and Infrastructure - Rivers"/>
         <property name="group" value="Topography and Infrastructure"/>
         <property name="proxyUrl" value=""/>
@@ -1922,18 +1936,12 @@
         <constructor-arg name="id" value="oil"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="topography_National_Onshore_Gas_Pipelines:Gas_Pipelines"/>
-                <property name="relatedFeatureTypeNames">
-                    <list>
-                        <value>er:Mine</value>
-                        <value>gsml:MappedFeature</value>
-                    </list>
-                </property>
+                <constructor-arg name="featureTypeName" value="topography_National_Onshore_Oil_Pipelines:Oil_Pipelines"/>
             </bean>
         </constructor-arg>
 
-        <property name="name" value="Oil"/>
-        <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
+        <property name="name" value="Oil Pipelines"/>
+        <property name="description" value="The National Onshore Oil Pipelines Dataset represents the spatial locations of pipelines for the transmission of natural Oil within mainland Australia complimented with feature attribution."/>
         <property name="group" value="Topography and Infrastructure"/>
 
         <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
@@ -1942,6 +1950,45 @@
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/> <!-- doMineralTenementDownload.do"/ -->
         <property name="order" value="525" />
+    </bean>
+    <bean id="knownTypeGas" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gas"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="topography_National_Onshore_Gas_Pipelines:Gas_Pipelines"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Gas Pipelines"/>
+        <property name="description" value="The National Onshore Gas Pipelines Dataset represents the spatial locations of pipelines for the transmission of natural gas within mainland Australia complimented with feature attribution."/>
+        <property name="group" value="Topography and Infrastructure"/>
+
+        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
+        <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/> <!-- doMineralTenementDownload.do"/ -->
+        <property name="order" value="530" />
+    </bean>
+
+    <bean id="knownTypeMajorPorts" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="majorports"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="topography_National_Major_Ports:National_Major_Ports"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="MajorPorts"/>
+        <property name="description" value="This point dataset contains major ports in Australian waters that include infrastructure facilities where maritime vessels have the ability to load and unload commodities."/>
+        <property name="group" value="Topography and Infrastructure"/>
+
+        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
+        <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/> <!-- doMineralTenementDownload.do"/ -->
+        <property name="order" value="535" />
     </bean>
     <!-- END: GPT-74 - Topology and Infrastructure -->
 
