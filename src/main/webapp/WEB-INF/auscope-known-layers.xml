@@ -1836,7 +1836,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="order" value="500" />
     </bean>
-	<!-- Coastlines (AND) -->
+    <!-- Coastlines (AND) -->
     <bean id="knownTypeCoastlines" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="coastlines" />
         <constructor-arg name="knownLayerSelector">
@@ -1857,7 +1857,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="order" value="505" />
     </bean>
-	<!-- AusHydro -->
+    <!-- AusHydro -->
     <bean id="knownTypeRiversAndLakes" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="Rivers" />
         <constructor-arg name="knownLayerSelector">
@@ -1865,17 +1865,17 @@
                 <constructor-arg name="layersMode" value="AND"/>
                 <constructor-arg name="layerNames">
                     <list>
-                		<value>AusHydro_PondageAreas_2</value>
-                		<value>AusHydro_PondageAreas_1</value>
-                		<value>AusHydro_Lakes_3</value>
-                		<value>AusHydro_Lakes_2</value>
-                		<value>AusHydro_Lakes_1</value>
-                		<value>AusHydro_WatercourseAreas_2</value>
-                		<value>AusHydro_WatercourseAreas_1</value>
-                		<value>AusHydro_Rivers_3</value>
-                		<value>AusHydro_Rivers_2</value>
-                		<value>AusHydro_Rivers_1</value>
-                	</list>
+                        <value>AusHydro_PondageAreas_2</value>
+                        <value>AusHydro_PondageAreas_1</value>
+                        <value>AusHydro_Lakes_3</value>
+                        <value>AusHydro_Lakes_2</value>
+                        <value>AusHydro_Lakes_1</value>
+                        <value>AusHydro_WatercourseAreas_2</value>
+                        <value>AusHydro_WatercourseAreas_1</value>
+                        <value>AusHydro_Rivers_3</value>
+                        <value>AusHydro_Rivers_2</value>
+                        <value>AusHydro_Rivers_1</value>
+                    </list>
                 </constructor-arg>
             </bean>
         </constructor-arg>
