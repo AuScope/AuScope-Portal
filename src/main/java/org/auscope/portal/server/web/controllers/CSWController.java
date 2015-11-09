@@ -1,5 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
+import static org.auscope.portal.core.util.DateUtil.stringToDateTime;
+
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -16,7 +18,6 @@ import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,26 +36,6 @@ public class CSWController extends BaseCSWController {
             ViewKnownLayerFactory viewKnownLayerFactory) {
         super(viewCSWRecordFactory, viewKnownLayerFactory);
         this.serviceCaller = serviceCaller;
-    }
-
-    /**
-     *
-     * @param dateString
-     *            in format: 28/02/2013
-     * @param endOfDay
-     *            false means the time will be 00:00:00:000 true means the time will be 23:59:59:999
-     * @return
-     */
-    private DateTime stringToDateTime(String dateString, boolean endOfDay) {
-        String[] date = dateString.split("/");
-        return new DateTime(
-                Integer.parseInt(date[2]), // year
-                Integer.parseInt(date[1]), // monthOfYear
-                Integer.parseInt(date[0]), // dayOfMonth
-                endOfDay ? 23 : 0, // hourOfDay
-                endOfDay ? 59 : 0, // minuteOfHour
-                endOfDay ? 59 : 0, // secondOfMinute
-                endOfDay ? 999 : 0); // millisOfSecond
     }
 
     /**

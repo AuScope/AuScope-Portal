@@ -16,21 +16,22 @@
 
     <bean id="cswGaDev" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswGaDev"/>
-        <constructor-arg name="title" value="GA Registry"/>
+        <constructor-arg name="title" value="Geoscience Australia"/>
         <constructor-arg name="serviceUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/csw-ga"/>
         <constructor-arg name="recordInformationUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <property name="hideFromCatalogue" value="true"/>
     </bean>
 
     <bean id="cswGswaDev" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswGswaDev"/>
-        <constructor-arg name="title" value="GSWA Registry"/>
+        <constructor-arg name="title" value="Geological Survey of Western Australia"/>
         <constructor-arg name="serviceUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/csw-gswa"/>
         <constructor-arg name="recordInformationUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s"/>
     </bean>
 
     <bean id="cswMineralResourcesTasmaniaDev" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswMineralResourcesTasmaniaDev"/>
-        <constructor-arg name="title" value="Mineral Resources Tasmania Registry"/>
+        <constructor-arg name="title" value="Mineral Resources Tasmania"/>
         <constructor-arg name="serviceUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/csw-tas"/>
         <constructor-arg name="recordInformationUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s"/>
     </bean>
