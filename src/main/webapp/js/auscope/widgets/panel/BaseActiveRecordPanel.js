@@ -19,14 +19,17 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     extend : 'portal.widgets.panel.CommonBaseRecordPanel',
     alias: 'widget.baseactiverecordpanel',
 
+    visibleIcon : 'portal-core/img/eye.png',
+    notVisibleIcon : 'portal-core/img/eye-off.png',
+    
     listenersHere : {
     },
 
     constructor : function(cfg) {
         var me = this;
-
+       
         me.listeners = Object.extend(me.listenersHere, cfg.listeners);
-
+        
         Ext.apply(cfg, {
             cls : 'auscope-dark-grid',
             hideHeaders : true,
@@ -61,7 +64,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 renderer : this._titleRenderer
             },{
                 text : 'info',
-                id : 'infoBLAHBLAH',
+                id : 'info',
                 xtype : 'actioncolumn',
                 dataIndex : 'info',
                 width: 32,
@@ -101,12 +104,24 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 dataIndex : 'visible',
                 width: 32,
                 align: 'center',
-                icon : 'portal-core/img/eye.png',
+                menuDisabled: true,
                 tooltip: 'Visible',
                 sortable: false,
-                menuDisabled: true,
+                renderer: function (value, metadata, layer) {
+                    var newSrc="src=\"";
+                    if(layer.visible){
+                    	newSrc+=me.visibleIcon+'"';
+                    }else{
+                    	newSrc+=me.notVisibleIcon+'"';
+                    }
+                    var img = metadata.value;
+                    // Change the src="..." image using this regular expression - toggle between eye.png and eye-off.png
+                    return img.replace(/src *= *[^ ]*/, newSrc);
+                },
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
                     me._setVisibilityAction(layer).execute();
+                    // Force the renderer to fire
+                    view.refresh();
                 }
             },{
                 text : 'Remove',
@@ -227,12 +242,6 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
             handler : function(){
 //                var layer = me.filterForm.layer;                 
                 layer.setLayerVisibility(!layer.visible);
-                if(layer.visible){
-                    this.setText('Toggle Layer Visibility OFF');
-                }else{
-                    this.setText('Toggle Layer Visibility ON');
-                }
-                
             }
         });
         
@@ -259,5 +268,5 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     },
 });
 
-// An attempt to get tooltips working.  Also trying in-line ones.  Consider moving to CommonBaseRecordPanel.js
-var tip = Ext.create('Ext.tip.ToolTip', {target : 'infoBLAHBLAH', html : 'simple tooltip for info'});
+// An attempt to get tooltips working.  Also trying in-line ones.
+var tip = Ext.create('Ext.tip.ToolTip', {target : 'info', html : 'simple tooltip for info'});
