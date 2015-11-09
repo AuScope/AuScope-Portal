@@ -115,7 +115,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                     	newSrc+=me.notVisibleIcon+'"';
                     }
                     var img = metadata.value;
-                    // Change the src="..." image using this regular expression
+                    // Change the src="..." image using this regular expression - toggle between eye.png and eye-off.png
                     return img.replace(/src *= *[^ ]*/, newSrc);
                 },
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
