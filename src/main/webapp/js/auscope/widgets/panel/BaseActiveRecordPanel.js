@@ -19,11 +19,6 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     extend : 'portal.widgets.panel.CommonBaseRecordPanel',
     alias: 'widget.baseactiverecordpanel',
 
-    browseCatalogueDNSMessage : false, //VT: Flags the do not show message when browse catalogue is clicked.
-    map : null,
-    activelayerstore : null,
-    menuFactory : null,
-    onlineResourcePanelType : null,
     visibleIcon : 'portal-core/img/eye.png',
     notVisibleIcon : 'portal-core/img/eye-off.png',
     
@@ -32,19 +27,8 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
 
     constructor : function(cfg) {
         var me = this;
-        this.map = cfg.map;
-        this.menuFactory = cfg.menuFactory;
-        this.activelayerstore = cfg.activelayerstore;
-        me.onlineResourcePanelType = cfg.onlineResourcePanelType;
-        var groupingFeature = Ext.create('Ext.grid.feature.Grouping',{
-            groupHeaderTpl: '{name} ({[values.rows.length]} {[values.rows.length > 1 ? "Items" : "Item"]})',
-            startCollapsed : true
-        });
        
         me.listeners = Object.extend(me.listenersHere, cfg.listeners);
-        
-        var menuItems = [this._getVisibleBoundFilterAction(),this._getActivelayerFilterAction(),
-                         this._getDataLayerFilterAction(),this._getImageLayerFilterAction()];
         
         Ext.apply(cfg, {
             cls : 'auscope-dark-grid',
