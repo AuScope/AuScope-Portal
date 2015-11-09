@@ -108,14 +108,14 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 tooltip: 'Visible',
                 sortable: false,
                 renderer: function (value, metadata, layer) {
-        	        var newSrc="src=\""; 
-					if(layer.visible){
-						newSrc+=me.visibleIcon+'"';
-					}else{
-						newSrc+=me.notVisibleIcon+'"';
-					}
-					var img = metadata.value;
-					return img.replace(/src *= *[^ ]*/, newSrc);
+                    var newSrc="src=\"";
+                    if(layer.visible){
+                    	newSrc+=me.visibleIcon+'"';
+                    }else{
+                    	newSrc+=me.notVisibleIcon+'"';
+                    }
+                    var img = metadata.value;
+                    return img.replace(/src *= *[^ ]*/, newSrc);
                 },
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
                     me._setVisibilityAction(layer).execute();
