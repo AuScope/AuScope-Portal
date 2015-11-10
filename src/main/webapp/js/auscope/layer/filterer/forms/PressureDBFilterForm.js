@@ -2,7 +2,7 @@
  * Builds a form panel for Pressure DB filters
  */
 Ext.define('auscope.layer.filterer.forms.PressureDBFilterForm', {
-    extend: 'auscope.layer.filterer.forms.BoreholeFilterForm',
+    extend: 'auscope.layer.filterer.forms.SF0BoreholeFilterForm',
 
     /**
      * Accepts a config for portal.layer.filterer.BaseFilterForm
