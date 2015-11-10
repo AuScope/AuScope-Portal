@@ -53,7 +53,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 xtype : 'actioncolumn',
                 width: 32,
                 align: 'center',
-                icon : 'portal-core/img/Drag_and_Drop-128.png',
+                icon : 'img/play_blue.png',
                 tooltipType: 'title',
                 sortable: false,
                 menuDisabled: true,
