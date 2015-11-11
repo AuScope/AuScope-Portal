@@ -83,11 +83,10 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                 if(me.browseCatalogueDNSMessage==true){
                 	
                 	// make sure there is no duplicate component
-                    var cswFilterWindow = Ext.get('cswFilterWindow');
+                    var cswFilterWindow = Ext.getCmp('cswFilterWindow');
                     if (cswFilterWindow) {
                         cswFilterWindow.destroy();
                     }
-
                     cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                         name : 'CSW Filter',
                         id : 'cswFilterWindow',
@@ -110,11 +109,10 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                                 }
                                 
                                 // make sure there is no duplicate component
-                                var cswFilterWindow = Ext.get('cswFilterWindow');
+                                var cswFilterWindow = Ext.getCmp('cswFilterWindow');
                                 if (cswFilterWindow) {
                                 	cswFilterWindow.destroy();
                                 }
-
                                 cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                                     name : 'CSW Filter',
                                     id : 'cswFilterWindow',
