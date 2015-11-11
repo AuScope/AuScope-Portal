@@ -46,6 +46,7 @@ Ext.application({
         //Our custom record store holds layers that the user has
         //added to the map using a OWS URL entered through the
         //custom layers panel
+        var customRecordsPanel;
         var customRecordStore = Ext.create('Ext.data.Store', {
             model : 'portal.csw.CSWRecord',
             proxy : {
@@ -61,11 +62,49 @@ Ext.application({
             listeners : {
                 load  :  function(store, records, successful, eopts){
                     if(!successful){
-                        Ext.Msg.show({
-                            title:'Error!',
-                            msg: 'Your WMS service has to support EPSG:3857 to be supported by Google map. You are seeing this error because either the URL is not valid or it does not conform to EPSG:3857 WMS layers standard',
-                            buttons: Ext.Msg.OK
-                        });
+                        var errStr = "";
+                        var idx;
+                        
+                        // Compile the returned error message
+                        for (idx=0; idx<records.length; idx++) {
+                            if (records[idx].hasOwnProperty('data')) {
+                                errStr += records[idx].data;
+                            }
+                        }
+                        
+                        // To prevent injection issues
+                        REPLACE_LIST = [/\'/g, /\"/g, /\=/g, /\</g, /\>/g, /\&/g, /\)/g, /\(/g, /\$/g, /\;/g, /\[/g, /\]/g, /\{/g, /\}/g];
+                        for (var i=0;i<REPLACE_LIST.length;i++) {
+                            errStr = errStr.replace(REPLACE_LIST[i],"");
+                        }
+
+                        // If there was no returned error message, then use the generic message
+                        if (errStr.length===0) {
+                            errStr =  "Your WMS service has to support EPSG:3857 or EPSG:4326 to be supported by Google map. You are seeing this error because either the URL is not valid or it does   not conform to EPSG:3857 or EPSG:4326 WMS layers standards"                       
+                        }
+                        
+                        if (errStr=="Your WMS does not appear to support EPSG:3857 WGS 84 / Pseudo-Mercator or EPSG:4326 WGS 84. This is required to be able to display your map in this Portal. If you are certain that your service supports EPSG:3857, click Yes for portal to attempt loading of the layer else No to exit.") {
+                            // Display error message
+                            Ext.Msg.show({
+                                title:'Error!',
+                                msg: errStr,
+                                buttons: Ext.Msg.YESNO,
+                                fn: function(btn) {
+                                      if (btn=='yes') {
+                                          // This re-sends the URL to the server, but with fewer checks
+                                          customRecordsPanel.getDockedComponent(2).items.getAt(1).searchClick(true);
+                                      }
+                                }                                      
+                            });
+                        } else {
+                            // Display error message
+                            Ext.Msg.show({
+                                title:'Error!',
+                                msg: errStr,
+                                buttons: Ext.Msg.OK
+                            });
+                        }
+                        
                     }else{
                         if(records.length === 0){
                             Ext.Msg.show({
@@ -199,7 +238,7 @@ Ext.application({
 
         });
 
-        var customRecordsPanel = Ext.create('auscope.widgets.CustomRecordPanel', {
+        customRecordsPanel = Ext.create('auscope.widgets.CustomRecordPanel', {
             title : 'Custom',
             itemId : 'org-auscope-custom-record-panel',
             store : customRecordStore,

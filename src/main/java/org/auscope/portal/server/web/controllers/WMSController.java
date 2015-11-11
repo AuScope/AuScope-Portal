@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,11 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.WMSService;
-import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.CSWGeographicBoundingBox;
 import org.auscope.portal.core.services.responses.csw.CSWGeographicElement;
@@ -32,7 +29,6 @@ import org.auscope.portal.core.services.responses.wms.GetCapabilitiesWMSLayerRec
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
-import org.auscope.portal.server.web.controllers.downloads.EarthResourcesDownloadController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -75,12 +71,19 @@ public class WMSController extends BaseCSWController {
     /**
      * Gets all WMS data records from a discovery service, and then creates JSON response for the WMS layers list in the portal
      *
+     * @param serviceUrl
+     *            The WMS URL to query
+     *            
+     * @param weakCheck
+     *            Turns off checking for the correct EPSG records before URL resolution
+     *             
      * @return a JSON representation of the CSWRecord equivalent records
      *
      * @throws Exception
      */
     @RequestMapping("/getCustomLayers.do")
-    public ModelAndView getCustomLayers(@RequestParam("service_URL") String serviceUrl) throws Exception {
+    public ModelAndView getCustomLayers(@RequestParam("service_URL") String serviceUrl, 
+                                        @RequestParam(required = false, value="weakCheck", defaultValue = "N") String weakCheck) throws Exception {
 
         CSWRecord[] records;
         int invalidLayerCount = 0;
@@ -94,9 +97,9 @@ public class WMSController extends BaseCSWController {
             if (capabilitiesRec != null) {
                 //Make a best effort of parsing a WMS into a CSWRecord
                 for (GetCapabilitiesWMSLayerRecord rec : capabilitiesRec.getLayers()) {
-                    //to check if layers are EPSG: 4326 SRS
+                    //If weakCheck is not 'Y' then check if layers are EPSG:4326 or EPSG:3857 SRS
                     String[] uniqueSRSList = getSRSList(capabilitiesRec.getLayerSRS(), rec.getChildLayerSRS());
-                    if (!((Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0 || (Arrays.binarySearch(uniqueSRSList,
+                    if (!weakCheck.equals("Y") && !((Arrays.binarySearch(uniqueSRSList, "epsg:3857")) >= 0 || (Arrays.binarySearch(uniqueSRSList,
                             "epsg:4326")) >= 0)) {
                         invalidLayerCount += 1;
                         continue;
@@ -141,19 +144,33 @@ public class WMSController extends BaseCSWController {
                     cswRecords.add(newRecord);
 
                 }
+            } else {
+                // Cannot find any WMS capability records
+                log.debug("Cannot find any WMS capability records");
+                return generateJSONResponseMAV(false, "I can resolve your WMS URL, but cannot find any WMS capability records", null);
             }
+            
             //generate the same response from a getCachedCSWRecords call
             records = cswRecords.toArray(new CSWRecord[cswRecords.size()]);
         } catch (MalformedURLException e) {
             log.debug(e.getMessage());
-            return generateJSONResponseMAV(false, "URL not well formed", null);
+            return generateJSONResponseMAV(false, "I cannot resolve your WMS URL, there was a malformed URL error: "+e.getMessage(), null);
         } catch (Exception e) {
-            log.debug(e.getMessage());
-            return generateJSONResponseMAV(false, "Unable to process request", null);
+            String excStr = e.getMessage();
+            log.debug(excStr);
+            // Fix up the least informative messages
+            if (excStr.equals("Not Found")) {
+                return generateJSONResponseMAV(false, "I cannot resolve your WMS URL: page not found", null);
+                
+            } else if (excStr.equals("null")) {
+                return generateJSONResponseMAV(false, "I cannot resolve your WMS URL", null);
+            }
+            
+            return generateJSONResponseMAV(false, excStr, null);
         }
 
         if (records.length == 0) {
-            return generateJSONResponseMAV(false, "No records that supports EPSG:3857 was found", null);
+            return generateJSONResponseMAV(false, "Your WMS does not appear to support EPSG:3857 (WGS 84 / Pseudo-Mercator) or EPSG:4326 (WGS 84). This is required to be able to display your map in this Portal. If you are certain that your service supports EPSG:3857, click Yes for portal to attempt loading of the layer else No to exit.", null);
         }
 
         ModelAndView mav = generateJSONResponseMAV(records);
