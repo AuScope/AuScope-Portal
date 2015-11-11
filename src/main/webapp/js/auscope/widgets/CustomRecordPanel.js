@@ -7,15 +7,11 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 
     enableBrowse : false,
 
-
     constructor : function(cfg) {
         this.callParent(arguments);
         this.on('afterrender', this._loadQueryBar, this);
         this.enableBrowse = cfg.enableBrowse;
-
-
     },
-
 
     _loadQueryBar : function() {
         this._updateSearchBar(false);
@@ -63,7 +59,6 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                 }]
             });
         }
-
     },
 
     _getRegistryAction : function(){
@@ -81,8 +76,14 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
             handler: function(btn) {
                 //VT: TODO use BrowserWindowWithWarning.js
                 if(me.browseCatalogueDNSMessage==true){
-                    var cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
+                	// make sure there is no duplicate component
+                    var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+                    if (cswFilterWindow) {
+                        cswFilterWindow.destroy();
+                    }
+                    cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                         name : 'CSW Filter',
+                        id : 'cswFilterWindow',
                         listeners : {
                             filterselectcomplete : Ext.bind(me.handleFilterSelectComplete, me)
                         }
@@ -99,8 +100,14 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                                 if (Ext.get('do_not_show_again').dom.checked == true){
                                     me.browseCatalogueDNSMessage=true;
                                 }
-                                var cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
+                                // make sure there is no duplicate component
+                                var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+                                if (cswFilterWindow) {
+                                	cswFilterWindow.destroy();
+                                }
+                                cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                                     name : 'CSW Filter',
+                                    id : 'cswFilterWindow',
                                     listeners : {
                                         filterselectcomplete : Ext.bind(me.handleFilterSelectComplete, me)
                                     }
