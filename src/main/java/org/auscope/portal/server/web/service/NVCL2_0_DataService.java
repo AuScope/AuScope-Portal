@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.xpath.XPathConstants;
@@ -109,6 +110,7 @@ public class NVCL2_0_DataService {
      */
     public BinnedCSVResponse getNVCL2_0_CSVBinned(String serviceUrl, String[] logIds, double binSizeMetres) throws Exception {
         final String MISSING_DATA_STRING = "null";
+        final int INITIAL_LIST_SIZE = 512;
         serviceUrl += "downloadscalars.html";
 
         HttpRequestBase method = nvclMethodMaker.getDownloadCSVMethod(serviceUrl, logIds);
@@ -131,7 +133,7 @@ public class NVCL2_0_DataService {
             double currentBinStartDepth = -Double.MAX_VALUE;
             int currentBinSize = 0;
             for (int i = 0; i < bins.length; i++) {
-                bins[i] = binnedResponse.new Bin(headerLine[2 + i], new ArrayList<Double>(512), true, new ArrayList<Object>(512));
+                bins[i] = binnedResponse.new Bin(headerLine[2 + i], new ArrayList<Double>(INITIAL_LIST_SIZE), true, new ArrayList<Map<String, Integer>>(INITIAL_LIST_SIZE), new ArrayList<String>(INITIAL_LIST_SIZE), new ArrayList<Double>(INITIAL_LIST_SIZE));
                 bins[i].setNumeric(true);
                 valueCounts.add(new HashMap<String, Integer>());
             }
@@ -154,21 +156,22 @@ public class NVCL2_0_DataService {
                     for (int i = 0; i < bins.length; i++) {
                         if (bins[i].isNumeric()) {
                             if (numericCount[i] > 0) {
-                                bins[i].getValues().add(numericTotal[i] / (double) numericCount[i]);
+                                bins[i].getNumericValues().add(numericTotal[i] / (double) numericCount[i]);
                                 bins[i].getStartDepths().add(currentBinStartDepth);
                             }
                         } else {
                             String value = getMostCountedValue(valueCounts.get(i));
                             if (value != null) {
-                                bins[i].getValues().add(value);
                                 bins[i].getStartDepths().add(currentBinStartDepth);
+                                bins[i].getHighStringValues().add(value);
+                                bins[i].getStringValues().add(valueCounts.get(i));
                             }
                         }
                     }
 
                     //Reset our working bin data
                     for (int i = 0; i < bins.length; i++) {
-                        valueCounts.get(i).clear();
+                        valueCounts.set(i, new HashMap<String, Integer>());
                         numericTotal[i] = 0.0;
                         numericCount[i] = 0;
                     }
@@ -217,20 +220,21 @@ public class NVCL2_0_DataService {
                 for (int i = 0; i < bins.length; i++) {
                     if (bins[i].isNumeric()) {
                         if (numericCount[i] > 0) {
-                            bins[i].getValues().add(numericTotal[i] / (double) numericCount[i]);
+                            bins[i].getNumericValues().add(numericTotal[i] / (double) numericCount[i]);
                             bins[i].getStartDepths().add(currentBinStartDepth);
                         }
                     } else {
                         String value = getMostCountedValue(valueCounts.get(i));
                         if (value != null) {
-                            bins[i].getValues().add(value);
                             bins[i].getStartDepths().add(currentBinStartDepth);
+                            bins[i].getHighStringValues().add(value);
+                            bins[i].getStringValues().add(valueCounts.get(i));
                         }
                     }
                 }
             }
 
-            binnedResponse.setBins(bins);
+            binnedResponse.setBinnedValues(bins);
             binnedResponse.setBinSize(binSizeMetres);
         } finally {
             IOUtils.closeQuietly(reader);

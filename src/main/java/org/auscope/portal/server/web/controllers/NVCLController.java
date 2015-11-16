@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.HttpUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AbstractStreamResponse;
+import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
@@ -500,6 +502,32 @@ public class NVCLController extends BasePortalController {
 
         response.setHeader("Content-Disposition", "attachment; filename=downloadScalar.csv");
         writeStreamResponse(response, serviceResponse);
+    }
+
+    /**
+     * Proxies a CSV download request to a WFS from a NVCL 2.0 service. Parses the response into a series of 1m averaged bins.
+     *
+     * @param serviceUrl
+     *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
+     * @param datasetId
+     *            The dataset to download
+     * @return
+     */
+    @RequestMapping("getNVCL2_0_CSVDataBinned.do")
+    public ModelAndView getNVCL2_0_CSVDataBinned(@RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("logIds") String[] logIds) throws Exception {
+
+        //Make our request
+        try {
+            BinnedCSVResponse response = dataService2_0.getNVCL2_0_CSVBinned(serviceUrl, logIds);
+
+            return generateJSONResponseMAV(true, Arrays.asList(response), "");
+
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting csv download for logId '%1$s' from %2$s: %3$s", logIds,serviceUrl, ex));
+            log.debug("Exception:", ex);
+            return generateJSONResponseMAV(false);
+        }
     }
 
     /**
