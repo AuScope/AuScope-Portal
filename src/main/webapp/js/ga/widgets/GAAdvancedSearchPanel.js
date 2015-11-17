@@ -1,7 +1,7 @@
 /**
  * This is the panel for the advanced search dialog.
  */
-Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
+Ext.define('ga.widgets.GAAdvancedSearchPanel', {
     extend : 'Ext.form.Panel',
     alias: 'widget.gaadvancedsearchpanel',
     map : null,
@@ -120,13 +120,17 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
         var registriesTab = {
                 title : '1. Choose Data Provider(s)',
                 xtype : 'panel',
+                style: 'padding: 5px',
                 type: 'vbox',
                 items:[{
+                   xtype: 'displayfield',
+                   value: 'Please select one or more data registries to search:'
+                }, {
                     xtype: 'checkboxgroup',
                     name : 'cswServiceId',
                     id : 'registryTabCheckboxGroup',
-                    allowBlank : 'false',
                     fieldLabel: 'Registries',
+                    labelStyle: 'visibility: hidden',
                     columns: 1,
                     vertical: true                    
                 }]
@@ -155,8 +159,10 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                             checked : cswServiceItemRec.get('selectedByDefault')
                         });
                     }
-                    var registry=Ext.getCmp('registryTabCheckboxGroup');
-                    registry.add(checkBoxItems);
+                    var registryTabCheckboxGroup=Ext.getCmp('registryTabCheckboxGroup');
+                    registryTabCheckboxGroup.add(checkBoxItems);
+                    registryTabCheckboxGroup.allowBlank = false;
+                    registryTabCheckboxGroup.blankText = 'At least one registry must be selected for the search';
                 }
             }
 

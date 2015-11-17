@@ -79,10 +79,6 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                     var cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                         name : 'CSW Filter',
                         id : 'cswFilterWindow',
-                        cswFilterFormPanel:  new auscope.widgets.GAAdvancedSearchPanel({
-                            name : 'Filter Form',
-                            map: this.map
-                        }),
                         listeners : {
                             filterselectcomplete : Ext.bind(me.handleFilterSelectComplete, me)
                         }
@@ -102,10 +98,6 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                                 var cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                                     name : 'CSW Filter',
                                     id : 'cswFilterWindow',
-                                    cswFilterFormPanel: new auscope.widgets.GAAdvancedSearchPanel({
-                                        name : 'Filter Form',
-                                        map: this.map
-                                    }),
                                     listeners : {
                                         filterselectcomplete : Ext.bind(me.handleFilterSelectComplete, me)
                                     }

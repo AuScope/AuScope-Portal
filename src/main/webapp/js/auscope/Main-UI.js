@@ -470,21 +470,22 @@ Ext.application({
 
         //Create our advanced search control handler
         var advancedSearchLinkHandler = function() {
-        	
+            
             var cswFilterWindow = Ext.getCmp('cswFilterWindow');
         	if (!cswFilterWindow) {
-        		cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
+        		cswFilterWindow = new ga.widgets.GAAdvancedSearchWindow({
 	                name : 'CSW Filter',
 	                id : 'cswFilterWindow',
-	                cswFilterFormPanel:  new auscope.widgets.GAAdvancedSearchPanel({
-	                    name : 'Filter Form',
-	                    map: this.map
-	                }),
+	                map : map,
+	                layerFactory : layerFactory,
+	                layerStore : layerStore,
 	                listeners : {
 	                    filterselectcomplete : function(filteredResultPanels) {
-	                        var cswSelectionWindow = new CSWSelectionWindow({
-	                            title : 'CSW Record Selection',
+	                        var cswSelectionWindow = new GASearchResultsWindow({
+	                            title : 'Advanced Search Results',
 	                            id: 'cswSelectionWindow',
+	                            map : map,
+	                            layerFactory : layerFactory,
 	                            resultpanels : filteredResultPanels,
 	                            listeners : {
 	                                selectioncomplete : function(csws){  
@@ -531,30 +532,33 @@ Ext.application({
         	// hmmm... validate empty input or just ignore it?
         	if (!basicSearchInput) {
         		return false;
-			}  
+        	}  
         	
         	if (basicSearchInput.dom.value === '') {
         		Ext.Msg.alert('Search Term Required', 'Please enter a search term in the provided input field.');
         		return false;
-        	}
-                        
+        	}                        
+            
             var filteredResultPanels=[];
 
             for(arrayIndex in cswServiceItemStore.data.items){
                 filteredResultPanels.push(getTabPanels(cswServiceItemStore.data.items[arrayIndex].data, basicSearchInput.dom.value));                
-            }
-            
+            }            
+        	
             var cswFilterWindow = Ext.getCmp('cswFilterWindow');
-        	if (cswFilterWindow) {
-        		cswFilterWindow.destroy();
-        	}
-        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
-        	if (!cswSelectionWindow) {
-        		cswSelectionWindow = new CSWSelectionWindow({
-                    title : 'CSW Record Selection',
+            if (cswFilterWindow) {
+                cswFilterWindow.destroy();
+            }
+
+            var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
+            if (!cswSelectionWindow) {
+                cswSelectionWindow = new GASearchResultsWindow({
+                    title : 'Basic Search Results',
                     id: 'cswSelectionWindow',
+                    map : map,
+                    layerFactory : layerFactory,
+                    layerStore : layerStore,
                     resultpanels : filteredResultPanels,
-                    showControlButtons : false,
                     listeners : {
                         selectioncomplete : function(csws){  
                             var tabpanel =  Ext.getCmp('auscope-tabs-panel');
@@ -570,7 +574,7 @@ Ext.application({
                             
                         }
                     }
-                });
+                });            
         	}
         	cswSelectionWindow.show();     	        	
         };
@@ -622,9 +626,12 @@ Ext.application({
 
             var result={
                     title : tabTitle,
-                    xtype: 'cswrecordpagingpanel',
+                    xtype: 'gasearchresultspanel',
                     layout : 'fit',
-                    store : filterCSWStore
+                    store : filterCSWStore,
+                    map : map,
+                    layerFactory : layerFactory,
+                    layerStore : layerStore
                 };
 
             return result;
