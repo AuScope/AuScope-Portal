@@ -52,7 +52,7 @@ Ext.application({
             },
             autoLoad : true
         });
-        
+
         // data store for service endpoints available for searching for CSW records
         var cswServiceItemStore = new Ext.data.Store({
             model   : 'portal.widgets.model.CSWServices',
@@ -66,7 +66,7 @@ Ext.application({
             },
             autoLoad : true
         });
-        
+
 
         //Our custom record store holds layers that the user has
         //added to the map using a OWS URL entered through the
@@ -179,7 +179,7 @@ Ext.application({
         var map = null;
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-        
+
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
             formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
@@ -363,7 +363,7 @@ Ext.application({
         mpc.show();
         mpc.setZIndex(40000);
         mpc.anchorTo(body, 'tr-tr', [0, 100], true);
-        
+
         /**
          * Add all the panels to the viewport
          */
@@ -388,9 +388,9 @@ Ext.application({
                        var tabpanel =  Ext.getCmp('auscope-tabs-panel');
                        var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
                        tabpanel.setActiveTab(customPanel);
-                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                            
+                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);
                        var newLayer = layerFactory.generateLayerFromCSWRecord(cswRecord);
-                       cswRecord.set('layer',newLayer);            
+                       cswRecord.set('layer',newLayer);
                        var filterForm = newLayer.get('filterForm');
                        filterForm.setLayer(newLayer);
                        layerStore.insert(0,newLayer);
@@ -405,51 +405,51 @@ Ext.application({
         }
 
         //Create our Print Map handler
-        var printMapHandler = function() {                    
-            // get the html of the map div and write it to a new window then call the browser print function            
+        var printMapHandler = function() {
+            // get the html of the map div and write it to a new window then call the browser print function
             var divToPrint = Ext.get('center_region');
-            
+
             // hide the controls
             Ext.get('center_region-map').select('.olButton').hide();
             Ext.get('center_region-map').select('.olAlphaImg').hide();
-            
+
             var html = divToPrint.dom.innerHTML;
-            
+
             // show the controls
             Ext.get('center_region-map').select('.olButton').show();
             Ext.get('center_region-map').select('.olAlphaImg').show();
-            
-            var printWindow = window.open('', '', 
-                    'width=' + divToPrint.dom.style.width 
-                    + ',height=' + divToPrint.dom.style.height 
+
+            var printWindow = window.open('', '',
+                    'width=' + divToPrint.dom.style.width
+                    + ',height=' + divToPrint.dom.style.height
                     + ',top=0,left=0,toolbars=no,scrollbars=yes,status=no,resizable=yes');
             printWindow.document.writeln(html);
-            
+
             printWindow.document.close();
             printWindow.focus();
             printWindow.print();
-            printWindow.close();            
-        };        
-        
+            printWindow.close();
+        };
+
         Ext.get('print-map-link').on('click', printMapHandler);
-        
+
         //Create our Reset Map handler
         // revert to the default zoom level, map extent and remove all our layers
         var resetMapHandler = function() {
-            map.map.zoomTo(4); 
+            map.map.zoomTo(4);
             var center = new OpenLayers.LonLat(133.3, -26).transform('EPSG:4326', 'EPSG:3857');
             map.map.setCenter(center);
-            
+
             // remove all of the layers we have added
-            var items = map.layerStore.data.items;    
+            var items = map.layerStore.data.items;
             for (i = items.length-1; i >=0; --i) {
-                var layer = items[i];        
+                var layer = items[i];
                 AppEvents.broadcast('removelayer', {layer:layer});
             }
             layerStore = Ext.create('portal.layer.LayerStore', {});
         };
-        Ext.get('reset-map-link').on('click', resetMapHandler);     
-        
+        Ext.get('reset-map-link').on('click', resetMapHandler);
+
         //Create our permalink generation handler
         var permalinkHandler = function() {
             var mss = Ext.create('portal.util.permalink.MapStateSerializer');
@@ -470,7 +470,7 @@ Ext.application({
 
         //Create our advanced search control handler
         var advancedSearchLinkHandler = function() {
-            
+
             var cswFilterWindow = Ext.getCmp('cswFilterWindow');
         	if (!cswFilterWindow) {
         		cswFilterWindow = new ga.widgets.GAAdvancedSearchWindow({
@@ -488,7 +488,7 @@ Ext.application({
 	                            layerFactory : layerFactory,
 	                            resultpanels : filteredResultPanels,
 	                            listeners : {
-	                                selectioncomplete : function(csws){  
+	                                selectioncomplete : function(csws){
 	                                    var tabpanel =  Ext.getCmp('auscope-tabs-panel');
 	                                    var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
 	                                    tabpanel.setActiveTab(customPanel);
@@ -499,7 +499,7 @@ Ext.application({
 	                                        csws[i].set('customlayer',true);
 	                                        customPanel.getStore().insert(0,csws[i]);
 	                                    }
-	                                    
+
 	                                }
 	                            }
 	                        });
@@ -508,18 +508,18 @@ Ext.application({
 	                }
 	            });
         	}
-        	
+
         	var basicSearchInput = Ext.get('basic-search-input');
         	if (basicSearchInput) {
         		//basicSearchInput.dom.disabled = 'true';
         		basicSearchInput.dom.value = '';
-        	}        	
-        	
+        	}
+
         	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
         	if (cswSelectionWindow) {
         		cswSelectionWindow.destroy();
-        	}        	
-        	
+        	}
+
             cswFilterWindow.show();
         };
         Ext.get('advanced-search-link').on('click', advancedSearchLinkHandler);
@@ -528,23 +528,23 @@ Ext.application({
         var basicSearchButtonHandler = function() {
 
         	var basicSearchInput = Ext.get('basic-search-input');
-        	
+
         	// hmmm... validate empty input or just ignore it?
         	if (!basicSearchInput) {
         		return false;
-        	}  
-        	
+        	}
+
         	if (basicSearchInput.dom.value === '') {
         		Ext.Msg.alert('Search Term Required', 'Please enter a search term in the provided input field.');
         		return false;
-        	}                        
-            
+        	}
+
             var filteredResultPanels=[];
 
             for(arrayIndex in cswServiceItemStore.data.items){
-                filteredResultPanels.push(getTabPanels(cswServiceItemStore.data.items[arrayIndex].data, basicSearchInput.dom.value));                
-            }            
-        	
+                filteredResultPanels.push(getTabPanels(cswServiceItemStore.data.items[arrayIndex].data, basicSearchInput.dom.value));
+            }
+
             var cswFilterWindow = Ext.getCmp('cswFilterWindow');
             if (cswFilterWindow) {
                 cswFilterWindow.destroy();
@@ -560,7 +560,7 @@ Ext.application({
                     layerStore : layerStore,
                     resultpanels : filteredResultPanels,
                     listeners : {
-                        selectioncomplete : function(csws){  
+                        selectioncomplete : function(csws){
                             var tabpanel =  Ext.getCmp('auscope-tabs-panel');
                             var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
                             tabpanel.setActiveTab(customPanel);
@@ -571,15 +571,15 @@ Ext.application({
                                 csws[i].set('customlayer',true);
                                 customPanel.getStore().insert(0,csws[i]);
                             }
-                            
+
                         }
                     }
-                });            
+                });
         	}
-        	cswSelectionWindow.show();     	        	
+        	cswSelectionWindow.show();
         };
         Ext.get('basic-search-button').on('click', basicSearchButtonHandler);
-        
+
         /**
          * Return configuration for the tabpanels in the basic search results
          *
@@ -594,10 +594,10 @@ Ext.application({
 
             keys.push("basicSearchTerm");
             values.push(basicSearchValue);
-            
+
             keys.push('cswServiceId');
             values.push(cswService.id);
-            
+
             //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
             var filterCSWStore = Ext.create('Ext.data.Store', {
                 model : 'portal.csw.CSWRecord',
@@ -621,7 +621,7 @@ Ext.application({
                 }
 
             });
-            
+
             tabTitle = cswService.title || 'Error retrieving title';
 
             var result={
@@ -636,7 +636,7 @@ Ext.application({
 
             return result;
         };
-        
+
         //Create our 'Clear Search' handler
         var clearSearchLinkHandler = function() {
             var cswFilterWindow = Ext.getCmp('cswFilterWindow');
@@ -647,22 +647,22 @@ Ext.application({
         	if (cswSelectionWindow) {
         		cswSelectionWindow.destroy();
         	}
-        	
+
         	var basicSearchInput = Ext.get('basic-search-input');
         	if (basicSearchInput) {
         		basicSearchInput.dom.value = '';
         	}
         };
         Ext.get('clear-search-link').on('click', clearSearchLinkHandler);
-        
-        //Create our 'Simple Search' handler for the Enter key. 
+
+        //Create our 'Simple Search' handler for the Enter key.
         var simpleSearchSubmitHandler = function(e) {
         	if (e.getKey() == e.ENTER) {
         		basicSearchButtonHandler();
         	}
         };
-        Ext.get('basic-search-input').on('keyup', simpleSearchSubmitHandler);   
-        
+        Ext.get('basic-search-input').on('keyup', simpleSearchSubmitHandler);
+
         //Handle deserialisation -- ONLY if we have a uri param called "state".
         var deserializationHandler;
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
@@ -682,5 +682,5 @@ Ext.application({
 
         }
     }
-    
+
 });
