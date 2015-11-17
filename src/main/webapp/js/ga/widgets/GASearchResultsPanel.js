@@ -78,7 +78,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
                             } 
                             if (!hasWMSResource) {
                                 var name = record.get('name');                                
-                                var addWMSLinkId = name.replace(/\W/g, '') + '_addWMSLink'; 
+                                var addWMSLinkId = '_' + name.replace(/\W/g, '') + '_addWMSLink'; 
                                 Ext.get(addWMSLinkId).el.style = 'color: gray';
                                 Ext.get(addWMSLinkId).click = null;
                             }
@@ -198,7 +198,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
             
             var recordInfoUrl = record.get('recordInfoUrl');
             
-            var addWMSLinkId = name.replace(/\W/g, '') + '_addWMSLink'; 
+            var addWMSLinkId = '_' + name.replace(/\W/g, '') + '_addWMSLink'; 
             
             return {
                 xtype: 'panel',
