@@ -361,7 +361,7 @@ Ext.application({
         });
 
         mpc.show();
-        mpc.setZIndex(40000);
+        mpc.setZIndex(1000);
         mpc.anchorTo(body, 'tr-tr', [0, 100], true);
         
         /**

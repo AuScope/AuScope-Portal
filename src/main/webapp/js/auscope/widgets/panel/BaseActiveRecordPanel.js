@@ -54,7 +54,6 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 width: 32,
                 align: 'center',
                 icon : 'img/play_blue.png',
-                tooltipType: 'title',
                 sortable: false,
                 menuDisabled: true,
              },{
@@ -70,12 +69,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 width: 32,
                 align: 'center',
                 icon : 'portal-core/img/information.png',
-                // Still trying to get tooltips going and also investigating crating 'Ext.tip.Tooltip' objects (at bottom of this)
-//                tooltip: 'Legend',// Tooltip.  Click for detailed information about the web services this layer utilises.',
-//                getTip: function(value, metadata, record, row, col, store) {
-//                    return 'Legend';
-//                },
-//                tooltipType: 'qtip',
+                tooltip: 'Show layer information',
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, record, row) {
@@ -88,24 +82,49 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 width: 32,
                 align: 'center',
                 icon : 'portal-core/img/key.png',
-                //tooltip: 'Legend',
-                getTip: function(value, metadata, record, row, col, store) {
-                    return 'Legend';
-                },
-                tooltipType: 'title',
+                tooltip: 'Show layer legend',
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
                     me._getLegendAction(layer).execute();
                 }
             },{
+                // This is a dummy column to solve a problem with the Visibility column that follows this
+                // Having the renderer to return the Visibility Img is seeming to cause 2 images to be displayed.
+                // The first is the visibility icon (on or off) and the second is some invisibile image.
+                // The problem this is seeming to cause is that the tooltip is on the 2nd invisible image.  The
+                // tooltip on the actual image is that of the column that proceeds it (to the left).  Thus this
+                // dummy column that outputs the same tooltip.  What a hack!
+                text : '&nbsp;',
+                xtype : 'actioncolumn',
+                width: 2,
+                align: 'center',
+                menuDisabled: true,
+                getTip : function(value, metadata, layer) {
+                    var tip = 'Toggle layer visibility ';
+                    if(layer.visible){
+                        tip+='off';
+                    }else{
+                        tip+='on';
+                    }
+                    return tip;
+                },
+            },{
                 text : 'Visible',
                 xtype : 'actioncolumn',
                 dataIndex : 'visible',
-                width: 32,
+                width: 30,
                 align: 'center',
                 menuDisabled: true,
-                tooltip: 'Visible',
+                getTip : function(value, metadata, layer) {
+                    var tip = 'Toggle layer visibility ';
+                    if(layer.visible){
+                        tip+='off';
+                    }else{
+                        tip+='on';
+                    }
+                    return tip;
+                },
                 sortable: false,
                 renderer: function (value, metadata, layer) {
                     var newSrc="src=\"";
@@ -130,7 +149,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 width: 32,
                 align: 'center',
                 icon : 'portal-core/img/cross.png',
-                tooltip: 'Remove',
+                tooltip: 'Remove layer from map',
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
@@ -267,6 +286,3 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
         return panel
     },
 });
-
-// An attempt to get tooltips working.  Also trying in-line ones.
-var tip = Ext.create('Ext.tip.ToolTip', {target : 'info', html : 'simple tooltip for info'});
