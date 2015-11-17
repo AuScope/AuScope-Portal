@@ -4,7 +4,7 @@
  * objects. This is a further subclass that provides links to the online resource
  * extra fields such as Abstract and MetadataURL. 
  */
-Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
+Ext.define('ga.widgets.GAOnlineResourcesPanel', {
     extend : 'Ext.grid.Panel',
     alias : 'widget.gaonlineresourcespanel',
 
@@ -109,9 +109,9 @@ Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
                                     var id = onlineResource.get('id');           
                                     var description = onlineResource.get('description');
                                     var layerAbstract = cfg.cswRecords[i].get('description');
-                                    auscope.widgets.GAOnlineResourcesPanel.prototype.
+                                    ga.widgets.GAOnlineResourcesPanel.prototype.
                                         _getLayerAbstractControlText(serviceUrl, version, name, id, description, type, layerAbstract);        
-                                    auscope.widgets.GAOnlineResourcesPanel.prototype.
+                                    ga.widgets.GAOnlineResourcesPanel.prototype.
                                         _getLayerMetadataURLControlText(serviceUrl, version, name, id, type);    
                                 }
                             }
@@ -487,7 +487,7 @@ Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
               }  else {    
                   layerAbstractElement.update('Layer abstract');
                   layerAbstractElement.addListener('click', function(){
-                      auscope.widgets.GAOnlineResourcesPanel.prototype._layerAbstractPopupHandler(serviceUrl, version, name, description, type, layerAbstract);
+                      ga.widgets.GAOnlineResourcesPanel.prototype._layerAbstractPopupHandler(serviceUrl, version, name, description, type, layerAbstract);
                   });
                   layerAbstractElement.set({
                     // pretend it to be a link.
