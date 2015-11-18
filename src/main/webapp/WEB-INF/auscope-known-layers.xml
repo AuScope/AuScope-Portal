@@ -1894,6 +1894,8 @@
                 <constructor-arg name="layersMode" value="AND"/>
                 <constructor-arg name="layerNames">
                     <list>
+                        <value>TOPO250K_Roads</value>
+                        <value>TOPO250K_Road_Crossings</value>
                         <value>Roads_1</value>
                         <value>Roads_2</value>
                         <value>Roads_3</value>
@@ -1920,6 +1922,9 @@
                         <value>Railways_1</value>
                         <value>Railways_2</value>
                         <value>Railways_3</value>
+                        <value>Railway_Crossing_Lines</value>
+                        <value>Railway_Crossings</value>
+                        <value>Railway_Stops</value>
                     </list>
                 </constructor-arg>
             </bean>

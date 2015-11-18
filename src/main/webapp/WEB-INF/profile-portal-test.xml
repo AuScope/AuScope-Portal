@@ -130,6 +130,7 @@
                 <ref bean="knownTypeCoastlines" />
                 <ref bean="knownTypeRiversAndLakes" />
                 <ref bean="knownTypeRoads1to4" />
+                <ref bean="knownTypeRailways1to3" />
                 <ref bean="knownTypeOil" />             
                 <ref bean="knownTypeGas" />             
                 <ref bean="knownTypeMajorPorts" />              
