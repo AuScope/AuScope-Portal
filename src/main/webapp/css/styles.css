@@ -252,3 +252,49 @@
     .layerabstractpopupbody {
         padding: 10px; border: none;
     }
+    
+    
+    .multiline-row .x-grid-cell-inner {
+        overflow: auto !important;
+        white-space: normal !important;
+        text-overflow: ellipsis;
+        display: block;
+    }
+	
+    .gasearchresult {
+        
+    }
+    
+    .gasearchresult .x-panel-body {
+        border: none;
+    }
+    
+    .gasearchresult .name {
+        font-weight: bold;
+        background-color: #f3f3f3;
+        width: 100%;
+    }
+    
+    .gasearchresult .description {
+        
+    }
+    
+    .gasearchresult .x-box-inner {
+        position: unset;
+    }
+    
+    .gasearchresult .links {
+        width: 500px;
+        height: 30px;
+        top: 10px;
+        border: none;
+    }
+    
+    .gasearchresult .links a {
+        padding-right: 30px;
+        position: relative !important;
+    }
+    
+    .dataregistries-checkboxgroup-label {
+        position: absolute;
+    }
