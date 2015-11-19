@@ -146,26 +146,6 @@
         <property name="order" value="150" />
     </bean>
     
-    <bean id="knownTypehydrogeochem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="capdf-hydrogeochem"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="public:hydrogeochem"/>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Hydrogeochemistry"/>
-        <property name="description" value="Northern Yilgarn Hydrogeochemistry "/>
-        <property name="group" value="Northern Yilgarn Hydrogeochemistry "/>
-
-        <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="getCapdfHydroGeoChemStyle.do"/>
-        <property name="proxyDownloadUrl" value="doCapdfHydroGeoChemDownload.do"/>
-        <property name="order" value="160" />   
-    </bean>
-
     <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="mineral-occ-view"/>
         <constructor-arg name="knownLayerSelector">
