@@ -26,7 +26,6 @@
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeGSMLBorehole" />
-                <ref bean="knownTypeReports" />
                 <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeTimaGeoSample" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
