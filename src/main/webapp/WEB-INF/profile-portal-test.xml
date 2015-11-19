@@ -27,7 +27,6 @@
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeTimaGeoSample" />
-                <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>

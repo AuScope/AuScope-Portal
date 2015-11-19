@@ -185,41 +185,6 @@
         <property name="order" value="4" />
     </bean>
 
-    <bean id="knownTypeYilgarnGeochemistry" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="yilgarn-geochem"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="gsml:GeologicUnit"/>
-                <property name="relatedFeatureTypeNames">
-                    <list>
-                        <value>omx:ObservationProcess</value>
-                        <value>gml:TimeInstant</value>
-                        <value>sa:LocatedSpecimen</value>
-                    </list>
-                </property>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Yilgarn Laterite Geochemistry"/>
-        <property name="description" value="A collection of detailed information about all analytes that were detected at a specific location"/>
-        <property name="proxyUrl" value="doYilgarnGeochemistry.do"/>
-        <property name="proxyCountUrl" value="doYilgarnGeochemistryCount.do"/>
-        <property name="proxyStyleUrl" value=""/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="430" />
-    </bean>
     <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="nvcl-borehole"/>
         <constructor-arg name="knownLayerSelector">
