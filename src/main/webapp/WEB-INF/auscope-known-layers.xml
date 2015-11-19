@@ -220,34 +220,6 @@
         <property name="order" value="50" />
     </bean>
     
-     <bean id="knownTypeTimaGeoSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="tima-geosample"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="tima:geosample_and_mineralogy"/>                           
-            </bean>
-        </constructor-arg>
-        <property name="name" value="TESCAN TIMA"/>
-        <property name="group" value="JdLC Mineralogy Library"/>
-        <property name="description" value="A collection of the results published from TIMA"/>
-        <property name="proxyUrl" value="doTIMAGeoSample.do"/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-circle.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="180" />
-    </bean>
-
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="sf0-borehole-nvcl"/>
         <constructor-arg name="knownLayerSelector">

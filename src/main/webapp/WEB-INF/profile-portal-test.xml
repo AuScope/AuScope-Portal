@@ -20,7 +20,6 @@
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeGSMLBorehole" />
-                <ref bean="knownTypeTimaGeoSample" />
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
