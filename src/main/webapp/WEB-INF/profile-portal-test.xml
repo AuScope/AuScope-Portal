@@ -12,21 +12,14 @@
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
             <list>                
-                <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />
-                <ref bean="knownTypeRemanentAnomalies" />
-                <ref bean="knownTypeRemanentAnomaliesTMI" />
-                <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
-                <ref bean="knownTypeEMAGRemanentAnomalies" />
-                <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeGSMLBorehole" />
-                <ref bean="knownTypeTimaGeoSample" />
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
@@ -66,10 +59,6 @@
                 <ref bean="knownTypeAsterFerricOxideContent" />
                 <ref bean="knownTypeAsterFeoh" />
                 <ref bean="knownTypeFerricOxideComp" />
-                <ref bean="knownTypeAsterChileSandToClay" />
-                <ref bean="knownTypeAsterChileWaterIndex" />
-                <ref bean="knownTypeAsterChileAlOHComp" />
-                <ref bean="knownTypeAsterChileFalseColour" />
                 <ref bean="knownTypeGroupIndex" />
                 <ref bean="knownTypeQuartzIndex" />
                 <ref bean="knownTypeMgohContent" />

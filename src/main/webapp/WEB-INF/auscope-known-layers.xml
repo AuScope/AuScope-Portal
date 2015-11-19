@@ -146,26 +146,6 @@
         <property name="order" value="150" />
     </bean>
     
-    <bean id="knownTypehydrogeochem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="capdf-hydrogeochem"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="public:hydrogeochem"/>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Hydrogeochemistry"/>
-        <property name="description" value="Northern Yilgarn Hydrogeochemistry "/>
-        <property name="group" value="Northern Yilgarn Hydrogeochemistry "/>
-
-        <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="getCapdfHydroGeoChemStyle.do"/>
-        <property name="proxyDownloadUrl" value="doCapdfHydroGeoChemDownload.do"/>
-        <property name="order" value="160" />   
-    </bean>
-
     <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="mineral-occ-view"/>
         <constructor-arg name="knownLayerSelector">
@@ -240,34 +220,6 @@
         <property name="order" value="50" />
     </bean>
     
-     <bean id="knownTypeTimaGeoSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="tima-geosample"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="tima:geosample_and_mineralogy"/>                           
-            </bean>
-        </constructor-arg>
-        <property name="name" value="TESCAN TIMA"/>
-        <property name="group" value="JdLC Mineralogy Library"/>
-        <property name="description" value="A collection of the results published from TIMA"/>
-        <property name="proxyUrl" value="doTIMAGeoSample.do"/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-circle.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="180" />
-    </bean>
-
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="sf0-borehole-nvcl"/>
         <constructor-arg name="knownLayerSelector">
@@ -877,67 +829,6 @@
         <property name="order" value="62" />
     </bean>
 
-    <bean id="knownTypeAsterChileSandToClay" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-SandToClay"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="abf6110f-36b0-4c78-b124-39743392e556"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Unweathered Sand to Clay Index (USCI)"/>
-        <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="210" />
-    </bean>
-
-    <bean id="knownTypeAsterChileWaterIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-waterindex"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="c289970f-1cb3-464d-ba79-0b8f5faac163"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Surface Water "/>
-        <property name="description" value="Water content of the surface after removing atmospheric path-length (topography) dependent water vapour using the ASTER GDEM-2 digital elevation model.    Higher levels of surface water (warmer tones) can be related to: (i) wet soil after snow melt; (ii) green vegetation; (iii) hydroscopic minerals like illite and montmorillonite; (iii) and/or groundwater seepage."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="211" />
-    </bean>
-
-
-    <bean id="knownTypeAsterChileAlOHComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-alohcomp"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="19aa8073-8af1-4dc8-9567-4b809e1052c5"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="AlOH Group Composition "/>
-        <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="212" />
-    </bean>
-
-
-    <bean id="knownTypeAsterChileFalseColour" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-falsecolour"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="4f3e3a20-8051-4b85-b135-6e8400ed133d"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="False Colour Composite "/>
-        <property name="description" value="Equivalent to false colour infrared photography and Landsat band colour composite  R:4; G:3; B:2. Green vegetation produces red colour."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="213" />
-    </bean>
-
-
-
-
     <bean id="knownTypeAsterOpaque" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="aster-opaque"/>
         <constructor-arg name="knownLayerSelector">
@@ -1131,109 +1022,6 @@
         <property name="description" value="1. Band ratio: B13/B10Blue is low silica contentRed is high silica content(potentially includes Si-rich minerals, such as quartz, feldspars, Al-clays)"/>
         <property name="group" value="National ASTER Map of Australia"/>
         <property name="order" value="77" />
-    </bean>
-
-    <bean id="knownTypeRemanentAnomalies" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="remanent-anomalies"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="RemAnom:Anomaly"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://remanentanomalies.csiro.au/geoserver/wfs</value>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="AUS5 - Remanent Anomalies"/>
-        <property name="description" value="A collection of services publishing magnetic anomalies"/>
-        <property name="group" value="Magnetics"/>
-
-        <!-- We don't need proxyUrl as Remanent Anomalies are WMS and NOT WFS -->
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
-        <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
-        <property name="order" value="80" />
-    </bean>
-
-    <bean id="knownTypeRemanentAnomaliesAutoSearch" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="remanent-anomalies-AutoSearch"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="RemAnomAutoSearch:AutoSearchAnomalies"/>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="AUS5 - AutoSearch Anomalies"/>
-        <property name="description" value="A collection of services publishing magnetic anomalies"/>
-        <property name="group" value="Magnetics"/>
-
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="getRemanentAnomaliesAutoSearchStyle.do"/>
-        <property name="proxyDownloadUrl" value="doRemanentAnomaliesAutoSearchDownload.do"/>
-        <property name="order" value="81" />
-    </bean>
-
-    <bean id="knownTypeRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="remanent-anomaliesTMI"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="mag:AUS5 - Total Magnetic Intensity"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="AUS5 - Total Magnetic Intensity"/>
-        <property name="description" value="Total Magnetic Intensity from Magnetic Anomaly Map of Australia (fifth edition), Geoscience Australia and other sources"/>
-        <property name="group" value="Magnetics"/>
-        <property name="order" value="82" />
-    </bean>
-
-    <bean id="knownTypeEMAGRemanentAnomalies" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="remanent-anomalies-EMAG"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="RemAnom:Anomaly"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://remanentanomalies.csiro.au/geoserverEMAG/wfs</value>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="EMAG2 - Remanent Anomalies"/>
-        <property name="description" value="A collection of services publishing magnetic anomalies from the EMAG2 layer"/>
-        <property name="group" value="Magnetics"/>
-
-        <!-- We don't need proxyUrl as Remanent Anomalies are WMS and NOT WFS -->
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
-        <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
-        <property name="order" value="83" />
-    </bean>
-
-    <bean id="knownTypeEMAGRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="remanent-anomalies-EMAGTMI"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="z"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc</value>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="EMAG2 - Total Magnetic Intensity"/>
-        <property name="description" value="Total Magnetic Intensity from the EMAG2 datasource.http://www.geomag.org/models/emag2.html"/>
-        <property name="group" value="Magnetics"/>
-        <property name="order" value="84" />
     </bean>
 
     <!-- This layer is NOT selectable, it is only used for hiding these features -->
