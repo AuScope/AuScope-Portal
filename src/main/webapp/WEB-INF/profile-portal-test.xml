@@ -61,10 +61,6 @@
                 <ref bean="knownTypeAsterFerricOxideContent" />
                 <ref bean="knownTypeAsterFeoh" />
                 <ref bean="knownTypeFerricOxideComp" />
-                <ref bean="knownTypeAsterChileSandToClay" />
-                <ref bean="knownTypeAsterChileWaterIndex" />
-                <ref bean="knownTypeAsterChileAlOHComp" />
-                <ref bean="knownTypeAsterChileFalseColour" />
                 <ref bean="knownTypeGroupIndex" />
                 <ref bean="knownTypeQuartzIndex" />
                 <ref bean="knownTypeMgohContent" />
