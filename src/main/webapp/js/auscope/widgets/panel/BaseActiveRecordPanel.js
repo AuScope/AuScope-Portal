@@ -211,8 +211,9 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                         var win = Ext.create('Ext.window.Window', {
                             title       : 'Legend: '+ layer.get('name'),
                             layout      : 'fit',
-                            width       : 300,
-                            height      : 400,
+                            // this will be resized dynamically as legend content is added
+                            //                            width       : 300,
+                            //                            height      : 400,
                             items: form
                         });
                         return win.show();
