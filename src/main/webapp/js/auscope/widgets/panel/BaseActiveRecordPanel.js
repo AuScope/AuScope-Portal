@@ -206,13 +206,12 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
             itemId : 'LegendAction',
             
             handler : function(){
+                // this will be resized dynamically as legend content is added
                 var legendCallback = function(legend, resources, filterer, success, form, layer){
                     if (success && form) {
                         var win = Ext.create('Ext.window.Window', {
                             title       : 'Legend: '+ layer.get('name'),
                             layout      : 'fit',
-                            width       : 200,
-                            height      : 300,
                             items: form
                         });
                         return win.show();
