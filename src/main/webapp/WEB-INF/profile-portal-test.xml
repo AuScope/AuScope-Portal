@@ -18,8 +18,8 @@
                 <ref bean="knownTypeMineralTenements" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
-                <ref bean="knownTypeBoreholePressureDB" />
-                <ref bean="knownTypeGSMLBorehole" />
+                <!-- <ref bean="knownTypeBoreholePressureDB" /> -->
+                <!-- <ref bean="knownTypeGSMLBorehole" /> -->
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
@@ -72,7 +72,7 @@
                 <ref bean="knownTypeSilicaContent" />
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
-                <ref bean="knownTypeSF0BoreholeNVCL" />             
+                <!-- <ref bean="knownTypeSF0BoreholeNVCL" />              -->
 <!--                 <ref bean="knownTypeSurfaceAftershock" /> -->
                 
                 <!-- Analytics -->
