@@ -131,6 +131,7 @@
                 <ref bean="cswMineralResourcesTasmaniaDev" />
                 <ref bean="cswAustralianTopography" />
                 <ref bean="cswAustralianSurfaceGeology" />
+                <ref bean="cswBoreholeNVCL"/>
 <!--            <ref bean="cswGeoscienceLocal" /> -->
 <!--            <ref bean="darwinDev" /> -->
 <!--            <ref bean="cswAuscopeTest" /> -->
