@@ -2,7 +2,7 @@
  * This is the GA portal footer.
  * It contains the logos of the state and federal agencies that contributed to the portal. 
  */
-Ext.define('auscope.widgets.GAHeader', {
+Ext.define('ga.widgets.GAHeader', {
     extend : 'Ext.panel.Panel',
     alias: 'widget.gaheader',
 
@@ -25,7 +25,7 @@ Ext.define('auscope.widgets.GAHeader', {
                 cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
                     name : 'CSW Filter',
                     id : 'cswFilterWindow',
-                    cswFilterFormPanel:  new auscope.widgets.GAAdvancedSearchPanel({
+                    cswFilterFormPanel:  new ga.widgets.GAAdvancedSearchPanel({
                         name : 'Filter Form',
                         map: me.map
                     }),

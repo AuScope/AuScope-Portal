@@ -2,7 +2,7 @@
  * This is the GA portal footer.
  * It contains the logos of the state and federal agencies that contributed to the portal. 
  */
-Ext.define('auscope.widgets.GAFooter', {
+Ext.define('ga.widgets.GAFooter', {
     extend : 'Ext.panel.Panel',
     alias: 'widget.gafooter',
 

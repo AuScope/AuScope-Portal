@@ -2,7 +2,7 @@
  * This is the GA menu bar.
  * It contains navigation and function links at te left and a lay-long indicator at the right.
  */
-Ext.define('auscope.widgets.GAMenuBar', {
+Ext.define('ga.widgets.GAMenuBar', {
     extend : 'Ext.panel.Panel',
     alias: 'widget.gamenubar',
 
@@ -82,7 +82,7 @@ Ext.define('auscope.widgets.GAMenuBar', {
         };
         
         var helpHandler = function() {
-            auscope.widgets.GAMenuBar.instructionManager.showInstructions([Ext.create('portal.util.help.Instruction', {
+            ga.widgets.GAMenuBar.instructionManager.showInstructions([Ext.create('portal.util.help.Instruction', {
                 highlightEl : 'auscope-tabs-panel',
                 title : 'Find data/layers',
                 description : 'In this panel a list of all available datasets in the form of layers will be presented to you.  Select the layer you would like to visualise.<br><br>Selecting a layer will expand any advanced filter options. If you do not wish to filter your datasets, you can visualise the data by clicking "Add to Map".<br/><br/>Further information about the data behind each layer can be displayed by clicking the icons alongside the layer name.'
