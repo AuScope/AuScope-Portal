@@ -94,6 +94,22 @@
         margin-right: 20px;
         display: flex;      
         justify-content: space-between;
+        color: white !important;
+        line-height: 25px;
+    }
+
+    #basic-search-input {
+        height: 25px;
+        width: 100px;
+        border: 1px solid #ffffff;    
+    }
+
+    #search-controls label {
+        margin-right: 5px;
+    }
+
+    #search-controls a {
+        color: white !important;
     }
     
     #activeLayersPanel {
@@ -188,37 +204,20 @@
         color: #000000;
         left: 15px;
     }
-
-    #search-link-spacer {
-        height: 100%;
-        width: 15px;
-        background: #ffffff url( "../img/spacer.png" ) no-repeat center center;        
-    }
-
-    #basic-search-input {
-        height: 100%;
-        border: 1px solid #ffffff;        
-    }
     
     #basic-search-link {
-        height: 100%;
+        height: 25px;
         width: 30px;
-        background: #ffffff url( "../img/run-search.png" ) no-repeat center center;
+        background: #FBAD17 url( "../img/magglass.gif" ) no-repeat center center; 
         border: 1px solid #ffffff;        
     }
     
     #clear-search-link {
-        height: 100%;
-        width: 30px;
-        background: #ffffff url( "../img/clear-search.png" ) no-repeat center center;
-        border: 1px solid #ffffff;     
+        margin-left: 10px;
     }
     
     #advanced-search-link {
-        height: 100%;
-        width: 30px;
-        background: #2B292A url( "../img/advanced-search.png" ) no-repeat center center;
- 
+        margin-left: 10px;
     }
     
     #header-controls {

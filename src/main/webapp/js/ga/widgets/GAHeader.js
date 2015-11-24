@@ -236,12 +236,11 @@ Ext.define('ga.widgets.GAHeader', {
                 
                 autoEl : {
                     tag : 'span',
-                    html: '<a id="advanced-search-link" href="javascript:void(0)"></a>\
-                            <label class="screenReaderOnly" for="basic-search-input">Search for data and publications</label>\
+                    html: '<label for="basic-search-input">Search for data and publications</label>\
                             <input type="text" id="basic-search-input" name="searchBox" maxlength="50"/>\
-                            <a id="basic-search-link" href="javascript:void(0)"></a>\
-                            <span id="search-link-spacer"></span>\
-                           <a id="clear-search-link" href="javascript:void(0)"></a>' 
+                            <span id="basic-search-link"><a href="javascript:void(0)"></a></span>\
+                            <a id="advanced-search-link" href="javascript:void(0)">Advanced Search</a>\
+                            <a id="clear-search-link" href="javascript:void(0)">Clear Search</a>' 
                 }  
             }]
         };
