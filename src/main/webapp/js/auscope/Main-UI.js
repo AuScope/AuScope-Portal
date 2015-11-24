@@ -188,15 +188,12 @@ Ext.application({
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
 
-        var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Featured',
-            id: 'knownLayersPanel',
+        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
-            store : knownLayerStore,
-            activelayerstore : layerStore,
+            store : layerStore,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             map : map,
             layerFactory : layerFactory,
-            onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -206,13 +203,16 @@ Ext.application({
                 dismissDelay : 30000
             }
         });
-
-        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
+        
+        var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
+            title : 'Featured',
+            id: 'knownLayersPanel',
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
-            store : layerStore,
-            onlineResourcePanelType : 'gaonlineresourcespanel',
+            store : knownLayerStore,
+            activelayerstore : layerStore,
             map : map,
             layerFactory : layerFactory,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -274,10 +274,30 @@ Ext.application({
 
         });
 
+        // header
+        var northPanel = {
+            layout: 'fit',
+            region:'north',
+            items:[{
+                xtype: 'gaheader',
+                map: map,
+                layerStore: layerStore,
+                registryStore: cswServiceItemStore
+            }]
+        };
+
+        // footer
+        var southPanel = {
+            layout: 'fit',
+            region:'south',
+            items:[{
+                xtype: 'gafooter'
+            }]
+        };
+        
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
             id : 'auscope-tabs-panel',
-            title : 'Layers',
             activeTab : 0,
             region : 'center',
             split : true,
@@ -291,7 +311,7 @@ Ext.application({
                 researchDataPanel
             ]
         });
-
+        
         /**
          * Used as a placeholder for the tree and details panel on the left of screen
          */
@@ -330,7 +350,7 @@ Ext.application({
             console.log("renderActiveLayers - divId: "+divId);
         }
 
-        var mpc = Ext.create('Ext.panel.Panel', {
+        var activeLayersPanel = Ext.create('Ext.panel.Panel', {
             id : 'activeLayersPanel',
             title : 'Active Layers',
              layout: {
@@ -360,16 +380,16 @@ Ext.application({
              collapsed : false,
         });
 
-        mpc.show();
-        mpc.setZIndex(40000);
-        mpc.anchorTo(body, 'tr-tr', [0, 100], true);
+        activeLayersPanel.show();
+        activeLayersPanel.setZIndex(40000);
+        activeLayersPanel.anchorTo(body, 'tr-tr', [0, 100], true);
         
         /**
          * Add all the panels to the viewport
          */
         var viewport = Ext.create('Ext.container.Viewport', {
             layout:'border',
-            items:[westPanel, centerPanel]
+            items:[northPanel, westPanel, centerPanel, southPanel]
         });
 
         if(urlParams.kml){
@@ -403,262 +423,12 @@ Ext.application({
             });
 
         }
-
-        //Create our Print Map handler
-        var printMapHandler = function() {                    
-            // get the html of the map div and write it to a new window then call the browser print function            
-            var divToPrint = Ext.get('center_region');
-            
-            // hide the controls
-            Ext.get('center_region-map').select('.olButton').hide();
-            Ext.get('center_region-map').select('.olAlphaImg').hide();
-            
-            var html = divToPrint.dom.innerHTML;
-            
-            // show the controls
-            Ext.get('center_region-map').select('.olButton').show();
-            Ext.get('center_region-map').select('.olAlphaImg').show();
-            
-            var printWindow = window.open('', '', 
-                    'width=' + divToPrint.dom.style.width 
-                    + ',height=' + divToPrint.dom.style.height 
-                    + ',top=0,left=0,toolbars=no,scrollbars=yes,status=no,resizable=yes');
-            printWindow.document.writeln(html);
-            
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();            
-        };        
-        
-        Ext.get('print-map-link').on('click', printMapHandler);
-        
-        //Create our Reset Map handler
-        // revert to the default zoom level, map extent and remove all our layers
-        var resetMapHandler = function() {
-            map.map.zoomTo(4); 
-            var center = new OpenLayers.LonLat(133.3, -26).transform('EPSG:4326', 'EPSG:3857');
-            map.map.setCenter(center);
-            
-            // remove all of the layers we have added
-            var items = map.layerStore.data.items;    
-            for (i = items.length-1; i >=0; --i) {
-                var layer = items[i];        
-                AppEvents.broadcast('removelayer', {layer:layer});
-            }
-            layerStore = Ext.create('portal.layer.LayerStore', {});
-        };
-        Ext.get('reset-map-link').on('click', resetMapHandler);     
-        
-        //Create our permalink generation handler
-        var permalinkHandler = function() {
-            var mss = Ext.create('portal.util.permalink.MapStateSerializer');
-
-            mss.addMapState(map);
-            mss.addLayers(layerStore);
-
-            mss.serialize(function(state, version) {
-                var popup = Ext.create('portal.widgets.window.PermanentLinkWindow', {
-                    state : state,
-                    version : version
-                });
-
-                popup.show();
-            });
-        };
-        Ext.get('permanent-link').on('click', permalinkHandler);
-
-        //Create our advanced search control handler
-        var advancedSearchLinkHandler = function() {
-        	
-            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
-        	if (!cswFilterWindow) {
-        		cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
-	                name : 'CSW Filter',
-	                id : 'cswFilterWindow',
-	                cswFilterFormPanel:  new auscope.widgets.GAAdvancedSearchPanel({
-	                    name : 'Filter Form',
-	                    map: this.map
-	                }),
-	                listeners : {
-	                    filterselectcomplete : function(filteredResultPanels) {
-	                        var cswSelectionWindow = new CSWSelectionWindow({
-	                            title : 'CSW Record Selection',
-	                            id: 'cswSelectionWindow',
-	                            resultpanels : filteredResultPanels,
-	                            listeners : {
-	                                selectioncomplete : function(csws){  
-	                                    var tabpanel =  Ext.getCmp('auscope-tabs-panel');
-	                                    var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
-	                                    tabpanel.setActiveTab(customPanel);
-	                                    if(!(csws instanceof Array)){
-	                                        csws = [csws];
-	                                    }
-	                                    for(var i=0; i < csws.length; i++){
-	                                        csws[i].set('customlayer',true);
-	                                        customPanel.getStore().insert(0,csws[i]);
-	                                    }
-	                                    
-	                                }
-	                            }
-	                        });
-	                        cswSelectionWindow.show();
-	                    }
-	                }
-	            });
-        	}
-        	
-        	var basicSearchInput = Ext.get('basic-search-input');
-        	if (basicSearchInput) {
-        		//basicSearchInput.dom.disabled = 'true';
-        		basicSearchInput.dom.value = '';
-        	}        	
-        	
-        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
-        	if (cswSelectionWindow) {
-        		cswSelectionWindow.destroy();
-        	}        	
-        	
-            cswFilterWindow.show();
-        };
-        Ext.get('advanced-search-link').on('click', advancedSearchLinkHandler);
-
-        //Create our 'Basic Search' handler
-        var basicSearchButtonHandler = function() {
-
-        	var basicSearchInput = Ext.get('basic-search-input');
-        	
-        	// hmmm... validate empty input or just ignore it?
-        	if (!basicSearchInput) {
-        		return false;
-			}  
-        	
-        	if (basicSearchInput.dom.value === '') {
-        		Ext.Msg.alert('Search Term Required', 'Please enter a search term in the provided input field.');
-        		return false;
-        	}
-                        
-            var filteredResultPanels=[];
-
-            for(arrayIndex in cswServiceItemStore.data.items){
-                filteredResultPanels.push(getTabPanels(cswServiceItemStore.data.items[arrayIndex].data, basicSearchInput.dom.value));                
-            }
-            
-            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
-        	if (cswFilterWindow) {
-        		cswFilterWindow.destroy();
-        	}
-        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
-        	if (!cswSelectionWindow) {
-        		cswSelectionWindow = new CSWSelectionWindow({
-                    title : 'CSW Record Selection',
-                    id: 'cswSelectionWindow',
-                    resultpanels : filteredResultPanels,
-                    showControlButtons : false,
-                    listeners : {
-                        selectioncomplete : function(csws){  
-                            var tabpanel =  Ext.getCmp('auscope-tabs-panel');
-                            var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
-                            tabpanel.setActiveTab(customPanel);
-                            if(!(csws instanceof Array)){
-                                csws = [csws];
-                            }
-                            for(var i=0; i < csws.length; i++){
-                                csws[i].set('customlayer',true);
-                                customPanel.getStore().insert(0,csws[i]);
-                            }
-                            
-                        }
-                    }
-                });
-        	}
-        	cswSelectionWindow.show();     	        	
-        };
-        Ext.get('basic-search-button').on('click', basicSearchButtonHandler);
-        
-        /**
-         * Return configuration for the tabpanels in the basic search results
-         *
-         * params - the parameter used to filter results for each tab panel
-         * cswServiceId - The id of the csw registry.
-         */
-        var getTabPanels = function(cswService,basicSearchValue) {
-            //Convert our keys/values into a form the controller can read
-            var keys = [];
-            var values = [];
-            var customRegistries=[];
-
-            keys.push("basicSearchTerm");
-            values.push(basicSearchValue);
-            
-            keys.push('cswServiceId');
-            values.push(cswService.id);
-            
-            //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
-            var filterCSWStore = Ext.create('Ext.data.Store', {
-                model : 'portal.csw.CSWRecord',
-                pageSize: 35,
-                autoLoad: false,
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                proxy : {
-                    type : 'ajax',
-                    url : 'getFilteredCSWRecords.do',
-                    reader : {
-                        type : 'json',
-                        rootProperty : 'data',
-                        successProperty: 'success',
-                        totalProperty: 'totalResults'
-                    },
-                    extraParams: {
-                        key : keys,
-                        value : values
-                    }
-
-                }
-
-            });
-            
-            tabTitle = cswService.title || 'Error retrieving title';
-
-            var result={
-                    title : tabTitle,
-                    xtype: 'cswrecordpagingpanel',
-                    layout : 'fit',
-                    store : filterCSWStore
-                };
-
-            return result;
-        };
-        
-        //Create our 'Clear Search' handler
-        var clearSearchLinkHandler = function() {
-            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
-        	if (cswFilterWindow) {
-        		cswFilterWindow.destroy();
-        	}
-        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
-        	if (cswSelectionWindow) {
-        		cswSelectionWindow.destroy();
-        	}
-        	
-        	var basicSearchInput = Ext.get('basic-search-input');
-        	if (basicSearchInput) {
-        		basicSearchInput.dom.value = '';
-        	}
-        };
-        Ext.get('clear-search-link').on('click', clearSearchLinkHandler);
-        
-        //Create our 'Simple Search' handler for the Enter key. 
-        var simpleSearchSubmitHandler = function(e) {
-        	if (e.getKey() == e.ENTER) {
-        		basicSearchButtonHandler();
-        	}
-        };
-        Ext.get('basic-search-input').on('keyup', simpleSearchSubmitHandler);   
         
         //Handle deserialisation -- ONLY if we have a uri param called "state".
         var deserializationHandler;
-        var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
+        var searchStart = window.location.href.indexOf('?');
+        
+        var urlParams = Ext.Object.fromQueryString(window.location.href.substring(searchStart + 1));
         if (urlParams && (urlParams.state || urlParams.s)) {
             var decodedString = urlParams.state ? urlParams.state : urlParams.s;
             var decodedVersion = urlParams.v;

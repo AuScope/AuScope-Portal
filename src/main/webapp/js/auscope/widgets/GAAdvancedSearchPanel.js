@@ -258,12 +258,12 @@ Ext.define('auscope.widgets.GAAdvancedSearchPanel', {
                            },
                            items: [{
                                xtype: 'button',
-                               scale: 'medium',
+                               scale: 'small',
                                text: 'Draw area on map',
                                handler: this.allowUserToDrawBoundingBox
                            },{
                                xtype: 'button',
-                               scale: 'medium',
+                               scale: 'small',
                                margin: '5 0 0 0',
                                text: 'Use current map extent',
                                handler: this.populateCoordinatesFromCurrentMapExtent
