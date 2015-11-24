@@ -60,6 +60,14 @@
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
+    <bean id="cswASTER" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswAustralianSurfaceGeology"/>
+        <constructor-arg name="title" value="ASTER"/>
+        <constructor-arg name="serviceUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/csw-aster-maps"/>
+        <constructor-arg name="recordInformationUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <property name="hideFromCatalogue" value="true"/>
+    </bean>
+
     <bean id="cswAuscopeTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswAuscopeTest"/>
         <constructor-arg name="title" value="AuScope Test Geonetwork"/>
