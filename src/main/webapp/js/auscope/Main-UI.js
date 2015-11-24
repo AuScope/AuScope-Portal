@@ -188,15 +188,12 @@ Ext.application({
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
 
-        var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Featured',
-            id: 'knownLayersPanel',
+        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
-            store : knownLayerStore,
-            activelayerstore : layerStore,
+            store : layerStore,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             map : map,
             layerFactory : layerFactory,
-            onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -206,13 +203,16 @@ Ext.application({
                 dismissDelay : 30000
             }
         });
-
-        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
+        
+        var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
+            title : 'Featured',
+            id: 'knownLayersPanel',
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
-            store : layerStore,
-            onlineResourcePanelType : 'gaonlineresourcespanel',
+            store : knownLayerStore,
+            activelayerstore : layerStore,
             map : map,
             layerFactory : layerFactory,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -274,10 +274,30 @@ Ext.application({
 
         });
 
+        // header
+        var northPanel = {
+            layout: 'fit',
+            region:'north',
+            items:[{
+                xtype: 'gaheader',
+                map: map,
+                layerStore: layerStore,
+                registryStore: cswServiceItemStore
+            }]
+        };
+
+        // footer
+        var southPanel = {
+            layout: 'fit',
+            region:'south',
+            items:[{
+                xtype: 'gafooter'
+            }]
+        };
+        
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
             id : 'auscope-tabs-panel',
-            title : 'Layers',
             activeTab : 0,
             region : 'center',
             split : true,
@@ -291,7 +311,7 @@ Ext.application({
                 researchDataPanel
             ]
         });
-
+        
         /**
          * Used as a placeholder for the tree and details panel on the left of screen
          */
@@ -330,7 +350,7 @@ Ext.application({
             console.log("renderActiveLayers - divId: "+divId);
         }
 
-        var mpc = Ext.create('Ext.panel.Panel', {
+        var activeLayersPanel = Ext.create('Ext.panel.Panel', {
             id : 'activeLayersPanel',
             title : 'Active Layers',
              layout: {
@@ -360,16 +380,16 @@ Ext.application({
              collapsed : false,
         });
 
-        mpc.show();
-        mpc.setZIndex(1000);
-        mpc.anchorTo(body, 'tr-tr', [0, 100], true);
-
+        activeLayersPanel.show();
+        activeLayersPanel.setZIndex(1000);
+        activeLayersPanel.anchorTo(body, 'tr-tr', [0, 100], true);
+        
         /**
          * Add all the panels to the viewport
          */
         var viewport = Ext.create('Ext.container.Viewport', {
             layout:'border',
-            items:[westPanel, centerPanel]
+            items:[northPanel, westPanel, centerPanel, southPanel]
         });
 
         if(urlParams.kml){
@@ -403,70 +423,6 @@ Ext.application({
             });
 
         }
-
-        //Create our Print Map handler
-        var printMapHandler = function() {
-            // get the html of the map div and write it to a new window then call the browser print function
-            var divToPrint = Ext.get('center_region');
-
-            // hide the controls
-            Ext.get('center_region-map').select('.olButton').hide();
-            Ext.get('center_region-map').select('.olAlphaImg').hide();
-
-            var html = divToPrint.dom.innerHTML;
-
-            // show the controls
-            Ext.get('center_region-map').select('.olButton').show();
-            Ext.get('center_region-map').select('.olAlphaImg').show();
-
-            var printWindow = window.open('', '',
-                    'width=' + divToPrint.dom.style.width
-                    + ',height=' + divToPrint.dom.style.height
-                    + ',top=0,left=0,toolbars=no,scrollbars=yes,status=no,resizable=yes');
-            printWindow.document.writeln(html);
-
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        };
-
-        Ext.get('print-map-link').on('click', printMapHandler);
-
-        //Create our Reset Map handler
-        // revert to the default zoom level, map extent and remove all our layers
-        var resetMapHandler = function() {
-            map.map.zoomTo(4);
-            var center = new OpenLayers.LonLat(133.3, -26).transform('EPSG:4326', 'EPSG:3857');
-            map.map.setCenter(center);
-
-            // remove all of the layers we have added
-            var items = map.layerStore.data.items;
-            for (i = items.length-1; i >=0; --i) {
-                var layer = items[i];
-                AppEvents.broadcast('removelayer', {layer:layer});
-            }
-            layerStore = Ext.create('portal.layer.LayerStore', {});
-        };
-        Ext.get('reset-map-link').on('click', resetMapHandler);
-
-        //Create our permalink generation handler
-        var permalinkHandler = function() {
-            var mss = Ext.create('portal.util.permalink.MapStateSerializer');
-
-            mss.addMapState(map);
-            mss.addLayers(layerStore);
-
-            mss.serialize(function(state, version) {
-                var popup = Ext.create('portal.widgets.window.PermanentLinkWindow', {
-                    state : state,
-                    version : version
-                });
-
-                popup.show();
-            });
-        };
-        Ext.get('permanent-link').on('click', permalinkHandler);
 
         //Create our advanced search control handler
         var advancedSearchLinkHandler = function() {
@@ -665,7 +621,9 @@ Ext.application({
 
         //Handle deserialisation -- ONLY if we have a uri param called "state".
         var deserializationHandler;
-        var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
+        var searchStart = window.location.href.indexOf('?');
+        
+        var urlParams = Ext.Object.fromQueryString(window.location.href.substring(searchStart + 1));
         if (urlParams && (urlParams.state || urlParams.s)) {
             var decodedString = urlParams.state ? urlParams.state : urlParams.s;
             var decodedVersion = urlParams.v;

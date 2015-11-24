@@ -2,60 +2,182 @@
         margin: 0px;
         padding: 0px;
         overflow: hidden;
-        bottom: 40px;
+    }
+
+    .screenReaderOnly {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
+    .olControlPanZoomBar {
+        top: 40px !important;
+    }
+    
+    .x-panel-body,
+    .x-fieldset-header-text, 
+    .x-form-item-label,
+    .x-panel-header-title,
+    .x-window-header-title,
+    .x-tab-inner,
+    .x-btn-inner,
+    .x-grid-cell-inner {
+        color: #2B292A !important;
+    }    
+     
+    .x-grid-item-selected {
+        background-color: #ADAFB2 !important;
+        color: #2B292A !important;
+    }
+    
+    .x-grid-item-over {
+        background-color: #C5CDD8 !important;
+        color: #2B292A !important;
+    }
+    
+    .x-grid-cell-inner::before {
+        border: none !important;
+        color: #2B292A !important;
+    }
+    
+    .x-panel-header-title-default > .x-title-text-default:after {
+        display: none;
+    }
+    .x-panel-header-title-default-framed > .x-title-text-default-framed:after {
+        display:none;
+    }
+    .x-window-header-title-default > .x-title-text-default:after {
+        display:none;
+    }
+    .x-panel-header-title-light > .x-title-text-light:after {
+        display:none;
+    }
+    .x-panel-header-title-light-framed > .x-title-text-light-framed:after {
+        display:none;
+    }
+    .x-panel-header-title-navigation > .x-title-text-navigation:after {
+        display:none;
+    }
+    
+    .olControlPanZoomBar .div {
+        position: absolute;
+    }
+    
+    #auscope-tabs-panel {
+        top: 28px !important;
     }
 
     #header-container {
+        background-color: #2B292A;
+        width: 100% !important;
+        height: 130px !important;
+    }
+
+    #header-container div {
+        background-color: #2B292A;
+        border: none !important;
+    }
+        
+    #header-container-body div {
+        border-color: #2B292A;
+
+    }
+    
+    #search-controls {
+        float: right;
+        margin-top: 20px;
+        clear: both;
+        height: 35px !important;
+        margin-right: 20px;
+        display: flex;      
+        justify-content: space-between;
+    }
+    
+    #activeLayersPanel {
+        top: 132px !important;
+    }
+ 
+    #header-container-innerCt {
         width: 100%;
-        height: 70px;
+        height: 100px;
         color: #ffffff;
-        background-color: #000000;
+        background-color: #2B292A;
         position:fixed;
         top: 0px;
         left: 0px;
         z-index: 1;
-        line-height: 60px;
+        line-height: 60px;        
     }
 
+    #header-container-innerCt div {
+        width: 100% !important;
+    }
+ 
+    #ausgin-logo {        
+        height: 100% !important;
+        width: 100% !important;
+        position: absolute;
+        margin-left: 10px !important;
+        background: #2B292A url( "../img/logos/ausgin-logo.png" ) no-repeat top left;
+    }
+    
     #footer-container {
+        height: 60px !important;
+    }
+
+    #footer-container div {
+        border: none !important;
+    }
+    
+    #footer-container-innerCt {
         width: 100%;
-        height: 40px;
+        height: 50px !important;
         background-color: #ffffff;
-        position:fixed;
-        bottom: 0px;
-        left: 0px;
-        z-index: 1;
-        line-height: 60px;
-        display: block;
+        line-height: 60px; 
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 5px 5px 5px !important;
+        border: none;
     }
     
     #menu-bar {
         width: 100%;
         height: 30px;
         color: #000000;
-        position:fixed;
-        top: 70px;
+        position: fixed;
         left: 0px;
         z-index: 1;
-        background-color: #FFC000;
+        background-color: #FBAD17 !important;
         line-height: 30px;
+        margin-top: 25px;
+        font: 12px Arial, Tahoma, Helvetica, sans-serif;
     }
     
     #menu-bar ul {
         list-style: none;
-        margin: 0;
+        margin-top: 8px;
         padding: 0;
     }
 
+    #menu-bar li img {
+        margin-top: -2px;
+        position: fixed;
+    }
+    
     #menu-bar li {
         display: inline-block;
         list-style-type: none;
     }
     
-    #menu-bar li img {
-	   position: absolute;
-	   top: 0px;
-	   left: -5px;
+    #center_region {
+        top: 130px !important;
+    }
+
+    #center_region-body {
+        padding-bottom: 20px !important;
     }
 
     #menu-bar a {
@@ -66,55 +188,54 @@
         color: #000000;
         left: 15px;
     }
-    
-    #header-container a {
-        color: #ffffff;
-        text-decoration: none;
-        padding-left: 20px;
-    }         
 
-    #search-form {
-        display: inline;
-        padding-left: 50px;
+    #search-link-spacer {
+        height: 100%;
+        width: 15px;
+        background: #ffffff url( "../img/spacer.png" ) no-repeat center center;        
     }
 
-    #search-form a {
-        padding-left: 20px;
+    #basic-search-input {
+        height: 100%;
+        border: 1px solid #ffffff;        
     }
     
-    .search-input-wrapper {
-		border: 1px solid #ffffff;
-		display: inline-block;
-		line-height: 17px;
-		height: 22px;
-    }
-
-    .search-input-wrapper input {
-        border: 1px solid #ffffff;
+    #basic-search-link {
+        height: 100%;
+        width: 30px;
+        background: #ffffff url( "../img/run-search.png" ) no-repeat center center;
+        border: 1px solid #ffffff;        
     }
     
-	.search-input-wrapper button {
-        background: #EB8F00 url( "../img/magglass.gif" ) no-repeat top left;
-		width: 23px;
-		margin-left: -4px;
-		height: 21px;
-		position: relative;
-		border: 1px solid white;
-		top: -5px;
-	}
+    #clear-search-link {
+        height: 100%;
+        width: 30px;
+        background: #ffffff url( "../img/clear-search.png" ) no-repeat center center;
+        border: 1px solid #ffffff;     
+    }
+    
+    #advanced-search-link {
+        height: 100%;
+        width: 30px;
+        background: #2B292A url( "../img/advanced-search.png" ) no-repeat center center;
+ 
+    }
     
     #header-controls {
         float: right;
+        width: 100%;
+        height: 20px;
         font-size: 10pt;
         display: inline;
         line-height: 17px;
+        text-align: right;
     }
 
-	#header-controls ul {
-	    list-style: none;
-	    margin: 0;
-	    padding: 0;
-	}
+    #header-controls ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
 
     #header-controls li {
         display: inline-block;
@@ -122,32 +243,13 @@
     }
 
     #header-controls a {
-	    position:relative;
-	    padding-left:15px;
-	    padding-right:15px;    
-	    text-decoration:none;
+        position:relative;
+        padding-left:15px;
+        padding-right:15px;    
+        text-decoration:none;
+        color: #ffffff;
     }
         
-    #header-controls .smaller {
-        font-size: 8pt;
-    }        
-        
-    #ausgin-header {
-        font-weight: bold;
-        font-size: 32pt;
-        padding-left: 20px;
-    }
-
-    .ga-portal-header {
-        font-weight: bold;
-        font-size: 18pt;
-        padding-left: 50px;
-    }    
-
-    .ga-portal-header::first-letter {
-        font-size: 24pt;
-    }  
-
     #body-container {
         position: fixed;
         top: 100px;
@@ -157,31 +259,6 @@
         overflow-x: hidden;
     }
 
-    #logo {
-        float: left;
-        width: 531px;
-        height: 100px;
-    }
-
-    #logo h1 {
-        float: left;
-        margin: 0;
-        padding: 0;
-        width: 531px;
-    }
-
-    #logo h1 a {
-        padding: 0;
-        margin: 0;
-        width: 531px;
-        height: 100px;
-        display: block;
-        background: url( "../img/img-auscope-banner.gif" ) no-repeat top left;
-    }
-
-    #logo h1 a span {
-        display: none;
-    }
 
     .related-portal-div {
         margin-top: 5px;
@@ -190,47 +267,6 @@
         border-bottom: 1px solid black;
     }
 
-    .niceDiv {
-        min-width: 40px;
-        max-width:650px;
-        min-height: 40px;
-        max-height: 350px;
-        font-family: Verdana;
-
-    }
-
-    .niceDivOverFlow {
-        font-family: Verdana;
-        min-width: 40px;
-        max-width:650px;
-        min-height: 40px;
-        max-height: 350px;
-        overflow: auto;
-    }
-
-    .auscopeTable {
-        font-family: Verdana;
-        font-weight: normal;
-        font-size: 12px;
-        color: #404040;
-        background-color: #fafafa;
-        border-style: solid;
-        border-color: #6699CC;
-        border-collapse: collapse;
-    }
-
-    #reportsname {
-        font-weight: bold;
-    }
-
-    #auscopePre {
-        white-space: pre-wrap;       /* css-3 */
-        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-        white-space: -pre-wrap;      /* Opera 4-6 */
-        white-space: -o-pre-wrap;    /* Opera 7 */
-        word-wrap: break-word;       /* Internet Explorer 5.5+ */
-        width: 99%;
-    }
 
     .centeredlabel {
          margin:15px;
