@@ -19,14 +19,17 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     extend : 'portal.widgets.panel.CommonBaseRecordPanel',
     alias: 'widget.baseactiverecordpanel',
 
+    visibleIcon : 'portal-core/img/eye.png',
+    notVisibleIcon : 'portal-core/img/eye-off.png',
+    
     listenersHere : {
     },
 
     constructor : function(cfg) {
         var me = this;
-
+       
         me.listeners = Object.extend(me.listenersHere, cfg.listeners);
-
+        
         Ext.apply(cfg, {
             cls : 'auscope-dark-grid',
             hideHeaders : true,
@@ -50,8 +53,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 xtype : 'actioncolumn',
                 width: 32,
                 align: 'center',
-                icon : 'portal-core/img/Drag_and_Drop-128.png',
-                tooltipType: 'title',
+                icon : 'img/play_blue.png',
                 sortable: false,
                 menuDisabled: true,
              },{
@@ -61,18 +63,13 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 renderer : this._titleRenderer
             },{
                 text : 'info',
-                id : 'infoBLAHBLAH',
+                id : 'info',
                 xtype : 'actioncolumn',
                 dataIndex : 'info',
                 width: 32,
                 align: 'center',
                 icon : 'portal-core/img/information.png',
-                // Still trying to get tooltips going and also investigating crating 'Ext.tip.Tooltip' objects (at bottom of this)
-//                tooltip: 'Legend',// Tooltip.  Click for detailed information about the web services this layer utilises.',
-//                getTip: function(value, metadata, record, row, col, store) {
-//                    return 'Legend';
-//                },
-//                tooltipType: 'qtip',
+                tooltip: 'Show layer information',
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, record, row) {
@@ -85,28 +82,65 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 width: 32,
                 align: 'center',
                 icon : 'portal-core/img/key.png',
-                //tooltip: 'Legend',
-                getTip: function(value, metadata, record, row, col, store) {
-                    return 'Legend';
-                },
-                tooltipType: 'title',
+                tooltip: 'Show layer legend',
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
                     me._getLegendAction(layer).execute();
                 }
             },{
+                // This is a dummy column to solve a problem with the Visibility column that follows this
+                // Having the renderer to return the Visibility Img is seeming to cause 2 images to be displayed.
+                // The first is the visibility icon (on or off) and the second is some invisibile image.
+                // The problem this is seeming to cause is that the tooltip is on the 2nd invisible image.  The
+                // tooltip on the actual image is that of the column that proceeds it (to the left).  Thus this
+                // dummy column that outputs the same tooltip.  What a hack!
+                text : '&nbsp;',
+                xtype : 'actioncolumn',
+                width: 2,
+                align: 'center',
+                menuDisabled: true,
+                getTip : function(value, metadata, layer) {
+                    var tip = 'Toggle layer visibility ';
+                    if(layer.visible){
+                        tip+='off';
+                    }else{
+                        tip+='on';
+                    }
+                    return tip;
+                },
+            },{
                 text : 'Visible',
                 xtype : 'actioncolumn',
                 dataIndex : 'visible',
-                width: 32,
+                width: 30,
                 align: 'center',
-                icon : 'portal-core/img/eye.png',
-                tooltip: 'Visible',
-                sortable: false,
                 menuDisabled: true,
+                getTip : function(value, metadata, layer) {
+                    var tip = 'Toggle layer visibility ';
+                    if(layer.visible){
+                        tip+='off';
+                    }else{
+                        tip+='on';
+                    }
+                    return tip;
+                },
+                sortable: false,
+                renderer: function (value, metadata, layer) {
+                    var newSrc="src=\"";
+                    if(layer.visible){
+                    	newSrc+=me.visibleIcon+'"';
+                    }else{
+                    	newSrc+=me.notVisibleIcon+'"';
+                    }
+                    var img = metadata.value;
+                    // Change the src="..." image using this regular expression - toggle between eye.png and eye-off.png
+                    return img.replace(/src *= *[^ ]*/, newSrc);
+                },
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
                     me._setVisibilityAction(layer).execute();
+                    // Force the renderer to fire
+                    view.refresh();
                 }
             },{
                 text : 'Remove',
@@ -115,7 +149,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 width: 32,
                 align: 'center',
                 icon : 'portal-core/img/cross.png',
-                tooltip: 'Remove',
+                tooltip: 'Remove layer from map',
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
@@ -172,13 +206,12 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
             itemId : 'LegendAction',
             
             handler : function(){
+                // this will be resized dynamically as legend content is added
                 var legendCallback = function(legend, resources, filterer, success, form, layer){
                     if (success && form) {
                         var win = Ext.create('Ext.window.Window', {
                             title       : 'Legend: '+ layer.get('name'),
                             layout      : 'fit',
-                            width       : 200,
-                            height      : 300,
                             items: form
                         });
                         return win.show();
@@ -227,12 +260,6 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
             handler : function(){
 //                var layer = me.filterForm.layer;                 
                 layer.setLayerVisibility(!layer.visible);
-                if(layer.visible){
-                    this.setText('Toggle Layer Visibility OFF');
-                }else{
-                    this.setText('Toggle Layer Visibility ON');
-                }
-                
             }
         });
         
@@ -258,6 +285,3 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
         return panel
     },
 });
-
-// An attempt to get tooltips working.  Also trying in-line ones.  Consider moving to CommonBaseRecordPanel.js
-var tip = Ext.create('Ext.tip.ToolTip', {target : 'infoBLAHBLAH', html : 'simple tooltip for info'});

@@ -4,7 +4,7 @@
  * objects. This is a further subclass that provides links to the online resource
  * extra fields such as Abstract and MetadataURL. 
  */
-Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
+Ext.define('ga.widgets.GAOnlineResourcesPanel', {
     extend : 'Ext.grid.Panel',
     alias : 'widget.gaonlineresourcespanel',
 
@@ -96,17 +96,23 @@ Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
                             var onlineResources = cfg.cswRecords[i].data.onlineResources;
                             for (var j = 0; j < onlineResources.length; j++) {
                                 var onlineResource = onlineResources[j]; 
-                                if (onlineResource.get('type') == portal.csw.OnlineResource.WFS
-                                        || onlineResource.get('type') == portal.csw.OnlineResource.WMS) {
+                                var type = onlineResource.get('type');
+                                var description;
+                                if (type == portal.csw.OnlineResource.WMS) {
+                                    name = cfg.cswRecords[i].get('name');
+                                } else {
+                                    name = onlineResource.get('name');
+                                }
+                                if (type == portal.csw.OnlineResource.WFS || type == portal.csw.OnlineResource.WMS) {
                                     var serviceUrl = onlineResource.get('url');
-                                    var version = onlineResource.get('version');  
-                                    var name = onlineResource.get('name');                                
-                                    var id = onlineResource.get('id');                                    
-                                    var description = onlineResource.get('description');   
-                                    auscope.widgets.GAOnlineResourcesPanel.prototype.
-                                        _getLayerAbstractControlText(serviceUrl, version, name, id, description, onlineResource.get('type'));        
-                                    auscope.widgets.GAOnlineResourcesPanel.prototype.
-                                        _getLayerMetadataURLControlText(serviceUrl, version, name, id, onlineResource.get('type'));    
+                                    var version = onlineResource.get('version');                                 
+                                    var id = onlineResource.get('id');           
+                                    var description = onlineResource.get('description');
+                                    var layerAbstract = cfg.cswRecords[i].get('description');
+                                    ga.widgets.GAOnlineResourcesPanel.prototype.
+                                        _getLayerAbstractControlText(serviceUrl, version, name, id, description, type, layerAbstract);        
+                                    ga.widgets.GAOnlineResourcesPanel.prototype.
+                                        _getLayerMetadataURLControlText(serviceUrl, version, name, id, type);    
                                 }
                             }
                         }
@@ -125,6 +131,12 @@ Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
         var styleURL = this.parentRecord.get("proxyStyleUrl");
         
         var name = onlineResource.get('name');
+        
+        // if the resource name is not provided try grabbing one from the parent cswRecord
+        if (!name || name.length === 0) {
+        	name = cswRecord.get('name');
+        }        
+        
         var url = onlineResource.get('url');	
         var description = onlineResource.get('description');
         var version = onlineResource.get('version');  
@@ -146,7 +158,7 @@ Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
         
         //Ensure there is a title (even it is just '<Untitled>'
         if (!name || name.length === 0) {
-            name = '&gt;Untitled&lt;';
+            name = '&lt;Untitled&gt;';
         }
 
         //Truncate description
@@ -188,7 +200,7 @@ Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
                 tag : 'div',
                 children : [{ 
                     	tag: 'span',
-                    	html : rowLabelTitle +  description
+                    	html : rowLabelTitle +  name
                     },
                     {
                         tag : 'br'
@@ -418,102 +430,131 @@ Ext.define('auscope.widgets.GAOnlineResourcesPanel', {
     },
       
       /**
-       * Looks for a Layer abstract from the getCapabilities document. If found, returns a 'link'
-       * otherwise returns a text message stating that none was found
+       * Looks for a Layer abstract, firstly from the cswRecord, and if not found there from the getCapabilities document. 
+       * If found, returns a 'link' otherwise returns a text message stating that none was found
        */
-      _getLayerAbstractControlText : function(serviceUrl, version, name, id, description, type) {
-          var requestURL;
-          switch (type) {
-              case portal.csw.OnlineResource.WFS:
-                  requestURL = 'getWFSFeatureAbstract.do';
-                  break;
-              case portal.csw.OnlineResource.WMS:
-                  requestURL = 'getWMSLayerAbstract.do';
-                  break; 
-              default: 
-                  // bad type passed in to this function
-                  return; 
-          }
-          // callback to set the text of the "Layer abstract" control
-          var getLayerAbstractCallback = function(options, success, response) {
-              var layerAbstractElement = Ext.get(id.replace(/\W/g, '') + '_abstract');
-              if (layerAbstractElement) {
-                  var jsonResponse;
-                  if (!success || !JSON.parse(response.responseText)["data"]) {                  
-                      layerAbstractElement.update('No abstract provided.');
-                  }  else {    
-                      layerAbstractElement.update('Layer abstract');
-                      layerAbstractElement.addListener('click', function(){
-                          auscope.widgets.GAOnlineResourcesPanel.prototype._layerAbstractPopupHandler(serviceUrl, version, name, description, type);
-                      });
-                      layerAbstractElement.set({
-                        // pretend it to be a link.
-                        style : 'color:blue; text-decoration:underline; cursor:pointer'
-                    });
-                  }
+      _getLayerAbstractControlText : function(serviceUrl, version, name, id, description, type, layerAbstract) {
+    	  
+    	  var me = this;
+    	  
+    	  var elementId = id.replace(/\W/g, '') + '_abstract';
+    	  
+    	  if (layerAbstract && layerAbstract.length > 0) {
+	          me._populateLayerAbstractLinkElement(true, elementId, serviceUrl, version, name, description, type, layerAbstract);
+    	  }
+    	  
+    	  // use AJAX to make a getCapabilities call to get the abstract
+    	  else {    		  
+	          var requestURL;
+	          switch (type) {
+	              case portal.csw.OnlineResource.WFS:
+	                  requestURL = 'getWFSFeatureAbstract.do';
+	                  break;
+	              case portal.csw.OnlineResource.WMS:
+	                  requestURL = 'getWMSLayerAbstract.do';
+	                  break; 
+	              default: 
+	                  // bad type passed in to this function
+	                  return; 
+	          }
+	          // callback to set the text of the "Layer abstract" control
+	          var getLayerAbstractCallback = function(options, success, response) {
+	        	  me._populateLayerAbstractLinkElement(success, elementId, serviceUrl, version, name, description, type, JSON.parse(response.responseText)["data"])
+	        };
+	        
+	        Ext.Ajax.request({
+	            url : requestURL,
+	            params : { 
+	                serviceUrl : serviceUrl,
+	                version : version,
+	                name : name
+	            },            
+	            waitMsg: 'Fetching Layer abstract...',
+	            callback : getLayerAbstractCallback 
+	        });
+    	  }
+      },
+      
+      /**
+       * Sets the text value of the layer abstract element. If there is an abstract adds a listener for click
+       * and styles the element like a hyperlink.
+       */
+      _populateLayerAbstractLinkElement : function(success, elementId, serviceUrl, version, name, description, type, layerAbstract) {
+    	  var layerAbstractElement = Ext.get(elementId);
+          if (layerAbstractElement) {
+              if (!success || !layerAbstract || layerAbstract.length === 0) {                  
+                  layerAbstractElement.update('No abstract provided.');
+              }  else {    
+                  layerAbstractElement.update('Layer abstract');
+                  layerAbstractElement.addListener('click', function(){
+                      ga.widgets.GAOnlineResourcesPanel.prototype._layerAbstractPopupHandler(serviceUrl, version, name, description, type, layerAbstract);
+                  });
+                  layerAbstractElement.set({
+                    // pretend it to be a link.
+                    style : 'color:blue; text-decoration:underline; cursor:pointer'
+                });
               }
-        };
-        
-        Ext.Ajax.request({
-            url : requestURL,
-            params : { 
-                serviceUrl : serviceUrl,
-                version : version,
-                name : name
-            },            
-            waitMsg: 'Fetching Layer abstract...',
-            callback : getLayerAbstractCallback 
-        });
-        
+          }
       },
       
       /**
        * Handler for clicking on the Layer Abstract element.
        */
-      _layerAbstractPopupHandler : function(serviceUrl, version, name, description, type) {          
+      _layerAbstractPopupHandler : function(serviceUrl, version, name, description, type, layerAbstract) {          
           
-          var layerAbstractURL;
-          switch (type) {
-              case portal.csw.OnlineResource.WFS:
-                  layerAbstractURL = "getWFSFeatureAbstract.do";
-                  break;
-              case portal.csw.OnlineResource.WMS:
-                  layerAbstractURL = "getWMSLayerAbstract.do";
-                  break; 
-              default: 
-                  // bad type passed in to this function
-                  return; 
-          }
-                             
-          // callback from the ajax function that gets the abstract.
-          var layerAbstractPopupCallback = function(response){           
-                  
-              var data = JSON.parse(response.responseText)["data"];
-              
-              Ext.create('Ext.window.Window', {
-                  title : 'Abstract: '+ description,
-                  layout : 'fit',
-                  width : 600,
-                  height : 300,
-                  autoScroll : true,
-                  html : '<div class="layerabstractpopupbody">' +  data + '</div>'
-              }).show();
-          };
+    	  if (layerAbstract && layerAbstract.length > 0) {
+    		  this._showLayerAbstractPopup(description, layerAbstract);
+    	  }
+    	  else {
+    	  
+	          var layerAbstractURL;
+	          switch (type) {
+	              case portal.csw.OnlineResource.WFS:
+	                  layerAbstractURL = "getWFSFeatureAbstract.do";
+	                  break;
+	              case portal.csw.OnlineResource.WMS:
+	                  layerAbstractURL = "getWMSLayerAbstract.do";
+	                  break; 
+	              default: 
+	                  // bad type passed in to this function
+	                  return; 
+	          }
+	                             
+	          // callback from the ajax function that gets the abstract.
+	          var layerAbstractPopupCallback = function(response){           
+	        	  this._showLayerAbstractPopup(description, JSON.parse(response.responseText)["data"]);
+	          };
+	          
+	          Ext.Ajax.request({
+	              url : layerAbstractURL,
+	              params : { 
+	                  serviceUrl : serviceUrl,
+	                  version : version,
+	                  name : name
+	              }, 
+	              timeout : 180000,
+	              scope : this,
+	              success : layerAbstractPopupCallback,
+	              failure : function(response, opts) {
+	                  return;
+	              }
+	          });    
+    	  }
           
-          Ext.Ajax.request({
-              url : layerAbstractURL,
-              params : { 
-                  serviceUrl : serviceUrl,
-                  version : version,
-                  name : name
-              }, 
-              timeout : 180000,
-              scope : this,
-              success : layerAbstractPopupCallback,
-              failure : function(response, opts) {
-                  return;
-              }
-          });        
+        },
+        
+        /**
+         * Shows a popup window containing the layer abstract.
+         */
+        _showLayerAbstractPopup : function(description, layerAbstract){              
+            Ext.create('Ext.window.Window', {
+                title : 'Abstract: '+ description,
+                layout : 'fit',
+                width : 600,
+                height : 300,
+                autoScroll : true,
+                html : '<div class="layerabstractpopupbody">' +  layerAbstract + '</div>'
+            }).show();
         },
         
         /**

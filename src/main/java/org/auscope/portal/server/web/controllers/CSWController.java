@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
+import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.CSWService;
@@ -109,9 +110,8 @@ public class CSWController extends BaseCSWController {
      * @param metadataDateTo
      * @param temporalExtentFrom
      * @param temporalExtentTo
-     * @return Example: "data":[portal.csw.CSWRecord], // These are anonymous objects, you can use them as the config for portal.csw.CSWRecord.
-     *         "msg":"No errors", "totalResults":18, // This is not the number of results returned, it is the number of results the query matched.
-     *         "success":true
+     * @return Example: "data":[portal.csw.CSWRecord], // These are anonymous objects, you can use them as the config for portal.csw.CSWRecord. "msg":
+     *         "No errors", "totalResults":18, // This is not the number of results returned, it is the number of results the query matched. "success":true
      */
     @RequestMapping("/getUncachedCSWRecords.do")
     public ModelAndView getUncachedCSWRecords(
@@ -150,7 +150,8 @@ public class CSWController extends BaseCSWController {
                     || Double.isNaN(southBoundLatitude)
                     || Double.isNaN(eastBoundLongitude)
                     || Double.isNaN(westBoundLongitude)) {
-                spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox);
+                OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(cswServiceUrl);
+                spatialBounds = FilterBoundingBox.attemptParseFromJSON(bbox, ogcServiceProviderType);
             } else {
                 spatialBounds = new FilterBoundingBox(
                         "EPSG:4326",

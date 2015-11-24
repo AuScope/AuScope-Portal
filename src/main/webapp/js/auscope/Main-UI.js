@@ -52,7 +52,7 @@ Ext.application({
             },
             autoLoad : true
         });
-        
+
         // data store for service endpoints available for searching for CSW records
         var cswServiceItemStore = new Ext.data.Store({
             model   : 'portal.widgets.model.CSWServices',
@@ -66,7 +66,7 @@ Ext.application({
             },
             autoLoad : true
         });
-        
+
 
         //Our custom record store holds layers that the user has
         //added to the map using a OWS URL entered through the
@@ -179,7 +179,7 @@ Ext.application({
         var map = null;
 
         map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-        
+
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
             formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
@@ -381,7 +381,7 @@ Ext.application({
         });
 
         activeLayersPanel.show();
-        activeLayersPanel.setZIndex(40000);
+        activeLayersPanel.setZIndex(1000);
         activeLayersPanel.anchorTo(body, 'tr-tr', [0, 100], true);
         
         /**
@@ -408,9 +408,9 @@ Ext.application({
                        var tabpanel =  Ext.getCmp('auscope-tabs-panel');
                        var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
                        tabpanel.setActiveTab(customPanel);
-                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                            
+                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);
                        var newLayer = layerFactory.generateLayerFromCSWRecord(cswRecord);
-                       cswRecord.set('layer',newLayer);            
+                       cswRecord.set('layer',newLayer);
                        var filterForm = newLayer.get('filterForm');
                        filterForm.setLayer(newLayer);
                        layerStore.insert(0,newLayer);
@@ -423,7 +423,202 @@ Ext.application({
             });
 
         }
-        
+
+        //Create our advanced search control handler
+        var advancedSearchLinkHandler = function() {
+
+            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+        	if (!cswFilterWindow) {
+        		cswFilterWindow = new ga.widgets.GAAdvancedSearchWindow({
+	                name : 'CSW Filter',
+	                id : 'cswFilterWindow',
+	                map : map,
+	                layerFactory : layerFactory,
+	                layerStore : layerStore,
+	                listeners : {
+	                    filterselectcomplete : function(filteredResultPanels) {
+	                        var cswSelectionWindow = new GASearchResultsWindow({
+	                            title : 'Advanced Search Results',
+	                            id: 'cswSelectionWindow',
+	                            map : map,
+	                            layerFactory : layerFactory,
+	                            resultpanels : filteredResultPanels,
+	                            listeners : {
+	                                selectioncomplete : function(csws){
+	                                    var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+	                                    var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
+	                                    tabpanel.setActiveTab(customPanel);
+	                                    if(!(csws instanceof Array)){
+	                                        csws = [csws];
+	                                    }
+	                                    for(var i=0; i < csws.length; i++){
+	                                        csws[i].set('customlayer',true);
+	                                        customPanel.getStore().insert(0,csws[i]);
+	                                    }
+
+	                                }
+	                            }
+	                        });
+	                        cswSelectionWindow.show();
+	                    }
+	                }
+	            });
+        	}
+
+        	var basicSearchInput = Ext.get('basic-search-input');
+        	if (basicSearchInput) {
+        		//basicSearchInput.dom.disabled = 'true';
+        		basicSearchInput.dom.value = '';
+        	}
+
+        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
+        	if (cswSelectionWindow) {
+        		cswSelectionWindow.destroy();
+        	}
+
+            cswFilterWindow.show();
+        };
+        Ext.get('advanced-search-link').on('click', advancedSearchLinkHandler);
+
+        //Create our 'Basic Search' handler
+        var basicSearchButtonHandler = function() {
+
+        	var basicSearchInput = Ext.get('basic-search-input');
+
+        	// hmmm... validate empty input or just ignore it?
+        	if (!basicSearchInput) {
+        		return false;
+        	}
+
+        	if (basicSearchInput.dom.value === '') {
+        		Ext.Msg.alert('Search Term Required', 'Please enter a search term in the provided input field.');
+        		return false;
+        	}
+
+            var filteredResultPanels=[];
+
+            for(arrayIndex in cswServiceItemStore.data.items){
+                filteredResultPanels.push(getTabPanels(cswServiceItemStore.data.items[arrayIndex].data, basicSearchInput.dom.value));
+            }
+
+            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+            if (cswFilterWindow) {
+                cswFilterWindow.destroy();
+            }
+
+            var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
+            if (!cswSelectionWindow) {
+                cswSelectionWindow = new GASearchResultsWindow({
+                    title : 'Basic Search Results',
+                    id: 'cswSelectionWindow',
+                    map : map,
+                    layerFactory : layerFactory,
+                    layerStore : layerStore,
+                    resultpanels : filteredResultPanels,
+                    listeners : {
+                        selectioncomplete : function(csws){
+                            var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+                            var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
+                            tabpanel.setActiveTab(customPanel);
+                            if(!(csws instanceof Array)){
+                                csws = [csws];
+                            }
+                            for(var i=0; i < csws.length; i++){
+                                csws[i].set('customlayer',true);
+                                customPanel.getStore().insert(0,csws[i]);
+                            }
+
+                        }
+                    }
+                });
+        	}
+        	cswSelectionWindow.show();
+        };
+        Ext.get('basic-search-button').on('click', basicSearchButtonHandler);
+
+        /**
+         * Return configuration for the tabpanels in the basic search results
+         *
+         * params - the parameter used to filter results for each tab panel
+         * cswServiceId - The id of the csw registry.
+         */
+        var getTabPanels = function(cswService,basicSearchValue) {
+            //Convert our keys/values into a form the controller can read
+            var keys = [];
+            var values = [];
+            var customRegistries=[];
+
+            keys.push("basicSearchTerm");
+            values.push(basicSearchValue);
+
+            keys.push('cswServiceId');
+            values.push(cswService.id);
+
+            //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
+            var filterCSWStore = Ext.create('Ext.data.Store', {
+                model : 'portal.csw.CSWRecord',
+                pageSize: 35,
+                autoLoad: false,
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                proxy : {
+                    type : 'ajax',
+                    url : 'getFilteredCSWRecords.do',
+                    reader : {
+                        type : 'json',
+                        rootProperty : 'data',
+                        successProperty: 'success',
+                        totalProperty: 'totalResults'
+                    },
+                    extraParams: {
+                        key : keys,
+                        value : values
+                    }
+
+                }
+
+            });
+
+            tabTitle = cswService.title || 'Error retrieving title';
+
+            var result={
+                    title : tabTitle,
+                    xtype: 'gasearchresultspanel',
+                    layout : 'fit',
+                    store : filterCSWStore,
+                    map : map,
+                    layerFactory : layerFactory,
+                    layerStore : layerStore
+                };
+
+            return result;
+        };
+
+        //Create our 'Clear Search' handler
+        var clearSearchLinkHandler = function() {
+            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
+        	if (cswFilterWindow) {
+        		cswFilterWindow.destroy();
+        	}
+        	var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
+        	if (cswSelectionWindow) {
+        		cswSelectionWindow.destroy();
+        	}
+
+        	var basicSearchInput = Ext.get('basic-search-input');
+        	if (basicSearchInput) {
+        		basicSearchInput.dom.value = '';
+        	}
+        };
+        Ext.get('clear-search-link').on('click', clearSearchLinkHandler);
+
+        //Create our 'Simple Search' handler for the Enter key.
+        var simpleSearchSubmitHandler = function(e) {
+        	if (e.getKey() == e.ENTER) {
+        		basicSearchButtonHandler();
+        	}
+        };
+        Ext.get('basic-search-input').on('keyup', simpleSearchSubmitHandler);
+
         //Handle deserialisation -- ONLY if we have a uri param called "state".
         var deserializationHandler;
         var searchStart = window.location.href.indexOf('?');
@@ -445,5 +640,5 @@ Ext.application({
 
         }
     }
-    
+
 });

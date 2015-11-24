@@ -12,25 +12,14 @@
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
             <list>                
-                <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />
-                <ref bean="knownTypeRemanentAnomalies" />
-                <ref bean="knownTypeRemanentAnomaliesTMI" />
-                <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
-                <ref bean="knownTypeEMAGRemanentAnomalies" />
-                <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
-                <ref bean="knownTypeBoreholePressureDB" />
-                <ref bean="knownTypeGSMLBorehole" />
-                <ref bean="knownTypeReports" />
-                <ref bean="knownTypeInSarReports" />
-                <ref bean="knownTypeGeotransects" />
-                <ref bean="knownTypeTimaGeoSample" />
-                <ref bean="knownTypeYilgarnGeochemistry"/>
+                <!-- <ref bean="knownTypeBoreholePressureDB" /> -->
+                <!-- <ref bean="knownTypeGSMLBorehole" /> -->
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
@@ -70,10 +59,6 @@
                 <ref bean="knownTypeAsterFerricOxideContent" />
                 <ref bean="knownTypeAsterFeoh" />
                 <ref bean="knownTypeFerricOxideComp" />
-                <ref bean="knownTypeAsterChileSandToClay" />
-                <ref bean="knownTypeAsterChileWaterIndex" />
-                <ref bean="knownTypeAsterChileAlOHComp" />
-                <ref bean="knownTypeAsterChileFalseColour" />
                 <ref bean="knownTypeGroupIndex" />
                 <ref bean="knownTypeQuartzIndex" />
                 <ref bean="knownTypeMgohContent" />
@@ -87,7 +72,7 @@
                 <ref bean="knownTypeSilicaContent" />
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
-                <ref bean="knownTypeSF0BoreholeNVCL" />             
+                <!-- <ref bean="knownTypeSF0BoreholeNVCL" />              -->
 <!--                 <ref bean="knownTypeSurfaceAftershock" /> -->
                 
                 <!-- Analytics -->
@@ -125,11 +110,15 @@
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Lithology"/> -->
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Age"/> -->
 <!--                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__AUS_GA_1M_GUPoly_Lithostratigraphy"/> -->
-				<!-- Group: Topography and Infrastructure -->
-				<ref bean="knownTypePopulatedPlaces1to8" />
-				<ref bean="knownTypeCoastlines" />
-				<ref bean="knownTypeRivers" />
-				<ref bean="knownTypeRoads1to4" />
+                <!-- Group: Topography and Infrastructure -->
+                <ref bean="knownTypePopulatedPlaces1to8" />
+                <ref bean="knownTypeCoastlines" />
+                <ref bean="knownTypeRiversAndLakes" />
+                <ref bean="knownTypeRoads1to4" />
+                <ref bean="knownTypeRailways1to3" />
+                <ref bean="knownTypeOil" />             
+                <ref bean="knownTypeGas" />             
+                <ref bean="knownTypeMajorPorts" />              
             </list>
         </constructor-arg>
     </bean>
@@ -140,28 +129,31 @@
                 <ref bean="cswGaDev" />
                 <ref bean="cswGswaDev" />
                 <ref bean="cswMineralResourcesTasmaniaDev" />
-<!--                 <ref bean="cswGeoscienceLocal" /> -->
-<!--                 <ref bean="darwinDev" /> -->
-<!-- 					<ref bean="cswAuscopeTest" /> -->
-<!--         			<ref bean="cswAuscopeProduction"/> -->
-<!--         			<ref bean="cswMDUTest"/>	 -->
-<!-- 				<ref bean="cswMDUProduction"/> -->
-<!-- 				<ref bean="cswAsterProduction"/> -->
-<!-- 				<ref bean="cswInSarProduction" /> -->
-				<!--  try below -->
-<!-- 				<ref bean="cswGswaDev" />  -->
-<!--  				<ref bean="cswMineralResourcesTasmaniaDev" /> -->
-<!-- 				<ref bean="cswAuscopeTest" />  -->
-<!-- 				<ref bean="cswAuscopeProduction" />  -->
-<!-- 				<ref bean="cswMDUTest" /> -->
-<!-- 				<ref bean="cswMDUProduction" /> -->
-<!-- 				<ref bean="cswSissANUProduction" /> -->
-<!-- 				<ref bean="cswGAPetroleumTest" /> -->
-<!-- 				<ref bean="cswInSarTest" /> -->
-<!-- 				<ref bean="cswInSarProduction" /> -->
-<!-- 				<ref bean="cswMRTTest" /> -->
-<!-- 				<ref bean="cswMRTProduction" /> -->
-<!-- 				<ref bean="cswVeglProduction" /> -->
+                <ref bean="cswAustralianTopography" />
+                <ref bean="cswAustralianSurfaceGeology" />
+                <ref bean="cswBoreholeNVCL"/>
+<!--            <ref bean="cswGeoscienceLocal" /> -->
+<!--            <ref bean="darwinDev" /> -->
+<!--            <ref bean="cswAuscopeTest" /> -->
+<!--            <ref bean="cswAuscopeProduction"/> -->
+<!--            <ref bean="cswMDUTest"/>     -->
+<!--            <ref bean="cswMDUProduction"/> -->
+<!--            <ref bean="cswAsterProduction"/> -->
+<!--            <ref bean="cswInSarProduction" /> -->
+<!--  try below -->
+<!--            <ref bean="cswGswaDev" />  -->
+<!--            <ref bean="cswMineralResourcesTasmaniaDev" /> -->
+<!--            <ref bean="cswAuscopeTest" />  -->
+<!--            <ref bean="cswAuscopeProduction" />  -->
+<!--            <ref bean="cswMDUTest" /> -->
+<!--            <ref bean="cswMDUProduction" /> -->
+<!--            <ref bean="cswSissANUProduction" /> -->
+<!--            <ref bean="cswGAPetroleumTest" /> -->
+<!--            <ref bean="cswInSarTest" /> -->
+<!--            <ref bean="cswInSarProduction" /> -->
+<!--            <ref bean="cswMRTTest" /> -->
+<!--            <ref bean="cswMRTProduction" /> -->
+<!--            <ref bean="cswVeglProduction" /> -->
             </list>
         </constructor-arg>
     </bean>
