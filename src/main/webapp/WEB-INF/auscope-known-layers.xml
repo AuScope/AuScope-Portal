@@ -796,9 +796,9 @@
                 <property name="recordId" value="E6029ED0-636B-4F91-A6A1-535EBA4B5AD1"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map of Australia"/>
+        <property name="name" value="ASTER Maps"/>
         <property name="description" value="This is the parent datafile of a datset that comprises a set of 14+ geoscience products made up of mosaiced ASTER scenes across Australia."/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="hidden" value="true"/>
         <property name="order" value="60" />
     </bean>
@@ -810,9 +810,9 @@
                 <property name="recordId" value="1c3f5e49-4241-4511-a3cc-60314ea09414"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map AlOH group composition"/>
+        <property name="name" value="ASTER Map AlOH group composition"/>
         <property name="description" value="1. Band ratio: B5/B7Blue is well ordered kaolinite, Al-rich muscovite/illite, paragonite, pyrophyllite Red is Al-poor (Si-rich) muscovite (phengite)"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="61" />
     </bean>
 
@@ -823,9 +823,9 @@
                 <property name="recordId" value="02e4fa4c-cbd0-429f-b487-381282debb8f"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map Ferrous iron index"/>
+        <property name="name" value="ASTER Map Ferrous iron index"/>
         <property name="description" value="1. Band ratio: B5/B4Blue is low abundance, Red is high abundance"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="62" />
     </bean>
 
@@ -836,9 +836,9 @@
                 <property name="recordId" value="ab9e636a-86f8-4366-acec-c24db7b72ff5"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map Opaque index"/>
+        <property name="name" value="ASTER Map Opaque index"/>
         <property name="description" value="1. Band ratio: B1/B4Blue is low abundance, Red is high abundance(potentially includes  carbon black (e.g. ash), magnetite, Mn oxides, and sulphides in unoxidised envornments"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="63" />
     </bean>
 
@@ -849,9 +849,9 @@
                 <property name="recordId" value="7bc66a7a-5ba0-447e-9a00-bf1ccd84e4f3"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map Ferric oxide content"/>
+        <property name="name" value="ASTER Map Ferric oxide content"/>
         <property name="description" value="1. Band ratio: B4/B3Blue is low abundance, Red is high abundance"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="64" />
     </bean>
 
@@ -862,9 +862,9 @@
                 <property name="recordId" value="f938456a-926d-4547-b111-093844f8fc5d"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map FeOH group content"/>
+        <property name="name" value="ASTER Map FeOH group content"/>
         <property name="description" value="1. Band ratio: (B6+B8)/B7Blue is low content, Red is high content(potentially includes: chlorite, epidote, jarosite, nontronite, gibbsite, gypsum, opal-chalcedony)"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="65" />
     </bean>
 
@@ -875,9 +875,9 @@
                 <property name="recordId" value="aa27099f-13dd-4294-8558-595661eeba01"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map Ferric oxide composition"/>
+        <property name="name" value="ASTER Map Ferric oxide composition"/>
         <property name="description" value="1. Band ratio: B2/B1Blue-cyan is goethite rich, Green is hematite-goethite, Red-yellow is hematite-rich"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="66" />
     </bean>
 
@@ -888,9 +888,9 @@
                 <property name="recordId" value="ea755cf7-eb59-41d1-86bd-4d1954c93bfe"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map Kaolin group index"/>
+        <property name="name" value="ASTER Map Kaolin group index"/>
         <property name="description" value="B6/B5(potential includes: pyrophyllite, alunite, well-ordered kaolinite)Blue is low content, Red is high content"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="67" />
     </bean>
 
@@ -901,9 +901,9 @@
                 <property name="recordId" value="137a4e7e-9633-40d8-9b2f-2d2d1eb15c08"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map TIR Quartz index"/>
+        <property name="name" value="ASTER Map TIR Quartz index"/>
         <property name="description" value="1. Band ratio: B11/(B10+B12)Blue is low quartz contentRed is high quartz content"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="68" />
     </bean>
 
@@ -914,9 +914,9 @@
                 <property name="recordId" value="a101fef8-2c52-4d62-9b43-0914487af197"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map MgOH group content"/>
+        <property name="name" value="ASTER Map MgOH group content"/>
         <property name="description" value="1. Band ratio: (B6+B9/(B7+B8)Blue is low content, Red is high content(potentially includes: calcite, dolomite, magnesite, chlorite, epidote, amphibole, talc, serpentine)"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="69" />
     </bean>
 
@@ -927,9 +927,9 @@
                 <property name="recordId" value="2bd17d05-22f8-4b0d-a318-3eaabc1b5c2a"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map green vegetation content"/>
+        <property name="name" value="ASTER Map green vegetation content"/>
         <property name="description" value="Band ratio: B3/B2 Blue is low contentRed is high content"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="70" />
     </bean>
 
@@ -940,9 +940,9 @@
                 <property name="recordId" value="8601612e-3f3e-4334-9d31-3c6ec30f092a"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map Ferrous iron content in MgOH/carbonate"/>
+        <property name="name" value="ASTER Map Ferrous iron content in MgOH/carbonate"/>
         <property name="description" value="1. Band ratio: B5/B4Blue is low ferrous iron content in carbonate and MgOH minerals like talc and tremolite.Red is high ferrous iron content in carbonate and MgOH minerals like chlorite and actinolite."/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="71" />
     </bean>
 
@@ -953,9 +953,9 @@
                 <property name="recordId" value="8348fe99-0d50-45cd-8a0a-5439e82da833"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map MgOH group composition"/>
+        <property name="name" value="ASTER Map MgOH group composition"/>
         <property name="description" value="1. Band ratio: B7/B8Blue-cyan is magnesite-dolomite, amphibole, chlorite\tRed is calcite, epidote, amphibole"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="72" />
     </bean>
 
@@ -966,9 +966,9 @@
                 <property name="recordId" value="bfd6b137-7227-47f4-82f0-9e7fb788c507"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map false colour mosaic"/>
+        <property name="name" value="ASTER Map false colour mosaic"/>
         <property name="description" value="1. False colour RGB composite Red: B3Green: B2Blue: B1(red = green vegetation)"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="73" />
     </bean>
 
@@ -979,9 +979,9 @@
                 <property name="recordId" value="768dcbde-ae8a-440e-9b4b-44624ba4c836"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map Regolith Ratios"/>
+        <property name="name" value="ASTER Map Regolith Ratios"/>
         <property name="description" value="1. 3 band RGB composite Red: B3/B2Green: B3/B7Blue: B4/B7(white = green vegetation)"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="74" />
     </bean>
 
@@ -992,9 +992,9 @@
                 <property name="recordId" value="b070d1d4-6420-4770-8ca6-3bf4b6682c3d"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map AlOH group content"/>
+        <property name="name" value="ASTER Map AlOH group content"/>
         <property name="description" value="1. Band ratio: (B5+B7)/B6Blue is low abundance, Red is high abundance potentially includes: phengite, muscovite, paragonite, lepidolite, illite, brammalite, montmorillonite, beidellite, kaolinite, dickite"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="75" />
     </bean>
 
@@ -1005,9 +1005,9 @@
                 <property name="recordId" value="EB574238-BCB9-4A98-B1C1-71D1D1B0A946"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map TIR Gypsum index"/>
+        <property name="name" value="ASTER Map TIR Gypsum index"/>
         <property name="description" value="1. Band ratio: (B10+B12)/B11Blue is low gypsum contentRed is high gypsum content"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="76" />
     </bean>
 
@@ -1018,9 +1018,9 @@
                 <property name="recordId" value="cca633fe-5cdc-4fea-b77f-71b81c701c47"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="National ASTER Map TIR Silica index"/>
+        <property name="name" value="ASTER Map TIR Silica index"/>
         <property name="description" value="1. Band ratio: B13/B10Blue is low silica contentRed is high silica content(potentially includes Si-rich minerals, such as quartz, feldspars, Al-clays)"/>
-        <property name="group" value="National ASTER Map of Australia"/>
+        <property name="group" value="ASTER Maps"/>
         <property name="order" value="77" />
     </bean>
 
