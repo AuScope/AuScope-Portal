@@ -33,7 +33,7 @@
         <constructor-arg name="id" value="cswGsv"/>
         <constructor-arg name="title" value="Geological Survey of Victoria"/>
         <constructor-arg name="serviceUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/csw-gsv"/>
-        <constructor-arg name="recordInformationUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="http://portal-dev.geoscience.gov.au/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
     </bean>
 
     <bean id="cswMineralResourcesTasmaniaDev" class="org.auscope.portal.core.services.csw.CSWServiceItem">
