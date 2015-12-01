@@ -73,7 +73,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, record, row) {
-                    me._serviceInformationClickHandler(record);
+                    me._serviceInformationClickHandler(colIndex, record, rowIndex, colIndex);
                 }
              },{
                 text : 'legend',
