@@ -372,7 +372,7 @@ Ext.application({
                      }
                   }
              ],
-             minHeight: 150,
+             minHeight: 170,
              width: 500,
              collapsible: true,
              animCollapse : true,
