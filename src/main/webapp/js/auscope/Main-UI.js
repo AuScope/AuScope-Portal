@@ -382,6 +382,7 @@ Ext.application({
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         if (urlParams && (urlParams.state || urlParams.s)) {
             var decodedString = urlParams.state ? urlParams.state : urlParams.s;
+            decodedString = decodedString.replace(/ /g, '+');//LJ:Aus-2598-permanent link does't work.
             var decodedVersion = urlParams.v;
 
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
