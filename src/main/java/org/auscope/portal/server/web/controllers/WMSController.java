@@ -291,12 +291,11 @@ public class WMSController extends BaseCSWController {
         //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
         //VT : GA style sheet also mess up the portal styling of tables as well.
         if (responseString.contains("table, th, td {")) {
-            responseString = responseString.replaceFirst("font-size: 80%", "font-size: 90%");
             responseString = responseString.replaceFirst("table, th, td \\{",
-                    "table.ausga, table.ausga th, table.ausga td {");
-            responseString = responseString.replaceFirst("th, td \\{", "table.ausga th, table.ausga td {");
-            responseString = responseString.replaceFirst("th \\{", "table.ausga th {");
-            responseString = responseString.replaceFirst("<table", "<table class='ausga'");
+                    ".ausga table, .ausga th, .ausga td {");
+            responseString = responseString.replaceFirst("th, td \\{", ".ausga th, .ausga td {");
+            responseString = responseString.replaceFirst("th \\{", ".ausga th {");
+            responseString = responseString.replace("<table class=\"featureInfo\"", "<table class='ausga'");
         }
 
         InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
