@@ -35,20 +35,10 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
             hideHeaders : true,
             viewConfig : {
                 emptyText : '<p class="centeredlabel">No records match the current filter.</p>',
-                preserveScrollOnRefresh: true,
+                preserveScrollOnRefresh: true    ,
                 plugins: {
                     ptype: 'gridviewdragdrop',
-                    dragText: 'Drag and drop to reorganize',
-                    dragZone: {
-                        onBeforeDrag: function(data, e) {
-                            draggedCell = Ext.get(e.target);    //.parentNode);
-                            if (draggedCell.hasCls('isDraggable')) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    }
+                    dragText: 'Drag and drop to reorganize'
                 },
                 listeners: {
                     drop: function(node, data, overModel, dropPosition,  dropFunction,  eOpts ){
@@ -60,21 +50,17 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
             },          
             columns : [{
                 text : 'Drag',
-                renderer : this._dragIconRenderer,  //  icon : 'img/play_blue.png'
+                xtype : 'actioncolumn',
                 width: 32,
                 align: 'center',
+                icon : 'img/play_blue.png',
                 sortable: false,
-                menuDisabled: false,
-                draggable: true,
-                tdCls: 'isDraggable',
-                tooltip: 'Drag to re-order layers'
+                menuDisabled: true,
              },{
                 text : 'Name',
                 dataIndex : 'name',
                 flex : 1,
-                renderer : this._titleRenderer,
-                menuDisabled: true,
-                tooltip: 'Click for more options',
+                renderer : this._titleRenderer
             },{
                 text : 'info',
                 id : 'info',
