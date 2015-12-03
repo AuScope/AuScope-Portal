@@ -295,7 +295,7 @@ public class WMSController extends BaseCSWController {
                     ".ausga table, .ausga th, .ausga td {");
             responseString = responseString.replaceFirst("th, td \\{", ".ausga th, .ausga td {");
             responseString = responseString.replaceFirst("th \\{", ".ausga th {");
-            responseString = responseString.replace("<table class=\"featureInfo\"", "<table class='ausga'");
+            responseString = responseString.replace("<table", "<table class='ausga'");
         }
 
         InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
