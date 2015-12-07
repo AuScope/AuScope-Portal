@@ -1681,14 +1681,14 @@
     </bean>
     <!-- END: GPT-74 - Topology and Infrastructure -->
     <!-- GPT-106 - Restricted Areas -->
-    <bean id="knownTypeProtectedAreasCapid2014Marine" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="protectedAreasCapid2014Marine"/>
+    <bean id="knownTypeProtectedAreasCAPAD2014Marine" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="protectedAreasCAPAD2014Marine"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
                 <constructor-arg name="layerName" value="Protected_Areas_CAPAD_2014_Marine"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="Protected Areas Capid 2014 - Marine"/>
+        <property name="name" value="Protected Areas CAPAD 2014 - Marine"/>
         <property name="description" value="The Collaborative Australian Protected Areas Database (CAPAD) 2014 is published by the Australian Commonwealth Department of Environment, and provides both spatial and text information about government, Indigenous and privately protected areas for continental Australia. State and Territory conservation agencies supplied data current to 30 June 2014. The terrestrial component of the database has been previously released in 1997, 2000, 2002, 2004, 2006, 2008 2010 and 2012.
 This version, provides both spatial and text information about off-shore protected areas in both state and Commonwealth waters. State and Territory conservation agencies supplied data current for 30 June 2014. This is the seventh version of the CAPAD- Marine database, with previous versions published in 1997, 2002, 2004, 2008 2010 and 2012. 
 CAPAD provides a snapshot of protected areas that meet the IUCN definition of a protected area:
@@ -1698,14 +1698,14 @@ This version of CAPAD 2014-Marine is a public / downloadable dataset available f
         <property name="group" value="Restricted Areas"/>
         <property name="order" value="600" />
     </bean>
-    <bean id="knownTypeProtectedAreasCapid2014Terrestrial" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="protectedAreasCapid2014Terrestrial"/>
+    <bean id="knownTypeProtectedAreasCAPAD2014Terrestrial" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="protectedAreasCAPAD2014Terrestrial"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
                 <constructor-arg name="layerName" value="Protected_Areas_CAPAD_2014_Terrestrial"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="Protected Areas Capid 2014 - Terrestrial"/>
+        <property name="name" value="Protected Areas CAPAD 2014 - Terrestrial"/>
         <property name="description" value="The Collaborative Australian Protected Areas Database (CAPAD) 2014 is published by the Australian Commonwealth Department of Environment, and provides both spatial and text information about government, indigenous and privately protected areas for continental Australia. State and Territory conservation agencies supplied data current to 30 June 2014. This is the ninth version of the database, with previous versions released in 1997, 2000, 2002, 2004, 2006, 2008, 2010 and 2012. 
 The Department also publishes protected areas data for the marine environment. 'CAPAD 2014-marine' contains spatial and text information about offshore protected areas, for both State and Commonwealth waters. Previous versions of CAPAD marine information have been published in 1997, 2002, 2004, 2008, 2010 and 2012. 
 CAPAD provides a snapshot of protected areas that meet the IUCN definition of a protected area."/>
