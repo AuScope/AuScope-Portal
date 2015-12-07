@@ -9,34 +9,39 @@ Ext.define('ga.widgets.GAHeader', {
     map: null,
     layerStore: null,
     registryStore: null,
-    
+    layerFactory: null,
+
     constructor : function(config){   
         
         var me = this;
         me.map = config.map;
         me.layerStore = config.layerStore;  
         me.registryStore = config.registryStore;    
+        me.layerFactory = config.layerFactory;
         
         //Create our advanced search control handler
         var advancedSearchLinkHandler = function() {
             
-            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
-            if (!cswFilterWindow) {
-                cswFilterWindow = new portal.widgets.window.CSWFilterWindow({
+            var gaAdvancedSearchWindow = Ext.getCmp('gaAdvancedSearchWindow');
+            if (!gaAdvancedSearchWindow) {
+                gaAdvancedSearchWindow = new ga.widgets.GAAdvancedSearchWindow({
                     name : 'CSW Filter',
-                    id : 'cswFilterWindow',
-                    cswFilterFormPanel:  new ga.widgets.GAAdvancedSearchPanel({
-                        name : 'Filter Form',
-                        map: me.map
-                    }),
+                    id : 'gaAdvancedSearchWindow',
+                    map : me.map,
+                    layerFactory : me.layerFactory,
+                    layerStore : me.layerStore,
                     listeners : {
                         filterselectcomplete : function(filteredResultPanels) {
-                            var cswSelectionWindow = new CSWSelectionWindow({
-                                title : 'CSW Record Selection',
-                                id: 'cswSelectionWindow',
+                            var gaSearchResultsWindow = new GASearchResultsWindow({
+                                title : 'Advanced Search Results',
+                                id: 'gaSearchResultsWindow',
+                                map : me.map,
+                                layerStore : me.layerStore,
+                                layerFactory : me.layerFactory,
+                                
                                 resultpanels : filteredResultPanels,
                                 listeners : {
-                                    selectioncomplete : function(csws){  
+                                    selectioncomplete : function(csws){
                                         var tabpanel =  Ext.getCmp('auscope-tabs-panel');
                                         var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
                                         tabpanel.setActiveTab(customPanel);
@@ -47,11 +52,11 @@ Ext.define('ga.widgets.GAHeader', {
                                             csws[i].set('customlayer',true);
                                             customPanel.getStore().insert(0,csws[i]);
                                         }
-                                        
+
                                     }
                                 }
                             });
-                            cswSelectionWindow.show();
+                            gaSearchResultsWindow.show();
                         }
                     }
                 });
@@ -63,12 +68,12 @@ Ext.define('ga.widgets.GAHeader', {
                 basicSearchInput.dom.value = '';
             }           
             
-            var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
-            if (cswSelectionWindow) {
-                cswSelectionWindow.destroy();
+            var gaSearchResultsWindow = Ext.getCmp('gaSearchResultsWindow');
+            if (gaSearchResultsWindow) {
+                gaSearchResultsWindow.destroy();
             }           
             
-            cswFilterWindow.show();
+            gaAdvancedSearchWindow.show();
         };
         
     
@@ -93,35 +98,40 @@ Ext.define('ga.widgets.GAHeader', {
                 filteredResultPanels.push(getTabPanels(me.registryStore.data.items[arrayIndex].data, basicSearchInput.dom.value));                
             }
             
-            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
-            if (cswFilterWindow) {
-                cswFilterWindow.destroy();
+            var gaAdvancedSearchWindow = Ext.getCmp('gaAdvancedSearchWindow');
+            if (gaAdvancedSearchWindow) {
+                gaAdvancedSearchWindow.destroy();
             }
-            var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
-            if (!cswSelectionWindow) {
-                cswSelectionWindow = new CSWSelectionWindow({
-                    title : 'CSW Record Selection',
-                    id: 'cswSelectionWindow',
-                    resultpanels : filteredResultPanels,
-                    showControlButtons : false,
-                    listeners : {
-                        selectioncomplete : function(csws){  
-                            var tabpanel =  Ext.getCmp('auscope-tabs-panel');
-                            var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
-                            tabpanel.setActiveTab(customPanel);
-                            if(!(csws instanceof Array)){
-                                csws = [csws];
-                            }
-                            for(var i=0; i < csws.length; i++){
-                                csws[i].set('customlayer',true);
-                                customPanel.getStore().insert(0,csws[i]);
-                            }
-                            
+            var gaSearchResultsWindow = Ext.getCmp('gaSearchResultsWindow');
+            if (gaSearchResultsWindow) {
+                gaSearchResultsWindow.destroy();
+            }
+            gaSearchResultsWindow = new GASearchResultsWindow({
+                title : 'Search Results',
+                id: 'gaSearchResultsWindow',
+                map : me.map,
+                layerStore : me.layerStore,
+                layerFactory : me.layerFactory,
+                resultpanels : filteredResultPanels,
+                showControlButtons : false,
+                listeners : {
+                    selectioncomplete : function(csws){  
+                        var tabpanel =  Ext.getCmp('auscope-tabs-panel');
+                        var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
+                        tabpanel.setActiveTab(customPanel);
+                        if(!(csws instanceof Array)){
+                            csws = [csws];
                         }
+                        for(var i=0; i < csws.length; i++){
+                            csws[i].set('customlayer',true);
+                            customPanel.getStore().insert(0,csws[i]);
+                        }
+                        
                     }
-                });
-            }
-            cswSelectionWindow.show();                  
+                }
+            });
+            
+            gaSearchResultsWindow.show();                  
         };
     
         /**
@@ -170,8 +180,11 @@ Ext.define('ga.widgets.GAHeader', {
     
             var result={
                     title : tabTitle,
-                    xtype: 'cswrecordpagingpanel',
+                    xtype: 'gasearchresultspanel',
                     layout : 'fit',
+                    map: me.map,
+                    layerStore : me.layerStore,
+                    layerFactory : me.layerFactory,
                     store : filterCSWStore
                 };
     
@@ -180,13 +193,13 @@ Ext.define('ga.widgets.GAHeader', {
         
         //Create our 'Clear Search' handler
         var clearSearchLinkHandler = function() {
-            var cswFilterWindow = Ext.getCmp('cswFilterWindow');
-            if (cswFilterWindow) {
-                cswFilterWindow.destroy();
+            var gaAdvancedSearchWindow = Ext.getCmp('gaAdvancedSearchWindow');
+            if (gaAdvancedSearchWindow) {
+                gaAdvancedSearchWindow.destroy();
             }
-            var cswSelectionWindow = Ext.getCmp('cswSelectionWindow');
-            if (cswSelectionWindow) {
-                cswSelectionWindow.destroy();
+            var gaSearchResultsWindow = Ext.getCmp('gaSearchResultsWindow');
+            if (gaSearchResultsWindow) {
+                gaSearchResultsWindow.destroy();
             }
             
             var basicSearchInput = Ext.get('basic-search-input');
