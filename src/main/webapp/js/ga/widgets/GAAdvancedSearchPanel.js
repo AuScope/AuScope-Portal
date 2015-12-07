@@ -152,11 +152,12 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
                 load  :  function(store, records, successful, eopts){
                     for (var i = 0; i < records.length; i++) {
                         var cswServiceItemRec = records[i];
+                        var title = cswServiceItemRec.get('title');
                         checkBoxItems.push({
-                            boxLabel : cswServiceItemRec.get('title'),
+                            boxLabel : title,
                             name : 'cswServiceId',
                             inputValue: cswServiceItemRec.get('id'),
-                            checked : cswServiceItemRec.get('selectedByDefault')
+                            checked : title.toLowerCase().contains('geoscience')
                         });
                     }
                     var registryTabCheckboxGroup=Ext.getCmp('registryTabCheckboxGroup');
