@@ -206,8 +206,9 @@ Ext.define('ga.widgets.GAOnlineResourcesPanel', {
                         tag : 'br'
                     },  
                     { 
-                    	tag: 'span',
-                    	html : rowLabelURL +  url
+                        tag: 'span',
+                        cls : 'onlineresourcedetails',
+                        html : rowLabelURL +  url
                     },
                     {
                         tag : 'br'
@@ -227,8 +228,9 @@ Ext.define('ga.widgets.GAOnlineResourcesPanel', {
                         tag : 'br'
                     },  
                     { 
-                    	tag: 'span',
-                    	html : rowLabelURL +  url
+                        tag: 'span',
+                        cls : 'onlineresourcedetails',
+                        html : rowLabelURL +  url
                     },
                     {
                         tag : 'br'
