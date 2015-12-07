@@ -79,7 +79,6 @@ Ext.define('ga.widgets.GAAdvancedSearchWindow', {
      * cswServiceId - The id of the csw registry.
      */
     _getTabPanels : function(params,cswServiceId) {
-        
         var me = this;
         
         //Convert our keys/values into a form the controller can read

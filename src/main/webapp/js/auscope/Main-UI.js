@@ -282,7 +282,8 @@ Ext.application({
                 xtype: 'gaheader',
                 map: map,
                 layerStore: layerStore,
-                registryStore: cswServiceItemStore
+                registryStore: cswServiceItemStore,
+                layerFactory: layerFactory
             }]
         };
 

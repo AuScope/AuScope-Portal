@@ -172,7 +172,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                       
                       //Update the layer panel to use
                       if (filterForm) {
-                          var filterer = newLayer.get('filterer');
+                          var filterer = layer.get('filterer');
                           if (filterer) {
                               var existingParams = filterer.getParameters();
                               filterForm.getForm().setValues(existingParams);

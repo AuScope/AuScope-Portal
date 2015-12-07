@@ -13,7 +13,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
     map : null,
     layerFactory : null,
     layerStore : null,
-    
+
     constructor : function(cfg) {
         var me = this;
 
@@ -62,35 +62,35 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
                 
                 // when the view is fully loaded we need to check for availability of some features and update the DOM                    
                 viewready: function(view) {
-                    
-                    var dataItems = ga.widgets.OnlineResourceSelectionPanelRow.parseCswRecordsFromStore(me.cswRecordStore);
-                    
+
                     me.cswRecordStore.each(function(record,id){
                         var hasWMSResource = false;
-                        
                         var onlineResources = record.data.onlineResources;
-                        for (var j = 0; j < onlineResources.length; j++) {
-                            var onlineResource = onlineResources[j]; 
-                            var type = onlineResource.get('type');                            ;
+                        for (var i = 0; i < onlineResources.length; i++) {
+                            var type = onlineResources[i].get('type');
                             if (type == portal.csw.OnlineResource.WMS) {
                                 hasWMSResource = true;
                                 break;
-                            } 
-                            if (!hasWMSResource) {
-                                var name = record.get('name');                                
-                                var addWMSLinkId = '_' + name.replace(/\W/g, '') + '_addWMSLink'; 
-                                Ext.get(addWMSLinkId).el.style = 'color: gray';
-                                Ext.get(addWMSLinkId).click = null;
-                            }
-                            
-                        }
+                            }                                          
+                        };
+                                   
+                        var addWMSLinkId = '_' + record.get('name').replace(/\W/g, '') + '_addWMSLink'; 
+                        var element = Ext.get(addWMSLinkId);
+                        
+                        if (!hasWMSResource) {
+                            element.addCls('pretendLinkDisabled');
+                            element.removeCls('pretendLinkEnabled');
+                        } else {
+                            // pretend it to be a link.
+                            element.addCls('pretendLinkEnabled');
+                            element.removeCls('pretendLinkDisabled');
+                            element.addListener('click', function(){
+                                me.displayWMSLayers(record);
+                            });
+                        };
                     });
-                },
-                
-                itemdblclick : function(grid, record, item, index, e, eOpts ){
-                    this.displayInfo(record);
+                   
                 }
-
             }
 
         });
@@ -151,29 +151,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
     getSpatialBoundsForRecord : function(record) {
         return record.data.geographicElements;
     },
-    
-    
-    /**
-     * Creates a layer out of this CSW record and adds it to the map
-     */
-    addLayerToMap : function(record) {     
-        this.map.layerStore.suspendEvents(true);
-        var layer = this.layerFactory.generateLayerFromCSWRecord(record);  
-        var filterer = layer.get('filterer');      
         
-        //Before applying filter, update the spatial bounds (silently)
-        filterer.setSpatialParam(this.map.getVisibleMapBounds(), true);
-        this.layerStore.add(layer); //this adds the layer to our store
-        this.map.layerStore.add(layer);
-        this.map.layerStore.resumeEvents();      
-        layer.get('filterForm').writeToFilterer(filterer);
-        AppEvents.broadcast('addlayer', {layer: layer});
- 
-        //VT: Tracking
-        portal.util.PiwikAnalytic.trackevent('Add:' + layer.get('sourceType'), 'Layer:' + layer.get('name'),'Filter:' + filterer.getParameters());
-        
-    },
-   
     
     // renderer for the details of the resource (name, description, links)
     _cellRenderer : function(value, metaData, record, row, col, store) {        
@@ -199,8 +177,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
             var recordInfoUrl = record.get('recordInfoUrl');
             
             var addWMSLinkId = '_' + name.replace(/\W/g, '') + '_addWMSLink'; 
-            
-            return {
+            var elements = {
                 xtype: 'panel',
                 cls : 'gasearchresult',              
                 items: [{
@@ -214,10 +191,8 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
                     xtype : 'displayfield',
                     value : Ext.util.Format.format('<span class="description">{0}</span>', description) 
                 },{
-                    xtype : 'toolbar',
+                    xtype : 'panel',
                     cls : 'links', 
-                    docked: 'top',
-                    title: 'controls',
                     items : [{       
                         xtype: 'box',
                         autoEl: {
@@ -258,34 +233,24 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
                           tag: 'a',
                           target : '_blank',
                           href: '#',
-                          cn: 'Download file'
+                          cn: 'Download data'
                         }
                     },
                     {
-                        xtype: 'box',
-                        listeners: {
-                            render: function(component) {            
-                                component.getEl().on('click', function(e) {
-                                    e.stopEvent();   
-                                    me.displayWMSLayers(record);
-                                });    
-                            }
-                        },
+                        xtype: 'box', 
                         id: addWMSLinkId,
                         autoEl: {                            
-                          tag: 'a',
-                          target : '_blank',
-                          href: 'recordInfoUrl',
-                          cn: 'Add WMS to map'
+                          tag: 'span',                          
+                          html: 'Add WMS to map'
                         }
                     }]
                 }]
                 
             }
+            return elements;    
         }       
-        
     },
-
+    
     // TODO HEYA
     displayFileDownloadWindow : function(record){
         Ext.Msg.show({
@@ -295,35 +260,16 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
         });
     },    
 
-    // TODO HEYA
-    displayWMSLayers : function(record){
-        Ext.Msg.show({
-            title:'Not implemented',
-            msg: 'The selected function is not currently implemented.',
-            buttons: Ext.Msg.OK
-        });
-        
-        /*
-        Ext.create('ga.widgets.WMSSelectionWindow', {
+    // displays a popup window allowing the user to select layers to add to the map
+    displayWMSLayers : function(record){   
+        var me = this;     
+        Ext.create('ga.widgets.GALayerSelectionWindow', {
             title : 'Add WMS Layers',
+            map: me.map,
+            layerFactory: me.layerFactory,
+            layerStore: me.layerStore,
             cswRecord: record
-        }).show();
-        */
-    },
-    
-    /**
-     * Function to handle double click of the CSW to bring up a window to display its information
-     */    
-    displayInfo : function(record){
-        Ext.create('Ext.window.Window', {
-            title : 'CSW Record Information',
-            items : [{
-                xtype : 'cswmetadatapanel',
-                width : 500,
-                border : false,
-                cswRecord : record
-            }]
-        }).show();
-    }
+        }).show();        
+    }   
 
 });

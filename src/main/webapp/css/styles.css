@@ -24,17 +24,18 @@
     .x-window-header-title,
     .x-tab-inner,
     .x-btn-inner,
-    .x-grid-cell-inner {
+    .x-grid-cell-inner,
+    .x-form-display-field-default {
         color: #2B292A !important;
     }    
      
     .x-grid-item-selected {
-        background-color: #ADAFB2 !important;
+        background-color: #E6E6E6 !important;
         color: #2B292A !important;
     }
     
     .x-grid-item-over {
-        background-color: #C5CDD8 !important;
+        background-color: #E6E6E6 !important;
         color: #2B292A !important;
     }
     
@@ -332,4 +333,16 @@
     
     .dataregistries-checkboxgroup-label {
         position: absolute;
+    }
+    
+    .pretendLinkEnabled {
+        color:blue; 
+        text-decoration:underline; 
+        cursor:pointer;
+    }
+    
+    .pretendLinkDisabled {
+       color: gray; 
+       text-decoration: none;
+       pointer: default;
     }
