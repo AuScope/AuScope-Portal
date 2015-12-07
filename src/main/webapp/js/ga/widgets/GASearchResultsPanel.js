@@ -262,14 +262,9 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
 
     // displays a popup window allowing the user to select layers to add to the map
     displayWMSLayers : function(record){   
-        var me = this;
-        var gaLayerSelectionWindow = Ext.get('gaLayerSelectionWindow');
-        if (gaLayerSelectionWindow) {
-            gaLayerSelectionWindow.destroy();
-        }        
+        var me = this;     
         Ext.create('ga.widgets.GALayerSelectionWindow', {
             title : 'Add WMS Layers',
-            id: 'gaLayerSelectionWindow',
             map: me.map,
             layerFactory: me.layerFactory,
             layerStore: me.layerStore,

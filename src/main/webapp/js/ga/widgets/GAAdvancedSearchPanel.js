@@ -470,8 +470,8 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
         Ext.ComponentQuery.query('#west')[0].setValue(west);  
     },
     
-    /* Fills the bounding box fields with coordinates from a 1:250K Area Map 
-     * TODO might be nice to highlight the rectangle on the map (briefly) as well 
+    /* 
+     * Fills the bounding box fields with coordinates from a 1:250K Area Map 
      */
     populateCoordinatesFromAreaMap : function(combo, record) {
         
