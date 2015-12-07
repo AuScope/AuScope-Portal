@@ -122,15 +122,15 @@
     <bean id="cswServiceList" class="java.util.ArrayList">
         <constructor-arg>
             <list>
-<!--                 <ref bean="cswGaDev" /> -->
-<!--                 <ref bean="cswGswaDev" /> -->
-<!--                 <ref bean="cswGsv" /> -->
-<!--                 <ref bean="cswMineralResourcesTasmaniaDev" /> -->
-<!--                 <ref bean="cswAustralianTopography" /> -->
-<!--                 <ref bean="cswAustralianSurfaceGeology" /> -->
-<!--                 <ref bean="cswBoreholeNVCL"/> -->
-<!--                 <ref bean="cswASTER" /> -->
-           <ref bean="cswGeoscienceLocal" />
+                <ref bean="cswGaDev" />
+                <ref bean="cswGswaDev" />
+                <ref bean="cswGsv" />
+                <ref bean="cswMineralResourcesTasmaniaDev" />
+                <ref bean="cswAustralianTopography" />
+                <ref bean="cswAustralianSurfaceGeology" />
+                <ref bean="cswBoreholeNVCL"/>
+                <ref bean="cswASTER" />
+<!--            <ref bean="cswGeoscienceLocal" /> -->
 <!--            <ref bean="darwinDev" /> -->
 <!--            <ref bean="cswAuscopeTest" /> -->
 <!--            <ref bean="cswAuscopeProduction"/> -->
