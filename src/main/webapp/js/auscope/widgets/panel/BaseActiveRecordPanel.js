@@ -56,11 +56,14 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 icon : 'img/play_blue.png',
                 sortable: false,
                 menuDisabled: true,
+                tooltip: 'Drag to re-order layers'
              },{
                 text : 'Name',
+                xtype : 'gridcolumn',
                 dataIndex : 'name',
                 flex : 1,
-                renderer : this._titleRenderer
+                renderer: this._titleRenderer,
+                tooltip: 'Click for more options'
             },{
                 text : 'info',
                 id : 'info',
