@@ -346,3 +346,8 @@
        text-decoration: none;
        pointer: default;
     }
+    
+    .onlineresourcedetails {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
