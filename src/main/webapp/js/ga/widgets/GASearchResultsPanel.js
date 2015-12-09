@@ -249,7 +249,6 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
         }       
     },
     
-    // TODO HEYA
     displayFileDownloadWindow : function(record){
         
         var html;
