@@ -157,7 +157,7 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
                             boxLabel : title,
                             name : 'cswServiceId',
                             inputValue: cswServiceItemRec.get('id'),
-                            checked : title.toLowerCase().contains('geoscience')
+                            checked : title.toLowerCase().includes('geoscience')
                         });
                     }
                     var registryTabCheckboxGroup=Ext.getCmp('registryTabCheckboxGroup');
