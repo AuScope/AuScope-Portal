@@ -1,17 +1,21 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.methods.HttpGet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.namespaces.IterableNamespace;
+import org.auscope.portal.core.util.DOMUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,16 +27,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
-
 @Controller
 public class IRISController extends BasePortalController {
     /**
@@ -40,16 +34,11 @@ public class IRISController extends BasePortalController {
      */
     private static final String ENCODING = "ISO-8859-1";
 
-    /**
-     * The XPath object that's used to create expressions to extract information from the IRIS responses.
-     */
-    private XPath xPath;
-
     private HttpServiceCaller httpService;
 
     /**
      * Makes sure that a string has a trailing forward slash.
-     * 
+     *
      * @param string
      *            The string that you want to have a trailing forward slash.
      * @return The original string, modified if required, with a trailing forward slash.
@@ -59,6 +48,14 @@ public class IRISController extends BasePortalController {
         return string.endsWith("/") ? string : string + "/";
     }
 
+    private NamespaceContext getIrisNamespace() {
+        return new IterableNamespace() {
+            {
+                map.put("default", "http://www.fdsn.org/xml/station/1");
+            }
+        };
+    }
+
     /**
      * Instantiates the IRISController object.
      *
@@ -66,18 +63,12 @@ public class IRISController extends BasePortalController {
      */
     @Autowired
     public IRISController(HttpServiceCaller httpService) {
-        this.xPath = XPathFactory.newInstance().newXPath();
         this.httpService = httpService;
-        this.xPath.setNamespaceContext(new IterableNamespace() {
-            {
-                map.put("default", "http://www.fdsn.org/xml/station/1");
-            }
-        });
     }
 
     /**
      * Downloads a resource from a URL and returns it as Document object.
-     * 
+     *
      * @param queryUrl
      *            The URL of the resource you require.
      * @return The resource at the URL requested, converted to a Document object.
@@ -88,15 +79,12 @@ public class IRISController extends BasePortalController {
     private Document getDocumentFromURL(String queryUrl)
             throws IOException, ParserConfigurationException, SAXException {
         String irisResponse = getIrisResponseFromQuery(queryUrl);
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true);
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        return builder.parse(new ByteArrayInputStream(irisResponse.getBytes(ENCODING)));
+        return DOMUtil.buildDomFromString(irisResponse);
     }
 
     /**
      * Downloads a resource from a URL and returns it as a String object.
-     * 
+     *
      * @param queryUrl
      *            The URL of the resource you require.
      * @return The resource at the requested URL, as a String object.
@@ -139,9 +127,10 @@ public class IRISController extends BasePortalController {
             //TODO VT: As part of the review for AGOS-15 , we should be following the same architecture as the rest of portal and
             // create a xslt file to do the transformation from xml to kml
             NodeList stations = irisDoc.getDocumentElement().getElementsByTagName("Station");
-            XPathExpression nameExpression = xPath.compile("default:Site/default:Name/text()");
-            XPathExpression latExpression = xPath.compile("default:Latitude/text()");
-            XPathExpression lonExpression = xPath.compile("default:Longitude/text()");
+            NamespaceContext nc = getIrisNamespace();
+            XPathExpression nameExpression = DOMUtil.compileXPathExpr("default:Site/default:Name/text()", nc);
+            XPathExpression latExpression = DOMUtil.compileXPathExpr("default:Latitude/text()", nc);
+            XPathExpression lonExpression = DOMUtil.compileXPathExpr("default:Longitude/text()", nc);
 
             StringBuilder kml = new StringBuilder(
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document><name>GML Links to KML</name><description><![CDATA[GeoSciML data converted to KML]]></description>");
@@ -202,10 +191,10 @@ public class IRISController extends BasePortalController {
                 channelCodes[i] = channel.getAttributes().getNamedItem("code").getTextContent();
             }
 
-            String startDate = xPath
-                    .compile("//default:Station[@code='" + stationCode + "']/default:Channel/@startDate")
+            NamespaceContext nc = getIrisNamespace();
+            String startDate = DOMUtil.compileXPathExpr("//default:Station[@code='" + stationCode + "']/default:Channel/@startDate", nc)
                     .evaluate(irisDoc, XPathConstants.STRING).toString();
-            String endDate = xPath.compile("//default:Station[@code='" + stationCode + "']/default:Channel/@endDate")
+            String endDate = DOMUtil.compileXPathExpr("//default:Station[@code='" + stationCode + "']/default:Channel/@endDate", nc)
                     .evaluate(irisDoc, XPathConstants.STRING).toString();
 
             ModelMap channelInfo = new ModelMap();
