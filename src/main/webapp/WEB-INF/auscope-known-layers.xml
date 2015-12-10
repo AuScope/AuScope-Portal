@@ -1494,6 +1494,22 @@
         <property name="order" value="381" />
     </bean>
 
+    <!-- GPT-41 / GPT-88 - 250K Scanned Geological Maps  -->
+    <bean id="knownTypeGeologicalMaps_250K_Scanned_Geological_Maps" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="knownTypeGeologicalMaps_250K_Scanned_Geological_Maps" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Scanned_250K_Geological_Map_Index"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Scanned 250K Geological Map Index"/>
+        <property name="description" value="This Web Map Service displays the spatial extents of scanned images of all 1:250 000 scale geological maps of Australia. The service contains information on the edition, publication date, and map publisher, and has links to map images available as 75 DPI, 125 DPI or 250 DPI resolution JPG files."/>
+        <property name="group" value="Geological Maps"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="383" />
+    </bean>
+    <!-- END: GPT-41 / GPT-88 - 250K Scanned Geological Maps  -->
 <!-- END: GPT-41 - Surface Geology Layers -->
 <!-- START: GPT-74 - Topology and Infrastructure -->
 
@@ -1765,4 +1781,5 @@ The coastal boundary for the Great Barrier Reef World Heritage Area is interim. 
         <property name="order" value="620" />
     </bean>
     <!-- END: GPT-106 - Restricted Areas -->
+    
 </beans>
