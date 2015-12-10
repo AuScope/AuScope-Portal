@@ -249,6 +249,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
         }       
     },
     
+
     displayFileDownloadWindow : function(record){
         
         var html;

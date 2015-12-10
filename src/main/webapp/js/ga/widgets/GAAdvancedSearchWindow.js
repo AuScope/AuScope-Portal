@@ -11,7 +11,7 @@ Ext.define('ga.widgets.GAAdvancedSearchWindow', {
     constructor : function(cfg) {      
         
     	var me = this;
-    	
+    	  
         me.map = cfg.map;
         me.layerFactory = cfg.layerFactory;
         me.layerStore = cfg.layerStore;
@@ -62,12 +62,13 @@ Ext.define('ga.widgets.GAAdvancedSearchWindow', {
         Ext.apply(cfg, {
             title : 'Enter Parameters',
             layout : 'fit',
+            constrain: true,
             modal : false,
             width : 500,
             items : [me.cswFilterFormPanel],
+            scrollable: false,
             buttons: controlButtons            
         });
-
 
         this.callParent(arguments);
     },

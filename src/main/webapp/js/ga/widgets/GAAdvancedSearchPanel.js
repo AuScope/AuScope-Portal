@@ -55,7 +55,7 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
             xtype : 'form',
             id : 'personalpanelcswfilterform',
             width : 500,
-            autoScroll :true,
+            scrollable: false,
             border : false,
             //height : 520,
             
@@ -157,7 +157,7 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
                             boxLabel : title,
                             name : 'cswServiceId',
                             inputValue: cswServiceItemRec.get('id'),
-                            checked : title.toLowerCase().contains('geoscience')
+                            checked : title.toLowerCase().includes('geoscience')
                         });
                     }
                     var registryTabCheckboxGroup=Ext.getCmp('registryTabCheckboxGroup');
@@ -288,25 +288,36 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
                             displayField: 'Name',
                             store: this.areaMapStore,
                             minChars: 0,
+                            forceSelection: true,
                             queryMode: 'remote',
+                            triggerAction: 'all',
                             typeAhead: true,
+                            enableKeyEvents: true,
                             width: 300,
                             hideLabel: true,
                             listeners: {
-                                select: this.populateCoordinatesFromAreaMap,
-                                keyup: function(combo, event) {
-                                    var key = String.fromCharCode(event.getKey()),
-                                        boundList = combo.getPicker(),
+                                // event when a value is selected from the list
+                                select: function(combo, event) {
+                                    var boundList = combo.getPicker(),
+                                    store = boundList.getStore();
+                                    record = store.findRecord(combo.displayField, combo.getValue()),
+                                    me.populateCoordinatesFromAreaMap(combo, record);
+                                }, 
+                                
+                                // handler for navigation keys - set the field value and populate the bounding box search 
+                                specialkey: function (combo, event) {
+                                    combo.setValue(combo.getRawValue());
+                                    var boundList = combo.getPicker(),
                                         store = boundList.getStore(),
-                                        record = store.findRecord(combo.displayField, key);
+                                        record = store.findRecord(combo.displayField, combo.getValue());
                                     if (record) {
                                         boundList.highlightItem(boundList.getNode(record));
-                                        this.populateCoordinatesFromAreaMap(combo, record);
+                                        me.populateCoordinatesFromAreaMap(combo, record);
                                     } else {
-                                    	combno.value = '';
-                                    }
+                                        combo.setValue('');
+                                    }                                    
                                 }
-                            }
+                           }
                         }, {
                             xtype: 'panel',
                             layout: 'vbox',
@@ -499,7 +510,18 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
         Ext.ComponentQuery.query('#south')[0].setValue(''); 
         Ext.ComponentQuery.query('#east')[0].setValue(''); 
         Ext.ComponentQuery.query('#west')[0].setValue(''); 
-        Ext.ComponentQuery.query('#defaultSortTypeRadio')[0].setValue(true);  
+        Ext.ComponentQuery.query('#defaultSortTypeRadio')[0].setValue(true); 
+        
+        var registryTabCheckboxGroup=Ext.getCmp('registryTabCheckboxGroup');
+        
+        for (var i = 0; i < registryTabCheckboxGroup.items.items.length; i++) {
+            var checkbox = registryTabCheckboxGroup.items.items[i];
+            if (checkbox.boxLabel.toLowerCase().includes('geoscience')) {
+                checkbox.setValue(true);
+            } else {
+                checkbox.setValue(false);
+            }                   
+        }
     } 
     
 });
