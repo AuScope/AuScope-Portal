@@ -111,6 +111,12 @@
 
     #search-controls a {
         color: white !important;
+        text-decoration : none;
+    }
+    
+    #search-controls a:hover,
+    #header-controls a:hover {
+    	text-decoration : underline;
     }
     
     #activeLayersPanel {
