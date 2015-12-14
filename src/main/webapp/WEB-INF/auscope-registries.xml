@@ -75,6 +75,14 @@
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
+    <bean id="cswRestrictedAreas" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswRestrictedAreas"/>
+        <constructor-arg name="title" value="Restricted Areas"/>
+        <constructor-arg name="serviceUrl" value="http://localhost:8080/geonetwork/srv/eng/csw-restricted-areas-featured"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <property name="hideFromCatalogue" value="true"/>
+    </bean>
+
     <bean id="cswAuscopeTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswAuscopeTest"/>
         <constructor-arg name="title" value="AuScope Test Geonetwork"/>
