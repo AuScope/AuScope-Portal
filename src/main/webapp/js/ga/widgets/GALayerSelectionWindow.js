@@ -108,7 +108,7 @@ Ext.define('ga.widgets.GALayerSelectionWindow', {
                         } catch(error) {
                             console.log(error);
                         }
-                        AppEvents.broadcast('addlayer', {layer: layer});
+                        AppEvents.broadcast('addlayer', {layer: layer, layerStore: me.map.layerStore});
                         
                         //VT: Tracking
                         portal.util.PiwikAnalytic.trackevent('Add:' + layer.get('sourceType'), 'Layer:' + layer.get('name'),'Filter:' + filterer.getParameters());

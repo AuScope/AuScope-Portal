@@ -55,13 +55,18 @@ Ext.define('ga.widgets.GAMenuBar', {
             me.map.map.setCenter(center);
             
             // remove all of the layers we have added
-            var items = me.map.layerStore.data.items;    
-            for (i = items.length-1; i >=0; --i) {
+            var items = me.layerStore.data.items;    
+            for (var i = items.length-1; i >=0; --i) {
                 var layer = items[i];        
-                AppEvents.broadcast('removelayer', {layer:layer});
+                AppEvents.broadcast('removelayer', {layer:layer, layerStore:me.layerStore});
             }
             me.layerStore = Ext.create('portal.layer.LayerStore', {});
-        };              
+            
+            // if the browser supports local storage, clear the stored map state
+            if(typeof(Storage) !== "undefined") {
+                localStorage.removeItem("storedApplicationState");
+            }
+        };                    
         
         //Create our permalink generation handler
         var permalinkHandler = function() {
@@ -79,6 +84,8 @@ Ext.define('ga.widgets.GAMenuBar', {
     
                 popup.show();
             });
+            
+            
         };
         
         var helpHandler = function() {
