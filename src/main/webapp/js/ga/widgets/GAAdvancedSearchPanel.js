@@ -153,11 +153,24 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
                     for (var i = 0; i < records.length; i++) {
                         var cswServiceItemRec = records[i];
                         var title = cswServiceItemRec.get('title');
+                        
+                        // browser hack here - earlier Firefox used contains and not includes
+                        var isChecked = false;
+                        if (String.prototype.includes) {
+                            isChecked = title.toLowerCase().includes('geoscience');
+                        }
+                        else if (String.prototype.contains) {
+                            isChecked = title.toLowerCase().contains('geoscience');
+                        } else {
+                            // iff no such methods exist then apply a default based on the GA geonetwork title
+                            isChecked = (title === 'Geoscience Australia');
+                        }
+                        
                         checkBoxItems.push({
                             boxLabel : title,
                             name : 'cswServiceId',
                             inputValue: cswServiceItemRec.get('id'),
-                            checked : title.toLowerCase().includes('geoscience')
+                            checked : isChecked
                         });
                     }
                     var registryTabCheckboxGroup=Ext.getCmp('registryTabCheckboxGroup');
