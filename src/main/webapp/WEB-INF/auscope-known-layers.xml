@@ -1512,7 +1512,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="383" />
+        <property name="order" value="60_Geological Maps_050" />
     </bean>
     <!-- END: GPT-41 / GPT-88 - 250K Scanned Geological Maps  -->
 <!-- END: GPT-41 - Surface Geology Layers -->
