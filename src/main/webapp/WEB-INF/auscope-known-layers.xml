@@ -3,6 +3,7 @@
       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
+    
     <bean id="knownTypeMine" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-mine"/>
         <constructor-arg name="knownLayerSelector">
@@ -16,6 +17,7 @@
                 </property>
             </bean>
         </constructor-arg>
+        
 
         <property name="name" value="Earth Resource Mine"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
@@ -37,8 +39,9 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="1" />
+        <property name="order" value="1_AuScope Earth Resource Services_010" />
     </bean>
+    
     <bean id="knownTypeMineralOccurrence" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-mineraloccurrence"/>
         <constructor-arg name="knownLayerSelector">
@@ -73,8 +76,9 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="2" />
+        <property name="order" value="1_AuScope Earth Resource Services_020" />
     </bean>
+    
     <bean id="knownTypeMiningActivity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-miningactivity"/>
         <constructor-arg name="knownLayerSelector">
@@ -109,7 +113,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="3" />
+        <property name="order" value="1_AuScope Earth Resource Services_030" />
     </bean>
 
 
@@ -143,7 +147,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>-->
-        <property name="order" value="150" />
+        <property name="order" value="40_Tenements_010" />
     </bean>
     
     <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -162,7 +166,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
-        <property name="order" value="4" />
+        <property name="order" value="1_AuScope Earth Resource Services_040" />
     </bean>
 
     <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -217,7 +221,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="50" />
+        <property name="order" value="20_Boreholes_010" />
     </bean>
     
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -467,7 +471,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="310" />
+        <property name="order" value="50_Geological Provinces_010" />
     </bean>
     
     <bean id="knownTypeGeologicalProvinceMetallogenic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -482,7 +486,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="311" />
+        <property name="order" value="50_Geological Provinces_020" />
     </bean>
 
     <bean id="knownTypeSedimentaryBasinsCenozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -498,7 +502,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="312" />
+        <property name="order" value="50_Geological Provinces_030" />
     </bean>
     
     <bean id="knownTypeSedimentaryBasinsMesozoicCenozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -514,7 +518,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="313" />
+        <property name="order" value="50_Geological Provinces_040" />
     </bean>
     
     <bean id="knownTypeSedimentaryBasinsMesozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -530,7 +534,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="314" />
+        <property name="order" value="50_Geological Provinces_050" />
     </bean>
 
     <bean id="knownTypeSedimentaryBasinsPaleozoicCenozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -546,7 +550,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="315" />
+        <property name="order" value="50_Geological Provinces_060" />
     </bean>
 
     <bean id="knownTypeSedimentaryBasinsPaleozoicMesozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -562,7 +566,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="316" />
+        <property name="order" value="50_Geological Provinces_070" />
     </bean>
     
     <bean id="knownTypeSedimentaryBasinsLatePaleozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -578,7 +582,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="317" />
+        <property name="order" value="50_Geological Provinces_080" />
     </bean>
 
     <bean id="knownTypeSedimentaryBasinsEarlyToLatePaleozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -594,7 +598,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="318" />
+        <property name="order" value="50_Geological Provinces_090" />
     </bean>
     
     <bean id="knownTypeSedimentaryBasinsEarlyPaleozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -610,7 +614,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="319" />
+        <property name="order" value="50_Geological Provinces_100" />
     </bean>
     
     <bean id="knownTypeTectonicProvincesPaleozoicMesozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -626,7 +630,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="320" /> 
+        <property name="order" value="50_Geological Provinces_110" /> 
     </bean>
 
     <bean id="knownTypeTectonicProvincesNeoproterozoicPaleozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -642,7 +646,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="321" />
+        <property name="order" value="50_Geological Provinces_120" />
     </bean>
     
     <bean id="knownTypeSedimentaryBasinsNeoproterozoicPaleozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -658,7 +662,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="322" />
+        <property name="order" value="50_Geological Provinces_130" />
     </bean> 
 
     <bean id="knownTypeIgneousProvincesProterozoicPaleozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -674,7 +678,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="323" />
+        <property name="order" value="50_Geological Provinces_140" />
     </bean>
 
     <bean id="knownTypeSedimentaryBasinsMesoproterozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -690,7 +694,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="324" />
+        <property name="order" value="50_Geological Provinces_150" />
     </bean>
 
     <bean id="knownTypeTectonicProvincesProterozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -706,7 +710,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="325" />
+        <property name="order" value="50_Geological Provinces_160" />
     </bean>
 
     <bean id="knownTypeSedimentaryBasinsPaleoproterozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -722,7 +726,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="326" />
+        <property name="order" value="50_Geological Provinces_170" />
     </bean>
 
     <bean id="knownTypeSedimentaryBasinsArcheanPaleoproterozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -738,7 +742,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="327" />
+        <property name="order" value="50_Geological Provinces_180" />
     </bean>
 
     <bean id="knownTypeTectonicProvincesArcheanProterozoic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -754,7 +758,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="328" />
+        <property name="order" value="50_Geological Provinces_190" />
     </bean>
 
     <bean id="knownTypeCrustalElements" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -770,7 +774,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="329" />
+        <property name="order" value="50_Geological Provinces_200" />
     </bean>
 
     <bean id="knownTypeAllGeologicalProvinces" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -786,7 +790,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="330" />
+        <property name="order" value="50_Geological Provinces_210" />
     </bean>
 
    <bean id="knownTypeAster" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -800,7 +804,7 @@
         <property name="description" value="This is the parent datafile of a datset that comprises a set of 14+ geoscience products made up of mosaiced ASTER scenes across Australia."/>
         <property name="group" value="ASTER Maps"/>
         <property name="hidden" value="true"/>
-        <property name="order" value="60" />
+         <property name="order" value="30_ASTER Maps_010" />
     </bean>
 
     <bean id="knownTypeAsterAloh" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -813,7 +817,7 @@
         <property name="name" value="ASTER Map AlOH group composition"/>
         <property name="description" value="1. Band ratio: B5/B7Blue is well ordered kaolinite, Al-rich muscovite/illite, paragonite, pyrophyllite Red is Al-poor (Si-rich) muscovite (phengite)"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="61" />
+        <property name="order" value="30_ASTER Maps_020" />
     </bean>
 
     <bean id="knownTypeAsterFerrous" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -826,7 +830,7 @@
         <property name="name" value="ASTER Map Ferrous iron index"/>
         <property name="description" value="1. Band ratio: B5/B4Blue is low abundance, Red is high abundance"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="62" />
+        <property name="order" value="30_ASTER Maps_030" />
     </bean>
 
     <bean id="knownTypeAsterOpaque" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -839,7 +843,7 @@
         <property name="name" value="ASTER Map Opaque index"/>
         <property name="description" value="1. Band ratio: B1/B4Blue is low abundance, Red is high abundance(potentially includes  carbon black (e.g. ash), magnetite, Mn oxides, and sulphides in unoxidised envornments"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="63" />
+        <property name="order" value="30_ASTER Maps_040" />
     </bean>
 
     <bean id="knownTypeAsterFerricOxideContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -852,7 +856,7 @@
         <property name="name" value="ASTER Map Ferric oxide content"/>
         <property name="description" value="1. Band ratio: B4/B3Blue is low abundance, Red is high abundance"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="64" />
+        <property name="order" value="30_ASTER Maps_050" />
     </bean>
 
     <bean id="knownTypeAsterFeoh" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -865,7 +869,7 @@
         <property name="name" value="ASTER Map FeOH group content"/>
         <property name="description" value="1. Band ratio: (B6+B8)/B7Blue is low content, Red is high content(potentially includes: chlorite, epidote, jarosite, nontronite, gibbsite, gypsum, opal-chalcedony)"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="65" />
+        <property name="order" value="30_ASTER Maps_060" />
     </bean>
 
     <bean id="knownTypeFerricOxideComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -878,7 +882,7 @@
         <property name="name" value="ASTER Map Ferric oxide composition"/>
         <property name="description" value="1. Band ratio: B2/B1Blue-cyan is goethite rich, Green is hematite-goethite, Red-yellow is hematite-rich"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="66" />
+        <property name="order" value="30_ASTER Maps_070" />
     </bean>
 
     <bean id="knownTypeGroupIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -891,7 +895,7 @@
         <property name="name" value="ASTER Map Kaolin group index"/>
         <property name="description" value="B6/B5(potential includes: pyrophyllite, alunite, well-ordered kaolinite)Blue is low content, Red is high content"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="67" />
+        <property name="order" value="30_ASTER Maps_080" />
     </bean>
 
     <bean id="knownTypeQuartzIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -904,7 +908,7 @@
         <property name="name" value="ASTER Map TIR Quartz index"/>
         <property name="description" value="1. Band ratio: B11/(B10+B12)Blue is low quartz contentRed is high quartz content"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="68" />
+        <property name="order" value="30_ASTER Maps_090" />
     </bean>
 
     <bean id="knownTypeMgohContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -917,7 +921,7 @@
         <property name="name" value="ASTER Map MgOH group content"/>
         <property name="description" value="1. Band ratio: (B6+B9/(B7+B8)Blue is low content, Red is high content(potentially includes: calcite, dolomite, magnesite, chlorite, epidote, amphibole, talc, serpentine)"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="69" />
+        <property name="order" value="30_ASTER Maps_100" />
     </bean>
 
     <bean id="knownTypeGreenVeg" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -930,7 +934,7 @@
         <property name="name" value="ASTER Map green vegetation content"/>
         <property name="description" value="Band ratio: B3/B2 Blue is low contentRed is high content"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="70" />
+        <property name="order" value="30_ASTER Maps_110" />
     </bean>
 
     <bean id="knownTypeFerrCarb" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -943,7 +947,7 @@
         <property name="name" value="ASTER Map Ferrous iron content in MgOH/carbonate"/>
         <property name="description" value="1. Band ratio: B5/B4Blue is low ferrous iron content in carbonate and MgOH minerals like talc and tremolite.Red is high ferrous iron content in carbonate and MgOH minerals like chlorite and actinolite."/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="71" />
+        <property name="order" value="30_ASTER Maps_120" />
     </bean>
 
     <bean id="knownTypeMgohGroupComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -956,7 +960,7 @@
         <property name="name" value="ASTER Map MgOH group composition"/>
         <property name="description" value="1. Band ratio: B7/B8Blue-cyan is magnesite-dolomite, amphibole, chlorite\tRed is calcite, epidote, amphibole"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="72" />
+        <property name="order" value="30_ASTER Maps_130" />
     </bean>
 
     <bean id="knownTypeFalseColor" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -969,7 +973,7 @@
         <property name="name" value="ASTER Map false colour mosaic"/>
         <property name="description" value="1. False colour RGB composite Red: B3Green: B2Blue: B1(red = green vegetation)"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="73" />
+        <property name="order" value="30_ASTER Maps_140" />
     </bean>
 
     <bean id="knownTypeRegolithRatios" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -982,7 +986,7 @@
         <property name="name" value="ASTER Map Regolith Ratios"/>
         <property name="description" value="1. 3 band RGB composite Red: B3/B2Green: B3/B7Blue: B4/B7(white = green vegetation)"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="74" />
+        <property name="order" value="30_ASTER Maps_150" />
     </bean>
 
     <bean id="knownTypeAlohGroupContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -995,7 +999,7 @@
         <property name="name" value="ASTER Map AlOH group content"/>
         <property name="description" value="1. Band ratio: (B5+B7)/B6Blue is low abundance, Red is high abundance potentially includes: phengite, muscovite, paragonite, lepidolite, illite, brammalite, montmorillonite, beidellite, kaolinite, dickite"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="75" />
+        <property name="order" value="30_ASTER Maps_160" />
     </bean>
 
     <bean id="knownTypeGypsumContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1008,7 +1012,7 @@
         <property name="name" value="ASTER Map TIR Gypsum index"/>
         <property name="description" value="1. Band ratio: (B10+B12)/B11Blue is low gypsum contentRed is high gypsum content"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="76" />
+        <property name="order" value="30_ASTER Maps_170" />
     </bean>
 
     <bean id="knownTypeSilicaContent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1021,7 +1025,7 @@
         <property name="name" value="ASTER Map TIR Silica index"/>
         <property name="description" value="1. Band ratio: B13/B10Blue is low silica contentRed is high silica content(potentially includes Si-rich minerals, such as quartz, feldspars, Al-clays)"/>
         <property name="group" value="ASTER Maps"/>
-        <property name="order" value="77" />
+        <property name="order" value="30_ASTER Maps_180" />
     </bean>
 
     <!-- This layer is NOT selectable, it is only used for hiding these features -->
@@ -1035,6 +1039,7 @@
         <property name="hidden" value="true"/>
         <property name="order" value="450" />
     </bean>
+    
     <!-- This layer is NOT selectable, it is only used for hiding these features -->
     <bean id="knownTypeFeatureCollection"
         class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1421,7 +1426,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="372" />
+        <property name="order" value="60_Geological Maps_020" />
     </bean>
 
     <!-- SurfaceGeology__1to1M_ContactsFaultsMakerBeds (Define Conjunction of multiple layers into one (AND) -->
@@ -1445,7 +1450,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="371" />
+        <property name="order" value="60_Geological Maps_010" />
     </bean>
 
     <!-- SurfaceGeology__1to25M_ContactsFaultsMakerBeds (Define Disjunction of multiple layers into one (OR)) -->
@@ -1468,7 +1473,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="382" />
+        <property name="order" value="60_Geological Maps_040" />
     </bean>
 
     <!-- SurfaceGeology__1to25M_ContactsFaultsMakerBeds (Define Conjunction of multiple layers into one (AND) -->
@@ -1491,7 +1496,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="381" />
+        <property name="order" value="60_Geological Maps_030" />
     </bean>
 
 <!-- END: GPT-41 - Surface Geology Layers -->
@@ -1522,7 +1527,7 @@
         <property name="group" value="Topography and Infrastructure"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="500" />
+        <property name="order" value="70_Topography and Infrastructure_010" />
     </bean>
     <!-- Coastlines (AND) -->
     <bean id="knownTypeCoastlines" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1543,7 +1548,7 @@
         <property name="group" value="Topography and Infrastructure"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="505" />
+        <property name="order" value="70_Topography and Infrastructure_020" />
     </bean>
     <!-- AusHydro -->
     <bean id="knownTypeRiversAndLakes" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1572,7 +1577,7 @@
         <property name="group" value="Topography and Infrastructure"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="510" />
+        <property name="order" value="70_Topography and Infrastructure_030" />
     </bean>
     <!-- Roads 1 to 4 (AND) -->
     <bean id="knownTypeRoads1to4" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1596,7 +1601,7 @@
         <property name="group" value="Topography and Infrastructure"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="515" />
+        <property name="order" value="70_Topography and Infrastructure_040" />
     </bean>
     <!-- Railways 1 to 3 (AND) -->
     <bean id="knownTypeRailways1to3" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1618,7 +1623,7 @@
         <property name="group" value="Topography and Infrastructure"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
-        <property name="order" value="520" />
+        <property name="order" value="70_Topography and Infrastructure_050" />
     </bean>
     <!-- Oil WFS -->
     <bean id="knownTypeOil" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1638,7 +1643,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/> <!-- doMineralTenementDownload.do"/ -->
-        <property name="order" value="525" />
+        <property name="order" value="70_Topography and Infrastructure_060" />
     </bean>
     <bean id="knownTypeGas" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="gas"/>
@@ -1657,7 +1662,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/> <!-- doMineralTenementDownload.do"/ -->
-        <property name="order" value="530" />
+        <property name="order" value="70_Topography and Infrastructure_070" />
     </bean>
 
     <bean id="knownTypeMajorPorts" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1677,8 +1682,9 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/> <!-- doMineralTenementDownload.do"/ -->
-        <property name="order" value="535" />
+        <property name="order" value="70_Topography and Infrastructure_080" />
     </bean>
+    
     <!-- END: GPT-74 - Topology and Infrastructure -->
     <!-- GPT-106 - Restricted Areas -->
     <bean id="knownTypeProtectedAreasCAPAD2014Marine" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1696,7 +1702,7 @@ CAPAD provides a snapshot of protected areas that meet the IUCN definition of a 
 The Australian Government Department of the Environment (DOE) publishes a summary of the CAPAD data biennially on its website at http://www.environment.gov.au/capad
 This version of CAPAD 2014-Marine is a public / downloadable dataset available for use through the CC-BY licencing model.  "/>
         <property name="group" value="Restricted Areas"/>
-        <property name="order" value="600" />
+        <property name="order" value="80_Restricted Areas_010" />
     </bean>
     <bean id="knownTypeProtectedAreasCAPAD2014Terrestrial" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="protectedAreasCAPAD2014Terrestrial"/>
@@ -1710,7 +1716,7 @@ This version of CAPAD 2014-Marine is a public / downloadable dataset available f
 The Department also publishes protected areas data for the marine environment. 'CAPAD 2014-marine' contains spatial and text information about offshore protected areas, for both State and Commonwealth waters. Previous versions of CAPAD marine information have been published in 1997, 2002, 2004, 2008, 2010 and 2012. 
 CAPAD provides a snapshot of protected areas that meet the IUCN definition of a protected area."/>
         <property name="group" value="Restricted Areas"/>
-        <property name="order" value="605" />
+        <property name="order" value="80_Restricted Areas_020" />
     </bean>
     <bean id="knownTypeWorld_Heritage_Areas_2007" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="World_Heritage_Areas_2007"/>
@@ -1726,7 +1732,7 @@ The Australian Fossil Mammal Sites (Naracoorte/Riversleigh), Lord Howe Island Gr
 A single Australian World Heritage Areas database has been created by combining data which was historically stored as a separate set of data for each property. All data are GDA compliant and use the WGS84 spheroid and datum.
 The coastal boundary for the Great Barrier Reef World Heritage Area is interim. This line is only INDICATIVE of 'mean low tide', as stated in the World Heritage inscription. An appropriate caveat must accompany this data when used for analysis or map production."/>
         <property name="group" value="Restricted Areas"/>
-        <property name="order" value="610" />
+        <property name="order" value="80_Restricted Areas_030" />
     </bean>
     <bean id="knownTypeDefence_Prohibited_Areas" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="Defence_Prohibited_Areas"/>
@@ -1738,8 +1744,9 @@ The coastal boundary for the Great Barrier Reef World Heritage Area is interim. 
         <property name="name" value="Defence Prohibited Areas"/>
         <property name="description" value="Defence prohibited areas are defined under the Defence Act 1903 and the Defence Force Regulations 1952 and are Defence premises used for testing of war materiel under the control of the Royal Australian Air Force or Australian Army."/>
         <property name="group" value="Restricted Areas"/>
-        <property name="order" value="610" />
+        <property name="order" value="80_Restricted Areas_040" />
     </bean>
+    
     <bean id="knownTypeDefence_Practice_Areas" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="Defence_Practice_Areas"/>
         <constructor-arg name="knownLayerSelector">
@@ -1750,7 +1757,7 @@ The coastal boundary for the Great Barrier Reef World Heritage Area is interim. 
         <property name="name" value="Defence Practice Areas"/>
         <property name="description" value="Defence Practice Areas are public safety exclusion zones located over areas to protect the public. The public safety exclusion zones are enforced to protect the public in the unlikely event of weapon system malfunction. It is very dangerous to be on land at any time, or on the water inside the Defence Practice Area public safety exclusion zones when aircraft are using the range for bombing or air-to-ground gunnery. Data included in this layer is indicative only and should not be used for detailed planning."/>
         <property name="group" value="Restricted Areas"/>
-        <property name="order" value="615" />
+        <property name="order" value="80_Restricted Areas_050" />
     </bean>
     <bean id="knownTypeDefence_Training_Areas" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="Defence_Training_Areas"/>
@@ -1762,7 +1769,7 @@ The coastal boundary for the Great Barrier Reef World Heritage Area is interim. 
         <property name="name" value="Defence Training Areas"/>
         <property name="description" value="Defence Training Areas are used for the maintenance of combat skills through continuous individual and collective capability training."/>
         <property name="group" value="Restricted Areas"/>
-        <property name="order" value="620" />
+        <property name="order" value="80_Restricted Areas_060" />
     </bean>
     <!-- END: GPT-106 - Restricted Areas -->
 </beans>
