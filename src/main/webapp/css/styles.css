@@ -111,12 +111,6 @@
 
     #search-controls a {
         color: white !important;
-        text-decoration : none;
-    }
-    
-    #search-controls a:hover,
-    #header-controls a:hover {
-    	text-decoration : underline;
     }
     
     #activeLayersPanel {
@@ -200,7 +194,8 @@
     }
 
     #center_region-body {
-        padding-bottom: 22px !important;
+        padding-bottom: 25px !important;
+        height: 99.25% !important;
     }
 
     #menu-bar a {
