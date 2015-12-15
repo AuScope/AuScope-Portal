@@ -83,6 +83,14 @@
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
+    <bean id="cswGeologicalMaps" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswGeologicalMaps"/>
+        <constructor-arg name="title" value="Geological Maps"/>
+        <constructor-arg name="serviceUrl" value="http://localhost:8080/geonetwork/srv/eng/csw-geological-maps-featured"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <property name="hideFromCatalogue" value="true"/>
+    </bean>
+
     <bean id="cswAuscopeTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswAuscopeTest"/>
         <constructor-arg name="title" value="AuScope Test Geonetwork"/>
