@@ -425,15 +425,25 @@ Ext.application({
 
         }
 
-        //Handle deserialisation -- ONLY if we have a uri param called "state".
-        var deserializationHandler;
-        var searchStart = window.location.href.indexOf('?');
-        
+        // Handle deserialisation
+        // if we have a uri param called "state" then we'll use that to deserialise.
+        // else if we have a value in localStorage called "storedApplicationState" then use that
+        // otherwise do nothing special        
+        var deserializationHandler, decodedString, decodedVersion, useStoredState = true;
+                
+        var searchStart = window.location.href.indexOf('?');        
         var urlParams = Ext.Object.fromQueryString(window.location.href.substring(searchStart + 1));
         if (urlParams && (urlParams.state || urlParams.s)) {
-            var decodedString = urlParams.state ? urlParams.state : urlParams.s;
-            var decodedVersion = urlParams.v;
-
+            decodedString = urlParams.state ? urlParams.state : urlParams.s;
+            decodedVersion = urlParams.v;        
+            useStoredState = false;
+        } else {
+            if(typeof(Storage) !== "undefined") {
+                decodedString = localStorage.getItem("storedApplicationState");
+                decodedVersion = null;
+            }
+        }
+        if (decodedString) {            
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
                 cswRecordStore : unmappedCSWRecordStore,
@@ -441,10 +451,10 @@ Ext.application({
                 layerStore : layerStore,
                 map : map,
                 stateString : decodedString,
-                stateVersion : decodedVersion
+                stateVersion : decodedVersion,
+                useStoredState: useStoredState
             });
-
-        }
+        }   
     }
 
 });
