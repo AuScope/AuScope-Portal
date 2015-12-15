@@ -11,7 +11,7 @@
     <!-- All elements must be of type org.auscope.portal.server.web.KnownLayer -->
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
-            <list>                
+            <list>
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
@@ -48,8 +48,8 @@
                 <ref bean="knownTypeSedimentaryBasinsMesoproterozoic" />
                 <ref bean="knownTypeTectonicProvincesProterozoic" />
                 <ref bean="knownTypeSedimentaryBasinsPaleoproterozoic" />
-                <ref bean="knownTypeSedimentaryBasinsArcheanPaleoproterozoic" />                               
-                <ref bean="knownTypeTectonicProvincesArcheanProterozoic" />    
+                <ref bean="knownTypeSedimentaryBasinsArcheanPaleoproterozoic" />
+                <ref bean="knownTypeTectonicProvincesArcheanProterozoic" />
                 <ref bean="knownTypeCrustalElements" />
                 <ref bean="knownTypeAllGeologicalProvinces" />
                 <ref bean="knownTypeAster" />
@@ -74,7 +74,7 @@
                 <ref bean="knownTypeSeismologyInSchool" />
                 <!-- <ref bean="knownTypeSF0BoreholeNVCL" />              -->
 <!--                 <ref bean="knownTypeSurfaceAftershock" /> -->
-                
+
                 <!-- Analytics -->
                 <!-- ref bean="knownTypeBouguerGeodetic" />
                 <ref bean="knownTypeGravAnomalyGeodetic" />
@@ -106,15 +106,15 @@
                 <ref bean="knownTypeRiversAndLakes" />
                 <ref bean="knownTypeRoads1to4" />
                 <ref bean="knownTypeRailways1to3" />
-                <ref bean="knownTypeOil" />             
-                <ref bean="knownTypeGas" />             
+                <ref bean="knownTypeOil" />
+                <ref bean="knownTypeGas" />
                 <ref bean="knownTypeMajorPorts" />
-                <!-- Restricted Areas -->      
-                <ref bean="knownTypeProtectedAreasCAPAD2014Marine" />              
-                <ref bean="knownTypeProtectedAreasCAPAD2014Terrestrial" />              
-                <ref bean="knownTypeWorld_Heritage_Areas_2007" />              
-                <ref bean="knownTypeDefence_Prohibited_Areas" />              
-                <ref bean="knownTypeDefence_Practice_Areas" />              
+                <!-- Restricted Areas -->
+                <ref bean="knownTypeProtectedAreasCAPAD2014Marine" />
+                <ref bean="knownTypeProtectedAreasCAPAD2014Terrestrial" />
+                <ref bean="knownTypeWorld_Heritage_Areas_2007" />
+                <ref bean="knownTypeDefence_Prohibited_Areas" />
+                <ref bean="knownTypeDefence_Practice_Areas" />
                 <ref bean="knownTypeDefence_Training_Areas" />
             </list>
         </constructor-arg>
