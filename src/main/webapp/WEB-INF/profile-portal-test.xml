@@ -99,6 +99,7 @@
                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to25M_GeologicalUnits__ALL" />
                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_ContactsFaultsMakerBeds__ALL" />
                 <ref bean="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__ALL" />
+                <ref bean="knownTypeGeologicalMaps_250K_Scanned_Geological_Maps" />
                 <!-- Group: Topography and Infrastructure -->
                 <ref bean="knownTypePopulatedPlaces1to8" />
                 <ref bean="knownTypeCoastlines" />
