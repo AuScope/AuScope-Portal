@@ -133,6 +133,7 @@
                 <ref bean="cswASTER" />
                 <ref bean="cswRestrictedAreas"/>
                 <ref bean="cswGeologicalMaps"/>
+                <ref bean="cswScannedMapsIndex"/>
 <!--            <ref bean="cswGeoscienceLocal" /> -->
 <!--            <ref bean="darwinDev" /> -->
 <!--            <ref bean="cswAuscopeTest" /> -->
