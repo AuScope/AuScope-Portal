@@ -341,12 +341,6 @@ public class WMSController extends BaseCSWController {
                     break;
                 }
             }
-            
-            // if no value was found in a child layer then use the value in the parent record.
-            if (StringUtils.isBlank(metadataURL)) {
-            	metadataURL = getCapabilitiesRecord.getMetadataUrl();
-            }
-            
             return generateJSONResponseMAV(true, metadataURL, "");
 
         } catch (Exception e) {
