@@ -68,7 +68,7 @@
     }
     
     #auscope-tabs-panel {
-        top: 28px !important;
+        top: 0 !important;
     }
 
     #header-container {
@@ -215,12 +215,13 @@
     }
     
     #center_region {
+       border: 1px solid rgb(193, 193, 193) !important;
         top: 130px !important;
     }
 
     #center_region-body {
         padding-bottom: 25px !important;
-        height: 99.25% !important;
+        height: 100% !important;
     }
 
     #menu-bar a {
@@ -399,4 +400,10 @@
     .onlineresourcedetails {
         overflow-wrap: break-word;
         word-wrap: break-word;
+    }
+    
+    
+    #header-container-innerCt, 
+    #header-container-body {
+        height : 130px !important;
     }
