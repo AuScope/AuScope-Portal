@@ -317,11 +317,12 @@ Ext.application({
          * Used as a placeholder for the tree and details panel on the left of screen
          */
         var westPanel = {
-            layout: 'border',//VT: vbox doesn't support splitbar unless we custom it.
+            id: "region-west",
+        	layout: 'border',//VT: vbox doesn't support splitbar unless we custom it.
             region:'west',
             border: false,
             split:true,
-            margin:'100 0 0 3',
+            margin:'130 0 0 3',
             width: 370,
             items:[tabsPanel]
         };
