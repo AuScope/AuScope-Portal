@@ -19,7 +19,7 @@ Ext.define('ga.widgets.GAAdvancedSearchWindow', {
         me.cswFilterFormPanel = new ga.widgets.GAAdvancedSearchPanel({
             name : 'Filter Form',
             map: me.map
-        });
+        });        
         
     	var controlButtons = [{
             xtype: 'button',
@@ -35,24 +35,38 @@ Ext.define('ga.widgets.GAAdvancedSearchWindow', {
             handler: function(button) {
                 var parent = button.findParentByType('window');
                 var panel = parent.getComponent(0);
-
-                if (panel.getForm().isValid()) {                 
+                
+                if (panel.getForm().isValid()) {                               
                     var additionalParams = panel.getForm().getValues(false, false, false, false);
-                    var filteredResultPanels=[];
-                    for(additionalParamKey in additionalParams){
-                        if(additionalParamKey == 'cswServiceId'){
-                            if(!(additionalParams[additionalParamKey] instanceof Array)){
-                                additionalParams[additionalParamKey]=[additionalParams[additionalParamKey]]
-                            }
-                            for(var j=0; j < additionalParams[additionalParamKey].length;j++){
-                                //VT:
-                                filteredResultPanels.push(this._getTabPanels(additionalParams,additionalParams[additionalParamKey][j]));
-                            }
-                        }
-                    }
-                    parent.fireEvent('filterselectcomplete',filteredResultPanels);
-                    parent.hide();  
                     
+                    var performSearch = function(confirm) {
+                        if (confirm === 'yes') {
+                            var filteredResultPanels=[];
+                            for(additionalParamKey in additionalParams){
+                                if(additionalParamKey == 'cswServiceId'){
+                                    if(!(additionalParams[additionalParamKey] instanceof Array)){
+                                        additionalParams[additionalParamKey]=[additionalParams[additionalParamKey]]
+                                    }
+                                    for(var j=0; j < additionalParams[additionalParamKey].length;j++){
+                                        //VT:
+                                        filteredResultPanels.push(me._getTabPanels(additionalParams,additionalParams[additionalParamKey][j]));
+                                    }
+                                }
+                            }
+                            parent.fireEvent('filterselectcomplete',filteredResultPanels);
+                            parent.hide();  
+                        }
+                    };
+                    
+                    if (additionalParams.north > 0 || additionalParams.south > 0) {
+                        Ext.MessageBox.confirm(
+                                'Confirm Northern Hemisphere search', 
+                                'You have provided a latitude coordinate that is in the northern hemisphere.\
+                                Use negative numbers for southern hemisphere. Do you wish to continue? (yes/no)', performSearch, this);
+
+                    } else {
+                        performSearch('yes');
+                    }                    
                 } else {
                     Ext.Msg.alert('Invalid Data', 'Please correct form errors.')
                 }
