@@ -98,6 +98,15 @@
        width : 765px !important;
     }
     
+    div#wrapper-search-and-links a {
+        text-decoration : none !important;
+        font-size : 12px !important;
+    }
+    
+    div#wrapper-search-and-links a:hover {
+        text-decoration : underline !important;
+    }
+    
     #search-controls {
         clear: both;
         display: flex;      
