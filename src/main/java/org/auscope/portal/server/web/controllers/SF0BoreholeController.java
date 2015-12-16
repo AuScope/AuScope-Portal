@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,11 +32,14 @@ public class SF0BoreholeController extends BasePortalController {
     private SF0BoreholeService boreholeService;
 
     private CSWCacheService cswService;
+    private GsmlpNameSpaceTable gsmlpNameSpaceTable;
 
     @Autowired
     public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService) {
         this.boreholeService = sf0BoreholeService;
-        this.cswService = cswService;
+        this.cswService = cswService;        
+        GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
+        this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
     }
 
     /**
@@ -117,9 +121,9 @@ public class SF0BoreholeController extends BasePortalController {
         String hyloggerFilter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
                 hyloggerBoreholeIDs);
-
+        String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         String style = this.boreholeService.getStyle(filter, (color.isEmpty() ? "#2242c7" : color), hyloggerFilter,
-                "#F87217");
+                "#F87217",gsmlpNameSpace);
 
         response.setContentType("text/xml");
 
@@ -133,5 +137,4 @@ public class SF0BoreholeController extends BasePortalController {
         styleStream.close();
         outputStream.close();
     }
-
 }

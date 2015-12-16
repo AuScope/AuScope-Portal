@@ -554,9 +554,9 @@
         <property name="name" value="Pressure DB"/>
         <property name="description" value="A collection of services implementing the Pressure DB Profile for gsml:Borehole and a collection of observations"/>
         <property name="group" value="Boreholes"/>
-        <property name="proxyUrl" value="doBoreholeFilter.do"/>
+        <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value=""/>
+        <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">

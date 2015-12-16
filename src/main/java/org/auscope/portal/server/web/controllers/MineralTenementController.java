@@ -115,7 +115,7 @@ public class MineralTenementController extends BasePortalController {
                 "<Rule>" +
                 "<Name>Polygon for mineral tenement</Name>" +
                 "<Title>Mineral Tenement</Title>" +
-                "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
+                "<Abstract>50 percent transparent green fill with a red outline 1 pixel in width</Abstract>" +
                 filter +
                 "<PolygonSymbolizer>" +
                 "<Fill>" +

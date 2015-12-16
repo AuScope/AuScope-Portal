@@ -130,6 +130,7 @@ public class NVCLDataService {
         } else {
             exprLogName = DOMUtil.compileXPathExpr("logName");
         }
+        XPathExpression exprispublic = DOMUtil.compileXPathExpr("ispublic");
         XPathExpression exprSampleCount = DOMUtil.compileXPathExpr("SampleCount");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
@@ -137,12 +138,15 @@ public class NVCLDataService {
             String logId = (String) exprLogId.evaluate(node, XPathConstants.STRING);
             String logName = (String) exprLogName.evaluate(node, XPathConstants.STRING);
             String sampleCountString = (String) exprSampleCount.evaluate(node, XPathConstants.STRING);
+            String ispub = (String) exprispublic.evaluate(node, XPathConstants.STRING);
+
             int sampleCount = 0;
             if (sampleCountString != null && !sampleCountString.isEmpty()) {
                 sampleCount = Integer.parseInt(sampleCountString);
             }
-
-            responseObjs.add(new GetLogCollectionResponse(logId, logName, sampleCount));
+            if(ispub==null || ispub.isEmpty() || ispub.equals("true")) {
+                responseObjs.add(new GetLogCollectionResponse(logId, logName, sampleCount));
+            }
         }
 
         return responseObjs;

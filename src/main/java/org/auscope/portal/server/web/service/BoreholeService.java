@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,7 +50,7 @@ public class BoreholeService extends BaseWFSService {
 
     // ----------------------------------------------------- Instance variables
     private WfsToKmlTransformer wfsToKml;
-
+    private String gsmlpNameSpace = null;
     // ----------------------------------------------------------- Constructors
 
     @Autowired
@@ -185,11 +186,14 @@ public class BoreholeService extends BaseWFSService {
 
         return filterString;
     }
-
+    public String getStyle(String filter, String color, String hyloggerFilter, String hyloggerColor,String gsmlpNameSpace) {
+        setGsmlpNameSpace(gsmlpNameSpace);
+        return getStyle(filter, color, hyloggerFilter, hyloggerColor);
+    }
     public String getStyle(String filter, String color, String hyloggerFilter, String hyloggerColor) {
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"" + getGsmlpNameSpace() + "\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
                 + "<NamedLayer>" + "<Name>"
                 + getTypeName()
@@ -251,5 +255,14 @@ public class BoreholeService extends BaseWFSService {
 
     public String getGeometryName() {
         return "gsml:collarLocation/gsml:BoreholeCollar/gsml:location";
+    }
+    public String getGsmlpNameSpace() {
+        if (gsmlpNameSpace == null)
+            return " xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" ";
+        else 
+            return gsmlpNameSpace;
+    } 
+    public void setGsmlpNameSpace(String gsmlpNameSpace) {
+        this.gsmlpNameSpace = gsmlpNameSpace;  
     }
 }

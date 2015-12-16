@@ -94,7 +94,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 var myMask = new Ext.LoadMask({
                                     msg    : 'Downloading Images...',
                                     target : comp
-                                });                                                           
+                                });
                                 myMask.show();
                                 var el = Ext.get('nvcl-iframe-nav');
                                 el.on('load',function(){
@@ -153,7 +153,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 success : function(pData, options) {
                                     var pResponseCode = pData.status;
                                     var updateTipText = function(tip, text) {
-                                        tip.body.dom.innerHTML = text;
+                                        var tipBody = tip.body.down('.x-autocontainer-innerCt');
+                                        if (tipBody) {
+                                            tipBody.setHtml(text);
+                                        }
                                         tip.doLayout();
                                     };
                                     if(pResponseCode !== 200) {
@@ -624,7 +627,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     Ext.getCmp('tsgEmailAddress').setValue(sEmail);
                                     var winStat = Ext.create('Ext.Window' , {
                                         autoScroll  : true,
-                                        border      : true,                                     
+                                        border      : true,
                                         loader: {
                                             url: Ext.util.Format.format('getNVCLWFSDownloadStatus.do?email={0}&serviceUrl={1}', escape(sEmail), escape(nvclDownloadServiceUrl)),
                                             autoLoad: true
