@@ -18,6 +18,7 @@
                 <ref bean="knownTypeMineralTenements" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
+                <ref bean="knownTypeSF0BoreholeNVCL" />
                 <!-- <ref bean="knownTypeBoreholePressureDB" /> -->
                 <!-- <ref bean="knownTypeGSMLBorehole" /> -->
                 <ref bean="knownTypeSamplingPoint"/>
@@ -130,6 +131,7 @@
                 <ref bean="cswAustralianTopography" />
                 <ref bean="cswAustralianSurfaceGeology" />
                 <ref bean="cswBoreholeNVCL"/>
+                <ref bean="cswBoreholeView"/>
                 <ref bean="cswASTER" />
                 <ref bean="cswRestrictedAreas"/>
                 <ref bean="cswGeologicalMaps"/>

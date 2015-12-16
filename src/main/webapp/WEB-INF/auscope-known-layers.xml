@@ -223,7 +223,7 @@
         </property>
         <property name="order" value="20_Boreholes_010" />
     </bean>
-    
+
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="sf0-borehole-nvcl"/>
         <constructor-arg name="knownLayerSelector">
@@ -258,7 +258,7 @@
             </bean>
         </constructor-arg>
 
-        <property name="name" value="Borehole View"/>
+        <property name="name" value="All Boreholes"/>
         <property name="group" value="Boreholes"/>
         <property name="description" value="A collection of services implementing the GeoSciML Portrayal Borehole View (gsmlp:BoreholeView)"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
@@ -277,7 +277,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="51" />
+        <property name="order" value="20_Boreholes_020" />
     </bean>
 
     <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">

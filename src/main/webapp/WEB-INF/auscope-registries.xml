@@ -67,6 +67,14 @@
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
+    <bean id="cswBoreholeView" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswBoreholeView"/>
+        <constructor-arg name="title" value="All Boreholes"/>
+        <constructor-arg name="serviceUrl" value="http://localhost:8080/geonetwork/srv/eng/csw-boreholes-view-featured"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <property name="hideFromCatalogue" value="true"/>
+    </bean>
+
     <bean id="cswASTER" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswAustralianSurfaceGeology"/>
         <constructor-arg name="title" value="ASTER"/>
