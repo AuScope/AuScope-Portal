@@ -1496,7 +1496,7 @@
 
     <!-- GPT-41 / GPT-88 - 250K Scanned Geological Maps  -->
     <bean id="knownTypeGeologicalMaps_250K_Scanned_Geological_Maps" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="knownTypeGeologicalMaps_250K_Scanned_Geological_Maps" />
+        <constructor-arg name="id" value="250K-scanned-geological-maps" />
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
                 <constructor-arg name="layerName" value="Scanned_250K_Geological_Map_Index"/>
