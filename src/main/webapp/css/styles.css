@@ -103,7 +103,8 @@
         font-size : 12px !important;
     }
     
-    div#wrapper-search-and-links a:hover {
+    div#wrapper-search-and-links a:hover,
+    div#wrapper-search-and-links a:focus {
         text-decoration : underline !important;
     }
     
