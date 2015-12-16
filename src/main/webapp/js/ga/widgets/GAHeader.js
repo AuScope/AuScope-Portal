@@ -240,7 +240,8 @@ Ext.define('ga.widgets.GAHeader', {
         
         // north panel contains the 'Contact Us' and 'Skip to content' links
         var linksPanel = {
-            height: '40px',
+            id : "ga-header-south-panel-links",
+        	height: '40px',
             items: [{
                 xtype: 'box',
                 id: 'header-controls',

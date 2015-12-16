@@ -254,7 +254,7 @@
     }
     
     /* 'contact us' + 'skip to content' wrapper */
-    #header-container-innerCt div#panel-1090 {
+    #header-container-innerCt div#ga-header-south-panel-links {
         left: auto !important;
         margin-right : 20px !important;
         right : 10px !important;
@@ -264,13 +264,13 @@
     }
 
     /* 'contact us' + 'skip to content' lists */
-    #header-container-innerCt div#panel-1090 li {
+    #header-container-innerCt div#ga-header-south-panel-links li {
         height : 25px;
         line-height : 25px;
     }
 
     /* 'contact us' + 'skip to content' links */
-    #header-container-innerCt div#panel-1090 li a {
+    #header-container-innerCt div#ga-header-south-panel-links li a {
         padding-left : 5px !important;
         padding-right : 0 !important;
     }
