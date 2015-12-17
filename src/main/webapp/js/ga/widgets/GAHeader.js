@@ -1,5 +1,5 @@
 /**
- * This is the GA portal footer.
+ * This is the GA portal header.
  * It contains the logos of the state and federal agencies that contributed to the portal. 
  */
 Ext.define('ga.widgets.GAHeader', {
@@ -214,15 +214,39 @@ Ext.define('ga.widgets.GAHeader', {
                 basicSearchButtonHandler();
             }
         };     
-            
-        // north panel contains the Contact Us and Skip to content links
+        
+        // logo
         var northPanel = {
-            height: '40px',
+        		id: 'ausgin-logo',
+        		xtype: 'box',
+                height: '59px',
+                autoEl: {tag : 'span'}   
+        };
+        
+        // search panel contains the search controls
+        var searchPanel = {
+        		id: 'search-controls',
+        		height: '30px',
+           		xtype: 'box',
+                autoEl: {
+                    tag: 'span',
+                    html: '<label for="basic-search-input">Search for data and publications</label>\
+                            <input type="text" id="basic-search-input" name="searchBox" maxlength="50"/>\
+                            <span id="basic-search-link"><a href="javascript:void(0)"></a></span>\
+                            <a id="advanced-search-link" href="javascript:void(0)">Advanced Search</a>\
+                            <a id="clear-search-link" href="javascript:void(0)">Clear Search</a>' 
+                }  
+        };
+        
+        // north panel contains the 'Contact Us' and 'Skip to content' links
+        var linksPanel = {
+            id : "ga-header-south-panel-links",
+        	height: '40px',
             items: [{
-                xtype : 'box',
+                xtype: 'box',
                 id: 'header-controls',
-                autoEl : {
-                    tag : 'div',
+                autoEl: {
+                    tag: 'div',
                     html: 
                          '<ul>\
                               <li><a href="mailto:geoscience-portal-aws@ga.gov.au">Contact Us</a></li>\
@@ -230,33 +254,16 @@ Ext.define('ga.widgets.GAHeader', {
                           </ul> '   
                 }       
             }]    
-                               
         };
 
-        // center panel contains the Logo and search tools
-        var centerPanel = {   
-            height: '70px',    
-            items:[{
-                xtype : 'box',
-                id: 'ausgin-logo',
-                autoEl : {
-                    tag : 'span'
-                }  
-            },{
-                /* TODO consider redoing this in ExtJS */
-                xtype : 'box',
-                id: 'search-controls',
-                
-                autoEl : {
-                    tag : 'span',
-                    html: '<label for="basic-search-input">Search for data and publications</label>\
-                            <input type="text" id="basic-search-input" name="searchBox" maxlength="50"/>\
-                            <span id="basic-search-link"><a href="javascript:void(0)"></a></span>\
-                            <a id="advanced-search-link" href="javascript:void(0)">Advanced Search</a>\
-                            <a id="clear-search-link" href="javascript:void(0)">Clear Search</a>' 
-                }  
-            }]
-        };
+        // center panel contains the search controls and the links
+        var centerPanel = {
+        		id: 'wrapper-search-and-links',
+        		xtype: 'panel',
+                height: '30px',
+                layout: 'hbox',
+                items: [searchPanel, linksPanel]
+            };
         
         // south panel contains the menu bar
         var southPanel = {
@@ -267,11 +274,11 @@ Ext.define('ga.widgets.GAHeader', {
         
         Ext.apply(config, {
             items: [{
-                xtype : 'panel',
+            	id: 'header-container',
+            	xtype: 'panel',
                 height: '140px',
                 layout: 'vbox',
-                id: 'header-container',
-                items : [northPanel, centerPanel, southPanel],
+                items: [northPanel, centerPanel, southPanel]
             }],
         
             listeners: {
@@ -285,7 +292,6 @@ Ext.define('ga.widgets.GAHeader', {
         });
     
         this.callParent(arguments);
-    
     }
 
 });

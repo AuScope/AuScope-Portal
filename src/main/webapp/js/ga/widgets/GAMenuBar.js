@@ -19,33 +19,46 @@ Ext.define('ga.widgets.GAMenuBar', {
         me.map = config.map;
         me.layerStore = config.layerStore;  
         
-        //Create our Print Map handler
-        var printMapHandler = function() {                    
-            // get the html of the map div and write it to a new window then call the browser print function            
-            var divToPrint = Ext.get('center_region');
+        // Create our Print Map handler         
+        var printMapHandler = function() {   
             
-            // hide the controls
-            Ext.get('center_region-map').select('.olButton').hide();
-            Ext.get('center_region-map').select('.olAlphaImg').hide();
+            // create some print-only css rules to apply before printing
+            var printCSS = 'html, body {\
+                margin: 0 0 0 0 !important;\
+                padding: 0 0 0 0 !important;\
+                height: 99% !important;\
+                background-color: #ffffff !important;\
+            }\
+            div {\
+                border: none !important;\
+                margin: 0 0 0 0 !important;\
+                page-break-after: avoid !important;\
+            }\
+            .x-panel, .x-tip, .x-splitter {\
+                display: none !important;\
+                height: 0px !important;\
+                width: 0px !important;\
+                border: none !important;\
+            }\
+            #center_region {\
+                display: block !important;\
+                top: 0px !important;\
+                left: 0px !important;\
+                height: 100% !important;\
+                width: 100% !important;\
+            }\
+            #center_region-body {\
+                padding: 0 0 0 0 !important;\
+            }\
+            .olButton, .olAlphaImg {\
+                display: none !important;\
+            }';
             
-            var html = divToPrint.dom.innerHTML;
-            
-            // show the controls
-            Ext.get('center_region-map').select('.olButton').show();
-            Ext.get('center_region-map').select('.olAlphaImg').show();
-            
-            var printWindow = window.open('', '', 
-                    'width=' + divToPrint.dom.style.width 
-                    + ',height=' + divToPrint.dom.style.height 
-                    + ',top=0,left=0,toolbars=no,scrollbars=yes,status=no,resizable=yes');
-            printWindow.document.writeln(html);
-            
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();            
-        };   
-    
+            // use the browser print() function with the new styles applied
+            Ext.util.CSS.createStyleSheet(printCSS, 'printCSSLink');            
+            window.print();            
+            Ext.util.CSS.removeStyleSheet('printCSSLink');    
+        };        
     
         //Create our Reset Map handler
         // revert to the default zoom level, map extent and remove all our layers
@@ -55,13 +68,18 @@ Ext.define('ga.widgets.GAMenuBar', {
             me.map.map.setCenter(center);
             
             // remove all of the layers we have added
-            var items = me.map.layerStore.data.items;    
-            for (i = items.length-1; i >=0; --i) {
+            var items = me.layerStore.data.items;    
+            for (var i = items.length-1; i >=0; --i) {
                 var layer = items[i];        
-                AppEvents.broadcast('removelayer', {layer:layer});
+                AppEvents.broadcast('removelayer', {layer:layer, layerStore:me.layerStore});
             }
             me.layerStore = Ext.create('portal.layer.LayerStore', {});
-        };              
+            
+            // if the browser supports local storage, clear the stored map state
+            if(typeof(Storage) !== "undefined") {
+                localStorage.removeItem("storedApplicationState");
+            }
+        };                    
         
         //Create our permalink generation handler
         var permalinkHandler = function() {
@@ -79,6 +97,8 @@ Ext.define('ga.widgets.GAMenuBar', {
     
                 popup.show();
             });
+            
+            
         };
         
         var helpHandler = function() {

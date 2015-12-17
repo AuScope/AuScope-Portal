@@ -74,7 +74,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
                             }                                          
                         };
                                    
-                        var addWMSLinkId = '_' + record.get('name').replace(/\W/g, '') + '_addWMSLink'; 
+                        var addWMSLinkId = '_' + record.get('id').replace(/\W/g, '') + '_addWMSLink'; 
                         var element = Ext.get(addWMSLinkId);
                         
                         if (!hasWMSResource) {
@@ -158,8 +158,6 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
         var me = this;       
         
         if (record) {
-            var name;
-
             var name = record.get('name');            
             
             //Ensure there is a title (even it is just '<Untitled>'
@@ -176,7 +174,7 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
             
             var recordInfoUrl = record.get('recordInfoUrl');
             
-            var addWMSLinkId = '_' + name.replace(/\W/g, '') + '_addWMSLink'; 
+            var addWMSLinkId = '_' + record.get('id').replace(/\W/g, '') + '_addWMSLink'; 
             var elements = {
                 xtype: 'panel',
                 cls : 'gasearchresult',              
@@ -251,13 +249,30 @@ Ext.define('ga.widgets.GASearchResultsPanel', {
         }       
     },
     
-    // TODO HEYA
+
     displayFileDownloadWindow : function(record){
-        Ext.Msg.show({
-            title:'Not implemented',
-            msg: 'The selected function is not currently implemented.',
-            buttons: Ext.Msg.OK
-        });
+        
+        var html;
+        
+        var uris = record.get('datasetURIs');
+        if (uris) {
+            html = '<ul>';
+            record.get('datasetURIs').forEach(function(item){
+                html += '<li><a target="_blank" href="' + item + '">' + item + '</a></li>';         
+            });            
+            html += '</ul>';
+            
+        } else {
+            html = 'No files available for download';
+        }
+        
+        Ext.create('Ext.window.Window', {
+            title: 'File Downloads',           
+            maxHeight: 200,
+            width: 600,
+            autoScroll: true,
+            html: html
+        }).show();
     },    
 
     // displays a popup window allowing the user to select layers to add to the map

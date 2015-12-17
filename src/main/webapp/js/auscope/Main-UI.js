@@ -20,6 +20,8 @@ Ext.application({
             'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
 
+    	// default baseLayer to load (layer.name)
+    	var defaultBaseLayer = "Google Satellite";
 
         // WARNING - Terry IS playing dangerous games here!
         // if !(oldBrowser) then ....
@@ -317,11 +319,12 @@ Ext.application({
          * Used as a placeholder for the tree and details panel on the left of screen
          */
         var westPanel = {
-            layout: 'border',//VT: vbox doesn't support splitbar unless we custom it.
+            id: "region-west",
+        	layout: 'border',//VT: vbox doesn't support splitbar unless we custom it.
             region:'west',
             border: false,
             split:true,
-            margin:'100 0 0 3',
+            margin:'130 0 0 3',
             width: 370,
             items:[tabsPanel]
         };
@@ -392,7 +395,15 @@ Ext.application({
             layout:'border',
             items:[northPanel, westPanel, centerPanel, southPanel]
         });
-
+        
+        /* set defaultBaseLayer for the map, if any */ 
+        Ext.each(map.layerSwitcher.baseLayers, function(baseLayer) {
+        	if (baseLayer.layer.name === defaultBaseLayer) {
+        		map.map.setBaseLayer(baseLayer.layer);
+         		return false;
+        	}
+        });
+        
         if(urlParams.kml){
 
             Ext.Ajax.request({
@@ -425,15 +436,25 @@ Ext.application({
 
         }
 
-        //Handle deserialisation -- ONLY if we have a uri param called "state".
-        var deserializationHandler;
-        var searchStart = window.location.href.indexOf('?');
-        
+        // Handle deserialisation
+        // if we have a uri param called "state" then we'll use that to deserialise.
+        // else if we have a value in localStorage called "storedApplicationState" then use that
+        // otherwise do nothing special        
+        var deserializationHandler, decodedString, decodedVersion, useStoredState = true;
+                
+        var searchStart = window.location.href.indexOf('?');        
         var urlParams = Ext.Object.fromQueryString(window.location.href.substring(searchStart + 1));
         if (urlParams && (urlParams.state || urlParams.s)) {
-            var decodedString = urlParams.state ? urlParams.state : urlParams.s;
-            var decodedVersion = urlParams.v;
-
+            decodedString = urlParams.state ? urlParams.state : urlParams.s;
+            decodedVersion = urlParams.v;        
+            useStoredState = false;
+        } else {
+            if(typeof(Storage) !== "undefined") {
+                decodedString = localStorage.getItem("storedApplicationState");
+                decodedVersion = null;
+            }
+        }
+        if (decodedString) {            
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
                 cswRecordStore : unmappedCSWRecordStore,
@@ -441,10 +462,10 @@ Ext.application({
                 layerStore : layerStore,
                 map : map,
                 stateString : decodedString,
-                stateVersion : decodedVersion
+                stateVersion : decodedVersion,
+                useStoredState: useStoredState
             });
-
-        }
+        }   
     }
 
 });

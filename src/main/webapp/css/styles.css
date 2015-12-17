@@ -68,7 +68,7 @@
     }
     
     #auscope-tabs-panel {
-        top: 28px !important;
+        top: 0 !important;
     }
 
     #header-container {
@@ -87,22 +87,45 @@
 
     }
     
+    /* wrapper for search controls and links */
+    #header-container div#wrapper-search-and-links {
+       /* border-top : 1px solid #fff !important; */
+       left : auto !important;
+       padding : 0;
+       position : absolute !important;
+       right : 0 !important;
+       top : 68px !important;
+       width : 765px !important;
+    }
+    
+    div#wrapper-search-and-links a {
+        text-decoration : none !important;
+        font-size : 12px !important;
+    }
+    
+    div#wrapper-search-and-links a:hover,
+    div#wrapper-search-and-links a:focus {
+        text-decoration : underline !important;
+    }
+    
     #search-controls {
-        float: right;
-        margin-top: 20px;
         clear: both;
-        height: 35px !important;
-        margin-right: 20px;
         display: flex;      
         justify-content: space-between;
         color: white !important;
         line-height: 25px;
+        height : 25px !important;
+        right : 255px;
+        left : auto !important;
+        position : absolute;
+        top : 0 !important;
     }
 
     #basic-search-input {
         height: 25px;
-        width: 100px;
-        border: 1px solid #ffffff;    
+        border: 1px solid #ffffff;  
+        padding-left : 5px;
+        width : 105px;
     }
 
     #search-controls label {
@@ -119,14 +142,19 @@
  
     #header-container-innerCt {
         width: 100%;
-        height: 100px;
         color: #ffffff;
         background-color: #2B292A;
         position:fixed;
         top: 0px;
         left: 0px;
         z-index: 1;
-        line-height: 60px;        
+        line-height: 60px;   
+        height : 100px !important;     
+    }
+
+    /* wrapper for ausgin-logo */
+    div#header-container-targetEl {
+        height : 59px;
     }
 
     #header-container-innerCt div {
@@ -134,11 +162,15 @@
     }
  
     #ausgin-logo {        
-        height: 100% !important;
         width: 100% !important;
-        position: absolute;
         margin-left: 10px !important;
         background: #2B292A url( "../img/logos/ausgin-logo.png" ) no-repeat top left;
+        display : block !important;
+        height : 59px !important;
+        position : relative;
+        top : 5px !important;
+        width : 100%  !important;
+        z-index: 99;
     }
     
     #footer-container {
@@ -169,8 +201,9 @@
         z-index: 1;
         background-color: #FBAD17 !important;
         line-height: 30px;
-        margin-top: 25px;
         font: 12px Arial, Tahoma, Helvetica, sans-serif;
+        margin-top : 0 !important;
+        top : 100px !important;
     }
     
     #menu-bar ul {
@@ -190,11 +223,13 @@
     }
     
     #center_region {
+       border: 1px solid rgb(193, 193, 193) !important;
         top: 130px !important;
     }
 
     #center_region-body {
-        padding-bottom: 22px !important;
+        padding-bottom: 25px !important;
+        height: 100% !important;
     }
 
     #menu-bar a {
@@ -210,7 +245,7 @@
         height: 25px;
         width: 30px;
         background: #FBAD17 url( "../img/magglass.gif" ) no-repeat center center; 
-        border: 1px solid #ffffff;        
+        border: 1px solid #ffffff;    
     }
     
     #clear-search-link {
@@ -219,6 +254,28 @@
     
     #advanced-search-link {
         margin-left: 10px;
+    }
+    
+    /* 'contact us' + 'skip to content' wrapper */
+    #header-container-innerCt div#ga-header-south-panel-links {
+        left: auto !important;
+        margin-right : 20px !important;
+        right : 10px !important;
+        top : 0 !important;
+        width : 225px !important;
+        z-index: 99;
+    }
+
+    /* 'contact us' + 'skip to content' lists */
+    #header-container-innerCt div#ga-header-south-panel-links li {
+        height : 25px;
+        line-height : 25px;
+    }
+
+    /* 'contact us' + 'skip to content' links */
+    #header-container-innerCt div#ga-header-south-panel-links li a {
+        padding-left : 5px !important;
+        padding-right : 0 !important;
     }
     
     #header-controls {
@@ -350,4 +407,10 @@
     .onlineresourcedetails {
         overflow-wrap: break-word;
         word-wrap: break-word;
+    }
+    
+    
+    #header-container-innerCt, 
+    #header-container-body {
+        height : 130px !important;
     }
