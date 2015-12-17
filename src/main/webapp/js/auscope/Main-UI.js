@@ -20,6 +20,8 @@ Ext.application({
             'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
 
+    	// default baseLayer to load (layer.name)
+    	var defaultBaseLayer = "Google Satellite";
 
         // WARNING - Terry IS playing dangerous games here!
         // if !(oldBrowser) then ....
@@ -393,7 +395,15 @@ Ext.application({
             layout:'border',
             items:[northPanel, westPanel, centerPanel, southPanel]
         });
-
+        
+        /* set defaultBaseLayer for the map, if any */ 
+        Ext.each(map.layerSwitcher.baseLayers, function(baseLayer) {
+        	if (baseLayer.layer.name === defaultBaseLayer) {
+        		map.map.setBaseLayer(baseLayer.layer);
+         		return false;
+        	}
+        });
+        
         if(urlParams.kml){
 
             Ext.Ajax.request({
