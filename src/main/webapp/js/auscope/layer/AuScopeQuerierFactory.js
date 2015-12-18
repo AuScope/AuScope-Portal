@@ -52,7 +52,7 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
             }
 
             if (knownLayer && knownLayer.get('id') === '250K-scanned-geological-maps') {
-                return Ext.create('portal.layer.querier.wms.WMSMultipleTabDisplayQuerier', cfg);
+                return Ext.create('portal.layer.querier.wms.WMSMultipleTabDisplayQuerier_GA_ScannedGeologicalMaps', cfg);
             }
 
             //Or just the plain old WMS querier
