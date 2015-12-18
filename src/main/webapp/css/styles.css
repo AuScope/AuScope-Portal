@@ -95,7 +95,7 @@
        position : absolute !important;
        right : 0 !important;
        top : 68px !important;
-       width : 765px !important;
+       width : 870px !important;
     }
     
     div#wrapper-search-and-links a {
@@ -125,7 +125,7 @@
         height: 25px;
         border: 1px solid #ffffff;  
         padding-left : 5px;
-        width : 105px;
+        width : 210px;
     }
 
     #search-controls label {
@@ -224,7 +224,7 @@
     
     #center_region {
        border: 1px solid rgb(193, 193, 193) !important;
-        top: 130px !important;
+        top: 131px !important;
     }
 
     #center_region-body {
@@ -413,4 +413,8 @@
     #header-container-innerCt, 
     #header-container-body {
         height : 130px !important;
+    }
+    
+    .olControlNavToolbar, .olControlEditingToolbar {
+        margin: 30px 0 0 0;
     }
