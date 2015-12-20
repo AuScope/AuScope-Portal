@@ -117,6 +117,27 @@
                 <ref bean="knownTypeDefence_Prohibited_Areas" />
                 <ref bean="knownTypeDefence_Practice_Areas" />
                 <ref bean="knownTypeDefence_Training_Areas" />
+                <!-- National Geophysical Datasets -->
+                <ref bean="knownTypeAirborneSurveys2014" />
+                <ref bean="knownTypeTotalMagneticIntensity2015Greyscale" />
+                <ref bean="knownTypeTotalMagneticIntensity2015HSI" />
+                <ref bean="knownTypeTotalMagneticIntensityVRTP2015Greyscale" />
+                <ref bean="knownTypeGravityBouguerOnshore2010Greyscale" />
+                <ref bean="knownTypeGravityAnomaly2010Greyscale" />
+                <ref bean="knownTypeGravityAnomaly2010HSI" />
+                <ref bean="knownTypeRadiometrics2015TernaryKThU" />
+                <ref bean="knownTypeRadiometrics2015UnfilteredDose" />
+                <ref bean="knownTypeRadiometrics2015FilteredDose" />
+                <ref bean="knownTypeRadiometrics2015UnfilteredPcK" />
+                <ref bean="knownTypeRadiometrics2015FilteredPcK" />
+                <ref bean="knownTypeRadiometrics2015UnfilteredPpmTh" />
+                <ref bean="knownTypeRadiometrics2015FilteredPpmTh" />
+                <ref bean="knownTypeRadiometrics2015UnfilteredPpmU" />
+                <ref bean="knownTypeRadiometrics2015FilteredPpmU" />
+                <ref bean="knownTypeRadiometrics2015FilteredThKRatio" />
+                <ref bean="knownTypeRadiometrics2015FilteredUKRatio" />
+                <ref bean="knownTypeRadiometrics2015FilteredUThRatio" />
+                <ref bean="knownTypeRadiometrics2015FilteredU2ThRatio" />
             </list>
         </constructor-arg>
     </bean>
@@ -137,6 +158,7 @@
                 <ref bean="cswRestrictedAreas"/>
                 <ref bean="cswGeologicalMaps"/>
                 <ref bean="cswScannedMapsIndex"/>
+                <ref bean="cswNationalGeophysicalDatasets"/>
 <!--            <ref bean="cswGeoscienceLocal" /> -->
 <!--            <ref bean="darwinDev" /> -->
 <!--            <ref bean="cswAuscopeTest" /> -->
