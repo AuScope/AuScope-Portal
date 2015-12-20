@@ -51,6 +51,10 @@ Ext.define('auscope.layer.AuScopeQuerierFactory', {
                 return Ext.create('portal.layer.querier.wms.WMSXMLFormatQuerier', cfg);
             }
 
+            if (knownLayer && knownLayer.get('id') === '250K-scanned-geological-maps') {
+                return Ext.create('portal.layer.querier.wms.WMSMultipleTabDisplayQuerier_GA_ScannedGeologicalMaps', cfg);
+            }
+
             //Or just the plain old WMS querier
             return Ext.create('portal.layer.querier.wms.WMSQuerier', cfg);
         } else if (irisResources.length > 0) {

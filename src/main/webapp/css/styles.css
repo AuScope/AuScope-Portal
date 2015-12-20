@@ -89,24 +89,34 @@
     
     /* wrapper for search controls and links */
     #header-container div#wrapper-search-and-links {
-       border-top : 1px solid #fff !important;
-       left : 0 !important;
-       padding : 1px 0;
-       position : relative !important;
-       top : 70px !important;
+       /* border-top : 1px solid #fff !important; */
+       left : auto !important;
+       padding : 0;
+       position : absolute !important;
+       right : 0 !important;
+       top : 68px !important;
+       width : 870px !important;
+    }
+    
+    div#wrapper-search-and-links a {
+        text-decoration : none !important;
+        font-size : 12px !important;
+    }
+    
+    div#wrapper-search-and-links a:hover,
+    div#wrapper-search-and-links a:focus {
+        text-decoration : underline !important;
     }
     
     #search-controls {
-        float: right;
-        margin-top: 20px;
         clear: both;
         display: flex;      
         justify-content: space-between;
         color: white !important;
         line-height: 25px;
         height : 25px !important;
-        right : auto;
-        margin : 0 0 0 10px !important;
+        right : 255px;
+        left : auto !important;
         position : absolute;
         top : 0 !important;
     }
@@ -114,10 +124,8 @@
     #basic-search-input {
         height: 25px;
         border: 1px solid #ffffff;  
-        
-        margin-top : 2px;
         padding-left : 5px;
-        width : 330px;
+        width : 210px;
     }
 
     #search-controls label {
@@ -216,7 +224,7 @@
     
     #center_region {
        border: 1px solid rgb(193, 193, 193) !important;
-        top: 130px !important;
+        top: 131px !important;
     }
 
     #center_region-body {
@@ -238,7 +246,6 @@
         width: 30px;
         background: #FBAD17 url( "../img/magglass.gif" ) no-repeat center center; 
         border: 1px solid #ffffff;    
-        margin-top : 2px;    
     }
     
     #clear-search-link {
@@ -429,3 +436,7 @@
         border-radius: 3px;
         background-position: 0.5px 0px;
     }    
+    
+    .olControlNavToolbar, .olControlEditingToolbar {
+        margin: 30px 0 0 0;
+    }
