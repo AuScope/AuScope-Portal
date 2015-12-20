@@ -407,3 +407,25 @@
     #header-container-body {
         height : 130px !important;
     }
+
+    .olControlInfoItemActive { 
+        background-image: url("../img/info.png") !important;
+        background-color: #EFBE2A;   
+        height: 22px;
+        width: 24px;
+        top: 5px;
+        border: 1px solid gray;
+        border-radius: 3px;
+        background-position: 0.5px 0px;
+    }
+    
+    .olControlInfoItemInactive { 
+        background-image: url("../img/info.png") !important;
+       background-color: #E6E6E6;
+        height: 22px;
+        width: 24px;
+        top: 5px;
+        border: 1px solid gray;
+        border-radius: 3px;
+        background-position: 0.5px 0px;
+    }    
