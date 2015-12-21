@@ -3,7 +3,6 @@
       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-
     <bean id="knownTypeMine" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-mine"/>
         <constructor-arg name="knownLayerSelector">
@@ -19,9 +18,9 @@
         </constructor-arg>
 
 
-        <property name="name" value="Earth Resource Mine"/>
+        <property name="name" value="Mines"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
-        <property name="group" value="AuScope Earth Resource Services"/>
+        <property name="group" value="Mines and Mining Activity"/>
         <property name="proxyUrl" value="doMineFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
@@ -39,7 +38,44 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="1_AuScope Earth Resource Services_010" />
+        <property name="order" value="1_Mines and Mining Activity_010" />
+    </bean>
+
+    <bean id="knownTypeMiningActivity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="erml-miningactivity"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="er:MiningFeatureOccurrence"/>
+                <property name="relatedFeatureTypeNames">
+                    <list>
+                        <value>er:MiningActivity</value>
+                        <value>gsml:MappedFeature</value>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Mines and Mining Activity"/>
+        <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
+        <property name="group" value="Mines and Mining Activity"/>
+        <property name="proxyUrl" value="doMiningActivityFilter.do"/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
+        <property name="proxyDownloadUrl" value="doMiningActivityFilterDownload.do"/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="1_Mines and Mining Activity_020" />
     </bean>
 
     <bean id="knownTypeMineralOccurrence" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -78,44 +114,6 @@
         </property>
         <property name="order" value="1_AuScope Earth Resource Services_020" />
     </bean>
-
-    <bean id="knownTypeMiningActivity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="erml-miningactivity"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="er:MiningFeatureOccurrence"/>
-                <property name="relatedFeatureTypeNames">
-                    <list>
-                        <value>er:MiningActivity</value>
-                        <value>gsml:MappedFeature</value>
-                    </list>
-                </property>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Earth Resource Mining Activity"/>
-        <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
-        <property name="group" value="AuScope Earth Resource Services"/>
-        <property name="proxyUrl" value="doMiningActivityFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
-        <property name="proxyDownloadUrl" value="doMiningActivityFilterDownload.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="1_AuScope Earth Resource Services_030" />
-    </bean>
-
 
     <bean id="knownTypeMineralTenements" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="mineral-tenements"/>
