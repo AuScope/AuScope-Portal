@@ -118,6 +118,7 @@
                 <ref bean="knownTypeDefence_Practice_Areas" />
                 <ref bean="knownTypeDefence_Training_Areas" />
                 <!-- National Geophysical Datasets -->
+                <ref bean="knownTypeOnshoreSeismicSurveys" />
                 <ref bean="knownTypeAirborneSurveys2014" />
                 <ref bean="knownTypeTotalMagneticIntensity2015Greyscale" />
                 <ref bean="knownTypeTotalMagneticIntensity2015HSI" />
