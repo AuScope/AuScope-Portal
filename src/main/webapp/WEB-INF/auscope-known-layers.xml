@@ -1797,7 +1797,7 @@ The coastal boundary for the Great Barrier Reef World Heritage Area is interim. 
                 <constructor-arg name="layerName" value="OnshoreSeismicSurveyLines"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="GA Onshore Seismic Surveys"/>
+        <property name="name" value="Onshore Seismic Surveys"/>
         <property name="description" value="The Onshore Seismic Data of Australia is a collection of all land seismic traverses cross the Australian continent and its margins. The data includes raw and processed data in SEGY format. The metadata includes acquisition reports, processing reports, processed images, logs, and so on. The data acquisition was carried out in Australia from 1949-2012 by Geoscience Australia and various partners. The set of reflection and refraction data comprises over 12,000 km of coverage, and provides an insight into the variations in crustal architecture in the varied geological domains. 
                 
             The complete processed dataset was first available for public access in Oct 2013 (http://www.ga.gov.au/minerals/projects/current-projects/seismic-acquisition-processing.html ). The location of seismic traverses is shown by the Gallery link on the webpage. The new survey data will be updated on the webpage by the official data release date. The attribute structure of the dataset has also been revised to be more compatible with the GeoSciML data standard, published by the IUGS Commission for Geoscience Information.
