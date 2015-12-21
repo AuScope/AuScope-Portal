@@ -67,6 +67,15 @@
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
+    <!-- TODO: name boreholes is inappopriate, csw-boreholes contains other datasets besides boreholes -->
+    <bean id="cswBoreholes" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswBoreholes"/>
+        <constructor-arg name="title" value="Boreholes"/>
+        <constructor-arg name="serviceUrl" value="http://localhost:8080/geonetwork/srv/eng/csw-boreholes"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
+        <property name="hideFromCatalogue" value="true"/>
+    </bean>
+
     <bean id="cswBoreholeView" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswBoreholeView"/>
         <constructor-arg name="title" value="All Boreholes"/>
