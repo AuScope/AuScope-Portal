@@ -54,7 +54,7 @@ public class TestGetCapabilitiesController extends PortalTestClass {
             });
 
             Assert.assertNotNull(is);
-            ModelAndView mv = controller.getCustomLayers(serviceUrl);
+            ModelAndView mv = controller.getCustomLayers(serviceUrl, "Y");
             Assert.assertNotNull(mv);
             List ls = (List) mv.getModelMap().get("data");
             Assert.assertEquals(21, ls.size());
@@ -88,7 +88,7 @@ public class TestGetCapabilitiesController extends PortalTestClass {
             });
 
             Assert.assertNotNull(is);
-            ModelAndView mv = controller.getCustomLayers(serviceUrl);
+            ModelAndView mv = controller.getCustomLayers(serviceUrl, "Y");
             Assert.assertNotNull(mv);
             List ls = (List) mv.getModelMap().get("data");
             Assert.assertEquals(1, ls.size());
