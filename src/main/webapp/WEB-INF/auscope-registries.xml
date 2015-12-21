@@ -26,7 +26,7 @@
         <constructor-arg name="id" value="cswGswaDev"/>
         <constructor-arg name="title" value="Geological Survey of Western Australia"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-gswa"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
     </bean>
 
     <bean id="cswGsv" class="org.auscope.portal.core.services.csw.CSWServiceItem">
@@ -40,14 +40,14 @@
         <constructor-arg name="id" value="cswMineralResourcesTasmaniaDev"/>
         <constructor-arg name="title" value="Mineral Resources Tasmania"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-tas"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
     </bean>
 
     <bean id="cswAustralianTopography" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswAustralianTopography"/>
         <constructor-arg name="title" value="Australian Topography"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-australian-topography-featured"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -55,7 +55,7 @@
         <constructor-arg name="id" value="cswAustralianSurfaceGeology"/>
         <constructor-arg name="title" value="Australian Surface Geology"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-au-surface-geology-featured"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -63,7 +63,7 @@
         <constructor-arg name="id" value="cswBoreholeNVCL"/>
         <constructor-arg name="title" value="National Virtual Core Library"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-boreholes-nvcl-featured"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -71,7 +71,7 @@
         <constructor-arg name="id" value="cswBoreholeView"/>
         <constructor-arg name="title" value="All Boreholes"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-boreholes-view-featured"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -79,7 +79,7 @@
         <constructor-arg name="id" value="cswBoreholeViewWMS"/>
         <constructor-arg name="title" value="All Boreholes WMS"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-boreholes-view-wms-featured"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -87,7 +87,7 @@
         <constructor-arg name="id" value="cswAustralianSurfaceGeology"/>
         <constructor-arg name="title" value="ASTER"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-aster-maps"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -96,6 +96,7 @@
         <constructor-arg name="title" value="Restricted Areas"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-restricted-areas-featured"/>
         <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -103,7 +104,7 @@
         <constructor-arg name="id" value="cswGeologicalMaps"/>
         <constructor-arg name="title" value="Geological Maps"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-geological-maps-featured"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -111,7 +112,7 @@
         <constructor-arg name="id" value="cswScannedMapsIndex"/>
         <constructor-arg name="title" value="Scanned Maps Index"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-scanned-maps-index-featured"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
@@ -119,7 +120,7 @@
         <constructor-arg name="id" value="cswNationalGeophysicalDatasets"/>
         <constructor-arg name="title" value="National Geophysical Datasets"/>
         <constructor-arg name="serviceUrl" value="http://dev.portal.geoscience.gov.au/geonetwork/srv/eng/csw-national-geophysical-datasets"/>
-        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
         <property name="hideFromCatalogue" value="true"/>
     </bean>
 
