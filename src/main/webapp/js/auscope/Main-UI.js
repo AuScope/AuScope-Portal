@@ -20,8 +20,6 @@ Ext.application({
             'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
 
-    	// default baseLayer to load (layer.name)
-    	var defaultBaseLayer = "Google Satellite";
 
         // WARNING - Terry IS playing dangerous games here!
         // if !(oldBrowser) then ....
@@ -161,27 +159,19 @@ Ext.application({
         //Create our store for holding the set of
         //layers that have been added to the map
         var layerStore = Ext.create('portal.layer.LayerStore', {});
-
-        //We need something to handle the clicks on the map
-        var queryTargetHandler = Ext.create('portal.layer.querier.QueryTargetHandler', {});
-
+        
         //Create our map implementations
         var mapCfg = {
             container : null,   //We will be performing a delayed render of this map
-            layerStore : layerStore,
-            listeners : {
-                query : function(mapWrapper, queryTargets) {
-                    queryTargetHandler.handleQueryTargets(mapWrapper, queryTargets);
-                }
-            }
+            layerStore : layerStore            
         };
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
 
 
         var map = null;
 
-        map = Ext.create('portal.map.openlayers.OpenLayersMap', mapCfg);
-
+        map = Ext.create('ga.map.openlayers.GAOpenLayersMap', mapCfg);         
+        
         var layerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
             formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
@@ -395,15 +385,7 @@ Ext.application({
             layout:'border',
             items:[northPanel, westPanel, centerPanel, southPanel]
         });
-        
-        /* set defaultBaseLayer for the map, if any */ 
-        Ext.each(map.layerSwitcher.baseLayers, function(baseLayer) {
-        	if (baseLayer.layer.name === defaultBaseLayer) {
-        		map.map.setBaseLayer(baseLayer.layer);
-         		return false;
-        	}
-        });
-        
+
         if(urlParams.kml){
 
             Ext.Ajax.request({
