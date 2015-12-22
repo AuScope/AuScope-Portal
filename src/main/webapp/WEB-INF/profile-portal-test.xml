@@ -13,7 +13,6 @@
         <constructor-arg>
             <list>
                 <ref bean="knownTypeMine" />
-                <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />
                 <ref bean="knownTypeMineralOccurrenceView" />

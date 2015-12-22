@@ -17,7 +17,6 @@
             </bean>
         </constructor-arg>
 
-
         <property name="name" value="Mines"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
         <property name="group" value="Mines and Mining Activity"/>
@@ -76,6 +75,25 @@
             </bean>
         </property>
         <property name="order" value="1_Mines and Mining Activity_020" />
+    </bean>
+
+    <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mineral-occ-view"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="mo:MinOccView"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Mineral Occurrences"/>
+        <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mo:MinOccView"/>
+        <property name="group" value="Mineral Occurrences and Resources"/>
+        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
+        <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
+        <property name="order" value="1_Mineral Occurrences and Resources_010" />
     </bean>
 
     <bean id="knownTypeMineralOccurrence" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -146,25 +164,6 @@
             </bean>
         </property>-->
         <property name="order" value="40_Tenements_010" />
-    </bean>
-
-    <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="mineral-occ-view"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="mo:MinOccView"/>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Mineral Occurrence View"/>
-        <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mo:MinOccView"/>
-        <property name="group" value="AuScope Earth Resource Services"/>
-        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
-        <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
-        <property name="order" value="1_AuScope Earth Resource Services_040" />
     </bean>
 
     <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
