@@ -435,7 +435,10 @@ Ext.application({
         } else {
             if(typeof(Storage) !== "undefined") {
                 decodedString = localStorage.getItem("geosciencePortalStoredApplicationState");
-                defaultBaseLayer = localStorage.getItem("geosciencePortalDefaultBaseLayer");
+                var serialisedBaseLayer = localStorage.getItem("geosciencePortalDefaultBaseLayer");
+                if (serialisedBaseLayer) {
+                    defaultBaseLayer = serialisedBaseLayer;
+                }
                 decodedVersion = null;
             }
         }
