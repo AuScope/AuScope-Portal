@@ -156,7 +156,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
-                    AppEvents.broadcast('removelayer', {layer:layer, rowIdx:rowIndex});
+                    AppEvents.broadcast('removelayer', {layer:layer, layerStore:me.store, rowIdx:rowIndex});
                 }
               }],
               plugins:[{                
