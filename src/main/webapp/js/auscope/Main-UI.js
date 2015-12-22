@@ -338,9 +338,9 @@ Ext.application({
             enableTabScroll : true,
             items:[
                 knownLayersPanel,
-                unmappedRecordsPanel,
-                customRecordsPanel,
-                researchDataPanel
+                // unmappedRecordsPanel, TODO: Remove code for uneeded tabs
+                customRecordsPanel
+                // researchDataPanel
             ]
         });
         
