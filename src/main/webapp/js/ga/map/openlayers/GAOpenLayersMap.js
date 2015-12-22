@@ -95,9 +95,10 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
                          {type: google.maps.MapTypeId.TERRAIN}
                      ),
                      new OpenLayers.Layer.Google(
-                         "Google Streets", // the default
+                         "Google Streets", 
                          {numZoomLevels: 20}
                      ),
+                     // the default
                      new OpenLayers.Layer.Google(
                          "Google Satellite",
                          {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}

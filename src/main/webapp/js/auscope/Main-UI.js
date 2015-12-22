@@ -20,6 +20,8 @@ Ext.application({
             'Accept-Encoding': 'gzip, deflate' //This ensures we use gzip for most of our requests (where available)
         };
 
+        // default baseLayer to load (layer.name)
+        var defaultBaseLayer = "Google Satellite";
 
         // WARNING - Terry IS playing dangerous games here!
         // if !(oldBrowser) then ....
@@ -457,7 +459,7 @@ Ext.application({
 
         // Handle deserialisation
         // if we have a uri param called "state" then we'll use that to deserialise.
-        // else if we have a value in localStorage called "storedApplicationState" then use that
+        // else if we have a value in localStorage called "geosciencePortalStoredApplicationState" then use that
         // otherwise do nothing special        
         var deserializationHandler, decodedString, decodedVersion, useStoredState = true;
                 
@@ -469,7 +471,8 @@ Ext.application({
             useStoredState = false;
         } else {
             if(typeof(Storage) !== "undefined") {
-                decodedString = localStorage.getItem("storedApplicationState");
+                decodedString = localStorage.getItem("geosciencePortalStoredApplicationState");
+                defaultBaseLayer = localStorage.getItem("geosciencePortalDefaultBaseLayer");
                 decodedVersion = null;
             }
         }
@@ -484,7 +487,16 @@ Ext.application({
                 stateVersion : decodedVersion,
                 useStoredState: useStoredState
             });
-        }   
+        } 
+        
+        /* set defaultBaseLayer for the map, if any */ 
+        Ext.each(map.layerSwitcher.baseLayers, function(baseLayer) {
+            if (baseLayer.layer.name === defaultBaseLayer) {
+                map.map.setBaseLayer(baseLayer.layer);
+                return false;
+            }
+        });
+        
     }
 
 });
