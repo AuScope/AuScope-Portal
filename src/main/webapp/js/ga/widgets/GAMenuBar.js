@@ -66,6 +66,14 @@ Ext.define('ga.widgets.GAMenuBar', {
             me.map.map.zoomTo(4); 
             var center = new OpenLayers.LonLat(133.3, -26).transform('EPSG:4326', 'EPSG:3857');
             me.map.map.setCenter(center);
+
+            /* set the Base Layer for the map */ 
+            Ext.each(me.map.layerSwitcher.baseLayers, function(baseLayer) {
+                if (baseLayer.layer.name === "Google Satellite") {
+                    me.map.map.setBaseLayer(baseLayer.layer);
+                    return false;
+                }
+            });
             
             // remove all of the layers we have added
             var items = me.layerStore.data.items;    
