@@ -362,7 +362,7 @@ public class WMSController extends BaseCSWController {
             String metadataURL = null;
 
             for (GetCapabilitiesWMSLayerRecord layer : getCapabilitiesRecord.getLayers()) {
-                if (name.equals(layer.getName())) {
+                if (name.equals(layer.getTitle())) {
                     metadataURL = layer.getMetadataURL();
                     break;
                 }
