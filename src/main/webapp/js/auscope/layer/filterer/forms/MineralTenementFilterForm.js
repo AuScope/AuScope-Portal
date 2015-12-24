@@ -91,42 +91,6 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
                 },{
                     xtype: 'combo',
                     anchor: '100%',
-                    fieldLabel: 'Tenement Type',
-                    name: 'tenementType',
-                    typeAhead: true,
-                    triggerAction: 'all',
-                    lazyRender:true,
-                    mode: 'local',
-                    store: tenementTypeStore,
-                    valueField: 'valueText',
-                    displayField: 'displayText',
-                    hiddenName: 'valueText'
-                },{
-                    anchor: '100%',
-                    xtype: 'textfield',
-                    fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
-                                    'owner' +
-                                '</span>',
-                    name: 'owner'
-                },{
-                    anchor: '100%',
-                    xtype: 'datefield',
-                    fieldLabel: '<span data-qtip="Tenement active till this date">' +
-                                'Tenement Expiry End Date' +
-                                '</span>',
-                    name: 'endDate',
-                    format: "Y-m-d",
-                    value: ''
-                },{
-                    anchor: '100%',
-                    xtype: 'textfield',
-                    fieldLabel: '<span data-qtip="Minimum size of the Tenement">' +
-                                'Min Size' +
-                                '</span>',
-                    name: 'size'
-                },{
-                    xtype: 'combo',
-                    anchor: '100%',
                     itemId: 'serviceFilter-field',
                     fieldLabel: 'Provider',
                     name: 'serviceFilter',

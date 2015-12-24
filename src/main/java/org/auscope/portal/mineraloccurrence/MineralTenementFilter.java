@@ -25,7 +25,7 @@ public class MineralTenementFilter extends AbstractFilter {
 
         fragments = new ArrayList<String>();
         if (name != null && !name.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:name", name));
+            fragments.add(this.generatePropertyIsLikeFragment("mt:name", "*" + name + "*"));
         }
         if (tenementType != null && !tenementType.isEmpty()) {
             fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
