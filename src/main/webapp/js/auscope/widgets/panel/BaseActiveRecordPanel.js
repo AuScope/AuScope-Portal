@@ -19,8 +19,8 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     extend : 'portal.widgets.panel.CommonBaseRecordPanel',
     alias: 'widget.baseactiverecordpanel',
 
-    visibleIcon : 'portal-core/img/eye.png',
-    notVisibleIcon : 'portal-core/img/eye-off.png',
+    visibleIcon : 'img/eye.png',
+    notVisibleIcon : 'img/eye_off.png',
     
     listenersHere : {
     },
