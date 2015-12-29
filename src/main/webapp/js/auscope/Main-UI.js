@@ -221,9 +221,11 @@ Ext.application({
         });
 
         var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
-            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
+            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map, showFilter: true}),
             store : layerStore,
             onlineResourcePanelType : 'gaonlineresourcespanel',
+            serviceInformationIcon: 'img/information.png',
+            mapExtentIcon: 'img/extent3.png',
             map : map,
             layerFactory : layerFactory,
             tooltip : {
@@ -239,12 +241,14 @@ Ext.application({
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             id: 'knownLayersPanel',
-            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
+            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map, showFilter: false}),
             store : knownLayerStore,
             activelayerstore : layerStore,
             map : map,
             layerFactory : layerFactory,
             onlineResourcePanelType : 'gaonlineresourcespanel',
+            serviceInformationIcon: 'img/information.png',
+            mapExtentIcon: 'img/extent3.png',
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -260,6 +264,8 @@ Ext.application({
             store : unmappedCSWRecordStore,
             activelayerstore : layerStore,
             onlineResourcePanelType : 'gaonlineresourcespanel',
+            serviceInformationIcon: 'img/information.png',
+            mapExtentIcon: 'img/extent3.png',
             tooltip : {
                 title : 'Registered Layers',
                 text : '<p>The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.</p>',
@@ -277,6 +283,8 @@ Ext.application({
             store : customRecordStore,
             activelayerstore : layerStore,
             onlineResourcePanelType : 'gaonlineresourcespanel',
+            serviceInformationIcon: 'img/information.png',
+            mapExtentIcon: 'img/extent3.png',
             enableBrowse : true,//VT: if true browse catalogue option will appear
             tooltip : {
                 title : 'Custom Data Layers',
@@ -296,6 +304,8 @@ Ext.application({
             map : map,
             layerFactory : layerFactory,
             onlineResourcePanelType : 'gaonlineresourcespanel',
+            serviceInformationIcon: 'img/information.png',
+            mapExtentIcon: 'img/extent3.png',
             tooltip : {
                 title : 'Research Data Layers',
                 text : '<p>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p>',
