@@ -453,6 +453,9 @@
         border: 1px #E6E6E6 solid !important;
     }
     
-    
+    /* class for UI elements that should not be displayed at all */
+    .displayNone {
+        display: none !important;
+    }
     
     

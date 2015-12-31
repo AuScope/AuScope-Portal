@@ -1,14 +1,19 @@
 /**
- * AuScope implementation of the core portal FormFactory
+ * Geoscience Australia implementation of the core portal FilterPanelMenuFactory
  */
-Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
+Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
     extend : 'portal.widgets.FilterPanelMenuFactory',
  
     map : null,
+    filterForm : null,
     
+    // whether to add a reset form button. default to true because that is the AuScope portal default
+    addResetFormAction : true,
     
     constructor : function(config) {
         this.map = config.map;
+        this.filterForm = config.filterForm;
+        
         this.callParent(arguments);
     },
 
@@ -18,15 +23,30 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
      * returns an array of menu action items.
      *
      */
-    appendAdditionalActions : function(menuItems,layer,group) {
+    appendAdditionalActions : function(menuItems,layer,group,filterForm) {
         
  
         //VT:Should have a download action except for Insar data.
-        if((layer.get('cswRecords').length > 0 &&
-                layer.get('cswRecords')[0].get('noCache')==false) && layer.id != 'portal-reports' ){
-                 menuItems.push(this._getDownloadAction(layer));
-        }
-        
+        if((layer.get('cswRecords').length > 0 &&                
+            layer.get('cswRecords')[0].get('noCache')==false) && layer.id != 'portal-reports'){
+                
+                var allOnlineResources = layer.getAllOnlineResources();
+            
+                var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WMS);
+                var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
+                var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
+
+                // only provide reset option if there are resources other than just WMS resources
+                // otherwise there will be no form fields to reset
+                if (wfsResources.length === 0 && wcsResources.length === 0) {
+                    this.addResetFormAction = false;
+                }
+                    
+                // only provide download option if there are WFS resources to download
+                if (wfsResources.length > 0) {
+                    menuItems.push(this._getDownloadAction(layer));    
+                }
+        }        
         
          //VT:  link layer to VGL if contain under the Analytic grouping                      
         if(group && group.indexOf('Analytic') >= 0){
@@ -44,7 +64,7 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     layerRemoveHandler : function(layer){
         this.fireEvent('removelayer', layer);
     },
-    
+       
     _getDownloadAction : function(layer){
         var me = this;
         var downloadLayerAction = new Ext.Action({

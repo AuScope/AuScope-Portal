@@ -212,22 +212,30 @@ Ext.application({
 
         map = Ext.create('ga.map.openlayers.GAOpenLayersMap', mapCfg);         
         
-        var layerFactory = Ext.create('portal.layer.LayerFactory', {
+        var defaultLayerFactory = Ext.create('portal.layer.LayerFactory', {
             map : map,
-            formFactory : Ext.create('auscope.layer.filterer.AuScopeFormFactory', {map : map}),
+            formFactory : Ext.create('auscope.layer.filterer.GAFormFactory', {map : map, showWMSFilter : false}),
             downloaderFactory : Ext.create('auscope.layer.AuScopeDownloaderFactory', {map: map}),
             querierFactory : Ext.create('auscope.layer.AuScopeQuerierFactory', {map: map}),
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
 
+        var activeLayerFactory = Ext.create('portal.layer.LayerFactory', {
+            map : map,
+            formFactory : Ext.create('auscope.layer.filterer.GAFormFactory', {map : map, showWMSFilter : true}),
+            downloaderFactory : Ext.create('auscope.layer.AuScopeDownloaderFactory', {map: map}),
+            querierFactory : Ext.create('auscope.layer.AuScopeQuerierFactory', {map: map}),
+            rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
+        });
+        
         var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
-            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map, showFilter: true}),
+            menuFactory : Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: true}),
             store : layerStore,
             onlineResourcePanelType : 'gaonlineresourcespanel',
             serviceInformationIcon: 'img/information.png',
             mapExtentIcon: 'img/extent3.png',
             map : map,
-            layerFactory : layerFactory,
+            layerFactory : activeLayerFactory,
             tooltip : {
                 anchor : 'top',
                 title : 'Featured Layers',
@@ -241,11 +249,11 @@ Ext.application({
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             id: 'knownLayersPanel',
-            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map, showFilter: false}),
+            menuFactory : Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: false}),
             store : knownLayerStore,
             activelayerstore : layerStore,
             map : map,
-            layerFactory : layerFactory,
+            layerFactory : defaultLayerFactory,
             onlineResourcePanelType : 'gaonlineresourcespanel',
             serviceInformationIcon: 'img/information.png',
             mapExtentIcon: 'img/extent3.png',
@@ -273,7 +281,7 @@ Ext.application({
                 dismissDelay : 30000
             },
             map : map,
-            layerFactory : layerFactory
+            layerFactory : defaultLayerFactory
 
         });
 
@@ -293,7 +301,7 @@ Ext.application({
                 dismissDelay : 30000
             },
             map : map,
-            layerFactory : layerFactory
+            layerFactory : defaultLayerFactory
         });
 
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
@@ -302,7 +310,7 @@ Ext.application({
             activelayerstore : layerStore,
             enableBrowse : false,//VT: if true browse catalogue option will appear
             map : map,
-            layerFactory : layerFactory,
+            layerFactory : defaultLayerFactory,
             onlineResourcePanelType : 'gaonlineresourcespanel',
             serviceInformationIcon: 'img/information.png',
             mapExtentIcon: 'img/extent3.png',
@@ -324,7 +332,7 @@ Ext.application({
                 map: map,
                 layerStore: layerStore,
                 registryStore: cswServiceItemStore,
-                layerFactory: layerFactory
+                layerFactory: defaultLayerFactory
             }]
         };
 
@@ -452,7 +460,7 @@ Ext.application({
                        var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
                        tabpanel.setActiveTab(customPanel);
                        var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);
-                       var newLayer = layerFactory.generateLayerFromCSWRecord(cswRecord);
+                       var newLayer = defaultLayerFactory.generateLayerFromCSWRecord(cswRecord);
                        cswRecord.set('layer',newLayer);
                        var filterForm = newLayer.get('filterForm');
                        filterForm.setLayer(newLayer);
@@ -493,7 +501,7 @@ Ext.application({
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
                 cswRecordStore : unmappedCSWRecordStore,
-                layerFactory : layerFactory,
+                layerFactory : defaultLayerFactory,
                 layerStore : layerStore,
                 map : map,
                 stateString : decodedString,
