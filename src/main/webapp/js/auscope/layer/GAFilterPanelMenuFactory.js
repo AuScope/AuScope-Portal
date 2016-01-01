@@ -5,15 +5,16 @@ Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
     extend : 'portal.widgets.FilterPanelMenuFactory',
  
     map : null,
-    filterForm : null,
+    panel: null,
+    recordPanel: null,
     
-    // whether to add a reset form button. default to true because that is the AuScope portal default
-    addResetFormAction : true,
+    // whether to add a reset form button on WMS forms. 
+    // default to true because that is currently the AuScope portal default
+    addResetFormActionForWMS : true,
     
     constructor : function(config) {
         this.map = config.map;
-        this.filterForm = config.filterForm;
-        
+        this.recordPanel = config.recordPanel;
         this.callParent(arguments);
     },
 
@@ -23,7 +24,7 @@ Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
      * returns an array of menu action items.
      *
      */
-    appendAdditionalActions : function(menuItems,layer,group,filterForm) {
+    appendAdditionalActions : function(menuItems,layer,group) {
         
  
         //VT:Should have a download action except for Insar data.
@@ -38,8 +39,8 @@ Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
 
                 // only provide reset option if there are resources other than just WMS resources
                 // otherwise there will be no form fields to reset
-                if (wfsResources.length === 0 && wcsResources.length === 0) {
-                    this.addResetFormAction = false;
+                if (wfsResources.length > 0 || wcsResources.length > 0) {
+                    menuItems.push(this._getResetFormAction());
                 }
                     
                 // only provide download option if there are WFS resources to download
@@ -56,8 +57,20 @@ Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
         var analytics = this._getlayerAnalytics(layer)
         if(analytics){
             menuItems.push(analytics);
-        }
-        
+        }  
+    },
+    
+    _getResetFormAction : function(){
+        var me = this;
+        return new Ext.Action({
+            text : 'Reset Form',
+            iconCls : 'refresh',
+            handler : function(e){
+                // this is awkward but we need to get access to the form
+                var filterForm = this.up('panel').up('panel').getLayout().owner.filterForm;
+                filterForm.reset();
+            }
+        })
         
     },
     
