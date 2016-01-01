@@ -228,8 +228,7 @@ Ext.application({
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
         
-        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
-            menuFactory : Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: true}),
+        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {            
             store : layerStore,
             onlineResourcePanelType : 'gaonlineresourcespanel',
             serviceInformationIcon: 'img/information.png',
@@ -246,10 +245,12 @@ Ext.application({
             }
         });
         
+        var activeLayersMenuFactory = Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: true, addResetFormActionForWMS : false, recordPanel : activeLayersPanel});
+        activeLayersPanel.menuFactory = activeLayersMenuFactory;
+        
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             id: 'knownLayersPanel',
-            menuFactory : Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: false}),
             store : knownLayerStore,
             activelayerstore : layerStore,
             map : map,
@@ -266,6 +267,9 @@ Ext.application({
                 dismissDelay : 30000
             }
         });
+        
+        var knownLayersMenuFactory = Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: false, addResetFormActionForWMS : false, recordPanel : knownLayersPanel})
+        knownLayersPanel.menuFactory = knownLayersMenuFactory;
 
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered',
