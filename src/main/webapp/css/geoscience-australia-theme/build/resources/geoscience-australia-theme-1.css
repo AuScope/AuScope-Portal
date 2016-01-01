@@ -10915,7 +10915,7 @@ the height of a multi-line element */
 }
 /* http://localhost:1841/ext/classic/theme-neutral/sass/src/form/field/Text.scss:258 */
 .x-form-text-default {
-    color: #adafb2;
+    color: black;
     padding: 3px 6px 2px;
     background-color: #fff;
     font: normal 12px/17px arial, helvetica, verdana, sans-serif;
@@ -11324,7 +11324,7 @@ the height of a multi-line element */
     border-width: 1px;
     border-style: dotted;
     border-color: #fff;
-    color: #adafb2;
+    color: black;
 }
 /* http://localhost:1841/ext/classic/theme-neutral/sass/src/view/BoundList.scss:25 */
 .x-boundlist-selected {
