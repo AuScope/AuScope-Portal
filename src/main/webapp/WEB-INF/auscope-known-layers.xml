@@ -19,7 +19,7 @@
 
         <property name="name" value="Mines"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
-        <property name="group" value="Mines and Mining Activity"/>
+        <property name="group" value="Mining Activity"/>
         <property name="proxyUrl" value="doMineFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
