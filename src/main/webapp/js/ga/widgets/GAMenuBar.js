@@ -85,8 +85,8 @@ Ext.define('ga.widgets.GAMenuBar', {
             
             // if the browser supports local storage, clear the stored map state
             if(typeof(Storage) !== "undefined") {
-                localStorage.removeItem("geosciencePortalStoredApplicationState");
-                localStorage.removeItem("geosciencePortalDefaultBaseLayer");
+                localStorage.removeItem("portalStorageApplicationState");
+                localStorage.removeItem("portalStorageDefaultBaseLayer");
             }
         };                    
         

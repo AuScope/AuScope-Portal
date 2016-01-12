@@ -422,7 +422,7 @@ Ext.application({
 
         // Handle deserialisation
         // if we have a uri param called "state" then we'll use that to deserialise.
-        // else if we have a value in localStorage called "geosciencePortalStoredApplicationState" then use that
+        // else if we have a value in localStorage called "portalStorageApplicationState" then use that
         // otherwise do nothing special        
         var deserializationHandler, decodedString, decodedVersion, useStoredState = true;
                 
@@ -434,8 +434,8 @@ Ext.application({
             useStoredState = false;
         } else {
             if(typeof(Storage) !== "undefined") {
-                decodedString = localStorage.getItem("geosciencePortalStoredApplicationState");
-                var serialisedBaseLayer = localStorage.getItem("geosciencePortalDefaultBaseLayer");
+                decodedString = localStorage.getItem("portalStorageApplicationState");
+                var serialisedBaseLayer = localStorage.getItem("portalStorageDefaultBaseLayer");
                 if (serialisedBaseLayer) {
                     defaultBaseLayer = serialisedBaseLayer;
                 }
