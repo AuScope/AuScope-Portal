@@ -8,7 +8,7 @@ Ext.define('auscope.layer.AuScopeDownloaderFactory', {
 
     _generateDownloader : function(wfsResources, wmsResources, wcsResources,useDownloadTracker) {
         if (wfsResources.length > 0 && useDownloadTracker) {
-            return Ext.create('portal.layer.downloader.wfs.KLWFSDownloader', {map : this.map});
+            return Ext.create('portal.layer.downloader.wfs.KLWFSDownloader', {map : this.map, featureCountUrl: 'getFeatureCount.do', enableFeatureCounts: true, enableFormatSelection: true});
         }
 
         if (wfsResources.length > 0 && !useDownloadTracker) {

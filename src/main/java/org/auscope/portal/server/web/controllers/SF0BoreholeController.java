@@ -2,14 +2,12 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
-import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
-import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
@@ -37,7 +35,7 @@ public class SF0BoreholeController extends BasePortalController {
     @Autowired
     public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService) {
         this.boreholeService = sf0BoreholeService;
-        this.cswService = cswService;        
+        this.cswService = cswService;
         GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
         this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
     }
@@ -56,12 +54,13 @@ public class SF0BoreholeController extends BasePortalController {
      */
     @RequestMapping("/doBoreholeViewFilter.do")
     public ModelAndView doBoreholeFilter(String serviceUrl, String boreholeName, String custodian,
-            String dateOfDrillingStart, String dateOfDrillingEnd, int maxFeatures, String bbox) throws Exception {
+            String dateOfDrillingStart, String dateOfDrillingEnd, int maxFeatures, String bbox,
+            @RequestParam(required=false, value="outputFormat") String outputFormat) throws Exception {
 
         try {
             FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox);
             WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
-                    dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, box);
+                    dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, box, outputFormat);
             return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             return this.generateExceptionResponse(e, serviceUrl);

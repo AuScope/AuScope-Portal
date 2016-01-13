@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -74,7 +73,7 @@ public class BoreholeService extends BaseWFSService {
      * @throws Exception
      */
     public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
-            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat)
             throws Exception {
         String filterString;
         BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
@@ -88,7 +87,7 @@ public class BoreholeService extends BaseWFSService {
         try {
             // Create a GetFeature request with an empty filter - get all
             method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
-                    ResultType.Results);
+                    ResultType.Results, outputFormat);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
             String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
 
@@ -259,10 +258,10 @@ public class BoreholeService extends BaseWFSService {
     public String getGsmlpNameSpace() {
         if (gsmlpNameSpace == null)
             return " xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" ";
-        else 
+        else
             return gsmlpNameSpace;
-    } 
+    }
     public void setGsmlpNameSpace(String gsmlpNameSpace) {
-        this.gsmlpNameSpace = gsmlpNameSpace;  
+        this.gsmlpNameSpace = gsmlpNameSpace;
     }
 }
