@@ -141,12 +141,12 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         var customNavTb=new customNavToolBar();
         customNavTb.controls[0].events.on({
             'activate': function() {
-                $('center_region-map').style.cursor = 'move';
+                Ext.get('center_region-map').dom.style.cursor = 'move';
             }
         });
         customNavTb.controls[1].events.on({
             'activate': function() {
-                $('center_region-map').style.cursor = 'crosshair';
+                Ext.get('center_region-map').dom.style.cursor = 'crosshair';
             },
             //VT: once we catch the afterZoom event, reset the control to panning.
             "afterZoom": function() {
@@ -160,7 +160,7 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         
         customNavTb.controls[2].events.on({
             'activate': function() {
-                $('center_region-map').style.cursor = 'default';
+                Ext.get('center_region-map').dom.style.cursor = 'default';
             }
         });
         
