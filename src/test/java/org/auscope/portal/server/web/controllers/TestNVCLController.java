@@ -112,7 +112,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -160,7 +160,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -201,7 +201,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
@@ -237,7 +237,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 

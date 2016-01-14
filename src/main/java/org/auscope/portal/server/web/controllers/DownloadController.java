@@ -1,6 +1,5 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,17 +102,26 @@ public class DownloadController extends BasePortalController {
     public void downloadGMLAsZip(
             @RequestParam("serviceUrls") final String[] serviceUrls,
             @RequestParam(required = false, value = "email", defaultValue = "") final String email,
+            @RequestParam(required = false, value = "outputFormat", defaultValue = "") final String outputFormat,
             HttpServletResponse response) throws Exception {
         ExecutorService pool = Executors.newCachedThreadPool();
-        downloadGMLAsZip(serviceUrls, response, pool, email);
+        downloadGMLAsZip(serviceUrls, response, pool, email, outputFormat);
     }
 
     public void downloadGMLAsZip(String[] serviceUrls, HttpServletResponse response, ExecutorService threadpool,
-            String email) throws Exception {
-
+            String email, String outputFormat) throws Exception {
         logger.trace("No. of serviceUrls: " + serviceUrls.length);
+
+        String extension = null;
+        if (outputFormat != null) {
+            String ext = MimeUtil.mimeToFileExtension(outputFormat);
+            if (ext != null && !ext.isEmpty()) {
+                extension = "." + ext;
+            }
+        }
+
         ServiceDownloadManager downloadManager = new ServiceDownloadManager(serviceUrls, serviceCaller, threadpool,
-                this.serviceConfiguration);
+                this.serviceConfiguration, extension);
 
         if (email != null && email.length() > 0) {
 
@@ -131,7 +139,7 @@ public class DownloadController extends BasePortalController {
                 return;
             }
 
-            downloadTracker.startTrack(downloadManager);
+            downloadTracker.startTrack(downloadManager, extension);
 
             htmlResponse = "<html><p>Your request has been submitted. The download process may take sometime depending on the size of the dataset</p>"
                     +
