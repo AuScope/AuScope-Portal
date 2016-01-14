@@ -24,19 +24,6 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineFilterDownload.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
         <property name="order" value="01_Mines and Mining Activity_010" />
     </bean>
 
