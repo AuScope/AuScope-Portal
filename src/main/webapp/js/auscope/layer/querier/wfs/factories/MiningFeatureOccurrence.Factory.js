@@ -51,7 +51,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory',
             style : 'padding-top:5px;padding-bottom:5px',
             overrideInfoWindowSize : {
                 width : 600,
-                height : 160
+                height : 170
             },
 
             items : [{
