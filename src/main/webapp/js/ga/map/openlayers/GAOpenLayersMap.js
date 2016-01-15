@@ -61,6 +61,8 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         }
     },
     
+    
+    
     /**
      * Renders this map to the specified Ext.container.Container along with its controls and
      * event handlers.
@@ -141,12 +143,12 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         var customNavTb=new customNavToolBar();
         customNavTb.controls[0].events.on({
             'activate': function() {
-                $('center_region-map').style.cursor = 'move';
+                Ext.get('center_region-map').dom.style.cursor = 'move';
             }
         });
         customNavTb.controls[1].events.on({
             'activate': function() {
-                $('center_region-map').style.cursor = 'crosshair';
+                Ext.get('center_region-map').dom.style.cursor = 'crosshair';
             },
             //VT: once we catch the afterZoom event, reset the control to panning.
             "afterZoom": function() {
@@ -160,7 +162,7 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         
         customNavTb.controls[2].events.on({
             'activate': function() {
-                $('center_region-map').style.cursor = 'default';
+                Ext.get('center_region-map').dom.style.cursor = 'default';
             }
         });
         
@@ -265,7 +267,125 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
             this.map.updateSize();
         }, this);      
        
-    }
+    },
+    
+    _makeQueryTargetsMap : function(layerStore, longitude, latitude) {
+        var queryTargets = [];
+        if (!layerStore) {
+            return queryTargets;
+        }
+        
+        //Iterate everything with WMS/WCS - no way around this :(
+        for (var i = 0; i < layerStore.getCount(); i++) {
+            var layer = layerStore.getAt(i);
+          
+            var cswRecords = layer.get('cswRecords');
+            for(var j = 0; j < cswRecords.length; j++){
+
+                var cswRecord = cswRecords[j];
+
+                //ensure this click lies within this CSW record
+                var containsPoint = false;
+                var geoEls = cswRecord.get('geographicElements');
+                for (var k = 0; k < geoEls.length; k++) {
+                    if (geoEls[k] instanceof portal.util.BBox &&
+                        geoEls[k].contains(latitude, longitude)) {
+                        containsPoint = true;
+                        break;
+                    }
+                }
+
+                //If it doesn't, don't consider this point for examination
+                if (!containsPoint || layer.visible==false) {
+                    continue;
+                }
+
+                //Finally we don't include WMS query targets if we
+                //have WCS queries for the same record
+                var allResources = cswRecord.get('onlineResources');
+                var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(allResources, portal.csw.OnlineResource.WMS);
+                var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allResources, portal.csw.OnlineResource.WCS);
+
+
+                //VT: if layerswitcher layer visibility is set to false, then do not query that layer as well.
+                if (wmsResources[0]) {
+                    var layerSwitcherVisible=true;
+                    var layerName=wmsResources[0].get('name');
+
+                    // We loop over the available to controls to find the layer switcher:
+                    var layerSwitcher = null;
+                    for (var y=0; y < this.map.controls.length; y++) {
+                        if (this.map.controls[y] instanceof OpenLayers.Control.LayerSwitcher) {
+                            layerSwitcher = this.map.controls[y];
+                            break;
+                        }
+                    }
+
+                    var layerSwitcherState = layerSwitcher.layerStates;
+                    for (var z = 0; z < layerSwitcherState.length; z++) {
+                        if (layerSwitcherState[z].name === layerName) {
+                            layerSwitcherVisible=layerSwitcherState[z].visibility;
+                            break;
+                        }
+                    }
+
+                    if (!layerSwitcherVisible) {
+                        continue;
+                    }
+                }
+
+
+                var resourcesToIterate = [];
+                if (wcsResources.length > 0) {
+                    resourcesToIterate = wcsResources;
+                } else {
+                    resourcesToIterate = wmsResources;
+                }
+
+                //Generate our query targets for WMS/WCS layers
+                for (var k = 0; k < resourcesToIterate.length; k++) {
+                    var type = resourcesToIterate[k].get('type');
+                    if (type === portal.csw.OnlineResource.WMS ||
+                        type === portal.csw.OnlineResource.WCS) {
+
+                        var serviceFilter = layer.get('filterer').getParameters().serviceFilter;
+                        if (serviceFilter) {
+                            if (Ext.isArray(serviceFilter)) {
+                                serviceFilter = serviceFilter[0];
+                            }
+                            // layers get filtered based on the service provider
+                            if (resourcesToIterate[k].get('url') != serviceFilter &&
+                                    this._getDomain(resourcesToIterate[k].get('url')) != serviceFilter) {
+                                continue;
+                            }
+                        }
+                        
+                        var nameFilter = layer.get('filterer').getParameters().mineName;
+                        if (nameFilter) {
+                            // layers get filtered based on the name
+                            if (resourcesToIterate[k].get('name') != serviceFilter &&
+                                    this._getDomain(resourcesToIterate[k].get('url')) != serviceFilter) {
+                                continue;
+                            }
+                        }
+                        
+                        queryTargets.push(Ext.create('portal.layer.querier.QueryTarget', {
+                            id : '',
+                            lat : latitude,
+                            lng : longitude,
+                            cswRecord   : cswRecord,
+                            onlineResource : resourcesToIterate[k],
+                            layer : layer,
+                            explicit : true
+                        }));
+                                                
+                    }
+                }
+            }
+        }
+
+        return queryTargets;
+    },
 
 });
 

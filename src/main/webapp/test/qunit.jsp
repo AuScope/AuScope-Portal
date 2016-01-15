@@ -9,8 +9,8 @@
   <script src="portal-core/js/qunit/qunit-reporter-junit.js"></script>
 
         <%-- Open Layers Imports --%>
-      <link rel="stylesheet" href="portal-core/js/OpenLayers-2.12/theme/default/style.css" type="text/css">
-      <script src="portal-core/js/OpenLayers-2.12/OpenLayers.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="portal-core/js/OpenLayers-2.13.1/theme/default/style.css" type="text/css">
+      <script src="portal-core/js/OpenLayers-2.13.1/OpenLayers.js" type="text/javascript"></script>
 
      <%-- JS imports - relative paths back to the webapp directory --%>
       <jsp:include page="../portal-core/jsimports.htm"/>

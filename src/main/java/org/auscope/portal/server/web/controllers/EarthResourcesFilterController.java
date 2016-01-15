@@ -37,6 +37,25 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class EarthResourcesFilterController extends BasePortalController {
 
+	/** different styles that apply for the different layers managed by this controller */
+	private enum Styles {
+		MINE("#1fffff", "#000000", 8, 0.15),
+		MINING_ACTIVITY("#FF9900", "#000000", 6, 0.15),
+		MINERAL_OCCURRENCE("#8C489F", "#000000", 6, 0.15);	
+		
+		public final String fillColour;
+		public final String borderColour;
+		public final double borderWidth;
+		public final int size;
+		
+		private Styles(final String fillColour, final String borderColour, final int size, final double borderWidth) {
+			this.fillColour = fillColour;
+			this.borderColour = borderColour;
+			this.borderWidth = borderWidth;
+			this.size = size;
+		}
+	}
+	
     // ----------------------------------------------------- Instance variables
 
     private MineralOccurrenceService mineralOccurrenceService;
@@ -361,7 +380,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 mineName, startDate, endDate, oreProcessed, producedMaterial,
                 cutOffGrade, production, maxFeatures, bbox);
 
-        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "#FF9900");
+        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", Styles.MINING_ACTIVITY);
 
         response.setContentType("text/xml");
 
@@ -398,7 +417,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMineFilter(mineName,
                 bbox);
 
-        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "#AA0078");
+        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", Styles.MINE);
 
         response.setContentType("text/xml");
 
@@ -438,7 +457,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(unescapeCommodityName,
                 bbox);
 
-        String style = this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
+        String style = this.getStyle(filter, "gsml:MappedFeature", Styles.MINERAL_OCCURRENCE);
 
         response.setContentType("text/xml");
 
@@ -482,7 +501,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName, minOreAmount,
                 minReserves, minResources, bbox);
 
-        String style = this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "#ed9c38");
+        String style = this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, Styles.MINERAL_OCCURRENCE);
 
         response.setContentType("text/xml");
 
@@ -496,7 +515,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getStyle(String filter, String name, String color) {
+    public String getStyle(String filter, String name, Styles styles) {
         // VT : This is a hack to get around using functions in feature chaining
         // https://jira.csiro.au/browse/SISS-1374
         // there are currently no available fix as wms request are made prior to
@@ -519,16 +538,20 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "<Mark>"
                 + "<WellKnownName>square</WellKnownName>"
                 + "<Fill>"
-                + "<CssParameter name=\"fill\">" + color + "</CssParameter>"
+                + "<CssParameter name=\"fill\">" + styles.fillColour + "</CssParameter>"
                 + "</Fill>"
+                + "<Stroke>" 
+                + "<CssParameter name=\"stroke\">" + styles.borderColour + "</CssParameter>" 
+                + "<CssParameter name=\"stroke-width\">" + styles.borderWidth + "</CssParameter>" 
+                + "</Stroke>" 
                 + "</Mark>"
-                + "<Size>6</Size>"
+                + "<Size>" + styles.size + "</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>"
                 + "</Rule>"
                 + "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
         return style;
-    }
-
+    }   
+    
 }

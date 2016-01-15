@@ -17,7 +17,7 @@ Ext.define('auscope.layer.filterer.forms.MineFilterForm', {
         for (var i = 0; i < cswRecords.length; i++) {
             var adminArea = cswRecords[i].get('adminArea');
             var allOnlineResources = cswRecords[i].get('onlineResources');
-            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'er:MiningFeatureOccurrence');
+            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WMS, 'er:MiningFeatureOccurrence');
 
             for (var j = 0; j < bhOnlineResources.length; j++) {
                 if (adminAreasMap[adminArea]) {
@@ -57,7 +57,7 @@ Ext.define('auscope.layer.filterer.forms.MineFilterForm', {
             items: [{
                 xtype:'fieldset',
                 title: '<span data-qtip="Please enter the filter constraints then hit \'Show Results\'">' +
-                           'Mine Filter Properties' +
+                           'Filter data' +
                        '</span>',
                 autoHeight: true,
                 items: [{
