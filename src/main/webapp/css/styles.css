@@ -458,4 +458,16 @@
         display: none !important;
     }
     
+    .queryResultPanel .x-panel-body {
+        border: none !important;
+        padding: 5px important;
+        margin: 5px !important;        
+    }
     
+    .queryResultPanel .x-toolbar-footer {
+        background-color: #FFFFFF !important;
+    }
+        
+    #x-autocontainer-innerCt {
+        border: none !important;
+    }

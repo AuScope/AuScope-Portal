@@ -44,17 +44,22 @@ Ext.define('auscope.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory',
 
         //Build our component
         return Ext.create('portal.layer.querier.BaseComponent', {
-            border : false,
             layout : 'fit',
             tabTitle : preferredName,
+            border : true,
+            header : false,
+            style : 'padding-top:5px;padding-bottom:5px',
+            overrideInfoWindowSize : {
+                width : 600,
+                height : 160
+            },
+
             items : [{
-                xtype : 'fieldset',
-                title : 'Mining Feature Occurrence',
-                labelWidth : 75,
-                autoScroll : true,
+                xtype : 'panel',         
+                cls: 'queryResultPanel',
                 items : [{
                     xtype : 'displayfield',
-                    fieldLabel : 'Name',
+                    fieldLabel : 'Mine ID',
                     value : this._makeWfsUriPopupHtml(nameUri, nameUri, 'Click here for more information about this feature.')
                 },{
                     xtype : 'displayfield',
@@ -62,24 +67,24 @@ Ext.define('auscope.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory',
                     value : preferredName
                 },{
                     xtype : 'displayfield',
-                    fieldLabel : 'Location',
-                    value : coordinateString
-                },{
-                    xtype : 'displayfield',
                     fieldLabel : 'Status',
                     value : status
+                },{
+                    xtype : 'displayfield',
+                    fieldLabel : 'Location',
+                    value : coordinateString
+                }],
+                buttonAlign : 'right',
+                buttons : [{
+                    text : 'Download',
+                    iconCls : 'download',
+                    handler : function() {
+                        var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, 'er:MiningFeatureOccurrence', gmlId);
+                        var url = 'downloadGMLAsZip.do?serviceUrls=' + escape(getXmlUrl);
+                        portal.util.FileDownloader.downloadFile(url);
+                    }
                 }]
             }],
-            buttonAlign : 'right',
-            buttons : [{
-                text : 'Download Feature',
-                iconCls : 'download',
-                handler : function() {
-                    var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, 'er:MiningFeatureOccurrence', gmlId);
-                    var url = 'downloadGMLAsZip.do?serviceUrls=' + escape(getXmlUrl);
-                    portal.util.FileDownloader.downloadFile(url);
-                }
-            }]
         });
     }
 });
