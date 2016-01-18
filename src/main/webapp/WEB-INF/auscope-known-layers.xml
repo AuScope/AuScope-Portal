@@ -229,16 +229,7 @@
                         <value>http://geology.information.qld.gov.au/geoserver/wfs</value>
                         <value>http://geology.data.vic.gov.au/nvcl/wfs</value>
                     </list>
-                </constructor-arg>
-                <property name="relatedFeatureTypeNames">
-                    <list>
-                        <!--<value>gsml:Borehole</value>-->
-                        <value>sa:SamplingFeatureCollection</value>
-                        <value>om:GETPUBLISHEDSYSTEMTSA</value>
-                        <value>nvcl:scannedBorehole</value>
-                        <value>nvcl:ScannedBoreholeCollection</value>
-                    </list>
-                </property>
+                </constructor-arg>                
             </bean>
         </constructor-arg>
 
@@ -248,7 +239,6 @@
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
-        <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/> -->
         <property name="iconAnchor">
             <bean class="java.awt.Point">
                 <constructor-arg index="0" value="16"/>

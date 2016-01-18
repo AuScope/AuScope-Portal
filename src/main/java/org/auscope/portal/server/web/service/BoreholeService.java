@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -48,6 +49,25 @@ public class BoreholeService extends BaseWFSService {
 
     private final Log log = LogFactory.getLog(getClass());
 
+    
+	/** different styles that apply for the different layers managed by this controller */
+	public enum Styles {
+		ALL_BOREHOLES("circle", 6, "#ff9c2c", "#000000", 0.15);
+		
+		public final String shape;
+		public final int size;
+		public final String fillColour;
+		public final String borderColour;
+		public final double borderWidth;
+		
+		private Styles(final String shape, final int size, final String fillColour, final String borderColour, final double borderWidth) {
+			this.shape = shape;
+			this.size = size;
+			this.fillColour = fillColour;
+			this.borderColour = borderColour;
+			this.borderWidth = borderWidth;
+		}
+	}
     // ----------------------------------------------------- Instance variables
     private WfsToKmlTransformer wfsToKml;
 
@@ -190,7 +210,7 @@ public class BoreholeService extends BaseWFSService {
         return filterString;
     }
 
-    public String getStyle(String filter, String color, String hyloggerFilter, String hyloggerColor) {
+    public String getStyle(String filter, String hyloggerFilter, String hyloggerColor, Styles styles) {
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
@@ -211,38 +231,20 @@ public class BoreholeService extends BaseWFSService {
                 + "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>"
                 + "<Graphic>"
                 + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
+                + "<WellKnownName>"+ styles.shape + "</WellKnownName>"
                 + "<Fill>"
-                + "<CssParameter name=\"fill\">"
-                + color
+                + "<CssParameter name=\"fill\">" + styles.fillColour
                 + "</CssParameter>"
                 + "</Fill>"
+                + "<Stroke>" 
+                + "<CssParameter name=\"stroke\">" + styles.borderColour + "</CssParameter>" 
+                + "<CssParameter name=\"stroke-width\">" + styles.borderWidth + "</CssParameter>" 
+                + "</Stroke>" 
                 + "</Mark>"
-                + "<Size>8</Size>"
+                + "<Size>" + styles.size + "</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>"
                 + "</Rule>"
-                // Won't do this until SISS-1513 is fixed.
-                //                + "<Rule>"
-                //                + "<Name>National Virtual Core Library</Name>"
-                //				+ hyloggerFilter
-                //				+ "<PointSymbolizer>"
-                //				+ "<Geometry><ogc:PropertyName>"
-                //				+ getGeometryName()
-                //				+ "</ogc:PropertyName></Geometry>"
-                //				+ "<Graphic>"
-                //				+ "<Mark>"
-                //				+ "<WellKnownName>square</WellKnownName>"
-                //				+ "<Fill>"
-                //				+ "<CssParameter name=\"fill\">"
-                //				+ hyloggerColor
-                //				+ "</CssParameter>"
-                //				+ "</Fill>"
-                //				+ "</Mark>"
-                //				+ "<Size>8</Size>"
-                //				+ "</Graphic>"
-                //				+ "</PointSymbolizer>"
-                //				+ "</Rule>"
                 + "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
 
