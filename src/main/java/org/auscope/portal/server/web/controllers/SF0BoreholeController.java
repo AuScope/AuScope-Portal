@@ -6,12 +6,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.xalan.templates.Stylesheet;
 import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.web.service.BoreholeService;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -118,8 +120,7 @@ public class SF0BoreholeController extends BasePortalController {
                 custodian, dateOfDrilling, maxFeatures, bbox,
                 hyloggerBoreholeIDs);
 
-        String style = this.boreholeService.getStyle(filter, (color.isEmpty() ? "#2242c7" : color), hyloggerFilter,
-                "#F87217");
+        String style = this.boreholeService.getStyle(filter, hyloggerFilter, "#F87217", BoreholeService.Styles.ALL_BOREHOLES);
 
         response.setContentType("text/xml");
 
