@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletResponse;
+
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
@@ -100,7 +101,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMineFilterCount.do")
     public ModelAndView doMineFilterCount(
             @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam("mineName") String mineName,
+            @RequestParam(required = false, value = "mineName") String mineName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {

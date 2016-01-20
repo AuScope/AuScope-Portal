@@ -6,9 +6,27 @@ Ext.define('auscope.layer.AuScopeDownloaderFactory', {
     extend : 'portal.layer.downloader.DownloaderFactory',
 
 
-    _generateDownloader : function(wfsResources, wmsResources, wcsResources,useDownloadTracker) {
+    _generateDownloader : function(source, wfsResources, wmsResources, wcsResources,useDownloadTracker) {
         if (wfsResources.length > 0 && useDownloadTracker) {
-            return Ext.create('portal.layer.downloader.wfs.KLWFSDownloader', {map : this.map, featureCountUrl: 'getFeatureCount.do', enableFeatureCounts: true, enableFormatSelection: true});
+            var enableFormatSelection = true;
+            var enableFeatureCounts = true;
+            //We don't allow certain functions on a number of known layers
+            switch(source.get('id')) {
+                case 'nvcl-borehole':
+                case 'erml-mine':
+                case 'erml-mineraloccurrence':
+                case 'erml-miningactivity':
+                case 'mineral-tenements':
+                    enableFormatSelection = false;
+                    break;
+                case 'capdf-hydrogeochem':
+                    enableFormatSelection = false;
+                    enableFeatureCounts = false;
+                    break;
+            }
+
+
+            return Ext.create('portal.layer.downloader.wfs.KLWFSDownloader', {map : this.map, featureCountUrl: 'getFeatureCount.do', enableFeatureCounts: enableFeatureCounts, enableFormatSelection: enableFormatSelection});
         }
 
         if (wfsResources.length > 0 && !useDownloadTracker) {
@@ -37,7 +55,7 @@ Ext.define('auscope.layer.AuScopeDownloaderFactory', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
-        return this._generateDownloader(wfsResources, wmsResources, wcsResources,true);
+        return this._generateDownloader(knownLayer, wfsResources, wmsResources, wcsResources,true);
     },
 
     /**
@@ -50,6 +68,6 @@ Ext.define('auscope.layer.AuScopeDownloaderFactory', {
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
         var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
 
-        return this._generateDownloader(wfsResources, wmsResources, wcsResources,false);
+        return this._generateDownloader(cswRecord, wfsResources, wmsResources, wcsResources,false);
     }
 });
