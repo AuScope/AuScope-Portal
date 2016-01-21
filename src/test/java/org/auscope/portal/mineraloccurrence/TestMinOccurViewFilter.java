@@ -15,15 +15,15 @@ public class TestMinOccurViewFilter extends PortalTestClass {
      */
     @Test
     public void testMinOccurFilter() throws Exception {
-        MinOccurViewFilter filter = new MinOccurViewFilter("abc", "cde", "fgh", "ijk");
+        MinOccurViewFilter filter = new MinOccurViewFilter("abc", "cde", "fgh", "ijk", "lmn");
 
         String result = filter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(result);
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/ogc:Literal",
-                new String[] {"abc"}, 1);
+                new String[] {"*abc*, *cde*"}, 2);
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc,
                 "/descendant::ogc:PropertyIsGreaterThanOrEqualTo/ogc:Literal",
-                new String[] {"cde", "fgh", "ijk"}, 3);
+                new String[] {"cde", "fgh", "ijk", "lmn"}, 3);
 
     }
 
@@ -34,7 +34,7 @@ public class TestMinOccurViewFilter extends PortalTestClass {
      */
     @Test
     public void testEmptyComoodityFilter() throws Exception {
-        MinOccurViewFilter filter = new MinOccurViewFilter("", "", "", "");
+        MinOccurViewFilter filter = new MinOccurViewFilter("", "", "", "", "");
 
         String result = filter.getFilterStringAllRecords();
         Assert.assertTrue(result.isEmpty());

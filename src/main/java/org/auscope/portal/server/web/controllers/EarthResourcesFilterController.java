@@ -38,21 +38,23 @@ import org.springframework.web.servlet.ModelAndView;
 public class EarthResourcesFilterController extends BasePortalController {
 
 	/** different styles that apply for the different layers managed by this controller */
-	private enum Styles {
-		MINE("#1fffff", "#000000", 8, 0.15),
-		MINING_ACTIVITY("#FF9900", "#000000", 6, 0.15),
-		MINERAL_OCCURRENCE("#8C489F", "#000000", 6, 0.15);	
+	public enum Styles {
+		MINE("square", 8, "#1fffff", "#000000", 0.15),
+		MINING_ACTIVITY("square", 6, "#FF9900", "#000000", 0.15),
+		MINERAL_OCCURRENCE("circle", 8, "#ffff00", "#000000", 0.15);	
 		
+		public final String shape;
+		public final int size;
 		public final String fillColour;
 		public final String borderColour;
 		public final double borderWidth;
-		public final int size;
 		
-		private Styles(final String fillColour, final String borderColour, final int size, final double borderWidth) {
+		private Styles(final String shape, final int size, final String fillColour, final String borderColour, final double borderWidth) {
+			this.shape = shape;
+			this.size = size;
 			this.fillColour = fillColour;
 			this.borderColour = borderColour;
 			this.borderWidth = borderWidth;
-			this.size = size;
 		}
 	}
 	
@@ -483,6 +485,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMinOccurViewFilterStyle.do")
     public void doMinOccurViewFilterStyle(
             HttpServletResponse response,
+            @RequestParam(required = false, value = "name") String name,      
             @RequestParam(value = "commodityName", required = false) String commodityName,
             @RequestParam(required = false, value = "size") String size,
             @RequestParam(required = false, value = "minOreAmount") String minOreAmount,
@@ -498,7 +501,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         if (commodityName != null) {
             unescapeCommodityName = URLDecoder.decode(commodityName, "UTF-8");
         }
-        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName, minOreAmount,
+        String filter = this.mineralOccurrenceService.getMinOccurViewFilter(name, unescapeCommodityName, minOreAmount,
                 minReserves, minResources, bbox);
 
         String style = this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, Styles.MINERAL_OCCURRENCE);
@@ -536,7 +539,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "<PointSymbolizer>"
                 + "<Graphic>"
                 + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
+                + "<WellKnownName>" + styles.shape + "</WellKnownName>"
                 + "<Fill>"
                 + "<CssParameter name=\"fill\">" + styles.fillColour + "</CssParameter>"
                 + "</Fill>"

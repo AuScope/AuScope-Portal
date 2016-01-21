@@ -17,7 +17,7 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
         for (var i = 0; i < cswRecords.length; i++) {
             var adminArea = cswRecords[i].get('adminArea');
             var allOnlineResources = cswRecords[i].get('onlineResources');
-            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'gsml:MappedFeature');
+            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WMS, 'mo:MinOccView');
 
             for (var j = 0; j < bhOnlineResources.length; j++) {
                 if (adminAreasMap[adminArea]) {
@@ -76,12 +76,19 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
                 labelAlign: 'right',
                 bodyStyle: 'padding:0px',
                 items :[{
+                    xtype: 'textfield',
+                    anchor: '100%',
+                    itemId: 'name-field',
+                    labelAlign: 'right',
+                    fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' + 'Name',
+                    name: 'name'
+                },{
                     xtype : 'combo',
                     anchor: '100%',
                     name: 'commodityName',
                     fieldLabel: '<span data-qtip="Please select a commodity from the Commodity Vocabulary. Powered by SISSVoc">' + 'Commodity' + '</span>',
                     labelAlign: 'right',
-                    forceSelection: true,
+                    forceSelection: false,
                     queryMode: 'local',
                     store: commodityStore,
                     triggerAction: 'all',

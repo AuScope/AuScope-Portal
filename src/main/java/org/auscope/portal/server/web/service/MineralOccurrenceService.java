@@ -357,10 +357,10 @@ public class MineralOccurrenceService extends BaseWFSService {
         return generateFilterString(filter, bbox);
     }
 
-    public String getMinOccurViewFilter(String commodityName, String minOreAmount, String minReserves,
+    public String getMinOccurViewFilter(String name, String commodityName, String minOreAmount, String minReserves,
             String minResources, FilterBoundingBox bbox)
             throws Exception {
-        MinOccurViewFilter filter = new MinOccurViewFilter(commodityName, minOreAmount, minReserves, minResources);
+        MinOccurViewFilter filter = new MinOccurViewFilter(name, commodityName, minOreAmount, minReserves, minResources);
         return generateFilterString(filter, bbox);
     }
 

@@ -1,13 +1,14 @@
 package org.auscope.portal.server.domain.ogc;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-
-import junit.framework.Assert;
 
 import org.auscope.portal.core.services.namespaces.OGCNamespaceContext;
 import org.auscope.portal.core.util.DOMUtil;
@@ -74,10 +75,10 @@ public abstract class AbstractFilterTestUtilities {
         xPath.setNamespaceContext(new OGCNamespaceContext());
 
         NodeList tempList = (NodeList) xPath.evaluate(xPathQuery, doc, XPathConstants.NODESET);
-        Assert.assertNotNull(tempList);
+        assertNotNull(tempList);
 
         if (expectedCount >= 0)
-            Assert.assertTrue(
+            assertTrue(
                     String.format("Count of expression invalid. Expected %1$s Got %2$s", expectedCount,
                             tempList.getLength()), tempList.getLength() == expectedCount);
 
@@ -89,10 +90,10 @@ public abstract class AbstractFilterTestUtilities {
                 boolean foundValidValue = false;
                 for (int j = 0; !foundValidValue && j < validValues.length; j++) {
 
-                    foundValidValue = validValues[j].equals(text);
+                    foundValidValue = validValues[j].contains(text);
                 }
 
-                Assert.assertTrue(String.format("Failed to find '%1$s' in '%2$s'", text, Arrays.toString(validValues)),
+                assertTrue(String.format("Failed to find '%1$s' in '%2$s'", text, Arrays.toString(validValues)),
                         foundValidValue);
             }
         }
