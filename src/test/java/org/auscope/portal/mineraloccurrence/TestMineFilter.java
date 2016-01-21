@@ -1,8 +1,8 @@
 package org.auscope.portal.mineraloccurrence;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
 
-import junit.framework.Assert;
+import java.io.IOException;
 
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.domain.ogc.AbstractFilterTestUtilities;
@@ -22,7 +22,7 @@ public class TestMineFilter extends PortalTestClass {
         MineFilter mineFilter = new MineFilter("");
 
         String filter = mineFilter.getFilterStringAllRecords();
-        Assert.assertEquals(
+        assertEquals(
                 "<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>er:specification/er:Mine/gml:name</ogc:PropertyName><ogc:Literal>*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>",
                 filter);
     }
@@ -38,9 +38,9 @@ public class TestMineFilter extends PortalTestClass {
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
 
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/ogc:PropertyName",
-                new String[] {"er:specification/er:Mine/er:mineName/er:MineName/er:mineName"}, 1);
+                new String[] {"er:specification/er:Mine/gml:name"}, 1);
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/ogc:Literal",
-                new String[] {"*", "Dominion Copper Mine"}, 1);
+                new String[] {"*Dominion Copper Mine*"}, 1);
 
     }
 
