@@ -21,6 +21,7 @@ import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
+import org.auscope.portal.server.web.service.BoreholeService.Styles;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -160,7 +161,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         String filter = service.getFilter(nameFilter, custodianFilter,
                 filterDate, maxFeatures, bbox, null);
 
-        String style = service.getStyle(filter, "#2242c7", null, null);
+        String style = service.getStyle(filter, null, "#2242c7", Styles.ALL_BOREHOLES);
         Assert.assertNotNull(style);
         Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
 
