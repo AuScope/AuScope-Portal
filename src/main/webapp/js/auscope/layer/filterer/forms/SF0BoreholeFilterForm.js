@@ -19,7 +19,7 @@ Ext.define('auscope.layer.filterer.forms.SF0BoreholeFilterForm', {
         for (var i = 0; i < cswRecords.length; i++) {
             var adminArea = cswRecords[i].get('adminArea');
             var allOnlineResources = cswRecords[i].get('onlineResources');
-            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS, 'gsmlp:BoreholeView');
+            var bhOnlineResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WMS, 'gsmlp:BoreholeView');
 
             for (var j = 0; j < bhOnlineResources.length; j++) {
                 if (adminAreasMap[adminArea]) {
