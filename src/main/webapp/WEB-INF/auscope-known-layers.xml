@@ -1658,12 +1658,12 @@
     <bean id="knownTypeMajorPorts" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="majorports"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="topography_National_Major_Ports:National_Major_Ports"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="National Major Ports"/>
             </bean>
         </constructor-arg>
 
-        <property name="name" value="MajorPorts"/>
+        <property name="name" value="National Major Ports"/>
         <property name="description" value="This point dataset contains major ports in Australian waters that include infrastructure facilities where maritime vessels have the ability to load and unload commodities."/>
         <property name="group" value="Topography and Infrastructure"/>
 
