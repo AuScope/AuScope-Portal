@@ -360,11 +360,11 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
                             }
                         }
                         
-                        var nameFilter = layer.get('filterer').getParameters().mineName;
+                        var nameFilter = layer.get('filterer').getParameters().name;
                         if (nameFilter) {
                             // layers get filtered based on the name
-                            if (resourcesToIterate[k].get('name') != serviceFilter &&
-                                    this._getDomain(resourcesToIterate[k].get('url')) != serviceFilter) {
+                            if (resourcesToIterate[k].get('name') != nameFilter &&
+                                    this._getDomain(resourcesToIterate[k].get('name')) != nameFilter) {
                                 continue;
                             }
                         }
