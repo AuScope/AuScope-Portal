@@ -20,6 +20,8 @@ Ext.define('auscope.layer.filterer.forms.DisjunctedLayersForm', {
     constructor : function(config) {
         var cswRecords = config.layer.get('cswRecords');
 
+        var serviceFilter = null;
+        
         var filterer = config.layer.get('filterer');
 
         var sliderHandler = function(caller, newValue) {
@@ -44,16 +46,20 @@ Ext.define('auscope.layer.filterer.forms.DisjunctedLayersForm', {
                         seenLayers[layerResource.name] = true;
                         layerList.push({
                             displayText : layerResource.description,
-                            serviceFilter : layerResource.name
+                            name : layerResource.name
                         });
+                        // set the url for the layers if not set yet (the disjunct layers all share the same service URL)
+                        if (!serviceFilter) {
+                            serviceFilter = layerResource.url;
+                        }
                     }
                 }
             }
 
         }
 
-        var adminAreasStore = Ext.create('Ext.data.Store', {
-            fields : [ 'displayText', 'serviceFilter' ],
+        var layerNameStore = Ext.create('Ext.data.Store', {
+            fields : [ 'displayText', 'name' ],
             data : layerList
         });
 
@@ -89,18 +95,23 @@ Ext.define('auscope.layer.filterer.forms.DisjunctedLayersForm', {
                 items : [ {
                     xtype : 'combo',
                     anchor : '95%',
-                    itemId : 'serviceFilter-field',
+                    itemId : 'name-field',
                     fieldLabel : 'Layer',
-                    name : 'serviceFilter',
+                    name : 'name',
                     typeAhead : true,
                     triggerAction : 'all',
                     lazyRender : true,
                     mode : 'local',
-                    store : adminAreasStore,
-                    valueField : 'serviceFilter',
+                    store : layerNameStore,
+                    valueField : 'name',
                     displayField : 'displayText',
-                    hiddenName : 'serviceFilter'
-                }, {
+                    hiddenName : 'name'
+                },{
+                    xtype : 'hidden',
+                    name : 'serviceFilter',
+                    value : serviceFilter,
+                    
+                },{
                     xtype : 'hidden',
                     name : 'postMethod',
                     value : 'true'
