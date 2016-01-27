@@ -1659,7 +1659,7 @@
         <constructor-arg name="id" value="majorports"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="National Major Ports"/>
+                <constructor-arg name="layerName" value="National_Major_Ports"/>
             </bean>
         </constructor-arg>
 
