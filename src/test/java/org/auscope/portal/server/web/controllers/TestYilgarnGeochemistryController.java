@@ -4,11 +4,12 @@ import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.httpclient.URI;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
@@ -211,7 +212,6 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
      */
     @Test
     public void testYilgarnGeochemistryFilter() throws Exception {
-        final String kmlBlob = "kmlBlob";
         final String serviceUrl = "http://service/wfs";
         final String geologicName = "filter info";
         final int maxFeatures = 0;
@@ -220,9 +220,9 @@ public class TestYilgarnGeochemistryController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockWfsService).getWfsResponseAsKml(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")),
+                oneOf(mockWfsService).getWfsResponse(with(equal(serviceUrl)), with(equal("gsml:GeologicUnit")),
                         with(any(String.class)), with(equal(maxFeatures)), with(equal((String) null)));
-                will(returnValue(new WFSTransformedResponse(expectedGML, kmlBlob, mockMethod)));
+                will(returnValue(new WFSResponse(expectedGML, mockMethod)));
 
                 allowing(mockMethod).getURI();
                 will(returnValue(new URI(serviceUrl, true)));

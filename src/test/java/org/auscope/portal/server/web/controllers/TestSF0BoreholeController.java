@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.jmock.Expectations;
@@ -61,7 +61,6 @@ public class TestSF0BoreholeController extends PortalTestClass {
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final String sf0BoreholeWfsResponse = "wfsResponse";
-        final String sf0BoreholeKmlResponse = "kmlResponse";
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
@@ -69,8 +68,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
             {
                 oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
                         filterDateStart, filterDateEnd, maxFeatures, null);
-                will(returnValue(new WFSTransformedResponse(sf0BoreholeWfsResponse, sf0BoreholeKmlResponse,
-                        mockHttpMethodBase)));
+                will(returnValue(new WFSResponse(sf0BoreholeWfsResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();
                 will(returnValue(httpMethodURI));
@@ -85,6 +83,5 @@ public class TestSF0BoreholeController extends PortalTestClass {
         Map data = (Map) response.getModel().get("data");
         Assert.assertNotNull(data);
         Assert.assertEquals(sf0BoreholeWfsResponse, data.get("gml"));
-        Assert.assertEquals(sf0BoreholeKmlResponse, data.get("kml"));
     }
 }

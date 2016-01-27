@@ -5,6 +5,7 @@ import java.net.URI;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
@@ -30,7 +31,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         this.earthResourcesFilterController = new EarthResourcesFilterController(this.mineralOccurrenceService);
     }
 
-    private void testMAVResponse(ModelAndView mav, Boolean success, String gml, String kml) {
+    private void testMAVResponse(ModelAndView mav, Boolean success, String gml) {
         ModelMap model = mav.getModelMap();
 
         if (success != null) {
@@ -42,13 +43,6 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
 
             Assert.assertNotNull(data);
             Assert.assertEquals(gml, data.get("gml"));
-        }
-
-        if (kml != null) {
-            ModelMap data = (ModelMap) model.get("data");
-
-            Assert.assertNotNull(data);
-            Assert.assertEquals(kml, data.get("kml"));
         }
     }
 
@@ -68,7 +62,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
 
     /**
      * Test doing a mine filter and getting all mines
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -90,12 +84,12 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
 
         //Ensure that we get a response that says failure
-        testMAVResponse(modelAndView, new Boolean(false), null, null);
+        testMAVResponse(modelAndView, new Boolean(false), null);
     }
 
     /**
      * Test doing a mine filter and getting all mines
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -117,12 +111,12 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
 
         //Ensure that we get a response that says failure
-        testMAVResponse(modelAndView, new Boolean(false), null, null);
+        testMAVResponse(modelAndView, new Boolean(false), null);
     }
 
     /**
      * Test doing a mine filter and getting all mines
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -130,7 +124,6 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         final String serviceURL = "http://localhost?";
         final String mineName = ""; //to get all mines
         final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
-        final String expectedKML = "<kml/>";
         final String expectedGML = "<gml/>";
 
         context.checking(new Expectations() {
@@ -138,7 +131,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
                 allowing(mockMethod).getURI();
                 will(returnValue(new URI(serviceURL)));
                 oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
-                will(returnValue(new WFSTransformedResponse(expectedGML, expectedKML, mockMethod)));
+                will(returnValue(new WFSResponse(expectedGML, mockMethod)));
             }
         });
 
@@ -146,12 +139,12 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
 
         //Ensure that we get a valid response
-        testMAVResponse(modelAndView, new Boolean(true), expectedGML, expectedKML);
+        testMAVResponse(modelAndView, new Boolean(true), expectedGML);
     }
 
     /**
      * Test doing a mine filter and getting all mines
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -159,7 +152,6 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         final String serviceURL = "http://localhost?";
         final String mineName = "mineName"; //to get all mines
         final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
-        final String expectedKML = "<kml/>";
         final String expectedGML = "<gml/>";
 
         context.checking(new Expectations() {
@@ -167,7 +159,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
                 allowing(mockMethod).getURI();
                 will(returnValue(new URI(serviceURL)));
                 oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
-                will(returnValue(new WFSTransformedResponse(expectedGML, expectedKML, mockMethod)));
+                will(returnValue(new WFSResponse(expectedGML, mockMethod)));
             }
         });
 
@@ -175,7 +167,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
 
         //Ensure that we get a valid response
-        testMAVResponse(modelAndView, new Boolean(true), expectedGML, expectedKML);
+        testMAVResponse(modelAndView, new Boolean(true), expectedGML);
     }
 
     @Test
@@ -194,12 +186,12 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
 
         //Ensure that we get a valid response
-        testMAVResponse(modelAndView, new Boolean(false), null, null);
+        testMAVResponse(modelAndView, new Boolean(false), null);
     }
 
     /**
      * Tests using the mine count service
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -223,7 +215,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
 
     /**
      * Tests using the mineral occurrence count service
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -254,7 +246,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
 
     /**
      * Tests using the mine activity count service
-     * 
+     *
      * @throws Exception
      */
     @Test
