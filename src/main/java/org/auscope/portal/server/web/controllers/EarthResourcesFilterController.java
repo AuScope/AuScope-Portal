@@ -5,10 +5,11 @@ import java.io.OutputStream;
 import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletResponse;
+
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.controllers.downloads.EarthResourcesDownloadController;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
@@ -73,10 +74,10 @@ public class EarthResourcesFilterController extends BasePortalController {
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
         try {
-            WFSTransformedResponse response = this.mineralOccurrenceService.getMinesGml(serviceUrl, mineName, bbox,
+            WFSResponse response = this.mineralOccurrenceService.getMinesGml(serviceUrl, mineName, bbox,
                     maxFeatures);
 
-            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+            return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);
@@ -154,7 +155,7 @@ public class EarthResourcesFilterController extends BasePortalController {
 
         try {
             //get the mineral occurrences
-            WFSTransformedResponse response = this.mineralOccurrenceService.getMineralOccurrenceGml(
+            WFSResponse response = this.mineralOccurrenceService.getMineralOccurrenceGml(
                     serviceUrl,
                     commodityName,
                     measureType,
@@ -165,7 +166,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                     maxFeatures,
                     bbox);
 
-            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+            return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);
@@ -263,7 +264,7 @@ public class EarthResourcesFilterController extends BasePortalController {
 
         try {
             // Get the mining activities
-            WFSTransformedResponse response = this.mineralOccurrenceService.getMiningActivityGml(serviceUrl
+            WFSResponse response = this.mineralOccurrenceService.getMiningActivityGml(serviceUrl
                     , mineName
                     , startDate
                     , endDate
@@ -274,7 +275,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                     , maxFeatures
                     , bbox);
 
-            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+            return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);

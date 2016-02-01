@@ -8,8 +8,7 @@ import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
-import org.auscope.portal.core.xslt.WfsToKmlTransformer;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,16 +24,11 @@ public class SF0BoreholeService extends BoreholeService {
 
     // -------------------------------------------------------------- Constants
 
-    // ----------------------------------------------------- Instance variables
-    private WfsToKmlTransformer wfsToKml;
-
     // ----------------------------------------------------------- Constructors
 
     @Autowired
-    public SF0BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker,
-            WfsToKmlTransformer wfsToKml) {
-        super(serviceCaller, methodMaker, wfsToKml);
-        this.wfsToKml = wfsToKml;
+    public SF0BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker) {
+        super(serviceCaller, methodMaker);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -50,7 +44,7 @@ public class SF0BoreholeService extends BoreholeService {
      * @return
      * @throws Exception
      */
-    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+    public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox) throws Exception {
         String filterString;
         SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, null);
@@ -66,9 +60,8 @@ public class SF0BoreholeService extends BoreholeService {
             method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
                     ResultType.Results);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
-            String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
 
-            return new WFSTransformedResponse(responseGml, responseKml, method);
+            return new WFSResponse(responseGml, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }

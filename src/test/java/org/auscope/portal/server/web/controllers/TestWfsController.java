@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.filter.SimplePropertyFilter;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -49,7 +50,6 @@ public class TestWfsController extends PortalTestClass {
     @Test
     public void testGetAllFeatures() throws Exception {
         final String gmlBlob = "gmlBlob";
-        final String kmlBlob = "kmlBlob";
         final String wfsUrl = "http://service/wfs";
         final String featureType = "type:name";
         final int maxFeatures = 1234;
@@ -58,9 +58,9 @@ public class TestWfsController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)),
+                oneOf(mockWfsService).getWfsResponse(with(equal(wfsUrl)), with(equal(featureType)),
                         with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));
-                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+                will(returnValue(new WFSResponse(gmlBlob, mockMethod)));
 
                 allowing(mockMethod).getURI();
                 will(returnValue(new URI("http://service.wfs/wfs")));
@@ -72,13 +72,11 @@ public class TestWfsController extends PortalTestClass {
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
         Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
     }
 
     @Test
     public void testGetAllFeaturesInBbox() throws Exception {
         final String gmlBlob = "gmlBlob";
-        final String kmlBlob = "kmlBlob";
         final String wfsUrl = "http://service/wfs";
         final String featureType = "type:name";
         final int maxFeatures = 1234;
@@ -87,9 +85,9 @@ public class TestWfsController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockWfsService).getWfsResponseAsKml(with(equal(wfsUrl)), with(equal(featureType)),
+                oneOf(mockWfsService).getWfsResponse(with(equal(wfsUrl)), with(equal(featureType)),
                         with(any(String.class)), with(equal(maxFeatures)), with(equal(srs)));
-                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+                will(returnValue(new WFSResponse(gmlBlob, mockMethod)));
 
                 allowing(mockMethod).getURI();
                 will(returnValue(new URI("http://service.wfs/wfs")));
@@ -101,21 +99,19 @@ public class TestWfsController extends PortalTestClass {
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
         Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
     }
 
     @Test
     public void testRequestFeature() throws Exception {
         final String gmlBlob = "gmlBlob";
-        final String kmlBlob = "kmlBlob";
         final String wfsUrl = "http://service/wfs";
         final String featureType = "type:name";
         final String featureId = "feature-id";
 
         context.checking(new Expectations() {
             {
-                oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, featureId);
-                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+                oneOf(mockWfsService).getWfsResponse(wfsUrl, featureType, featureId);
+                will(returnValue(new WFSResponse(gmlBlob, mockMethod)));
 
                 allowing(mockMethod).getURI();
                 will(returnValue(new URI("http://service.wfs/wfs")));
@@ -127,13 +123,11 @@ public class TestWfsController extends PortalTestClass {
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
         Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
     }
 
     @Test
     public void testRequestFeatureByProperty() throws Exception {
         final String gmlBlob = "gmlBlob";
-        final String kmlBlob = "kmlBlob";
         final String wfsUrl = "http://service/wfs";
         final String featureType = "type:name";
         final String featureProperty = "feature/property";
@@ -144,8 +138,8 @@ public class TestWfsController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockWfsService).getWfsResponseAsKml(wfsUrl, featureType, filterString, null, null);
-                will(returnValue(new WFSTransformedResponse(gmlBlob, kmlBlob, mockMethod)));
+                oneOf(mockWfsService).getWfsResponse(wfsUrl, featureType, filterString, null, null);
+                will(returnValue(new WFSResponse(gmlBlob, mockMethod)));
 
                 allowing(mockMethod).getURI();
                 will(returnValue(new URI("http://service.wfs/wfs")));
@@ -158,12 +152,11 @@ public class TestWfsController extends PortalTestClass {
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
         Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
     }
 
     /**
      * Tests get feature count works as expected
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -190,7 +183,7 @@ public class TestWfsController extends PortalTestClass {
 
     /**
      * Tests get feature count works as expected
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -213,7 +206,7 @@ public class TestWfsController extends PortalTestClass {
 
     /**
      * Test wfsFeaturePopup will all optional parameters specified
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -248,7 +241,7 @@ public class TestWfsController extends PortalTestClass {
 
     /**
      * Tests wfsFeaturePopup with only a URL
-     * 
+     *
      * @throws Exception
      */
     @Test
