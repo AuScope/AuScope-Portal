@@ -23,9 +23,8 @@ import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.DOMUtil;
-import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,16 +47,12 @@ public class BoreholeService extends BaseWFSService {
 
     private final Log log = LogFactory.getLog(getClass());
 
-    // ----------------------------------------------------- Instance variables
-    private WfsToKmlTransformer wfsToKml;
     private String gsmlpNameSpace = null;
     // ----------------------------------------------------------- Constructors
 
     @Autowired
-    public BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker,
-            WfsToKmlTransformer wfsToKml) {
+    public BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker) {
         super(serviceCaller, methodMaker);
-        this.wfsToKml = wfsToKml;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -73,7 +68,7 @@ public class BoreholeService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+    public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat)
             throws Exception {
         String filterString;
@@ -89,10 +84,9 @@ public class BoreholeService extends BaseWFSService {
             // Create a GetFeature request with an empty filter - get all
             method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
                     ResultType.Results, outputFormat);
-            String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
-            String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
+            String responseData = this.httpServiceCaller.getMethodResponseAsString(method);
 
-            return new WFSTransformedResponse(responseGml, responseKml, method);
+            return new WFSResponse(responseData, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }

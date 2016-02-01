@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.service;
 
 import java.net.URISyntaxException;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -13,8 +14,7 @@ import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.Re
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
-import org.auscope.portal.core.xslt.WfsToKmlTransformer;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.mineraloccurrence.MinOccurViewFilter;
 import org.auscope.portal.mineraloccurrence.Mine;
 import org.auscope.portal.mineraloccurrence.MineFilter;
@@ -42,24 +42,21 @@ public class MineralOccurrenceService extends BaseWFSService {
     // ----------------------------------------------------- Instance variables
 
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
-    private WfsToKmlTransformer gmlToKml;
 
     // ----------------------------------------------------------- Constructors
 
     @Autowired
     public MineralOccurrenceService(HttpServiceCaller httpServiceCaller,
             MineralOccurrencesResponseHandler respHandler,
-            WFSGetFeatureMethodMaker methodMaker,
-            WfsToKmlTransformer gmlToKml) {
+            WFSGetFeatureMethodMaker methodMaker) {
         super(httpServiceCaller, methodMaker);
         this.mineralOccurrencesResponseHandler = respHandler;
-        this.gmlToKml = gmlToKml;
 
     }
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param filter
      *            The filter
      * @param bbox
@@ -79,7 +76,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Gets the GML/KML response for all mines matching the specified parameters
-     * 
+     *
      * @param serviceUrl
      *            a Web Feature Service URL
      * @param mineName
@@ -91,7 +88,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @return
      * @throws PortalServiceException
      */
-    public WFSTransformedResponse getMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox,
+    public WFSResponse getMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox,
             int maxFeatures) throws PortalServiceException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
@@ -101,9 +98,8 @@ public class MineralOccurrenceService extends BaseWFSService {
             method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null,
                     ResultType.Results);
             String responseGml = httpServiceCaller.getMethodResponseAsString(method);
-            String responseKml = gmlToKml.convert(responseGml, serviceUrl);
 
-            return new WFSTransformedResponse(responseGml, responseKml, method);
+            return new WFSResponse(responseGml, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, "Error when attempting to download Mines GML", ex);
         }
@@ -111,7 +107,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Gets the parsed Mine response for all mines matching the specified parameters
-     * 
+     *
      * @param serviceUrl
      *            a Web Feature Service URL
      * @param mineName
@@ -141,7 +137,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Gets the count of all mines matching the specified parameters
-     * 
+     *
      * @param serviceUrl
      *            a Web Feature Service URL
      * @param mineName
@@ -166,7 +162,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
-     * 
+     *
      * @param serviceURL
      * @param commodityName
      * @param measureType
@@ -181,7 +177,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @return
      * @throws URISyntaxException
      */
-    public WFSTransformedResponse getMineralOccurrenceGml(String serviceURL,
+    public WFSResponse getMineralOccurrenceGml(String serviceURL,
             String commodityName,
             String measureType,
             String minOreAmount,
@@ -204,8 +200,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                 maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
-            String kml = gmlToKml.convert(response, serviceURL);
-            return new WFSTransformedResponse(response, kml, method);
+            return new WFSResponse(response, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }
@@ -213,7 +208,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the count of Mineral Occurrence GML
-     * 
+     *
      * @param serviceURL
      * @param commodityName
      * @param measureType
@@ -253,7 +248,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
-     * 
+     *
      * @param serviceURL
      * @param mineName
      * @param startDate
@@ -268,7 +263,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSTransformedResponse getMiningActivityGml(String serviceURL,
+    public WFSResponse getMiningActivityGml(String serviceURL,
             String mineName,
             String startDate,
             String endDate,
@@ -289,8 +284,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                 maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
-            String kml = gmlToKml.convert(response, serviceURL);
-            return new WFSTransformedResponse(response, kml, method);
+            return new WFSResponse(response, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }
@@ -298,7 +292,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the count of Mineral Activity features
-     * 
+     *
      * @param serviceURL
      * @param mineName
      * @param startDate

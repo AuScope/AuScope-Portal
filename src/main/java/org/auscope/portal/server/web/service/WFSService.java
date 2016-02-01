@@ -11,27 +11,26 @@ import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
-import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.xslt.GmlToHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * A service class encapsulating high level access to a remote Web Feature Service
- * 
+ *
  * @author Josh Vote
  *
  */
 @Service
 public class WFSService extends BaseWFSService {
 
-    private WfsToKmlTransformer wfsToKml;
     private GmlToHtml gmlToHtml;
 
     /**
      * Creates a new instance of this class with the specified dependencies
-     * 
+     *
      * @param httpServiceCaller
      *            Will be used for making requests
      * @param wfsMethodMaker
@@ -44,20 +43,18 @@ public class WFSService extends BaseWFSService {
     @Autowired
     public WFSService(HttpServiceCaller httpServiceCaller,
             WFSGetFeatureMethodMaker wfsMethodMaker,
-            WfsToKmlTransformer wfsToKml, GmlToHtml gmlToHtml) {
+            GmlToHtml gmlToHtml) {
         super(httpServiceCaller, wfsMethodMaker);
-        this.wfsToKml = wfsToKml;
         this.gmlToHtml = gmlToHtml;
     }
 
-    private WFSTransformedResponse doRequestAndKmlTransform(HttpRequestBase method, String serviceUrl)
+    private WFSResponse doRequest(HttpRequestBase method, String serviceUrl)
             throws PortalServiceException {
         try {
             String wfs = httpServiceCaller.getMethodResponseAsString(method);
             OWSExceptionParser.checkForExceptionResponse(wfs);
-            String kml = wfsToKml.convert(wfs, serviceUrl);
 
-            return new WFSTransformedResponse(wfs, kml, method);
+            return new WFSResponse(wfs, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }
@@ -79,8 +76,8 @@ public class WFSService extends BaseWFSService {
     /**
      * Makes a WFS GetFeature request constrained by the specified parameters
      *
-     * The response is returned as a String in both GML and KML forms.
-     * 
+     * The response is returned as a String
+     *
      * @param wfsUrl
      *            the web feature service url
      * @param featureType
@@ -91,17 +88,17 @@ public class WFSService extends BaseWFSService {
      * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String featureId)
+    public WFSResponse getWfsResponse(String wfsUrl, String featureType, String featureId)
             throws PortalServiceException, URISyntaxException {
         HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, featureId, null, null, null, null);
-        return doRequestAndKmlTransform(method, wfsUrl);
+        return doRequest(method, wfsUrl);
     }
 
     /**
      * Makes a WFS GetFeature request constrained by the specified parameters
      *
-     * The response is returned as a String in both GML and KML forms.
-     * 
+     * The response is returned as a String
+     *
      * @param wfsUrl
      *            the web feature service url
      * @param featureType
@@ -116,11 +113,11 @@ public class WFSService extends BaseWFSService {
      * @throws URISyntaxException
      * @throws Exception
      */
-    public WFSTransformedResponse getWfsResponseAsKml(String wfsUrl, String featureType, String filterString,
+    public WFSResponse getWfsResponse(String wfsUrl, String featureType, String filterString,
             Integer maxFeatures, String srs) throws PortalServiceException, URISyntaxException {
         HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srs,
                 ResultType.Results);
-        return doRequestAndKmlTransform(method, wfsUrl);
+        return doRequest(method, wfsUrl);
     }
 
     /**
@@ -152,7 +149,7 @@ public class WFSService extends BaseWFSService {
      * Makes a WFS GetFeature request constrained by the specified parameters
      *
      * The response is returned as a String in both GML and HTML forms.
-     * 
+     *
      * @param wfsUrl
      *            the web feature service url
      * @param featureType
@@ -173,7 +170,7 @@ public class WFSService extends BaseWFSService {
      * Makes a HTTP Get request to the specified URL.
      *
      * The response is returned as a String in both GML and HTML forms.
-     * 
+     *
      * @param wfsUrl
      *            the web feature service url
      * @param featureType
