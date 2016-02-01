@@ -273,9 +273,9 @@ public class NVCLController extends BasePortalController {
                 int count = this.boreholeService.countAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, hyloggerBoreholeIDs);
                 return generateJSONResponseMAV(true, count, "");
             } else {
-                WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
+                WFSResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
                         dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, hyloggerBoreholeIDs, outputFormat);
-                return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+                return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
             }
         } catch (Exception e) {
             log.info("Error performing borehole filter: ", e);

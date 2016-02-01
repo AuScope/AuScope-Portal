@@ -60,7 +60,7 @@ public class SF0BoreholeService extends BoreholeService {
      * @return
      * @throws Exception
      */
-    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+    public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, String outputFormat) throws Exception {
         String filterString;
         SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, null);

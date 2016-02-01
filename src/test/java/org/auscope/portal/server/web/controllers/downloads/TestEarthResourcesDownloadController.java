@@ -44,7 +44,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
 
     /**
      * Test doing a mine download
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -52,6 +52,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         final String mineName = "testMine";
         final String serviceURL = "http://testblah.com";
         final String resultXML = "<result>this is a test</result>";
+        final String outputFormat = "gml";
         final ByteArrayInputStream ins = new ByteArrayInputStream(resultXML.getBytes());
         final MyServletOutputStream out = new MyServletOutputStream(resultXML.length());
 
@@ -60,19 +61,19 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();
                 will(returnValue(out));
-                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0, null);
+                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0, null, outputFormat);
                 will(returnValue(ins));
             }
         });
 
-        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0, null, this.response);
+        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0, null, outputFormat, this.response);
         Assert.assertTrue(out.getInputString().equals(resultXML));
 
     }
 
     /**
      * Test doing a mine download with PortalException thrown
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -80,6 +81,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         final String mineName = "testMine";
         final String serviceURL = "http://testblah.com";
         final String resultXML = "<result>this is a test</result>";
+        final String outputFormat = null;
         final MyServletOutputStream out = new MyServletOutputStream(resultXML.length());
         final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
@@ -88,18 +90,18 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();
                 will(returnValue(out));
-                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0, null);
+                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0, null, outputFormat);
                 will(throwException(new PortalServiceException(mockMethod)));
             }
         });
 
-        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0, null, this.response);
+        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0, null, outputFormat, this.response);
         Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
 
     /**
      * Tests using the mineral occurrence download service
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -141,7 +143,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
 
     /**
      * Tests using the mineral occurrence download service
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -183,7 +185,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
 
     /**
      * Tests using the mine activity download service
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -224,7 +226,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
 
     /**
      * Tests using the mine activity download service
-     * 
+     *
      * @throws Exception
      */
     @Test
