@@ -18,6 +18,7 @@ import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
+import org.auscope.portal.core.services.namespaces.WFSNamespaceContext;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
@@ -68,6 +69,41 @@ public class BoreholeService extends BaseWFSService {
      * @throws Exception
      */
     public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat)
+            throws Exception {
+        String filterString;
+        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
+        if (bbox == null) {
+            filterString = nvclFilter.getFilterStringAllRecords();
+        } else {
+            filterString = nvclFilter.getFilterStringBoundingBox(bbox);
+        }
+
+        HttpRequestBase method = null;
+        try {
+            // Create a GetFeature request with an empty filter - get all
+            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
+                    ResultType.Results, outputFormat);
+            String responseData = this.httpServiceCaller.getMethodResponseAsString(method);
+
+            return new WFSResponse(responseData, method);
+        } catch (Exception ex) {
+            throw new PortalServiceException(method, ex);
+        }
+    }
+
+    /**
+     * Counts all boreholes from a given service url and return the response
+     *
+     * @param serviceURL
+     * @param bbox
+     *            Set to the bounding box in which to fetch results, otherwise set it to null
+     * @param restrictToIDList
+     *            [Optional] A list of gml:id values that the resulting filter should restrict its search space to
+     * @return
+     * @throws Exception
+     */
+    public int countAllBoreholes(String serviceURL, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
             throws Exception {
         String filterString;
@@ -82,10 +118,12 @@ public class BoreholeService extends BaseWFSService {
         try {
             // Create a GetFeature request with an empty filter - get all
             method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
-                    ResultType.Results);
-            String responseData = this.httpServiceCaller.getMethodResponseAsString(method);
+                    ResultType.Hits, null);
+            String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
 
-            return new WFSResponse(responseData, method);
+            Document doc = DOMUtil.buildDomFromString(responseGml, true);
+            String number = (String) DOMUtil.compileXPathExpr("wfs:FeatureCollection/@numberOfFeatures", new WFSNamespaceContext()).evaluate(doc, XPathConstants.STRING);
+            return Integer.parseInt(number);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }

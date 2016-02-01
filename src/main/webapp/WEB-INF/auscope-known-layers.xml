@@ -21,7 +21,7 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
         <property name="group" value="AuScope Earth Resource Services"/>
         <property name="proxyUrl" value="doMineFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doMineFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineFilterDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
@@ -57,7 +57,7 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MineralOccurence"/>
         <property name="group" value="AuScope Earth Resource Services"/>
         <property name="proxyUrl" value="doMineralOccurrenceFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doMineralOccurrenceFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralOccurrenceFilterDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/>
@@ -93,7 +93,7 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
         <property name="group" value="AuScope Earth Resource Services"/>
         <property name="proxyUrl" value="doMiningActivityFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doMiningActivityFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMiningActivityFilterDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png"/>
@@ -323,7 +323,7 @@
         <property name="group" value="Boreholes"/>
         <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
         <property name="proxyUrl" value="doNVCLFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doNVCLFilterHits.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -584,7 +584,7 @@
         <property name="description" value="A collection of services that support the GeoSciML Borehole feature type."/>
         <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doBoreholeFilterCount.do"/>
         <property name="proxyStyleUrl" value="doFilterStyle.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png"/>
         <property name="iconAnchor">

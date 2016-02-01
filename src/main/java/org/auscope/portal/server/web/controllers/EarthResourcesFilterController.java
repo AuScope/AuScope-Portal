@@ -101,7 +101,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMineFilterCount.do")
     public ModelAndView doMineFilterCount(
             @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam("mineName") String mineName,
+            @RequestParam(required = false, value = "mineName") String mineName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
             throws Exception {

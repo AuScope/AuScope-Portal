@@ -63,11 +63,12 @@ public class TestSF0BoreholeController extends PortalTestClass {
         final String sf0BoreholeWfsResponse = "wfsResponse";
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
+        final String outputFormat = "text/xml";
 
         context.checking(new Expectations() {
             {
                 oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
-                        filterDateStart, filterDateEnd, maxFeatures, null);
+                        filterDateStart, filterDateEnd, maxFeatures, null, outputFormat);
                 will(returnValue(new WFSResponse(sf0BoreholeWfsResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();
@@ -77,7 +78,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
         });
 
         ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, null);
+                filterDateStart, filterDateEnd, maxFeatures, null, outputFormat);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
