@@ -386,6 +386,126 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
 
         return queryTargets;
     },
+    
+    /**
+     * Opens an info window at a location with the specified content. When the window loads initFunction will be called
+     *
+     * function(windowLocation, width, height, content, initFunction)
+     *
+     * width - Number - width of the info window in pixels
+     * height - Number - height of the info window in pixels
+     * windowLocation - portal.map.Point - where the window will be opened from
+     * content - Mixed - A HTML string representing the content of the window OR a Ext.container.Container object OR an Array of the previous types
+     * initFunction - [Optional] function(portal.map.BaseMap map, Mixed content) a function that will be called when the info window actually opens
+     */
+    openInfoWindow : function(windowLocation, width, height, content,layer) {
+        //Firstly create a popup with a chunk of placeholder HTML - we will render an ExtJS container inside that
+        var popupId = Ext.id();
+        var location = new OpenLayers.LonLat(windowLocation.getLongitude(), windowLocation.getLatitude());
+        location = location.transform('EPSG:4326','EPSG:3857');
+        var verticalPadding = content.length <= 1 ? 0 : 32; //If we are opening a padded popup, we need to pad for the header
+        var horizontalPadding = 0;
+        var paddedSize = new OpenLayers.Size(width + horizontalPadding, height + verticalPadding);
+        var divId = Ext.id();       
+        
+        // check if the active layers panel started off in a collapsed state
+        var activeLayersPanel = Ext.getCmp('activeLayersPanel'); 
+        var activeLayersIsCollapsed = activeLayersPanel.getCollapsed();
+        
+        var closeBoxCallback = function() {
+            if (!activeLayersIsCollapsed) {
+                // it didn't start off collapsed - we did it so undo it
+                activeLayersPanel.expand(true);
+            }
+            this.hide();
+        };
+        
+        var divHtml = Ext.util.Format.format('<html><body><div id="{0}" style="width: {1}px; height: {2}px;"></div></body></html>', divId, paddedSize.w, paddedSize.h);
+        var popup = new OpenLayers.Popup.FramedCloud(popupId, location, paddedSize, divHtml, null, true, closeBoxCallback);
+
+        this.map.addPopup(popup, true);
+        
+        // collapse the Active Layers Panel while the popup is active. Ignored if already collapsed.
+        activeLayersPanel.collapse(true);        
+        
+        //Workaround
+        //ExtJS needs events to bubble up to the window for them to work (it's where the event handlers live)
+        //Unfortunately OpenLayers is too aggressive in consuming events occuring in a popup, so the events never make it.
+        //So - to workaround this we capture relevant events in our parent div (sitting before the open layer popup handlers) 
+        //and manually redirect them to the ExtJS handlers
+        var node = Ext.get(divId).dom;
+        var handler = function(e) {
+            Ext.event.publisher.Dom.instance.onDelegatedEvent(e); //this is a private ExtJS function - it's likely to break on upgrade
+            if (e.type !== 'click') {
+                Ext.event.publisher.Gesture.instance.onDelegatedEvent(e);
+            }
+            return false;
+        };
+        node.addEventListener('mousedown', handler);
+        node.addEventListener('mouseup', handler);
+        node.addEventListener('mousemove', handler);
+        node.addEventListener('click', handler);             
+
+        //End workaround
+        
+        
+        this.openedInfoLayerId=layer.get('id');
+        //next create an Ext.Container to house our content, render it to the HTML created above
+        if (!Ext.isArray(content)) {
+            content = [content];
+        }
+
+        //We need a parent control to house the components, a regular panel works fine for one component
+        //A tab panel will be required for many components
+        if (content.length === 1) {
+            Ext.create('Ext.panel.Panel', {
+                width : paddedSize.w,
+                height : paddedSize.h,
+                autoScroll : true,
+                layout: 'fit',
+                renderTo : divId,
+                border : false,
+                items : content
+            });
+          //VT:Tracking
+            portal.util.PiwikAnalytic.trackevent('Query','layer:'+layer.get('name'),'id:' + content[0].tabTitle);
+            
+        } else {
+            var tabPanelItems = [];
+            for (var i = 0; i < content.length; i++) {
+                if (Ext.isString(content[i])) {
+                    tabPanelItems.push({
+                        title : '',
+                        border : false,
+                        layout: 'fit',
+                        autoScroll : true,
+                        html : content[i]
+                    });
+                    portal.util.PiwikAnalytic.trackevent('Query','layer:'+layer.get('name'),'id:Unknown');
+                } else {
+                    tabPanelItems.push({
+                        title : content[i].tabTitle,
+                        border : false,
+                        layout: 'fit',
+                        autoScroll : true,
+                        items : [content[i]]
+                    });
+                    portal.util.PiwikAnalytic.trackevent('Query','layer:'+layer.get('name'),'id:' + content[i].tabTitle);
+                }
+            }
+
+            Ext.create('Ext.tab.Panel', {
+                width : paddedSize.w,
+                height : paddedSize.h,
+                renderTo : divId, 
+                layout: 'fit',
+                //plain : true,
+                border : false,
+                activeTab: 0,
+                items : tabPanelItems
+            });
+        }
+    },
 
 });
 
