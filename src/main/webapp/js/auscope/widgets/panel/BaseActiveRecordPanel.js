@@ -273,16 +273,18 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
      * Column definition function to draw the panel when a row is clicked upon.  Here is a common one to draw the WMS/WFS filter with Opacity, drop-downs etc..
      * Override
      */
-    _getInlineLayerPanel : function(filterForm, parentElId){                             
-        var me = this;   
+    _getInlineLayerPanel : function(filterForm, parentElId){
+        var me = this;
         var panel =Ext.create('portal.widgets.panel.FilterPanel', {    
             wantAddLayerButton : false,
+            wantUpdateLayerButton : true,
             wantOptionsButton : false,
             menuFactory : this.menuFactory,
             filterForm  : filterForm, 
             detachOnRemove : false,
             map         : this.map,
             renderTo    : parentElId,
+            layerStore  : me.store
         });   
         
         return panel
