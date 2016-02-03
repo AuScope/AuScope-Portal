@@ -1379,7 +1379,7 @@
     </bean>
 
     <bean id="knownTypeGeologicalMaps_Contacts_Faults_Dykes_MarkerBeds" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="layers-disjunction1m" />
+        <constructor-arg name="id" value="geological-maps-contacts-faults-dykes-marker-beds" />
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
                 <constructor-arg name="layersMode" value="AND"/>
@@ -1405,7 +1405,7 @@
     </bean>
 
     <bean id="knownTypeGeologicalMaps_Lithostratigraphy" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="layers-conjunction" />
+        <constructor-arg name="id" value="geological-units-lithostratigraphy" />
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
                 <constructor-arg name="layersMode" value="AND"/>
