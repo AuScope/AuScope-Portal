@@ -1377,100 +1377,94 @@
         <property name="group" value="Analytic - CSIRO"/>
         <property name="order" value="142" />
     </bean>
-    <!-- End of Analytic layer -->
 
-<!-- GPT-41 - Surface Geology Layers -->
-    <!-- SurfaceGeology__1to1M_ContactsFaultsMakerBeds (Define Disjunction of multiple layers into one (OR)) -->
-    <bean id="knownTypeGeologicalMaps_SurfaceGeology__1to1M_GeologicalUnits__ALL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <bean id="knownTypeGeologicalMaps_Contacts_Faults_Dykes_MarkerBeds" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="layers-disjunction1m" />
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
-                <constructor-arg name="layersMode" value="OR"/>
-                <constructor-arg name="layerNames">
-                    <list>
-                        <value>AUS_GA_1M_GUPoly_Lithostratigraphy</value>
-                        <value>AUS_GA_1M_GUPoly_Age</value>
-                        <value>AUS_GA_1M_GUPoly_Lithology</value>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="1:1M Surface Geology - geological units"/>
-        <property name="description" value="Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by lithostratigraphic classification, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS_GA_1M_GUPoly_Age (Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by age, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS_GA_1M_GUPoly_Lithology (Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by lithology, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000."/>
-        <property name="group" value="Geological Maps"/>
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="order" value="60_Geological Maps_020" />
-    </bean>
-
-    <!-- SurfaceGeology__1to1M_ContactsFaultsMakerBeds (Define Conjunction of multiple layers into one (AND) -->
-    <bean id="knownTypeGeologicalMaps_SurfaceGeology__1to1M_ContactsFaultsMakerBeds__ALL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="layers-conjunction" />
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
                 <constructor-arg name="layersMode" value="AND"/>
                 <constructor-arg name="layerNames">
                     <list>
+                        <value>AUS_GA_2500K_MiscLines</value>
                         <value>AUS_GA_1M_MiscLines</value>
                         <value>AUS_GA_1M_Faults</value>
+                        <value>AUS_GA_2500K_Faults</value>
                         <value>AUS_GA_1M_Contacts</value>
-                        <value>AUS_GA_1M_GULine</value>
+                        <value>AUS_GA_2500K_Contacts</value>
+                        <value>AUS_GA_1M_GULine</value>                        
                     </list>
                 </constructor-arg>
             </bean>
         </constructor-arg>
-        <property name="name" value="1:1M Surface Geology - contacts, faults, marker beds"/>
-        <property name="description" value="This layer contains lines that complement the geology data, but are not classified as geological features (eg, coastline and other water boundaries, limits of mapping or available data), compiled at 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Faults and Shears (Fault and shear structures, represented as lines, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Contacts (Lines that represent contacts between geological units (eg, depositional, intrusive and faulted contacts), compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Geological Unit Lines (Surface geological units (outcrop or near-outcrop) that are too narrow to be represented by polygons, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000."/>
+        <property name="name" value="Contacts, faults, dykes, marker beds"/>
+        <property name="description" value="This layer contains lines that complement the geology data, but are not classified as geological features (eg, coastline and other water boundaries, limits of mapping or available data), compiled at 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Faults and Shears (Fault and shear structures, represented as lines, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Contacts (Lines that represent contacts between geological units (eg, depositional, intrusive and faulted contacts), compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Geological Unit Lines (Surface geological units (outcrop or near-outcrop) that are too narrow to be represented by polygons, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000."/>        
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
         <property name="order" value="60_Geological Maps_010" />
     </bean>
 
-    <!-- SurfaceGeology__1to25M_ContactsFaultsMakerBeds (Define Disjunction of multiple layers into one (OR)) -->
-    <bean id="knownTypeGeologicalMaps_SurfaceGeology__1to25M_GeologicalUnits__ALL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="layers-disjunction2500k" />
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
-                <constructor-arg name="layersMode" value="OR"/>
-                <constructor-arg name="layerNames">
-                    <list>
-                        <value>AUS_GA_2500k_GUPoly_Lithostratigraphy</value>
-                        <value>AUS_GA_2500k_GUPoly_Age</value>
-                        <value>AUS_GA_2500k_GUPoly_Lithology</value>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="1:2.5M Surface Geology - geological units"/>
-        <property name="description" value="Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by lithostratigraphic classification, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS_GA_1M_GUPoly_Age (Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by age, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS_GA_1M_GUPoly_Lithology (Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by lithology, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000."/>
-        <property name="group" value="Geological Maps"/>
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="order" value="60_Geological Maps_040" />
-    </bean>
-
-    <!-- SurfaceGeology__1to25M_ContactsFaultsMakerBeds (Define Conjunction of multiple layers into one (AND) -->
-    <bean id="knownTypeGeologicalMaps_SurfaceGeology__1to25M_ContactsFaultsMakerBeds__ALL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="layers-conjunction2" />
+    <bean id="knownTypeGeologicalMaps_Lithostratigraphy" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="layers-conjunction" />
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
                 <constructor-arg name="layersMode" value="AND"/>
                 <constructor-arg name="layerNames">
                     <list>
-                        <value>AUS_GA_2500k_MiscLines</value>
-                        <value>AUS_GA_2500k_Faults</value>
-                        <value>AUS_GA_2500k_Contacts</value>
+                        <value>AUS_GA_2500k_GUPoly_Lithostratigraphy</value>
+                        <value>AUS_GA_1M_GUPoly_Lithostratigraphy</value>
                     </list>
                 </constructor-arg>
             </bean>
         </constructor-arg>
-        <property name="name" value="1:2.5M Surface Geology - contacts, faults"/>
-        <property name="description" value="This layer contains lines that complement the geology data, but are not classified as geological features (eg, coastline and other water boundaries, limits of mapping or available data), compiled at 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Faults and Shears (Fault and shear structures, represented as lines, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Contacts (Lines that represent contacts between geological units (eg, depositional, intrusive and faulted contacts), compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000), AUS GA 1:1M Geological Unit Lines (Surface geological units (outcrop or near-outcrop) that are too narrow to be represented by polygons, compiled for use around 1:1M scale. This layer is limited to display only at scales greater than 1:1,500,000."/>
+        <property name="name" value="Geological units (lithostratigraphy)"/>
+        <property name="description" value="Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by lithostratigraphic classification."/>
+        <property name="group" value="Geological Maps"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="60_Geological Maps_020" />
+    </bean>
+
+    <bean id="knownTypeGeologicalMaps_Lithology" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geological-units-lithology" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                        <value>AUS_GA_2500k_GUPoly_Lithology</value>
+                        <value>AUS_GA_1M_GUPoly_Lithology</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Geological units (lithology)"/>
+        <property name="description" value="Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by lithological classification."/>
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
         <property name="order" value="60_Geological Maps_030" />
+    </bean>
+
+    <bean id="knownTypeGeologicalMaps_Age" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geological-units-age" />
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
+                <constructor-arg name="layersMode" value="AND"/>
+                <constructor-arg name="layerNames">
+                    <list>
+                        <value>AUS_GA_2500k_GUPoly_Age</value>
+                        <value>AUS_GA_1M_GUPoly_Age</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Geological units (age)"/>
+        <property name="description" value="Surface geological units (outcrop or near-outcrop bedrock and surficial regolith units) symbolised by age ."/>        
+        <property name="group" value="Geological Maps"/>
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="order" value="60_Geological Maps_040" />
     </bean>
 
     <!-- GPT-41 / GPT-88 - 250K Scanned Geological Maps  -->
@@ -1659,7 +1653,7 @@
         <constructor-arg name="id" value="majorports"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="National_Major_Ports"/>
+                <constructor-arg name="layerName" value="National Major Ports"/>
             </bean>
         </constructor-arg>
 
