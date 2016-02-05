@@ -471,3 +471,7 @@
     #x-autocontainer-innerCt {
         border: none !important;
     }
+    
+    .x-menu-header {
+        background-color: #FBAD17 !important;
+    }
