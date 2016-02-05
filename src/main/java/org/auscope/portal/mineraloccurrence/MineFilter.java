@@ -21,11 +21,11 @@ public class MineFilter extends AbstractFilter {
     public MineFilter(String mineName) {
         if (mineName != null && mineName.length() > 0) {
             this.filterFragment = this.generatePropertyIsLikeFragment(
-                    "er:specification/er:Mine/gml:name", "*" + mineName + "*");
+                    "er:specification/er:Mine/er:mineName/er:MineName/er:mineName", "*" + mineName + "*");
         }
         // Ensure a MFO query always returns a type mine!
         else {
-            this.filterFragment = this.generatePropertyIsLikeFragment("er:specification/er:Mine/gml:name", "*");
+            this.filterFragment = this.generatePropertyIsLikeFragment("er:specification/er:Mine/er:mineName/er:MineName/er:mineName", "*");
         }
     }
 

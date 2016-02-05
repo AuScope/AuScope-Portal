@@ -23,7 +23,7 @@ public class TestMineFilter extends PortalTestClass {
 
         String filter = mineFilter.getFilterStringAllRecords();
         assertEquals(
-                "<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>er:specification/er:Mine/gml:name</ogc:PropertyName><ogc:Literal>*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>",
+                "<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>er:specification/er:Mine/er:mineName/er:MineName/er:mineName</ogc:PropertyName><ogc:Literal>*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>",
                 filter);
     }
 
@@ -38,7 +38,7 @@ public class TestMineFilter extends PortalTestClass {
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
 
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/ogc:PropertyName",
-                new String[] {"er:specification/er:Mine/gml:name"}, 1);
+                new String[] {"er:specification/er:Mine/er:mineName/er:MineName/er:mineName"}, 1);
         AbstractFilterTestUtilities.runNodeSetValueCheck(doc, "/descendant::ogc:PropertyIsLike/ogc:Literal",
                 new String[] {"*Dominion Copper Mine*"}, 1);
 
