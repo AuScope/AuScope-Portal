@@ -374,15 +374,14 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
                     throws Exception {
-        // FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
-        FilterBoundingBox bbox = null;
-        // Get the mining activities
-        // VT: Currently not working as GeoServer is returning strange error for this filer
+        
+    	FilterBoundingBox bbox = null;
+        
         String filter = this.mineralOccurrenceService.getMiningActivityFilter(
                 mineName, startDate, endDate, oreProcessed, producedMaterial,
                 cutOffGrade, production, maxFeatures, bbox);
 
-        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", Styles.MINING_ACTIVITY);
+        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "Mining Activity", Styles.MINING_ACTIVITY);
 
         response.setContentType("text/xml");
 
@@ -413,13 +412,13 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
                     throws Exception {
-        // FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
+
         FilterBoundingBox bbox = null;
-        // Get the mining activities
+
         String filter = this.mineralOccurrenceService.getMineFilter(mineName,
                 bbox);
 
-        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", Styles.MINE);
+        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "Mine", Styles.MINE);
 
         response.setContentType("text/xml");
 
@@ -449,9 +448,9 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
                     throws Exception {
-        // FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
+
         FilterBoundingBox bbox = null;
-        // Get the mining activities
+
         String unescapeCommodityName = "";
         if (commodityName != null) {
             unescapeCommodityName = URLDecoder.decode(commodityName, "UTF-8");
@@ -459,7 +458,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(unescapeCommodityName,
                 bbox);
 
-        String style = this.getStyle(filter, "gsml:MappedFeature", Styles.MINERAL_OCCURRENCE);
+        String style = this.getStyle(filter, "gsml:MappedFeature", "Mineral Occurrence", Styles.MINERAL_OCCURRENCE);
 
         response.setContentType("text/xml");
 
@@ -494,9 +493,9 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
                     throws Exception {
-        // FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
+
         FilterBoundingBox bbox = null;
-        // Get the mining activities
+
         String unescapeCommodityName = "";
         if (commodityName != null) {
             unescapeCommodityName = URLDecoder.decode(commodityName, "UTF-8");
@@ -504,7 +503,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMinOccurViewFilter(name, unescapeCommodityName, minOreAmount,
                 minReserves, minResources, bbox);
 
-        String style = this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, Styles.MINERAL_OCCURRENCE);
+        String style = this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "Mineral Occurrence", Styles.MINERAL_OCCURRENCE);
 
         response.setContentType("text/xml");
 
@@ -518,12 +517,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getStyle(String filter, String name, Styles styles) {
-        // VT : This is a hack to get around using functions in feature chaining
-        // https://jira.csiro.au/browse/SISS-1374
-        // there are currently no available fix as wms request are made prior to
-        // knowing app-schema mapping.
-
+    public String getStyle(String filter, String name, String title, Styles styles) {
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:mo=\"http://xmlns.geoscience.gov.au/minoccml/1.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
                 + "<NamedLayer>" + "<Name>"
@@ -534,6 +528,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>"
                 + "<Rule>"
                 + "<Name>" + name + "</Name>"
+                + "<Title>" + title + "</Title>"
                 + "<Abstract>" + name + "</Abstract>"
                 + filter
                 + "<PointSymbolizer>"
