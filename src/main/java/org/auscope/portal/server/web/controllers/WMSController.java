@@ -488,10 +488,11 @@ public class WMSController extends BaseCSWController {
     @RequestMapping("/getDefaultStyle.do")
     public void getDefaultStyle(
             HttpServletResponse response,
-            @RequestParam("layerName") String layerName)
+            @RequestParam("layerName") String layerName,
+            @RequestParam("layerTitle") String layerTitle)
             throws Exception {
 
-        String style = this.getStyle(layerName, "#ed9c38");
+        String style = this.getStyle(layerName, layerTitle, "#ed9c38");
 
         response.setContentType("text/xml");
 
@@ -505,7 +506,7 @@ public class WMSController extends BaseCSWController {
         outputStream.close();
     }
 
-    public String getStyle(String name, String color) {
+    public String getStyle(String name, String title, String color) {
         //VT : This is a hack to get around using functions in feature chaining
         // https://jira.csiro.au/browse/SISS-1374
         // there are currently no available fix as wms request are made prior to
@@ -521,6 +522,7 @@ public class WMSController extends BaseCSWController {
                 + "<IsDefault>1</IsDefault>" + "<FeatureTypeStyle>"
                 + "<Rule>"
                 + "<Name>" + name + "</Name>"
+                + "<Title>" + title + "</Title>"
                 + "<Abstract>" + name + "</Abstract>"
                 + "<PointSymbolizer>"
                 + "<Graphic>"

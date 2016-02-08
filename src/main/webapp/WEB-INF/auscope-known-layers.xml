@@ -48,19 +48,6 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMiningActivityFilterDownload.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
         <property name="order" value="01_Mines and Mining Activity_020" />
     </bean>
 
@@ -104,19 +91,6 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralOccurrenceFilterDownload.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
         <property name="order" value="1_AuScope Earth Resource Services_020" />
     </bean>
 
@@ -1384,14 +1358,12 @@
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
                 <constructor-arg name="layersMode" value="AND"/>
                 <constructor-arg name="layerNames">
-                    <list>
-                        <value>AUS_GA_2500K_MiscLines</value>
-                        <value>AUS_GA_1M_MiscLines</value>
-                        <value>AUS_GA_1M_Faults</value>
-                        <value>AUS_GA_2500K_Faults</value>
-                        <value>AUS_GA_1M_Contacts</value>
-                        <value>AUS_GA_2500K_Contacts</value>
-                        <value>AUS_GA_1M_GULine</value>                        
+                    <list>                    
+                        <value>AUS_GA_2500k_Faults</value>
+						<value>AUS_GA_2500k_Contacts</value>
+						<value>AUS_GA_1M_Faults</value>
+						<value>AUS_GA_1M_Contacts</value>
+						<value>AUS_GA_1M_GULine</value>          
                     </list>
                 </constructor-arg>
             </bean>

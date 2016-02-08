@@ -225,7 +225,7 @@ public class BoreholeService extends BaseWFSService {
                 + "<IsDefault>1</IsDefault>"
                 + "<FeatureTypeStyle>"
                 + "<Rule>"
-                + "<Name>Boreholes</Name>"
+                + "<Name>Borehole</Name>"
                 + filter
                 + "<PointSymbolizer>"
                 + "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>"
