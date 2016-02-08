@@ -211,13 +211,20 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
             handler : function(){
                 // this will be resized dynamically as legend content is added
                 var legendCallback = function(legend, resources, filterer, success, form, layer){
-                    if (success && form) {
-                        var win = Ext.create('Ext.window.Window', {
-                            title       : 'Legend: '+ layer.get('name'),
-                            layout      : 'fit',
-                            items: form
-                        });
-                        return win.show();
+                    if (success && form) {                        
+                        // allow more than one legend popup but only one per layer
+                        var popupId = 'legendPopup_' + layer.get('id');                        
+                        var popupWindow = Ext.get(popupId);
+                        if (!popupWindow) {
+                            popupWindow = Ext.create('Ext.window.Window', {                        
+                                id          : 'legendPopup_' + layer.get('id'),
+                                title       : 'Legend: '+ layer.get('name'),
+                                layout      : 'fit',
+                                items: form
+                            }); 
+                            popupWindow.show();
+                        } 
+                        return Ext.getCmp(popupWindow.id).focus();              
                     }
                 };
     
