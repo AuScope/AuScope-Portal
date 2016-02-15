@@ -50,6 +50,7 @@ Ext.define('ga.widgets.GALayerSelectionWindow', {
                 url : 'getWMSLayersForCSWRecord.do',
                 extraParams : { 
                     service_URL : me.getCapabilitiesUrl,
+                    weakCheck : 'Y',
                     recordName : me.cswRecord.get('name'),
                     isService : me.cswRecord.get('service')
                 }, 
@@ -97,10 +98,6 @@ Ext.define('ga.widgets.GALayerSelectionWindow', {
                         // set the source type to an arbitrary value to avoid the grouping logic
                         layer.set('sourceType', 'search');
                         
-                        me.map.layerStore.suspendEvents(true);
-                        me.map.layerStore.add(layer); //this adds the layer to our store
-                        me.map.layerStore.resumeEvents();
-                        
                         var filterer = layer.get('filterer');      
 
                         try {
@@ -108,7 +105,7 @@ Ext.define('ga.widgets.GALayerSelectionWindow', {
                         } catch(error) {
                             console.log(error);
                         }
-                        AppEvents.broadcast('addlayer', {layer: layer, layerStore: me.map.layerStore});
+                        ActiveLayerManager.addLayer(layer);
                         
                         //VT: Tracking
                         portal.util.PiwikAnalytic.trackevent('Add:' + layer.get('sourceType'), 'Layer:' + layer.get('name'),'Filter:' + filterer.getParameters());

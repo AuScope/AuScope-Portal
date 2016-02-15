@@ -20,7 +20,6 @@ GASearchResultsWindow = Ext.extend(Ext.Window, {
                 layout: 'fit',
                 map: cfg.map,
                 layerFactory: cfg.layerFactory,
-                layerStore: cfg.layerStore,                
                 items : cfg.resultpanels // GASearchResultsPanel
             }],
 

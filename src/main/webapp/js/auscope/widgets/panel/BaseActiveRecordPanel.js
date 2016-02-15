@@ -29,24 +29,23 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
         var me = this;
        
         me.listeners = Object.extend(me.listenersHere, cfg.listeners);
+        this.store = cfg.store;
         
         Ext.apply(cfg, {
             cls : 'auscope-dark-grid',
             hideHeaders : true,
             viewConfig : {
                 emptyText : '<p class="centeredlabel">No records match the current filter.</p>',
-                preserveScrollOnRefresh: true    ,
+                preserveScrollOnRefresh: true,
                 plugins: {
                     ptype: 'gridviewdragdrop',
                     dragText: 'Drag and drop to reorganize'
                 },
                 listeners: {
                     drop: function(node, data, overModel, dropPosition,  dropFunction,  eOpts ){
-                        me.map.updateLayerIndex();
-                        // Request the redraw of the layers
-                        AppEvents.broadcast('layerindexchanged', {});
+                        ActiveLayerManager.updateLayerOrder(me.map, data.records[0])
                     }
-                }
+                },
             },          
             columns : [{
                 text : 'Drag',
@@ -156,7 +155,7 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
                 sortable: false,
                 menuDisabled: true,
                 handler : function(view, rowIndex, colIndex, item, event, layer, row) {
-                    AppEvents.broadcast('removelayer', {layer:layer, layerStore:me.store, rowIdx:rowIndex});
+                    ActiveLayerManager.removeLayer(layer);
                 }
               }],
               plugins:[{                

@@ -7,15 +7,11 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 
     enableBrowse : false,
 
-
     constructor : function(cfg) {
         this.callParent(arguments);
         this.on('afterrender', this._loadQueryBar, this);
         this.enableBrowse = cfg.enableBrowse;
-
-
     },
-
 
     _loadQueryBar : function() {
         this._updateSearchBar(false);

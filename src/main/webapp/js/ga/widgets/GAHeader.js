@@ -7,7 +7,6 @@ Ext.define('ga.widgets.GAHeader', {
     alias: 'widget.gaheader',
 
     map: null,
-    layerStore: null,
     registryStore: null,
     layerFactory: null,
 
@@ -15,7 +14,6 @@ Ext.define('ga.widgets.GAHeader', {
         
         var me = this;
         me.map = config.map;
-        me.layerStore = config.layerStore;  
         me.registryStore = config.registryStore;    
         me.layerFactory = config.layerFactory;
         
@@ -29,14 +27,12 @@ Ext.define('ga.widgets.GAHeader', {
                     id : 'gaAdvancedSearchWindow',
                     map : me.map,
                     layerFactory : me.layerFactory,
-                    layerStore : me.layerStore,
                     listeners : {
                         filterselectcomplete : function(filteredResultPanels) {
                             var gaSearchResultsWindow = new GASearchResultsWindow({
                                 title : 'Advanced Search Results',
                                 id: 'gaSearchResultsWindow',
                                 map : me.map,
-                                layerStore : me.layerStore,
                                 layerFactory : me.layerFactory,
                                 
                                 resultpanels : filteredResultPanels,
@@ -110,7 +106,6 @@ Ext.define('ga.widgets.GAHeader', {
                 title : 'Search Results',
                 id: 'gaSearchResultsWindow',
                 map : me.map,
-                layerStore : me.layerStore,
                 layerFactory : me.layerFactory,
                 resultpanels : filteredResultPanels,
                 showControlButtons : false,
@@ -183,7 +178,6 @@ Ext.define('ga.widgets.GAHeader', {
                     xtype: 'gasearchresultspanel',
                     layout : 'fit',
                     map: me.map,
-                    layerStore : me.layerStore,
                     layerFactory : me.layerFactory,
                     store : filterCSWStore
                 };
@@ -217,17 +211,17 @@ Ext.define('ga.widgets.GAHeader', {
         
         // logo
         var northPanel = {
-        		id: 'ausgin-logo',
-        		xtype: 'box',
+                id: 'ausgin-logo',
+                xtype: 'box',
                 height: '59px',
                 autoEl: {tag : 'span'}   
         };
         
         // search panel contains the search controls
         var searchPanel = {
-        		id: 'search-controls',
-        		height: '30px',
-           		xtype: 'box',
+                id: 'search-controls',
+                height: '30px',
+                xtype: 'box',
                 autoEl: {
                     tag: 'span',
                     html: '<label for="basic-search-input">Search for data and publications</label>\
@@ -241,7 +235,7 @@ Ext.define('ga.widgets.GAHeader', {
         // north panel contains the 'Contact Us' and 'Skip to content' links
         var linksPanel = {
             id : "ga-header-south-panel-links",
-        	height: '40px',
+            height: '40px',
             items: [{
                 xtype: 'box',
                 id: 'header-controls',
@@ -258,8 +252,8 @@ Ext.define('ga.widgets.GAHeader', {
 
         // center panel contains the search controls and the links
         var centerPanel = {
-        		id: 'wrapper-search-and-links',
-        		xtype: 'panel',
+                id: 'wrapper-search-and-links',
+                xtype: 'panel',
                 height: '30px',
                 layout: 'hbox',
                 items: [searchPanel, linksPanel]
@@ -268,14 +262,13 @@ Ext.define('ga.widgets.GAHeader', {
         // south panel contains the menu bar
         var southPanel = {
             xtype: 'gamenubar',
-            map: me.map,
-            layerStore: me.layerStore
-        };        
-        
+            map: me.map
+        };
+
         Ext.apply(config, {
             items: [{
-            	id: 'header-container',
-            	xtype: 'panel',
+                id: 'header-container',
+                xtype: 'panel',
                 height: '140px',
                 layout: 'vbox',
                 items: [northPanel, centerPanel, southPanel]

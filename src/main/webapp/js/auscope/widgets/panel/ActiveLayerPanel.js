@@ -9,8 +9,6 @@ Ext.define('portal.widgets.panel.ActiveLayerPanel', {
         this.callParent(arguments);
     },
 
-  
-
     /**
      * Implements method - see parent class for details.
      */

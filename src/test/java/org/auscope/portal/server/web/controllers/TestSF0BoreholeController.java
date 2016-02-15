@@ -15,6 +15,7 @@ import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -69,7 +70,7 @@ public class TestSF0BoreholeController extends PortalTestClass {
                 oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
                         maxFeatures, null);
                 will(returnValue(new WFSTransformedResponse(sf0BoreholeWfsResponse, sf0BoreholeKmlResponse,
-                        mockHttpMethodBase)));
+                        mockHttpMethodBase, true)));
 
                 allowing(mockHttpMethodBase).getURI();
                 will(returnValue(httpMethodURI));
@@ -81,9 +82,11 @@ public class TestSF0BoreholeController extends PortalTestClass {
                 filterDate, maxFeatures, null);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
-        Map data = (Map) response.getModel().get("data");
-        Assert.assertNotNull(data);
-        Assert.assertEquals(sf0BoreholeWfsResponse, data.get("gml"));
-        Assert.assertEquals(sf0BoreholeKmlResponse, data.get("kml"));
+        Object dataObj = response.getModel().get("data");
+        Assert.assertNotNull(dataObj);
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(sf0BoreholeWfsResponse, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(sf0BoreholeKmlResponse, ((ModelMap)dataObj).get("kml"));
+        }
     }
 }

@@ -31,25 +31,27 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
     }
 
     private void testMAVResponse(ModelAndView mav, Boolean success, String gml, String kml) {
+
         ModelMap model = mav.getModelMap();
+        Assert.assertEquals(success.booleanValue(), model.get("success"));
 
-        if (success != null) {
-            Assert.assertEquals(success.booleanValue(), model.get("success"));
+        if (success) {
+            Object dataObj = model.get("data");
+            Assert.assertNotNull(dataObj);
+            if (dataObj instanceof ModelMap) {
+                if (gml != null) {
+                    ModelMap data = ((ModelMap) dataObj);
+                    Assert.assertNotNull(data);
+                    Assert.assertEquals(gml, data.get("gml"));
+                }
+                if (gml != null) {
+                    ModelMap data = ((ModelMap) dataObj);
+                    Assert.assertNotNull(data);
+                    Assert.assertEquals(gml, data.get("kml"));
+                }
+            }
         }
 
-        if (gml != null) {
-            ModelMap data = (ModelMap) model.get("data");
-
-            Assert.assertNotNull(data);
-            Assert.assertEquals(gml, data.get("gml"));
-        }
-
-        if (kml != null) {
-            ModelMap data = (ModelMap) model.get("data");
-
-            Assert.assertNotNull(data);
-            Assert.assertEquals(kml, data.get("kml"));
-        }
     }
 
     private void testMAVResponseCount(ModelAndView mav, Boolean success, Integer count) {
@@ -110,7 +112,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
-                will(returnValue(new WFSTransformedResponse(xmlErrorResponse, expectedKML, mockMethod)));
+                will(returnValue(new WFSTransformedResponse(xmlErrorResponse, expectedKML, mockMethod, false)));
             }
         });
 

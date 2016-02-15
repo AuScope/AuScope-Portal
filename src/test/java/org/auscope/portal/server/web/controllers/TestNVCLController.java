@@ -35,6 +35,7 @@ import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -101,7 +102,7 @@ public class TestNVCLController extends PortalTestClass {
             {
                 oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
                         maxFeatures, bbox, null);
-                will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase)));
+                will(returnValue(new WFSTransformedResponse(nvclWfsResponse, nvclKmlResponse, mockHttpMethodBase, true)));
 
                 allowing(mockHttpMethodBase).getURI();
                 will(returnValue(httpMethodURI));
@@ -113,10 +114,12 @@ public class TestNVCLController extends PortalTestClass {
                 filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
-        Map data = (Map) response.getModel().get("data");
-        Assert.assertNotNull(data);
-        Assert.assertEquals(nvclWfsResponse, data.get("gml"));
-        Assert.assertEquals(nvclKmlResponse, data.get("kml"));
+        Object dataObj = response.getModel().get("data");
+        Assert.assertNotNull(dataObj);
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(nvclWfsResponse, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(nvclKmlResponse, ((ModelMap)dataObj).get("kml"));
+        }
     }
 
     /**
@@ -159,10 +162,12 @@ public class TestNVCLController extends PortalTestClass {
                 filterDate, maxFeatures, bbox, onlyHylogger);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
-        Map data = (Map) response.getModel().get("data");
-        Assert.assertNotNull(data);
-        Assert.assertEquals(nvclWfsResponse, data.get("gml"));
-        Assert.assertEquals(nvclKmlResponse, data.get("kml"));
+        Object dataObj = response.getModel().get("data");
+        Assert.assertNotNull(dataObj);
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(nvclWfsResponse, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(nvclKmlResponse, ((ModelMap)dataObj).get("kml"));
+        }
     }
 
     /**
@@ -745,10 +750,12 @@ public class TestNVCLController extends PortalTestClass {
                 filterDate, maxFeatures, "", onlyHylogger, serviceFilter);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
-        Map data = (Map) response.getModel().get("data");
-        Assert.assertNotNull(data);
-        Assert.assertEquals(nvclWfsResponse, data.get("gml"));
-        Assert.assertEquals(nvclKmlResponse, data.get("kml"));
+        Object dataObj = response.getModel().get("data");
+        Assert.assertNotNull(dataObj);
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(nvclWfsResponse, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(nvclKmlResponse, ((ModelMap)dataObj).get("kml"));
+        }
     }
 
     @Test
