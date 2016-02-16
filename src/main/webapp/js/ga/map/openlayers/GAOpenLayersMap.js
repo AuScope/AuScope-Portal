@@ -10,7 +10,11 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
     selectControl : null,
     layerSwitcher : null,
 
-    constructor : function(cfg) {
+    baseLayerName : null,
+    
+    constructor : function(cfg) {        
+        this.baseLayerName = cfg.baseLayerName;        
+        
         this.callParent(arguments);
     },
 
@@ -78,44 +82,42 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         var containerId = divId;
         var me = this;
 
-        this.map = new OpenLayers.Map({
+        me.map = new OpenLayers.Map({
             div: containerId,
             projection: 'EPSG:3857',
             controls : [],
-            layers: [
-                     new OpenLayers.Layer.WMS (
-                         "World Political Boundaries",
-                         "http://www.ga.gov.au/gis/services/topography/World_Political_Boundaries_WM/MapServer/WMSServer",
-                         {layers: 'Countries'}
-                     ),
-                     new OpenLayers.Layer.Google(
-                             "Google Hybrid",
-                             {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
-                     ),
-                     new OpenLayers.Layer.Google(
-                         "Google Physical",
-                         {type: google.maps.MapTypeId.TERRAIN}
-                     ),
-                     new OpenLayers.Layer.Google(
-                         "Google Streets", 
-                         {numZoomLevels: 20}
-                     ),
-                     // the default
-                     new OpenLayers.Layer.Google(
-                         "Google Satellite",
-                         {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
-                     )
-                 ],
-                 center: new OpenLayers.LonLat(133.3, -26)
-                     // Google.v3 uses web mercator as projection, so we have to
-                     // transform our coordinates
-                     .transform('EPSG:4326', 'EPSG:3857'),
-                 zoom: 4
+            layers: [             
+                // the default
+                new OpenLayers.Layer.Google(
+                        "Google Satellite",
+                        {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+                ),
+                new OpenLayers.Layer.Google(
+                    "Google Streets", 
+                    {type: google.maps.MapTypeId.ROADMAP,numZoomLevels: 20}
+                ),
+                new OpenLayers.Layer.Google(
+                    "Google Physical",
+                    {type: google.maps.MapTypeId.TERRAIN}
+                ),
+                new OpenLayers.Layer.Google(
+                    "Google Hybrid",
+                    {type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20}
+                ),
+                new OpenLayers.Layer.WMS (
+                    "World Political Boundaries",
+                    "http://www.ga.gov.au/gis/services/topography/World_Political_Boundaries_WM/MapServer/WMSServer",
+                    {layers: 'Countries'}
+                )],
+                // Google.v3 uses web mercator as projection, so we have to
+                // transform our coordinates
+                center: new OpenLayers.LonLat(133.3, -26).transform('EPSG:4326', 'EPSG:3857'),
+                zoom: 4
         });
 
         this.highlightPrimitiveManager = this.makePrimitiveManager();
         this.container = container;
-        this.rendered = true;               
+        this.rendered = false;               
         
         // default control, the hand/pan control
         var panControl = new OpenLayers.Control.Navigation();
@@ -252,9 +254,6 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
             this.map.addControl(panel);
         }
         
-        // There was an option to call _addMapCreatedEventListener(fn, args) to callback once the map is created.  Call them.
-        this._callMapCreatedEventListeners();
-
         //Finally listen for resize events on the parent container so we can pass the details
         //on to Openlayers.
         container.on('resize', function() {
@@ -264,9 +263,8 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         //Finally listen for boxready events on the parent container so we can pass the details
         //on to Openlayers.
         container.on('boxready', function() {
-            this.map.updateSize();
-        }, this);      
-       
+            me.map.updateSize();
+        }, this);
     },
     
     _makeQueryTargetsMap : function(layerStore, longitude, latitude) {
@@ -385,6 +383,37 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
         }
 
         return queryTargets;
+    },
+    
+    // Draw the OpenLayers layers (eg. "Google Street View"/"Google Satellite") Controls (GPT-40 Active Layers)
+    renderBaseLayerSwitcher : function(divId) {
+        var me = this;
+        
+        if (me.map && !me.layerSwitcher) {
+            if (divId) {
+                me.layerSwitcher = new OpenLayers.Control.LayerSwitcher({
+                    'div': OpenLayers.Util.getElement(divId),
+                    'ascending':true
+                });
+            } else {
+                // No div so it will appear on the map if the portal code doesn't call this
+                me.layerSwitcher = new OpenLayers.Control.LayerSwitcher({
+                    'ascending':true
+                });
+            }
+            // might need to replace rather than add
+            me.map.addControl(me.layerSwitcher);
+            me.layerSwitcher.maximizeControl();
+        }
+        
+        if (me.baseLayerName) {            
+            Ext.each(me.map.layers, function(layer) {
+                if (layer.name === me.baseLayerName) {
+                    me.map.setBaseLayer(layer);
+                    return true;
+                }
+            });     
+        }
     },
     
     /**
@@ -508,4 +537,3 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
     },
 
 });
-

@@ -7,7 +7,6 @@ Ext.define('ga.widgets.GAMenuBar', {
     alias: 'widget.gamenubar',
 
     map: null,
-    layerStore: null,
     
     statics : {
         instructionManager : Ext.create('portal.util.help.InstructionManager', {}),
@@ -17,7 +16,6 @@ Ext.define('ga.widgets.GAMenuBar', {
         
         var me = this;
         me.map = config.map;
-        me.layerStore = config.layerStore;  
         
         // Create our Print Map handler         
         var printMapHandler = function() {   
@@ -75,13 +73,7 @@ Ext.define('ga.widgets.GAMenuBar', {
                 }
             });
             
-            // remove all of the layers we have added
-            var items = me.layerStore.data.items;    
-            for (var i = items.length-1; i >=0; --i) {
-                var layer = items[i];        
-                AppEvents.broadcast('removelayer', {layer:layer, layerStore:me.layerStore});
-            }
-            me.layerStore = Ext.create('portal.layer.LayerStore', {});
+            ActiveLayerManager.removeAllLayers(me.map);
             
             // if the browser supports local storage, clear the stored map state
             if(typeof(Storage) !== "undefined") {
@@ -95,7 +87,7 @@ Ext.define('ga.widgets.GAMenuBar', {
             var mss = Ext.create('portal.util.permalink.MapStateSerializer');
     
             mss.addMapState(me.map);
-            mss.addLayers(me.layerStore);
+            mss.addLayers(me.map);
     
             mss.serialize(function(state, version) {
                 var popup = Ext.create('portal.widgets.window.PermanentLinkWindow', {

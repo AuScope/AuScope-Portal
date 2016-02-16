@@ -68,11 +68,13 @@ public class TestWfsController extends PortalTestClass {
         });
 
         ModelAndView modelAndView = wfsController.requestAllFeatures(wfsUrl, featureType, bboxJsonString, maxFeatures);
-        ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
+        Object dataObj = modelAndView.getModel().get("data");
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
-        Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(gmlBlob, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(kmlBlob, ((ModelMap)dataObj).get("kml"));
+        }
     }
 
     @Test
@@ -97,11 +99,13 @@ public class TestWfsController extends PortalTestClass {
         });
 
         ModelAndView modelAndView = wfsController.requestAllFeatures(wfsUrl, featureType, bboxJsonString, maxFeatures);
-        ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
+        Object dataObj = modelAndView.getModel().get("data");
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
-        Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(gmlBlob, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(kmlBlob, ((ModelMap)dataObj).get("kml"));
+        }
     }
 
     @Test
@@ -123,11 +127,13 @@ public class TestWfsController extends PortalTestClass {
         });
 
         ModelAndView modelAndView = wfsController.requestFeature(wfsUrl, featureType, featureId);
-        ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
+        Object dataObj = modelAndView.getModel().get("data");
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
-        Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(gmlBlob, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(kmlBlob, ((ModelMap)dataObj).get("kml"));
+        }
     }
 
     @Test
@@ -154,11 +160,13 @@ public class TestWfsController extends PortalTestClass {
 
         ModelAndView modelAndView = wfsController.requestFeatureByProperty(wfsUrl, featureType, featureProperty,
                 propertyValue);
-        ModelMap dataObj = (ModelMap) modelAndView.getModel().get("data");
+        Object dataObj = modelAndView.getModel().get("data");
         Assert.assertTrue((Boolean) modelAndView.getModel().get("success"));
         Assert.assertNotNull(dataObj);
-        Assert.assertEquals(gmlBlob, dataObj.get("gml"));
-        Assert.assertEquals(kmlBlob, dataObj.get("kml"));
+        if (dataObj instanceof ModelMap) {
+            Assert.assertEquals(gmlBlob, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(kmlBlob, ((ModelMap)dataObj).get("kml"));
+        }
     }
 
     /**

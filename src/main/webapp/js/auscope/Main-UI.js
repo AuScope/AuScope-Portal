@@ -5,8 +5,6 @@ Ext.Loader.setConfig({
 //    }
 });
 
-Ext.require('portal.events.AppEvents');
-
 Ext.application({
     name : 'portal',
 
@@ -23,6 +21,32 @@ Ext.application({
         // default baseLayer to load (layer.name)
         var defaultBaseLayer = "Google Satellite";
 
+        // Handle deserialisation
+        // if we have a uri param called "state" then we'll use that to deserialise.
+        // else if we have a value in localStorage called "portalStorageApplicationState" then use that
+        // otherwise do nothing special
+        var deserializationHandler, decodedString, decodedVersion, useStoredState = true;
+
+        // separating the GET parameters from the current URL
+        var urlParams = this.getParameters(window.location.href);
+        if (urlParams['s'] && urlParams['v']) {
+            decodedString = urlParams['s'];
+            decodedVersion = urlParams['v'];
+            useStoredState = false;
+        } else {
+            if(typeof(Storage) !== "undefined") {
+                decodedString = localStorage.getItem("portalStorageApplicationState");
+                var serialisedBaseLayer = localStorage.getItem("portalStorageDefaultBaseLayer");
+                if (serialisedBaseLayer) {
+                    defaultBaseLayer = serialisedBaseLayer;
+                }
+                decodedVersion = null;
+            }
+        }
+
+        // main div
+        var body = Ext.getBody();
+
         // WARNING - Terry IS playing dangerous games here!
         // if !(oldBrowser) then ....
         Ext.Ajax.method = 'GET';
@@ -35,8 +59,6 @@ Ext.application({
         Ext.Ajax.timeout = 300000;
         //IF END
 
-
-        var currentExtent = map
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var isDebugMode = urlParams.debug;
 
@@ -196,17 +218,17 @@ Ext.application({
             autoLoad : true
         });
 
-        //Create our store for holding the set of
-        //layers that have been added to the map
-        var layerStore = Ext.create('portal.layer.LayerStore', {});
+        //Create our store for holding the set of layers that have been added to the map
+        var activeLayerStore = Ext.create('portal.layer.LayerStore');
         
         //Create our map implementations
         var mapCfg = {
             container : null,   //We will be performing a delayed render of this map
-            layerStore : layerStore            
+            layerStore : activeLayerStore,
+            baseLayerName : defaultBaseLayer,
+            portalIsHandlingLayerSwitcher : true
         };
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
-
 
         var map = null;
 
@@ -228,31 +250,12 @@ Ext.application({
             rendererFactory : Ext.create('auscope.layer.AuScopeRendererFactory', {map: map})
         });
         
-        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {            
-            store : layerStore,
-            onlineResourcePanelType : 'gaonlineresourcespanel',
-            serviceInformationIcon: 'img/information.png',
-            mapExtentIcon: 'img/extent3.png',
-            map : map,
-            layerFactory : activeLayerFactory,
-            tooltip : {
-                anchor : 'top',
-                title : 'Featured Layers',
-                text : '<p>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p>',
-                showDelay : 100,
-                icon : 'img/information.png',
-                dismissDelay : 30000
-            }
-        });
-        
-        var activeLayersMenuFactory = Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: true, addResetFormActionForWMS : false, recordPanel : activeLayersPanel});
-        activeLayersPanel.menuFactory = activeLayersMenuFactory;
+
         
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Featured',
             id: 'knownLayersPanel',
             store : knownLayerStore,
-            activelayerstore : layerStore,
             map : map,
             layerFactory : defaultLayerFactory,
             onlineResourcePanelType : 'gaonlineresourcespanel',
@@ -274,7 +277,6 @@ Ext.application({
         var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
             title : 'Registered',
             store : unmappedCSWRecordStore,
-            activelayerstore : layerStore,
             onlineResourcePanelType : 'gaonlineresourcespanel',
             serviceInformationIcon: 'img/information.png',
             mapExtentIcon: 'img/extent3.png',
@@ -293,7 +295,6 @@ Ext.application({
             title : 'Custom',
             itemId : 'org-auscope-custom-record-panel',
             store : customRecordStore,
-            activelayerstore : layerStore,
             onlineResourcePanelType : 'gaonlineresourcespanel',
             serviceInformationIcon: 'img/information.png',
             mapExtentIcon: 'img/extent3.png',
@@ -311,7 +312,6 @@ Ext.application({
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Research Data',
             store : researchDataLayerStore,
-            activelayerstore : layerStore,
             enableBrowse : false,//VT: if true browse catalogue option will appear
             map : map,
             layerFactory : defaultLayerFactory,
@@ -334,7 +334,6 @@ Ext.application({
             items:[{
                 xtype: 'gaheader',
                 map: map,
-                layerStore: layerStore,
                 registryStore: cswServiceItemStore,
                 layerFactory: defaultLayerFactory
             }]
@@ -394,50 +393,6 @@ Ext.application({
                 }
             }
         });
-
-        /**
-         * Add panel for the Active Layers and Controls (GPT-40)
-         */
-        var body = Ext.getBody();
-
-        // Render Active Layers into divId
-        var renderActiveLayers = function(divId) {
-            console.log("renderActiveLayers - divId: "+divId);
-        }
-
-        var activeLayersPanel = Ext.create('Ext.panel.Panel', {
-            id : 'activeLayersPanel',
-            title : 'Active Layers',
-             layout: {
-                 type: 'vbox',         // Arrange child items vertically
-                 align: 'stretch',     // Each takes up full width
-                 padding: 1
-             },
-             renderTo: body,
-             items : [
-                  activeLayersPanel,     //activeLayerDisplay,
-                  {
-                     xtype : 'label',
-                     id : 'baseMap',
-                     html : '<div id="baseMap"></div>',
-                     listeners: {
-                         afterrender: function (view) {
-                             map.renderBaseMap('baseMap');
-                         }
-                     }
-                  }
-             ],
-             minHeight: 170,
-             width: 500,
-             collapsible: true,
-             animCollapse : true,
-             collapseDirection : 'top',
-             collapsed : false,
-        });
-
-        activeLayersPanel.show();
-        activeLayersPanel.setZIndex(1000);
-        activeLayersPanel.anchorTo(body, 'tr-tr', [0, 100], true);
         
         /**
          * Add all the panels to the viewport
@@ -468,7 +423,7 @@ Ext.application({
                        cswRecord.set('layer',newLayer);
                        var filterForm = newLayer.get('filterForm');
                        filterForm.setLayer(newLayer);
-                       layerStore.insert(0,newLayer);
+                       ActiveLayerManager.addlayer(newLayer);
                    }
 
                 },
@@ -479,49 +434,86 @@ Ext.application({
 
         }
 
-        // Handle deserialisation
-        // if we have a uri param called "state" then we'll use that to deserialise.
-        // else if we have a value in localStorage called "portalStorageApplicationState" then use that
-        // otherwise do nothing special        
-        var deserializationHandler, decodedString, decodedVersion, useStoredState = true;
-                
-        var searchStart = window.location.href.indexOf('?');        
-        var urlParams = Ext.Object.fromQueryString(window.location.href.substring(searchStart + 1));
-        if (urlParams && (urlParams.state || urlParams.s)) {
-            decodedString = urlParams.state ? urlParams.state : urlParams.s;
-            decodedVersion = urlParams.v;        
-            useStoredState = false;
-        } else {
-            if(typeof(Storage) !== "undefined") {
-                decodedString = localStorage.getItem("portalStorageApplicationState");
-                var serialisedBaseLayer = localStorage.getItem("portalStorageDefaultBaseLayer");
-                if (serialisedBaseLayer) {
-                    defaultBaseLayer = serialisedBaseLayer;
-                }
-                decodedVersion = null;
+        var activeLayersPanel = Ext.create('portal.widgets.panel.ActiveLayerPanel', {
+            store : activeLayerStore,
+            onlineResourcePanelType : 'gaonlineresourcespanel',
+            serviceInformationIcon: 'img/information.png',
+            mapExtentIcon: 'img/extent3.png',
+            map : map,
+            layerFactory : activeLayerFactory,
+            tooltip : {
+                anchor : 'top',
+                title : 'Featured Layers',
+                text : '<p>This is where the portal groups data services with a common theme under a layer. This allows you to interact with multiple data providers using a common interface.</p><br><p>The underlying data services are discovered from a remote registry. If no services can be found for a layer, it will be disabled.</p>',
+                showDelay : 100,
+                icon : 'img/information.png',
+                dismissDelay : 30000
             }
-        }
+        });
+        var activeLayersMenuFactory = Ext.create('auscope.layer.GAFilterPanelMenuFactory',{map : map, showFilter: true, addResetFormActionForWMS : false, recordPanel : activeLayersPanel});
+        activeLayersPanel.menuFactory = activeLayersMenuFactory;
+
+        var activeLayersPanel = Ext.create('Ext.panel.Panel', {
+            id : 'activeLayersPanel',
+            title : 'Active Layers',
+             layout: {
+                 type: 'vbox',         // Arrange child items vertically
+                 align: 'stretch',     // Each takes up full width
+                 padding: 1
+             },
+             renderTo: body,
+             items : [
+                  activeLayersPanel,     //activeLayerDisplay,
+                  {
+                     xtype : 'label',
+                     id : 'baseMap',
+                     html : '<div id="layerSwitcher"></div>',
+                     listeners: {
+                         afterrender: function (view) {
+                             map.renderBaseLayerSwitcher('layerSwitcher');
+                         }
+                     }
+                  }
+             ],
+             minHeight: 170,
+             width: 500,
+             collapsible: true,
+             animCollapse : true,
+             collapseDirection : 'top',
+             collapsed : false,
+        });
+
+        activeLayersPanel.show();
+        activeLayersPanel.setZIndex(1000);
+        activeLayersPanel.anchorTo(body, 'tr-tr', [0, 100], true);
+
+        // deserialise and add the restored layers if necessary
         if (decodedString) {            
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
                 cswRecordStore : unmappedCSWRecordStore,
                 layerFactory : defaultLayerFactory,
-                layerStore : layerStore,
                 map : map,
                 stateString : decodedString,
                 stateVersion : decodedVersion,
                 useStoredState: useStoredState
             });
-        } 
-        
-        /* set defaultBaseLayer for the map, if any */ 
-        Ext.each(map.layerSwitcher.baseLayers, function(baseLayer) {
-            if (baseLayer.layer.name === defaultBaseLayer) {
-                map.map.setBaseLayer(baseLayer.layer);
-                return false;
+        }
+    },
+
+    /** gets the url parameters if any for deserialisation */
+    getParameters : function (url){
+        var urlParams = {};
+        url = url.split('?');
+        if (url.length > 1) {
+            var regex = '=(.*?)(;|&|$)';
+            urlParams['s'] = url[1].split(new RegExp('s' + regex,'gi'))[1];
+            if (!urlParams['s']) {
+                urlParams['s'] = url[1].split(new RegExp('state' + regex,'gi'))[1];
             }
-        });
-        
+            urlParams['v'] = url[1].split(new RegExp('v' + regex,'gi'))[1];
+        }
+        return urlParams;
     }
 
 });

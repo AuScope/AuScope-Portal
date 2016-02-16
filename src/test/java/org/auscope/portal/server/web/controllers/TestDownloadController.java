@@ -83,6 +83,7 @@ public class TestDownloadController extends PortalTestClass {
     @Test
     public void testDownloadGMLAsZip() throws Exception {
         final String[] serviceUrls = {"http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs"};
+        final String dummyKml = "<someKmlHere/>";
         final String dummyGml = "<someGmlHere/>";
         final String dummyJSONResponse = "{\"data\":{\"kml\":\"<someKmlHere/>\", \"gml\":\""
                 + dummyGml + "\"},\"success\":true}";
@@ -121,8 +122,8 @@ public class TestDownloadController extends PortalTestClass {
         byte[] uncompressedData = new byte[dummyGml.getBytes().length];
         int dataRead = in.read(uncompressedData);
 
-        Assert.assertEquals(dummyGml.getBytes().length, dataRead);
-        Assert.assertArrayEquals(dummyGml.getBytes(), uncompressedData);
+        Assert.assertEquals(dummyKml.getBytes().length, dataRead);
+        Assert.assertArrayEquals(dummyKml.getBytes(), uncompressedData);
 
         in.close();
 

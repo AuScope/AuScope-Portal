@@ -100,7 +100,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             WFSTransformedResponse response = this.mineralOccurrenceService.getMinesGml(serviceUrl, mineName, bbox,
                     maxFeatures);
 
-            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+            return generateJSONResponseMAV(response.getSuccess(), response.getGml(), response.getTransformed(), response.getMethod());
         } catch (Exception e) {
             log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
             log.debug("Exception: ", e);

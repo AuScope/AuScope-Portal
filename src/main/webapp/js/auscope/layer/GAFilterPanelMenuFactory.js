@@ -26,40 +26,30 @@ Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
      */
     appendAdditionalActions : function(menuItems,layer,group) {
         
- 
         //VT:Should have a download action except for Insar data.
-        if((layer.get('cswRecords').length > 0 &&                
-            layer.get('cswRecords')[0].get('noCache')==false) && layer.id != 'portal-reports'){
+        if((layer.get('cswRecords').length > 0
+            && layer.get('cswRecords')[0].get('noCache')==false)
+            && layer.id != 'portal-reports'){
                 
-                var allOnlineResources = layer.getAllOnlineResources();
-            
-                var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WMS);
-                var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
-                var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
-
-                // only provide reset option if there are resources other than just WMS resources
-                // otherwise there will be no form fields to reset
-                if (wfsResources.length > 0 || wcsResources.length > 0) {
-                    menuItems.push(this._getResetFormAction());
-                }
-                    
-                // only provide download option if there are WFS resources to download
-                if (wfsResources.length > 0) {
-                    menuItems.push(this._getDownloadAction(layer));    
-                }
-        }        
+            var allOnlineResources = layer.getAllOnlineResources();
         
-         //VT:  link layer to VGL if contain under the Analytic grouping                      
-        if(group && group.indexOf('Analytic') >= 0){
-            menuItems.push(this._getAnalyticLink(layer));
+            var wmsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WMS);
+            var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WFS);
+            var wcsResources = portal.csw.OnlineResource.getFilteredFromArray(allOnlineResources, portal.csw.OnlineResource.WCS);
+
+            // only provide reset option if there are resources other than just WMS resources
+            // otherwise there will be no form fields to reset
+            if (wfsResources.length > 0 || wcsResources.length > 0) {
+                menuItems.push(this._getResetFormAction());
+            }
+
+            // only provide download option if there are WFS resources to download
+            if (wfsResources.length > 0) {
+                menuItems.push(this._getDownloadAction(layer));
+            }
         }
-        //VT: check for any layer specific analytic function
-        var analytics = this._getlayerAnalytics(layer)
-        if(analytics){
-            menuItems.push(analytics);
-        }  
     },
-    
+
     _getResetFormAction : function(){
         var me = this;
         return new Ext.Action({
@@ -71,11 +61,6 @@ Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
                 filterForm.reset();
             }
         })
-        
-    },
-    
-    layerRemoveHandler : function(layer){
-        this.fireEvent('removelayer', layer);
     },
        
     _getDownloadAction : function(layer){
@@ -105,81 +90,7 @@ Ext.define('auscope.layer.GAFilterPanelMenuFactory', {
                 }
             }
         });
-        
-        return downloadLayerAction
-    },
-    
-   
-    
-    _getAnalyticLink : function(layer){    
-        var me=this;
-        return new Ext.Action({
-            text : 'Vgl Analytics',
-            iconCls : 'link',
-            handler : function(){                
-                
-                var mss = Ext.create('portal.util.permalink.MapStateSerializer');
-                var layerStore = Ext.create('portal.layer.LayerStore', {});
-                layerStore.insert(0,layer);
-
-                mss.addMapState(me.map);
-                mss.addLayers(layerStore);
-                mss.serialize(function(state, version) {
-                    var urlParams = Ext.Object.fromQueryString(location.search.substring(1));
-                    urlParams.s = state;
-                    if (version) {
-                        urlParams.v = version;
-                    }
-                    //VT: Hardcoding this for now, don't foresee any changes anytime soon.
-                    var linkedUrl = "http://vgl.auscope.org/VGL-Portal/gmap.html";
-
-                    var params = Ext.Object.toQueryString(urlParams);
-
-                    //*HACK:* sssssshhhh dont tell anyone we don't care about escaping....
-                    linkedUrl = Ext.urlAppend(linkedUrl, decodeURIComponent(params));
-                    window.open(linkedUrl);
-                });
-                
-            }
-        });
-        
-    },
-    
-    
-    _getlayerAnalytics : function(layer){ 
-        var me = this;
-        if( auscope.layer.analytic.AnalyticFormFactory.supportLayer(layer)){
-            
-            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active') && layer.get('filterer').parameters.featureType){            
-                return new Ext.Action({
-                    text : 'Graph',
-                    iconCls : 'graph',                    
-                    handler : function(){   
-                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)                        
-                        win.show();
-                        me.on('removelayer',function(closeLayer){
-                            if(closeLayer.get('id')==layer.get('id')){
-                                win.close();
-                            }                            
-                        })                                               
-                    }
-                });
-            }else{
-                return new Ext.Action({
-                    text : '<span data-qtip="Add layer to map and select \'Group of Interest\' to enable this function">' + 'Graph',
-                    disabled : true,
-                    iconCls : 'graph',                    
-                    handler : function(){   
-                        Ext.Msg.alert('Alert', 'Add layer to map first.');
-                    }
-                });
-            }
-        }else{
-            return null;
-        }
-        
-       
-        
+        return downloadLayerAction;
     }
-    
+
 });
