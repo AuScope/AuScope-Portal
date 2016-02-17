@@ -23,6 +23,19 @@ Ext.define('portal.widgets.panel.BaseActiveRecordPanel', {
     notVisibleIcon : 'img/eye_off.png',
     
     listenersHere : {
+        // when the component is ready, we can update its events
+        viewready: function(grid) {
+            var view = grid.getView(),
+                dd = view.findPlugin('gridviewdragdrop'),
+                pos;
+
+            // ignore drag events that didn't originate from the Name column
+            // this will allow default events like click inside the expanded panel to work
+            dd.dragZone.onBeforeDrag = function (data, e) {
+                pos = grid.getView().getPositionByEvent(e);
+                return pos.colIdx === 1;
+            }
+        }
     },
 
     constructor : function(cfg) {
