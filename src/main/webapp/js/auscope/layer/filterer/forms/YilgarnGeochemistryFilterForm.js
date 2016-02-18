@@ -21,7 +21,7 @@ Ext.define('auscope.layer.filterer.forms.YilgarnGeochemistryFilterForm', {
             autoHeight: true,
             items: [{
                 xtype:'fieldset',
-                title: 'YilgarnGeochemistry Filter Properties',
+                title: 'Filter data',
                 autoHeight: true,
                 items: [{
                     anchor: '100%',
