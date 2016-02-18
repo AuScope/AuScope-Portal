@@ -1585,8 +1585,8 @@
     <bean id="knownTypeOil" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="oil"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="topography_National_Onshore_Oil_Pipelines:Oil_Pipelines"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="National_Onshore_Oil_Pipelines"/>
             </bean>
         </constructor-arg>
 
@@ -1604,8 +1604,8 @@
     <bean id="knownTypeGas" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="gas"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="topography_National_Onshore_Gas_Pipelines:Gas_Pipelines"/>
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="National_Onshore_Gas_Pipelines"/>
             </bean>
         </constructor-arg>
 
@@ -1625,7 +1625,7 @@
         <constructor-arg name="id" value="majorports"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="National Major Ports"/>
+                <constructor-arg name="layerName" value="National_Major_Ports"/>
             </bean>
         </constructor-arg>
 
