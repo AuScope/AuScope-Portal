@@ -67,7 +67,7 @@ Ext.define('auscope.layer.filterer.forms.MiningActivityFilterForm', {
             items: [{
                 xtype:'fieldset',
                 title: '<span data-qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
-                       'Mining Activity Filter Properties' +
+                       'Filter data' +
                        '</span>',
                 defaultType: 'textfield',
                 defaults: {anchor: '100%'},

@@ -11,7 +11,7 @@ Ext.define('auscope.layer.filterer.forms.PressureDBFilterForm', {
         this.callParent(arguments);
 
         var fieldSet = this.getComponent('borehole-fieldset');
-        fieldSet.setTitle('Pressure DB Filter Properties');
+        fieldSet.setTitle('Filter data');
         this.doLayout();
     }
 });

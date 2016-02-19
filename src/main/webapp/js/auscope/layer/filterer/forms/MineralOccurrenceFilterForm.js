@@ -70,7 +70,7 @@ Ext.define('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', {
             items: [{
                 xtype: 'fieldset',
                 title: '<span data-qtip="Please enter the filter constraints then hit \'Apply Filter\'">' +
-                          'Mineral Occurrence Filter Properties' +
+                          'Filter data' +
                        '</span>',
                 autoHeight: true,
                 labelAlign: 'right',

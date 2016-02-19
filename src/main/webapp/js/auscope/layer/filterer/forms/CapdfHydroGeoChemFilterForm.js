@@ -92,7 +92,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             items: [{
                 xtype:'fieldset',
                 title: '<span data-qtip="Please enter the filter constraints then hit \'Show Results\'">' +
-                           'Geochemistry Filter Properties' +
+                           'Filter data' +
                        '</span>',
                 autoHeight: true,
                 items: [{

@@ -57,7 +57,7 @@ Ext.define('auscope.layer.filterer.forms.BoreholeFilterForm', {
             items: [{
                 xtype:'fieldset',
                 itemId: 'borehole-fieldset',
-                title: 'Borehole Filter Properties',
+                title: 'Filter data',
                 autoHeight : true,
                 items: [{
                     xtype: 'textfield',

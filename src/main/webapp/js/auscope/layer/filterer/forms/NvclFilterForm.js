@@ -11,7 +11,7 @@ Ext.define('auscope.layer.filterer.forms.NvclFilterForm', {
         this.callParent(arguments);
 
         var fieldSet = this.getComponent('borehole-fieldset');
-        fieldSet.setTitle('NVCL Filter Properties');
+        fieldSet.setTitle('Filter data');
         this.add({
             xtype: 'hidden',
             itemId: 'hylogger-field',
