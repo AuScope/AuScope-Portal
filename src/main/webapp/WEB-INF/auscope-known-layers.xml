@@ -1647,7 +1647,7 @@
         <constructor-arg name="id" value="protectedAreasCAPAD2014Marine"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="Protected_Areas_CAPAD_2014_Marine"/>
+                <constructor-arg name="layerName" value="0"/>
             </bean>
         </constructor-arg>
         <property name="name" value="Protected Areas CAPAD 2014 - Marine"/>
