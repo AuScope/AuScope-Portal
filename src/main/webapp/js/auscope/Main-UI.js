@@ -1,8 +1,10 @@
 Ext.Loader.setConfig({
     enabled: true,
-//    paths: {
-//        'AM': 'app'
-//    }
+});
+
+Ext.override(Ext.Window, {
+    constrainHeader: true,
+    modal: true
 });
 
 Ext.application({

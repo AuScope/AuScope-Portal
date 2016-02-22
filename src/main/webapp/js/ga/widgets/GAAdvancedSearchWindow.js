@@ -76,12 +76,10 @@ Ext.define('ga.widgets.GAAdvancedSearchWindow', {
         Ext.apply(cfg, {
             title : 'Enter Parameters',
             layout : 'fit',
-            constrain: true,
-            modal : false,
             width : 500,
             items : [me.cswFilterFormPanel],
             scrollable: false,
-            buttons: controlButtons            
+            buttons: controlButtons         
         });
 
         this.callParent(arguments);
