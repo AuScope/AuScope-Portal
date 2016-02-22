@@ -1664,7 +1664,7 @@ This version of CAPAD 2014-Marine is a public / downloadable dataset available f
         <constructor-arg name="id" value="protectedAreasCAPAD2014Terrestrial"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="Protected_Areas_CAPAD_2014_Terrestrial"/>
+                <constructor-arg name="layerName" value="Protected_Areas_2014"/>
             </bean>
         </constructor-arg>
         <property name="name" value="Protected Areas CAPAD 2014 - Terrestrial"/>
