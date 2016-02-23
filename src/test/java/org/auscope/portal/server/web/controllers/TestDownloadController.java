@@ -10,13 +10,9 @@ import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.message.BasicHeader;
 import org.auscope.portal.core.configuration.ServiceConfiguration;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
@@ -83,9 +79,9 @@ public class TestDownloadController extends PortalTestClass {
     @Test
     public void testDownloadGMLAsZip() throws Exception {
         final String[] serviceUrls = {"http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs"};
+        final String outputFormat = "gml";
         final String dummyGml = "<someGmlHere/>";
-        final String dummyJSONResponse = "{\"data\":{\"kml\":\"<someKmlHere/>\", \"gml\":\""
-                + dummyGml + "\"},\"success\":true}";
+        final String dummyJSONResponse = "{\"data\":{\"gml\":\"" + dummyGml + "\"},\"success\":true}";
         final MyServletOutputStream servletOutputStream = new MyServletOutputStream(dummyJSONResponse.length());
         final InputStream dummyJSONResponseIS = new ByteArrayInputStream(dummyJSONResponse.getBytes());
 
@@ -107,7 +103,7 @@ public class TestDownloadController extends PortalTestClass {
         });
 
         downloadController.downloadGMLAsZip(serviceUrls, mockHttpResponse,
-                threadPool, null);
+                threadPool, null, outputFormat);
         Thread.sleep(100);
         dummyJSONResponseIS.close();
 
@@ -136,6 +132,7 @@ public class TestDownloadController extends PortalTestClass {
     @Test
     public void testDownloadGMLAsZipWithJSONError() throws Exception {
 
+        final String outputFormat = "gml";
         final String[] serviceUrls = {
                 "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs",
                 "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://www.mrt.tas.gov.au:80/web-services/wfs"};
@@ -167,7 +164,7 @@ public class TestDownloadController extends PortalTestClass {
         });
 
         downloadController.downloadGMLAsZip(serviceUrls, mockHttpResponse,
-                threadPool, null);
+                threadPool, null, outputFormat);
         Thread.sleep(500);
         dummyJSONResponseNoMsgIS.close();
         dummyJSONResponseIS.close();
@@ -198,12 +195,12 @@ public class TestDownloadController extends PortalTestClass {
      */
     @Test
     public void testDownloadGMLAsZipWithException() throws Exception {
-
+        final String outputFormat = "gml";
         final String[] serviceUrls = {
                 "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs",
                 "http://localhost:8088/AuScope-Portal/doBoreholeFilter.do?&serviceUrl=http://www.mrt.tas.gov.au:80/web-services/wfs"};
         final String dummyGml = "<someGmlHere/>";
-        final String dummyJSONResponse = "{\"data\":{\"kml\":\"<someKmlHere/>\", \"gml\":\""
+        final String dummyJSONResponse = "{\"data\":{\"gml\":\""
                 + dummyGml + "\"},\"success\":true}";
         final MyServletOutputStream servletOutputStream = new MyServletOutputStream(dummyJSONResponse.length());
         final InputStream dummyJSONResponseIS2 = new ByteArrayInputStream(dummyJSONResponse.getBytes());
@@ -228,7 +225,7 @@ public class TestDownloadController extends PortalTestClass {
         });
 
         downloadController.downloadGMLAsZip(serviceUrls, mockHttpResponse,
-                threadPool, null);
+                threadPool, null, outputFormat);
         Thread.sleep(500);
 
         dummyJSONResponseIS2.close();

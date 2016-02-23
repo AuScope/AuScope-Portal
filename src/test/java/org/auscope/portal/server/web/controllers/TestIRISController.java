@@ -44,19 +44,6 @@ public class TestIRISController extends PortalTestClass {
     }
 
     @Test
-    public void getIRISStations_stationResponseXML_ResultantModelHasAKmlInsideIt() {
-        // Act
-        ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/stationResponse.xml", "");
-
-        // Assert
-        Assert.assertTrue(result
-                .getModel()
-                .toString()
-                .contains(
-                        "kml=<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\">"));
-    }
-
-    @Test
     public void getIRISStations_stationResponseBadXML_ResultantModelHasSuccessSetToFalse() {
         // Act
         ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/stationResponseBad.xml", "");
@@ -72,19 +59,6 @@ public class TestIRISController extends PortalTestClass {
 
         // Assert
         Assert.assertTrue((Boolean) result.getModel().get("success"));
-    }
-
-    @Test
-    public void getStationChannels_channelResponseXML_ResultantModelHasAKmlInsideIt() {
-        // Act
-        ModelAndView result = this.controller.getIRISStations("org/auscope/portal/iris/channelResponse.xml", "");
-
-        // Assert
-        Assert.assertTrue(result
-                .getModel()
-                .toString()
-                .contains(
-                        "kml=<?xml version=\"1.0\" encoding=\"UTF-8\"?><kml xmlns=\"http://www.opengis.net/kml/2.2\">"));
     }
 
     @Test

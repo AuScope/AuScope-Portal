@@ -2,7 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.gsml.TIMAGeosampleFilter;
 import org.auscope.portal.server.web.service.WFSService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,8 @@ public class TIMAController extends BasePortalController {
             @RequestParam(required = false, value = "sampleName") String sampleName,
             @RequestParam(required = false, value = "igsn") String igsn,
             @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures)
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures,
+            @RequestParam(required = false, value = "outputFormat") String outputFormat)
             throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -47,9 +48,9 @@ public class TIMAController extends BasePortalController {
         String filterString = generateGeoSampleFilter(sampleName, igsn, bboxJson);
 
         //Make our request and get it transformed
-        WFSTransformedResponse response = null;
+        WFSResponse response = null;
         try {
-            response = wfsService.getWfsResponseAsKml(serviceUrl, "tima:geosample_and_mineralogy", filterString,
+            response = wfsService.getWfsResponse(serviceUrl, "tima:geosample_and_mineralogy", filterString,
                     maxFeatures, null);
         } catch (Exception ex) {
             log.warn(String.format("Unable to request/transform WFS response for '%1$s' from '%2$s': %3$s", sampleName,
@@ -58,12 +59,12 @@ public class TIMAController extends BasePortalController {
             return generateExceptionResponse(ex, serviceUrl);
         }
 
-        return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+        return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
     }
 
     /**
      * Utility function for generating an OGC filter for a TIMA simple feature
-     * 
+     *
      * @return
      */
     private String generateGeoSampleFilter(String name, String igsn, String bboxString) {

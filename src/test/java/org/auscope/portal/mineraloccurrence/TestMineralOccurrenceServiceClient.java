@@ -14,7 +14,6 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
-import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -22,14 +21,13 @@ import org.junit.Test;
 
 /**
  * Created by IntelliJ IDEA. User: Mathew Wyatt Date: Jun 4, 2009
- * 
+ *
  * @version: $Id$
  */
 public class TestMineralOccurrenceServiceClient extends PortalTestClass {
     private MineralOccurrenceService mineralOccurrenceService;
     private HttpServiceCaller httpServiceCaller;
     private MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler;
-    private WfsToKmlTransformer mockGmlToKml;
 
     private WFSGetFeatureMethodMaker methodMaker;
 
@@ -38,9 +36,8 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         this.methodMaker = context.mock(WFSGetFeatureMethodMaker.class);
         this.mineralOccurrencesResponseHandler = context.mock(MineralOccurrencesResponseHandler.class);
         this.httpServiceCaller = context.mock(HttpServiceCaller.class);
-        this.mockGmlToKml = context.mock(WfsToKmlTransformer.class);
         this.mineralOccurrenceService = new MineralOccurrenceService(this.httpServiceCaller,
-                this.mineralOccurrencesResponseHandler, this.methodMaker, this.mockGmlToKml);
+                this.mineralOccurrencesResponseHandler, this.methodMaker);
         //this.commodityService = context.mock(CommodityService.class);
     }
 
@@ -116,47 +113,47 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
     /**
      * Test the event that we dont provide a name or group
-     * 
+     *
      * @throws Exception
      *
      @Test public void testGetCommodityNoNameOrGroup() throws Exception { final String serviceURL = "http://localhost?"; final String commodityName = "";
-     * 
+     *
      *       final GetMethod mockMethod = context.mock(GetMethod.class); final String mockCommodityResponse = new String();
      * @SuppressWarnings("unchecked") final Collection<Mine> mockCommodities = (Collection<Mine>)context.mock(Collection.class);
-     * 
+     *
      *                                context.checking(new Expectations() {{ oneOf(methodMaker).makeMethod(serviceURL, "er:Commodity", "");
      *                                will(returnValue(mockMethod)); oneOf(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
      *                                oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod, mockHttpClient); will(returnValue(mockCommodityResponse));
      *                                oneOf(mineralOccurrencesResponseHandler).getCommodities(mockCommodityResponse); will(returnValue(mockCommodities)); }});
-     * 
+     *
      *                                Collection<Commodity> commodities = this.commodityService.get(serviceURL, commodityName);
      *                                Assert.assertEquals(mockCommodities, commodities); }
      */
 
     /**
      * Test the event that we provide a name
-     * 
+     *
      * @throws Exception
      *
      @Test public void testGetCommodity() throws Exception { final String serviceURL = "http://localhost?"; final String commodityName = "someName";
-     * 
+     *
      *       final CommodityFilter commodityFilter = new CommodityFilter(commodityName); final GetMethod mockMethod = context.mock(GetMethod.class); final
      *       String mockCommodityResponse = new String();
      * @SuppressWarnings("unchecked") final Collection<Commodity> mockCommodities = (Collection<Commodity>)context.mock(Collection.class);
-     * 
+     *
      *                                context.checking(new Expectations() {{ oneOf(methodMaker).makeMethod(serviceURL, "er:Commodity",
      *                                commodityFilter.getFilterString()); will(returnValue(mockMethod));
      *                                oneOf(httpServiceCaller).getHttpClient();will(returnValue(mockHttpClient));
      *                                oneOf(httpServiceCaller).getMethodResponseAsString(mockMethod, mockHttpClient); will(returnValue(mockCommodityResponse));
      *                                oneOf(mineralOccurrencesResponseHandler).getCommodities(mockCommodityResponse); will(returnValue(mockCommodities)); }});
-     * 
+     *
      *                                Collection<Commodity> commodities = this.commodityService.get(serviceURL, commodityName);
      *                                Assert.assertEquals(mockCommodities, commodities); }
      */
 
     /**
      * Test for a valid query.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -189,8 +186,6 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
                 will(returnValue(mockMethod));
                 oneOf(httpServiceCaller).getMethodResponseAsString(with(any(HttpGet.class)));
                 will(returnValue(mockCommodityResponse));
-
-                oneOf(mockGmlToKml).convert(mockCommodityResponse, serviceURL);
             }
         });
 
@@ -223,8 +218,6 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
                 will(returnValue(mockMethod));
                 oneOf(httpServiceCaller).getMethodResponseAsString(with(any(HttpGet.class)));
                 will(returnValue(mockActivityResponse));
-
-                oneOf(mockGmlToKml).convert(mockActivityResponse, serviceUrl);
             }
         });
 
@@ -233,7 +226,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
     /**
      * Tests getting the count of all mines
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -267,7 +260,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
     /**
      * Tests getting the count of all mineral occurrences
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -307,7 +300,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
 
     /**
      * Tests getting the count of all mining activities
-     * 
+     *
      * @throws Exception
      */
     @Test

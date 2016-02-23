@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
@@ -57,6 +59,7 @@ public class EarthResourcesDownloadController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "startIndex") String startIndex,
+            @RequestParam(required = false, value = "outputFormat") String outputFormat,
             HttpServletResponse response) throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -72,7 +75,7 @@ public class EarthResourcesDownloadController extends BasePortalController {
         File file = null;
         try {
             InputStream results = this.mineralOccurrenceDownloadService.downloadMinesGml(serviceUrl, mineName, bbox,
-                    maxFeatures, startIndex);
+                    maxFeatures, startIndex, outputFormat);
 
             file = FileIOUtil.writeStreamToFileTemporary(results, "APT_MFD", ".xml", true);
             FileInputStream in = new FileInputStream(file);

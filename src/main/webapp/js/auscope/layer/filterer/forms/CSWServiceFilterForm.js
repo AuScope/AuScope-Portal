@@ -26,7 +26,6 @@ Ext.define('auscope.layer.filterer.forms.CSWServiceFilterForm', {
             labelWidth : 70,
             bodyStyle : 'padding:5px',
             autoHeight : true,
-            id : 'cswServiceFilterForm',
             items : [ {
                 xtype : 'fieldset',
                 title : 'CSW Filter Properties',

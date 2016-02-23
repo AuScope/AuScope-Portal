@@ -2,10 +2,8 @@ package org.auscope.portal.server.web.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.auscope.portal.capdf.CapdfHydroGeoChemFilter;
-import org.auscope.portal.capdf.CapdfMeasurementLimitFilter;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
@@ -28,19 +26,19 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
     }
 
     @Test
-    public void testGetHydroGeoChemFilter() {
+    public void testGetHydroGeoChemFilter() throws Exception {
         String batchid = "1234";
         FilterBoundingBox bbox = null;
 
         String result = service.getHydroGeoChemFilter(batchid, bbox);
         Assert.assertEquals(204, result.length());
         String expected = "<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>batch_id</ogc:PropertyName><ogc:Literal>1234</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>";
-        Assert.assertEquals(expected, result);
+        Assert.assertTrue(xmlStringEquals(expected, result, false));
     }
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param filter
      *            The filter
      * @param bbox
@@ -48,12 +46,12 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
      * @return
      */
     @Test
-    public void testGetMeasurementLimits() {
+    public void testGetMeasurementLimits() throws Exception {
         String group = "1234";
         String result = service.getMeasurementLimits(group);
         Assert.assertEquals(201, result.length());
         String expected = "<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>group</ogc:PropertyName><ogc:Literal>1234</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>";
-        Assert.assertEquals(expected, result);
+        Assert.assertTrue(xmlStringEquals(expected, result, false));
     }
 
     @Test
@@ -96,7 +94,7 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
         String expected = "<ogc:Filter><ogc:And><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" >"
                 + "<ogc:PropertyName>batch_id</ogc:PropertyName><ogc:Literal>1234</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsLessThan matchCase=\"false\" >"
                 + "<ogc:PropertyName>NaCl</ogc:PropertyName><ogc:Literal>1.0</ogc:Literal></ogc:PropertyIsLessThan></ogc:And></ogc:Filter>";
-        Assert.assertEquals(expected, result);
+        Assert.assertTrue(xmlStringEquals(expected, result, false));
 
         config = ccc.getIteration(5);
         filter = new CapdfHydroGeoChemFilter(batchid, ccq, ccc.getIterationLowerBound(config),
@@ -106,7 +104,7 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
                 + "<ogc:PropertyName>batch_id</ogc:PropertyName><ogc:Literal>1234</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"
                 + "<ogc:PropertyName>NaCl</ogc:PropertyName><ogc:Literal>8.6</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo><ogc:PropertyIsLessThan matchCase=\"false\" >"
                 + "<ogc:PropertyName>NaCl</ogc:PropertyName><ogc:Literal>10.5</ogc:Literal></ogc:PropertyIsLessThan></ogc:And></ogc:Filter>";
-        Assert.assertEquals(expected, result);
+        Assert.assertTrue(xmlStringEquals(expected, result, false));
 
     }
 }
