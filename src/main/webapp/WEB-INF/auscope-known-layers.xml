@@ -1489,14 +1489,10 @@
     <bean id="knownTypeCoastlines" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="coastlines" />
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelectors">
-                <constructor-arg name="layersMode" value="AND"/>
-                <constructor-arg name="layerNames">
-                    <list>
-                        <value>AUS_GA_2500k_MiscLines</value>
-                        <value>AUS_GA_1M_MiscLines</value>
-                    </list>
-                </constructor-arg>
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                
+                <constructor-arg name="layerName" value="Coastline1M" />
+
             </bean>
         </constructor-arg>
         <property name="name" value="Coastlines"/>
