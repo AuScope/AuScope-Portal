@@ -24,33 +24,33 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
            graphWidth : 600, // These values are used to set the size of the graph
            graphHeight : 400
        });
-	   
-	   // Create an Ext window to house the chart (panel)
+       
+       // Create an Ext window to house the chart (panel)
        var win = Ext.create('Ext.window.Window', {
            defaults    : { autoScroll:true }, // Enable scrollbars for underlying panel, if it is bigger than the window
-		   border      : true,
-		   items       : splot,
-		   id          : 'rkswWindow',
-		   layout      : 'fit', 
-		   maximizable : true,
-		   modal       : true,
-		   title       : 'Interactive Plot: ',
+           border      : true,
+           items       : splot,
+           id          : 'rkswWindow',
+           layout      : 'fit', 
+           maximizable : true,
+           modal       : true,
+           title       : 'Interactive Plot: ',
            resizable   : true,
-		   height  : 700, // Height and width of window the houses the graph
+           height  : 700, // Height and width of window the houses the graph
            width   : 1300,           
            x           : 10,
            y           : 10
        });
        win.show();
        
-	   splot.mask("Rendering...");
+       splot.mask("Rendering...");
        splot.plot(series, xaxis_name, yaxis_names, yaxis_keys);
        splot.maskClear();  
        
        this.on('close',function(){
            win.close();
        });
-	   
+       
 
     },
 
@@ -183,7 +183,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         hasTip : true,
                         tipRenderer : function(value, record, column, tip) {
                             //Load our vocab string asynchronously
-                        	var logName = record.get('logName');
+                            var logName = record.get('logName');
                             var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(logName);
                             Ext.Ajax.request({
                                 url : vocabsQuery,
@@ -214,7 +214,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
                                         updateTipText(tip, response.data.scopeNote);
                                     } else {
-                                    	updateTipText(tip, logName);
+                                        updateTipText(tip, logName);
                                     }
                                 }
                            });
@@ -293,7 +293,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 text : 'Plot',
                                 xtype : 'button',
                                 handler : function () {
-									// If nothing was selected
+                                    // If nothing was selected
                                     if (scalarGrid.getSelectionModel().getCount()===0) {
                                         Ext.Msg.show({
                                             title:'Hint',
@@ -319,11 +319,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                  if (success) {
                                                      // Once we have received the plot data, reformat it into (x,y) values
                                                      var jsonObj = Ext.JSON.decode(response.responseText);
-													 var data_bin = new Object;
-													 var has_data = false;
+                                                     var data_bin = new Object;
+                                                     var has_data = false;
                                                      var yaxis_labels = new Object;
-													 var yaxis_keys = [];
-													 if ('success' in jsonObj && jsonObj.success==true && jsonObj.data.length>0 ) {
+                                                     var yaxis_keys = [];
+                                                     if ('success' in jsonObj && jsonObj.success==true && jsonObj.data.length>0 ) {
                                                          jsonObj.data[0].binnedValues.forEach(function(bv) {
                                                              ["stringValues","numericValues"].forEach(function(dataType) {
                                                                  if (bv.startDepths.length==bv[dataType].length && bv[dataType].length>0) {
@@ -336,22 +336,22 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                                          if (dataType=="stringValues") {
                                                                      
                                                                              // Using entries(), make a name,value list, then use that to add to 'data_bin[dataType]'
-															                 d3.entries(val).forEach(function(meas) {                                                                                 
+                                                                             d3.entries(val).forEach(function(meas) {                                                                                 
                                                                                  var key=meas.key+"_"+metric_name;
-																		         if (!(key in data_bin[dataType])) {
+                                                                                 if (!(key in data_bin[dataType])) {
                                                                                      data_bin[dataType][key] = [];
                                                                                  }
                                                                                  
-																		         // Depth is 'x' and 'y' is our measured value 
+                                                                                 // Depth is 'x' and 'y' is our measured value 
                                                                                  data_bin[dataType][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
                                                                                  has_data=true;
                                                                            
-															                 });
+                                                                             });
                                                                          } else if (dataType=="numericValues") {
                                                                              if (!(metric_name in data_bin[dataType])) {
                                                                                  data_bin[dataType][metric_name] = [];
                                                                              }
-																		     // Depth is 'x' and 'y' is our measured value 
+                                                                             // Depth is 'x' and 'y' is our measured value 
                                                                              data_bin[dataType][metric_name].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(val)});
                                                                              has_data=true;
                                                                          }
@@ -362,24 +362,24 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                      }
                                                      
                                                      // Create an array to hold y-axis labels, then call 'genericPlot()'
-													 // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
-													 if (has_data) {
+                                                     // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
+                                                     if (has_data) {
                                                          if ("stringValues" in data_bin) {
                                                              yaxis_labels['stringValues'] = "Sample Count";
-															 yaxis_keys.push('stringValues');
+                                                             yaxis_keys.push('stringValues');
                                                          }
                                                          if ("numericValues" in data_bin) {
                                                              yaxis_labels['numericValues'] = "Meter Average";
-															 yaxis_keys.push('numericValues');
+                                                             yaxis_keys.push('numericValues');
                                                          }                                                         
                                                          me.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys);
-												     } else {
-														 Ext.Msg.show({
-															 title:'No data',
-															 msg:'Sorry, the selected dataset has no data. Please select a different dataset',
-															 buttons: Ext.Msg.OK 
-														 });
-													 }
+                                                     } else {
+                                                         Ext.Msg.show({
+                                                             title:'No data',
+                                                             msg:'Sorry, the selected dataset has no data. Please select a different dataset',
+                                                             buttons: Ext.Msg.OK 
+                                                         });
+                                                     }
                                                      
                                                  } else {
                                                      Ext.Msg.show({
