@@ -16,36 +16,38 @@ Ext.define('auscope.chart.rickshawChart', {
      * xaxis_name - string, label for the x-axis
      *
      * yaxis_names - Object array, keys are in 'yaxis_keys', values are the labels for the y-axis
-	 *
-	 * yaxis_keys - array of names of y-axis keys, length is 1 or 2 (since there can only be 1 or 2 y-axes)
+     *
+     * yaxis_keys - array of names of y-axis keys, length is 1 or 2 (since there can only be 1 or 2 y-axes)
+     *
+     * metric_colours - [OPTIONAL] Object array, keys are the metrics in data_bin, values are RGB colour strings, e.g. '#1f77b4'
      *
      */
-    plot : function(data_bin,xaxis_name,yaxis_names, yaxis_keys) {
+    plot : function(data_bin,xaxis_name,yaxis_names, yaxis_keys, metric_colours) {
         
         var htmlSelection = d3.select("[id="+this.innerId+"]");
         var graphWidth = this.graphWidth;
         var graphHeight = this.graphHeight;
         var innerId = this.innerId;
-		
-		// Check input parameters
-		if (yaxis_keys.length>2 || yaxis_keys.length==0) {
-			throw new Error("auscope.chart.rickshawChart.plot(): 'yaxis_keys' must have 1 or 2 members");
-		}
-		if (yaxis_keys.length==1) {
-			if (!(yaxis_keys[0] in data_bin)) {
-				throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'data_bin'");
-			}
-			if (!(yaxis_keys[0] in yaxis_names)) {
-				throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'yaxis_names'");
-			}	
-		} else {
-			if (!(yaxis_keys[0] in data_bin) || !(yaxis_keys[1] in data_bin)) {
-				throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'data_bin'");
-			}
-			if (!(yaxis_keys[0] in yaxis_names) || !(yaxis_keys[1] in yaxis_names)) {
-				throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'yaxis_names'");
-			}	 
-		}
+        
+        // Check input parameters
+        if (yaxis_keys.length>2 || yaxis_keys.length==0) {
+            throw new Error("auscope.chart.rickshawChart.plot(): 'yaxis_keys' must have 1 or 2 members");
+        }
+        if (yaxis_keys.length==1) {
+            if (!(yaxis_keys[0] in data_bin)) {
+                throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'data_bin'");
+            }
+            if (!(yaxis_keys[0] in yaxis_names)) {
+                throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'yaxis_names'");
+            }    
+        } else {
+            if (!(yaxis_keys[0] in data_bin) || !(yaxis_keys[1] in data_bin)) {
+                throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'data_bin'");
+            }
+            if (!(yaxis_keys[0] in yaxis_names) || !(yaxis_keys[1] in yaxis_names)) {
+                throw new Error("auscope.chart.rickshawChart.plot(): values in 'yaxis_keys' are not keys of 'yaxis_names'");
+            }     
+        }
         
         // Clean out HTML
         htmlSelection.html("");
@@ -89,7 +91,7 @@ Ext.define('auscope.chart.rickshawChart', {
         '                    <input type="radio" name="offset" id="stack" value="zero" checked>' +
         '                    <span>stack</span>' +
         '                </label>' +
-		'                <label for="value">' +
+        '                <label for="value">' +
         '                    <input type="radio" name="offset" id="value" value="value">' +
         '                    <span>value</span>' +
         '                </label>' +
@@ -103,7 +105,7 @@ Ext.define('auscope.chart.rickshawChart', {
         '                </label>' +
         '            </div>' +
         '            <div id="interpolation_form">' +
-		'                <label for="linear">' +
+        '                <label for="linear">' +
         '                    <input type="radio" name="interpolation" id="linear" value="linear" checked>' +
         '                    <span>linear</span>' +
         '                </label>' +
@@ -125,18 +127,18 @@ Ext.define('auscope.chart.rickshawChart', {
         '    </form>' +
         '</div>';
         
-		// Append HTML to the <div>
+        // Append HTML to the <div>
         htmlSelection.html(graph_html);
         
-		// Use this to reference graph later on
+        // Use this to reference graph later on
         var local_div = d3.select("[id=rickshawChart_outer]");
-		
+        
         // Make up a list of all depths, then remove duplicates by turning it into a set
         var depth_list = [];
-		
-		d3.keys(data_bin).forEach(function(dataType) {
+        
+        d3.keys(data_bin).forEach(function(dataType) {
             var temp_depth_list = [].concat.apply([],d3.values(data_bin[dataType])).map(function(a){ return a.x; });
-			depth_list = depth_list.concat(temp_depth_list);
+            depth_list = depth_list.concat(temp_depth_list);
         }); 
         var global_depth_set = d3.set(depth_list);
     
@@ -146,7 +148,7 @@ Ext.define('auscope.chart.rickshawChart', {
         // (it is present at other depths), it is zero at this depth. Rickshaw will interpolate more readily when when the missing values are filled with zeros. 
         // You can also use 'null' to fill missing values, but this gives ugly gaps in the line graph, and single isolated points that cannot be plotted.
         //
-		d3.keys(data_bin).forEach(function(dataType) {
+        d3.keys(data_bin).forEach(function(dataType) {
             d3.keys(data_bin[dataType]).forEach(function(db_key) {
                 var local_depth_list=data_bin[dataType][db_key].map(function(currentValue) { return currentValue.x; });
                 global_depth_set.forEach(function(global_depth) {
@@ -157,24 +159,25 @@ Ext.define('auscope.chart.rickshawChart', {
                     }
                 })
             });
-	    });
-		
-		// Find max and min of x and y values
-		var max_y_val = new Object;
-		var min_y_val = new Object;
-		d3.keys(data_bin).forEach(function(dataType) {
-			var temp_y_list = [].concat.apply([],d3.values(data_bin[dataType])).map(function(a){ return a.y; });
-			max_y_val[dataType] = d3.max(temp_y_list);
-			min_y_val[dataType] = d3.min(temp_y_list);
-	    });
-		
-		
-        // Use max/min values to setup two sets of scales for the y-axis
-		var scales = new Object;
-		d3.keys(data_bin).forEach(function(dataType) {
-			scales[dataType] = new d3.scale.linear().domain([min_y_val[dataType], max_y_val[dataType]]);
-		});
+        });
         
+        // Find max and min of x and y values
+        var max_y_val = new Object;
+        var min_y_val = new Object;
+        d3.keys(data_bin).forEach(function(dataType) {
+            var temp_y_list = [].concat.apply([],d3.values(data_bin[dataType])).map(function(a){ return a.y; });
+            max_y_val[dataType] = d3.max(temp_y_list);
+            min_y_val[dataType] = d3.min(temp_y_list);
+        });
+        
+        
+        // Use max/min values to setup two sets of scales for the y-axis
+        var scales = new Object;
+        d3.keys(data_bin).forEach(function(dataType) {
+            scales[dataType] = new d3.scale.linear().domain([min_y_val[dataType], max_y_val[dataType]]);
+        });
+        
+
         // Strong colours do best with the 'mouseover the legend to display individual colours separately' function
         var colorScale = function (colour_idx) { var scale = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#e377c2','#7f7f7f',
                                                       '#bcbd22','#17becf','#393b79','#5254a3','#6b6ecf','#637939','#8ca252','#b5cf6b',
@@ -182,18 +185,32 @@ Ext.define('auscope.chart.rickshawChart', {
                                                       '#a55194','#ce6dbd','#de9ed6']; return scale[colour_idx%scale.length]; };
 
         // Create an array of all the X-values for the graph, values must be sorted by x-value
-		var seriesX = [];
-		var index=0;
-		d3.keys(data_bin).forEach(function(dataType) {
-            d3.keys(data_bin[dataType]).forEach(function(currentValue) {
-				var X = { color: colorScale(index), 
+        var seriesX = [];
+        var index=0;
+        d3.keys(data_bin).forEach(function(dataType) {
+            if (metric_colours==undefined) {
+                // Use the built-in strong colours
+                d3.keys(data_bin[dataType]).forEach(function(currentValue) {
+                    var X = { color: colorScale(index), 
                          data: data_bin[dataType][currentValue].sort(function(a,b) { return d3.ascending(a.x,b.x); }),
                          name: currentValue,
-						 scale: scales[dataType]
-					   };
-                seriesX.push(X);
-				index+=1;
-		    });
+                         scale: scales[dataType]
+                       };
+                    seriesX.push(X);
+                    index+=1;
+                });
+            } else {
+                // Use the colours supplied
+                d3.keys(data_bin[dataType]).forEach(function(currentValue) {
+                    var X = { color: metric_colours[currentValue], 
+                         data: data_bin[dataType][currentValue].sort(function(a,b) { return d3.ascending(a.x,b.x); }),
+                         name: currentValue,
+                         scale: scales[dataType]
+                       };
+                    seriesX.push(X);
+                    index+=1;
+                });
+            }
         });
         
         // Instantiate our graph!
@@ -277,39 +294,39 @@ Ext.define('auscope.chart.rickshawChart', {
         });
         
         // Graph's y-axes
-		var has_grid=true;
-		var orient_str = 'left';
-		yaxis_keys.forEach(function(dataType) {
+        var has_grid=true;
+        var orient_str = 'left';
+        yaxis_keys.forEach(function(dataType) {
             var yAxis = new Rickshaw.Graph.Axis.Y.Scaled({
                 graph: graph,
                 tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
                 ticksTreatment: ticksTreatment,
                 orientation: orient_str,
                 element: local_div.select("[id=y_axis_"+dataType+"]").node(),
-				grid: has_grid,
-				scale: scales[dataType]
+                grid: has_grid,
+                scale: scales[dataType]
             });
-			// Only first y-axis has a grid
-			if (has_grid==true) {
-				has_grid=false;
-			}
-			// First right, then left
-			if (orient_str=='left') {
-				orient_str='right';
-			}
-		});
+            // Only first y-axis has a grid
+            if (has_grid==true) {
+                has_grid=false;
+            }
+            // First right, then left
+            if (orient_str=='left') {
+                orient_str='right';
+            }
+        });
 
-		// A callback function to redraw labels each time graph is rendered (needed?)
+        // A callback function to redraw labels each time graph is rendered (needed?)
         var render_labels = function() {
             
-		    local_div.select("[id=x_axis]").select("svg").append("text")
+            local_div.select("[id=x_axis]").select("svg").append("text")
                  .attr("text-anchor", "start")
                  .attr("x", 640)
                  .attr("y", 40)
                  .text(xaxis_name);
-				 
-		    if (yaxis_keys.length==2) {
-			
+                 
+            if (yaxis_keys.length==2) {
+            
                 var num_label_div =  local_div.select("[id=y_axis_"+yaxis_keys[1]+"]");
                 var txt_label_div = local_div.select("[id=y_axis_"+yaxis_keys[0]+"]");
             
@@ -321,18 +338,18 @@ Ext.define('auscope.chart.rickshawChart', {
                      .attr("y", 20)
                      .text(yaxis_names[yaxis_keys[1]]);
                     num_label_div.style("left","605px");
-				 
-		            txt_label_div.select("svg").append("text")
+                 
+                    txt_label_div.select("svg").append("text")
                      .attr("text-anchor", "start")
                      .attr("x", 0)
                      .attr("y", 60)
                      .text(yaxis_names[yaxis_keys[0]]);
                     txt_label_div.style("left","-105px");
-				}
-				
-			} else if (yaxis_keys.length==1) {
-				
-				var label_div =  local_div.select("[id=y_axis_"+yaxis_keys[0]+"]");
+                }
+                
+            } else if (yaxis_keys.length==1) {
+                
+                var label_div =  local_div.select("[id=y_axis_"+yaxis_keys[0]+"]");
                  
                 // One y-axis, numerics
                 if (label_div.size()==1) {
@@ -342,10 +359,10 @@ Ext.define('auscope.chart.rickshawChart', {
                      .attr("y", 60)
                      .text(yaxis_names[yaxis_keys[0]]);
                     label_div.style("left","-105px");
-				}
+                }
             }
-			
-		}; // end of callback function
+            
+        }; // end of callback function
         
 
         // Create and register the controls
@@ -353,7 +370,7 @@ Ext.define('auscope.chart.rickshawChart', {
             element: local_div.select("[id=right_side_panel]").node(),
             graph: graph
         });
-		
+        
         // X-Axis for the preview slider
         var previewXAxis = new Rickshaw.Graph.Axis.X({
             graph: preview.previews[0],
@@ -362,14 +379,14 @@ Ext.define('auscope.chart.rickshawChart', {
             orientation: 'top'
         });
         previewXAxis.render();
-		
-		
-		
-		// Configure graph. Input the starting values. These must match the HTML radio buttons etc. above.
-		graph.configure({"renderer":"area","interpolation":"linear","unstack":false,"offset":"zero"});
+        
+        
+        
+        // Configure graph. Input the starting values. These must match the HTML radio buttons etc. above.
+        graph.configure({"renderer":"area","interpolation":"linear","unstack":false,"offset":"zero"});
         
         // Register routine to redraw labels upon graph update
-		graph.onUpdate(render_labels);
+        graph.onUpdate(render_labels);
         
         // Render graph
         graph.render();
