@@ -14,7 +14,45 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     supportsKnownLayer : function(knownLayer) {
         return knownLayer.getId() === 'nvcl-borehole';
     },
+    
+    /**
+     * Routine to start up an interactive plot where you the user can specify the kind of graph, apply smoothing etc.
+     * Uses Rickshaw library.
+     */
+    genericPlot : function(series, xaxis_name, yaxis_names, yaxis_keys) {
+       var splot = Ext.create('auscope.chart.rickshawChart',{
+           graphWidth : 600, // These values are used to set the size of the graph
+           graphHeight : 400
+       });
+       
+       // Create an Ext window to house the chart (panel)
+       var win = Ext.create('Ext.window.Window', {
+           defaults    : { autoScroll:true }, // Enable scrollbars for underlying panel, if it is bigger than the window
+           border      : true,
+           items       : splot,
+           id          : 'rkswWindow',
+           layout      : 'fit', 
+           maximizable : true,
+           modal       : true,
+           title       : 'Interactive Plot: ',
+           resizable   : true,
+           height  : 700, // Height and width of window the houses the graph
+           width   : 1300,           
+           x           : 10,
+           y           : 10
+       });
+       win.show();
+       
+       splot.mask("Rendering...");
+       splot.plot(series, xaxis_name, yaxis_names, yaxis_keys);
+       splot.maskClear();  
+       
+       this.on('close',function(){
+           win.close();
+       });
+       
 
+    },
 
     /**
      * Shows the NVCL dataset display window for the given dataset (belonging to the selected known layer feature)
@@ -145,7 +183,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         hasTip : true,
                         tipRenderer : function(value, record, column, tip) {
                             //Load our vocab string asynchronously
-                        	var logName = record.get('logName');
+                            var logName = record.get('logName');
                             var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(logName);
                             Ext.Ajax.request({
                                 url : vocabsQuery,
@@ -176,7 +214,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
                                         updateTipText(tip, response.data.scopeNote);
                                     } else {
-                                    	updateTipText(tip, logName);
+                                        updateTipText(tip, logName);
                                     }
                                 }
                            });
@@ -247,134 +285,113 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     id     : 'scalarFormHint',
                                     autoEl : {
                                         tag  : 'div',
-                                        html : 'Select a scalar(s) from the "Scalar List" table on the left and then click "Plot" button.<br><br>Leave the default depth values for the entire depth.'
+                                        html : 'Select a scalar(s) from the "Scalar List" table on the left and then click "Plot" or "Download" button.'
                                     }
                                 }]
-                            },{
-                                title       : 'Options',
-                                defaultType : 'textfield',
-
-                                // these are applied to fields
-                                //,defaults:{anchor:'-20', allowBlank:false}
-                                bodyStyle   : 'padding:0 0 0 45px',
-
-                                // fields
-                                items:[{
-                                    xtype       : 'numberfield',
-                                    fieldLabel  : 'Start Depth (m)',
-                                    name        : 'startDepth',
-                                    minValue    : 1,
-                                    value       : startDepth,
-                                    accelerate  : true
-                                },{
-                                    xtype       : 'numberfield',
-                                    fieldLabel  : 'End Depth (m)',
-                                    name        : 'endDepth',
-                                    minValue    : 1,
-                                    value       : endDepth,
-                                    accelerate  : true
-                                },{
-                                    xtype                   : 'numberfield',
-                                    fieldLabel              : 'Interval (m)',
-                                    name                    : 'samplingInterval',
-                                    minValue                : 0,
-                                    value                   : 2.0,
-                                    allowDecimals           : true,
-                                    decimalPrecision        : 1,
-                                    step                    : 0.1,
-                                    //alternateIncrementValue : 2.1,
-                                    accelerate              : true
-                                }]
-                            },{
-                                xtype       : 'fieldset',
-                                title       : 'Graph Options',
-                                padding : '0 0 0 0',
-                                border : false,
-                                layout: {
-                                    type: 'hbox',
-                                    pack: 'start',
-                                    align: 'stretch'
-                                },
-                                autoHeight  : true,
-                                items       :[{
-                                    xtype  : 'fieldset',
-                                    title  : 'Graph Type',
-                                    flex   : 3,
-                                    items :[{
-                                        xtype   : 'radiogroup',
-                                        flex    : 2,
-                                        id      : 'ts1',
-                                        columns : 1,
-                                        items   : [
-                                            {boxLabel: 'Stacked Bar Chart', name: 'graphType', inputValue: 1, checked: true},
-                                            {boxLabel: 'Scattered Chart', name: 'graphType', inputValue: 2},
-                                            {boxLabel: 'Line Chart', name: 'graphType', inputValue: 3}
-                                        ]
-                                    }]
-                                }, {
-                                    xtype: 'fieldset',
-                                    title : 'Graph Display Option',
-                                    flex: 2,
-                                    items : [{
-                                        xtype     : 'checkbox',
-                                        flex      : 1,
-                                        checked   : true,
-                                        boxLabel  : 'Show Legend',
-                                        name      : 'legend',
-                                        inputValue: '1',
-                                        itemId    : 'legendcheckbox1'
-                                    }]
-                                }]
-
                             }],
                             buttons:[{
-                                text: 'Plot',
-                                handler: function() {
-                                    var sHtml = '';
-                                    var item_count = scalarGrid.getSelectionModel().getCount();
-                                    var scalarForm = Ext.getCmp('scalarsForm').getForm();
-                                    var width = 300;
-                                    var height = 600;
-
-                                    if (item_count > 0) {
-                                        var s = scalarGrid.getSelectionModel().getSelection();
-                                        for(var i = 0, len = s.length; i < len; i++){
-                                            sHtml +='<img src="';
-                                            sHtml += 'getNVCLPlotScalar.do?logId=';
-                                            sHtml += s[i].get('logId');
-                                            sHtml += '&' + scalarForm.getValues(true);
-                                            sHtml += '&width=' + width;
-                                            sHtml += '&height=' + height;
-                                            sHtml += '&serviceUrl=';
-                                            sHtml += escape(nvclDataServiceUrl);
-                                            sHtml += '" ';
-                                            sHtml += 'onload="Ext.getCmp(\'plWindow\').doLayout();"';
-                                            sHtml += '/>';
-                                        }
-
-                                        var winPlot = Ext.create('Ext.Window', {
-                                            autoScroll  : true,
-                                            border      : true,
-                                            html        : sHtml,
-                                            id          : 'plWindow',
-                                            layout      : 'fit',
-                                            maximizable : true,
-                                            modal       : true,
-                                            title       : 'Plot: ',
-                                            autoHeight  : true,
-                                            autoWidth   : true,
-                                            x           : 10,
-                                            y           : 10
-                                          });
-
-                                        winPlot.show();
-                                    } else if (item_count === 0){
+                                text : 'Plot',
+                                xtype : 'button',
+                                handler : function () {
+                                    // If nothing was selected
+                                    if (scalarGrid.getSelectionModel().getCount()===0) {
                                         Ext.Msg.show({
                                             title:'Hint',
-                                            msg: 'You need to select a scalar(s) from the "List of Scalars" table to plot.',
+                                            msg: 'You need to select a scalar(s) from the "List of Scalars" table to download the csv.',
                                             buttons: Ext.Msg.OK
                                         });
+                                    } else {
+                                        var datasetIds = scalarGrid.getSelectionModel().getSelection();
+                                        var logIds = [];
+                                        for(var i=0;i<datasetIds.length;i++){
+                                            logIds[i] =  datasetIds[i].get('logId');
+                                        }
+                                        // Request plot data from server
+                                        Ext.Ajax.request({
+                                             url: 'getNVCL2_0_CSVDataBinned.do',
+                                             scope : this,
+                                             timeout : 60000,
+                                             params: {
+                                                 serviceUrl: nvclDataServiceUrl,
+                                                 logIds : logIds
+                                             },
+                                             callback : function(options, success, response) {
+                                                 if (success) {
+                                                     // Once we have received the plot data, reformat it into (x,y) values
+                                                     var jsonObj = Ext.JSON.decode(response.responseText);
+                                                     var data_bin = new Object;
+                                                     var has_data = false;
+                                                     var yaxis_labels = new Object;
+                                                     var yaxis_keys = [];
+                                                     if ('success' in jsonObj && jsonObj.success==true && jsonObj.data.length>0 ) {
+                                                         jsonObj.data[0].binnedValues.forEach(function(bv) {
+                                                             ["stringValues","numericValues"].forEach(function(dataType) {
+                                                                 if (bv.startDepths.length==bv[dataType].length && bv[dataType].length>0) {
+                                                                     if (!(dataType in data_bin)) {
+                                                                         data_bin[dataType] = new Object;
+                                                                     }
+                                                                     var metric_name = bv.name;
+                                                                     bv[dataType].forEach(function(val, idx, arr) {
+                                                                         
+                                                                         if (dataType=="stringValues") {
+                                                                     
+                                                                             // Using entries(), make a name,value list, then use that to add to 'data_bin[dataType]'
+                                                                             d3.entries(val).forEach(function(meas) {                                                                                 
+                                                                                 var key=meas.key+"_"+metric_name;
+                                                                                 if (!(key in data_bin[dataType])) {
+                                                                                     data_bin[dataType][key] = [];
+                                                                                 }
+                                                                                 
+                                                                                 // Depth is 'x' and 'y' is our measured value 
+                                                                                 data_bin[dataType][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
+                                                                                 has_data=true;
+                                                                           
+                                                                             });
+                                                                         } else if (dataType=="numericValues") {
+                                                                             if (!(metric_name in data_bin[dataType])) {
+                                                                                 data_bin[dataType][metric_name] = [];
+                                                                             }
+                                                                             // Depth is 'x' and 'y' is our measured value 
+                                                                             data_bin[dataType][metric_name].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(val)});
+                                                                             has_data=true;
+                                                                         }
+                                                                     });
+                                                                 }
+                                                             });
+                                                         });
+                                                     }
+                                                     
+                                                     // Create an array to hold y-axis labels, then call 'genericPlot()'
+                                                     // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
+                                                     if (has_data) {
+                                                         if ("stringValues" in data_bin) {
+                                                             yaxis_labels['stringValues'] = "Sample Count";
+                                                             yaxis_keys.push('stringValues');
+                                                         }
+                                                         if ("numericValues" in data_bin) {
+                                                             yaxis_labels['numericValues'] = "Meter Average";
+                                                             yaxis_keys.push('numericValues');
+                                                         }                                                         
+                                                         me.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys);
+                                                     } else {
+                                                         Ext.Msg.show({
+                                                             title:'No data',
+                                                             msg:'Sorry, the selected dataset has no data. Please select a different dataset',
+                                                             buttons: Ext.Msg.OK 
+                                                         });
+                                                     }
+                                                     
+                                                 } else {
+                                                     Ext.Msg.show({
+                                                         title:'Error',
+                                                         msg:'Failed to load resources',
+                                                         buttons: Ext.Msg.OK
+                                                     });                                 
+                                                 }
+                                             }
+                                        });
                                     }
+
                                 }
                             },{
                                 text : 'Download',
@@ -428,6 +445,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             }
         });
     },
+    
+
+    
+    
+    
 
     /**
      * Shows the NVCL dataset download window for the given dataset (belonging to the selected known layer feature)

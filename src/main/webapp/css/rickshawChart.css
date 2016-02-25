@@ -1,0 +1,82 @@
+/* Stylesheet for the 'auscope.chart.rickshawChart' javascript routine */
+
+#rickshawChart_outer {
+    padding-right: 20px; /* for scrollbar */
+    overflow: visible;
+}
+
+#rickshawChart_outer #chart_container {
+    position: absolute;
+    padding-top: 30px; 
+    left: 280px;
+    top: 0px;
+    height: 600px;
+}
+
+#rickshawChart_outer #chart_container * {
+    font-family:  Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+
+#rickshawChart_outer #chart {
+    position: relative;
+}
+
+#rickshawChart_outer .rickshaw_graph .y_ticks {
+    left: 0;
+}
+
+#rickshawChart_outer #legend {
+    z-index: 0;
+}
+
+#rickshawChart_outer #y_axis_numericValues, #y_axis_stringValues {
+    padding-top: 30px;
+    position: absolute;
+    top: 0px;
+    font-family:  Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    opacity: 0.7;
+    z-index: 1;
+    height: 400px;
+    width: 100px;
+}
+
+#rickshawChart_outer #x_axis {
+    position: relative;
+    font-family:  Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    opacity: 0.7;
+}
+
+#rickshawChart_outer #left_side_panel {
+    width: 240px;
+    padding: 0px 0px 0px 0px;
+}
+
+#rickshawChart_outer #left_side_panel * {
+    font-family:  Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+
+#rickshawChart_outer #right_side_panel {
+    width: 240px;
+    height: 600px;
+    padding: 0px 0px 0px 0px;
+    position: absolute;
+    left: 1000px;
+    top: 0px;
+    font-family:  Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    opacity: 0.7;
+}
+
+#rickshawChart_outer h6 {
+    font-size: 10pt;
+    font-weight: 400;
+}
+
+#rickshawChart_outer #preview {
+    position: relative;
+    left: -10px;
+}
