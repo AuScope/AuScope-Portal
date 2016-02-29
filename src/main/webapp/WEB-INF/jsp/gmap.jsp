@@ -29,25 +29,13 @@
       </script>
 
       <%-- JS imports - relative paths back to the webapp directory --%>
-      <jsp:include page="../../portal-core/jsimports.jsp">
-        <jsp:param name="portal.build.version" value="${portal.build.version}" />
-      </jsp:include>
-      <jsp:include page="../../portal-core/jsimports-openlayers.jsp">
-        <jsp:param name="portal.build.version" value="${portal.build.version}" />
-      </jsp:include>
-      <jsp:include page="../../jsimports.jsp">
-        <jsp:param name="portal.build.version" value="${portal.build.version}" />
-      </jsp:include>
-
-${buildVersion} - ${buildTimestamp}
+      <jsp:include page="../../portal-core/jsimports.jsp"/>
+      <jsp:include page="../../portal-core/jsimports-openlayers.jsp"/>
+      <jsp:include page="../../jsimports.jsp"/>
 
       <%-- CSS imports - relative paths back to the webapp directory--%>
-      <jsp:include page="../../portal-core/cssimports.jsp">
-        <jsp:param name="portal.build.version" value="${portal.build.version}" />
-      </jsp:include>     
-      <jsp:include page="../../cssimports.jsp">
-        <jsp:param name="portal.build.version" value="${portal.build.version}" />
-      </jsp:include>
+      <jsp:include page="../../portal-core/cssimports.jsp"/>
+      <jsp:include page="../../cssimports.jsp"/>
       
       <script src="js/auscope/Main-UI.js" type="text/javascript"></script>
 
@@ -91,8 +79,11 @@ ${buildVersion} - ${buildTimestamp}
    </head>
     
    <body>
-        <!-- If you put anything in here manually it will end up in the DOM
-             AFTER all of the ExtJS content -->  
+        <!-- If you put anything in here manually it will end up in the DOM AFTER all of the ExtJS content -->  
+        
+         <div style="display:none">
+            Geoscience Portal build ${buildVersion}
+        </div>
    </body>
 
 </html>
