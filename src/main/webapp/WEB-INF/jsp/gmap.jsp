@@ -19,9 +19,6 @@
       <script src="portal-core/js/threejs/controls/OrbitControls.js" type="text/javascript"></script>
       <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
       <script src="portal-core/js/d3Legends/d3.legend.js" type="text/javascript"></script>
-      
-      
-      
 
       <script type="text/javascript">
          var VOCAB_SERVICE_URL = "${vocabServiceUrl}";
@@ -32,17 +29,27 @@
       </script>
 
       <%-- JS imports - relative paths back to the webapp directory --%>
-      <jsp:include page="../../portal-core/jsimports.htm"/>
-      <jsp:include page="../../portal-core/jsimports-gmap.htm"/>
-      <jsp:include page="../../portal-core/jsimports-openlayers.htm"/>
-      <jsp:include page="../../jsimports.htm"/>
+      <jsp:include page="../../portal-core/jsimports.jsp">
+        <jsp:param name="portal.build.version" value="${portal.build.version}" />
+      </jsp:include>
+      <jsp:include page="../../portal-core/jsimports-openlayers.jsp">
+        <jsp:param name="portal.build.version" value="${portal.build.version}" />
+      </jsp:include>
+      <jsp:include page="../../jsimports.jsp">
+        <jsp:param name="portal.build.version" value="${portal.build.version}" />
+      </jsp:include>
+
+${buildVersion} - ${buildTimestamp}
 
       <%-- CSS imports - relative paths back to the webapp directory--%>
-      <jsp:include page="../../portal-core/cssimports.htm"/>      
-      <jsp:include page="../../cssimports.htm"/>
-
+      <jsp:include page="../../portal-core/cssimports.jsp">
+        <jsp:param name="portal.build.version" value="${portal.build.version}" />
+      </jsp:include>     
+      <jsp:include page="../../cssimports.jsp">
+        <jsp:param name="portal.build.version" value="${portal.build.version}" />
+      </jsp:include>
+      
       <script src="js/auscope/Main-UI.js" type="text/javascript"></script>
-            
 
       <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
       <c:if test="${not empty analyticKey}">

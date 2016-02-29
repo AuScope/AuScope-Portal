@@ -1,6 +1,5 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.awt.Menu;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,12 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Controller that handles all {@link Menu}-related requests,
- *
- * @author Jarek Sanders
+ * Controller that handles all html page requests and loads properties that are needed by that page.
+ * 
+ * For example, the main page requires configuration details from config.properties and version.properties
+ * and the admin page accesses values from the Manifest.
  */
 @Controller
-public class MenuController {
+public class HtmlController {
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -40,7 +40,11 @@ public class MenuController {
         String vocabServiceUrl = hostConfigurer.resolvePlaceholder("HOST.vocabService.url");
         String maxFeatureValue = hostConfigurer.resolvePlaceholder("HOST.maxFeatures.value");
         String analyticKey = hostConfigurer.resolvePlaceholder("HOST.google.analytics.key");
-        String piwikSiteId = hostConfigurer.resolvePlaceholder("HOST.piwik.site.id");
+        String piwikSiteId = hostConfigurer.resolvePlaceholder("HOST.piwik.site.id");               
+        String buildVersion = hostConfigurer.resolvePlaceholder("portal.build.version");
+        String buildTimestamp = hostConfigurer.resolvePlaceholder("portal.build.date.timestamp");
+        int buildTimestampHashcode = buildTimestamp.hashCode();
+
         String localhost = null;
         try {
             localhost = InetAddress.getLocalHost().getCanonicalHostName();
@@ -54,12 +58,17 @@ public class MenuController {
         logger.debug("maxFeatureValue: " + maxFeatureValue);
         logger.debug("analyticKey: " + analyticKey);
         logger.debug("hostname: " + localhost);
-        logger.debug("piwikSiteId: " + piwikSiteId);
-
+        logger.debug("piwikSiteId: " + piwikSiteId);        
+        logger.debug("buildVersion: " + buildVersion);
+        logger.debug("buildTimestamp: " + buildTimestampHashcode);
+        
         ModelAndView mav = new ModelAndView("gmap");
         mav.addObject("googleKey", googleKey);
         mav.addObject("vocabServiceUrl", vocabServiceUrl);
-        mav.addObject("maxFeatureValue", maxFeatureValue);
+        mav.addObject("maxFeatureValue", maxFeatureValue);        
+        mav.addObject("buildVersion", buildVersion);
+        mav.addObject("buildTimestamp", buildTimestampHashcode);
+        
         if (analyticKey != null && !analyticKey.isEmpty()) {
             mav.addObject("analyticKey", analyticKey);
         }
@@ -125,7 +134,6 @@ public class MenuController {
                 mav.addObject("builtBy", atts.getValue("Built-By"));
                 mav.addObject("osName", atts.getValue("osName"));
                 mav.addObject("osVersion", atts.getValue("osVersion"));
-
                 mav.addObject("serverName", request.getServerName());
                 mav.addObject("serverInfo", request.getSession().getServletContext().getServerInfo());
                 mav.addObject("serverJavaVersion", System.getProperty("java.version"));
