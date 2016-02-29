@@ -150,4 +150,19 @@ public class PressureDBService {
         HttpRequestBase method = methodMaker.makeDownloadMethod(serviceUrl, wellID, features);
         return httpServiceCaller.getMethodResponseAsStream(method);
     }
+    
+
+    /**
+     * Makes a pressure DB Plot request, parses the response and returns it as a formatted POJO.
+     *
+     * @param wellID
+     * @param serviceUrl
+     * @return
+     * @throws Exception
+     */
+    public String makePlotRequest(String wellID, String serviceUrl, String[] features) throws Exception {
+        HttpRequestBase method = methodMaker.makePlotMethod(serviceUrl, wellID, features);
+        return httpServiceCaller.getMethodResponseAsString(method);
+    }
+    
 }

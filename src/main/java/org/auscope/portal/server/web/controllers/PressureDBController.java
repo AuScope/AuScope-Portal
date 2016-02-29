@@ -1,7 +1,10 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.IOException;
+import org.apache.commons.io.IOUtils;
+
 import java.io.InputStream;
+import java.io.StringWriter;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -100,4 +103,28 @@ public class PressureDBController extends BasePortalController {
         outputStream.close();
     }
 
+	/**
+	 * Handles requests for the pressuredb-plot method
+	 *
+	 * Will return a JSON encoded pressuredb-plot data 
+	 * 
+	 * @param serviceUrl
+	 * @param wellID
+	 * @return
+	 */
+    @RequestMapping("/pressuredb-plot.do")
+	public ModelAndView plot(String serviceUrl, String wellID, String[] features) {
+		try {
+			String response = pressureDBService.makePlotRequest(wellID,
+					serviceUrl, features);
+			return generateJSONResponseMAV(true, response, "");
+		} catch (Exception e) {
+			log.warn(String
+					.format("Error making pressure-db download request for '%1$s' to '%2$s': %3$s",
+							wellID, serviceUrl, e));
+			log.debug("Exception: ", e);
+			return generateJSONResponseMAV(false, null,
+					"Failure communicating with Pressure DB data service");
+		}
+	}
 }
