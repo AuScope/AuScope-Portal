@@ -103,7 +103,7 @@
     </style>
 
     <%-- Framework imports - relative paths back to the webapp directory --%>
-    <jsp:include page="../../frameworkimports.htm"/>
+    <jsp:include page="../../frameworkimports.jsp"/>
     <script type="text/javascript">
 
     //<![CDATA[
