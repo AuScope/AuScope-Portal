@@ -70,8 +70,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
            modal       : true,
            title       : 'Interactive Plot: ',
            resizable   : true,
-           height  : 800, // Height and width of window the houses the graph
-           width   : 1300,           
+           height  : 600, // Height and width of window the houses the graph
+           width   : 1100,           
            x           : 10,
            y           : 10
        });
@@ -102,7 +102,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
             tabTitle : 'Details:' + featureId,
             items : [{
                 xtype : 'form',
-                width : 400,
+                width : 450,
                 autoHeight : true,
                 listeners : {
                     afterrender : function(form) {
@@ -208,7 +208,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                     }
                 }, {
                 	xtype : 'button',
-                	text : 'Interactive Plot',
+                	text : 'Plot',
                 	handler : function() {
                         var params = {
                                 wellID : actualFeatureId,
