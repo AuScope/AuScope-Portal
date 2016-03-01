@@ -150,7 +150,7 @@ public class TestBoreholeService extends PortalTestClass {
         final FilterBoundingBox bbox = null;
 
         String filter = service.getFilter(nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, null);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, null, null);
 
         String style = service.getStyle(filter, "#2242c7", null, null);
         Assert.assertNotNull(style);

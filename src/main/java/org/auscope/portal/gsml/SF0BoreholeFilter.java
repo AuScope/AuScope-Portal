@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SF0BoreholeFilter extends BoreholeFilter {
-
+	protected Boolean justNVCL;
     // ----------------------------------------------------------- Constructors
 
     public SF0BoreholeFilter() {
@@ -25,8 +25,9 @@ public class SF0BoreholeFilter extends BoreholeFilter {
         super(null, null, null, null, null);
     }
 
-    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,List<String> ids) {
+    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,List<String> ids,  Boolean justNVCL) {
         super(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids);
+        this.justNVCL = justNVCL;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -100,7 +101,11 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                     .generateOrComparisonFragment(idFragments
                             .toArray(new String[idFragments.size()])));
         }
-
+        
+        if (this.justNVCL != null && this.justNVCL==true) {
+        	parameterFragments.add(this.generatePropertyIsEqualToFragment("gsmlp:nvclCollection", "true"));
+        }
+        
         return this.generateAndComparisonFragment(this
                 .generateAndComparisonFragment(parameterFragments
                         .toArray(new String[parameterFragments.size()])));

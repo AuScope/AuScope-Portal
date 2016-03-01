@@ -64,7 +64,7 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.ReportFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
             case 'sf0-borehole-nvcl' :
-                baseFilterForm = Ext.create('auscope.layer.filterer.forms.SF0BoreholeFilterForm', baseFilterFormCfg);
+                baseFilterForm = Ext.create('auscope.layer.filterer.forms.BoreholeViewFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
             case 'remanent-anomalies':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', baseFilterFormCfg);
