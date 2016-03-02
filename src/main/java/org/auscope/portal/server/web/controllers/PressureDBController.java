@@ -243,7 +243,7 @@ public class PressureDBController extends BasePortalController {
     String getStyle(String layerName, String geometryName, String color) {
     	
     String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
+            + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
             + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
             + "<NamedLayer>" + "<Name>"
             + layerName

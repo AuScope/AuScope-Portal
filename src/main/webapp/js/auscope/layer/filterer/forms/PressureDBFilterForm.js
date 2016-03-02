@@ -37,7 +37,8 @@ Ext.define('auscope.layer.filterer.forms.PressureDBFilterForm', {
             name: 'ccLevels',
             increment: 1,
             minValue:3,
-            maxValue:9,           
+            maxValue:9,   
+            value:9,
             tipText: function(thumb){
                 return Ext.String.format('<b>Total {0} color code</b>', thumb.value);
             }                            
