@@ -35,7 +35,7 @@ Ext.define('auscope.layer.filterer.forms.PressureDBFilterForm', {
             fieldLabel: '<span data-qtip="Select the levels value for color coding">' + 'Color Code Levels' + '</span>',
             labelAlign: 'left',
             name: 'ccLevels',
-            increment: 2,
+            increment: 1,
             minValue:3,
             maxValue:9,           
             tipText: function(thumb){

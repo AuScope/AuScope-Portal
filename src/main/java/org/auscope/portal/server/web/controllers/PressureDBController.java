@@ -315,7 +315,8 @@ public class PressureDBController extends BasePortalController {
 		String header = "";
 		String middle = "";
 		String tail = "";
-		numRules = numRules > 9 ? 9 : numRules;
+		if (numRules > 9) numRules = 9;
+		int i = 0;
 		header = "<Rule>" 
 				+ "<Name>Boreholes</Name>"
 				+ "<Title>Boreholes</Title>"
@@ -323,7 +324,7 @@ public class PressureDBController extends BasePortalController {
 				+ "<ogc:Filter>"
 				+ "	<ogc:PropertyIsLessThan matchCase=\"false\" >"
 				+ "<ogc:PropertyName>" + propertyName + "</ogc:PropertyName>"
-				+ "<ogc:Literal>" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(0) : PRESSURE_DB_ELEVATION_MAP.get(0)) + "</ogc:Literal>"
+				+ "<ogc:Literal>" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i) : PRESSURE_DB_ELEVATION_MAP.get(i)) + "</ogc:Literal>"
 				+ "</ogc:PropertyIsLessThan>" 
 				+ "</ogc:Filter>"
 				+ "<PointSymbolizer>" 
@@ -332,7 +333,7 @@ public class PressureDBController extends BasePortalController {
 				+ "<WellKnownName>square</WellKnownName>" 
 				+ "<Fill>"
 				+ "<CssParameter name=\"fill\">"
-				+ PRESSURE_DB_COLOUR_MAP.get(0)
+				+ PRESSURE_DB_COLOUR_MAP.get(i)
 				+ "</CssParameter>"
 				+ "</Fill>" 
 				+ "</Mark>" 
@@ -340,15 +341,11 @@ public class PressureDBController extends BasePortalController {
 				+ "</Graphic>"
 				+ "</PointSymbolizer>" 
 				+ "</Rule>";
-		System.out.println("head:" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(0) : PRESSURE_DB_ELEVATION_MAP.get(0)));
-		int stripe = 9/(numRules-1);
-		int low = 0;
-		int high = 0;
-		for (int i = stripe; i < 8; i += stripe) {
-			low =  (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i) : PRESSURE_DB_ELEVATION_MAP.get(i);
-			if (i == stripe)
-				low =  (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(0) : PRESSURE_DB_ELEVATION_MAP.get(0);
-			high = (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i+stripe) : PRESSURE_DB_ELEVATION_MAP.get(i+stripe);
+		System.out.println("head:" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i) : PRESSURE_DB_ELEVATION_MAP.get(i)));
+		
+		for (i=1;i< (numRules-1);i++) {
+			int low =  (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i-1) : PRESSURE_DB_ELEVATION_MAP.get(i-1);
+			int high = (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i) : PRESSURE_DB_ELEVATION_MAP.get(i);
 			middle += "<Rule>"
 					+ "<Name>Boreholes</Name>"
 					+ "<Title>Boreholes</Title>"
@@ -388,7 +385,7 @@ public class PressureDBController extends BasePortalController {
 				+ "<ogc:Filter>"
 				+ "	<ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"
 				+ "<ogc:PropertyName>" + propertyName + "</ogc:PropertyName>"
-				+ "<ogc:Literal>" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(8) : PRESSURE_DB_ELEVATION_MAP.get(8)) + "</ogc:Literal>"
+				+ "<ogc:Literal>" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i-1) : PRESSURE_DB_ELEVATION_MAP.get(i-1)) + "</ogc:Literal>"
 				+ "</ogc:PropertyIsGreaterThanOrEqualTo>" 
 				+ "</ogc:Filter>"
 				+ "<PointSymbolizer>" 
@@ -397,7 +394,7 @@ public class PressureDBController extends BasePortalController {
 				+ "<WellKnownName>square</WellKnownName>" 
 				+ "<Fill>"
 				+ "<CssParameter name=\"fill\">"
-				+ PRESSURE_DB_COLOUR_MAP.get(8)
+				+ PRESSURE_DB_COLOUR_MAP.get(i)
 				+ "</CssParameter>"
 				+ "</Fill>" 
 				+ "</Mark>" 
@@ -405,7 +402,7 @@ public class PressureDBController extends BasePortalController {
 				+ "</Graphic>"
 				+ "</PointSymbolizer>" 
 				+ "</Rule>";	
-		System.out.println("tail:" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(8) : PRESSURE_DB_ELEVATION_MAP.get(8)));		
+		System.out.println("tail:" + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i-1) : PRESSURE_DB_ELEVATION_MAP.get(i-1)));		
 		styleRules = header + middle + tail;
 		return styleRules;
 	}
