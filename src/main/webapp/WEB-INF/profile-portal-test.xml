@@ -112,7 +112,7 @@
                 <!-- Restricted Areas -->
                 <ref bean="knownTypeProtectedAreasCAPAD2014Marine" />
                 <ref bean="knownTypeProtectedAreasCAPAD2014Terrestrial" />
-                <ref bean="knownTypeWorld_Heritage_Areas_2007" />
+                <ref bean="knownTypeWorld_Heritage_Areas_Australia" />
                 <ref bean="knownTypeDefence_Prohibited_Areas" />
                 <ref bean="knownTypeDefence_Practice_Areas" />
                 <ref bean="knownTypeDefence_Training_Areas" />

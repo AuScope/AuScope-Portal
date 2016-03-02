@@ -1670,14 +1670,14 @@ CAPAD provides a snapshot of protected areas that meet the IUCN definition of a 
         <property name="group" value="Restricted Areas"/>
         <property name="order" value="80_Restricted Areas_020" />
     </bean>
-    <bean id="knownTypeWorld_Heritage_Areas_2007" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="World_Heritage_Areas_2007"/>
+    <bean id="knownTypeWorld_Heritage_Areas_Australia" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="World_Heritage_Areas_Australia"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="World_Heritage_Areas_2007"/>
+                <constructor-arg name="layerName" value="World_Heritage_Areas_Australia"/>
             </bean>
         </constructor-arg>
-        <property name="name" value="World Heritage Areas 2007"/>
+        <property name="name" value="World Heritage Areas"/>
         <property name="description" value="There are currently fifteen (15) Australian properties on the World Heritage List, as of January 2004. (This dataset was acquired from Department of Environment in 2007)
 The Great Barrier Reef, the Tasmanian Wilderness, the Wet Tropics of Queensland and Shark Bay meet all four World Heritage criteria for natural heritage, with Kakadu National Park, Uluru-Kata Tjuta National Park, Willandra Lakes Region and the Tasmanian Wilderness being listed for both natural and cultural criteria.
 The Australian Fossil Mammal Sites (Naracoorte/Riversleigh), Lord Howe Island Group, Central Eastern Rainforest Reserves of Australia, Fraser Island, Macquarie Island, Heard and McDonald Islands, the Greater Blue Mountains Area and Purnululu National Park are listed under the World Heritage criteria for natural heritage.
