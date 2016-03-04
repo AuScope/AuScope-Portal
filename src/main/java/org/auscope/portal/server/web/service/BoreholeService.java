@@ -20,11 +20,12 @@ import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
+import org.auscope.portal.core.services.namespaces.WFSNamespaceContext;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.gsml.BoreholeFilter;
@@ -49,6 +50,7 @@ public class BoreholeService extends BaseWFSService {
 
     private final Log log = LogFactory.getLog(getClass());
 
+    private String gsmlpNameSpace = null;
     
 	/** different styles that apply for the different layers managed by this controller */
 	public enum Styles {
@@ -74,10 +76,8 @@ public class BoreholeService extends BaseWFSService {
     // ----------------------------------------------------------- Constructors
 
     @Autowired
-    public BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker,
-            WfsToKmlTransformer wfsToKml) {
+    public BoreholeService(HttpServiceCaller serviceCaller, WFSGetFeatureMethodMaker methodMaker) {
         super(serviceCaller, methodMaker);
-        this.wfsToKml = wfsToKml;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -93,11 +93,11 @@ public class BoreholeService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSTransformedResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
-            String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
+    public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+            String dateOfDrillingStart, String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat)
             throws Exception {
         String filterString;
-        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling, restrictToIDList);
+        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, restrictToIDList);
         if (bbox == null) {
             filterString = nvclFilter.getFilterStringAllRecords();
         } else {
@@ -108,16 +108,52 @@ public class BoreholeService extends BaseWFSService {
         try {
             // Create a GetFeature request with an empty filter - get all
             method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
-                    ResultType.Results);
+                    ResultType.Results, outputFormat);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
-            String responseKml = this.wfsToKml.convert(responseGml, serviceURL);
 
-            return new WFSTransformedResponse(responseGml, responseKml, method);
+            return new WFSResponse(responseGml, method);
         } catch (Exception ex) {
             throw new PortalServiceException(method, ex);
         }
     }
 
+    /**
+     * Counts all boreholes from a given service url and return the response
+     *
+     * @param serviceURL
+     * @param bbox
+     *            Set to the bounding box in which to fetch results, otherwise set it to null
+     * @param restrictToIDList
+     *            [Optional] A list of gml:id values that the resulting filter should restrict its search space to
+     * @return
+     * @throws Exception
+     */
+    public int countAllBoreholes(String serviceURL, String boreholeName, String custodian,
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
+            throws Exception {
+        String filterString;
+        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
+        if (bbox == null) {
+            filterString = nvclFilter.getFilterStringAllRecords();
+        } else {
+            filterString = nvclFilter.getFilterStringBoundingBox(bbox);
+        }
+
+        HttpRequestBase method = null;
+        try {
+            // Create a GetFeature request with an empty filter - get all
+            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
+                    ResultType.Hits, null);
+            String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
+
+            Document doc = DOMUtil.buildDomFromString(responseGml, true);
+            String number = (String) DOMUtil.compileXPathExpr("wfs:FeatureCollection/@numberOfFeatures", new WFSNamespaceContext()).evaluate(doc, XPathConstants.STRING);
+            return Integer.parseInt(number);
+        } catch (Exception ex) {
+            throw new PortalServiceException(method, ex);
+        }
+    }
+    
     private void appendHyloggerBoreholeIDs(String url, String typeName, List<String> idList)
             throws PortalServiceException, URISyntaxException {
         //Make request
@@ -184,9 +220,9 @@ public class BoreholeService extends BaseWFSService {
         return ids;
     }
 
-    public String getFilter(String boreholeName, String custodian, String dateOfDrilling,
+    public String getFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,
             int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
-        BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrilling, ids);
+        BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids);
         return generateFilterString(filter, bbox);
     }
 
@@ -210,7 +246,12 @@ public class BoreholeService extends BaseWFSService {
         return filterString;
     }
 
-    public String getStyle(String filter, String hyloggerFilter, String hyloggerColor, Styles styles) {
+    public String getStyle(String filter, String gsmlpNameSpace, Styles styles) {
+        setGsmlpNameSpace(gsmlpNameSpace);
+        return getStyle(filter, styles);
+    }
+
+    public String getStyle(String filter, Styles styles) {
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
@@ -257,5 +298,15 @@ public class BoreholeService extends BaseWFSService {
 
     public String getGeometryName() {
         return "gsml:collarLocation/gsml:BoreholeCollar/gsml:location";
+    }
+    
+    public String getGsmlpNameSpace() {
+        if (gsmlpNameSpace == null)
+            return " xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" ";
+        else
+            return gsmlpNameSpace;
+    }
+    public void setGsmlpNameSpace(String gsmlpNameSpace) {
+        this.gsmlpNameSpace = gsmlpNameSpace;
     }
 }

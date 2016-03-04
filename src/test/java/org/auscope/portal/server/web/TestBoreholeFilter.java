@@ -1,8 +1,6 @@
 package org.auscope.portal.server.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.gsml.BoreholeFilter;
@@ -25,10 +23,10 @@ public class TestBoreholeFilter extends PortalTestClass {
     @Test
     public void testNullOrEmptyParams() {
 
-        BoreholeFilter filter = new BoreholeFilter(null, null, null, null);
+        BoreholeFilter filter = new BoreholeFilter(null, null, null, null, null);
         String nullFilterString = filter.getFilterStringAllRecords();
 
-        filter = new BoreholeFilter("", "", "", new ArrayList<String>());
+        filter = new BoreholeFilter("", "", "", "", new ArrayList<String>());
         String emptyFilterString = filter.getFilterStringAllRecords();
 
         Assert.assertEquals(emptyFilterString, nullFilterString);
@@ -41,7 +39,7 @@ public class TestBoreholeFilter extends PortalTestClass {
      */
     @Test
     public void testCaseInsensitiveStrings() throws Exception {
-        BoreholeFilter filter = new BoreholeFilter("boreholeName", "boreholeCustodian", null, null);
+        BoreholeFilter filter = new BoreholeFilter("boreholeName", "boreholeCustodian", null, null, null);
         String filterString = filter.getFilterStringAllRecords();
 
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filterString);

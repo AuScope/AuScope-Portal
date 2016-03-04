@@ -21,7 +21,7 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
         <property name="group" value="Mines and Mining Activity"/>
         <property name="proxyUrl" value="doMineFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doMineFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineFilterDownload.do"/>
         <property name="order" value="01_Mines and Mining Activity_010" />
@@ -45,7 +45,7 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
         <property name="group" value="Mines and Mining Activity"/>
         <property name="proxyUrl" value="doMiningActivityFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doMiningActivityFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMiningActivityFilterDownload.do"/>
         <property name="order" value="01_Mines and Mining Activity_020" />
@@ -64,7 +64,7 @@
         <property name="group" value="Mineral Occurrences and Resources"/>
         <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doMineralOccurrenceFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
         <property name="order" value="02_Mineral Occurrences and Resources_010" />
@@ -88,7 +88,7 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MineralOccurence"/>
         <property name="group" value="AuScope Earth Resource Services"/>
         <property name="proxyUrl" value="doMineralOccurrenceFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doMineralOccurrenceFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralOccurrenceFilterDownload.do"/>
         <property name="order" value="1_AuScope Earth Resource Services_020" />
@@ -165,7 +165,7 @@
         <property name="group" value="Boreholes"/>
         <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
         <property name="proxyUrl" value="doNVCLFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doNVCLFilterHits.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -252,7 +252,7 @@
         <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
         <property name="group" value="University of Melbourne"/>
         <property name="proxyUrl" value="doBoreholeFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyCountUrl" value="doBoreholeFilterCount.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
