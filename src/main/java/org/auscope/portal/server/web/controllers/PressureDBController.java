@@ -204,7 +204,7 @@ public class PressureDBController extends BasePortalController {
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "color", defaultValue = "") String color,
             @RequestParam(required = false, value = "ccProperty", defaultValue = "") String ccProperty ,     
-            @RequestParam(required = false, value = "ccLevels", defaultValue = "0") int ccLevels )               
+            @RequestParam(required = false, value = "ccLevels", defaultValue = "9") int ccLevels )               
             throws Exception {
 
         String style = "";
@@ -319,7 +319,7 @@ public class PressureDBController extends BasePortalController {
 		int i = 0;
 		header = "<Rule>" 
 				+ "<Name>Boreholes</Name>"
-				+ "<Title>Boreholes</Title>"
+				+ "<Title>Boreholes less than " + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i) : PRESSURE_DB_ELEVATION_MAP.get(i)) + "</Title>"
 				+ "<Abstract>Light purple square boxes</Abstract>"
 				+ "<ogc:Filter>"
 				+ "	<ogc:PropertyIsLessThan matchCase=\"false\" >"
@@ -348,7 +348,9 @@ public class PressureDBController extends BasePortalController {
 			int high = (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i) : PRESSURE_DB_ELEVATION_MAP.get(i);
 			middle += "<Rule>"
 					+ "<Name>Boreholes</Name>"
-					+ "<Title>Boreholes</Title>"
+					+ "<Title>Boreholes from " 
+					+ Integer.toString(low) + "m to " + Integer.toString(high) + "m"
+					+ "</Title>"
 					+ "<Abstract>Light purple square boxes</Abstract>"
 					+ "<ogc:Filter>"
 					+ "<ogc:And>"
@@ -380,7 +382,7 @@ public class PressureDBController extends BasePortalController {
 		}
 		tail = "<Rule>" 
 				+ "<Name>Boreholes</Name>"
-				+ "<Title>Boreholes</Title>"
+				+ "<Title>Boreholes greater than " + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i-1) : PRESSURE_DB_ELEVATION_MAP.get(i-1)) + "</Title>"
 				+ "<Abstract>Light purple square boxes</Abstract>"
 				+ "<ogc:Filter>"
 				+ "	<ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"
