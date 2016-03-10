@@ -79,14 +79,14 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
      * @throws PortalServiceException
      */
     public InputStream downloadMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures,
-            String startIndex) throws PortalServiceException {
+            String startIndex, String outputFormat) throws PortalServiceException {
         MineFilter filter = new MineFilter(mineName);
         String filterString = generateFilterString(filter, bbox);
 
         HttpRequestBase method = null;
         try {
             method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures, null,
-                    ResultType.Results, null, startIndex);
+                    ResultType.Results, outputFormat, startIndex);
             return httpServiceCaller.getMethodResponseAsStream(method);
 
         } catch (Exception ex) {
@@ -96,7 +96,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
-     * 
+     *
      * @param serviceURL
      * @param commodityName
      * @param measureType
@@ -143,7 +143,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
 
     /**
      * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
-     * 
+     *
      * @param serviceURL
      * @param mineName
      * @param startDate

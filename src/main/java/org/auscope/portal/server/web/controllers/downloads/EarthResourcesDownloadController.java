@@ -60,6 +60,7 @@ public class EarthResourcesDownloadController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "startIndex") String startIndex,
+            @RequestParam(required = false, value = "outputFormat") String outputFormat,
             HttpServletResponse response) throws Exception {
         
         OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
@@ -76,7 +77,7 @@ public class EarthResourcesDownloadController extends BasePortalController {
         File file = null;
         try {
             InputStream results = this.mineralOccurrenceDownloadService.downloadMinesGml(serviceUrl, mineName, bbox,
-                    maxFeatures, startIndex);
+                    maxFeatures, startIndex, outputFormat);
 
             file = FileIOUtil.writeStreamToFileTemporary(results, "APT_MFD", ".xml", true);
             FileInputStream in = new FileInputStream(file);

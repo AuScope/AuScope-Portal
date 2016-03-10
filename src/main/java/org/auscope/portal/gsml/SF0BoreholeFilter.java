@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 
 /**
  * A class for filter SF0 Borehole web service
- * 
+ *
  * @author Florence Tan
  *
  */
@@ -19,11 +22,11 @@ public class SF0BoreholeFilter extends BoreholeFilter {
 
     public SF0BoreholeFilter() {
         // test
-        super(null, null, null, null);
+        super(null, null, null, null, null);
     }
 
-    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrilling, List<String> ids) {
-        super(boreholeName, custodian, dateOfDrilling, ids);
+    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,List<String> ids) {
+        super(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -48,7 +51,7 @@ public class SF0BoreholeFilter extends BoreholeFilter {
         List<String> parameterFragments = new ArrayList<String>();
         if (boreholeName != null && !boreholeName.isEmpty()) {
             parameterFragments.add(this.generatePropertyIsLikeFragment(
-                    "gsmlp:name", "*" + this.boreholeName + "*"));
+                    "gsmlp:name", this.boreholeName));
         }
 
         if (custodian != null && !custodian.isEmpty()) {
@@ -59,10 +62,31 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                                     this.custodian));
         }
 
-        if (dateOfDrilling != null && !dateOfDrilling.isEmpty()) {
-            parameterFragments.add(this.generatePropertyIsLikeFragment(
-                    "gsmlp:drillStartDate",
-                    "*" +  this.dateOfDrilling + "*"));
+        if (dateOfDrillingStart != null && !dateOfDrillingStart.isEmpty()
+                && dateOfDrillingEnd != null && !dateOfDrillingEnd.isEmpty()) {
+            // AUS-2595 Due to the date compare does not like the
+            // PropertyIsLike, it was change to use PropertyIsGreaterThan & PropertyIsLessThan.
+            DateTimeFormatter formatter = DateTimeFormat
+                    .forPattern("yyyy-MM-dd");
+            DateTime dtStart = formatter
+                    .parseDateTime(this.dateOfDrillingStart);
+            DateTime dtEnd = formatter.parseDateTime(this.dateOfDrillingEnd);
+            // LJ: Need to minus 1 second for startDate to cover the time of
+            // 00:00:00
+            // Need to plus 1 second for endDate to cover the time of 00:00:00
+            dtStart = dtStart.minusSeconds(1);
+            dtEnd = dtEnd.plusSeconds(1);
+            DateTimeFormatter outFormatter = DateTimeFormat
+                    .forPattern("yyyy-MM-dd HH:mm:ss");
+            String utcDateofDrillingStart = outFormatter.print(dtStart);
+            String utcDateofDrillingEnd = outFormatter.print(dtEnd);
+            parameterFragments.add(this.generateDatePropertyIsGreaterThan(
+                    "gsmlp:drillStartDate",false,
+                    this.generateFunctionDateParse(utcDateofDrillingStart)));
+
+            parameterFragments.add(this.generateDatePropertyIsLessThan(
+                    "gsmlp:drillStartDate",false,
+                    this.generateFunctionDateParse(utcDateofDrillingEnd)));
         }
 
         if (this.restrictToIDList != null && !this.restrictToIDList.isEmpty()) {

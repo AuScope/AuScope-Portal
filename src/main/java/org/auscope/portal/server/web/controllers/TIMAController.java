@@ -39,7 +39,8 @@ public class TIMAController extends BasePortalController {
             @RequestParam(required = false, value = "sampleName") String sampleName,
             @RequestParam(required = false, value = "igsn") String igsn,
             @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures)
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures,
+            @RequestParam(required = false, value = "outputFormat") String outputFormat)
             throws Exception {
 
         OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
@@ -65,7 +66,7 @@ public class TIMAController extends BasePortalController {
 
     /**
      * Utility function for generating an OGC filter for a TIMA simple feature
-     * 
+     *
      * @return
      */
     private String generateGeoSampleFilter(String name, String igsn, FilterBoundingBox bbox) {
