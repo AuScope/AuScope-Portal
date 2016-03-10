@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.CSWCacheService;
-import org.auscope.portal.core.services.responses.wfs.WFSResponse;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.jmock.Expectations;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @version: $Id$
  */
+@SuppressWarnings("rawtypes")
 public class TestSF0BoreholeController extends PortalTestClass {
 
     /** The mock portrayal borehole view service. */
@@ -54,18 +56,20 @@ public class TestSF0BoreholeController extends PortalTestClass {
         final String serviceUrl = "http://fake.com/wfs";
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDateStart = "1986-10-09";
+        final String filterDate = "1986-10-09";
         final int maxFeatures = 10;
+        final FilterBoundingBox bbox = new FilterBoundingBox("EPSG:4326", new double[] {1, 2}, new double[] {3, 4});
         final String sf0BoreholeWfsResponse = "wfsResponse";
-        final String outputFormat = "text/csv";
+        final String sf0BoreholeKmlResponse = "kmlResponse";
         final HttpRequestBase mockHttpMethodBase = context.mock(HttpRequestBase.class);
         final URI httpMethodURI = new URI("http://example.com");
 
         context.checking(new Expectations() {
             {
-                oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDateStart,
-                        null, maxFeatures, null, outputFormat);
-                will(returnValue(new WFSResponse(sf0BoreholeWfsResponse, mockHttpMethodBase)));
+                oneOf(mockSF0BoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter, filterDate,
+                        maxFeatures, null);
+                will(returnValue(new WFSTransformedResponse(sf0BoreholeWfsResponse, sf0BoreholeKmlResponse,
+                        mockHttpMethodBase, true)));
 
                 allowing(mockHttpMethodBase).getURI();
                 will(returnValue(httpMethodURI));
@@ -74,13 +78,14 @@ public class TestSF0BoreholeController extends PortalTestClass {
         });
 
         ModelAndView response = this.sf0BoreholeController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, null, maxFeatures, null, outputFormat);
+                filterDate, maxFeatures, null);
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Object dataObj = response.getModel().get("data");
         Assert.assertNotNull(dataObj);
         if (dataObj instanceof ModelMap) {
             Assert.assertEquals(sf0BoreholeWfsResponse, ((ModelMap)dataObj).get("gml"));
+            Assert.assertEquals(sf0BoreholeKmlResponse, ((ModelMap)dataObj).get("kml"));
         }
     }
 }
