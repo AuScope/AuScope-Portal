@@ -15,10 +15,9 @@ import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource.OnlineResourceType;
 import org.auscope.portal.core.services.responses.csw.CSWOnlineResourceImpl;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
-import org.auscope.portal.core.xslt.WfsToKmlTransformer;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.auscope.portal.server.web.service.BoreholeService.Styles;
@@ -45,9 +44,6 @@ public class TestSF0BoreholeService extends PortalTestClass {
     /** The mock HTTP method */
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
-    /** The mock GML transformer */
-    private WfsToKmlTransformer mockGmlToKml = context.mock(WfsToKmlTransformer.class);
-
     /** The Constant GETSCANNEDBOREHOLEXML. */
     private static final String GETSCANNEDBOREHOLEXML = "org/auscope/portal/nvcl/GetScannedBorehole.xml";
 
@@ -62,7 +58,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
      */
     @Before
     public void setUp() throws Exception {
-        service = new SF0BoreholeService(mockHttpServiceCaller, mockMethodMaker, mockGmlToKml);
+        service = new SF0BoreholeService(mockHttpServiceCaller, mockMethodMaker);
     }
 
     /**
@@ -80,7 +76,6 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String custodian = "custodian";
         final String dateOfDrilling = "2011-01-01";
         final String gmlString = "xmlString";
-        final String kmlString = "kmlString";
 
         context.checking(new Expectations() {
             {
@@ -92,61 +87,16 @@ public class TestSF0BoreholeService extends PortalTestClass {
 
                 oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
                 will(returnValue(gmlString));
-
-                oneOf(mockGmlToKml).convert(gmlString, serviceURL);
-                will(returnValue(kmlString));
             }
         });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
-                maxFeatures, bbox);
+        WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+        		dateOfDrilling, maxFeatures, bbox);
         Assert.assertNotNull(result);
-        Assert.assertEquals(gmlString, result.getGml());
-        Assert.assertEquals(kmlString, result.getTransformed());
+        Assert.assertEquals(gmlString, result.getData());
         Assert.assertSame(mockMethod, result.getMethod());
     }
 
-    /**
-     * Test get all boreholes no bbox and with year only in the date of drilling field.
-     *
-     * @throws Exception
-     *             the exception
-     */
-    @Test
-    public void testGetAllBoreholesNoBboxDrillYearOnly() throws Exception {
-        final FilterBoundingBox bbox = null;
-        final String serviceURL = "http://example.com";
-        final int maxFeatures = 45;
-        final String boreholeName = "borehole-name";
-        final String custodian = "custodian";
-        final String dateOfDrilling = "2011";
-        final String gmlString = "xmlString";
-        final String kmlString = "kmlString";
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")),
-                        with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)),
-                        with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));
-                will(returnValue(mockMethod));
-
-                oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
-                will(returnValue(gmlString));
-
-                oneOf(mockGmlToKml).convert(gmlString, serviceURL);
-                will(returnValue(kmlString));
-            }
-        });
-
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
-                maxFeatures, bbox);
-        Assert.assertNotNull(result);
-        Assert.assertEquals(gmlString, result.getGml());
-        Assert.assertEquals(kmlString, result.getTransformed());
-        Assert.assertSame(mockMethod, result.getMethod());
-    }    
-    
     /**
      * Test that SF0 filter style will return a style layer descriptor with correct feature type name
      */
@@ -154,12 +104,11 @@ public class TestSF0BoreholeService extends PortalTestClass {
     public void testSF0FilterStyle() throws Exception {
         final String nameFilter = "filterBob";
         final String custodianFilter = "filterCustodian";
-        final String filterDate = "1986-10-09";
+        final String dateOfDrilling = "1986-10-09";
         final int maxFeatures = 10;
         final FilterBoundingBox bbox = null;
 
-        String filter = service.getFilter(nameFilter, custodianFilter,
-                filterDate, maxFeatures, bbox, null);
+        String filter = service.getFilter(nameFilter, custodianFilter, dateOfDrilling, maxFeatures, bbox, null);
 
         String style = service.getStyle(filter, null, "#2242c7", Styles.ALL_BOREHOLES);
         Assert.assertNotNull(style);
@@ -182,7 +131,6 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String custodian = "custodian";
         final String dateOfDrilling = "2011-01-01";
         final String gmlString = "xmlString";
-        final String kmlString = "kmlString";
 
         context.checking(new Expectations() {
             {
@@ -193,17 +141,13 @@ public class TestSF0BoreholeService extends PortalTestClass {
                 will(returnValue(mockMethod));
                 oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
                 will(returnValue(gmlString));
-
-                oneOf(mockGmlToKml).convert(gmlString, serviceURL);
-                will(returnValue(kmlString));
             }
         });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
-                maxFeatures, bbox);
+        WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+        		dateOfDrilling, maxFeatures, bbox);
         Assert.assertNotNull(result);
-        Assert.assertEquals(gmlString, result.getGml());
-        Assert.assertEquals(kmlString, result.getTransformed());
+        Assert.assertEquals(gmlString, result.getData());
         Assert.assertSame(mockMethod, result.getMethod());
     }
 
@@ -221,7 +165,6 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String custodian = "shaksdhska";
         final String dateOfDrilling = "2010-01-02";
         final String gmlString = "xmlString";
-        final String kmlString = "kmlString";
         final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrilling, null))
                 .getFilterStringAllRecords();
 
@@ -234,17 +177,13 @@ public class TestSF0BoreholeService extends PortalTestClass {
 
                 oneOf(mockHttpServiceCaller).getMethodResponseAsString(with(any(HttpRequestBase.class)));
                 will(returnValue(gmlString));
-
-                oneOf(mockGmlToKml).convert(gmlString, serviceURL);
-                will(returnValue(kmlString));
             }
         });
 
-        WFSTransformedResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrilling,
-                maxFeatures, null);
+        WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+        		dateOfDrilling, maxFeatures, null);
         Assert.assertNotNull(result);
-        Assert.assertEquals(gmlString, result.getGml());
-        Assert.assertEquals(kmlString, result.getTransformed());
+        Assert.assertEquals(gmlString, result.getData());
         Assert.assertSame(mockMethod, result.getMethod());
     }
 

@@ -16,7 +16,7 @@ import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.HttpUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AbstractStreamResponse;
@@ -90,7 +90,8 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
-            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
+            @RequestParam(required = false, value = "outputFormat", defaultValue = "") String outputFormat)
                     throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
@@ -111,7 +112,7 @@ public class NVCLController extends BasePortalController {
         OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
 
-        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, onlyHylogger);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, onlyHylogger, outputFormat, false);
     }
 
     /**
@@ -129,10 +130,12 @@ public class NVCLController extends BasePortalController {
     @RequestMapping("/doNVCLFilter.do")
     public ModelAndView doNVCLFilter(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
             @RequestParam(required = false, value = "dateOfDrilling", defaultValue = "") String dateOfDrilling,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
-            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
+            @RequestParam(required = false, value = "outputFormat", defaultValue = "") String outputFormat)
                     throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
@@ -150,10 +153,9 @@ public class NVCLController extends BasePortalController {
             }
         }
 
-        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
-        // show all NVCL boreholes
-        return doBoreholeFilter(serviceUrl, boreholeName, null, dateOfDrilling, -1, bbox, onlyHylogger);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrilling, -1, bbox, onlyHylogger, outputFormat, false);
     }
 
     /**
@@ -170,7 +172,7 @@ public class NVCLController extends BasePortalController {
      */
     public ModelAndView doBoreholeFilter(String serviceUrl, String boreholeName, String custodian,
             String dateOfDrilling, int maxFeatures, FilterBoundingBox bbox,
-            boolean onlyHylogger) throws Exception {
+            boolean onlyHylogger, String outputFormat, boolean countOnly) throws Exception {
         List<String> hyloggerBoreholeIDs = null;
         if (onlyHylogger) {
             try {
@@ -191,9 +193,14 @@ public class NVCLController extends BasePortalController {
         }
 
         try {
-            WFSTransformedResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
-                    dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
-            return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+            if (countOnly) {
+                int count = this.boreholeService.countAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs);
+                return generateJSONResponseMAV(true, count, "");
+            } else {
+                WFSResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
+                		dateOfDrilling, maxFeatures, bbox, hyloggerBoreholeIDs, outputFormat);
+                return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
+            }
         } catch (Exception e) {
             return this.generateExceptionResponse(e, serviceUrl);
         }
