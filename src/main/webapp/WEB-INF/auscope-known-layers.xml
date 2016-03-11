@@ -62,7 +62,6 @@
         <property name="name" value="Mineral Occurrences"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mo:MinOccView"/>
         <property name="group" value="Mineral Occurrences and Resources"/>
-        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value="doMineralOccurrenceFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
@@ -106,9 +105,9 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
         <property name="group" value="Tenements"/>
 
-        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
+
+        <property name="proxyUrl" value="getAllMineralTenementFeatures.do"/>
+        <property name="proxyCountUrl" value="getMineralTenementCount.do"/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>
         <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png"/>
@@ -1590,7 +1589,6 @@
         <property name="description" value="The National Onshore Oil Pipelines Dataset represents the spatial locations of pipelines for the transmission of natural Oil within mainland Australia complimented with feature attribution."/>
         <property name="group" value="Topography and Infrastructure"/>
 
-        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
@@ -1609,7 +1607,6 @@
         <property name="description" value="The National Onshore Gas Pipelines Dataset represents the spatial locations of pipelines for the transmission of natural gas within mainland Australia complimented with feature attribution."/>
         <property name="group" value="Topography and Infrastructure"/>
 
-        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
@@ -1629,7 +1626,6 @@
         <property name="description" value="This point dataset contains major ports in Australian waters that include infrastructure facilities where maritime vessels have the ability to load and unload commodities."/>
         <property name="group" value="Topography and Infrastructure"/>
 
-        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/> <!-- getMineralTenementStyle.do"/ -->
