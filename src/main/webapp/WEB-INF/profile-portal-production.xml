@@ -21,9 +21,8 @@
                 <ref bean="knownTypeEMAGRemanentAnomalies" />
                 <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
-                <ref bean="knownTypeBoreholeNvcl" />
-                <ref bean="knownTypeBoreholePressureDB" />
-                <ref bean="knownTypeGSMLBorehole" />                
+                <ref bean="knownTypeNVCLBoreholes" />
+                <ref bean="knownTypeAllBoreholes" />          
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
@@ -62,9 +61,6 @@
                 <ref bean="knownTypeAlohGroupContent" />
                 <ref bean="knownTypeGypsumContent" />
                 <ref bean="knownTypeSilicaContent" />
-                <ref bean="knownTypeBoreholeMSCL" />
-                <ref bean="knownTypeSeismologyInSchool" />
-                <ref bean="knownTypeSF0BoreholeNVCL" />
                 <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeTimaGeoSample" />
                 

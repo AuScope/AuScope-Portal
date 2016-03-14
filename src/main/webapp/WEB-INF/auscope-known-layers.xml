@@ -127,7 +127,7 @@
         <property name="order" value="40_Tenements_010" />
     </bean>
 
-    <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <bean id="knownTypeNVCLBoreholes" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="nvcl-borehole"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
@@ -165,7 +165,9 @@
         <property name="group" value="Boreholes"/>
         <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
         <property name="proxyUrl" value="doNVCLFilter.do"/>
-        <property name="proxyCountUrl" value="doNVCLFilterHits.do"/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value=""/>
+        
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -182,7 +184,7 @@
         <property name="order" value="20_Boreholes_010" />
     </bean>
 
-    <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+    <bean id="knownTypeAllBoreholes" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="sf0-borehole-nvcl"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
@@ -213,197 +215,7 @@
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
         <property name="order" value="20_Boreholes_020" />
-    </bean>
-
-    <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">
-        <constructor-arg name="id" value="mscl-borehole"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://sisstest.arrc.csiro.au:8080/agos/wfs</value>
-                        <value>http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs</value>
-                    </list>
-                </constructor-arg>
-                <property name="relatedFeatureTypeNames">
-                    <list>
-                        <value>mscl:scanned_data</value>
-                        <value>sa:SamplingFeatureCollection</value>
-                    </list>
-                </property>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="MSCL Data"/>
-        <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
-        <property name="group" value="University of Melbourne"/>
-        <property name="proxyUrl" value="doBoreholeFilter.do"/>
-        <property name="proxyCountUrl" value="doBoreholeFilterCount.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="200" />
-    </bean>
-
-    <bean id="knownTypeSurfaceAftershock" class="org.auscope.portal.view.ResearchDataLayer">
-        <constructor-arg name="id" value="surface-aftershock"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="surfaceaftershock:seismometer"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs</value>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Surface Aftershock Data"/>
-        <property name="description" value="Surface aftershock seismograph continuous data."/>
-        <property name="group" value="University of Melbourne"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="201" />
-    </bean>
-
-    <bean id="knownTypeSeismologyInSchool" class="org.auscope.portal.view.ResearchDataLayer">
-        <constructor-arg name="id" value="seismology-in-schools-site"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.view.knownlayer.IRISSelector">
-                <constructor-arg name="serviceEndpoint" value="http://service.iris.edu"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="IRIS Feed"/>
-        <property name="description" value="Seismographs in Schools data feed from Incorporated Research Institutions for Seismology (IRIS). S network code."/>
-        <property name="group" value="Seismographs in Schools Network"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="300" />
-    </bean>
-
-    <bean id="knownTypeBoreholePressureDB" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="pressuredb-borehole"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://services-test.auscope.org:80/pressuredb/wfs</value>
-                        <value>http://services.auscope.org:80/pressuredb/wfs</value>
-                    </list>
-                </constructor-arg>
-                <property name="relatedFeatureTypeNames">
-                    <list>
-                        <value>sa:SamplingFeatureCollection</value>
-                        <value>om:GETPUBLISHEDSYSTEMTSA</value>
-                        <value>pdb:rft</value>
-                        <value>pdb:nacl</value>
-                        <value>pdb:t</value>
-                        <value>pdb:cl</value>
-                        <value>pdb:tds</value>
-                        <value>pdb:dst</value>
-                        <value>pdb:fitp</value>
-                    </list>
-                </property>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Pressure DB"/>
-        <property name="description" value="A collection of services implementing the Pressure DB Profile for gsml:Borehole and a collection of observations"/>
-        <property name="group" value="Boreholes"/>
-        <property name="proxyUrl" value="doBoreholeFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value=""/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="52"/>
-    </bean>
-    <bean id="knownTypeGSMLBorehole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="gsml-borehole"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="All Boreholes"/>
-        <property name="description" value="A collection of services that support the GeoSciML Borehole feature type."/>
-        <property name="group" value="Boreholes"/>
-        <property name="proxyUrl" value="doBoreholeFilter.do"/>
-        <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="doFilterStyle.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="53" />
     </bean>
 
     <bean id="knownTypeGeologicalProvinceContact" class="org.auscope.portal.core.view.knownlayer.KnownLayer">

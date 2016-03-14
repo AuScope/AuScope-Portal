@@ -16,10 +16,8 @@
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />
                 <ref bean="knownTypeMineralOccurrenceView" />
-                <ref bean="knownTypeBoreholeNvcl" />
-                <ref bean="knownTypeSF0BoreholeNVCL" />
-                <!-- <ref bean="knownTypeBoreholePressureDB" /> -->
-                <!-- <ref bean="knownTypeGSMLBorehole" /> -->
+                <ref bean="knownTypeNVCLBoreholes" />
+                <ref bean="knownTypeAllBoreholes" />
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
                 <ref bean="knownTypeLateriteYilgarnGeoChem"/>
@@ -69,10 +67,7 @@
                 <ref bean="knownTypeRegolithRatios" />
                 <ref bean="knownTypeAlohGroupContent" />
                 <ref bean="knownTypeGypsumContent" />
-                <ref bean="knownTypeSilicaContent" />
-                <ref bean="knownTypeBoreholeMSCL" />
-                <ref bean="knownTypeSeismologyInSchool" />
-                <!-- <ref bean="knownTypeSF0BoreholeNVCL" />              -->
+                <ref bean="knownTypeSilicaContent" />     
 <!--                 <ref bean="knownTypeSurfaceAftershock" /> -->
 
                 <!-- Analytics -->

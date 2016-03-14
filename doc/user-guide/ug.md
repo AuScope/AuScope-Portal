@@ -118,9 +118,7 @@ Allows the filtering of the displayed layers based on:
 The tabs at the top of the _Layers_ panel separate the data services into several collections:
 
 * Featured: These data services are registered with the portal and are displayed together using common themes such as Mining, Boreholes and so on.
-* Registered: These services are similar to those from the _Featured_ category but do not belong to any of the _Featured_ themes.
 * [Custom Layers](#custom-layers): This tab allows you to create your own layers from remote data services (see below).
-* Research data: These layers are from past or present research activities and may contain partial or incomplete information.
 
 #### Custom Layers
 

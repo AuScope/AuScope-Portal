@@ -5,7 +5,6 @@ import org.auscope.portal.core.services.KnownLayerService;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.auscope.portal.core.view.knownlayer.KnownLayerGrouping;
-import org.auscope.portal.view.ResearchDataLayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +21,6 @@ public class KnownLayerController extends BaseCSWController {
 
     /** Used for requesting groupings of CSWRecords under known layers */
     private KnownLayerService knownLayerService;
-    /** Used for converting data to something the view can understand */
-    private ViewKnownLayerFactory viewKnownLayerFactory;
 
     @Autowired
     public KnownLayerController(KnownLayerService knownLayerService,
@@ -58,16 +55,5 @@ public class KnownLayerController extends BaseCSWController {
         KnownLayerGrouping grouping = knownLayerService.groupKnownLayerRecords();
 
         return generateCSWRecordResponse(grouping.getUnmappedRecords());
-    }
-
-    /**
-     * Gets a JSON response which contains the representations of all the research data layers.
-     * 
-     * @return The ModelAndView object containing any known layers of type ResearchDataLayer.
-     */
-    @RequestMapping("getResearchDataLayers.do")
-    public ModelAndView getResearchDataLayers() {
-        KnownLayerGrouping grouping = knownLayerService.groupKnownLayerRecords(ResearchDataLayer.class);
-        return generateKnownLayerResponse(grouping.getKnownLayers());
     }
 }
