@@ -9,12 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.service.MineralTenementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MineralTenementController extends BasePortalController {
@@ -27,6 +30,68 @@ public class MineralTenementController extends BasePortalController {
     public MineralTenementController(MineralTenementService mineralTenementService) {
         this.mineralTenementService = mineralTenementService;
     }
+    
+    
+    @RequestMapping("/getAllMineralTenementFeatures.do")
+    public ModelAndView getAllMineralTenementFeatures(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "tenementName") String tenementName,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+                    throws Exception {
+
+        // The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
+        // This will in turn limit the number of points returned to 200
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
+        WFSTransformedResponse response = null;
+        try {
+            response = this.mineralTenementService.getAllTenements(serviceUrl, tenementName, 
+                    maxFeatures, bbox);
+
+            
+        } catch (Exception e) {
+            log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
+            log.debug("Exception: ", e);
+            return this.generateExceptionResponse(e, serviceUrl);
+        }
+        
+        log.warn("GML: " + response.getGml());
+        
+        
+        return generateJSONResponseMAV(response.getSuccess(), response.getGml(), response.getTransformed(), response.getMethod());
+    }
+    
+    @RequestMapping("/getMineralTenementCount.do")
+    public ModelAndView getMineralTenementCount(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "tenementName") String tenementName,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+                    throws Exception {
+
+        // The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
+        // This will in turn limit the number of points returned to 200
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
+        WFSCountResponse response = null;
+        try {
+            response = this.mineralTenementService.getTenementCount(serviceUrl, tenementName, 
+                    maxFeatures, bbox);
+
+            
+        } catch (Exception e) {
+            log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
+            log.debug("Exception: ", e);
+            return this.generateExceptionResponse(e, serviceUrl);
+        }
+        
+        log.warn("GML: " + response.getNumberOfFeatures());
+        
+        
+        return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
+    }
+    
 
     @RequestMapping("/doMineralTenementDownload.do")
     public void doMineralTenementDownload(
