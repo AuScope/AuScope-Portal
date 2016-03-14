@@ -4,11 +4,10 @@ import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
-import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.gsml.YilgarnGeochemistryFilter;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
@@ -46,7 +45,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
 
     /**
      * Given a located specimen ID, lookup its details and return a simplified response
-     * 
+     *
      * @param serviceUrl
      *            The WFS url containing a sa:LocatedSpecimen type
      * @param featureId
@@ -58,7 +57,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
     public ModelAndView doLocatedSpecimenFeature(@RequestParam("serviceUrl") final String serviceUrl,
             @RequestParam("featureId") final String featureId) throws Exception {
 
-        // Let the underlying service do all the heavy lifting
+        //Let the underlying service do all the heavy lifting
         YilgarnLocatedSpecimenRecord locSpecimenRecord = null;
         try {
             locSpecimenRecord = geochemService.getLocatedSpecimens(serviceUrl, featureId);
@@ -73,7 +72,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
 
-        // Transform our response for the view
+        //Transform our response for the view
         String[] specName = null;
         String[] uniqueSpecName = null;
         YilgarnObservationRecord[] observations = locSpecimenRecord.getRelatedObservations();
@@ -82,7 +81,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
             for (int j = 0; j < observations.length; j++) {
                 specName[j] = observations[j].getAnalyteName();
             }
-            // specName has duplicate values so this is to get Unique values.
+            //specName has duplicate values so this is to get Unique values.
             Arrays.sort(specName);
             int k = 0;
             for (int i = 0; i < specName.length; i++) {
@@ -104,7 +103,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
 
     /**
      * Generates a Model object to send to the view.
-     * 
+     *
      * @param records
      * @param materialDesc
      * @param uniqueSpecName
@@ -122,14 +121,11 @@ public class YilgarnGeochemistryController extends BasePortalController {
 
     /**
      * Utility function for generating an OGC filter for a geologicUnit based on the specified params
-     * 
-     * @param serviceUrl
-     * 
+     *
      * @return
      */
-    private String generateGeologicUnitFilter(String name, String bboxString, String serviceUrl) {
-        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxString, ogcServiceProviderType);
+    private String generateGeologicUnitFilter(String name, String bboxString) {
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxString);
         YilgarnGeochemistryFilter yilgarnGeochemistryFilter = new YilgarnGeochemistryFilter(name);
         if (bbox == null) {
             return yilgarnGeochemistryFilter.getFilterStringAllRecords();
@@ -140,7 +136,7 @@ public class YilgarnGeochemistryController extends BasePortalController {
 
     /**
      * This method returns the GMl/KML output from a Yilgarn Geochemistry WFS
-     * 
+     *
      * @param serviceUrl
      *            A WFS endpoint
      * @param geologicName
@@ -158,15 +154,15 @@ public class YilgarnGeochemistryController extends BasePortalController {
             @RequestParam(required = false, value = "geologicName") String geologicName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-                    throws Exception {
+            throws Exception {
 
-        // Build our filter details
-        String filterString = generateGeologicUnitFilter(geologicName, bboxJson, serviceUrl);
+        //Build our filter details
+        String filterString = generateGeologicUnitFilter(geologicName, bboxJson);
 
-        // Make our request and get it transformed
-        WFSTransformedResponse response = null;
+        //Make our request and get it transformed
+        WFSResponse response = null;
         try {
-            response = wfsService.getWfsResponseAsKml(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures, null);
+            response = wfsService.getWfsResponse(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures, null);
         } catch (Exception ex) {
             log.warn(String.format("Unable to request/transform WFS response for '%1$s' from '%2$s': %3$s",
                     geologicName, serviceUrl, ex));
@@ -174,12 +170,12 @@ public class YilgarnGeochemistryController extends BasePortalController {
             return generateExceptionResponse(ex, serviceUrl);
         }
 
-        return generateJSONResponseMAV(true, response.getGml(), response.getTransformed(), response.getMethod());
+        return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
     }
 
     /**
      * Similar to doYilgarnGeochemistryFilter, this method returns the count of the matched features
-     * 
+     *
      * @param serviceUrl
      *            A WFS endpoint
      * @param geologicName
@@ -198,12 +194,12 @@ public class YilgarnGeochemistryController extends BasePortalController {
             @RequestParam(required = false, value = "geologicName") String geologicName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-                    throws Exception {
+            throws Exception {
 
-        // Build our filter details
-        String filterString = generateGeologicUnitFilter(geologicName, bboxJson, serviceUrl);
+        //Build our filter details
+        String filterString = generateGeologicUnitFilter(geologicName, bboxJson);
 
-        // Make our request and get it transformed
+        //Make our request and get it transformed
         WFSCountResponse response = null;
         try {
             response = wfsService.getWfsFeatureCount(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures, null);
