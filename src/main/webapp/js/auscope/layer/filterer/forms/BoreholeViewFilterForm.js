@@ -17,7 +17,7 @@ Ext.define('auscope.layer.filterer.forms.BoreholeViewFilterForm', {
             	xtype: 'checkbox',
                 anchor: '95%',
                 itemId: 'showNoneHylogged-field',                	
-                boxLabel: 'Show None-Hylogged Wells',
+                boxLabel: 'Show Hylogged boreholes',
                 name: 'showNoneHylogged',
                 value: 'false'
         });        

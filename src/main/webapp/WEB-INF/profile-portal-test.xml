@@ -16,7 +16,8 @@
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
-                <ref bean="knownTypeMineralTenements" />
+                <ref bean="knownTypeMineralTenements" />                
+                <ref bean="knownTypeColorCodeMineralTenements" />
                 <ref bean="knownTypeRemanentAnomalies" />
                 <ref bean="knownTypeRemanentAnomaliesTMI" />
                 <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
