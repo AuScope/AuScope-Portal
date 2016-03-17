@@ -13,13 +13,12 @@
       <script src="portal-core/js/OpenLayers-2.13.1/OpenLayers.js" type="text/javascript"></script>
 
      <%-- JS imports - relative paths back to the webapp directory --%>
-      <jsp:include page="../portal-core/jsimports.htm"/>
-      <jsp:include page="../portal-core/jsimports-gmap.htm"/>
-      <jsp:include page="../portal-core/jsimports-openlayers.htm"/>
+      <jsp:include page="../portal-core/jsimports.jsp"/>
+      <jsp:include page="../portal-core/jsimports-openlayers.jsp"/>
       <jsp:include page="../jsimports.htm"/>
 
       <%-- CSS imports - relative paths back to the webapp directory--%>
-      <jsp:include page="../portal-core/cssimports.htm"/>
+      <jsp:include page="../portal-core/cssimports.jsp"/>
 
 
 <!-- END REFERENCE FILE HERE -->

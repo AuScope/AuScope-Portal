@@ -32,13 +32,12 @@
       </script>
 
       <%-- JS imports - relative paths back to the webapp directory --%>
-      <jsp:include page="../../portal-core/jsimports.htm"/>
-      <jsp:include page="../../portal-core/jsimports-gmap.htm"/>
-      <jsp:include page="../../portal-core/jsimports-openlayers.htm"/>
+      <jsp:include page="../../portal-core/jsimports.jsp"/>
+      <jsp:include page="../../portal-core/jsimports-openlayers.jsp"/>
       <jsp:include page="../../jsimports.htm"/>
 
       <%-- CSS imports - relative paths back to the webapp directory--%>
-      <jsp:include page="../../portal-core/cssimports.htm"/>      
+      <jsp:include page="../../portal-core/cssimports.jsp"/>      
       <jsp:include page="../../cssimports.htm"/>
 
       <script src="js/auscope/Main-UI.js" type="text/javascript"></script>
