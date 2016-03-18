@@ -78,8 +78,9 @@ Ext.define('ga.widgets.GAAdvancedSearchWindow', {
             layout : 'fit',
             width : 500,
             items : [me.cswFilterFormPanel],
-            scrollable: false,
-            buttons: controlButtons         
+            scrollable : false,
+            buttons : controlButtons,
+            modal : false
         });
 
         this.callParent(arguments);
