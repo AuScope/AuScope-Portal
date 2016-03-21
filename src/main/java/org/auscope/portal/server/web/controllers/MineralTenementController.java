@@ -194,8 +194,8 @@ public class MineralTenementController extends BasePortalController {
                 
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Exploration</Title>" +
-                    "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
+                    "<Title>Exploration</Title>" +
+                    "<Abstract></Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
                     "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
@@ -217,8 +217,8 @@ public class MineralTenementController extends BasePortalController {
                     
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Prospecting</Title>" +
-                    "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
+                    "<Title>Prospecting</Title>" +
+                    "<Abstract></Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
                     "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
@@ -239,8 +239,8 @@ public class MineralTenementController extends BasePortalController {
                     
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Miscellaneous</Title>" +
-                    "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
+                    "<Title>Miscellaneous</Title>" +
+                    "<Abstract></Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
                     "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
@@ -261,8 +261,8 @@ public class MineralTenementController extends BasePortalController {
                     
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Mining Lease</Title>" +
-                    "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
+                    "<Title>Mining Lease</Title>" +
+                    "<Abstract></Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
                     "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
@@ -283,8 +283,8 @@ public class MineralTenementController extends BasePortalController {
                     
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Licence</Title>" +
-                    "<Abstract>50% transparent green fill with a red outline 1 pixel in width</Abstract>" +
+                    "<Title>Licence</Title>" +
+                    "<Abstract></Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
                     "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
@@ -329,7 +329,7 @@ public class MineralTenementController extends BasePortalController {
                 
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Exploration</Title>" +
+                    "<Title>Live</Title>" +
                     "<Abstract>Tenement Status Blue</Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
@@ -352,7 +352,7 @@ public class MineralTenementController extends BasePortalController {
                     
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Prospecting</Title>" +
+                    "<Title>Current</Title>" +
                     "<Abstract>Tenement Status Green</Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
@@ -375,7 +375,7 @@ public class MineralTenementController extends BasePortalController {
 
                     "<Rule>" +
                     "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Tenement Type Licence</Title>" +
+                    "<Title>Pending</Title>" +
                     "<Abstract>Tenement Status Red</Abstract>" +
                     "<ogc:Filter>" +
                     "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +

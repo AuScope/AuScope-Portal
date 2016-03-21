@@ -30,7 +30,7 @@
     z-index: 0;
 }
 
-#rickshawChart_outer #y_axis_numericValues, #y_axis_stringValues {
+#rickshawChart_outer [id^=y_axis_] {
     padding-top: 30px;
     position: absolute;
     top: 0px;
