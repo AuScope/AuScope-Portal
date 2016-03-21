@@ -387,5 +387,10 @@
             <artifactId>portal-core</artifactId>
             <version>${portal.core.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.3</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,12 +1,18 @@
 package org.auscope.portal.server.web.service;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
@@ -14,9 +20,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.util.DOMUtil;
+import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
+import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse.Bin;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
-import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TrayThumbNailResponse;
 import org.auscope.portal.server.web.NVCL2_0_DataServiceMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +31,8 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 @Service
 public class NVCL2_0_DataService {
@@ -39,6 +48,8 @@ public class NVCL2_0_DataService {
         this.httpServiceCaller = httpServiceCaller;
     }
 
+
+
     /**
      * Makes a CSV download request from NVCL 2.0 service and returns the resulting data in a CSVDownloadResponse
      *
@@ -51,7 +62,6 @@ public class NVCL2_0_DataService {
      * @return
      * @throws Exception
      */
-
     public CSVDownloadResponse getNVCL2_0_CSVDownload(String serviceUrl, String[] logIds) throws Exception {
 
         serviceUrl += "downloadscalars.html";
@@ -62,6 +72,176 @@ public class NVCL2_0_DataService {
         Header contentHeader = httpResponse.getEntity().getContentType();
 
         return new CSVDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
+    }
+
+    private String getMostCountedValue(HashMap<String, Integer> map) {
+        String largestValue = null;
+        int largestCount = Integer.MIN_VALUE;
+
+        for (Entry<String, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > largestCount) {
+                largestCount = entry.getValue();
+                largestValue = entry.getKey();
+            }
+        }
+
+        return largestValue;
+    }
+
+    /**
+     * Makes a CSV download request from an NVCL 2.0 service and parses the resulting data into a series of 1 metre bins where
+     * each bin represents the average value for that range of the borehole.
+     * @param serviceUrl
+     * @param logIds
+     * @return
+     * @throws Exception
+     */
+    public BinnedCSVResponse getNVCL2_0_CSVBinned(String serviceUrl, String[] logIds) throws Exception {
+       return  getNVCL2_0_CSVBinned(serviceUrl, logIds, 1.0);
+    }
+
+    /**
+     * Makes a CSV download request from an NVCL 2.0 service and parses the resulting data into a series of binSizeMetres bins where
+     * each bin represents the average value for that range of the borehole.
+     * @param serviceUrl
+     * @param logIds
+     * @return
+     * @throws Exception
+     */
+    public BinnedCSVResponse getNVCL2_0_CSVBinned(String serviceUrl, String[] logIds, double binSizeMetres) throws Exception {
+        final String MISSING_DATA_STRING = "null";
+        final int INITIAL_LIST_SIZE = 512;
+        serviceUrl += "downloadscalars.html";
+
+        HttpRequestBase method = nvclMethodMaker.getDownloadCSVMethod(serviceUrl, logIds);
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
+        CSVReader reader = null;
+        BinnedCSVResponse binnedResponse = new BinnedCSVResponse();
+        try {
+            //Prepare parsing
+            reader = new CSVReader(new InputStreamReader(responseStream), ',', '\'', 0);
+            String[] headerLine = reader.readNext();
+            if (headerLine == null || headerLine.length <= 2) {
+                throw new IOException("No or malformed CSV header sent");
+            }
+
+            //Prepare our bins
+            Bin[] bins = new Bin[headerLine.length - 2];
+            List<HashMap<String, Integer>> valueCounts = new ArrayList<HashMap<String, Integer>>(bins.length);
+            double[] numericTotal = new double[bins.length];
+            int[] numericCount = new int[bins.length];
+            double currentBinStartDepth = -Double.MAX_VALUE;
+            int currentBinSize = 0;
+            for (int i = 0; i < bins.length; i++) {
+                bins[i] = binnedResponse.new Bin(headerLine[2 + i], new ArrayList<Double>(INITIAL_LIST_SIZE), true, new ArrayList<Map<String, Integer>>(INITIAL_LIST_SIZE), new ArrayList<String>(INITIAL_LIST_SIZE), new ArrayList<Double>(INITIAL_LIST_SIZE));
+                bins[i].setNumeric(true);
+                valueCounts.add(new HashMap<String, Integer>());
+            }
+
+            //Start parsing our data - loading it into bins
+            String[] dataLine = null;
+            while ((dataLine = reader.readNext()) != null) {
+                if (dataLine.length != headerLine.length) {
+                    continue; //skip malformed lines
+                }
+
+                //If we've exceeded our current bin size - save the data and start a new bin
+                double depth = Double.parseDouble(dataLine[0]);
+                if (depth - currentBinStartDepth >= binSizeMetres) {
+
+                    if (currentBinStartDepth == -Double.MAX_VALUE) {
+                        currentBinStartDepth = depth;
+                    }
+
+                    for (int i = 0; i < bins.length; i++) {
+                        if (bins[i].isNumeric()) {
+                            if (numericCount[i] > 0) {
+                                bins[i].getNumericValues().add(numericTotal[i] / (double) numericCount[i]);
+                                bins[i].getStartDepths().add(currentBinStartDepth);
+                            }
+                        } else {
+                            String value = getMostCountedValue(valueCounts.get(i));
+                            if (value != null) {
+                                bins[i].getStartDepths().add(currentBinStartDepth);
+                                bins[i].getHighStringValues().add(value);
+                                bins[i].getStringValues().add(valueCounts.get(i));
+                            }
+                        }
+                    }
+
+                    //Reset our working bin data
+                    for (int i = 0; i < bins.length; i++) {
+                        valueCounts.set(i, new HashMap<String, Integer>());
+                        numericTotal[i] = 0.0;
+                        numericCount[i] = 0;
+                    }
+
+                    currentBinStartDepth = depth;
+                    currentBinSize = 0;
+                }
+
+                //Build up our current bin
+                boolean dataAdded = false;
+                for (int i = 0; i < bins.length; i++) {
+                    String rawBinData = dataLine[2 + i];
+                    if (rawBinData == null || rawBinData.isEmpty() || rawBinData.equals(MISSING_DATA_STRING)) {
+                        continue; //skip missing data
+                    } else {
+                        dataAdded = true;
+                    }
+
+                    if (bins[i].isNumeric()) {
+                        try {
+                            double newData = Double.parseDouble(rawBinData);
+                            numericCount[i]++;
+                            numericTotal[i] += newData;
+                        } catch (NumberFormatException nfe) {
+                            //OK - this column isn't actually numeric
+                            bins[i].setNumeric(false);
+                        }
+                    }
+
+                    if (!bins[i].isNumeric()) {
+                        Integer currentCount = valueCounts.get(i).get(rawBinData);
+                        if (currentCount == null) {
+                            valueCounts.get(i).put(rawBinData, 1);
+                        } else {
+                            valueCounts.get(i).put(rawBinData, currentCount + 1);
+                        }
+                    }
+                }
+                if (dataAdded) {
+                    currentBinSize++;
+                }
+            }
+
+            //If we've got a partial bin at the end - let's include the data
+            if (currentBinSize > 0) {
+                for (int i = 0; i < bins.length; i++) {
+                    if (bins[i].isNumeric()) {
+                        if (numericCount[i] > 0) {
+                            bins[i].getNumericValues().add(numericTotal[i] / (double) numericCount[i]);
+                            bins[i].getStartDepths().add(currentBinStartDepth);
+                        }
+                    } else {
+                        String value = getMostCountedValue(valueCounts.get(i));
+                        if (value != null) {
+                            bins[i].getStartDepths().add(currentBinStartDepth);
+                            bins[i].getHighStringValues().add(value);
+                            bins[i].getStringValues().add(valueCounts.get(i));
+                        }
+                    }
+                }
+            }
+
+            binnedResponse.setBinnedValues(bins);
+            binnedResponse.setBinSize(binSizeMetres);
+        } finally {
+            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(responseStream);
+        }
+
+        return binnedResponse;
     }
 
     public TrayThumbNailResponse getTrayThumbNail(String dataSetId, String serviceUrl, String logId,
@@ -79,7 +259,7 @@ public class NVCL2_0_DataService {
 
     /**
      * Makes and parses a getLogCollection request to a NVCLDataService
-     * 
+     *
      * @param serviceUrl
      *            The NVCLDataService url
      * @param datasetId
