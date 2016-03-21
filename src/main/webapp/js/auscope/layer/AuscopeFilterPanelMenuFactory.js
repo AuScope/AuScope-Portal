@@ -13,6 +13,40 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     },
 
     /**
+     * Given an portal.layer.Layer, check if there is necessary to append additional style url params.
+     *
+     * returns sldConfig {
+     * sldUrl:sldUrl,
+     * isSld_body:isSld_body
+     * }.
+     *
+     */
+
+
+
+    appendAdditionalLegendParams : function(layer, filter, styleUrl) {
+        var ccProperty;
+        var isSld_body = true;
+        var sldUrl;
+        if (layer.id === "pressuredb-borehole") {
+            // LJ: AUS-2619 Additional params for pressureDB legend.
+            ccProperty = filter.getParameter('ccProperty') || '';
+            var ccLevels = filter.getParameter('ccLevels') || 9;
+            sldUrl = portal.util.URL.base + styleUrl
+                    + "?ccProperty=" + ccProperty
+                    + "&ccLevels=" + ccLevels;
+            isSld_body = false;
+        } else if (layer.id === "colorcode-mineral-tenements") {
+            ccProperty = filter.getParameter('ccProperty') || 'TenementType';
+            sldUrl = styleUrl + "?ccProperty=" + ccProperty;
+            isSld_body = true;
+        } else {
+            sldUrl = styleUrl;
+            isSld_body = true;
+        }
+        return { sldUrl : sldUrl,isSld_body : isSld_body };
+    },
+    /**
      * Given an portal.layer.Layer, check if there are any additional action to display
      * 
      * returns an array of menu action items.
@@ -144,7 +178,6 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         }else{
             return null;
         }
-        
        
         
     }

@@ -62,4 +62,27 @@ public class PressureDBMethodMaker extends AbstractMethodMaker {
 
         return method;
     }
+    /**
+     * Makes a HTTP method for a pressuredb-plot request.
+     * 
+     * @param serviceUrl
+     * @param wellID
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase makePlotMethod(String serviceUrl, String wellID, String[] features) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "downloadjson.html"));
+
+        builder.setParameter("wellid", wellID);
+        
+        for (String feature : features) {
+            builder.addParameter("feature", feature);
+        }
+        
+        method.setURI(builder.build());
+
+        return method;
+    }    
 }

@@ -31,7 +31,8 @@ public class PressureDBExceptionParser {
      * @throws PressureDBException
      */
     public static void checkForExceptionResponse(Document doc) throws PortalServiceException {
-        XPath xPath = XPathFactory.newInstance().newXPath();
+    	XPathFactory factory = new org.apache.xpath.jaxp.XPathFactoryImpl();
+    	XPath xPath = factory.newXPath();   
 
         try {
             //Check for an exception response

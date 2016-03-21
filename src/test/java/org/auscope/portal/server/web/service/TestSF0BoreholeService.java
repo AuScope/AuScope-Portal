@@ -110,7 +110,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final FilterBoundingBox bbox = null;
 
         String filter = service.getFilter(nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, null);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, null, null);
 
         String style = service.getStyle(filter, "#2242c7", null, null);
         Assert.assertNotNull(style);
@@ -169,7 +169,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String dateOfDrillingStart = "2010-01-02";
         final String dateOfDrillingEnd = "2010-01-03";
         final String gmlString = "xmlString";
-        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, null))
+        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, null, null))
                 .getFilterStringAllRecords();
 
         context.checking(new Expectations() {

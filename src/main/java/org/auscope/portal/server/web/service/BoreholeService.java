@@ -193,7 +193,7 @@ public class BoreholeService extends BaseWFSService {
     }
 
     public String getFilter(String boreholeName, String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,
-            int maxFeatures, FilterBoundingBox bbox, List<String> ids) throws Exception {
+            int maxFeatures, FilterBoundingBox bbox, List<String> ids, Boolean justNVCL) throws Exception {
         BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, ids);
         return generateFilterString(filter, bbox);
     }
@@ -222,7 +222,31 @@ public class BoreholeService extends BaseWFSService {
         return getStyle(filter, color, hyloggerFilter, hyloggerColor);
     }
     public String getStyle(String filter, String color, String hyloggerFilter, String hyloggerColor) {
-
+    	String ruleForHylogged = "";
+    	if (getGsmlpNameSpace().equals("http://xmlns.geosciml.org/geosciml-portrayal/4.0") 
+    			&& hyloggerFilter.isEmpty() == false ) { //For NVCL logged data, apply gsmlp:nvclCollection check, and put red colour.
+        	ruleForHylogged = "<Rule>" +
+				"<Name>Hylogged</Name>" +
+				"<Title>Red Square</Title>" +
+				"<Abstract>portal-style</Abstract>" +
+				 hyloggerFilter +
+				"<PointSymbolizer>" +
+                "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>" +
+				"<Graphic>" +
+				"<Mark>" +
+				"<WellKnownName>square</WellKnownName>" +
+				"<Fill>" +
+				"<CssParameter name=\"fill\">"+
+				hyloggerColor +
+				"</CssParameter>" +
+				"</Fill>" +
+				"</Mark>" +
+				"<Size>8</Size>" +
+				"</Graphic>" +
+				"</PointSymbolizer>" +
+				"</Rule>";
+    	}
+    	
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"" + getGsmlpNameSpace() + "\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
@@ -253,6 +277,7 @@ public class BoreholeService extends BaseWFSService {
                 + "</Graphic>"
                 + "</PointSymbolizer>"
                 + "</Rule>"
+                + ruleForHylogged 
                 // Won't do this until SISS-1513 is fixed.
                 //                + "<Rule>"
                 //                + "<Name>National Virtual Core Library</Name>"

@@ -146,6 +146,39 @@
         <property name="order" value="150" />
     </bean>
     
+    <bean id="knownTypeColorCodeMineralTenements" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="colorcode-mineral-tenements"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="mt:MineralTenement"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="ColorCode Mineral Tenements"/>
+        <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
+        <property name="group" value="Tenements"/>
+
+        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getColorCodeMineralTenementStyle.do"/>
+        <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>
+        <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>-->
+        <property name="order" value="151" />
+    </bean>
+        
     <bean id="knownTypehydrogeochem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="capdf-hydrogeochem"/>
         <constructor-arg name="knownLayerSelector">
@@ -556,7 +589,8 @@
         <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
+        <property name="proxyStyleUrl" value="doPressureDBFilterStyle.do"/>
+        <!--
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -569,7 +603,7 @@
                 <constructor-arg index="0" value="32"/>
                 <constructor-arg index="1" value="32"/>
             </bean>
-        </property>
+        </property> -->
         <property name="order" value="52"/>
     </bean>
     <bean id="knownTypeGSMLBorehole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">

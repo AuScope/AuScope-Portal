@@ -49,7 +49,44 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
             }
         });
     },
+    /**
+     * Routine to start up an interactive plot where you the user can specify the kind of graph, apply smoothing etc.
+     * Uses Rickshaw library.
+     */
+    genericPlot : function(series, xaxis_name, yaxis_names, yaxis_keys) {
+       var splot = Ext.create('auscope.chart.rickshawChart',{
+           graphWidth : 600, // These values are used to set the size of the graph
+           graphHeight : 400
+       });
+       
+       // Create an Ext window to house the chart (panel)
+       var win = Ext.create('Ext.window.Window', {
+           defaults    : { autoScroll:true }, // Enable scrollbars for underlying panel, if it is bigger than the window
+           border      : true,
+           items       : splot,
+           id          : 'rkswWindowPressureDB',
+           layout      : 'fit', 
+           maximizable : true,
+           modal       : true,
+           title       : 'Interactive Plot: ',
+           resizable   : true,
+           height  : 600, // Height and width of window the houses the graph
+           width   : 1100,           
+           x           : 10,
+           y           : 10
+       });
+       win.show();
+       
+       splot.mask("Rendering...");
+       splot.plot(series, xaxis_name, yaxis_names, yaxis_keys);
+       splot.maskClear();  
+       
+       this.on('close',function(){
+           win.close();
+       });
+       
 
+    },
     /**
      * Overrides abstract parseKnownLayerFeature
      */
@@ -65,7 +102,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
             tabTitle : 'Details:' + featureId,
             items : [{
                 xtype : 'form',
-                width : 400,
+                width : 450,
                 autoHeight : true,
                 listeners : {
                     afterrender : function(form) {
@@ -169,6 +206,67 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                              });
                         }
                     }
+                }, {
+                	xtype : 'button',
+                	text : 'Plot',
+                	handler : function() {
+                        var params = {
+                                wellID : actualFeatureId,
+                                serviceUrl : pressureDbUrl,
+                                features : []
+                            };
+
+                            //Find the parent form - iterate the selected values
+                            var parentForm = this.findParentByType('form');
+                            var featuresAdded = 0;
+                            for (feature in parentForm.getForm().getValues()) {
+                                params.features.push(feature);
+                                featuresAdded++;
+                            }
+
+                            if (featuresAdded == 1) {
+                                Ext.Ajax.request({
+                                    url : 'pressuredb-plot.do',
+                                    params : params,
+                                    scope : this,
+                                    success : function(response) {
+                                        var responseObj = Ext.JSON.decode(response.responseText);
+                                        if (responseObj && responseObj.success) {
+                                            var jsonObj = JSON.parse(responseObj.data);                                        
+                                            var data_bin = {};
+                                            var xaxis_name;
+                                            var yaxis_names = {};
+                                            var yaxis_keys = [];
+                                            var rows = jsonObj.rows;
+                                            var wellid = jsonObj.wellid;
+                                            var feature = jsonObj.feature;
+                                            var x = "depth";
+                                            var y = feature;
+                                            var dataType = "metric";
+                                            data_bin[dataType] = {};
+                                            var metric_name = wellid + '_' + feature;
+                                            data_bin[dataType][metric_name] = [];
+                                            rows.forEach(function(record) {
+                                                data_bin[dataType][metric_name].push({"x":parseFloat(record[x]), "y":parseFloat(record[y])});
+                                            });
+                                            xaxis_name = "Depth";
+                                            yaxis_names={"metric":"Feature"};
+                                            yaxis_keys=["metric"];
+                                            metric_colours={"3814_dst":'#1f77b4'};
+                                            me.genericPlot(data_bin, xaxis_name, yaxis_names, yaxis_keys);
+                                        }
+                                    }
+                                });
+                            } else {
+                                Ext.Msg.show({
+                                    title:'Wrong selection',
+                                    msg: 'You could select one feature only before proceeding with graph plotting.',
+                                    icon: Ext.MessageBox.WARNING
+                                 });
+                            }                		
+ 
+                	}
+                	
                 }]
             }]
         });
