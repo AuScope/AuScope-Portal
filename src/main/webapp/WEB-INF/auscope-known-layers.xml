@@ -230,6 +230,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_010" />
     </bean>
 
@@ -245,6 +246,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_020" />
     </bean>
 
@@ -261,6 +263,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_030" />
     </bean>
 
@@ -277,6 +280,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_040" />
     </bean>
 
@@ -293,6 +297,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_050" />
     </bean>
 
@@ -309,6 +314,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_060" />
     </bean>
 
@@ -325,6 +331,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_070" />
     </bean>
 
@@ -341,6 +348,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_080" />
     </bean>
 
@@ -357,6 +365,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_090" />
     </bean>
 
@@ -373,6 +382,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_100" />
     </bean>
 
@@ -389,6 +399,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_110" />
     </bean>
 
@@ -405,6 +416,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_120" />
     </bean>
 
@@ -421,6 +433,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_130" />
     </bean>
 
@@ -437,6 +450,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_140" />
     </bean>
 
@@ -453,6 +467,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_150" />
     </bean>
 
@@ -469,6 +484,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_160" />
     </bean>
 
@@ -485,6 +501,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_170" />
     </bean>
 
@@ -501,6 +518,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_180" />
     </bean>
 
@@ -517,6 +535,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_190" />
     </bean>
 
@@ -533,6 +552,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_200" />
     </bean>
 
@@ -549,6 +569,7 @@
         <property name="group" value="Geological Provinces"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="50_Geological Provinces_210" />
     </bean>
 
@@ -1184,6 +1205,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="60_Geological Maps_010" />
     </bean>
 
@@ -1205,6 +1227,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="60_Geological Maps_020" />
     </bean>
 
@@ -1226,6 +1249,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="60_Geological Maps_030" />
     </bean>
 
@@ -1247,6 +1271,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="60_Geological Maps_040" />
     </bean>
 
@@ -1263,6 +1288,7 @@
         <property name="group" value="Geological Maps"/>
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
+        <property name="singleTile" value="true"/>
         <property name="order" value="60_Geological Maps_050" />
     </bean>
     <!-- END: GPT-41 / GPT-88 - 250K Scanned Geological Maps  -->
