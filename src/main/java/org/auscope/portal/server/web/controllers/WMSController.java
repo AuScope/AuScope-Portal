@@ -488,11 +488,10 @@ public class WMSController extends BaseCSWController {
     @RequestMapping("/getDefaultStyle.do")
     public void getDefaultStyle(
             HttpServletResponse response,
-            @RequestParam("layerName") String layerName,
-            @RequestParam("layerTitle") String layerTitle)
+            @RequestParam("layerName") String layerName)
             throws Exception {
 
-        String style = this.getStyle(layerName, layerTitle, "#ed9c38");
+        String style = this.getStyle(layerName, "default-title", "#ed9c38");
 
         response.setContentType("text/xml");
 
