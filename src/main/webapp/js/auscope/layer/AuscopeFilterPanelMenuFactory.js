@@ -38,8 +38,8 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
             isSld_body = false;
         } else if (layer.id === "colorcode-mineral-tenements") {
             ccProperty = filter.getParameter('ccProperty') || 'TenementType';
-            sldUrl = styleUrl + "?ccProperty=" + ccProperty;
-            isSld_body = true;
+            sldUrl = portal.util.URL.base + styleUrl + "?ccProperty=" + ccProperty; 
+            isSld_body = false;
         } else {
             sldUrl = styleUrl;
             isSld_body = true;
