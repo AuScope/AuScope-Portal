@@ -90,7 +90,7 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
                 // the default
                 new OpenLayers.Layer.Google(
                         "Google Satellite",
-                        {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}
+                        {type: google.maps.MapTypeId.SATELLITE, numZoomLevels: 22}                       
                 ),
                 new OpenLayers.Layer.Google(
                     "Google Streets", 
@@ -115,6 +115,11 @@ Ext.define('ga.map.openlayers.GAOpenLayersMap', {
                 zoom: 4
         });
 
+        // set wrapDateLine to false on all the base layers
+        for (var i = 0; i < me.map.layers.length; i++) {
+            me.map.layers[i].wrapDateLine = false;
+        }
+        
         this.highlightPrimitiveManager = this.makePrimitiveManager();
         this.container = container;
         this.rendered = false;               
