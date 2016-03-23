@@ -38,10 +38,7 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 				}]
 			});
 		}
-
 	},
-
-
 
 	addKMLtoPanel: function(name, file) {
 		var csw = Ext.create('portal.csw.CSWRecord', {
@@ -63,7 +60,6 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 		this.getStore().insert(0, csw);
 		return csw;
 	},
-
 
 	_getCustomWMS: function() {
 		var me = this;
@@ -114,14 +110,10 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 							},
 							waitMsg: 'Adding KML Layer...',
 							success: function(fp, o) {
-
 								var tabpanel = Ext.getCmp('auscope-tabs-panel');
 								var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
 								tabpanel.setActiveTab(customPanel);
-
 								customPanel.addKMLtoPanel(o.result.data.name, o.result.data.file);
-
-
 							},
 							failure: function(fp, action) {
 								Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file.');
@@ -158,14 +150,10 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 							url: 'addKMLLayer.do',
 							waitMsg: 'Adding KML Layer...',
 							success: function(fp, o) {
-
 								var tabpanel = Ext.getCmp('auscope-tabs-panel');
 								var customPanel = me.ownerCt.getComponent('org-auscope-custom-record-panel');
 								tabpanel.setActiveTab(customPanel);
-
 								customPanel.addKMLtoPanel(o.result.name, o.result.file);
-
-
 							},
 							failure: function(fp, action) {
 								Ext.Msg.alert('Status', 'Unable to parse file. Make sure the file is a valid KML file.');
@@ -177,9 +165,4 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
 		});
 		return panel;
 	},
-
-
-
-
-
 });
