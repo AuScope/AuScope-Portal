@@ -475,3 +475,41 @@
     .x-menu-header {
         background-color: #FBAD17 !important;
     }
+
+    h1.featureInfo {
+        font-size: 14pt;
+        margin-bottom: -20px;
+    }
+
+    table.featureInfo {
+        margin-top: 10px;
+        width: 100%;
+        border:1px solid black;
+        font-family: arial;
+        font-size: 90%; color: #333333;
+        border-spacing: unset;
+    }
+
+    table.featureInfo>tbody>tr>td {
+        padding: 2px;
+    }
+
+    table.featureInfo>tbody>tr>td:first-child {
+        font-weight: bold;
+    }
+
+    table.featureInfo>tbody>tr:nth-child(even) {
+        background: #CCC
+    }
+
+    table.featureInfo>tbody>tr:nth-child(odd) {
+        background: #FFF
+    }
+
+    table.featureInfo>th, table.featureInfo>td {
+       valign: top; text-align: left;
+    }
+
+    table.featureInfo>th {
+       background-color: #aed7ff;
+    }

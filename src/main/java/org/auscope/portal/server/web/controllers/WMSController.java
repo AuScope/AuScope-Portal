@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+
 /**
  * Handles GetCapabilites (WFS)WMS queries.
  *
@@ -470,19 +471,36 @@ public class WMSController extends BaseCSWController {
                 Double.parseDouble(latitude),
                 (int) (Double.parseDouble(x)), (int) (Double.parseDouble(y)), "", sldBody, postMethod, version,
                 feature_count, true);
-        //VT: Ugly hack for the GA wms layer in registered tab as its font is way too small at 80.
-        //VT : GA style sheet also mess up the portal styling of tables as well.
-        if (responseString.contains("table, th, td {")) {
-            responseString = responseString.replaceFirst("font-size: 80%", "font-size: 90%");
-            responseString = responseString.replaceFirst("table, th, td \\{",
-                    "table.ausga, table.ausga th, table.ausga td {");
-            responseString = responseString.replaceFirst("th, td \\{", "table.ausga th, table.ausga td {");
-            responseString = responseString.replaceFirst("th \\{", "table.ausga th {");
-            responseString = responseString.replaceFirst("<table", "<table class='ausga'");
-        }
+
+        responseString = getModifiedHTMLForFeatureInfoWindow(responseString);
 
         InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
+    }
+
+    /**
+     * Since the HTML that we get back in the feature info is really bad, perform some DOM manipulations on it.
+     *
+     * @param originalHTML the HTML received from the server
+     * @return HTML with nicer markup
+     */
+    public String getModifiedHTMLForFeatureInfoWindow(String htmlContent) {
+
+        // remove the inline style from the response so we can style it ourselves
+        if (htmlContent.contains("<style")) {
+            int styleStartIndex = htmlContent.indexOf("<style");
+            int styleEndIndex = htmlContent.indexOf("</style>");
+            htmlContent = htmlContent.substring(0, styleStartIndex).concat(htmlContent.substring(styleEndIndex+8));
+        }
+
+        // the supplied html tries to use "caption" as the header. That won't work
+        // so create a header tag with the same content
+        htmlContent = htmlContent.replace("caption", "h1");
+
+        // remove the awful blue cells that serve to divide the tables. We can do this with css instead.
+        htmlContent = htmlContent.replaceAll("<tr><td style='background-color:blue'>&nbsp;</td><td style='background-color:blue'>&nbsp;</td></tr>", "");
+
+        return htmlContent;
     }
 
     @RequestMapping("/getDefaultStyle.do")
