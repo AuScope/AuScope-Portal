@@ -12,6 +12,7 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
     miniMap : null,
     boxLayer : null,
     me: null,
+    scrollable : true,
     
     constructor : function(cfg){   
         
@@ -55,10 +56,9 @@ Ext.define('ga.widgets.GAAdvancedSearchPanel', {
             xtype : 'form',
             id : 'personalpanelcswfilterform',
             width : 500,
-            scrollable: false,
+            scrollable: true,
             border : false,
-            //height : 520,
-            
+
             fieldDefaults: {
                 msgTarget: 'side',
                 autoFitErrors: false
