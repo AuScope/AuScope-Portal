@@ -153,7 +153,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 success : function(pData, options) {
                                     var pResponseCode = pData.status;
                                     var updateTipText = function(tip, text) {
-                                        tip.body.dom.innerHTML = text;
+                                        var tipBody = tip.body.down('.x-autocontainer-innerCt');
+                                        if (tipBody) {
+                                            tipBody.setHtml(text);
+                                        }
                                         tip.doLayout();
                                     };
                                     if(pResponseCode !== 200) {
