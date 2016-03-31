@@ -88,7 +88,9 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
-            @RequestParam(required = false, value = "color", defaultValue = "") String color)
+            @RequestParam(required = false, value = "color", defaultValue = "") String color,
+            @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged )            
+             
             throws Exception {
 
         FilterBoundingBox bbox = null;
@@ -114,12 +116,13 @@ public class SF0BoreholeController extends BasePortalController {
         //		}
 
         String filter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
-                null);
+                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, null);
 
+        Boolean justNVCL = showNoneHylogged;
+        
         String hyloggerFilter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
-                hyloggerBoreholeIDs);
+                hyloggerBoreholeIDs, justNVCL);
         String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         String style = this.boreholeService.getStyle(filter, (color.isEmpty() ? "#2242c7" : color), hyloggerFilter,
                 "#F87217",gsmlpNameSpace);
