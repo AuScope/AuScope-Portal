@@ -5,7 +5,7 @@ var RenderControls = function(args) {
 	this.initialize = function() {
 
 		this.element = args.element;
-		this.graph = args.graph;
+		this.graphs = args.graph ? [ args.graph ] : args.graphs;
 		this.settings = this.serialize();
 
 		this.inputs = {
@@ -41,8 +41,7 @@ var RenderControls = function(args) {
 				config.offset = this.settings.offset;
 			}
 
-			this.graph.configure(config);
-			this.graph.render();
+			this.graphs.forEach(function(x,idx, arr) { x.configure(config); x.render(); });
 
 		}.bind(this), false);
 	}

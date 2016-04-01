@@ -22,7 +22,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     genericPlot : function(series, xaxis_name, yaxis_names, yaxis_keys) {
        var splot = Ext.create('auscope.chart.rickshawChart',{
            graphWidth : 600, // These values are used to set the size of the graph
-           graphHeight : 400
+           graphHeight : 300
        });
        
        // Create an Ext window to house the chart (panel)
@@ -34,7 +34,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
            layout      : 'fit', 
            maximizable : true,
            modal       : true,
-           title       : 'Interactive Plot: ',
+           title       : 'NVCL Interactive Plot: ',
            resizable   : true,
            height  : 700, // Height and width of window the houses the graph
            width   : 1300,           
@@ -327,32 +327,42 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                          jsonObj.data[0].binnedValues.forEach(function(bv) {
                                                              ["stringValues","numericValues"].forEach(function(dataType) {
                                                                  if (bv.startDepths.length==bv[dataType].length && bv[dataType].length>0) {
-                                                                     if (!(dataType in data_bin)) {
-                                                                         data_bin[dataType] = new Object;
-                                                                     }
                                                                      var metric_name = bv.name;
+                                                                     if (!(metric_name in data_bin)) {
+                                                                         data_bin[metric_name] = new Object;
+                                                                     }
+                                                                     
                                                                      bv[dataType].forEach(function(val, idx, arr) {
                                                                          
+                                                                         // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
                                                                          if (dataType=="stringValues") {
                                                                      
-                                                                             // Using entries(), make a name,value list, then use that to add to 'data_bin[dataType]'
+                                                                             // Using entries(), make a name,value list, then use that to add to 'data_bin[metric_name]'
                                                                              d3.entries(val).forEach(function(meas) {                                                                                 
                                                                                  var key=meas.key+"_"+metric_name;
-                                                                                 if (!(key in data_bin[dataType])) {
-                                                                                     data_bin[dataType][key] = [];
+                                                                                 if (!(key in data_bin[metric_name])) {
+                                                                                     data_bin[metric_name][key] = [];
+                                                                                     if (!(metric_name in yaxis_labels)) {
+                                                                                         yaxis_labels[metric_name] = "Sample Count";
+                                                                                         yaxis_keys.push(metric_name);
+                                                                                     }
                                                                                  }
                                                                                  
                                                                                  // Depth is 'x' and 'y' is our measured value 
-                                                                                 data_bin[dataType][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
+                                                                                 data_bin[metric_name][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
                                                                                  has_data=true;
                                                                            
                                                                              });
                                                                          } else if (dataType=="numericValues") {
-                                                                             if (!(metric_name in data_bin[dataType])) {
-                                                                                 data_bin[dataType][metric_name] = [];
+                                                                             if (!(metric_name in data_bin[metric_name])) {
+                                                                                 data_bin[metric_name][metric_name] = [];
+                                                                                 if (!(metric_name in yaxis_labels)) {
+                                                                                     yaxis_labels[metric_name] = "Meter Average";
+                                                                                     yaxis_keys.push(metric_name);
+                                                                                 }
                                                                              }
                                                                              // Depth is 'x' and 'y' is our measured value 
-                                                                             data_bin[dataType][metric_name].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(val)});
+                                                                             data_bin[metric_name][metric_name].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(val)});
                                                                              has_data=true;
                                                                          }
                                                                      });
@@ -361,17 +371,8 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                          });
                                                      }
                                                      
-                                                     // Create an array to hold y-axis labels, then call 'genericPlot()'
-                                                     // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
+                                                     // Call 'genericPlot()'
                                                      if (has_data) {
-                                                         if ("stringValues" in data_bin) {
-                                                             yaxis_labels['stringValues'] = "Sample Count";
-                                                             yaxis_keys.push('stringValues');
-                                                         }
-                                                         if ("numericValues" in data_bin) {
-                                                             yaxis_labels['numericValues'] = "Meter Average";
-                                                             yaxis_keys.push('numericValues');
-                                                         }                                                         
                                                          me.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys);
                                                      } else {
                                                          Ext.Msg.show({
