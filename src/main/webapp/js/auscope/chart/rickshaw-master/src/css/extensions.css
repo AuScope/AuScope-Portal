@@ -1,64 +1,65 @@
 div, span, p, td {
 	font-family: Arial, sans-serif;
 }
-#content {
+[id^=content_] {
 	width: 1200px;
 }
-#chart {
+[id^=chart_] {
 	display: inline-block;
 }
-#chart path {
+[id^=chart_] path {
 	-webkit-transition: opacity 0.2s linear;
 }
-#preview {
+[id^=preview_] {
 	margin-top: 10px;
 }
-#legend {
+[id^=legend_] {
 	display: inline-block;
 	position: relative;
 	left: 8px;
 }
-#legend_container {
+[id^=legend_container_] {
 	position: absolute;
 	right: 0;
 	bottom: 26px;
 	width: 0;
 }
-#chart_container {
+[id^=chart_container_] {
 	position: relative;
 	display: inline-block;
 }
-#smoother {
+[id^=smoother_] {
 	margin: 0 0 10px 16px;
 	width: 100px;
 }
 .rickshaw_graph .detail {
 	left: -1000;
 }
-#chart {
+
+[id^=chart_] {
 	border: 1px solid #f0f0f0;
 }
-#side_panel {
+[id*=_side_panel_] {
 	padding: 0 20px 20px 0;
 	width: 240px;
 	display: inline-block;
 	vertical-align: top;
 }
-#side_panel section {
+[id*=_side_panel_] section {
 	color: #505050;
 	font-size: 12px;
 }
-#side_panel section h6 {
+[id*=_side_panel_] section h6 {
 	margin: 0 0 1em 0;
 	font-size: 12px;
 	font-weight: normal;
 }
-#side_panel .ui-slider-horizontal {
+[id*=_side_panel_] .ui-slider-horizontal {
 	height: 1px !important;
 	border-color: #e0e0e0;
 	margin-bottom: 10px;
 }
-#side_panel .ui-slider-handle {
+[id*=_side_panel_] .ui-slider-handle {
 	border-color: #a0a0a0;
 	height: 9px !important;
 	width: 9px !important;
@@ -67,20 +68,20 @@ div, span, p, td {
 	outline: none;
 	cursor: pointer;
 }
-#legend {
+[id^=legend_] {
 	background-color: white;
 	margin-left: 0;
 	padding: 0;
 	left: 0;
 }
-#legend .label {
+[id^=legend_] .label {
 	color: #404040;
 }
-#legend .action {
+[id^=legend_] .action {
 	color: black;
 	opacity: 0.5;
 }
-#legend ul {
+[id^=legend_] ul {
 	padding: 0;
 }
 h1 {
@@ -93,33 +94,34 @@ section {
 	border-top: 1px solid #eaeaea;
 	padding: 15px 0;
 }
-#smoother {
+[id^=smoother_] {
 	margin: 5px 0 0 10px;
 	width: 90%;
 }
-label.disabled {
+label.disabled span {
 	opacity: 0.4;
 }
-#renderer_form.toggler {
+[id*=_form_].toggler {
 	display: block;
 	margin: 0;
 }
-#renderer_form.toggler input[type=radio]:checked {
+[id*=_form_].toggler input[type=radio]:checked {
 	outline: 2px solid steelblue;
 }
-#renderer_form.toggler input[type=radio] {
+[id*=_form_].toggler input[type=radio] {
 	-moz-appearance: button;
 	background: white;
 	margin: 0 7px;
-	width: 39px;
-	height: 26px;
+	width: 30px;
+	height: 30px;
 	position: absolute;
 }
-#renderer_form.toggler label {
+[id*=_form_].toggler label {
 	display: inline-block;
 	padding: 0;
-	width: 39px;
-	padding-top: 27px;
+	width: 30px;
+	height: 13px;
+	padding-top: 30px;
 	text-align: center;
 	font-size: 10px;
 	color: #808080;
@@ -128,57 +130,54 @@ label.disabled {
 	margin: 0 7px;
 	cursor: pointer;
 }
-#interpolation_form,
-#offset_form {
-	vertical-align: top;
-	display: inline-block;
-	width: 45%;
+div[id^=interpolation_form_].toggler input[type=radio],
+div[id^=offset_form_].toggler input[type=radio]{
+  right: -6.5px;
+  top: 0.5px;
+  z-index: -1;
 }
-#interpolation_form label,
-#offset_form label {
-	display: block;
+
+label[for^=area_] {
+	background: url(../images/om_stack30.png);
+	background-size: 100% 100%;
 }
-label[for=area] {
-	background: url(../images/om_stack.png);
+label[for^=line_] {
+	background: url(../images/om_lines30.png);
+	background-size: 100% 100%;
 }
-label[for=line] {
-	background: url(../images/om_lines.png);
+label[for^=bar_] {
+	background: url(../images/om_bar30.png);
+	background-size: 100% 100%;
 }
-label[for=bar] {
-	background: url(../images/om_bar.png);
+label[for^=scatter_] {
+	background: url(../images/om_scatter30.png);
+	background-size: 100% 100%;
 }
-label[for=scatter] {
-	background: url(../images/om_scatter.png);
+label[for^=stack_] {
+	background: url(../images/offs_stack30.png);
+	background-size: 100% 100%;
 }
-#offset_form label,
-#interpolation_form label {
-	background-repeat: no-repeat;
-	background-position: 2em center;
-	cursor: pointer;
-	cursor: hand;
+label[for^=pct_] {
+	background: url(../images/om_percent30.png);
+	background-size: 100% 100%;
 }
-#offset_form label span,
-#interpolation_form label span {
-	padding-left: 36px;
+label[for^=stream_] {
+	background: url(../images/om_stream30.png);
+	background-size: 100% 100%;
 }
-label[for=stack] {
-	background-image: url(../images/offset_stack.png);
+label[for^=value_] {
+	background: url(../images/offset_value30.png);
+	background-size: 100% 100%;
 }
-label[for=pct] {
-	background-image: url(../images/offset_pct.png);
+label[for^=cardinal_] {
+	background: url(../images/interp_cardinal30.png);
+	background-size: 100% 100%;
 }
-label[for=stream] {
-	background-image: url(../images/offset_stream.png);
+label[for^=linear_] {
+	background: url(../images/interp_linear30.png);
+	background-size: 100% 100%;
 }
-label[for=value] {
-	background-image: url(../images/offset_value.png);
-}
-label[for=cardinal] {
-	background-image: url(../images/interp_cardinal.png);
-}
-label[for=linear] {
-	background-image: url(../images/interp_linear.png);
-}
-label[for=step] {
-	background-image: url(../images/interp_step.png);
+label[for^=step_] {
+	background: url(../images/interp_step30.png);
+	background-size: 100% 100%;
 }
