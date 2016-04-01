@@ -37,7 +37,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="1" />
+        <property name="order" value="10" />
     </bean>
     <bean id="knownTypeMineralOccurrence" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-mineraloccurrence"/>
@@ -73,7 +73,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="2" />
+        <property name="order" value="11" />
     </bean>
     <bean id="knownTypeMiningActivity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-miningactivity"/>
@@ -109,7 +109,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="3" />
+        <property name="order" value="12" />
     </bean>
 
 
@@ -215,7 +215,7 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
-        <property name="order" value="4" />
+        <property name="order" value="13" />
     </bean>
 
   
