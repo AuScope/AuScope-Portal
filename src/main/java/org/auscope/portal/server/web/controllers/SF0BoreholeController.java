@@ -125,7 +125,7 @@ public class SF0BoreholeController extends BasePortalController {
                 hyloggerBoreholeIDs, justNVCL);
         String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         String style = this.boreholeService.getStyle(filter, (color.isEmpty() ? "#2242c7" : color), hyloggerFilter,
-                "#F87217",gsmlpNameSpace);
+                "#FF0000",gsmlpNameSpace);
 
         response.setContentType("text/xml");
 

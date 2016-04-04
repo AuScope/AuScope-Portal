@@ -43,6 +43,7 @@ Ext.define('auscope.layer.filterer.forms.PressureDBFilterForm', {
                 return Ext.String.format('<b>Total {0} color code</b>', thumb.value);
             }                            
         });
+        fieldSet.remove('serviceFilter-field');
         
         fieldSet.add({
             xtype: 'combo',
