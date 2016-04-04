@@ -53,47 +53,28 @@ Ext.define('auscope.chart.rickshawChart', {
         var graph_html = currentHTML + '<div id="rickshawChart_outer">';
         
         yaxis_keys.forEach(function(yaxis_key, idx, arr) {
+
+            // Add legend on left hand side and a graph with axes
+            graph_html += '<div id="content_'+idx.toString()+'">' +
+                          '  <div id="left_side_panel_'+idx.toString()+'">'+
+                          '    <section><div id="legend_'+idx.toString()+'"></div></section>'+
+                          '    <section></section>'+
+                          '  </div>'+
+                          '  <div id="chartcontainer_'+idx.toString()+'">'+
+                          '       <div id="y_axis_'+idx.toString()+'"></div>' +
+                          '          <div id="chart_'+idx.toString()+'"></div>'+
+                          '       <div id="x_axis_'+idx.toString()+'"></div>';
+                          
+            // Add graph preview slider, but only after the last graph
+            if (idx==yaxis_keys.length-1) {
+                graph_html += '       <div id="preview_'+idx.toString()+'"></div>';
+            }
+            graph_html +=  '  </div>'+
+                           '  <form id="right_side_panel_'+idx.toString()+'">';
             
-            if (idx>0 && idx<yaxis_keys.length-1) {
-                graph_html += '<div id="content_'+idx.toString()+'">' +
-                              '  <div id="left_side_panel_'+idx.toString()+'">'+
-                              '    <section><div id="legend_'+idx.toString()+'"></div></section>'+
-                              '    <section></section>'+
-                              '  </div>'+
-                              '  <div id="chartcontainer_'+idx.toString()+'">'+
-                              '       <div id="y_axis_'+idx.toString()+'"></div>' +
-                              '          <div id="chart_'+idx.toString()+'"></div>'+
-                              '       <div id="x_axis_'+idx.toString()+'"></div>'+
-                              '  </div>'+
-                              '  <form id="right_side_panel_'+idx.toString()+'"></form>'+
-                              '</div>';
-            } else if (idx==yaxis_keys.length-1) {
-                graph_html += '<div id="content_'+idx.toString()+'">' +
-                              '  <div id="left_side_panel_'+idx.toString()+'">'+
-                              '    <section><div id="legend_'+idx.toString()+'"></div></section>'+
-                              '    <section></section>'+
-                              '  </div>'+
-                              '  <div id="chartcontainer_'+idx.toString()+'">'+
-                              '       <div id="y_axis_'+idx.toString()+'"></div>' +
-                              '          <div id="chart_'+idx.toString()+'"></div>'+
-                              '       <div id="x_axis_'+idx.toString()+'"></div>'+
-                              '       <div id="preview_'+idx.toString()+'"></div>'+
-                              '  </div>'+
-                              '  <form id="right_side_panel_'+idx.toString()+'"></form>'+
-                              '</div>';
-            } else {
-                graph_html += '<div id="content_'+idx.toString()+'">'+
-                              '  <div id="left_side_panel_'+idx.toString()+'">'+
-                              '    <section><div id="legend_'+idx.toString()+'"></div></section>'+
-                              '    <section></section>'+
-                              '  </div>'+
-                              '  <div id="chartcontainer_'+idx.toString()+'">'+
-                              '    <div id="y_axis_'+idx.toString()+'"></div>' +
-                              '    <div id="chart_'+idx.toString()+'"></div>'+
-                              '    <div id="x_axis_'+idx.toString()+'"></div>' +
-                              '  </div>'+
-                              '  <form id="right_side_panel_'+idx.toString()+'">'+
-                              '    <section>'+
+            // Only the first graph gets the controls placed on its right hand side
+            if (idx==0) {
+                graph_html += '    <section>'+
                               '      <div id="renderer_form_'+idx.toString()+'" class="toggler">'+
                               '        <input type="radio" name="renderer" id="area_'+idx.toString()+'" value="area" checked>'+
                               '        <label for="area_'+idx.toString()+'">area</label>'+
@@ -143,11 +124,12 @@ Ext.define('auscope.chart.rickshawChart', {
                               '      <h6>Smoothing</h6>'+
                               '      <div id="smoother_'+idx.toString()+'"></div>'+
                               '    </section>'+
-                              '    <section></section>'+
-                              '  </form>'+
-                              '</div>';
+                              '    <section></section>';
             }
+            graph_html +=  '  </form>'+
+                           '</div>'; // id='content=_'
         });
+        graph_html += '</div>'; // id='rickshawChart_outer'
         
         // Append HTML to the <div>
         htmlSelection.html(graph_html);
