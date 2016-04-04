@@ -5,7 +5,7 @@ Ext.require('Ext.chart.*');
 Ext.require([ 'Ext.Window', 'Ext.fx.target.Sprite', 'Ext.layout.container.Fit', 'Ext.window.MessageBox' ]);
 
 function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observationsToReturn, maskedElement) {
-    // I want this to always be an array, even if only has one element.
+    // I want this to always be an array, even if it only has one element.
     observationsToReturn = [].concat(observationsToReturn);
 
     firstInitialChartWidth = 381;
@@ -43,16 +43,16 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     observationsToReturn[i] == 'p_wave_amplitude' ? 'P-Wave amp (mV)' :
                     observationsToReturn[i] == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
                     observationsToReturn[i] == 'density' ? 'Density (g/cm³)' :
-                    // AGOS-42: I.E. Wouldn't render the  properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render the superscript character properly so I've used the other notation.
                     observationsToReturn[i] == 'magnetic_susceptibility' ? 'Mag. sus. (×10^-5 SI)' :
-                    // AGOS-42: I.E. Wouldn't render  properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render the superscript character properly so I've used the other notation.
                     observationsToReturn[i] == 'impedance' ? 'Impedance (×10³ kgm^-2 s^-1)' :
                     observationsToReturn[i] == 'natural_gamma' ? 'Natural gamma (cps)' :
                     observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ω·m)' :
                     undefined;
 
-                windowTitle +=
-                    // Add a comma or ampersand if needed:
+                // Add a comma or ampersand if needed:
+                windowTitle += (!first ? (last ? ' &amp; ' : ', ') : '') + 
                     // Remove the unit of measure:
                     new RegExp('^(.+?) \\(').exec(xAxisTitle)[1];
 
@@ -78,12 +78,15 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         // for more info.
                         // This workaround can be removed if a new version of ExtJS
                         // reintroduces a 'reverse' option for the axis object.
-                        item.data['depth'] = -item.data['depth'];
+                        if (i === 0) {
+                            item.data['depth'] = -item.data['depth'];
+                        }
                         // End ReverseAxisIssue.
 
-                        // Only use items that actually have a value for the
-                        // desired observation:
-                        return item.data[observationsToReturn[i]] != '';
+                        // Return all items regardless of whether they have a value.
+                        // This results in gaps in the plot but it's better than having
+                        // ExtJS bridge them as this would create a misleading representation.
+                        return true;
                     }
                 });
 
@@ -98,15 +101,14 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         type : 'numeric',
                         position : 'left',
                         fields : [ 'depth' ],
-                        minorTickSteps : 1
+                        minorTickSteps : 1,
+                        grid: true
                         // TODO ReverseAxisIssue: See other TODO with this name,
                         // above, for more information.
                         // This code is here to modify the label's value so that
                         // it doesn't include the negative sign.
-                        ,label : {
-                            renderer: function(v) {
-                                return Ext.util.Format.number(Math.abs(v), '0.0');
-                            }
+                        ,renderer: function(v) {
+                            return Ext.util.Format.number(Math.abs(v), '0.0');
                         }
                         // End ReverseAxisIssue.
                     }, {
