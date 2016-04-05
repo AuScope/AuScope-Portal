@@ -4,8 +4,111 @@
 Ext.require('Ext.chart.*');
 Ext.require([ 'Ext.Window', 'Ext.fx.target.Sprite', 'Ext.layout.container.Fit', 'Ext.window.MessageBox' ]);
 
+Ext.define('Extjs.contribs.chart.axis.layout.Logarithmic', {
+  extend: 'Ext.chart.axis.layout.Continuous',
+  alias: 'axisLayout.logarithmic',
+  
+  config: {
+    adjustMinimumByMajorUnit: false,
+    adjustMaximumByMajorUnit: false
+  },
+  
+  /**
+   * Convert the value from the normal to the log10 version.
+   * NB: The renderer for the field needs to do the inverse.
+   * It is also advised that 0 and negative values be excluded, as they will return negative Infinity
+   */
+  getCoordFor: function (value, field, idx, items) {
+    return Math.log10(value);
+  },
+
+  /**
+   * Called by the parent class to build the 'tick marks', which also determines where the grid lines get shown.
+   * The default behaviour is to get an even spread. Instead, we want to show the grid lines on the multiples of the
+   * power of tens - e.g. 1,2,3,4,5,6,7,8,9,10,20,30,40,50,60,70,80,90,100, and so forth
+   */
+  snapEnds: function (context, min, max, estStepSize) {
+    var segmenter = context.segmenter;
+    var axis = this.getAxis();
+    var majorTickSteps = axis.getMajorTickSteps();
+        // if specific number of steps requested and the segmenter can do such segmentation
+    var out = majorTickSteps && segmenter.exactStep ?
+        segmenter.exactStep(min, (max - min) / majorTickSteps) :
+        segmenter.preferredStep(min, estStepSize);
+    var unit = out.unit;
+    var step = out.step;
+    var from = segmenter.align(min, step, unit);
+
+    // Calculate the steps.
+    var steps = []
+    for (var magnitude = Math.floor(min); magnitude < Math.ceil(max); magnitude++) {
+      var baseValue = Math.pow(10, magnitude);
+      for (var increment = 1; increment < 10; increment++) {
+        var value = baseValue * increment;
+        var logValue = Math.log10(value);
+        if (logValue > min && logValue < max) {
+          steps.push(logValue);
+        }
+      }
+    }
+
+    return {
+        min: segmenter.from(min),
+        max: segmenter.from(max),
+        from: from,
+        to: segmenter.add(from, steps * step, unit),
+        step: step,
+        steps: steps.length,
+        unit: unit,
+        get: function (current) {
+            return steps[current]
+        }
+    };
+  },
+  
+  // Trimming by the range makes the graph look weird. So we don't.
+  trimByRange: Ext.emptyFn
+  
+}, function() {
+  // IE (and the PhantomJS system) do not have have a log10 function. So we polyfill it in if needed.
+  Math.log10 = Math.log10 || function(x) {
+    return Math.log(x) / Math.LN10;
+  };
+})
+
+Ext.define('Extjs.contribs.chart.axis.segmenter.Logarithmic', {
+  extend: 'Ext.chart.axis.segmenter.Numeric',
+  alias: 'segmenter.logarithmic',
+  config: {
+    minimum: 200
+  },
+  
+  renderer: function (value, context) {
+    return (Math.pow(10, value)).toFixed(3);
+  }
+
+});
+
+Ext.define('Extjs.contribs.chart.axis.Logarithmic', {
+  extend: 'Ext.chart.axis.Numeric',
+  
+  requires: [
+    'Extjs.contribs.chart.axis.layout.Logarithmic',
+    'Extjs.contribs.chart.axis.segmenter.Logarithmic'
+  ],
+  
+  type: 'logarithmic',
+  alias: [
+    'axis.logarithmic',
+  ],
+  config: {
+    layout: 'logarithmic',
+    segmenter: 'logarithmic',
+  }
+});
+
 function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observationsToReturn, maskedElement) {
-    // I want this to always be an array, even if only has one element.
+    // I want this to always be an array, even if it only has one element.
     observationsToReturn = [].concat(observationsToReturn);
 
     firstInitialChartWidth = 381;
@@ -37,22 +140,24 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
             for (var i = 0; i < observationsToReturn.length; i++) {
                 var first = i === 0;
                 var last = i === observationsToReturn.length - 1;
+                
+                var xAxisType = ['magnetic_susceptibility', 'resistivity'].indexOf(observationsToReturn[i]) == -1 ? 'numeric' : 'logarithmic';
 
                 var xAxisTitle =
                     observationsToReturn[i] == 'diameter' ? 'Diameter (cm)' :
                     observationsToReturn[i] == 'p_wave_amplitude' ? 'P-Wave amp (mV)' :
                     observationsToReturn[i] == 'p_wave_velocity' ? 'P-Wave vel (m/s)' :
                     observationsToReturn[i] == 'density' ? 'Density (g/cm³)' :
-                    // AGOS-42: I.E. Wouldn't render the  properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render the superscript character properly so I've used the other notation.
                     observationsToReturn[i] == 'magnetic_susceptibility' ? 'Mag. sus. (×10^-5 SI)' :
-                    // AGOS-42: I.E. Wouldn't render  properly so I've used the other notation.
+                    // AGOS-42: I.E. Wouldn't render the superscript character properly so I've used the other notation.
                     observationsToReturn[i] == 'impedance' ? 'Impedance (×10³ kgm^-2 s^-1)' :
                     observationsToReturn[i] == 'natural_gamma' ? 'Natural gamma (cps)' :
                     observationsToReturn[i] == 'resistivity' ? 'Resistivity (Ω·m)' :
                     undefined;
 
-                windowTitle +=
-                    // Add a comma or ampersand if needed:
+                // Add a comma or ampersand if needed:
+                windowTitle += (!first ? (last ? ' &amp; ' : ', ') : '') + 
                     // Remove the unit of measure:
                     new RegExp('^(.+?) \\(').exec(xAxisTitle)[1];
 
@@ -78,12 +183,15 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         // for more info.
                         // This workaround can be removed if a new version of ExtJS
                         // reintroduces a 'reverse' option for the axis object.
-                        item.data['depth'] = -item.data['depth'];
+                        if (i === 0) {
+                            item.data['depth'] = -item.data['depth'];
+                        }
                         // End ReverseAxisIssue.
 
-                        // Only use items that actually have a value for the
-                        // desired observation:
-                        return item.data[observationsToReturn[i]] != '';
+                        // Return all items regardless of whether they have a value.
+                        // This results in gaps in the plot but it's better than having
+                        // ExtJS bridge them as this would create a misleading representation.
+                        return true;
                     }
                 });
 
@@ -98,20 +206,19 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                         type : 'numeric',
                         position : 'left',
                         fields : [ 'depth' ],
-                        minorTickSteps : 1
+                        minorTickSteps : 1,
+                        grid: true
                         // TODO ReverseAxisIssue: See other TODO with this name,
                         // above, for more information.
                         // This code is here to modify the label's value so that
                         // it doesn't include the negative sign.
-                        ,label : {
-                            renderer: function(v) {
-                                return Ext.util.Format.number(Math.abs(v), '0.0');
-                            }
+                        ,renderer: function(v) {
+                            return Ext.util.Format.number(Math.abs(v), '0.0');
                         }
                         // End ReverseAxisIssue.
                     }, {
                         title : xAxisTitle,
-                        type : 'numeric',
+                        type : xAxisType,
                         position : 'top',
                         fields : [ observationsToReturn[i] ],
                         minorTickSteps : 1
