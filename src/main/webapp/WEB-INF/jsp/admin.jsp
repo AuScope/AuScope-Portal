@@ -105,7 +105,7 @@
                         region : 'south',
                         title : 'Diagnostic Functions',
                         split : true,
-                        diagnosticFunctions : [admin.AuScopeDiagnosticFunctions.ClearCswCache],
+                        diagnosticFunctions : [admin.AuScopeDiagnosticFunctions.ClearCswCache, admin.AuScopeDiagnosticFunctions.ClearGsmlpNSCache],
                         autoScroll : true
                     }]
                 }]

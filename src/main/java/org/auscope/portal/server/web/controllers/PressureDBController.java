@@ -212,18 +212,15 @@ public class PressureDBController extends BasePortalController {
             propertyMode = 1;
             style = getColorCodedStyle("gsmlp:BoreholeView",
                     "gsmlp:boreholeLength_m", ccLevels, propertyMode);
-            System.out.println("PressueDB:style:gsmlp:boreholeLength_m");
             break;
         case "Elevation":
             propertyMode = 2;
             style = getColorCodedStyle("gsmlp:BoreholeView",
                     "gsmlp:elevation_m", ccLevels, propertyMode);
-            System.out.println("PressueDB:style:gsmlp:elevation_m");
             break;
         default:
             propertyMode = 0;
             style = getStyle("gsmlp:BoreholeView", "gsmlp:shape", "#2242c7");
-            System.out.println("PressueDB:style:gsmlp:shape");
             break;
         }
         
@@ -349,9 +346,6 @@ public class PressureDBController extends BasePortalController {
                 + "<Size>8</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>" + "</Rule>";
-        System.out.println("head:"
-                + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                        .get(i) : PRESSURE_DB_ELEVATION_MAP.get(i)));
 
         for (i = 1; i < (numRules - 1); i++) {
             int low = (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i - 1)
@@ -399,8 +393,6 @@ public class PressureDBController extends BasePortalController {
                     + "<Size>8</Size>"
                     + "</Graphic>"
                     + "</PointSymbolizer>" + "</Rule>";
-            System.out.println("middle:i-" + i + ":low-" + low + ":high-"
-                    + high);
         }
         tail = "<Rule>" + "<Name>Boreholes</Name>"
                 + "<Title>Boreholes greater than "
@@ -432,9 +424,6 @@ public class PressureDBController extends BasePortalController {
                 + "<Size>8</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>" + "</Rule>";
-        System.out.println("tail:"
-                + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                        .get(i - 1) : PRESSURE_DB_ELEVATION_MAP.get(i - 1)));
         styleRules = header + middle + tail;
         return styleRules;
     }
