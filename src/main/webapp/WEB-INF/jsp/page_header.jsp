@@ -13,7 +13,7 @@
 
             <li><a id="hh-userGuide" href="static/user-guide/ug.htm" target="new">User Guide<span></span></a></li>
 
-            <li><a href="links.html">Links<span></span></a></li>
+            <!-- <li><a href="links.html">Links<span></span></a></li> -->
          </ul>
       </div>
       <span id="latlng"></span>
