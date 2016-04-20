@@ -363,7 +363,7 @@ Ext.application({
             var mss = Ext.create('portal.util.permalink.MapStateSerializer');
 
             mss.addMapState(map);
-            mss.addLayers(layerStore);
+            mss.addLayers(map);
 
             mss.serialize(function(state, version) {
                 var popup = Ext.create('portal.widgets.window.PermanentLinkWindow', {
