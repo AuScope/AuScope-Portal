@@ -28,7 +28,7 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
      * Generates a method for making a request to NVCL 2.0 for the Mosaic imagery for a particular logId
      *
      * The response will be either HTML or a binary stream representing an image
-     * 
+     *
      * @param serviceUrl
      *            The URL of the NVCLDataService
      * @param logId
@@ -71,7 +71,7 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
 
     /**
      * Generates a method for making a request for all NVCL logged elements that belong to a particular dataset
-     * 
+     *
      * @param serviceUrl
      *            The URL of the NVCLDataService
      * @param datasetId
@@ -96,6 +96,33 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
         //attach them to the method
         method.setURI(builder.build());
 
+        return method;
+    }
+
+    /**
+     * Generates a method for returning all algorithms supported by the NVCL analytical engine
+     * @param serviceUrl
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getAlgorithms(String serviceUrl) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getAlgorithms.html"));
+        method.setURI(builder.build());
+        return method;
+    }
+
+    /**
+     * Generates a method for returning all classifications for a given algorithm (supported by the NVCL analytical engine)
+     * @param serviceUrl
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getClassifications(String serviceUrl, int algorithmOutputId) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getClassifications.html"));
+        builder.setParameter("algorithmoutputid", Integer.toString(algorithmOutputId));
+        method.setURI(builder.build());
         return method;
     }
 

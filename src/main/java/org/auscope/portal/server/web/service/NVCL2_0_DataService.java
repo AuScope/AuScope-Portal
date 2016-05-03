@@ -20,6 +20,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.util.DOMUtil;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputResponse;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmVersion;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse.Bin;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
@@ -302,5 +305,89 @@ public class NVCL2_0_DataService {
 
         return responseObjs;
     }
+
+    /**
+     * Makes and parses an NVCL getAlgorithms request.
+     * @param serviceUrl
+     * @return
+     */
+    public List<AlgorithmOutputResponse> getAlgorithms(String serviceUrl) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.getAlgorithms(serviceUrl);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        Document responseDoc = DOMUtil.buildDomFromString(responseText, false);
+
+        XPathExpression expr = DOMUtil.compileXPathExpr("Algorithms/algorithms");
+        XPathExpression exprOutputs = DOMUtil.compileXPathExpr("outputs");
+        XPathExpression exprVersions = DOMUtil.compileXPathExpr("versions");
+        XPathExpression exprVersion = DOMUtil.compileXPathExpr("version");
+        XPathExpression exprAlgorithmOutputId = DOMUtil.compileXPathExpr("algorithmoutputID");
+        NodeList algorithmNodeList = (NodeList) expr.evaluate(responseDoc, XPathConstants.NODESET);
+
+        XPathExpression exprAlgorithmId = DOMUtil.compileXPathExpr("algorithmID");
+        XPathExpression exprName = DOMUtil.compileXPathExpr("name");
+
+        ArrayList<AlgorithmOutputResponse> responseObjs = new ArrayList<AlgorithmOutputResponse>();
+
+        for (int i = 0; i < algorithmNodeList.getLength(); i++) {
+            Node node = algorithmNodeList.item(i);
+
+            int algorithmId = Integer.parseInt((String) exprAlgorithmId.evaluate(node, XPathConstants.STRING));
+            String algorithmName = (String) exprName.evaluate(node, XPathConstants.STRING);
+
+            NodeList outputNodeList = (NodeList) exprOutputs.evaluate(node, XPathConstants.NODESET);
+            for (int j = 0; j < outputNodeList.getLength(); j++) {
+                Node outputNode = outputNodeList.item(j);
+                String outputName = (String) exprName.evaluate(outputNode, XPathConstants.STRING);
+
+                NodeList versionNodeList = (NodeList) exprVersions.evaluate(outputNode, XPathConstants.NODESET);
+                ArrayList<AlgorithmVersion> versions = new ArrayList<AlgorithmVersion>(versionNodeList.getLength());
+                for (int k = 0; k < versionNodeList.getLength(); k++) {
+                    Node versionNode = versionNodeList.item(k);
+
+                    int versionId = Integer.parseInt((String) exprVersion.evaluate(versionNode, XPathConstants.STRING));
+                    int algorithmOutputId = Integer.parseInt((String) exprAlgorithmOutputId.evaluate(versionNode, XPathConstants.STRING));
+
+                    versions.add(new AlgorithmVersion(algorithmOutputId, versionId));
+                }
+
+                responseObjs.add(new AlgorithmOutputResponse(algorithmId, algorithmName, outputName, versions));
+            }
+        }
+
+        return responseObjs;
+    }
+
+    /**
+     * Makes and parses a getClassifications request
+     * @param serviceUrl
+     * @param algorithmOutputId
+     * @return
+     * @throws Exception
+     */
+    public List<AlgorithmOutputClassification> getClassifications(String serviceUrl, int algorithmOutputId) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.getClassifications(serviceUrl, algorithmOutputId);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        Document responseDoc = DOMUtil.buildDomFromString(responseText, false);
+
+        XPathExpression exprNodes = DOMUtil.compileXPathExpr("ClassificationsCollection/classifications");
+        XPathExpression exprClassText = DOMUtil.compileXPathExpr("classText");
+        XPathExpression exprColor = DOMUtil.compileXPathExpr("colour");
+        XPathExpression exprIndex = DOMUtil.compileXPathExpr("index");
+
+        NodeList classNodeList = (NodeList) exprNodes.evaluate(responseDoc, XPathConstants.NODESET);
+        ArrayList<AlgorithmOutputClassification> responseObjs = new ArrayList<AlgorithmOutputClassification>(classNodeList.getLength());
+        for (int i = 0; i < classNodeList.getLength(); i++) {
+            Node classNode = classNodeList.item(i);
+
+            String classText = (String) exprClassText.evaluate(classNode, XPathConstants.STRING);
+            int color = Integer.parseInt((String) exprColor.evaluate(classNode, XPathConstants.STRING));
+            int index = Integer.parseInt((String) exprIndex.evaluate(classNode, XPathConstants.STRING));
+
+            responseObjs.add(new AlgorithmOutputClassification(classText, color, index));
+        }
+
+        return responseObjs;
+    }
+
 
 }

@@ -20,6 +20,8 @@ import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.HttpUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AbstractStreamResponse;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputResponse;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
@@ -805,5 +807,41 @@ public class NVCLController extends BasePortalController {
     private static InputStream get404HTMLError() throws IOException {
         InputStream input = NVCLController.class.getResourceAsStream("/htmlerror/NVCL404Response.htm");
         return input;
+    }
+
+    /**
+     * Proxies a NVCL getAlgorithms request. Returns a JSON response
+     *
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @return
+     */
+    @RequestMapping("getNVCLAlgorithms.do")
+    public ModelAndView getNVCLWFSDownloadStatus(@RequestParam("serviceUrl") String serviceUrl) throws Exception {
+        try {
+            List<AlgorithmOutputResponse> algorithms = dataService2_0.getAlgorithms(serviceUrl);
+            return generateJSONResponseMAV(true, algorithms, "");
+        } catch (Exception ex) {
+            log.warn("Unable to fetch NVCL algorithms for " + serviceUrl, ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+
+    /**
+     * Proxies a NVCL getAlgorithms request. Returns a JSON response
+     *
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @return
+     */
+    @RequestMapping("getNVCLClassifications.do")
+    public ModelAndView getNVCLWFSDownloadStatus(@RequestParam("serviceUrl") String serviceUrl, @RequestParam("algorithmOutputId") int algorithmOutputId) throws Exception {
+        try {
+            List<AlgorithmOutputClassification> classifications = dataService2_0.getClassifications(serviceUrl, algorithmOutputId);
+            return generateJSONResponseMAV(true, classifications, "");
+        } catch (Exception ex) {
+            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + algorithmOutputId, ex);
+            return generateJSONResponseMAV(false);
+        }
     }
 }

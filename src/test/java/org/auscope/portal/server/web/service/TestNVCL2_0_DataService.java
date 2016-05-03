@@ -2,11 +2,14 @@ package org.auscope.portal.server.web.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputResponse;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.web.NVCL2_0_DataServiceMethodMaker;
 import org.jmock.Expectations;
@@ -134,5 +137,89 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         Assert.assertEquals(0, response.getBinnedValues()[0].getNumericValues().size());
         Assert.assertEquals(0, response.getBinnedValues()[1].getNumericValues().size());
         Assert.assertEquals(0, response.getBinnedValues()[2].getNumericValues().size());
+    }
+
+    /**
+     * Tests parsing an example getAlgorithms response
+     * @throws Exception
+     */
+    @Test
+    public void testGetAlgorithms() throws Exception {
+        final String serviceUrl = "http://example/url/wfs";
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetAlgorithmsResponse.xml");
+
+        context.checking(new Expectations() {{
+                oneOf(mockMethodMaker).getAlgorithms(serviceUrl);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
+        }});
+
+        List<AlgorithmOutputResponse> responses = dataService.getAlgorithms(serviceUrl);
+
+        Assert.assertNotNull(responses);
+        Assert.assertEquals(31, responses.size());
+        Assert.assertEquals("The Spectral Assistant VNIR", responses.get(0).getAlgorithmName());
+        Assert.assertEquals("VNIR Mineral", responses.get(0).getOutputName());
+        Assert.assertEquals(1, responses.get(0).getAlgorithmId());
+        Assert.assertEquals(5, responses.get(0).getVersions().size());
+        Assert.assertEquals(703, responses.get(0).getVersions().get(0).getVersion());
+        Assert.assertEquals(82, responses.get(0).getVersions().get(0).getAlgorithmOutputId());
+        Assert.assertEquals(601, responses.get(0).getVersions().get(4).getVersion());
+        Assert.assertEquals(26, responses.get(0).getVersions().get(4).getAlgorithmOutputId());
+
+
+        Assert.assertEquals("The Spectral Assistant TIR", responses.get(30).getAlgorithmName());
+        Assert.assertEquals("TIR Nil Stat", responses.get(30).getOutputName());
+        Assert.assertEquals(3, responses.get(30).getAlgorithmId());
+        Assert.assertEquals(4, responses.get(30).getVersions().size());
+        Assert.assertEquals(703, responses.get(30).getVersions().get(0).getVersion());
+        Assert.assertEquals(73, responses.get(30).getVersions().get(0).getAlgorithmOutputId());
+        Assert.assertEquals(701, responses.get(30).getVersions().get(3).getVersion());
+        Assert.assertEquals(61, responses.get(30).getVersions().get(3).getAlgorithmOutputId());
+    }
+
+    /**
+     * Tests parsing an example getClassifications response
+     * @throws Exception
+     */
+    @Test
+    public void testGetClassifications() throws Exception {
+        final String serviceUrl = "http://example/url/wfs";
+        final int algorithmOutputId = 123;
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetClassificationsResponse.xml");
+
+        context.checking(new Expectations() {{
+                oneOf(mockMethodMaker).getClassifications(serviceUrl, algorithmOutputId);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
+        }});
+
+        List<AlgorithmOutputClassification> responses = dataService.getClassifications(serviceUrl, algorithmOutputId);
+
+        Assert.assertNotNull(responses);
+        Assert.assertEquals(22, responses.size());
+        Assert.assertEquals("NULL", responses.get(0).getClassText());
+        Assert.assertEquals(8421504, responses.get(0).getColor());
+        Assert.assertEquals(-1, responses.get(0).getIndex());
+        Assert.assertEquals("MaskedOff", responses.get(21).getClassText());
+        Assert.assertEquals(8947848, responses.get(21).getColor());
+        Assert.assertEquals(20, responses.get(21).getIndex());
+    }
+
+    /**
+     * Tests parsing an example getClassifications error
+     * @throws Exception
+     */
+    @Test
+    public void testGetClassifications_Error() throws Exception {
+        final String serviceUrl = "http://example/url/wfs";
+        final int algorithmOutputId = 123;
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetClassificationsResponse_Error.xml");
+
+        context.checking(new Expectations() {{
+                oneOf(mockMethodMaker).getClassifications(serviceUrl, algorithmOutputId);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
+        }});
+
+        List<AlgorithmOutputClassification> responses = dataService.getClassifications(serviceUrl, algorithmOutputId);
+        Assert.assertEquals(0, responses.size());
     }
 }
