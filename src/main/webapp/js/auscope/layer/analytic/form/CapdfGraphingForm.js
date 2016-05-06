@@ -353,7 +353,7 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
 
 
         var win = Ext.create('Ext.window.Window', {
-            title: 'Scatter Plot',
+            title: 'Box Plot',
             height: 500,
             width: 700,
             layout: 'fit',
