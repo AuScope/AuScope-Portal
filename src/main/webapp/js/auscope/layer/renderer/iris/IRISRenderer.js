@@ -64,7 +64,7 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
                 // This is a bit cheeky because I'm using the WFS KML parser but it's the same anyway as
                 // this is what I'm generating. I don't really know why the KML parser is in the WFS
                 // namespace because to me it seems like they shouldn't be coupled...
-                var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : jsonReponse.data.kml, map : me.map});
+                var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : jsonReponse.msg, map : me.map});
                 var primitives = parser.makePrimitives(me.icon, irisResource, layer);
                 
                 // Add our single points and overlays to the overlay manager (which will add them to the map)
