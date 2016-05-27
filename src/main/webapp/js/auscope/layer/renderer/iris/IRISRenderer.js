@@ -49,6 +49,10 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
         var serviceUrl = irisResource.data.url;
         var networkCode = irisResource.data.name;        
         me.renderStatus.initialiseResponses([serviceUrl], 'Loading...');
+
+        // Display rubbish bin icon so that layer can be deleted
+        this.fireEvent('renderstarted', this, [], filterer);
+
         var layer = me.parentLayer;
 
         // Keep track of the _ajaxRequest handle so that we can abort it if need be:
@@ -72,6 +76,9 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
                 
                 var s = primitives.length == 1 ? '' : 's';
                 me.renderStatus.updateResponse(serviceUrl, primitives.length + " record" + s + " retrieved.");
+
+                // Display tick icon now that the download has finished
+                me.fireEvent('renderfinished', me);
             }
         });
     },
