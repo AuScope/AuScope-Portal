@@ -49,7 +49,6 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
             reader: {
                 type : 'array'
             },
-            groupField : 'analyteName',
             sorters : ['analyteName']
         });
 
