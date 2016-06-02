@@ -152,13 +152,25 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
                         store: allAnalytes,
                         typeAhead: true,
                         forceSelection: true,
+                        id: 'LSFAnalyteSelector',
                         listeners: {
                             select : function(combo, records) {
                                 locSpecStore.clearFilter();
-                                if (records.length > 0) {
-                                    var selectedMineral = records[0].get('field1'); //TODO change to a proper field name
+                                if (records.data.field1) {
+                                    var selectedMineral = records.data.field1; //TODO change to a proper field name
                                     locSpecStore.filter('analyteName', selectedMineral, false, false);
                                 }
+                            }
+                        }
+                    },{
+                        xtype: 'button',
+                        text: 'Clear Selection',
+                        listeners: {
+                            click: function(thisButton, e, eOpts) {
+                                locSpecStore.clearFilter();
+                                var s = Ext.ComponentQuery.query('xcombo#LSFAnalyteSelector');
+                                if (s.length>0)
+                                    s[0].clearValue();
                             }
                         }
                     },{
