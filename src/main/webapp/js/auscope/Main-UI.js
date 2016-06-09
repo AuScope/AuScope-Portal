@@ -64,14 +64,14 @@ Ext.application({
                     if(!successful){
                         var errStr = "";
                         var idx;
-                        
+
                         // Compile the returned error message
                         for (idx=0; idx<records.length; idx++) {
                             if (records[idx].hasOwnProperty('data')) {
                                 errStr += records[idx].data;
                             }
                         }
-                        
+
                         // To prevent injection issues
                         REPLACE_LIST = [/\'/g, /\"/g, /\=/g, /\</g, /\>/g, /\&/g, /\)/g, /\(/g, /\$/g, /\;/g, /\[/g, /\]/g, /\{/g, /\}/g];
                         for (var i=0;i<REPLACE_LIST.length;i++) {
@@ -80,9 +80,9 @@ Ext.application({
 
                         // If there was no returned error message, then use the generic message
                         if (errStr.length===0) {
-                            errStr =  "Your WMS service has to support EPSG:3857 or EPSG:4326 to be supported by Google map. You are seeing this error because either the URL is not valid or it does   not conform to EPSG:3857 or EPSG:4326 WMS layers standards"                       
+                            errStr =  "Your WMS service has to support EPSG:3857 or EPSG:4326 to be supported by Google map. You are seeing this error because either the URL is not valid or it does   not conform to EPSG:3857 or EPSG:4326 WMS layers standards"
                         }
-                        
+
                         if (errStr=="Your WMS does not appear to support EPSG:3857 WGS 84 / Pseudo-Mercator or EPSG:4326 WGS 84. This is required to be able to display your map in this Portal. If you are certain that your service supports EPSG:3857, click Yes for portal to attempt loading of the layer else No to exit.") {
                             // Display error message
                             Ext.Msg.show({
@@ -94,7 +94,7 @@ Ext.application({
                                           // This re-sends the URL to the server, but with fewer checks
                                           customRecordsPanel.getDockedComponent(2).items.getAt(1).searchClick(true);
                                       }
-                                }                                      
+                                }
                             });
                         } else {
                             // Display error message
@@ -104,7 +104,7 @@ Ext.application({
                                 buttons: Ext.Msg.OK
                             });
                         }
-                        
+
                     }else{
                         if(records.length === 0){
                             Ext.Msg.show({
@@ -181,6 +181,7 @@ Ext.application({
         var mapCfg = {
             container : null,   //We will be performing a delayed render of this map
             layerStore : layerStore,
+            layerSwitcher: true,
             listeners : {
                 query : function(mapWrapper, queryTargets) {
                     queryTargetHandler.handleQueryTargets(mapWrapper, queryTargets);
@@ -341,9 +342,9 @@ Ext.application({
                        var tabpanel =  Ext.getCmp('auscope-tabs-panel');
                        var customPanel = tabpanel.getComponent('org-auscope-custom-record-panel')
                        tabpanel.setActiveTab(customPanel);
-                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);                            
+                       var cswRecord = customPanel.addKMLtoPanel(responseObj.data.name,responseObj.data.file);
                        var newLayer = layerFactory.generateLayerFromCSWRecord(cswRecord);
-                       cswRecord.set('layer',newLayer);            
+                       cswRecord.set('layer',newLayer);
                        var filterForm = newLayer.get('filterForm');
                        filterForm.setLayer(newLayer);
                        layerStore.insert(0,newLayer);
@@ -396,7 +397,5 @@ Ext.application({
             });
 
         }
-
-
     }
 });

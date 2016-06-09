@@ -31,6 +31,7 @@ import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphT
 import org.auscope.portal.server.web.service.BoreholeService;
 import org.auscope.portal.server.web.service.NVCL2_0_DataService;
 import org.auscope.portal.server.web.service.NVCLDataService;
+import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -63,6 +64,8 @@ public class TestNVCLController extends PortalTestClass {
     /** The nvcl controller. */
     private NVCLController nvclController;
 
+    private SF0BoreholeService mockSF0Service;
+
     /**
      * Setup.
      */
@@ -73,8 +76,9 @@ public class TestNVCLController extends PortalTestClass {
         this.mockCSWService = context.mock(CSWCacheService.class);
         this.mockDataService = context.mock(NVCLDataService.class);
         this.mock2_0_DataService = context.mock(NVCL2_0_DataService.class);
+        this.mockSF0Service = context.mock(SF0BoreholeService.class);
         this.nvclController = new NVCLController(this.mockBoreholeService, this.mockCSWService, this.mockDataService,
-                this.mock2_0_DataService);
+                this.mock2_0_DataService, this.mockSF0Service);
     }
 
     /**

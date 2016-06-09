@@ -126,4 +126,63 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
         return method;
     }
 
+    /**
+     * Generates a method for submitting an NVCL processing job for a given (user) email
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase submitProcessingJob(String serviceUrl, String email, String jobName, String[] wfsUrls, String wfsFilter,
+            int algorithmOutputId, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "submitNVCLAnalyticalJob.do"));
+        builder.setParameter("email", email);
+        builder.setParameter("jobname", jobName);
+        builder.setParameter("algorithmoutputid", Integer.toString(algorithmOutputId));
+        builder.setParameter("classification", classification);
+        builder.setParameter("startdepth", Integer.toString(startDepth));
+        builder.setParameter("enddepth", Integer.toString(endDepth));
+        builder.setParameter("logicalop", operator);
+        builder.setParameter("value", value);
+        builder.setParameter("units", units);
+        builder.setParameter("span", Integer.toString(span));
+        builder.setParameter("serviceurls", String.join(",", wfsUrls));
+        builder.setParameter("filter", wfsFilter);
+
+        method.setURI(builder.build());
+        return method;
+    }
+
+    /**
+     * Generates a method for checking an NVCL processing job for a given (user) email
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase checkProcessingJob(String serviceUrl, String email) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "checkNVCLAnalyticalJobStatus.do"));
+        builder.setParameter("email", email);
+
+        method.setURI(builder.build());
+        return method;
+    }
+
+    /**
+     * Generates a method for get an NVCL processing job outputs
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getProcessingJobResults(String serviceUrl, String jobId) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getNVCLAnalyticalJobResult.do"));
+        builder.setParameter("jobid", jobId);
+
+        method.setURI(builder.build());
+        return method;
+    }
 }

@@ -97,18 +97,20 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             items: [{
                 xtype: 'form',
                 border: false,
+                autoScroll: true,
                 items: [{
                     xtype: 'container',
                     html: '<p class="centeredlabel">National Virtual Core Library analytics are run remotely and may take some time to complete. By entering an email and a job name you can come back to this form later to collect your results.</p>'
                 },{
                     xtype: 'textfield',
                     name: 'email',
+                    itemId: 'email',
                     fieldLabel: 'Email',
                     allowBlank: false,
                     anchor: '100%'
                 },{
                     xtype: 'textfield',
-                    name: 'name',
+                    name: 'jobName',
                     fieldLabel: 'Job Name',
                     allowBlank: false,
                     anchor: '100%'
@@ -131,7 +133,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             fieldLabel: 'Algorithm Output',
                             store: algorithmOutputStore,
                             displayField: 'outputName',
-                            valueField: 'id',
+                            valueField: 'algorithmId',
                             forceSelection: true,
                             queryMode: 'local',
                             typeAhead: true,
@@ -145,11 +147,11 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             margin: '3 5 0 5'
                         },{
                             xtype: 'combo',
-                            name: 'version',
+                            name: 'algorithmOutputId',
                             itemId: 'version',
                             store: versionsStore,
                             displayField: 'version',
-                            valueField: 'version',
+                            valueField: 'algorithmOutputId',
                             forceSelection: true,
                             queryMode: 'local',
                             allowBlank: false,
@@ -185,7 +187,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         defaults: defaults,
                         items: [{
                             xtype: 'numberfield',
-                            name: 'from',
+                            name: 'startDepth',
                             fieldLabel: 'Region of interest',
                             decimalPrecision: 0,
                             allowBlank: false,
@@ -196,7 +198,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             margin: '3 5 0 5'
                         },{
                             xtype: 'numberfield',
-                            name: 'to',
+                            name: 'endDepth',
                             decimalPrecision: 0,
                             allowBlank: false,
                             value: 9999
@@ -248,7 +250,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         defaults: defaults,
                         items: [{
                             xtype: 'numberfield',
-                            name: 'value',
+                            name: 'span',
                             fieldLabel: 'Evaluated over a span of',
                             decimalPrecision: 0,
                             allowBlank: false,
@@ -284,7 +286,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
     },
 
     _onAlgorithmOutputChange: function(combo, newValue, oldValue) {
-        var record = combo.getStore().getById(newValue);
+        var idx = combo.getStore().find('algorithmId', newValue);
+        var record = combo.getStore().getAt(idx);
         if (record) {
             var versionCombo = this.down('#version');
             versionCombo.setValue(null);
@@ -295,13 +298,13 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
 
             if (versionStore.getCount()) {
                 var highestVersion = versionStore.getAt(0);
-                versionCombo.setValue(highestVersion.get('version'));
+                versionCombo.setValue(highestVersion.get('algorithmOutputId'));
             }
         }
     },
 
     _onVersionChange: function(combo, newValue, oldValue) {
-        var idx = combo.getStore().find('version', newValue);
+        var idx = combo.getStore().find('algorithmOutputId', newValue);
         var record = combo.getStore().getAt(idx);
         if (record) {
             var classCombo = this.down('#classification');
@@ -318,7 +321,82 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
     },
 
     _onStatus: function() {
-        console.log('TODO');
+        var formPanel = this.down('form');
+        var emailField = formPanel.down('#email');
+
+        if (!emailField.isValid()) {
+            return;
+        }
+
+        var email = emailField.getValue();
+        var mask = new Ext.LoadMask({
+            msg: 'Checking status...',
+            target: this
+        });
+        mask.show();
+        portal.util.Ajax.request({
+            url: 'checkNVCLProcessingJob.do',
+            params: {
+                email: email
+            },
+            scope: this,
+            callback: function(success, data, message) {
+                mask.hide();
+
+                if (!success) {
+                    Ext.Msg.alert('Error', 'Unable to check your processing jobs at this time. Please try again later.');
+                    console.log(message);
+                    return;
+                }
+
+                if (Ext.isEmpty(data)) {
+                    Ext.Msg.alert('No Jobs', 'There are currently no jobs submitted for ' + email);
+                    return;
+                }
+
+                var popup = Ext.create('Ext.window.Window', {
+                    modal: true,
+                    layout: 'fit',
+                    title: 'Previously submitted jobs',
+                    width: 400,
+                    height: 200,
+                    items: [{
+                        xtype: 'analyticaljobstatuspanel',
+                        statuses: data,
+                        listeners: {
+                            statusselect: Ext.bind(function(panel, rec) {
+                                this._loadFilterForJob(rec.get('jobId'));
+                            }, this)
+                        }
+                    }]
+                });
+                popup.show();
+            }
+        });
+    },
+
+    _loadFilterForJob: function(jobId) {
+        var mask = new Ext.LoadMask({
+            msg: 'Loading results...',
+            target: this
+        });
+        mask.show();
+        portal.util.Ajax.request({
+            url: 'getNVCLProcessingResults.do',
+            params: {
+                jobId: jobId
+            },
+            scope: this,
+            callback: function(success, data) {
+                mask.hide();
+                if (!success) {
+                    Ext.Msg.alert('Error', 'Unable to access your job results at this time. Please try again later.');
+                    return;
+                }
+
+                console.log("TODO - Add ", data.passBoreholes, ' to ', this.layer);
+            }
+        });
     },
 
     _onSubmit: function() {
@@ -327,7 +405,44 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             return;
         }
 
+        //Build up our parameters for job submission
+        var params = {};
+        if (this.layer) {
+            params = this.layer.get('filterer').getParameters();
 
-        console.log('TODO');
+            var wfsUrls = [];
+            if (Ext.isEmpty(params.serviceFilter)) {
+                var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(this.layer.getAllOnlineResources(), portal.csw.OnlineResource.WFS);
+                wfsUrls = wfsResources.map(function(or) {
+                    return or.get('url');
+                });
+            } else {
+                wfsUrls = [params.serviceFilter];
+            }
+
+            params.wfsUrl = wfsUrls;
+        }
+        Ext.apply(params, formPanel.getValues());
+
+        //Submit the job
+        var mask = new Ext.LoadMask({
+            msg: 'Submitting job...',
+            target: this
+        });
+        mask.show();
+        portal.util.Ajax.request({
+            url: 'submitSF0NVCLProcessingJob.do',
+            params: params,
+            scope: this,
+            callback: function(success) {
+                mask.hide();
+                if (!success) {
+                    Ext.Msg.alert('Error', 'Unable to submit your processing job at this time. Please try again later.');
+                    return;
+                }
+
+                Ext.Msg.alert('Success', 'Your job has successfully submitted. You can check the status with the "Check Status" button below');
+            }
+        });
     }
 });

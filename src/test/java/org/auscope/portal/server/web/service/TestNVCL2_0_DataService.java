@@ -5,15 +5,19 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
 import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputResponse;
+import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
+import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobStatus;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.web.NVCL2_0_DataServiceMethodMaker;
 import org.jmock.Expectations;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -24,11 +28,23 @@ import org.junit.Test;
  */
 public class TestNVCL2_0_DataService extends PortalTestClass {
 
+    private static final String ANALYTICAL_SERVICES_URL = "http://foo.bar/service";
+
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private NVCL2_0_DataServiceMethodMaker mockMethodMaker = context.mock(NVCL2_0_DataServiceMethodMaker.class);
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
-    private NVCL2_0_DataService dataService = new NVCL2_0_DataService(mockServiceCaller, mockMethodMaker);
+    private NVCL2_0_DataService dataService;
 
+    @Before
+    public void setup() {
+        final PortalPropertyPlaceholderConfigurer mockProperties = context.mock(PortalPropertyPlaceholderConfigurer.class);
+
+        context.checking(new Expectations() {{
+            allowing(mockProperties).resolvePlaceholder("HOST.nvclAnalyticalServices.url");will(returnValue(ANALYTICAL_SERVICES_URL));
+        }});
+
+        dataService = new NVCL2_0_DataService(mockServiceCaller, mockMethodMaker, mockProperties);
+    }
 
     /**
      * Tests parsing of a downloadscalars request into a BinnedCSVResponse
@@ -221,5 +237,91 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
 
         List<AlgorithmOutputClassification> responses = dataService.getClassifications(serviceUrl, algorithmOutputId);
         Assert.assertEquals(0, responses.size());
+    }
+
+    /**
+     * Tests parsing an example submit processing response
+     * @throws Exception
+     */
+    @Test
+    public void testSubmitProcessingJob() throws Exception {
+        final int algorithmOutputId = 123;
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_submitAnalyticalJobResponse.json");
+
+        final String[] wfsUrls = new String[] {"http://nvclwebservices.vm.csiro.au/geoserverBH/wfs"};
+        final String email = "foo@bar.com";
+        final String jobName = "myjobname";
+        final String classification = "Muscovite";
+        final Integer startDepth = 0;
+        final Integer endDepth = 999;
+        final String logicalOp = "gt";
+        final String value = "50";
+        final String units = "pct";
+        final Integer span = 1;
+        final String wfsFilter = "<ogc:Filter><PropertyIsEqualTo><PropertyName>gsmlp:nvclCollection</PropertyName><Literal>true</Literal></PropertyIsEqualTo></ogc:Filter>";
+
+        context.checking(new Expectations() {{
+                oneOf(mockMethodMaker).submitProcessingJob(ANALYTICAL_SERVICES_URL, email, jobName, wfsUrls, wfsFilter, algorithmOutputId, classification, startDepth, endDepth, logicalOp, value, units, span);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
+        }});
+
+        boolean result = dataService.submitProcessingJob(email, jobName, wfsUrls, wfsFilter, algorithmOutputId, classification, startDepth, endDepth, logicalOp, value, units, span);
+        Assert.assertTrue(result);
+    }
+
+    /**
+     * Tests parsing an example submit processing response
+     * @throws Exception
+     */
+    @Test
+    public void testCheckProcessingJob() throws Exception {
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_checkAnalyticalJobResponse.json");
+        final String email = "foo@bar.com";
+
+        context.checking(new Expectations() {{
+                oneOf(mockMethodMaker).checkProcessingJob(ANALYTICAL_SERVICES_URL, email);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
+        }});
+
+        List<AnalyticalJobStatus> result = dataService.checkProcessingJobs(email);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.size());
+
+        Assert.assertEquals("85d83b0cc3e0c878f2ec28f71fa8715b", result.get(0).getJobId());
+        Assert.assertEquals("Success", result.get(0).getStatus());
+        Assert.assertEquals("test001", result.get(0).getJobDescription());
+
+        Assert.assertEquals("f42363ec8d735728d1ffc5b89dce2a7e", result.get(1).getJobId());
+        Assert.assertEquals("Success", result.get(1).getStatus());
+        Assert.assertEquals("test001", result.get(1).getJobDescription());
+    }
+
+    /**
+     * Tests parsing an example submit processing response
+     * @throws Exception
+     */
+    @Test
+    public void testGetProcessingJobResults() throws Exception {
+        final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_getAnalyticalJobResultsResponse.json");
+        final String id = "dae39b22716dd89255e76badb6b37193";
+
+        context.checking(new Expectations() {{
+                oneOf(mockMethodMaker).getProcessingJobResults(ANALYTICAL_SERVICES_URL, id);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
+        }});
+
+        AnalyticalJobResults results = dataService.getProcessingResults(id);
+        Assert.assertNotNull(results);
+
+        Assert.assertEquals("dae39b22716dd89255e76badb6b37193", results.getJobId());
+        Assert.assertEquals("foo@bar.com", results.getEmail());
+        Assert.assertEquals("test001", results.getJobDescription());
+
+        Assert.assertEquals(1, results.getPassBoreholes().size());
+        Assert.assertEquals(1, results.getFailBoreholes().size());
+        Assert.assertEquals(0, results.getErrorBoreholes().size());
+
+        Assert.assertEquals("http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/WTB5", results.getPassBoreholes().get(0));
+        Assert.assertEquals("http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/150390", results.getFailBoreholes().get(0));
     }
 }
