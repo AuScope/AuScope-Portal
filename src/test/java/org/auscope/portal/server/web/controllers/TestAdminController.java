@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.services.admin.AdminDiagnosticResponse;
 import org.auscope.portal.core.services.admin.EndpointAndSelector;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
@@ -19,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Unit tests for AdminController
- * 
+ *
  * @author Josh Vote
  *
  */
@@ -28,48 +27,42 @@ public class TestAdminController extends PortalTestClass {
     private AuScopeAdminService mockService;
     private CSWServiceItem mockServiceItem;
     private ArrayList<CSWServiceItem> cswServiceList;
-    private PortalPropertyPlaceholderConfigurer mockProperties;
     private AdminController controller;
 
     @Before
     public void setup() {
         mockService = context.mock(AuScopeAdminService.class);
         mockServiceItem = context.mock(CSWServiceItem.class);
-        mockProperties = context.mock(PortalPropertyPlaceholderConfigurer.class);
         cswServiceList = new ArrayList<CSWServiceItem>();
         cswServiceList.add(mockServiceItem);
 
-        controller = new AdminController(cswServiceList, mockProperties, mockService);
+        controller = new AdminController(cswServiceList, mockService);
     }
 
     /**
      * Tests the vocab diagnostic test is initialised succesfully
-     * 
+     *
      * @throws Exception
      */
     @Test
     public void testVocab() throws Exception {
-        final String vocabUrl = "http://fake.vocab/url";
         final AdminDiagnosticResponse response = new AdminDiagnosticResponse();
 
         context.checking(new Expectations() {
             {
-                oneOf(mockProperties).resolvePlaceholder("HOST.vocabService.url");
-                will(returnValue(vocabUrl));
-
-                oneOf(mockService).sissVoc2Connectivity(vocabUrl);
+                oneOf(mockService).sissVoc2Connectivity("http://fake.vocab/url");
                 will(returnValue(response));
             }
         });
 
-        ModelAndView mav = controller.testVocabulary();
+        ModelAndView mav = controller.testVocabulary("http://fake.vocab/url");
         Assert.assertNotNull(mav);
         Assert.assertTrue((Boolean) mav.getModel().get("success"));
     }
 
     /**
      * Tests that duplicate WFS + typename combinations are removed before calling the admin service
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -101,7 +94,7 @@ public class TestAdminController extends PortalTestClass {
 
     /**
      * Tests that duplicate WMS + layer name combinations are removed before calling the admin service
-     * 
+     *
      * @throws Exception
      */
     @Test
