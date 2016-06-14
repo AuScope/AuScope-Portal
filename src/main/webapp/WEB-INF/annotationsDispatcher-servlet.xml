@@ -27,7 +27,13 @@
 
     <!-- creates a java.util.Properties instance with values loaded from the supplied location -->
     <!-- TO DO: Check if we need this  -->
-    <util:properties id="configProperties" location="classpath:config.properties"/>
+    <bean id="propertyConfigurer" class="org.auscope.portal.core.server.PortalPropertySourcesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
       <property name="prefix" value="/WEB-INF/jsp/"/>

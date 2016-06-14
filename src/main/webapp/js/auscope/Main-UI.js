@@ -181,7 +181,6 @@ Ext.application({
         var mapCfg = {
             container : null,   //We will be performing a delayed render of this map
             layerStore : layerStore,
-            layerSwitcher: true,
             listeners : {
                 query : function(mapWrapper, queryTargets) {
                     queryTargetHandler.handleQueryTargets(mapWrapper, queryTargets);

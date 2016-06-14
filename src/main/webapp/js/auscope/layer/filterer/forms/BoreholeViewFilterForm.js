@@ -20,46 +20,43 @@ Ext.define('auscope.layer.filterer.forms.BoreholeViewFilterForm', {
                 boxLabel: 'Show Hylogged boreholes',
                 name: 'showNoneHylogged',
                 value: 'false'
+        },{
+            xtype: 'checkbox',
+            anchor: '95%',
+            itemId: 'nvcl-analytics-field',
+            boxLabel: '',
+            submitValue: false,
+            hidden: true,
+            listeners: {
+                change: Ext.bind(this._onAnalyticsCbChange, this)
+            }
+        },{
+            xtype: 'hidden',
+            name: 'ids',
+            listeners: {
+                change: Ext.bind(this._onIdsChange, this)
+            }
         });
         this.doLayout();
     },
 
-    /**
-     * Adds an array of borehole ID's to the approved filter list. If a list already exists, it is replaced
-     */
-    addIdFilter: function(ids, name) {
-        this.removeIdFilter();
-
-        var fieldSet = this.getComponent('borehole-fieldset');
-        fieldSet.setDisabled(true);
-
-        this.add({
-            xtype: 'container',
-            itemId: 'id-filter',
-            layout: 'hbox',
-            items: [{
-                xtype: 'label',
-                text: 'Showing results from "' + name + '"'
-            },{
-                xtype: 'button',
-                scope: this,
-                text: 'X',
-                handler: function() {
-                    this.removeIdFilter();
-                }
-            },{
-                xtype: 'hidden',
-                value: ids.join(',')
-            }]
-        });
+    _onAnalyticsCbChange: function(cb, newValue, oldValue) {
+        if (newValue == false) {
+            //Don't set this field to hidden while the change event handlers are still running
+            //Doing so will result in Ext errors as the DOM el's suddenly disappear. (so yield and update after events run)
+            new Ext.util.DelayedTask(Ext.bind(function() {
+                this.layer.get('filterer').setParameter('ids', '');
+            }, this)).delay(1);
+        }
     },
 
-    /**
-     * Removes any ID filter currently in place (or nothing if one isn't in place)
-     */
-    removeIdFilter: function() {
-        var fieldSet = this.getComponent('borehole-fieldset');
-        fieldSet.setDisabled(false);
-        this.remove('id-filter');
+    _onIdsChange: function(hidden, newValue, oldValue) {
+        if (Ext.isEmpty(newValue)) {
+            this.down('#nvcl-analytics-field').setHidden(true);
+        } else {
+            this.down('#nvcl-analytics-field').setBoxLabel('Showing analytics from job "' + this.layer.get('filterer').getParameter('nvclJobName') + '"')
+            this.down('#nvcl-analytics-field').setValue(true);
+            this.down('#nvcl-analytics-field').setHidden(false);
+        }
     }
 });

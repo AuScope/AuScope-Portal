@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -89,13 +90,19 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "color", defaultValue = "") String color,
-            @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged )            
-             
+            @RequestParam(required = false, value = "ids") String ids,
+            @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged )
+
             throws Exception {
 
         FilterBoundingBox bbox = null;
         //				FilterBoundingBox
         //				.attemptParseFromJSON(bboxJson);
+
+        List<String> boreholeIdentifiers = null;
+        if (ids != null && !ids.isEmpty()) {
+            boreholeIdentifiers = Arrays.asList(ids.split(","));
+        }
 
         List<String> hyloggerBoreholeIDs = null;
         // AUS-2445
@@ -116,10 +123,10 @@ public class SF0BoreholeController extends BasePortalController {
         //		}
 
         String filter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, null);
+                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, boreholeIdentifiers, null);
 
         Boolean justNVCL = showNoneHylogged;
-        
+
         String hyloggerFilter = this.boreholeService.getFilter(boreholeName,
                 custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
                 hyloggerBoreholeIDs, justNVCL);
@@ -139,23 +146,23 @@ public class SF0BoreholeController extends BasePortalController {
         styleStream.close();
         outputStream.close();
     }
-    
+
     /**
      * This controller method is for forcing the internal cache of GsmlpNameSpaceTable to invalidate and update.
-     * 
+     *
      * @return
-     */    
+     */
 
     @RequestMapping("/updateGsmlpNSCache.do")
     public ModelAndView updateGsmlpNSCache() throws Exception {
         try {
             if (gsmlpNameSpaceTable != null )
-                gsmlpNameSpaceTable.clearCache();                
+                gsmlpNameSpaceTable.clearCache();
             return generateJSONResponseMAV(true);
         } catch (Exception e) {
             log.warn(String.format("Error updating GsmlpNS cache: %1$s", e));
             log.debug("Exception:", e);
             return generateJSONResponseMAV(false);
         }
-    }    
+    }
 }

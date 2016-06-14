@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SF0BoreholeFilter extends BoreholeFilter {
 	protected Boolean justNVCL;
+	protected List<String> identifiers;
     // ----------------------------------------------------------- Constructors
 
     public SF0BoreholeFilter() {
@@ -25,9 +26,10 @@ public class SF0BoreholeFilter extends BoreholeFilter {
         super(null, null, null, null, null);
     }
 
-    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,List<String> ids,  Boolean justNVCL) {
+    public SF0BoreholeFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,List<String> ids, List<String> identifiers,  Boolean justNVCL) {
         super(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids);
         this.justNVCL = justNVCL;
+        this.identifiers = identifiers;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -101,11 +103,24 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                     .generateOrComparisonFragment(idFragments
                             .toArray(new String[idFragments.size()])));
         }
-        
+
+        if (this.identifiers != null && !this.identifiers.isEmpty()) {
+            List<String> compareFragments = new ArrayList<String>();
+            for (String identifier : identifiers) {
+                if (identifier != null && identifier.length() > 0) {
+                    compareFragments.add(this.generatePropertyIsEqualToFragment("gsmlp:identifier", identifier));
+                }
+            }
+
+            parameterFragments.add(this
+                    .generateOrComparisonFragment(compareFragments
+                            .toArray(new String[compareFragments.size()])));
+        }
+
         if (this.justNVCL != null && this.justNVCL==true) {
         	parameterFragments.add(this.generatePropertyIsEqualToFragment("gsmlp:nvclCollection", "true"));
         }
-        
+
         return this.generateAndComparisonFragment(this
                 .generateAndComparisonFragment(parameterFragments
                         .toArray(new String[parameterFragments.size()])));

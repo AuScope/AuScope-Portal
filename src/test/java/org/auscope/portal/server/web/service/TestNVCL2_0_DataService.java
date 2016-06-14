@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpRequestBase;
-import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
@@ -37,13 +36,12 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
 
     @Before
     public void setup() {
-        final PortalPropertyPlaceholderConfigurer mockProperties = context.mock(PortalPropertyPlaceholderConfigurer.class);
 
         context.checking(new Expectations() {{
-            allowing(mockProperties).resolvePlaceholder("HOST.nvclAnalyticalServices.url");will(returnValue(ANALYTICAL_SERVICES_URL));
+
         }});
 
-        dataService = new NVCL2_0_DataService(mockServiceCaller, mockMethodMaker, mockProperties);
+        dataService = new NVCL2_0_DataService(mockServiceCaller, mockMethodMaker, ANALYTICAL_SERVICES_URL);
     }
 
     /**
@@ -303,7 +301,7 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
     @Test
     public void testGetProcessingJobResults() throws Exception {
         final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_getAnalyticalJobResultsResponse.json");
-        final String id = "dae39b22716dd89255e76badb6b37193";
+        final String id = "a015180de276f01fc146e7093dbe4389";
 
         context.checking(new Expectations() {{
                 oneOf(mockMethodMaker).getProcessingJobResults(ANALYTICAL_SERVICES_URL, id);will(returnValue(mockMethod));
@@ -313,15 +311,17 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         AnalyticalJobResults results = dataService.getProcessingResults(id);
         Assert.assertNotNull(results);
 
-        Assert.assertEquals("dae39b22716dd89255e76badb6b37193", results.getJobId());
+        Assert.assertEquals("a015180de276f01fc146e7093dbe4389", results.getJobId());
         Assert.assertEquals("foo@bar.com", results.getEmail());
-        Assert.assertEquals("test001", results.getJobDescription());
+        Assert.assertEquals("test004", results.getJobDescription());
 
-        Assert.assertEquals(1, results.getPassBoreholes().size());
+        Assert.assertEquals(2, results.getPassBoreholes().size());
         Assert.assertEquals(1, results.getFailBoreholes().size());
-        Assert.assertEquals(0, results.getErrorBoreholes().size());
+        Assert.assertEquals(1, results.getErrorBoreholes().size());
 
-        Assert.assertEquals("http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/WTB5", results.getPassBoreholes().get(0));
-        Assert.assertEquals("http://nvclwebservices.vm.csiro.au/resource/feature/CSIRO/borehole/150390", results.getFailBoreholes().get(0));
+        Assert.assertEquals("http://example/id1", results.getPassBoreholes().get(0));
+        Assert.assertEquals("http://example/id2", results.getPassBoreholes().get(1));
+        Assert.assertEquals("http://example/id3", results.getFailBoreholes().get(0));
+        Assert.assertEquals("http://example/id4", results.getErrorBoreholes().get(0));
     }
 }

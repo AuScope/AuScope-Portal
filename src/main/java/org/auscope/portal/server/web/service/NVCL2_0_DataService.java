@@ -21,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
@@ -36,6 +35,7 @@ import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse
 import org.auscope.portal.server.domain.nvcldataservice.TrayThumbNailResponse;
 import org.auscope.portal.server.web.NVCL2_0_DataServiceMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -54,10 +54,10 @@ public class NVCL2_0_DataService {
     @Autowired
     public NVCL2_0_DataService(HttpServiceCaller httpServiceCaller,
             NVCL2_0_DataServiceMethodMaker nvclMethodMaker,
-            PortalPropertyPlaceholderConfigurer properties) {
+            @Value("${HOST.nvclAnalyticalServices.url}") String analyticalServicesUrl) {
         this.nvclMethodMaker = nvclMethodMaker;
         this.httpServiceCaller = httpServiceCaller;
-        this.analyticalServicesUrl = properties.resolvePlaceholder("HOST.nvclAnalyticalServices.url");
+        this.analyticalServicesUrl = analyticalServicesUrl;
     }
 
 

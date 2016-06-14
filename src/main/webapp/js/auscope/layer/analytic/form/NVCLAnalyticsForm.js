@@ -366,6 +366,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         listeners: {
                             statusselect: Ext.bind(function(panel, rec) {
                                 this._loadFilterForJob(rec.get('jobId'));
+                                popup.close();
+                                this.close();
                             }, this)
                         }
                     }]
@@ -394,7 +396,16 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     return;
                 }
 
-                console.log("TODO - Add ", data.passBoreholes, ' to ', this.layer);
+                if (Ext.isEmpty(data) || Ext.isEmpty(data[0].passBoreholes)) {
+                    Ext.Msg.alert('No Data', 'No boreholes matched your query.');
+                    return;
+                }
+
+                this.layer.get('filterer').setParameters({
+                    ids: data[0].passBoreholes.join(','),
+                    nvclJobName: data[0].jobDescription
+                }, false);
+                portal.map.openlayers.ActiveLayerManager.addLayer(this.layer);
             }
         });
     },
@@ -408,6 +419,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         //Build up our parameters for job submission
         var params = {};
         if (this.layer) {
+            console.log('filterer:', this.layer.get('filterer').getParameters());
+            console.log('form:', this.layer.get('filterForm').getValues());
             params = this.layer.get('filterer').getParameters();
 
             var wfsUrls = [];

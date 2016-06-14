@@ -25,7 +25,7 @@ Ext.define('auscope.layer.analytic.form.nvcl.AnalyticalJobStatusPanel', {
 
         Ext.apply(cfg, {
             columns: [
-                {text: 'Name', dataIndex: 'jobDescription', flex: 1},
+                {text: 'Name', dataIndex: 'jobDescription', flex: 1, renderer: this._nameRenderer},
                 {
                     xtype: 'clickcolumn',
                     text: 'Status',
@@ -36,10 +36,31 @@ Ext.define('auscope.layer.analytic.form.nvcl.AnalyticalJobStatusPanel', {
                     }
                 }],
             hideHeaders: true,
-            store: store
+            store: store,
+            buttons: [{
+                iconCls: 'add',
+                text: 'Show results on map',
+                scope: this,
+                handler: function() {
+                    var selection = this.getSelection();
+                    if (Ext.isEmpty(selection)) {
+                        return;
+                    }
+
+                    this.fireEvent('statusselect', this, selection[0]);
+                }
+            }]
         });
 
         this.callParent(arguments);
+    },
+
+    _nameRenderer: function(value, md, record) {
+        if (!Ext.isEmpty(record.get('jobUrl'))) {
+            return '<a href="' + record.get('jobUrl') + '" target="_blank">' + value + '</a>';
+        } else {
+            return value;
+        }
     },
 
     _statusClick: function(col, record) {
