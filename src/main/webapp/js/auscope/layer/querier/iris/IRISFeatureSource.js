@@ -8,24 +8,21 @@ Ext.define('auscope.layer.querier.iris.IRISFeatureSource', {
             networkCode,
             stationCode,
             callback) {
-        
+
         var me = this;
-        Ext.Ajax.request({
+        portal.util.Ajax.request({
             url : 'getStationChannels.do',
             params : {
                 serviceUrl : serviceUrl,
                 networkCode : networkCode,
-                stationCode : stationCode 
+                stationCode : stationCode
             },
-            callback : function(options, success, response) {
-                var jsonResponse;
-                // Fail if the ajax was unsuccessful or we can't decode the JSON:
-                // notice assignment side-effect.
-                if (!success || !(jsonResponse = Ext.JSON.decode(response.responseText)).success) {
+            callback : function(success, data) {.
+                if (!success) {
                     callback(false, []);
                 }
                 else {
-                    callback(true, jsonResponse.data);
+                    callback(true, data);
                 }
             }
         });

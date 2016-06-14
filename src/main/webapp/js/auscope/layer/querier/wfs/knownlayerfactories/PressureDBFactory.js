@@ -16,34 +16,30 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
     },
 
     retrieveAvailableOM : function(form, boreholeId, serviceUrl) {
-        Ext.Ajax.request({
+        portal.util.Ajax.request({
             url : 'pressuredb-getAvailableOM.do',
             params : {
                 wellID : boreholeId,
                 serviceUrl : serviceUrl
             },
             scope : this,
-            success : function(response) {
-                var responseObj = Ext.JSON.decode(response.responseText);
+            success : function(data) {
+                var availableOmResponse = data[0];
 
-                if (responseObj && responseObj.success) {
-                    var availableOmResponse = responseObj.data[0];
+                //Update our form based on our response
+                var temperatureCbGroup = form.getComponent('temperature');
+                var salinityCbGroup = form.getComponent('salinity');
+                var pressureCbGroup = form.getComponent('pressure');
 
-                    //Update our form based on our response
-                    var temperatureCbGroup = form.getComponent('temperature');
-                    var salinityCbGroup = form.getComponent('salinity');
-                    var pressureCbGroup = form.getComponent('pressure');
+                temperatureCbGroup.getComponent('temperature').setDisabled(!availableOmResponse.temperatureT);
 
-                    temperatureCbGroup.getComponent('temperature').setDisabled(!availableOmResponse.temperatureT);
+                salinityCbGroup.getComponent('total-dissolved-solids').setDisabled(!availableOmResponse.salinityTds);
+                salinityCbGroup.getComponent('nacl-concentration').setDisabled(!availableOmResponse.salinityNacl);
+                salinityCbGroup.getComponent('cl-concentration').setDisabled(!availableOmResponse.salinityCl);
 
-                    salinityCbGroup.getComponent('total-dissolved-solids').setDisabled(!availableOmResponse.salinityTds);
-                    salinityCbGroup.getComponent('nacl-concentration').setDisabled(!availableOmResponse.salinityNacl);
-                    salinityCbGroup.getComponent('cl-concentration').setDisabled(!availableOmResponse.salinityCl);
-
-                    pressureCbGroup.getComponent('rock-formation-test').setDisabled(!availableOmResponse.pressureRft);
-                    pressureCbGroup.getComponent('drill-stem-test').setDisabled(!availableOmResponse.pressureDst);
-                    pressureCbGroup.getComponent('formation-interval-test-pressure').setDisabled(!availableOmResponse.pressureFitp);
-                }
+                pressureCbGroup.getComponent('rock-formation-test').setDisabled(!availableOmResponse.pressureRft);
+                pressureCbGroup.getComponent('drill-stem-test').setDisabled(!availableOmResponse.pressureDst);
+                pressureCbGroup.getComponent('formation-interval-test-pressure').setDisabled(!availableOmResponse.pressureFitp);
 
                 form.loadMask.hide();
             }
@@ -58,33 +54,33 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
            graphWidth : 600, // These values are used to set the size of the graph
            graphHeight : 400
        });
-       
+
        // Create an Ext window to house the chart (panel)
        var win = Ext.create('Ext.window.Window', {
            defaults    : { autoScroll:true }, // Enable scrollbars for underlying panel, if it is bigger than the window
            border      : true,
            items       : splot,
            id          : 'rkswWindowPressureDB',
-           layout      : 'fit', 
+           layout      : 'fit',
            maximizable : true,
            modal       : true,
            title       : 'Interactive Plot: ',
            resizable   : true,
            height  : 600, // Height and width of window the houses the graph
-           width   : 1100,           
+           width   : 1100,
            x           : 10,
            y           : 10
        });
        win.show();
-       
+
        splot.mask("Rendering...");
        splot.plot(series, xaxis_name, yaxis_names, yaxis_keys);
-       splot.maskClear();  
-       
+       splot.maskClear();
+
        this.on('close',function(){
            win.close();
        });
-       
+
 
     },
     /**
@@ -225,36 +221,32 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                             }
 
                             if (featuresAdded == 1) {
-                                Ext.Ajax.request({
+                                portal.util.Ajax.request({
                                     url : 'pressuredb-plot.do',
                                     params : params,
                                     scope : this,
-                                    success : function(response) {
-                                        var responseObj = Ext.JSON.decode(response.responseText);
-                                        if (responseObj && responseObj.success) {
-                                            var jsonObj = JSON.parse(responseObj.data);                                        
-                                            var data_bin = {};
-                                            var xaxis_name;
-                                            var yaxis_names = {};
-                                            var yaxis_keys = [];
-                                            var rows = jsonObj.rows;
-                                            var wellid = jsonObj.wellid;
-                                            var feature = jsonObj.feature;
-                                            var x = "depth";
-                                            var y = feature;
-                                            var dataType = "metric";
-                                            data_bin[dataType] = {};
-                                            var metric_name = wellid + '_' + feature;
-                                            data_bin[dataType][metric_name] = [];
-                                            rows.forEach(function(record) {
-                                                data_bin[dataType][metric_name].push({"x":parseFloat(record[x]), "y":parseFloat(record[y])});
-                                            });
-                                            xaxis_name = "Depth";
-                                            yaxis_names={"metric":"Feature"};
-                                            yaxis_keys=["metric"];
-                                            metric_colours={"3814_dst":'#1f77b4'};
-                                            me.genericPlot(data_bin, xaxis_name, yaxis_names, yaxis_keys);
-                                        }
+                                    success : function(data) {
+                                        var data_bin = {};
+                                        var xaxis_name;
+                                        var yaxis_names = {};
+                                        var yaxis_keys = [];
+                                        var rows = data.rows;
+                                        var wellid = data.wellid;
+                                        var feature = data.feature;
+                                        var x = "depth";
+                                        var y = feature;
+                                        var dataType = "metric";
+                                        data_bin[dataType] = {};
+                                        var metric_name = wellid + '_' + feature;
+                                        data_bin[dataType][metric_name] = [];
+                                        rows.forEach(function(record) {
+                                            data_bin[dataType][metric_name].push({"x":parseFloat(record[x]), "y":parseFloat(record[y])});
+                                        });
+                                        xaxis_name = "Depth";
+                                        yaxis_names={"metric":"Feature"};
+                                        yaxis_keys=["metric"];
+                                        metric_colours={"3814_dst":'#1f77b4'};
+                                        me.genericPlot(data_bin, xaxis_name, yaxis_names, yaxis_keys);
                                     }
                                 });
                             } else {
@@ -263,10 +255,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                                     msg: 'You could select one feature only before proceeding with graph plotting.',
                                     icon: Ext.MessageBox.WARNING
                                  });
-                            }                		
- 
+                            }
+
                 	}
-                	
+
                 }]
             }]
         });

@@ -14,7 +14,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     supportsKnownLayer : function(knownLayer) {
         return knownLayer.getId() === 'nvcl-borehole';
     },
-    
+
     /**
      * Routine to start up an interactive plot where you the user can specify the kind of graph, apply smoothing etc.
      * Uses Rickshaw library.
@@ -24,33 +24,33 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
            graphWidth : 600, // These values are used to set the size of the graph
            graphHeight : 300
        });
-       
+
        // Create an Ext window to house the chart (panel)
        var win = Ext.create('Ext.window.Window', {
            defaults    : { autoScroll:true }, // Enable scrollbars for underlying panel, if it is bigger than the window
            border      : true,
            items       : splot,
            id          : 'rkswWindow',
-           layout      : 'fit', 
+           layout      : 'fit',
            maximizable : true,
            modal       : true,
            title       : 'NVCL Interactive Plot: ',
            resizable   : true,
            height  : 700, // Height and width of window the houses the graph
-           width   : 1300,           
+           width   : 1300,
            x           : 10,
            y           : 10
        });
        win.show();
-       
+
        splot.mask("Rendering...");
        splot.plot(series, xaxis_name, yaxis_names, yaxis_keys);
-       splot.maskClear();  
-       
+       splot.maskClear();
+
        this.on('close',function(){
            win.close();
        });
-       
+
 
     },
 
@@ -185,11 +185,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             //Load our vocab string asynchronously
                             var logName = record.get('logName');
                             var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(logName);
-                            Ext.Ajax.request({
+                            portal.util.Ajax.request({
                                 url : vocabsQuery,
                                 logName : logName,
-                                success : function(pData, options) {
-                                    var pResponseCode = pData.status;
+                                callback : function(success, data, message) {
                                     var updateTipText = function(tip, text) {
                                         var tipBody = tip.body.down('.x-autocontainer-innerCt');
                                         if (tipBody) {
@@ -197,22 +196,17 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         }
                                         tip.doLayout();
                                     };
-                                    if(pResponseCode !== 200) {
-                                        updateTipText(tip, 'ERROR: ' + pResponseCode);
-                                        return;
-                                    }
 
-                                    var response = Ext.JSON.decode(pData.responseText);
-                                    if (!response.success) {
-                                        updateTipText(tip, 'ERROR: server returned error');
+                                    if (!success) {
+                                        updateTipText(tip, 'ERROR: ' + message);
                                         return;
                                     }
 
                                     //Update tool tip
-                                    if (response.data.definition && response.data.definition.length > 0) {
-                                        updateTipText(tip, response.data.definition);
-                                    } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
-                                        updateTipText(tip, response.data.scopeNote);
+                                    if (data.definition && data.definition.length > 0) {
+                                        updateTipText(tip, data.definition);
+                                    } else if (data.scopeNote && data.scopeNote.length > 0) {
+                                        updateTipText(tip, data.scopeNote);
                                     } else {
                                         updateTipText(tip, logName);
                                     }
@@ -307,7 +301,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                             logIds[i] =  datasetIds[i].get('logId');
                                         }
                                         // Request plot data from server
-                                        Ext.Ajax.request({
+                                        portal.util.Ajax.request({
                                              url: 'getNVCL2_0_CSVDataBinned.do',
                                              scope : this,
                                              timeout : 60000,
@@ -315,30 +309,29 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                  serviceUrl: nvclDataServiceUrl,
                                                  logIds : logIds
                                              },
-                                             callback : function(options, success, response) {
+                                             callback : function(success, data, message) {
                                                  if (success) {
                                                      // Once we have received the plot data, reformat it into (x,y) values
-                                                     var jsonObj = Ext.JSON.decode(response.responseText);
                                                      var data_bin = new Object;
                                                      var has_data = false;
                                                      var yaxis_labels = new Object;
                                                      var yaxis_keys = [];
-                                                     if ('success' in jsonObj && jsonObj.success==true && jsonObj.data.length>0 ) {
-                                                         jsonObj.data[0].binnedValues.forEach(function(bv) {
+                                                     if (data.length>0 ) {
+                                                         data[0].binnedValues.forEach(function(bv) {
                                                              ["stringValues","numericValues"].forEach(function(dataType) {
                                                                  if (bv.startDepths.length==bv[dataType].length && bv[dataType].length>0) {
                                                                      var metric_name = bv.name;
                                                                      if (!(metric_name in data_bin)) {
                                                                          data_bin[metric_name] = new Object;
                                                                      }
-                                                                     
+
                                                                      bv[dataType].forEach(function(val, idx, arr) {
-                                                                         
+
                                                                          // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
                                                                          if (dataType=="stringValues") {
-                                                                     
+
                                                                              // Using entries(), make a name,value list, then use that to add to 'data_bin[metric_name]'
-                                                                             d3.entries(val).forEach(function(meas) {                                                                                 
+                                                                             d3.entries(val).forEach(function(meas) {
                                                                                  var key=meas.key+"_"+metric_name;
                                                                                  if (!(key in data_bin[metric_name])) {
                                                                                      data_bin[metric_name][key] = [];
@@ -347,11 +340,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                                                          yaxis_keys.push(metric_name);
                                                                                      }
                                                                                  }
-                                                                                 
-                                                                                 // Depth is 'x' and 'y' is our measured value 
+
+                                                                                 // Depth is 'x' and 'y' is our measured value
                                                                                  data_bin[metric_name][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
                                                                                  has_data=true;
-                                                                           
+
                                                                              });
                                                                          } else if (dataType=="numericValues") {
                                                                              if (!(metric_name in data_bin[metric_name])) {
@@ -361,7 +354,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                                                      yaxis_keys.push(metric_name);
                                                                                  }
                                                                              }
-                                                                             // Depth is 'x' and 'y' is our measured value 
+                                                                             // Depth is 'x' and 'y' is our measured value
                                                                              data_bin[metric_name][metric_name].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(val)});
                                                                              has_data=true;
                                                                          }
@@ -370,7 +363,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                              });
                                                          });
                                                      }
-                                                     
+
                                                      // Call 'genericPlot()'
                                                      if (has_data) {
                                                          me.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys);
@@ -378,16 +371,16 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                          Ext.Msg.show({
                                                              title:'No data',
                                                              msg:'Sorry, the selected dataset has no data. Please select a different dataset',
-                                                             buttons: Ext.Msg.OK 
+                                                             buttons: Ext.Msg.OK
                                                          });
                                                      }
-                                                     
+
                                                  } else {
                                                      Ext.Msg.show({
                                                          title:'Error',
                                                          msg:'Failed to load resources',
                                                          buttons: Ext.Msg.OK
-                                                     });                                 
+                                                     });
                                                  }
                                              }
                                         });
@@ -446,11 +439,11 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             }
         });
     },
-    
 
-    
-    
-    
+
+
+
+
 
     /**
      * Shows the NVCL dataset download window for the given dataset (belonging to the selected known layer feature)
