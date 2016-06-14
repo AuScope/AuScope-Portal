@@ -223,7 +223,7 @@
         <constructor-arg name="id" value="ga-geotransects"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="OnshoreSeismicSurveyLines"/>
+                <constructor-arg name="layerName" value="Onshore_Seismic_Surveys"/>
             </bean>
         </constructor-arg>
 
