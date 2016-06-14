@@ -7,10 +7,7 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 
-import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.services.PortalServiceException;
-import org.auscope.portal.core.services.SISSVoc2Service;
-import org.auscope.portal.core.services.responses.vocab.Concept;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.web.service.ErmlVocabService;
 import org.auscope.portal.server.web.service.NvclVocabService;
