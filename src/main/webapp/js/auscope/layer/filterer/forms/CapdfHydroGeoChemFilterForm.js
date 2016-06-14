@@ -34,7 +34,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
          this.parameterCombo = Ext.create('Ext.form.ComboBox', {           
             anchor: '100%',
             itemId: 'aoiParam',
-            disabled :  true,
+            disabled : false,
             fieldLabel: '<span data-qtip="Select the parameter of interest">' + 'Parameter of Interest' + '</span>',
             labelAlign: 'left',
             name: 'poi',
@@ -57,14 +57,24 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             listeners: {
                 select : function(combo, record, eOpts){
                     me.updateMinMaxSlider(record.get('min'),record.get('max'));
+                    if (window.sessionStorage) {
+                        sessionStorage.setItem('capdfHydroGeoChemFilterForm_max', record.get('max'));
+                        sessionStorage.setItem('capdfHydroGeoChemFilterForm_min', record.get('min'));
+                    }
+                },
+                change : function(combo, newValue, oldValue, eOpts){
+                    if (window.sessionStorage && newValue != null) {
+                        sessionStorage.setItem('capdfHydroGeoChemFilterForm_poi', newValue);
+                    }
                 }
+
             }
         });
          
          this.minMaxSlider = Ext.create('Ext.slider.Multi', {           
              anchor: '100%',
              itemId: 'minMaxSlider',
-             disabled :  true,
+             disabled: false,
              fieldLabel: '<span data-qtip="Select the min and max value for color coding">' + 'Min/Max Color Code' + '</span>',
              labelAlign: 'left',
              name: 'minMax',
@@ -72,7 +82,18 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
              values: [25, 50],
              minValue:0,
              maxValue:100,
-             
+             listeners: {
+                 beforerender: function(slider, eOpts) {
+                     if (window.sessionStorage) {
+                         var min = sessionStorage.getItem('capdfHydroGeoChemFilterForm_min');
+                         var max = sessionStorage.getItem('capdfHydroGeoChemFilterForm_max');
+                         if (min != null && max != null) {
+                             me.updateMinMaxSlider(min,max);
+                         }
+                     }
+                     
+                 }
+            }
                                
          });
             
@@ -128,7 +149,19 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                         listeners : {
                             select : function(combo, record, eOpts){
                                 me.updateParameterCombo(record.get('groupValue'));
-                                
+                                if (window.sessionStorage) {
+                                    sessionStorage.setItem('capdfHydroGeoChemFilterForm_upc',record.get('groupValue'));
+                                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
+                                }
+
+                            },
+                            beforerender : function(combo, eOpts ) {
+                                if (window.sessionStorage) {
+                                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_upc');
+                                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
+                                }
+                                me.updateMinMaxSlider('0','100');
+                                me.parameterCombo.setRawValue("");
                             }
                         }
                     },this.parameterCombo, this.minMaxSlider]
@@ -145,7 +178,23 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
         //load our commodity store
         var callingInstance = this;
         groupStore.load( {
-            callback : function() {
+            callback : function(records, operation, success) { 
+                var combo = Ext.ComponentQuery.query('#aoi');
+                if (combo.length>0 && window.sessionStorage) {
+                    var selectedVal = combo[combo.length-1].getValue();
+                                    
+                    // Only update the "Point of Interest" if 'capdfHydroGeoChemFilterForm_poi' has been set
+                    if (selectedVal != null) {                    
+                        me.updateParameterCombo(selectedVal);
+                    } else {
+                        me.parameterCombo.setRawValue("");
+                        if (window.sessionStorage) {
+                            sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
+                        }
+                        me.updateMinMaxSlider('0','100'); 
+                    }
+                }
+
                 //It's very important that once all of our stores are loaded we fire the formloaded event
                 //because we are setting the delayedFormLoading parameter to true in our constructor
                 callingInstance.setIsFormLoaded(true);
@@ -155,6 +204,8 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
     },
     
     
+    // This loads up 'Parameter of Interest' and sets displayed value
+    // It uses 'setRawValue()' to avoid triggering extra callbacks
     updateParameterCombo : function(featureType){
         var aoiParamStore = Ext.create('Ext.data.Store', {
             fields : ['classifier', 'pref_name','min','max'],
@@ -174,31 +225,60 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
         });
         
         this.parameterCombo.setStore(aoiParamStore);
-        this.parameterCombo.setDisabled(false);
         var me = this;
         
-        var myMask = new Ext.LoadMask({
-            msg    : 'Please wait...',
-            target : this.parameterCombo.up('fieldset')
-        });
-
-        myMask.show();
+        // Sometimes the upper fieldset component is not defined yet.
+        var myMask;
+        if (this.parameterCombo.up('fieldset')!=undefined) {
+            myMask = new Ext.LoadMask({
+                msg    : 'Please wait...',
+                target : this.parameterCombo.up('fieldset')
+            });
+            myMask.show();
+        }
         
         aoiParamStore.on('load',function(store, records, successful, eOpts ){
-            myMask.hide();
-            if(successful){
-                me.parameterCombo.setSelection(records[0]);
+            if (myMask!=undefined)
+                myMask.hide();
+            
+            // If there are no 'Parameters of Interest'
+            if (store.getCount()==0) {
+                me.parameterCombo.setRawValue("");
+                if (window.sessionStorage) {
+                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
+                }
+                me.updateMinMaxSlider('0','100');
+                return;
             }
-        })
+        
+            if(successful){
+                if (window.sessionStorage) {
+                    var poi = sessionStorage.getItem('capdfHydroGeoChemFilterForm_poi');
+                    if (poi != null && me.parameterCombo.getStore()!= null && me.parameterCombo.getStore().getCount()>0) {
+                        me.parameterCombo.setRawValue(poi);
+                        return;
+                    }
+                }
+                
+                if (me.parameterCombo.getStore() != null) {
+                    if (records != null) {
+                        me.parameterCombo.setSelection(records[0]);
+                    }
+                }
+            }
+        });
     },
     
     updateMinMaxSlider : function(min,max){
-      var min=parseFloat(min),
-          max=parseFloat(max)
-      this.minMaxSlider.setMinValue(min);
-      this.minMaxSlider.setMaxValue(max);
-      this.minMaxSlider.setValue([min,max],true);
-      this.minMaxSlider.setDisabled(false);
+        var minLimit=parseFloat(min),
+            maxLimit=parseFloat(max);
+      
+        // Set the slider limits
+        this.minMaxSlider.setMinValue(minLimit);
+        this.minMaxSlider.setMaxValue(maxLimit);
+
+        this.minMaxSlider.setValue([minLimit,maxLimit],true);
+
     }
 });
 
