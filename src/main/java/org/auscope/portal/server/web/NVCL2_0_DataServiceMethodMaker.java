@@ -2,6 +2,7 @@ package org.auscope.portal.server.web;
 
 import java.net.URISyntaxException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
@@ -147,7 +148,7 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
         builder.setParameter("value", value);
         builder.setParameter("units", units);
         builder.setParameter("span", Integer.toString(span));
-        builder.setParameter("serviceurls", String.join(",", wfsUrls));
+        builder.setParameter("serviceurls", StringUtils.join(wfsUrls, ','));
         builder.setParameter("filter", wfsFilter);
 
         method.setURI(builder.build());
