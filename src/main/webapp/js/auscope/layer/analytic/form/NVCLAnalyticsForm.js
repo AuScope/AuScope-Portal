@@ -139,7 +139,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             typeAhead: true,
                             allowBlank: false,
                             listeners: {
-                                change: Ext.bind(this._onAlgorithmOutputChange, this)
+                                select: Ext.bind(this._onAlgorithmOutputSelect, this)
                             }
                         },{
                             xtype: 'label',
@@ -285,17 +285,15 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         this.callParent(arguments);
     },
 
-    _onAlgorithmOutputChange: function(combo, newValue, oldValue) {
-        var idx = combo.getStore().find('algorithmId', newValue);
-        var record = combo.getStore().getAt(idx);
+    _onAlgorithmOutputSelect: function(combo, record) {
+        var versionCombo = this.down('#version');
+        versionCombo.setValue(null);
+
+        var versionStore = versionCombo.getStore();
+        versionStore.removeAll();
+
         if (record) {
-            var versionCombo = this.down('#version');
-            versionCombo.setValue(null);
-
-            var versionStore = versionCombo.getStore();
-            versionStore.removeAll();
             versionStore.loadData(record.get('versions'));
-
             if (versionStore.getCount()) {
                 var highestVersion = versionStore.getAt(0);
                 versionCombo.setValue(highestVersion.get('algorithmOutputId'));
