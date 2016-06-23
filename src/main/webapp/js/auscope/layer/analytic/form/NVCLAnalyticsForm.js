@@ -43,8 +43,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         });
 
         var versionsStore = Ext.create('Ext.data.Store', {
-            fields: [{name: 'version', type: 'int'},
-                     {name: 'algorithmOutputId', type: 'int'}],
+            fields: [{name: 'version'},
+                     {name: 'algorithmOutputId'}],
             proxy: {
                 type: 'memory',
                 reader: {
@@ -299,6 +299,15 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                 var highestVersion = versionStore.getAt(0);
                 versionCombo.setValue(highestVersion.get('algorithmOutputId'));
             }
+
+            //Add our "All versions tag"
+            var allOutputIds = record.get('versions').map(function(v) {
+                return v.algorithmOutputId
+            }).join(',');
+            versionStore.add({
+                version: 'All Versions',
+                algorithmOutputId: allOutputIds
+            });
         }
     },
 
@@ -361,7 +370,6 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
 
                 if (!success) {
                     Ext.Msg.alert('Error', 'Unable to check your processing jobs at this time. Please try again later.');
-                    console.log(message);
                     return;
                 }
 
@@ -435,8 +443,6 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         //Build up our parameters for job submission
         var params = {};
         if (this.layer) {
-            console.log('filterer:', this.layer.get('filterer').getParameters());
-            console.log('form:', this.layer.get('filterForm').getValues());
             params = this.layer.get('filterer').getParameters();
 
             var wfsUrls = [];

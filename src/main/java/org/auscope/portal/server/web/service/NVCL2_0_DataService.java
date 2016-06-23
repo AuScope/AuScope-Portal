@@ -398,6 +398,28 @@ public class NVCL2_0_DataService {
         return responseObjs;
     }
 
+    /**
+     * Makes and passes a set of getClassifications requests. The sum total of all responses will
+     * be combined using a union operation (OR operation) and only the distinct class names will be returned
+     * @param serviceUrl
+     * @param algorithmOutputIds
+     * @return
+     * @throws Exception
+     */
+    public List<AlgorithmOutputClassification> getClassifications(String serviceUrl, int[] algorithmOutputIds) throws Exception {
+        if (algorithmOutputIds.length == 1) {
+            return getClassifications(serviceUrl, algorithmOutputIds[0]);
+        }
+
+        Map<String, AlgorithmOutputClassification> distinctClassifications = new HashMap<String, AlgorithmOutputClassification>();
+        for (int algorithmOutputId : algorithmOutputIds) {
+            for (AlgorithmOutputClassification classification : getClassifications(serviceUrl, algorithmOutputId)) {
+                distinctClassifications.put(classification.getClassText(), classification);
+            }
+        }
+
+        return new ArrayList<AlgorithmOutputClassification>(distinctClassifications.values());
+    }
 
     /**
      * Submits a NVCL analytical processing job. Returns true if the remote service reports success, false if it reports failure
@@ -416,8 +438,8 @@ public class NVCL2_0_DataService {
      * @param span
      */
     public boolean submitProcessingJob(String email, String jobName, String[] wfsUrls, String wfsFilter,
-            int algorithmOutputId, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws Exception {
-        HttpRequestBase method = nvclMethodMaker.submitProcessingJob(analyticalServicesUrl, email, jobName, wfsUrls, wfsFilter, algorithmOutputId, classification, startDepth, endDepth, operator, value, units, span);
+            int[] algorithmOutputIds, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.submitProcessingJob(analyticalServicesUrl, email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, classification, startDepth, endDepth, operator, value, units, span);
         String responseText = httpServiceCaller.getMethodResponseAsString(method);
         JSONObject response = JSONObject.fromObject(responseText);
         return response.getString("response").toString().toLowerCase().equals("success");

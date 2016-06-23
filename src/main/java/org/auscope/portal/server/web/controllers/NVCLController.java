@@ -840,12 +840,21 @@ public class NVCLController extends BasePortalController {
      * @return
      */
     @RequestMapping("getNVCLClassifications.do")
-    public ModelAndView getNVCLWFSDownloadStatus(@RequestParam("serviceUrl") String serviceUrl, @RequestParam("algorithmOutputId") int algorithmOutputId) throws Exception {
+    public ModelAndView getNVCLWFSDownloadStatus(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("algorithmOutputId") String rawAlgorithmOutputId) throws Exception {
+
+        String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
+        int[] algorithmOutputIds = new int[algorithmOutputIdStrings.length];
+        for (int i = 0; i < algorithmOutputIds.length; i++) {
+            algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
+        }
+
         try {
-            List<AlgorithmOutputClassification> classifications = dataService2_0.getClassifications(serviceUrl, algorithmOutputId);
+            List<AlgorithmOutputClassification> classifications = dataService2_0.getClassifications(serviceUrl, algorithmOutputIds);
             return generateJSONResponseMAV(true, classifications, "");
         } catch (Exception ex) {
-            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + algorithmOutputId, ex);
+            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + rawAlgorithmOutputId, ex);
             return generateJSONResponseMAV(false);
         }
     }
@@ -868,7 +877,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "bbox") String bboxJson,
 
-            @RequestParam("algorithmOutputId") int algorithmOutputId,
+            @RequestParam("algorithmOutputId") String rawAlgorithmOutputId,
             @RequestParam("classification") String classification,
             @RequestParam("startDepth") int startDepth,
             @RequestParam("endDepth") int endDepth,
@@ -878,12 +887,18 @@ public class NVCLController extends BasePortalController {
             @RequestParam("span") int span)
             throws Exception {
 
+        String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
+        int[] algorithmOutputIds = new int[algorithmOutputIdStrings.length];
+        for (int i = 0; i < algorithmOutputIds.length; i++) {
+            algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
+        }
+
         String filterString = null;
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         filterString = sf0BoreholeService.getFilter(boreholeName, "", dateOfDrillingStart, dateOfDrillingEnd, -1, bbox, null, true);
 
         try {
-            boolean result = this.dataService2_0.submitProcessingJob(email, jobName, wfsUrls, filterString, algorithmOutputId, classification, startDepth, endDepth, operator, value, units, span);
+            boolean result = this.dataService2_0.submitProcessingJob(email, jobName, wfsUrls, filterString, algorithmOutputIds, classification, startDepth, endDepth, operator, value, units, span);
             return generateJSONResponseMAV(result);
         } catch (Exception ex) {
             log.error("Unable to submit processing job: " + ex.getMessage());
