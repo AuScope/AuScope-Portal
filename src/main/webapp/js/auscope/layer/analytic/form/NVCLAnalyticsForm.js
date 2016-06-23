@@ -107,6 +107,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     itemId: 'email',
                     fieldLabel: 'Email',
                     allowBlank: false,
+                    value: this._recoverUserEmail(),
                     anchor: '100%'
                 },{
                     xtype: 'textfield',
@@ -318,6 +319,20 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         }
     },
 
+    _saveUserEmail: function(email) {
+        if (window.localStorage) {
+            localStorage.setItem('auscope-nvcl-analytics-email', email);
+        }
+    },
+
+    _recoverUserEmail: function() {
+        if (window.localStorage) {
+            return localStorage.getItem('auscope-nvcl-analytics-email');
+        } else {
+            return '';
+        }
+    },
+
     _onStatus: function() {
         var formPanel = this.down('form');
         var emailField = formPanel.down('#email');
@@ -327,6 +342,9 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         }
 
         var email = emailField.getValue();
+        this._saveUserEmail(email);
+
+
         var mask = new Ext.LoadMask({
             msg: 'Checking status...',
             target: this
@@ -434,6 +452,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             params.wfsUrl = wfsUrls;
         }
         Ext.apply(params, formPanel.getValues());
+
+        this._saveUserEmail(params.email);
 
         //Submit the job
         var mask = new Ext.LoadMask({
