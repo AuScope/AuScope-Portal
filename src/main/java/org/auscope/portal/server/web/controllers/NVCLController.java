@@ -613,6 +613,31 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
+    
+    /**
+     * Request for mineral colours for NVCL graphs
+     *
+     * @param serviceUrl
+     *          The URL of colour table request
+     * @param logId
+                logId of the dataset
+     *
+     * @return
+     */
+     @RequestMapping("getNVCL2_0_MineralColourTable.do")
+     public ModelAndView getNVCL2_0_MineralColourTable(@RequestParam("serviceUrl") String serviceUrl,
+                                            @RequestParam("logIds") String[] logIds) throws Exception {
+        //Make our request
+        try {
+            String responseStr = dataService2_0.getNVCL2_0_MineralColourTable(serviceUrl, logIds);
+            return generateJSONResponseMAV(true, responseStr, "");
+
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting colour table for logId '%1$s' from %2$s: %3$s", logIds, serviceUrl, ex));
+            log.debug("Exception:", ex);
+            return generateJSONResponseMAV(false);
+        }                               
+     }
 
     /**
      * Proxies a NVCL TSG download request. Writes directly to the HttpServletResponse
