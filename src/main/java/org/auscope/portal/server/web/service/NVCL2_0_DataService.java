@@ -42,6 +42,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import net.sf.json.JSONObject;
+import net.sf.json.JSONArray;
+
 import au.com.bytecode.opencsv.CSVReader;
 
 @Service
@@ -256,6 +259,48 @@ public class NVCL2_0_DataService {
 
         return binnedResponse;
     }
+        
+    /**
+     * Given logIds, convert classifications to a set of colour tables, indexed on logName
+     * Each colour table uses RGB hex colour strings, indexed on mineral name
+     *
+     * @param serviceUrl
+     * @param logIds
+     * @return string of colour tables in JSON format
+     * @throws Exception
+     */
+    
+    public String getNVCL2_0_MineralColourTable(String serviceUrl, String[] logIds) throws Exception {
+        JSONObject outObj = new JSONObject();
+        for (String logId : logIds) {
+            HttpRequestBase method = nvclMethodMaker.getGetClassificationsMethod(serviceUrl, logId);
+            String httpResponseStr = httpServiceCaller.getMethodResponseAsString(method);
+            JSONObject inObj = JSONObject.fromObject(httpResponseStr);
+            if (inObj.has("classifications")) {
+                JSONArray jsonClassList = inObj.getJSONArray("classifications");
+                JSONObject colourTable = new JSONObject();
+                for (int i = 0; i < jsonClassList.size(); i++)
+                {
+                    String mineralName = jsonClassList.getJSONObject(i).getString("classText");
+                    String bgrColour = jsonClassList.getJSONObject(i).getString("colour");
+                    String hexColourStr = BGRColorToHexColorStr(Integer.parseInt(bgrColour));
+                    colourTable.element(mineralName, hexColourStr);
+                }
+                outObj.element(logId, colourTable);
+            }
+        }
+        return outObj.toString();
+    }
+    
+    
+    /**
+     * Convert BGR integers to Javascript-style hex #RRGGBB strings
+     * @param BGRColorNumber
+     * @returns RGB string
+     */
+    private String BGRColorToHexColorStr(int BGRColorNumber) {
+        return String.format("#%1$02x%2$02x%3$02x", (BGRColorNumber & 255), (BGRColorNumber & 65280) >> 8, (BGRColorNumber >> 16));
+    } 
 
     public TrayThumbNailResponse getTrayThumbNail(String dataSetId, String serviceUrl, String logId,
             Integer width, Integer startSampleNo, Integer endSampleNo) throws Exception {

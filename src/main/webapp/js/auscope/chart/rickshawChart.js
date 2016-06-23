@@ -187,7 +187,7 @@ Ext.define('auscope.chart.rickshawChart', {
                                                       '#bcbd22','#17becf','#393b79','#5254a3','#6b6ecf','#637939','#8ca252','#b5cf6b',
                                                       '#8c6d31','#bd9e39','#e7ba52','#843c39','#ad494a','#d6616b','#e7969c','#7b4173',
                                                       '#a55194','#ce6dbd','#de9ed6']; return scale[colour_idx%scale.length]; };
-            
+        
         var graph_list = [];
             
         // Draw each graph
@@ -197,29 +197,26 @@ Ext.define('auscope.chart.rickshawChart', {
             var seriesX = [];
             var index=0;
 
-            if (metric_colours==undefined) {
-                // Use the built-in strong colours
-                d3.keys(data_bin[yaxis_key]).forEach(function(currentValue) {
+            // If defined, use the colours in 'metric_colours', if colour can be found else the local colour table
+            d3.keys(data_bin[yaxis_key]).forEach(function(currentValue) {
+                if (metric_colours && currentValue in metric_colours) {
+                    // Supplied colour table
+                    var X = { color: metric_colours[currentValue], 
+                        data: data_bin[yaxis_key][currentValue].sort(function(a,b) { return d3.ascending(a.x,b.x); }),
+                        name: currentValue,
+                        scale: scales[yaxis_key]
+                    };
+                } else { 
+                    // local colour table
                     var X = { color: colorScale(index), 
                         data: data_bin[yaxis_key][currentValue].sort(function(a,b) { return d3.ascending(a.x,b.x); }),
                         name: currentValue,
                         scale: scales[yaxis_key]
                     };
-                    seriesX.push(X);
-                    index+=1;
-                });
-            } else {
-                // Use the colours supplied
-                d3.keys(data_bin[yaxis_key]).forEach(function(currentValue) {
-                    var X = { color: metric_colours[currentValue], 
-                         data: data_bin[yaxis_key][currentValue].sort(function(a,b) { return d3.ascending(a.x,b.x); }),
-                         name: currentValue,
-                         scale: scales[yaxis_key]
-                    };
-                    seriesX.push(X);
-                    index+=1;
-                });
-            }
+                }
+                seriesX.push(X);
+                index+=1;
+            });
         
             // Instantiate our graph!
             var graph = new Rickshaw.Graph( {

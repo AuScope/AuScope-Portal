@@ -128,6 +128,32 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
     }
 
     /**
+     * Generates a method for making a request for a classifications (list of colours and mineral names)
+     * 
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param logId
+     *            The logId of the dataset
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getGetClassificationsMethod(String serviceUrl, String logId) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getClassifications.html"));
+
+        //set all of the parameters
+        builder.setParameter("logid", logId);
+        builder.setParameter("outputformat","json");
+
+        //attach them to the method
+        method.setURI(builder.build());
+
+        return method;
+    }
+
+    /**
      * Generates a method for submitting an NVCL processing job for a given (user) email
      *
      * @return
