@@ -134,13 +134,18 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
      * @throws URISyntaxException
      */
     public HttpRequestBase submitProcessingJob(String serviceUrl, String email, String jobName, String[] wfsUrls, String wfsFilter,
-            int[] algorithmOutputIds, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
+            int[] algorithmOutputIds, String logName, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
         HttpGet method = new HttpGet();
 
         URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "submitNVCLAnalyticalJob.do"));
         builder.setParameter("email", email);
         builder.setParameter("jobname", jobName);
-        builder.setParameter("algorithmoutputid", StringUtils.join(algorithmOutputIds, ','));
+        if (algorithmOutputIds != null && algorithmOutputIds.length > 0) {
+            builder.setParameter("algorithmoutputid", StringUtils.join(algorithmOutputIds, ','));
+        }
+        if (StringUtils.isNotEmpty(logName)) {
+            builder.setParameter("logname", logName);
+        }
         builder.setParameter("classification", classification);
         builder.setParameter("startdepth", Integer.toString(startDepth));
         builder.setParameter("enddepth", Integer.toString(endDepth));

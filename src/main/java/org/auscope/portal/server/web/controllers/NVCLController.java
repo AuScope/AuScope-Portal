@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
@@ -877,7 +878,9 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "bbox") String bboxJson,
 
-            @RequestParam("algorithmOutputId") String rawAlgorithmOutputId,
+            @RequestParam(required = false, value = "algorithmOutputId") String rawAlgorithmOutputId,
+            @RequestParam(required = false, value = "logName") String logName,
+
             @RequestParam("classification") String classification,
             @RequestParam("startDepth") int startDepth,
             @RequestParam("endDepth") int endDepth,
@@ -887,10 +890,18 @@ public class NVCLController extends BasePortalController {
             @RequestParam("span") int span)
             throws Exception {
 
-        String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
-        int[] algorithmOutputIds = new int[algorithmOutputIdStrings.length];
-        for (int i = 0; i < algorithmOutputIds.length; i++) {
-            algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
+        if ((StringUtils.isEmpty(rawAlgorithmOutputId) && StringUtils.isEmpty(logName)) ||
+            StringUtils.isNotEmpty(rawAlgorithmOutputId) && StringUtils.isNotEmpty(logName)) {
+            return generateJSONResponseMAV(false, null, "Must define exactly one of algorithmOutputId or logName");
+        }
+
+        int[] algorithmOutputIds = null;
+        if (StringUtils.isNotEmpty(rawAlgorithmOutputId)) {
+            String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
+            algorithmOutputIds = new int[algorithmOutputIdStrings.length];
+            for (int i = 0; i < algorithmOutputIds.length; i++) {
+                algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
+            }
         }
 
         String filterString = null;
@@ -898,7 +909,7 @@ public class NVCLController extends BasePortalController {
         filterString = sf0BoreholeService.getFilter(boreholeName, "", dateOfDrillingStart, dateOfDrillingEnd, -1, bbox, null, true);
 
         try {
-            boolean result = this.dataService2_0.submitProcessingJob(email, jobName, wfsUrls, filterString, algorithmOutputIds, classification, startDepth, endDepth, operator, value, units, span);
+            boolean result = this.dataService2_0.submitProcessingJob(email, jobName, wfsUrls, filterString, algorithmOutputIds, logName, classification, startDepth, endDepth, operator, value, units, span);
             return generateJSONResponseMAV(result);
         } catch (Exception ex) {
             log.error("Unable to submit processing job: " + ex.getMessage());

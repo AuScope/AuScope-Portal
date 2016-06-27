@@ -299,6 +299,7 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         final String email = "foo@bar.com";
         final String jobName = "myjobname";
         final String classification = "Muscovite";
+        final String logName = null;
         final Integer startDepth = 0;
         final Integer endDepth = 999;
         final String logicalOp = "gt";
@@ -308,11 +309,11 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         final String wfsFilter = "<ogc:Filter><PropertyIsEqualTo><PropertyName>gsmlp:nvclCollection</PropertyName><Literal>true</Literal></PropertyIsEqualTo></ogc:Filter>";
 
         context.checking(new Expectations() {{
-                oneOf(mockMethodMaker).submitProcessingJob(ANALYTICAL_SERVICES_URL, email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, classification, startDepth, endDepth, logicalOp, value, units, span);will(returnValue(mockMethod));
+                oneOf(mockMethodMaker).submitProcessingJob(ANALYTICAL_SERVICES_URL, email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, logName, classification, startDepth, endDepth, logicalOp, value, units, span);will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
         }});
 
-        boolean result = dataService.submitProcessingJob(email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, classification, startDepth, endDepth, logicalOp, value, units, span);
+        boolean result = dataService.submitProcessingJob(email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, logName, classification, startDepth, endDepth, logicalOp, value, units, span);
         Assert.assertTrue(result);
     }
 

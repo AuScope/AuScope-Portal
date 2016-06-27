@@ -5,7 +5,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
     extend : 'Ext.window.Window',
 
     statics: {
-        NVCL_DATA_SERVICE : 'http://nvclwebservices.vm.csiro.au/NVCLDataServices'
+        NVCL_DATA_SERVICE : 'http://nvclwebservices.vm.csiro.au/NVCLDataServices',
+        NON_STANDARD_ALGORITHM_ID : -9999
     },
 
     layer : null,
@@ -17,7 +18,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         this.layer=cfg.layer;
         this.map=cfg.map;
 
-        var width = Math.min(window.screen.width - 100, 700);
+        var fieldWidth = 335;
         var defaults = {
             labelWidth: 150,
             padding: 0
@@ -39,7 +40,18 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     rootProperty: 'data'
                 }
             },
-            autoLoad: true
+            autoLoad: true,
+            sorters: ["algorithmId"],
+            listeners: {
+                load: function(algorithmOutputStore, records, success) {
+                    algorithmOutputStore.add({
+                        algorithmId: auscope.layer.analytic.form.NVCLAnalyticsForm.NON_STANDARD_ALGORITHM_ID,
+                        algorithmName: 'Non Standard Algorithm',
+                        outputName: 'Non Standard Algorithm',
+                        versions: []
+                    });
+                }
+            }
         });
 
         var versionsStore = Ext.create('Ext.data.Store', {
@@ -88,8 +100,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
 
         Ext.apply(cfg, {
             title: 'National Virtual Core Library Analytics',
-            height: 700,
-            width: width,
+            height: 750,
+            width: 700,
             layout: 'fit',
             padding: '10',
             border: false,
@@ -139,11 +151,13 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             queryMode: 'local',
                             typeAhead: true,
                             allowBlank: false,
+                            width: fieldWidth,
                             listeners: {
                                 select: Ext.bind(this._onAlgorithmOutputSelect, this)
                             }
                         },{
                             xtype: 'label',
+                            itemId: 'versionlabel',
                             text: 'version',
                             margin: '3 5 0 5'
                         },{
@@ -165,14 +179,33 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         xtype: 'combo',
                         name: 'classification',
                         fieldLabel: 'Classification',
-                        itemId: 'classification',
+                        itemId: 'classification-combo',
                         store: classificationStore,
                         displayField: 'classText',
                         valueField: 'classText',
                         forceSelection: true,
                         queryMode: 'local',
                         allowBlank: false,
-                        typeAhead: true
+                        typeAhead: true,
+                        width: fieldWidth
+                    },{
+                        xtype: 'textfield',
+                        name: 'classification',
+                        itemId: 'classification-text',
+                        fieldLabel: 'Classification',
+                        allowBlank: false,
+                        width: fieldWidth,
+                        hidden: true,
+                        disabled: true
+                    },{
+                        xtype: 'textfield',
+                        fieldLabel: 'Log Name',
+                        itemId: 'logname',
+                        name: 'logName',
+                        allowBlank: false,
+                        width: fieldWidth,
+                        hidden: true,
+                        disabled: true
                     }]
                 },{
                     xtype: 'container',
@@ -192,7 +225,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             fieldLabel: 'Region of interest',
                             decimalPrecision: 0,
                             allowBlank: false,
-                            value: 0
+                            value: 0,
+                            width: fieldWidth
                         },{
                             xtype: 'label',
                             text: ' metres to ',
@@ -217,7 +251,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         valueField: 'value',
                         forceSelection: true,
                         allowBlank: false,
-                        queryMode: 'local'
+                        queryMode: 'local',
+                        width: fieldWidth
                     },{
                         xtype: 'fieldset',
                         layout: 'hbox',
@@ -228,7 +263,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             name: 'value',
                             fieldLabel: 'Value',
                             allowBlank: false,
-                            decimalPrecision: 5
+                            decimalPrecision: 5,
+                            width: fieldWidth
                         },{
                             xtype: 'label',
                             text: ' ',
@@ -255,7 +291,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             fieldLabel: 'Evaluated over a span of',
                             decimalPrecision: 0,
                             allowBlank: false,
-                            value: 1
+                            value: 1,
+                            width: fieldWidth
                         },{
                             xtype: 'label',
                             text: 'metres',
@@ -286,6 +323,37 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         this.callParent(arguments);
     },
 
+    _setupNonStandardAlgorithm: function(record) {
+        this.down('#logname').setHidden(false).setDisabled(false);
+        this.down('#classification-text').setHidden(false).setDisabled(false);
+        this.down('#version').setHidden(true).setDisabled(true);
+        this.down('#versionlabel').setHidden(true).setDisabled(true);
+        this.down('#classification-combo').setHidden(true).setDisabled(true);
+    },
+
+    _setupStandardAlgorithm: function(record, versionCombo, versionStore) {
+        this.down('#logname').setHidden(true).setDisabled(true);
+        this.down('#classification-text').setHidden(true).setDisabled(true);
+        this.down('#version').setHidden(false).setDisabled(false);
+        this.down('#versionlabel').setHidden(false).setDisabled(false);
+        this.down('#classification-combo').setHidden(false).setDisabled(false);
+
+        versionStore.loadData(record.get('versions'));
+        if (versionStore.getCount()) {
+            var highestVersion = versionStore.getAt(0);
+            versionCombo.setValue(highestVersion.get('algorithmOutputId'));
+        }
+
+        //Add our "All versions tag"
+        var allOutputIds = record.get('versions').map(function(v) {
+            return v.algorithmOutputId
+        }).join(',');
+        versionStore.add({
+            version: 'All Versions',
+            algorithmOutputId: allOutputIds
+        });
+    },
+
     _onAlgorithmOutputSelect: function(combo, record) {
         var versionCombo = this.down('#version');
         versionCombo.setValue(null);
@@ -294,20 +362,11 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         versionStore.removeAll();
 
         if (record) {
-            versionStore.loadData(record.get('versions'));
-            if (versionStore.getCount()) {
-                var highestVersion = versionStore.getAt(0);
-                versionCombo.setValue(highestVersion.get('algorithmOutputId'));
+            if (record.get('algorithmId') === auscope.layer.analytic.form.NVCLAnalyticsForm.NON_STANDARD_ALGORITHM_ID) {
+                this._setupNonStandardAlgorithm(record);
+            } else {
+                this._setupStandardAlgorithm(record, versionCombo, versionStore);
             }
-
-            //Add our "All versions tag"
-            var allOutputIds = record.get('versions').map(function(v) {
-                return v.algorithmOutputId
-            }).join(',');
-            versionStore.add({
-                version: 'All Versions',
-                algorithmOutputId: allOutputIds
-            });
         }
     },
 
@@ -315,7 +374,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         var idx = combo.getStore().find('algorithmOutputId', newValue);
         var record = combo.getStore().getAt(idx);
         if (record) {
-            var classCombo = this.down('#classification');
+            var classCombo = this.down('#classification-combo');
             classCombo.setValue(null);
 
             var classStore = classCombo.getStore();
