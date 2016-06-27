@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -949,6 +951,40 @@ public class NVCLController extends BasePortalController {
             log.error("Unable to check NVCL processing jobs: " + ex.getMessage());
             log.debug("Exception: ", ex);
             return generateJSONResponseMAV(false);
+        }
+    }
+
+    @RequestMapping("/downloadNVCLProcessingResults.do")
+    public void downloadNVCLProcessingResults(@RequestParam("jobId") String jobId, HttpServletResponse response) throws Exception {
+        AnalyticalJobResults results = this.dataService2_0.getProcessingResults(jobId);
+
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition","inline; filename=nvclanalytics-" + jobId + ".zip;");
+        ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+
+        try{
+            zout.putNextEntry(new ZipEntry("passIds.csv"));
+            for (String id : results.getPassBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.putNextEntry(new ZipEntry("failIds.csv"));
+            for (String id : results.getFailBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.putNextEntry(new ZipEntry("errorIds.csv"));
+            for (String id : results.getErrorBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.finish();
+            zout.flush();
+        } finally {
+            zout.close();
         }
     }
 }

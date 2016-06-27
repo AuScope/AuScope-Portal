@@ -3,6 +3,7 @@ package org.auscope.portal.server.web.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -471,6 +472,11 @@ public class NVCL2_0_DataService {
             status.setTimeStamp(obj.getString("jmstimestamp"));
             status.setMsgId(obj.getString("jmsmsgID"));
             status.setCorrelationId(obj.getString("jmscorrelationID"));
+
+            //Parse the timestamp to milliseconds since Unix Epoch
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+            long timestampMillis = df.parse(status.getTimeStamp()).getTime();
+            status.setTimeStampMillis(timestampMillis);
 
             parsedStatuses.add(status);
         }

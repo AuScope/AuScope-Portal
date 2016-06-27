@@ -17,6 +17,7 @@ public class AnalyticalJobStatus implements Serializable {
     private String timeStamp;
     private String msgId;
     private String correlationId;
+    private long timeStampMillis;
 
     public AnalyticalJobStatus() {
         super();
@@ -51,6 +52,14 @@ public class AnalyticalJobStatus implements Serializable {
     public String getStatus() {
         return status;
     }
+    public long getTimeStampMillis() {
+        return timeStampMillis;
+    }
+
+    public void setTimeStampMillis(long timeStampMillis) {
+        this.timeStampMillis = timeStampMillis;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }

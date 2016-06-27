@@ -441,7 +441,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     modal: true,
                     layout: 'fit',
                     title: 'Previously submitted jobs',
-                    width: 400,
+                    width: 500,
                     height: 200,
                     items: [{
                         xtype: 'analyticaljobstatuspanel',
@@ -451,12 +451,22 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                                 this._loadFilterForJob(rec.get('jobId'));
                                 popup.close();
                                 this.close();
+                            }, this),
+
+                            statusdownload: Ext.bind(function(panel, rec) {
+                                this._downloadJobResults(rec.get('jobId'));
                             }, this)
                         }
                     }]
                 });
                 popup.show();
             }
+        });
+    },
+
+    _downloadJobResults: function(jobId) {
+        portal.util.FileDownloader.downloadFile('downloadNVCLProcessingResults.do', {
+            jobId: jobId
         });
     },
 
