@@ -287,8 +287,8 @@ public class BoreholeService extends BaseWFSService {
         sb.append("<Title>portal-style</Title>");
         sb.append("<Abstract>portal-style</Abstract>");
         sb.append("<IsDefault>1</IsDefault>");
-        sb.append("<FeatureTypeStyle>");
         for (int i = 0; i < filters.size(); i++) {
+            sb.append("<FeatureTypeStyle>");
             sb.append("<Rule>");
             sb.append("<Name>" + names.get(i) + "</Name>");
             sb.append("<Abstract>" + names.get(i) + "</Abstract>");
@@ -308,9 +308,9 @@ public class BoreholeService extends BaseWFSService {
             sb.append("</Graphic>");
             sb.append("</PointSymbolizer>");
             sb.append("</Rule>");
+            sb.append("</FeatureTypeStyle>");
         }
 
-        sb.append("</FeatureTypeStyle>");
         sb.append("</UserStyle>");
         sb.append("</NamedLayer>");
         sb.append("</StyledLayerDescriptor>");

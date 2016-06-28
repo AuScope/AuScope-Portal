@@ -133,14 +133,14 @@ public class SF0BoreholeController extends BasePortalController {
         List<Mark> filterMarks = new ArrayList<Mark>();
         String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         if (StringUtils.isNotEmpty(analyticsJobId)) {
+          //Generate a style for displaying pass/fail/error holes
             AnalyticalJobResults analyticsResults = nvclDataService.getProcessingResults(analyticsJobId);
 
-            //Generate a style for displaying pass/fail/error holes
-            if (!analyticsResults.getPassBoreholes().isEmpty()) {
-                filterNames.add("Pass Boreholes");
-                filterColors.add(color.isEmpty() ? "#2242c7" : color);
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), null));
-                filterMarks.add(Mark.SQUARE);
+            if (!analyticsResults.getErrorBoreholes().isEmpty()) {
+                filterNames.add("Error Boreholes");
+                filterColors.add("#ff0000");
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), null));
+                filterMarks.add(Mark.X);
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
@@ -150,11 +150,11 @@ public class SF0BoreholeController extends BasePortalController {
                 filterMarks.add(Mark.SQUARE);
             }
 
-            if (!analyticsResults.getErrorBoreholes().isEmpty()) {
-                filterNames.add("Error Boreholes");
-                filterColors.add("#ff0000");
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), null));
-                filterMarks.add(Mark.X);
+            if (!analyticsResults.getPassBoreholes().isEmpty()) {
+                filterNames.add("Pass Boreholes");
+                filterColors.add(color.isEmpty() ? "#2242c7" : color);
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), null));
+                filterMarks.add(Mark.SQUARE);
             }
         } else {
             //Generate a Hylogged vs Non Hylogged style
