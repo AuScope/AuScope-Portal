@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.service;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
@@ -42,6 +43,30 @@ import org.w3c.dom.NodeList;
  */
 @Service
 public class BoreholeService extends BaseWFSService {
+
+    /**
+     * Type of SLD Mark
+     * @author Josh Vote (CSIRO)
+     *
+     */
+    public enum Mark {
+        SQUARE("square"),
+        CIRCLE("circle"),
+        TRIANGLE("triangle"),
+        STAR("star"),
+        CROSS("cross"),
+        X("x");
+
+        private final String text;
+        private Mark(final String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return this.text;
+        }
+    }
 
     // -------------------------------------------------------------- Constants
 
@@ -219,7 +244,7 @@ public class BoreholeService extends BaseWFSService {
     }
 
     /**
-     * Generates a broad SLD for symbolising a set of filters
+     * Generates a broad SLD for symbolising a set of filters. Default Mark is Square
      *
      * @param names 1-1 correspondance with filters - the human readable names of each filter
      * @param filters The filters to be symbolised
@@ -228,8 +253,22 @@ public class BoreholeService extends BaseWFSService {
      * @return
      */
     public String getStyle(List<String> names, List<String> filters, List<String> colors, String gsmlpNameSpace) {
-        if (filters.size() != colors.size() || filters.size() != names.size()) {
-            throw new IllegalArgumentException("names/filters/colors must have the same length");
+        return getStyle(names, filters, colors, new ArrayList<Mark>(Collections.nCopies(filters.size(), Mark.SQUARE)), gsmlpNameSpace);
+    }
+
+    /**
+     * Generates a broad SLD for symbolising a set of filters
+     *
+     * @param names 1-1 correspondance with filters - the human readable names of each filter
+     * @param filters The filters to be symbolised
+     * @param colors 1-1 correspondance with filters - The CSS color for each filter to be symbolised with
+     * @param marks 1-1 correspondance with filters - The SLD symbols to use for each filter
+     * @param gsmlpNameSpace
+     * @return
+     */
+    public String getStyle(List<String> names, List<String> filters, List<String> colors, List<Mark> marks, String gsmlpNameSpace) {
+        if (filters.size() != colors.size() || filters.size() != names.size() || filters.size() != marks.size()) {
+            throw new IllegalArgumentException("names/filters/colors/marks must have the same length");
         }
 
         if (gsmlpNameSpace != null && !gsmlpNameSpace.isEmpty()) {
@@ -258,7 +297,7 @@ public class BoreholeService extends BaseWFSService {
             sb.append("<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>");
             sb.append("<Graphic>");
             sb.append("<Mark>");
-            sb.append("<WellKnownName>square</WellKnownName>");
+            sb.append("<WellKnownName>" + marks.get(i).toString() + "</WellKnownName>");
             sb.append("<Fill>");
             sb.append("<CssParameter name=\"fill\">");
             sb.append(colors.get(i));

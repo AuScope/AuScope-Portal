@@ -14,6 +14,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
+import org.auscope.portal.server.web.service.BoreholeService.Mark;
 import org.auscope.portal.server.web.service.NVCL2_0_DataService;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,7 @@ public class SF0BoreholeController extends BasePortalController {
         List<String> filterNames = new ArrayList<String>();
         List<String> filterColors = new ArrayList<String>();
         List<String> filters = new ArrayList<String>();
+        List<Mark> filterMarks = new ArrayList<Mark>();
         String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         if (StringUtils.isNotEmpty(analyticsJobId)) {
             AnalyticalJobResults analyticsResults = nvclDataService.getProcessingResults(analyticsJobId);
@@ -136,26 +138,30 @@ public class SF0BoreholeController extends BasePortalController {
             //Generate a style for displaying pass/fail/error holes
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
-                filterColors.add("#FF0000");
+                filterColors.add(color.isEmpty() ? "#2242c7" : color);
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), null));
+                filterMarks.add(Mark.SQUARE);
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
-                filterColors.add(color.isEmpty() ? "#2242c7" : color);
+                filterColors.add("#8390C6");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), null));
+                filterMarks.add(Mark.SQUARE);
             }
 
             if (!analyticsResults.getErrorBoreholes().isEmpty()) {
                 filterNames.add("Error Boreholes");
-                filterColors.add("#808080");
+                filterColors.add("#ff0000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), null));
+                filterMarks.add(Mark.X);
             }
         } else {
             //Generate a Hylogged vs Non Hylogged style
             filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, null, null));
             filterColors.add(color.isEmpty() ? "#2242c7" : color);
             filterNames.add("Boreholes");
+            filterMarks.add(Mark.SQUARE);
 
             //Not all borehole services support the hylogged attribute
             Boolean justNVCL = showNoneHylogged;
@@ -165,12 +171,13 @@ public class SF0BoreholeController extends BasePortalController {
                         hyloggerBoreholeIDs, justNVCL));
                 filterColors.add("#FF0000");
                 filterNames.add("Hylogged");
+                filterMarks.add(Mark.SQUARE);
             }
         }
 
         response.setContentType("text/xml");
 
-        String style = this.boreholeService.getStyle(filterNames, filters, filterColors, gsmlpNameSpace);
+        String style = this.boreholeService.getStyle(filterNames, filters, filterColors, filterMarks, gsmlpNameSpace);
         ByteArrayInputStream styleStream = new ByteArrayInputStream(style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
