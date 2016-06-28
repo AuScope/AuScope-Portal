@@ -164,7 +164,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                     var loadMask = new Ext.LoadMask(form, { msg: "Please wait..." });
                                     loadMask.show();
 
-                                    Ext.Ajax.request({
+                                    portal.util.Ajax.request({
                                         url : 'getTimeseriesUrl.do',
                                         timeout : 180 * 1000,
                                         method : 'get',
@@ -178,15 +178,14 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
                                             duration : (formValues.days * 86400),
                                             output : formValues.output
                                         },
-                                        callback : function(options, success, response) {
-                                            var jsonResponse  = Ext.JSON.decode(response.responseText);
+                                        callback : function(success, data) {
                                             //window.open(jsonResponse.data, '_blank');
                                             var browserWindow = new portal.util.misc.BrowserWindowWithWarning({
                                                 id : 'irisPopupWarning',
                                                 message : 'Please make sure you have pop-ups enabled in your browser. If you don\'t see anything, check your browser warning for blocked pop-ups.'
                                             });
                                             browserWindow.open(function(){
-                                                window.open(jsonResponse.data, '_blank','status=1');
+                                                window.open(data, '_blank','status=1');
                                             })
                                             loadMask.hide();
                                         }
