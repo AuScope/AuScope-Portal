@@ -225,7 +225,7 @@ public class BoreholeService extends BaseWFSService {
     	String ruleForHylogged = "";
     	if (getGsmlpNameSpace().equals("http://xmlns.geosciml.org/geosciml-portrayal/4.0") 
     			&& hyloggerFilter.isEmpty() == false ) { //For NVCL logged data, apply gsmlp:nvclCollection check, and put red colour.
-        	ruleForHylogged = "<Rule>" +
+        	ruleForHylogged = "</FeatureTypeStyle><FeatureTypeStyle><Rule>" +
 				"<Name>Hylogged</Name>" +
 				"<Title>Red Square</Title>" +
 				"<Abstract>portal-style</Abstract>" +

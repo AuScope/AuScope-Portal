@@ -12,6 +12,9 @@ import java.util.Map.Entry;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,6 +23,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.util.DOMUtil;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputResponse;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmVersion;
+import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
+import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobStatus;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse.Bin;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
@@ -27,6 +35,7 @@ import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse
 import org.auscope.portal.server.domain.nvcldataservice.TrayThumbNailResponse;
 import org.auscope.portal.server.web.NVCL2_0_DataServiceMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -40,12 +49,15 @@ public class NVCL2_0_DataService {
     private final Log log = LogFactory.getLog(getClass());
     private NVCL2_0_DataServiceMethodMaker nvclMethodMaker;
     private HttpServiceCaller httpServiceCaller;
+    private String analyticalServicesUrl;
 
     @Autowired
     public NVCL2_0_DataService(HttpServiceCaller httpServiceCaller,
-            NVCL2_0_DataServiceMethodMaker nvclMethodMaker) {
+            NVCL2_0_DataServiceMethodMaker nvclMethodMaker,
+            @Value("${HOST.nvclAnalyticalServices.url}") String analyticalServicesUrl) {
         this.nvclMethodMaker = nvclMethodMaker;
         this.httpServiceCaller = httpServiceCaller;
+        this.analyticalServicesUrl = analyticalServicesUrl;
     }
 
 
@@ -303,4 +315,184 @@ public class NVCL2_0_DataService {
         return responseObjs;
     }
 
+    /**
+     * Makes and parses an NVCL getAlgorithms request.
+     * @param serviceUrl
+     * @return
+     */
+    public List<AlgorithmOutputResponse> getAlgorithms(String serviceUrl) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.getAlgorithms(serviceUrl);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        Document responseDoc = DOMUtil.buildDomFromString(responseText, false);
+
+        XPathExpression expr = DOMUtil.compileXPathExpr("Algorithms/algorithms");
+        XPathExpression exprOutputs = DOMUtil.compileXPathExpr("outputs");
+        XPathExpression exprVersions = DOMUtil.compileXPathExpr("versions");
+        XPathExpression exprVersion = DOMUtil.compileXPathExpr("version");
+        XPathExpression exprAlgorithmOutputId = DOMUtil.compileXPathExpr("algorithmoutputID");
+        NodeList algorithmNodeList = (NodeList) expr.evaluate(responseDoc, XPathConstants.NODESET);
+
+        XPathExpression exprAlgorithmId = DOMUtil.compileXPathExpr("algorithmID");
+        XPathExpression exprName = DOMUtil.compileXPathExpr("name");
+
+        ArrayList<AlgorithmOutputResponse> responseObjs = new ArrayList<AlgorithmOutputResponse>();
+
+        for (int i = 0; i < algorithmNodeList.getLength(); i++) {
+            Node node = algorithmNodeList.item(i);
+
+            int algorithmId = Integer.parseInt((String) exprAlgorithmId.evaluate(node, XPathConstants.STRING));
+            String algorithmName = (String) exprName.evaluate(node, XPathConstants.STRING);
+
+            NodeList outputNodeList = (NodeList) exprOutputs.evaluate(node, XPathConstants.NODESET);
+            for (int j = 0; j < outputNodeList.getLength(); j++) {
+                Node outputNode = outputNodeList.item(j);
+                String outputName = (String) exprName.evaluate(outputNode, XPathConstants.STRING);
+
+                NodeList versionNodeList = (NodeList) exprVersions.evaluate(outputNode, XPathConstants.NODESET);
+                ArrayList<AlgorithmVersion> versions = new ArrayList<AlgorithmVersion>(versionNodeList.getLength());
+                for (int k = 0; k < versionNodeList.getLength(); k++) {
+                    Node versionNode = versionNodeList.item(k);
+
+                    int versionId = Integer.parseInt((String) exprVersion.evaluate(versionNode, XPathConstants.STRING));
+                    int algorithmOutputId = Integer.parseInt((String) exprAlgorithmOutputId.evaluate(versionNode, XPathConstants.STRING));
+
+                    versions.add(new AlgorithmVersion(algorithmOutputId, versionId));
+                }
+
+                responseObjs.add(new AlgorithmOutputResponse(algorithmId, algorithmName, outputName, versions));
+            }
+        }
+
+        return responseObjs;
+    }
+
+    /**
+     * Makes and parses a getClassifications request
+     * @param serviceUrl
+     * @param algorithmOutputId
+     * @return
+     * @throws Exception
+     */
+    public List<AlgorithmOutputClassification> getClassifications(String serviceUrl, int algorithmOutputId) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.getClassifications(serviceUrl, algorithmOutputId);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        Document responseDoc = DOMUtil.buildDomFromString(responseText, false);
+
+        XPathExpression exprNodes = DOMUtil.compileXPathExpr("ClassificationsCollection/classifications");
+        XPathExpression exprClassText = DOMUtil.compileXPathExpr("classText");
+        XPathExpression exprColor = DOMUtil.compileXPathExpr("colour");
+        XPathExpression exprIndex = DOMUtil.compileXPathExpr("index");
+
+        NodeList classNodeList = (NodeList) exprNodes.evaluate(responseDoc, XPathConstants.NODESET);
+        ArrayList<AlgorithmOutputClassification> responseObjs = new ArrayList<AlgorithmOutputClassification>(classNodeList.getLength());
+        for (int i = 0; i < classNodeList.getLength(); i++) {
+            Node classNode = classNodeList.item(i);
+
+            String classText = (String) exprClassText.evaluate(classNode, XPathConstants.STRING);
+            int color = Integer.parseInt((String) exprColor.evaluate(classNode, XPathConstants.STRING));
+            int index = Integer.parseInt((String) exprIndex.evaluate(classNode, XPathConstants.STRING));
+
+            responseObjs.add(new AlgorithmOutputClassification(classText, color, index));
+        }
+
+        return responseObjs;
+    }
+
+
+    /**
+     * Submits a NVCL analytical processing job. Returns true if the remote service reports success, false if it reports failure
+     * @param serviceUrl Base endpoint for the NVCL Analytical Services
+     * @param email
+     * @param jobName
+     * @param wfsUrls
+     * @param wfsFilter
+     * @param algorithmOutputId
+     * @param classification
+     * @param startDepth
+     * @param endDepth
+     * @param operator
+     * @param value
+     * @param units
+     * @param span
+     */
+    public boolean submitProcessingJob(String email, String jobName, String[] wfsUrls, String wfsFilter,
+            int algorithmOutputId, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.submitProcessingJob(analyticalServicesUrl, email, jobName, wfsUrls, wfsFilter, algorithmOutputId, classification, startDepth, endDepth, operator, value, units, span);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        JSONObject response = JSONObject.fromObject(responseText);
+        return response.getString("response").toString().toLowerCase().equals("success");
+    }
+
+    /**
+     * Queries for the list of analytical processing jobs submitted for a particular email.
+     * @param serviceUrl
+     * @param email
+     * @return
+     * @throws Exception
+     */
+    public List<AnalyticalJobStatus> checkProcessingJobs(String email) throws Exception {
+        List<AnalyticalJobStatus> parsedStatuses = new ArrayList<AnalyticalJobStatus>();
+
+        HttpRequestBase method = nvclMethodMaker.checkProcessingJob(analyticalServicesUrl, email);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        JSONArray response = JSONArray.fromObject(responseText);
+        for (Object i : response) {
+            JSONObject obj = (JSONObject) i;
+
+            AnalyticalJobStatus status = new AnalyticalJobStatus();
+            status.setJobId(obj.getString("jobid"));
+            status.setJobDescription(obj.getString("jobDescription"));
+            status.setEmail(obj.getString("email"));
+            status.setStatus(obj.getString("status"));
+            status.setJobUrl(obj.getString("joburl"));
+            status.setMessage(obj.getString("message"));
+            status.setTimeStamp(obj.getString("jmstimestamp"));
+            status.setMsgId(obj.getString("jmsmsgID"));
+            status.setCorrelationId(obj.getString("jmscorrelationID"));
+
+            parsedStatuses.add(status);
+        }
+
+        return parsedStatuses;
+    }
+
+    /**
+     * Queries for the results of a given job.
+     * @param jobId
+     * @return
+     * @throws Exception
+     */
+    public AnalyticalJobResults getProcessingResults(String jobId) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.getProcessingJobResults(analyticalServicesUrl, jobId);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        JSONObject response = JSONObject.fromObject(responseText);
+
+        AnalyticalJobResults results = new AnalyticalJobResults(response.getString("jobid"));
+        results.setJobDescription(response.getString("jobDescription"));
+        results.setEmail(response.getString("email"));
+
+
+        JSONArray successes = response.getJSONArray("boreholes");
+        List<String> successIds = new ArrayList<String>(successes.size());
+        for (Object obj : successes) {
+            successIds.add(((JSONObject) obj).getString("id"));
+        }
+        results.setPassBoreholes(successIds);
+
+        JSONArray fails = response.getJSONArray("failedBoreholes");
+        List<String> failIds = new ArrayList<String>(fails.size());
+        for (Object obj : fails) {
+            failIds.add(((JSONObject) obj).getString("id"));
+        }
+        results.setFailBoreholes(failIds);
+
+        JSONArray errors = response.getJSONArray("errorBoreholes");
+        List<String> errorIds = new ArrayList<String>(errors.size());
+        for (Object obj : errors) {
+            errorIds.add(((JSONObject) obj).getString("id"));
+        }
+        results.setErrorBoreholes(errorIds);
+
+        return results;
+    }
 }

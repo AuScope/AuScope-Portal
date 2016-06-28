@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.auscope.portal.core.server.PortalPropertyPlaceholderConfigurer;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -41,10 +40,6 @@ public class TestCSWCacheController extends PortalTestClass {
 
     /** The mock csw service. */
     private CSWCacheService mockCSWService = context.mock(CSWCacheService.class);
-
-    /** The mock property configurer. */
-    private PortalPropertyPlaceholderConfigurer mockPropertyConfigurer = context
-            .mock(PortalPropertyPlaceholderConfigurer.class);
 
     /** The mock http request. */
     private HttpServletRequest mockHttpRequest = context.mock(HttpServletRequest.class);
@@ -83,8 +78,7 @@ public class TestCSWCacheController extends PortalTestClass {
             }
         });
 
-        cswController = new CSWCacheController(mockCSWService, mockViewCSWRecordFactory, mockViewKnownLayerFactory,
-                mockPropertyConfigurer);
+        cswController = new CSWCacheController(mockCSWService, mockViewCSWRecordFactory, mockViewKnownLayerFactory);
     }
 
     /**
