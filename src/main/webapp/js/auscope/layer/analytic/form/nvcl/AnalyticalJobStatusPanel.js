@@ -47,14 +47,22 @@ Ext.define('auscope.layer.analytic.form.nvcl.AnalyticalJobStatusPanel', {
                         tooltip: 'View the job results on the map',
                         scope: this,
                         handler: function(view, rowIndex, colIndex, item, e, record) {
-                            this.fireEvent('statusselect', this, record);
+                            if (record.get('status').toLowerCase() === 'success') {
+                                this.fireEvent('statusselect', this, record);
+                            } else {
+                                Ext.Msg.alert('Results not available', 'The results for this job are not available. You will need to wait for it to finish processing.');
+                            }
                         }
                     },{
                         iconCls: 'download',
                         tooltip: 'Download the borehole IDs to your local machine',
                         scope: this,
                         handler: function(view, rowIndex, colIndex, item, e, record) {
-                            this.fireEvent('statusdownload', this, record);
+                            if (record.get('status').toLowerCase() === 'success') {
+                                this.fireEvent('statusdownload', this, record);
+                            } else {
+                                Ext.Msg.alert('Results not available', 'The results for this job are not available. You will need to wait for it to finish processing.');
+                            }
                         }
                     }]
                 }],
