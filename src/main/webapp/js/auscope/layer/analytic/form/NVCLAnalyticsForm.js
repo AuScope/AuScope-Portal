@@ -448,7 +448,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         statuses: data,
                         listeners: {
                             statusselect: Ext.bind(function(panel, rec) {
-                                this._loadFilterForJob(rec.get('jobId'));
+                                this._loadFilterForJob(rec.get('jobId'), rec.get('jobDescription'));
                                 popup.close();
                                 this.close();
                             }, this),
@@ -470,37 +470,12 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         });
     },
 
-    _loadFilterForJob: function(jobId) {
-        var mask = new Ext.LoadMask({
-            msg: 'Loading results...',
-            target: this
-        });
-        mask.show();
-        portal.util.Ajax.request({
-            url: 'getNVCLProcessingResults.do',
-            params: {
-                jobId: jobId
-            },
-            scope: this,
-            callback: function(success, data) {
-                mask.hide();
-                if (!success) {
-                    Ext.Msg.alert('Error', 'Unable to access your job results at this time. Please try again later.');
-                    return;
-                }
-
-                if (Ext.isEmpty(data) || Ext.isEmpty(data[0].passBoreholes)) {
-                    Ext.Msg.alert('No Data', 'No boreholes matched your query.');
-                    return;
-                }
-
-                this.layer.get('filterer').setParameters({
-                    ids: data[0].passBoreholes.join(','),
-                    nvclJobName: data[0].jobDescription
-                }, false);
-                portal.map.openlayers.ActiveLayerManager.addLayer(this.layer);
-            }
-        });
+    _loadFilterForJob: function(jobId, jobName) {
+        this.layer.get('filterer').setParameters({
+            analyticsJobId: jobId,
+            nvclJobName: jobName
+        }, false);
+        portal.map.openlayers.ActiveLayerManager.addLayer(this.layer);
     },
 
     _onSubmit: function() {

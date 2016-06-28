@@ -32,7 +32,7 @@ Ext.define('auscope.layer.filterer.forms.BoreholeViewFilterForm', {
             }
         },{
             xtype: 'hidden',
-            name: 'ids',
+            name: 'analyticsJobId',
             listeners: {
                 change: Ext.bind(this._onIdsChange, this)
             }
@@ -45,7 +45,7 @@ Ext.define('auscope.layer.filterer.forms.BoreholeViewFilterForm', {
             //Don't set this field to hidden while the change event handlers are still running
             //Doing so will result in Ext errors as the DOM el's suddenly disappear. (so yield and update after events run)
             new Ext.util.DelayedTask(Ext.bind(function() {
-                this.layer.get('filterer').setParameter('ids', '');
+                this.layer.get('filterer').setParameter('analyticsJobId', '');
             }, this)).delay(1);
         }
     },

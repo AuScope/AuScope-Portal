@@ -217,92 +217,70 @@ public class BoreholeService extends BaseWFSService {
 
         return filterString;
     }
-    public String getStyle(String filter, String color, String hyloggerFilter, String hyloggerColor,String gsmlpNameSpace) {
-        setGsmlpNameSpace(gsmlpNameSpace);
-        return getStyle(filter, color, hyloggerFilter, hyloggerColor);
-    }
-    public String getStyle(String filter, String color, String hyloggerFilter, String hyloggerColor) {
-    	String ruleForHylogged = "";
-    	if (getGsmlpNameSpace().equals("http://xmlns.geosciml.org/geosciml-portrayal/4.0") 
-    			&& hyloggerFilter.isEmpty() == false ) { //For NVCL logged data, apply gsmlp:nvclCollection check, and put red colour.
-        	ruleForHylogged = "<Rule>" +
-				"<Name>Hylogged</Name>" +
-				"<Title>Red Square</Title>" +
-				"<Abstract>portal-style</Abstract>" +
-				 hyloggerFilter +
-				"<PointSymbolizer>" +
-                "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>" +
-				"<Graphic>" +
-				"<Mark>" +
-				"<WellKnownName>square</WellKnownName>" +
-				"<Fill>" +
-				"<CssParameter name=\"fill\">"+
-				hyloggerColor +
-				"</CssParameter>" +
-				"</Fill>" +
-				"</Mark>" +
-				"<Size>8</Size>" +
-				"</Graphic>" +
-				"</PointSymbolizer>" +
-				"</Rule>";
-    	}
-    	
-        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"" + getGsmlpNameSpace() + "\" "
-                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-                + "<NamedLayer>" + "<Name>"
-                + getTypeName()
-                + "</Name>"
-                + "<UserStyle>"
-                + "<Name>portal-style</Name>"
-                + "<Title>portal-style</Title>"
-                + "<Abstract>portal-style</Abstract>"
-                + "<IsDefault>1</IsDefault>"
-                + "<FeatureTypeStyle>"
-                + "<Rule>"
-                + "<Name>Boreholes</Name>"
-                + filter
-                + "<PointSymbolizer>"
-                + "<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>"
-                + "<Graphic>"
-                + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
-                + "<Fill>"
-                + "<CssParameter name=\"fill\">"
-                + color
-                + "</CssParameter>"
-                + "</Fill>"
-                + "</Mark>"
-                + "<Size>8</Size>"
-                + "</Graphic>"
-                + "</PointSymbolizer>"
-                + "</Rule>"
-                + ruleForHylogged 
-                // Won't do this until SISS-1513 is fixed.
-                //                + "<Rule>"
-                //                + "<Name>National Virtual Core Library</Name>"
-                //				+ hyloggerFilter
-                //				+ "<PointSymbolizer>"
-                //				+ "<Geometry><ogc:PropertyName>"
-                //				+ getGeometryName()
-                //				+ "</ogc:PropertyName></Geometry>"
-                //				+ "<Graphic>"
-                //				+ "<Mark>"
-                //				+ "<WellKnownName>square</WellKnownName>"
-                //				+ "<Fill>"
-                //				+ "<CssParameter name=\"fill\">"
-                //				+ hyloggerColor
-                //				+ "</CssParameter>"
-                //				+ "</Fill>"
-                //				+ "</Mark>"
-                //				+ "<Size>8</Size>"
-                //				+ "</Graphic>"
-                //				+ "</PointSymbolizer>"
-                //				+ "</Rule>"
-                + "</FeatureTypeStyle>"
-                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
 
-        return style;
+    /**
+     * Generates a broad SLD for symbolising a set of filters
+     *
+     * @param names 1-1 correspondance with filters - the human readable names of each filter
+     * @param filters The filters to be symbolised
+     * @param colors 1-1 correspondance with filters - The CSS color for each filter to be symbolised with
+     * @param gsmlpNameSpace
+     * @return
+     */
+    public String getStyle(List<String> names, List<String> filters, List<String> colors, String gsmlpNameSpace) {
+        if (filters.size() != colors.size() || filters.size() != names.size()) {
+            throw new IllegalArgumentException("names/filters/colors must have the same length");
+        }
+
+        if (gsmlpNameSpace != null && !gsmlpNameSpace.isEmpty()) {
+            setGsmlpNameSpace(gsmlpNameSpace);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        sb.append("<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"" + getGsmlpNameSpace() + "\" ");
+        sb.append("xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
+        sb.append("<NamedLayer>" + "<Name>");
+        sb.append(getTypeName());
+        sb.append("</Name>");
+        sb.append("<UserStyle>");
+        sb.append("<Name>portal-style</Name>");
+        sb.append("<Title>portal-style</Title>");
+        sb.append("<Abstract>portal-style</Abstract>");
+        sb.append("<IsDefault>1</IsDefault>");
+        sb.append("<FeatureTypeStyle>");
+        for (int i = 0; i < filters.size(); i++) {
+            sb.append("<Rule>");
+            sb.append("<Name>" + names.get(i) + "</Name>");
+            sb.append("<Abstract>" + names.get(i) + "</Abstract>");
+            sb.append(filters.get(i));
+            sb.append("<PointSymbolizer>");
+            sb.append("<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>");
+            sb.append("<Graphic>");
+            sb.append("<Mark>");
+            sb.append("<WellKnownName>square</WellKnownName>");
+            sb.append("<Fill>");
+            sb.append("<CssParameter name=\"fill\">");
+            sb.append(colors.get(i));
+            sb.append("</CssParameter>");
+            sb.append("</Fill>");
+            sb.append("</Mark>");
+            sb.append("<Size>8</Size>");
+            sb.append("</Graphic>");
+            sb.append("</PointSymbolizer>");
+            sb.append("</Rule>");
+        }
+
+        sb.append("</FeatureTypeStyle>");
+        sb.append("</UserStyle>");
+        sb.append("</NamedLayer>");
+        sb.append("</StyledLayerDescriptor>");
+
+        return sb.toString();
+    }
+
+    public boolean namespaceSupportsHyloggerFilter(String namespace) {
+        return namespace.equals("http://xmlns.geosciml.org/geosciml-portrayal/4.0");
     }
 
     public String getTypeName() {
