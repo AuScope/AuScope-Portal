@@ -31,7 +31,8 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
 
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private NVCL2_0_DataServiceMethodMaker mockMethodMaker = context.mock(NVCL2_0_DataServiceMethodMaker.class);
-    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
+    private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class, "mockMethod");
+    private HttpRequestBase mockMethod2 = context.mock(HttpRequestBase.class, "mockMethod2");
     private NVCL2_0_DataService dataService;
 
     @Before
@@ -219,6 +220,54 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
     }
 
     /**
+     * Tests parsing multiple getClassifications responses
+     * @throws Exception
+     */
+    @Test
+    public void testGetManyClassifications() throws Exception {
+        final String serviceUrl = "http://example/url/wfs";
+        final int[] algorithmOutputIds = new int[] {123, 456};
+        final String responseString1 = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetClassificationsResponse.xml");
+        final String responseString2 = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_GetClassificationsResponse2.xml");
+
+        context.checking(new Expectations() {{
+                oneOf(mockMethodMaker).getClassifications(serviceUrl, algorithmOutputIds[0]);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString1));
+
+                oneOf(mockMethodMaker).getClassifications(serviceUrl, algorithmOutputIds[1]);will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString2));
+        }});
+
+        List<AlgorithmOutputClassification> responses = dataService.getClassifications(serviceUrl, algorithmOutputIds);
+
+        Assert.assertNotNull(responses);
+        Assert.assertEquals(23, responses.size());
+
+        boolean foundNull = false;
+        boolean foundDistinct = false;
+
+        for (AlgorithmOutputClassification c : responses) {
+            switch(c.getClassText()) {
+            case "NULL":
+                Assert.assertFalse("Multiple instances of NULL", foundNull);
+                Assert.assertEquals(8421504, c.getColor());
+                Assert.assertEquals(-1, c.getIndex());
+                foundNull = true;
+                break;
+            case "NEW_DISTINCT":
+                Assert.assertFalse("Multiple instances of NEW_DISTINCT", foundDistinct);
+                Assert.assertEquals(1111111, c.getColor());
+                Assert.assertEquals(0, c.getIndex());
+                foundDistinct = true;
+                break;
+            }
+        }
+
+        Assert.assertTrue("NULL not found", foundNull);
+        Assert.assertTrue("NEW_DISTINCT not found", foundDistinct);
+    }
+
+    /**
      * Tests parsing an example getClassifications error
      * @throws Exception
      */
@@ -243,13 +292,14 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
      */
     @Test
     public void testSubmitProcessingJob() throws Exception {
-        final int algorithmOutputId = 123;
+        final int[] algorithmOutputIds = new int[] {123, 456};
         final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_submitAnalyticalJobResponse.json");
 
         final String[] wfsUrls = new String[] {"http://nvclwebservices.vm.csiro.au/geoserverBH/wfs"};
         final String email = "foo@bar.com";
         final String jobName = "myjobname";
         final String classification = "Muscovite";
+        final String logName = null;
         final Integer startDepth = 0;
         final Integer endDepth = 999;
         final String logicalOp = "gt";
@@ -259,11 +309,11 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         final String wfsFilter = "<ogc:Filter><PropertyIsEqualTo><PropertyName>gsmlp:nvclCollection</PropertyName><Literal>true</Literal></PropertyIsEqualTo></ogc:Filter>";
 
         context.checking(new Expectations() {{
-                oneOf(mockMethodMaker).submitProcessingJob(ANALYTICAL_SERVICES_URL, email, jobName, wfsUrls, wfsFilter, algorithmOutputId, classification, startDepth, endDepth, logicalOp, value, units, span);will(returnValue(mockMethod));
+                oneOf(mockMethodMaker).submitProcessingJob(ANALYTICAL_SERVICES_URL, email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, logName, classification, startDepth, endDepth, logicalOp, value, units, span);will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(responseString));
         }});
 
-        boolean result = dataService.submitProcessingJob(email, jobName, wfsUrls, wfsFilter, algorithmOutputId, classification, startDepth, endDepth, logicalOp, value, units, span);
+        boolean result = dataService.submitProcessingJob(email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, logName, classification, startDepth, endDepth, logicalOp, value, units, span);
         Assert.assertTrue(result);
     }
 

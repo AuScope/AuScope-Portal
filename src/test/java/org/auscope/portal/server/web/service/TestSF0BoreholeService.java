@@ -112,7 +112,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         String filter = service.getFilter(nameFilter, custodianFilter,
                 filterDateStart, filterDateEnd, maxFeatures, bbox, null, null);
 
-        String style = service.getStyle(filter, "#2242c7", null, null);
+        String style = service.getStyle(Arrays.asList("style1"), Arrays.asList(filter), Arrays.asList("#2242c7"), null);
         Assert.assertNotNull(style);
         Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
 

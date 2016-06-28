@@ -2,16 +2,20 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
+import org.auscope.portal.server.web.service.BoreholeService.Mark;
+import org.auscope.portal.server.web.service.NVCL2_0_DataService;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,11 +36,13 @@ public class SF0BoreholeController extends BasePortalController {
 
     private CSWCacheService cswService;
     private GsmlpNameSpaceTable gsmlpNameSpaceTable;
+    private NVCL2_0_DataService nvclDataService;
 
     @Autowired
-    public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService) {
+    public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService, NVCL2_0_DataService nvclDataService) {
         this.boreholeService = sf0BoreholeService;
         this.cswService = cswService;
+        this.nvclDataService = nvclDataService;
         GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
         this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
     }
@@ -90,7 +96,9 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "color", defaultValue = "") String color,
-            @RequestParam(required = false, value = "ids") String ids,
+            @RequestParam(required = false, value = "analyticsJobId") String analyticsJobId,
+            @RequestParam(required = false, value = "failIds") String failIds,
+            @RequestParam(required = false, value = "errorIds") String errorIds,
             @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged )
 
             throws Exception {
@@ -98,11 +106,6 @@ public class SF0BoreholeController extends BasePortalController {
         FilterBoundingBox bbox = null;
         //				FilterBoundingBox
         //				.attemptParseFromJSON(bboxJson);
-
-        List<String> boreholeIdentifiers = null;
-        if (ids != null && !ids.isEmpty()) {
-            boreholeIdentifiers = Arrays.asList(ids.split(","));
-        }
 
         List<String> hyloggerBoreholeIDs = null;
         // AUS-2445
@@ -122,26 +125,63 @@ public class SF0BoreholeController extends BasePortalController {
         //			log.debug("Exception:", e);
         //		}
 
-        String filter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, boreholeIdentifiers, null);
-
-        Boolean justNVCL = showNoneHylogged;
-
-        String hyloggerFilter = this.boreholeService.getFilter(boreholeName,
-                custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
-                hyloggerBoreholeIDs, justNVCL);
+        //Generate a style. Either generate a Hylogged/Non Hylogged style OR generate a style for NVCL analytics
+        //that includes pass/fail/error boreholes
+        List<String> filterNames = new ArrayList<String>();
+        List<String> filterColors = new ArrayList<String>();
+        List<String> filters = new ArrayList<String>();
+        List<Mark> filterMarks = new ArrayList<Mark>();
         String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
-        String style = this.boreholeService.getStyle(filter, (color.isEmpty() ? "#2242c7" : color), hyloggerFilter,
-                "#FF0000",gsmlpNameSpace);
+        if (StringUtils.isNotEmpty(analyticsJobId)) {
+          //Generate a style for displaying pass/fail/error holes
+            AnalyticalJobResults analyticsResults = nvclDataService.getProcessingResults(analyticsJobId);
+
+            if (!analyticsResults.getErrorBoreholes().isEmpty()) {
+                filterNames.add("Error Boreholes");
+                filterColors.add("#ff0000");
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), null));
+                filterMarks.add(Mark.X);
+            }
+
+            if (!analyticsResults.getFailBoreholes().isEmpty()) {
+                filterNames.add("Fail Boreholes");
+                filterColors.add("#8390C6");
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), null));
+                filterMarks.add(Mark.SQUARE);
+            }
+
+            if (!analyticsResults.getPassBoreholes().isEmpty()) {
+                filterNames.add("Pass Boreholes");
+                filterColors.add(color.isEmpty() ? "#2242c7" : color);
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), null));
+                filterMarks.add(Mark.SQUARE);
+            }
+        } else {
+            //Generate a Hylogged vs Non Hylogged style
+            filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, null, null));
+            filterColors.add(color.isEmpty() ? "#2242c7" : color);
+            filterNames.add("Boreholes");
+            filterMarks.add(Mark.SQUARE);
+
+            //Not all borehole services support the hylogged attribute
+            Boolean justNVCL = showNoneHylogged;
+            if (justNVCL && this.boreholeService.namespaceSupportsHyloggerFilter(gsmlpNameSpace)) {
+                filters.add(this.boreholeService.getFilter(boreholeName,
+                        custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
+                        hyloggerBoreholeIDs, justNVCL));
+                filterColors.add("#FF0000");
+                filterNames.add("Hylogged");
+                filterMarks.add(Mark.SQUARE);
+            }
+        }
 
         response.setContentType("text/xml");
 
-        ByteArrayInputStream styleStream = new ByteArrayInputStream(
-                style.getBytes());
+        String style = this.boreholeService.getStyle(filterNames, filters, filterColors, filterMarks, gsmlpNameSpace);
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,
-                false);
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
         outputStream.close();
