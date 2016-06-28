@@ -5,7 +5,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
     extend : 'Ext.window.Window',
 
     statics: {
-        NVCL_DATA_SERVICE : 'http://nvclwebservices.vm.csiro.au/NVCLDataServices'
+        NVCL_DATA_SERVICE : 'http://nvclwebservices.vm.csiro.au/NVCLDataServices',
+        NON_STANDARD_ALGORITHM_ID : -9999
     },
 
     layer : null,
@@ -17,7 +18,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         this.layer=cfg.layer;
         this.map=cfg.map;
 
-        var width = Math.min(window.screen.width - 100, 700);
+        var fieldWidth = 335;
         var defaults = {
             labelWidth: 150,
             padding: 0
@@ -39,12 +40,23 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     rootProperty: 'data'
                 }
             },
-            autoLoad: true
+            autoLoad: true,
+            sorters: ["algorithmId"],
+            listeners: {
+                load: function(algorithmOutputStore, records, success) {
+                    algorithmOutputStore.add({
+                        algorithmId: auscope.layer.analytic.form.NVCLAnalyticsForm.NON_STANDARD_ALGORITHM_ID,
+                        algorithmName: 'Non Standard Algorithm',
+                        outputName: 'Non Standard Algorithm',
+                        versions: []
+                    });
+                }
+            }
         });
 
         var versionsStore = Ext.create('Ext.data.Store', {
-            fields: [{name: 'version', type: 'int'},
-                     {name: 'algorithmOutputId', type: 'int'}],
+            fields: [{name: 'version'},
+                     {name: 'algorithmOutputId'}],
             proxy: {
                 type: 'memory',
                 reader: {
@@ -88,8 +100,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
 
         Ext.apply(cfg, {
             title: 'National Virtual Core Library Analytics',
-            height: 700,
-            width: width,
+            height: 750,
+            width: 700,
             layout: 'fit',
             padding: '10',
             border: false,
@@ -107,6 +119,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     itemId: 'email',
                     fieldLabel: 'Email',
                     allowBlank: false,
+                    value: this._recoverUserEmail(),
                     anchor: '100%'
                 },{
                     xtype: 'textfield',
@@ -138,11 +151,13 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             queryMode: 'local',
                             typeAhead: true,
                             allowBlank: false,
+                            width: fieldWidth,
                             listeners: {
-                                change: Ext.bind(this._onAlgorithmOutputChange, this)
+                                select: Ext.bind(this._onAlgorithmOutputSelect, this)
                             }
                         },{
                             xtype: 'label',
+                            itemId: 'versionlabel',
                             text: 'version',
                             margin: '3 5 0 5'
                         },{
@@ -164,14 +179,33 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         xtype: 'combo',
                         name: 'classification',
                         fieldLabel: 'Classification',
-                        itemId: 'classification',
+                        itemId: 'classification-combo',
                         store: classificationStore,
                         displayField: 'classText',
                         valueField: 'classText',
                         forceSelection: true,
                         queryMode: 'local',
                         allowBlank: false,
-                        typeAhead: true
+                        typeAhead: true,
+                        width: fieldWidth
+                    },{
+                        xtype: 'textfield',
+                        name: 'classification',
+                        itemId: 'classification-text',
+                        fieldLabel: 'Classification',
+                        allowBlank: false,
+                        width: fieldWidth,
+                        hidden: true,
+                        disabled: true
+                    },{
+                        xtype: 'textfield',
+                        fieldLabel: 'Log Name',
+                        itemId: 'logname',
+                        name: 'logName',
+                        allowBlank: false,
+                        width: fieldWidth,
+                        hidden: true,
+                        disabled: true
                     }]
                 },{
                     xtype: 'container',
@@ -191,7 +225,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             fieldLabel: 'Region of interest',
                             decimalPrecision: 0,
                             allowBlank: false,
-                            value: 0
+                            value: 0,
+                            width: fieldWidth
                         },{
                             xtype: 'label',
                             text: ' metres to ',
@@ -216,7 +251,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         valueField: 'value',
                         forceSelection: true,
                         allowBlank: false,
-                        queryMode: 'local'
+                        queryMode: 'local',
+                        width: fieldWidth
                     },{
                         xtype: 'fieldset',
                         layout: 'hbox',
@@ -227,7 +263,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             name: 'value',
                             fieldLabel: 'Value',
                             allowBlank: false,
-                            decimalPrecision: 5
+                            decimalPrecision: 5,
+                            width: fieldWidth
                         },{
                             xtype: 'label',
                             text: ' ',
@@ -254,7 +291,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             fieldLabel: 'Evaluated over a span of',
                             decimalPrecision: 0,
                             allowBlank: false,
-                            value: 1
+                            value: 1,
+                            width: fieldWidth
                         },{
                             xtype: 'label',
                             text: 'metres',
@@ -285,20 +323,49 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         this.callParent(arguments);
     },
 
-    _onAlgorithmOutputChange: function(combo, newValue, oldValue) {
-        var idx = combo.getStore().find('algorithmId', newValue);
-        var record = combo.getStore().getAt(idx);
+    _setupNonStandardAlgorithm: function(record) {
+        this.down('#logname').setHidden(false).setDisabled(false);
+        this.down('#classification-text').setHidden(false).setDisabled(false);
+        this.down('#version').setHidden(true).setDisabled(true);
+        this.down('#versionlabel').setHidden(true).setDisabled(true);
+        this.down('#classification-combo').setHidden(true).setDisabled(true);
+    },
+
+    _setupStandardAlgorithm: function(record, versionCombo, versionStore) {
+        this.down('#logname').setHidden(true).setDisabled(true);
+        this.down('#classification-text').setHidden(true).setDisabled(true);
+        this.down('#version').setHidden(false).setDisabled(false);
+        this.down('#versionlabel').setHidden(false).setDisabled(false);
+        this.down('#classification-combo').setHidden(false).setDisabled(false);
+
+        versionStore.loadData(record.get('versions'));
+        if (versionStore.getCount()) {
+            var highestVersion = versionStore.getAt(0);
+            versionCombo.setValue(highestVersion.get('algorithmOutputId'));
+        }
+
+        //Add our "All versions tag"
+        var allOutputIds = record.get('versions').map(function(v) {
+            return v.algorithmOutputId
+        }).join(',');
+        versionStore.add({
+            version: 'All Versions',
+            algorithmOutputId: allOutputIds
+        });
+    },
+
+    _onAlgorithmOutputSelect: function(combo, record) {
+        var versionCombo = this.down('#version');
+        versionCombo.setValue(null);
+
+        var versionStore = versionCombo.getStore();
+        versionStore.removeAll();
+
         if (record) {
-            var versionCombo = this.down('#version');
-            versionCombo.setValue(null);
-
-            var versionStore = versionCombo.getStore();
-            versionStore.removeAll();
-            versionStore.loadData(record.get('versions'));
-
-            if (versionStore.getCount()) {
-                var highestVersion = versionStore.getAt(0);
-                versionCombo.setValue(highestVersion.get('algorithmOutputId'));
+            if (record.get('algorithmId') === auscope.layer.analytic.form.NVCLAnalyticsForm.NON_STANDARD_ALGORITHM_ID) {
+                this._setupNonStandardAlgorithm(record);
+            } else {
+                this._setupStandardAlgorithm(record, versionCombo, versionStore);
             }
         }
     },
@@ -307,7 +374,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         var idx = combo.getStore().find('algorithmOutputId', newValue);
         var record = combo.getStore().getAt(idx);
         if (record) {
-            var classCombo = this.down('#classification');
+            var classCombo = this.down('#classification-combo');
             classCombo.setValue(null);
 
             var classStore = classCombo.getStore();
@@ -320,6 +387,20 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         }
     },
 
+    _saveUserEmail: function(email) {
+        if (window.localStorage) {
+            localStorage.setItem('auscope-nvcl-analytics-email', email);
+        }
+    },
+
+    _recoverUserEmail: function() {
+        if (window.localStorage) {
+            return localStorage.getItem('auscope-nvcl-analytics-email');
+        } else {
+            return '';
+        }
+    },
+
     _onStatus: function() {
         var formPanel = this.down('form');
         var emailField = formPanel.down('#email');
@@ -329,6 +410,9 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         }
 
         var email = emailField.getValue();
+        this._saveUserEmail(email);
+
+
         var mask = new Ext.LoadMask({
             msg: 'Checking status...',
             target: this
@@ -345,7 +429,6 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
 
                 if (!success) {
                     Ext.Msg.alert('Error', 'Unable to check your processing jobs at this time. Please try again later.');
-                    console.log(message);
                     return;
                 }
 
@@ -358,16 +441,20 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     modal: true,
                     layout: 'fit',
                     title: 'Previously submitted jobs',
-                    width: 400,
+                    width: 500,
                     height: 200,
                     items: [{
                         xtype: 'analyticaljobstatuspanel',
                         statuses: data,
                         listeners: {
                             statusselect: Ext.bind(function(panel, rec) {
-                                this._loadFilterForJob(rec.get('jobId'));
+                                this._loadFilterForJob(rec.get('jobId'), rec.get('jobDescription'));
                                 popup.close();
                                 this.close();
+                            }, this),
+
+                            statusdownload: Ext.bind(function(panel, rec) {
+                                this._downloadJobResults(rec.get('jobId'));
                             }, this)
                         }
                     }]
@@ -377,37 +464,18 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         });
     },
 
-    _loadFilterForJob: function(jobId) {
-        var mask = new Ext.LoadMask({
-            msg: 'Loading results...',
-            target: this
+    _downloadJobResults: function(jobId) {
+        portal.util.FileDownloader.downloadFile('downloadNVCLProcessingResults.do', {
+            jobId: jobId
         });
-        mask.show();
-        portal.util.Ajax.request({
-            url: 'getNVCLProcessingResults.do',
-            params: {
-                jobId: jobId
-            },
-            scope: this,
-            callback: function(success, data) {
-                mask.hide();
-                if (!success) {
-                    Ext.Msg.alert('Error', 'Unable to access your job results at this time. Please try again later.');
-                    return;
-                }
+    },
 
-                if (Ext.isEmpty(data) || Ext.isEmpty(data[0].passBoreholes)) {
-                    Ext.Msg.alert('No Data', 'No boreholes matched your query.');
-                    return;
-                }
-
-                this.layer.get('filterer').setParameters({
-                    ids: data[0].passBoreholes.join(','),
-                    nvclJobName: data[0].jobDescription
-                }, false);
-                portal.map.openlayers.ActiveLayerManager.addLayer(this.layer);
-            }
-        });
+    _loadFilterForJob: function(jobId, jobName) {
+        this.layer.get('filterer').setParameters({
+            analyticsJobId: jobId,
+            nvclJobName: jobName
+        }, false);
+        portal.map.openlayers.ActiveLayerManager.addLayer(this.layer);
     },
 
     _onSubmit: function() {
@@ -419,8 +487,6 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         //Build up our parameters for job submission
         var params = {};
         if (this.layer) {
-            console.log('filterer:', this.layer.get('filterer').getParameters());
-            console.log('form:', this.layer.get('filterForm').getValues());
             params = this.layer.get('filterer').getParameters();
 
             var wfsUrls = [];
@@ -436,6 +502,8 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             params.wfsUrl = wfsUrls;
         }
         Ext.apply(params, formPanel.getValues());
+
+        this._saveUserEmail(params.email);
 
         //Submit the job
         var mask = new Ext.LoadMask({

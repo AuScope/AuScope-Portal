@@ -6,12 +6,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
@@ -840,12 +843,21 @@ public class NVCLController extends BasePortalController {
      * @return
      */
     @RequestMapping("getNVCLClassifications.do")
-    public ModelAndView getNVCLWFSDownloadStatus(@RequestParam("serviceUrl") String serviceUrl, @RequestParam("algorithmOutputId") int algorithmOutputId) throws Exception {
+    public ModelAndView getNVCLWFSDownloadStatus(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("algorithmOutputId") String rawAlgorithmOutputId) throws Exception {
+
+        String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
+        int[] algorithmOutputIds = new int[algorithmOutputIdStrings.length];
+        for (int i = 0; i < algorithmOutputIds.length; i++) {
+            algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
+        }
+
         try {
-            List<AlgorithmOutputClassification> classifications = dataService2_0.getClassifications(serviceUrl, algorithmOutputId);
+            List<AlgorithmOutputClassification> classifications = dataService2_0.getClassifications(serviceUrl, algorithmOutputIds);
             return generateJSONResponseMAV(true, classifications, "");
         } catch (Exception ex) {
-            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + algorithmOutputId, ex);
+            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + rawAlgorithmOutputId, ex);
             return generateJSONResponseMAV(false);
         }
     }
@@ -868,7 +880,9 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "bbox") String bboxJson,
 
-            @RequestParam("algorithmOutputId") int algorithmOutputId,
+            @RequestParam(required = false, value = "algorithmOutputId") String rawAlgorithmOutputId,
+            @RequestParam(required = false, value = "logName") String logName,
+
             @RequestParam("classification") String classification,
             @RequestParam("startDepth") int startDepth,
             @RequestParam("endDepth") int endDepth,
@@ -878,12 +892,26 @@ public class NVCLController extends BasePortalController {
             @RequestParam("span") int span)
             throws Exception {
 
+        if ((StringUtils.isEmpty(rawAlgorithmOutputId) && StringUtils.isEmpty(logName)) ||
+            StringUtils.isNotEmpty(rawAlgorithmOutputId) && StringUtils.isNotEmpty(logName)) {
+            return generateJSONResponseMAV(false, null, "Must define exactly one of algorithmOutputId or logName");
+        }
+
+        int[] algorithmOutputIds = null;
+        if (StringUtils.isNotEmpty(rawAlgorithmOutputId)) {
+            String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
+            algorithmOutputIds = new int[algorithmOutputIdStrings.length];
+            for (int i = 0; i < algorithmOutputIds.length; i++) {
+                algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
+            }
+        }
+
         String filterString = null;
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         filterString = sf0BoreholeService.getFilter(boreholeName, "", dateOfDrillingStart, dateOfDrillingEnd, -1, bbox, null, true);
 
         try {
-            boolean result = this.dataService2_0.submitProcessingJob(email, jobName, wfsUrls, filterString, algorithmOutputId, classification, startDepth, endDepth, operator, value, units, span);
+            boolean result = this.dataService2_0.submitProcessingJob(email, jobName, wfsUrls, filterString, algorithmOutputIds, logName, classification, startDepth, endDepth, operator, value, units, span);
             return generateJSONResponseMAV(result);
         } catch (Exception ex) {
             log.error("Unable to submit processing job: " + ex.getMessage());
@@ -923,6 +951,40 @@ public class NVCLController extends BasePortalController {
             log.error("Unable to check NVCL processing jobs: " + ex.getMessage());
             log.debug("Exception: ", ex);
             return generateJSONResponseMAV(false);
+        }
+    }
+
+    @RequestMapping("/downloadNVCLProcessingResults.do")
+    public void downloadNVCLProcessingResults(@RequestParam("jobId") String jobId, HttpServletResponse response) throws Exception {
+        AnalyticalJobResults results = this.dataService2_0.getProcessingResults(jobId);
+
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition","inline; filename=nvclanalytics-" + jobId + ".zip;");
+        ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+
+        try{
+            zout.putNextEntry(new ZipEntry("passIds.csv"));
+            for (String id : results.getPassBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.putNextEntry(new ZipEntry("failIds.csv"));
+            for (String id : results.getFailBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.putNextEntry(new ZipEntry("errorIds.csv"));
+            for (String id : results.getErrorBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.finish();
+            zout.flush();
+        } finally {
+            zout.close();
         }
     }
 }
