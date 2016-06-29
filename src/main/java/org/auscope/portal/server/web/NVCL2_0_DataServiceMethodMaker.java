@@ -134,7 +134,7 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
      * @throws URISyntaxException
      */
     public HttpRequestBase submitProcessingJob(String serviceUrl, String email, String jobName, String[] wfsUrls, String wfsFilter,
-            int[] algorithmOutputIds, String logName, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
+            String[] algorithmOutputIds, String logName, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
         HttpGet method = new HttpGet();
 
         URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "submitNVCLAnalyticalJob.do"));
