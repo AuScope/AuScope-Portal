@@ -310,7 +310,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     xtype: 'button',
                     text: 'Check Status',
                     iconCls : 'info',
-                    handler: Ext.bind(this._onStatus, this)
+                    handler: Ext.bind(this._onStatus, this, [null, null], false)
                 },{
                     xtype: 'button',
                     text: 'Begin Processing',
@@ -401,17 +401,31 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         }
     },
 
-    _onStatus: function() {
-        var formPanel = this.down('form');
-        var emailField = formPanel.down('#email');
+    /**
+     * Shows the status popup for the given user email (ignores any entered email).
+     *
+     * If jobId is set, that particular jobID will be highlighted in the status popup.
+     */
+    showStatusPopup: function(jobEmail, jobId) {
+        this._onStatus(jobEmail, jobId);
+    },
 
-        if (!emailField.isValid()) {
-            return;
+    _onStatus: function(jobEmail, jobId) {
+        var params = {};
+        if (Ext.isEmpty(jobEmail)) {
+            var formPanel = this.down('form');
+            var emailField = formPanel.down('#email');
+
+            if (!emailField.isValid()) {
+                return;
+            }
+
+            var email = emailField.getValue();
+            this._saveUserEmail(email);
+            params.email = email;
+        } else {
+            params.email = jobEmail;
         }
-
-        var email = emailField.getValue();
-        this._saveUserEmail(email);
-
 
         var mask = new Ext.LoadMask({
             msg: 'Checking status...',
@@ -420,9 +434,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         mask.show();
         portal.util.Ajax.request({
             url: 'checkNVCLProcessingJob.do',
-            params: {
-                email: email
-            },
+            params: params,
             scope: this,
             callback: function(success, data, message) {
                 mask.hide();
@@ -455,7 +467,17 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
 
                             statusdownload: Ext.bind(function(panel, rec) {
                                 this._downloadJobResults(rec.get('jobId'));
-                            }, this)
+                            }, this),
+
+                            afterrender: function(panel) {
+                                if (jobId) {
+                                    var recIdx = panel.getStore().find('jobId', jobId);
+                                    if (recIdx >= 0) {
+                                        var record = panel.getStore().getAt(recIdx);
+                                        panel.getSelectionModel().select(record);
+                                    }
+                                }
+                            }
                         }
                     }]
                 });
