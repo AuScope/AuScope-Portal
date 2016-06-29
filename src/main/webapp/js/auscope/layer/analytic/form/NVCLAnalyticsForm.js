@@ -190,18 +190,18 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         width: fieldWidth
                     },{
                         xtype: 'textfield',
-                        name: 'classification',
-                        itemId: 'classification-text',
-                        fieldLabel: 'Classification',
+                        fieldLabel: 'Log Name',
+                        itemId: 'logname',
+                        name: 'logName',
                         allowBlank: false,
                         width: fieldWidth,
                         hidden: true,
                         disabled: true
                     },{
                         xtype: 'textfield',
-                        fieldLabel: 'Log Name',
-                        itemId: 'logname',
-                        name: 'logName',
+                        name: 'classification',
+                        itemId: 'classification-text',
+                        fieldLabel: 'Classification',
                         allowBlank: false,
                         width: fieldWidth,
                         hidden: true,
