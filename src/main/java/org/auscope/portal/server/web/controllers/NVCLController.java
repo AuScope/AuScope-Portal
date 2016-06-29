@@ -897,13 +897,9 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false, null, "Must define exactly one of algorithmOutputId or logName");
         }
 
-        int[] algorithmOutputIds = null;
+        String[] algorithmOutputIds = null;
         if (StringUtils.isNotEmpty(rawAlgorithmOutputId)) {
-            String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
-            algorithmOutputIds = new int[algorithmOutputIdStrings.length];
-            for (int i = 0; i < algorithmOutputIds.length; i++) {
-                algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
-            }
+            algorithmOutputIds = rawAlgorithmOutputId.split(",");
         }
 
         String filterString = null;

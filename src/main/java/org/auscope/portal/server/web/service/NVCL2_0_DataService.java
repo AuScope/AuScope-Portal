@@ -439,7 +439,7 @@ public class NVCL2_0_DataService {
      * @param span
      */
     public boolean submitProcessingJob(String email, String jobName, String[] wfsUrls, String wfsFilter,
-            int[] algorithmOutputIds, String logName, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws Exception {
+            String[] algorithmOutputIds, String logName, String classification, int startDepth, int endDepth, String operator, String value, String units, int span) throws Exception {
         HttpRequestBase method = nvclMethodMaker.submitProcessingJob(analyticalServicesUrl, email, jobName, wfsUrls, wfsFilter, algorithmOutputIds, logName, classification, startDepth, endDepth, operator, value, units, span);
         String responseText = httpServiceCaller.getMethodResponseAsString(method);
         JSONObject response = JSONObject.fromObject(responseText);

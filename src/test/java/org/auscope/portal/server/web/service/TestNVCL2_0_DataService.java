@@ -292,7 +292,7 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
      */
     @Test
     public void testSubmitProcessingJob() throws Exception {
-        final int[] algorithmOutputIds = new int[] {123, 456};
+        final String[] algorithmOutputIds = new String[] {"123", "456"};
         final String responseString = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/NVCL_submitAnalyticalJobResponse.json");
 
         final String[] wfsUrls = new String[] {"http://nvclwebservices.vm.csiro.au/geoserverBH/wfs"};
