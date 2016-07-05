@@ -4,7 +4,7 @@
     <groupId>org.auscope.portal</groupId>
     <artifactId>AuScope-Portal</artifactId>
     <packaging>war</packaging>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.3.0</version>
     <name>AuScope-Portal</name>
     <description>AuScopes flagship demonstration tool</description>
     <url>http://portal.auscope.org</url>
@@ -36,7 +36,7 @@
         <spring.version>3.0.5.RELEASE</spring.version>
         <spring.security.version>3.0.5.RELEASE</spring.security.version>
         <geotools.version>2.6.5</geotools.version>
-        <portal.core.version>1.5.0-SNAPSHOT</portal.core.version>
+        <portal.core.version>1.5.0</portal.core.version>
     </properties>
     <build>    
         <plugins>        
