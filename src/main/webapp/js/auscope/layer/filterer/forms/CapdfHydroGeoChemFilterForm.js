@@ -31,6 +31,32 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             autoLoad : true
         });  
         
+        // 'Group of Interest' selector
+        this.groupCombo = Ext.create('Ext.form.ComboBox', {
+                        anchor: '100%',
+                        itemId: 'aoi',
+                        fieldLabel: '<span data-qtip="Select the group of interest">' + 'Group of Interest' + '</span>',
+                        labelAlign: 'left',
+                        name: 'featureType',
+                        typeAhead: true,
+                        triggerAction: 'all',
+                        lazyRender:true,
+                        queryMode: 'local',
+                        typeAheadDelay: 500,
+                        store: groupStore,
+                        valueField: 'groupValue',
+                        displayField: 'groupName',                    
+                        listeners : {
+                            select : function(combo, record, eOpts){
+                                me.updateParameterCombo(record.get('groupValue'));
+                                if (window.sessionStorage) {
+                                    sessionStorage.setItem('capdfHydroGeoChemFilterForm_upc',record.get('groupValue'));
+                                }
+                            }
+                        }
+                    });
+        
+        // 'Parameter of Interest' selector
          this.parameterCombo = Ext.create('Ext.form.ComboBox', {           
             anchor: '100%',
             itemId: 'aoiParam',
@@ -56,12 +82,10 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             },
             listeners: {
                 select : function(combo, record, eOpts){
-                    me.updateMinMaxSlider(record.get('min'),record.get('max'));
-                    if (window.sessionStorage) {
-                        sessionStorage.setItem('capdfHydroGeoChemFilterForm_max', record.get('max'));
-                        sessionStorage.setItem('capdfHydroGeoChemFilterForm_min', record.get('min'));
-                    }
+                    // When selector changes, set slider below to max/min
+                    me.setSliderToRecord(record, true);
                 },
+                // When selector changes remember the setting
                 change : function(combo, newValue, oldValue, eOpts){
                     if (window.sessionStorage && newValue != null) {
                         sessionStorage.setItem('capdfHydroGeoChemFilterForm_poi', newValue);
@@ -71,6 +95,8 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             }
         });
          
+         
+         // 'Min/Max Color Code' slider
          this.minMaxSlider = Ext.create('Ext.slider.Multi', {           
              anchor: '100%',
              itemId: 'minMaxSlider',
@@ -79,25 +105,35 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
              labelAlign: 'left',
              name: 'minMax',
              decimalPrecision : 3,
-             values: [25, 50],
+             values: [0, 100],
              minValue:0,
              maxValue:100,
              listeners: {
                  beforerender: function(slider, eOpts) {
+                     // Set up stored slider values
                      if (window.sessionStorage) {
                          var min = sessionStorage.getItem('capdfHydroGeoChemFilterForm_min');
                          var max = sessionStorage.getItem('capdfHydroGeoChemFilterForm_max');
-                         if (min != null && max != null) {
-                             me.updateMinMaxSlider(min,max);
+                         var minV = sessionStorage.getItem('capdfHydroGeoChemFilterForm_minV');
+                         var maxV = sessionStorage.getItem('capdfHydroGeoChemFilterForm_maxV');
+                         if (min != null && max != null && me.parameterCombo.getRawValue()!=null && me.parameterCombo.getRawValue()!="") {
+                             me.updateMinMaxSlider(min,max,minV,maxV);
                          }
                      }
-                     
+                 },
+                 
+                 // When slider is changed, remember the settings
+                 changecomplete: function(slider, newValue, thumb, eOpts ) {
+                     if (window.sessionStorage) {
+                         sessionStorage.setItem('capdfHydroGeoChemFilterForm_minV', slider.getValue(0));
+                         sessionStorage.setItem('capdfHydroGeoChemFilterForm_maxV', slider.getValue(1));
+                     }
                  }
             }
                                
          });
             
-
+        // Apply configuration
         Ext.apply(config, {
             delayedFormLoading: true,
             border: false,
@@ -131,40 +167,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                         '</span>',
                     autoHeight:true,                   
                     collapsible:true,
-                    items:[{
-                        xtype: 'combo',
-                        anchor: '100%',
-                        itemId: 'aoi',
-                        fieldLabel: '<span data-qtip="Select the group of interest">' + 'Group of Interest' + '</span>',
-                        labelAlign: 'left',
-                        name: 'featureType',
-                        typeAhead: true,
-                        triggerAction: 'all',
-                        lazyRender:true,
-                        queryMode: 'local',
-                        typeAheadDelay: 500,
-                        store: groupStore,
-                        valueField: 'groupValue',
-                        displayField: 'groupName',                    
-                        listeners : {
-                            select : function(combo, record, eOpts){
-                                me.updateParameterCombo(record.get('groupValue'));
-                                if (window.sessionStorage) {
-                                    sessionStorage.setItem('capdfHydroGeoChemFilterForm_upc',record.get('groupValue'));
-                                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
-                                }
-
-                            },
-                            beforerender : function(combo, eOpts ) {
-                                if (window.sessionStorage) {
-                                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_upc');
-                                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
-                                }
-                                me.updateMinMaxSlider('0','100');
-                                me.parameterCombo.setRawValue("");
-                            }
-                        }
-                    },this.parameterCombo, this.minMaxSlider]
+                    items:[this.groupCombo,this.parameterCombo, this.minMaxSlider]
                 }]
             }]
         });
@@ -175,24 +178,25 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
         Ext.tip.QuickTipManager.init();
         this.callParent(arguments);
         
-        //load our commodity store
+        // Load "Group of interest" selector, and update "Parameter of Interest" selector below
         var callingInstance = this;
         groupStore.load( {
-            callback : function(records, operation, success) { 
-                var combo = Ext.ComponentQuery.query('#aoi');
-                if (combo.length>0 && window.sessionStorage) {
-                    var selectedVal = combo[combo.length-1].getValue();
-                                    
-                    // Only update the "Point of Interest" if 'capdfHydroGeoChemFilterForm_poi' has been set
-                    if (selectedVal != null) {                    
+            callback : function(records, operation, success) {                
+                var combo=me.groupCombo;
+                if (combo.getStore()!=null && combo.getStore().getCount()>0) {
+                    var selectedVal = combo.getValue();
+                    if (selectedVal!=null && selectedVal != "") {
                         me.updateParameterCombo(selectedVal);
-                    } else {
-                        me.parameterCombo.setRawValue("");
-                        if (window.sessionStorage) {
-                            sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
+                    } else if (window.sessionStorage) {
+                        var upcVal = sessionStorage.getItem('capdfHydroGeoChemFilterForm_upc');
+                        if (upcVal != null) {
+                            // IE does not remember selected value when "Add to Layer" button is hit, so must restore it
+                            if (Ext.isIE) {
+                                combo.setValue(upcVal);
+                                me.updateParameterCombo(upcVal);
+                            }
                         }
-                        me.updateMinMaxSlider('0','100'); 
-                    }
+                    } 
                 }
 
                 //It's very important that once all of our stores are loaded we fire the formloaded event
@@ -201,10 +205,9 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                 callingInstance.fireEvent('formloaded');
             }
         });
-    },
-    
-    
-    // This loads up 'Parameter of Interest' and sets displayed value
+    }, // End of constructor
+        
+    // This loads up 'Parameter of Interest', sets displayed value, updates the slider
     // It uses 'setRawValue()' to avoid triggering extra callbacks
     updateParameterCombo : function(featureType){
         var aoiParamStore = Ext.create('Ext.data.Store', {
@@ -227,18 +230,22 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
         this.parameterCombo.setStore(aoiParamStore);
         var me = this;
         
-        // Sometimes the upper fieldset component is not defined yet.
         var myMask;
-        if (this.parameterCombo.up('fieldset')!=undefined) {
-            myMask = new Ext.LoadMask({
-                msg    : 'Please wait...',
-                target : this.parameterCombo.up('fieldset')
-            });
-            myMask.show();
+        
+        // Sometimes the upper fieldset component is not defined yet.
+        if (!Ext.isIE) {
+            if (this.parameterCombo.up('fieldset')!=undefined) {
+                var fieldSet = this.parameterCombo.up('fieldset');
+                myMask = new Ext.LoadMask({
+                    msg    : 'Please wait...',
+                    target : fieldSet
+                });
+                myMask.show();
+            }
         }
         
         aoiParamStore.on('load',function(store, records, successful, eOpts ){
-            if (myMask!=undefined)
+            if (!Ext.isIE && myMask!=undefined)
                 myMask.hide();
             
             // If there are no 'Parameters of Interest'
@@ -246,39 +253,79 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                 me.parameterCombo.setRawValue("");
                 if (window.sessionStorage) {
                     sessionStorage.removeItem('capdfHydroGeoChemFilterForm_poi');
+                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_max');
+                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_min');
+                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_maxV');
+                    sessionStorage.removeItem('capdfHydroGeoChemFilterForm_minV');
                 }
-                me.updateMinMaxSlider('0','100');
+                me.updateMinMaxSlider('0','100','0','100');
                 return;
             }
         
-            if(successful){
+            if (successful) {
+                // Select the stored value, if possible
                 if (window.sessionStorage) {
                     var poi = sessionStorage.getItem('capdfHydroGeoChemFilterForm_poi');
-                    if (poi != null && me.parameterCombo.getStore()!= null && me.parameterCombo.getStore().getCount()>0) {
-                        me.parameterCombo.setRawValue(poi);
-                        return;
+                    if (poi != null && store.getCount()>0) {
+                        var selectedRecord = store.findRecord("classifier", poi);
+                        if (selectedRecord!=null) {
+                            me.parameterCombo.setRawValue(poi);
+                            var maxV = sessionStorage.getItem('capdfHydroGeoChemFilterForm_maxV');
+                            var minV = sessionStorage.getItem('capdfHydroGeoChemFilterForm_minV');
+                            me.updateMinMaxSlider(selectedRecord.get('min'),selectedRecord.get('max'), minV, maxV);
+                            return;
+                        }
                     }
                 }
-                
+
+                // Else select the first value
                 if (me.parameterCombo.getStore() != null) {
                     if (records != null) {
                         me.parameterCombo.setSelection(records[0]);
+                        me.setSliderToRecord(records[0], true);
                     }
                 }
             }
         });
-    },
+    }, // End of updateParameterCombo
     
-    updateMinMaxSlider : function(min,max){
+    //  Set the min, max and both slider thumb values using the input 'record'
+    //  If resetVals is not 'true', then will not change the thumb values    
+    setSliderToRecord: function(record, resetVals) {
+        if (resetVals===true) {
+            this.updateMinMaxSlider(record.get('min'),record.get('max'), record.get('min'),record.get('max'));
+        } else {
+            this.updateMinMaxSlider(record.get('min'),record.get('max'), null, null);
+        }
+        if (window.sessionStorage) {
+           sessionStorage.setItem('capdfHydroGeoChemFilterForm_max', record.get('max'));
+           sessionStorage.setItem('capdfHydroGeoChemFilterForm_min', record.get('min'));
+           if (resetVals===true) {
+               sessionStorage.setItem('capdfHydroGeoChemFilterForm_maxV', record.get('max'));
+               sessionStorage.setItem('capdfHydroGeoChemFilterForm_minV', record.get('min'));
+           }
+        }
+    },
+
+    // Updates slider max, min and thumb values
+    updateMinMaxSlider : function(min,max,minV,maxV){
         var minLimit=parseFloat(min),
             maxLimit=parseFloat(max);
       
         // Set the slider limits
         this.minMaxSlider.setMinValue(minLimit);
         this.minMaxSlider.setMaxValue(maxLimit);
-
-        this.minMaxSlider.setValue([minLimit,maxLimit],true);
-
+        
+        // Set the slider values
+        if (minV != null && maxV != null) {
+            var minValue=parseFloat(minV),
+                maxValue=parseFloat(maxV);
+            if (minValue<minLimit)
+                minValue=minLimit;
+            if (maxValue>maxLimit)
+                maxValue=maxLimit;
+            this.minMaxSlider.setValue([minValue,maxValue],false);
+        }
     }
 });
 
