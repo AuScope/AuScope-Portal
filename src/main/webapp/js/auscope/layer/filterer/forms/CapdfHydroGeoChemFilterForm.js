@@ -7,14 +7,18 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
     /**
      * Accepts a config for portal.layer.filterer.BaseFilterForm
      */
-    constructor : function(config) {      
-        
+    constructor : function(config) {
+
         var wfsresource = portal.csw.OnlineResource.getFilteredFromArray(config.layer.getAllOnlineResources(), portal.csw.OnlineResource.WFS);
         //VT: for the time being we assumed that is only one service endpoint.
-        wfsresource = wfsresource[0];
-        this.serviceUrl = wfsresource.get('url');
+        if (wfsresource.length == 0) {
+            wfsresource = null;
+            this.serviceUrl = null;
+        } else {
+            this.serviceUrl = wfsresource[0].get('url');
+        }
         var me = this;
-      
+
         var groupStore = Ext.create('Ext.data.Store', {
             fields : ['groupName', 'groupValue'],
             proxy : {
@@ -29,9 +33,9 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                 }
             },
             autoLoad : true
-        });  
-        
-         this.parameterCombo = Ext.create('Ext.form.ComboBox', {           
+        });
+
+         this.parameterCombo = Ext.create('Ext.form.ComboBox', {
             anchor: '100%',
             itemId: 'aoiParam',
             disabled :  true,
@@ -42,9 +46,9 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             triggerAction: 'all',
             lazyRender:true,
             queryMode: 'local',
-            typeAheadDelay: 500,            
+            typeAheadDelay: 500,
             valueField: 'classifier',
-            displayField: 'classifier', 
+            displayField: 'classifier',
             listConfig: {
                 itemTpl:  Ext.create('Ext.XTemplate',
                         '<tpl if="pref_name == null || pref_name == \'\'">',
@@ -60,8 +64,8 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                 }
             }
         });
-         
-         this.minMaxSlider = Ext.create('Ext.slider.Multi', {           
+
+         this.minMaxSlider = Ext.create('Ext.slider.Multi', {
              anchor: '100%',
              itemId: 'minMaxSlider',
              disabled :  true,
@@ -72,10 +76,10 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
              values: [25, 50],
              minValue:0,
              maxValue:100,
-             
-                               
+
+
          });
-            
+
 
         Ext.apply(config, {
             delayedFormLoading: true,
@@ -108,7 +112,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                     title: '<span data-qtip="Please enter your color coding selection">' +
                         'Color Coding Filter' +
                         '</span>',
-                    autoHeight:true,                   
+                    autoHeight:true,
                     collapsible:true,
                     items:[{
                         xtype: 'combo',
@@ -124,24 +128,24 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
                         typeAheadDelay: 500,
                         store: groupStore,
                         valueField: 'groupValue',
-                        displayField: 'groupName',                    
+                        displayField: 'groupName',
                         listeners : {
                             select : function(combo, record, eOpts){
                                 me.updateParameterCombo(record.get('groupValue'));
-                                
+
                             }
                         }
                     },this.parameterCombo, this.minMaxSlider]
                 }]
             }]
         });
-        
-       
-     
+
+
+
 
         Ext.tip.QuickTipManager.init();
         this.callParent(arguments);
-        
+
         //load our commodity store
         var callingInstance = this;
         groupStore.load( {
@@ -153,8 +157,8 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             }
         });
     },
-    
-    
+
+
     updateParameterCombo : function(featureType){
         var aoiParamStore = Ext.create('Ext.data.Store', {
             fields : ['classifier', 'pref_name','min','max'],
@@ -172,18 +176,18 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             },
             autoLoad : true
         });
-        
+
         this.parameterCombo.setStore(aoiParamStore);
         this.parameterCombo.setDisabled(false);
         var me = this;
-        
+
         var myMask = new Ext.LoadMask({
             msg    : 'Please wait...',
             target : this.parameterCombo.up('fieldset')
         });
 
         myMask.show();
-        
+
         aoiParamStore.on('load',function(store, records, successful, eOpts ){
             myMask.hide();
             if(successful){
@@ -191,7 +195,7 @@ Ext.define('auscope.layer.filterer.forms.CapdfHydroGeoChemFilterForm', {
             }
         })
     },
-    
+
     updateMinMaxSlider : function(min,max){
       var min=parseFloat(min),
           max=parseFloat(max)

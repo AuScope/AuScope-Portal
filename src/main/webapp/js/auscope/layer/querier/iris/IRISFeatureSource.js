@@ -17,7 +17,7 @@ Ext.define('auscope.layer.querier.iris.IRISFeatureSource', {
                 networkCode : networkCode,
                 stationCode : stationCode
             },
-            callback : function(success, data) {.
+            callback : function(success, data) {
                 if (!success) {
                     callback(false, []);
                 }
