@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
@@ -845,9 +846,8 @@ public class NVCLController extends BasePortalController {
     @RequestMapping("getNVCLClassifications.do")
     public ModelAndView getNVCLWFSDownloadStatus(
             @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam("algorithmOutputId") String rawAlgorithmOutputId) throws Exception {
+            @RequestParam("algorithmOutputId") String[] algorithmOutputIdStrings) throws Exception {
 
-        String[] algorithmOutputIdStrings = rawAlgorithmOutputId.split(",");
         int[] algorithmOutputIds = new int[algorithmOutputIdStrings.length];
         for (int i = 0; i < algorithmOutputIds.length; i++) {
             algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
@@ -857,7 +857,7 @@ public class NVCLController extends BasePortalController {
             List<AlgorithmOutputClassification> classifications = dataService2_0.getClassifications(serviceUrl, algorithmOutputIds);
             return generateJSONResponseMAV(true, classifications, "");
         } catch (Exception ex) {
-            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + rawAlgorithmOutputId, ex);
+            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + algorithmOutputIdStrings, ex);
             return generateJSONResponseMAV(false);
         }
     }
@@ -880,10 +880,10 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
             @RequestParam(required = false, value = "bbox") String bboxJson,
 
-            @RequestParam(required = false, value = "algorithmOutputId") String rawAlgorithmOutputId,
+            @RequestParam(required = false, value = "algorithmOutputId") String[] algorithmOutputIds,
             @RequestParam(required = false, value = "logName") String logName,
 
-            @RequestParam("classification") String classification,
+            @RequestParam(required = false, value = "classification") String classification,
             @RequestParam("startDepth") int startDepth,
             @RequestParam("endDepth") int endDepth,
             @RequestParam("operator") String operator,
@@ -892,14 +892,10 @@ public class NVCLController extends BasePortalController {
             @RequestParam("span") int span)
             throws Exception {
 
-        if ((StringUtils.isEmpty(rawAlgorithmOutputId) && StringUtils.isEmpty(logName)) ||
-            StringUtils.isNotEmpty(rawAlgorithmOutputId) && StringUtils.isNotEmpty(logName)) {
-            return generateJSONResponseMAV(false, null, "Must define exactly one of algorithmOutputId or logName");
-        }
 
-        String[] algorithmOutputIds = null;
-        if (StringUtils.isNotEmpty(rawAlgorithmOutputId)) {
-            algorithmOutputIds = rawAlgorithmOutputId.split(",");
+        if ((ArrayUtils.isEmpty(algorithmOutputIds) && StringUtils.isEmpty(logName)) ||
+             ArrayUtils.isNotEmpty(algorithmOutputIds) && StringUtils.isNotEmpty(logName)) {
+            return generateJSONResponseMAV(false, null, "Must define exactly one of algorithmOutputId or logName");
         }
 
         String filterString = null;
