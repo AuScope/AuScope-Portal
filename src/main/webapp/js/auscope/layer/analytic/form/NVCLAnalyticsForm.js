@@ -85,7 +85,19 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                     rootProperty: 'data'
                 }
             },
-            autoLoad: false
+            autoLoad: false,
+            listeners: {
+                scope: this,
+                load: function(algorithmOutputStore, records, success) {
+                    //If there are no classifications for a given algorithmOutputId set
+                    //then we need to disable our classification box
+                    if (success && Ext.isEmpty(records)) {
+                        this._setupAlgorithm(true);
+                    } else {
+                        this._setupAlgorithm();
+                    }
+                }
+            }
         });
 
         var operatorStore = Ext.create('Ext.data.Store', {
@@ -161,7 +173,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             text: 'version',
                             margin: '3 5 0 5'
                         },{
-                            xtype: 'combo',
+                            xtype: 'tagfield',
                             name: 'algorithmOutputId',
                             itemId: 'version',
                             store: versionsStore,
@@ -171,8 +183,29 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             queryMode: 'local',
                             allowBlank: false,
                             typeAhead: true,
+                            width: 250,
                             listeners: {
                                 change: Ext.bind(this._onVersionChange, this)
+                            },
+                            triggers: {
+                                all: {
+                                    cls: 'nvcl-all-trigger',
+                                    handler: Ext.bind(function() {
+                                        var values = [];
+                                        versionsStore.each(function(version) {
+                                            values.push(version.get('algorithmOutputId'));
+                                        });
+                                        this.down('#version').setValue(values);
+                                    }, this),
+                                    weight: -998
+                                },
+                                clear: {
+                                    cls: 'x-form-clear-trigger',
+                                    handler: Ext.bind(function() {
+                                        this.down('#version').setValue([]);
+                                    }, this),
+                                    weight: -999
+                                }
                             }
                         }]
                     },{
@@ -323,35 +356,41 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         this.callParent(arguments);
     },
 
-    _setupNonStandardAlgorithm: function(record) {
+    _setupNonStandardAlgorithm: function(record, disableClassifications) {
         this.down('#logname').setHidden(false).setDisabled(false);
-        this.down('#classification-text').setHidden(false).setDisabled(false);
+        this.down('#classification-text').setHidden(false).setDisabled(disableClassifications ? true : false);
         this.down('#version').setHidden(true).setDisabled(true);
         this.down('#versionlabel').setHidden(true).setDisabled(true);
         this.down('#classification-combo').setHidden(true).setDisabled(true);
     },
 
-    _setupStandardAlgorithm: function(record, versionCombo, versionStore) {
+    _setupStandardAlgorithm: function(record, disableClassifications) {
         this.down('#logname').setHidden(true).setDisabled(true);
         this.down('#classification-text').setHidden(true).setDisabled(true);
         this.down('#version').setHidden(false).setDisabled(false);
         this.down('#versionlabel').setHidden(false).setDisabled(false);
-        this.down('#classification-combo').setHidden(false).setDisabled(false);
+        this.down('#classification-combo').setHidden(false).setDisabled(disableClassifications ? true : false);
+    },
 
-        versionStore.loadData(record.get('versions'));
-        if (versionStore.getCount()) {
-            var highestVersion = versionStore.getAt(0);
-            versionCombo.setValue(highestVersion.get('algorithmOutputId'));
+    _setupAlgorithm: function(disableClassifications) {
+        var algorithmCombo = this.down('#algorithm');
+        var algorithmOutputStore = algorithmCombo.getStore();
+
+        var recIndex = algorithmOutputStore.find('algorithmId', algorithmCombo.getValue());
+        if (recIndex < 0) {
+            return;
         }
+        var record = algorithmOutputStore.getAt(recIndex);
+        var versionCombo = this.down('#version');
+        var versionStore = versionCombo.getStore();
 
-        //Add our "All versions tag"
-        var allOutputIds = record.get('versions').map(function(v) {
-            return v.algorithmOutputId
-        }).join(',');
-        versionStore.add({
-            version: 'All Versions',
-            algorithmOutputId: allOutputIds
-        });
+        if (record) {
+            if (record.get('algorithmId') === auscope.layer.analytic.form.NVCLAnalyticsForm.NON_STANDARD_ALGORITHM_ID) {
+                this._setupNonStandardAlgorithm(record, disableClassifications);
+            } else {
+                this._setupStandardAlgorithm(record, disableClassifications);
+            }
+        }
     },
 
     _onAlgorithmOutputSelect: function(combo, record) {
@@ -361,27 +400,27 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         var versionStore = versionCombo.getStore();
         versionStore.removeAll();
 
-        if (record) {
-            if (record.get('algorithmId') === auscope.layer.analytic.form.NVCLAnalyticsForm.NON_STANDARD_ALGORITHM_ID) {
-                this._setupNonStandardAlgorithm(record);
-            } else {
-                this._setupStandardAlgorithm(record, versionCombo, versionStore);
-            }
+        versionStore.loadData(record.get('versions'));
+        if (versionStore.getCount()) {
+            var highestVersion = versionStore.getAt(0);
+            versionCombo.setValue(highestVersion.get('algorithmOutputId'));
         }
+
+        this._setupAlgorithm();
     },
 
     _onVersionChange: function(combo, newValue, oldValue) {
-        var idx = combo.getStore().find('algorithmOutputId', newValue);
-        var record = combo.getStore().getAt(idx);
-        if (record) {
+        if (!Ext.isEmpty(newValue)) {
             var classCombo = this.down('#classification-combo');
+            var classText = this.down('#classification-text');
             classCombo.setValue(null);
+            classText.setValue('');
 
             var classStore = classCombo.getStore();
             classStore.removeAll();
             classStore.getProxy().setExtraParams({
                 serviceUrl: auscope.layer.analytic.form.NVCLAnalyticsForm.NVCL_DATA_SERVICE,
-                algorithmOutputId: record.get('algorithmOutputId')
+                algorithmOutputId: newValue
             });
             classStore.load();
         }
