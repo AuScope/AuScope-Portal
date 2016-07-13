@@ -401,32 +401,23 @@ Ext.application({
                 var knownLayer = knownLayerStore.getById('sf0-borehole-nvcl');
 
                 //Expand group
-                var groupingFeature = null;
-                Ext.each(knownLayersPanel.getView().features, function(f) {
-                    if (f.$className === 'Ext.grid.feature.Grouping') {
-                        groupingFeature = f;
+                knownLayersPanel._eachGroup(function(group) {
+                    if (group.getTitle().indexOf(knownLayer.get('group')) >= 0) {
+                        group.expand();
                     }
                 });
-                if (groupingFeature) {
-                    groupingFeature.expand(knownLayer.get('group'));
 
-                    //Expand layer
-                    var rowExpanderContainer = null;
-                    Ext.each(knownLayersPanel.plugins, function(p) {
-                        if (p.$className === 'portal.widgets.grid.plugin.RowExpanderContainer') {
-                            rowExpanderContainer = p;
-                        }
-                    });
-                    if (rowExpanderContainer) {
-                        rowExpanderContainer.toggleRow(knownLayersPanel.getView().getRow(knownLayer), knownLayer);
-
-                        var layer = knownLayer.get('layer');
-                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer, map);
-                        win.show();
-
-                        win.showStatusPopup(urlParams.nvclanemail, urlParams.nvclanid);
+                //Expand row
+                knownLayersPanel._eachRow(function(row) {
+                    if (row.recordId === knownLayer.get('id')) {
+                        row.expand();
                     }
-                }
+                });
+
+                var layer = knownLayer.get('layer');
+                var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer, map);
+                win.show();
+                win.showStatusPopup(urlParams.nvclanemail, urlParams.nvclanid);
             });
         }
     }
