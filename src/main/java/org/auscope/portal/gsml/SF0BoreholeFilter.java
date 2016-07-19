@@ -117,12 +117,15 @@ public class SF0BoreholeFilter extends BoreholeFilter {
                             .toArray(new String[compareFragments.size()])));
         }
 
+
         if (this.justNVCL != null && this.justNVCL==true) {
-        	parameterFragments.add(this.generatePropertyIsEqualToFragment("gsmlp:nvclCollection", "true"));
+            //We can "optimise" the query if we are using "justNVCL" boreholes.
+        	return this.generateAndComparisonFragment(this.generatePropertyIsEqualToFragment("gsmlp:nvclCollection", "true"),
+        	                                          this.generateAndComparisonFragment(parameterFragments.toArray(new String[parameterFragments.size()])));
+        } else {
+            return this.generateAndComparisonFragment(parameterFragments.toArray(new String[parameterFragments.size()]));
         }
 
-        return this.generateAndComparisonFragment(this
-                .generateAndComparisonFragment(parameterFragments
-                        .toArray(new String[parameterFragments.size()])));
+
     }
 }

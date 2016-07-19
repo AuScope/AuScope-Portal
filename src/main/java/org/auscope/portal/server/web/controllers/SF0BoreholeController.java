@@ -139,21 +139,21 @@ public class SF0BoreholeController extends BasePortalController {
             if (!analyticsResults.getErrorBoreholes().isEmpty()) {
                 filterNames.add("Error Boreholes");
                 filterColors.add("#ff0000");
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), null));
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true));
                 filterMarks.add(Mark.X);
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
                 filterColors.add("#8390C6");
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), null));
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true));
                 filterMarks.add(Mark.SQUARE);
             }
 
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
                 filterColors.add(color.isEmpty() ? "#2242c7" : color);
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), null));
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true));
                 filterMarks.add(Mark.SQUARE);
             }
         } else {
