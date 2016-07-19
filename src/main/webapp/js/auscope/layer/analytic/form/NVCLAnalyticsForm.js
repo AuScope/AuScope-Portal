@@ -536,6 +536,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             analyticsJobId: jobId,
             nvclJobName: jobName
         }, false);
+        //this.layer.get('filterForm').readFromFilterer(this.layer.get('filterer'));
         portal.map.openlayers.ActiveLayerManager.addLayer(this.layer);
     },
 
