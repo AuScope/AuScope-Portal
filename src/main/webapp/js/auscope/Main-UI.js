@@ -399,20 +399,7 @@ Ext.application({
             knownLayerStore.on('load', function() {
                 //Expand the known layer then trigger the popup for the layer that gets generated on expand
                 var knownLayer = knownLayerStore.getById('sf0-borehole-nvcl');
-
-                //Expand group
-                knownLayersPanel._eachGroup(function(group) {
-                    if (group.getTitle().indexOf(knownLayer.get('group')) >= 0) {
-                        group.expand();
-                    }
-                });
-
-                //Expand row
-                knownLayersPanel._eachRow(function(row) {
-                    if (row.recordId === knownLayer.get('id')) {
-                        row.expand();
-                    }
-                });
+                knownLayersPanel.expandRecordById(knownLayer.get('id'));
 
                 var layer = knownLayer.get('layer');
                 var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer, map);
