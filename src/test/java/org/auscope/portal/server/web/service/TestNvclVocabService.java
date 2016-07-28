@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker.Format;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -33,7 +34,7 @@ public class TestNvclVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository works as expected - returning all scalars
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -53,9 +54,9 @@ public class TestNvclVocabService extends PortalTestClass {
                 will(returnValue(mockMethod2));
 
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(rs1));
+                will(returnValue(new HttpClientInputStream(rs1, null)));
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);
-                will(returnValue(rs2));
+                will(returnValue(new HttpClientInputStream(rs2, null)));
 
                 oneOf(mockMethod).releaseConnection();
                 oneOf(mockMethod2).releaseConnection();
@@ -69,7 +70,7 @@ public class TestNvclVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository by label works as expected - returning only a single term
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -85,7 +86,7 @@ public class TestNvclVocabService extends PortalTestClass {
                 will(returnValue(mockMethod));
 
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(rs1));
+                will(returnValue(new HttpClientInputStream(rs1, null)));
 
                 oneOf(mockMethod).releaseConnection();
             }

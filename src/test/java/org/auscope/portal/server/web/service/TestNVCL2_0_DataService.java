@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
@@ -60,7 +61,7 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockMethodMaker).getDownloadCSVMethod(with(any(String.class)), with(any(String[].class)));will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(new HttpClientInputStream(responseStream, null)));
             }
         });
 
@@ -111,7 +112,7 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockMethodMaker).getDownloadCSVMethod(with(any(String.class)), with(any(String[].class)));will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(new HttpClientInputStream(responseStream, null)));
 
                 allowing(responseStream).read(with(any(byte[].class)), with(any(Integer.class)), with(any(Integer.class)));will(throwException(new IOException()));
 
@@ -137,7 +138,7 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockMethodMaker).getDownloadCSVMethod(with(any(String.class)), with(any(String[].class)));will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(responseStream));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(new HttpClientInputStream(responseStream, null)));
             }
         });
 

@@ -1,15 +1,12 @@
 package org.auscope.portal.server.web.service;
 
 import java.io.InputStream;
-import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
-import org.auscope.portal.core.services.PortalServiceException;
-import org.auscope.portal.core.services.SISSVoc3Service;
-import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker;
 import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc3MethodMaker.Format;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
@@ -19,11 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 public class TestErmlVocabService extends PortalTestClass {
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class, "mockMethod");
@@ -51,7 +44,7 @@ public class TestErmlVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository works as expected - returning all english GA concepts
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -71,9 +64,9 @@ public class TestErmlVocabService extends PortalTestClass {
                 will(returnValue(mockMethod2));
 
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(rs1));
+                will(returnValue(new HttpClientInputStream(rs1, null)));
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);
-                will(returnValue(rs2));
+                will(returnValue(new HttpClientInputStream(rs2, null)));
 
                 oneOf(mockMethod).releaseConnection();
                 oneOf(mockMethod2).releaseConnection();
@@ -90,7 +83,7 @@ public class TestErmlVocabService extends PortalTestClass {
 
     /**
      * Tests that iterating a repository works as expected - returning only a single french term
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -110,9 +103,9 @@ public class TestErmlVocabService extends PortalTestClass {
                 will(returnValue(mockMethod2));
 
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(rs1));
+                will(returnValue(new HttpClientInputStream(rs1, null)));
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod2);
-                will(returnValue(rs2));
+                will(returnValue(new HttpClientInputStream(rs2, null)));
 
                 oneOf(mockMethod).releaseConnection();
                 oneOf(mockMethod2).releaseConnection();

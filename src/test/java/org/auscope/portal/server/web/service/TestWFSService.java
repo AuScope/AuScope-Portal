@@ -5,6 +5,7 @@ import java.net.ConnectException;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.PortalServiceException;
@@ -434,7 +435,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(responseStream));
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
 
                 oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName,
                         ResultType.Hits, null, null);
@@ -500,7 +501,7 @@ public class TestWFSService extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(responseStream));
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
 
                 oneOf(mockMethodMaker).makePostMethod(serviceUrl, typeName, filterString, maxFeatures, srsName,
                         ResultType.Hits, null, null);
