@@ -72,60 +72,59 @@ Ext.define('auscope.chart.rickshawChart', {
             graph_html +=  '  </div>'+
                            '  <form id="right_side_panel_'+idx.toString()+'">';
             
-            // Only the first graph gets the controls placed on its right hand side
-            if (idx==0) {
-                graph_html += '    <section>'+
-                              '      <div id="renderer_form_'+idx.toString()+'" class="toggler">'+
-                              '        <input type="radio" name="renderer" id="area_'+idx.toString()+'" value="area" checked>'+
-                              '        <label for="area_'+idx.toString()+'">area</label>'+
-                              '        <input type="radio" name="renderer" id="bar_'+idx.toString()+'" value="bar">'+
-                              '        <label for="bar_'+idx.toString()+'">bar</label>'+
-                              '        <input type="radio" name="renderer" id="line_'+idx.toString()+'" value="line">'+
-                              '        <label for="line_'+idx.toString()+'">line</label>'+
-                              '        <input type="radio" name="renderer" id="scatter_'+idx.toString()+'" value="scatterplot">'+
-                              '        <label for="scatter_'+idx.toString()+'">scatter</label>'+
-                              '      </div>'+
-                              '    </section>'+
-                              '    <section>'+
-                              '      <div id="offset_form_'+idx.toString()+'" class="toggler">'+
-                              '        <label for="stack_'+idx.toString()+'">'+
-                              '          <input type="radio" name="offset" id="stack_'+idx.toString()+'" value="zero" checked>'+
-                              '          <span>stack</span>'+
-                              '        </label>'+
-                              '        <label for="stream_'+idx.toString()+'">'+
-                              '          <input type="radio" name="offset" id="stream_'+idx.toString()+'" value="wiggle">'+
-                              '          <span>stream</span>'+
-                              '        </label>'+
-                              '        <label for="pct_'+idx.toString()+'">'+
-                              '          <input type="radio" name="offset" id="pct_'+idx.toString()+'" value="expand">'+
-                              '          <span>pct</span>'+
-                              '        </label>'+
-                              '        <label for="value_'+idx.toString()+'">'+
-                              '          <input type="radio" name="offset" id="value_'+idx.toString()+'" value="value">'+
-                              '          <span>value</span>'+
-                              '        </label>'+
-                              '      </div>'+
-                              '      <div id="interpolation_form_'+idx.toString()+'" class="toggler">'+
-                              '        <label for="cardinal_'+idx.toString()+'">'+
-                              '          <input type="radio" name="interpolation" id="cardinal_'+idx.toString()+'" value="cardinal" checked>'+
-                              '          <span>cardinal</span>'+
-                              '        </label>'+
-                              '        <label for="linear_'+idx.toString()+'">'+
-                              '          <input type="radio" name="interpolation" id="linear_'+idx.toString()+'" value="linear">'+
-                              '          <span>linear</span>'+
-                              '        </label>'+
-                              '        <label for="step_'+idx.toString()+'">'+
-                              '          <input type="radio" name="interpolation" id="step_'+idx.toString()+'" value="step-after">'+
-                              '          <span>step</span>'+
-                              '        </label>'+
-                              '      </div>'+
-                              '    </section>'+
-                              '    <section>'+
-                              '      <h6>Smoothing</h6>'+
-                              '      <div id="smoother_'+idx.toString()+'"></div>'+
-                              '    </section>'+
-                              '    <section></section>';
-            }
+            // Place controls on right hand side of each graph
+            graph_html += '    <section>'+
+                          '      <div id="renderer_form_'+idx.toString()+'" class="toggler">'+
+                          '        <input type="radio" name="renderer" id="area_'+idx.toString()+'" value="area" checked>'+
+                          '        <label for="area_'+idx.toString()+'">area</label>'+
+                          '        <input type="radio" name="renderer" id="bar_'+idx.toString()+'" value="bar">'+
+                          '        <label for="bar_'+idx.toString()+'">bar</label>'+
+                          '        <input type="radio" name="renderer" id="line_'+idx.toString()+'" value="line">'+
+                          '        <label for="line_'+idx.toString()+'">line</label>'+
+                          '        <input type="radio" name="renderer" id="scatter_'+idx.toString()+'" value="scatterplot">'+
+                          '        <label for="scatter_'+idx.toString()+'">scatter</label>'+
+                          '      </div>'+
+                          '    </section>'+
+                          '    <section>'+
+                          '      <div id="offset_form_'+idx.toString()+'" class="toggler">'+
+                          '        <label for="stack_'+idx.toString()+'">'+
+                          '          <input type="radio" name="offset" id="stack_'+idx.toString()+'" value="zero" checked>'+
+                          '          <span>stack</span>'+
+                          '        </label>'+
+                          '        <label for="stream_'+idx.toString()+'">'+
+                          '          <input type="radio" name="offset" id="stream_'+idx.toString()+'" value="wiggle">'+
+                          '          <span>stream</span>'+
+                          '        </label>'+
+                          '        <label for="pct_'+idx.toString()+'">'+
+                          '          <input type="radio" name="offset" id="pct_'+idx.toString()+'" value="expand">'+
+                          '          <span>pct</span>'+
+                          '        </label>'+
+                          '        <label for="value_'+idx.toString()+'">'+
+                          '          <input type="radio" name="offset" id="value_'+idx.toString()+'" value="value">'+
+                          '          <span>value</span>'+
+                          '        </label>'+
+                          '      </div>'+
+                          '      <div id="interpolation_form_'+idx.toString()+'" class="toggler">'+
+                          '        <label for="cardinal_'+idx.toString()+'">'+
+                          '          <input type="radio" name="interpolation" id="cardinal_'+idx.toString()+'" value="cardinal" checked>'+
+                          '          <span>cardinal</span>'+
+                          '        </label>'+
+                          '        <label for="linear_'+idx.toString()+'">'+
+                          '          <input type="radio" name="interpolation" id="linear_'+idx.toString()+'" value="linear">'+
+                          '          <span>linear</span>'+
+                          '        </label>'+
+                          '        <label for="step_'+idx.toString()+'">'+
+                          '          <input type="radio" name="interpolation" id="step_'+idx.toString()+'" value="step-after">'+
+                          '          <span>step</span>'+
+                          '        </label>'+
+                          '      </div>'+
+                          '    </section>'+
+                          '    <section>'+
+                          '      <h6>Smoothing</h6>'+
+                          '      <div id="smoother_'+idx.toString()+'"></div>'+
+                          '    </section>'+
+                          '    <section></section>';
+
             graph_html +=  '  </form>'+
                            '</div>'; // id='content=_'
         });
@@ -336,20 +335,23 @@ Ext.define('auscope.chart.rickshawChart', {
             height: yaxis_keys.length*50,
         });
             
-        // A slider which can be used to smooth out the peaks in the graph
-        var smoother = new Rickshaw.Graph.MultiSmoother({
-            graphs: graph_list,
-            element: local_div.select("[id=smoother_0]").node()
-        });
+
         
-        // Create and register the controls
-        var controls = new RenderControls({
-            element: local_div.select("[id=right_side_panel_0]").node(),
-            graphs: graph_list
-        });
         
         // Render graph
         graph_list.forEach(function(graph, idx, arr) {
+            
+            // One set of controls for each graph
+            var controls = new RenderControls({
+                element: local_div.select("[id=right_side_panel_"+idx.toString()+"]").node(),
+                graph: graph
+            });
+            
+            // A slider which can be used to smooth out the peaks in the graph
+            var smoother = new Rickshaw.Graph.Smoother({
+                graph: graph,
+                element: local_div.select("[id=smoother_"+idx.toString()+"]").node()
+            });
             
             // X-Axis for the preview slider
             var previewXAxis = new Rickshaw.Graph.Axis.X({
