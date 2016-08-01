@@ -91,7 +91,6 @@
                 <ref bean="cswMDUProduction" />
                 <ref bean="cswAsterProduction" />
                 <ref bean="cswInSarProduction" />
-                <ref bean="cswVeglProduction" />
             </list>
         </constructor-arg>
     </bean>

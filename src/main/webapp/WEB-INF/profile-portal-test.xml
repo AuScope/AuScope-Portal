@@ -106,7 +106,6 @@
                 <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswAsterProduction" />
-                <ref bean="cswVeglProduction" />
             </list>
         </constructor-arg>
     </bean>
