@@ -17,7 +17,7 @@ public class MineralTenementFilter extends AbstractFilter {
 
     /**
      * Given a mine name, this object will build a filter to a wild card search for mine names
-     *
+     * Extended to support mt:status as well.
      * @param mineName
      *            the main name
      */
@@ -47,7 +47,35 @@ public class MineralTenementFilter extends AbstractFilter {
             fragments.add(this.generatePropertyIsLikeFragment("mt:status", status));
         }
     }
+    /**
+     * Given a mine name, this object will build a filter to a wild card search for mine names
+     *
+     * @param mineName
+     *            the main name
+     */
+    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate) {
 
+        fragments = new ArrayList<String>();
+        if (name != null && !name.isEmpty()) {
+            fragments.add(this.generatePropertyIsLikeFragment("mt:name", name));
+        }
+        if (tenementType != null && !tenementType.isEmpty()) {
+            fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
+        }
+
+        if (owner != null && !owner.isEmpty()) {
+            fragments.add(this.generatePropertyIsLikeFragment("mt:owner", owner));
+        }
+
+        if (size != null && !size.isEmpty()) {
+            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("mt:area", size));
+        }
+
+        if (endDate != null && !endDate.isEmpty()) {
+            fragments.add(this.generatePropertyIsLessThanOrEqualTo("mt:expireDate", endDate));
+        }
+
+    }
     public String getFilterStringAllRecords() {
         return this.generateFilter(this.generateAndComparisonFragment(fragments.toArray(new String[fragments.size()])));
     }
