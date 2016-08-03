@@ -14,7 +14,7 @@ public class TestMineralTenementFilter extends PortalTestClass {
      */
     @Test
     public void testMinOccurFilter() throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter("abc", "def", "ghi", "jkl", "mno");
+        MineralTenementFilter filter = new MineralTenementFilter("abc", "def", "ghi", "jkl", "mno","pqr");
 
         String result = filter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(result);
@@ -30,7 +30,7 @@ public class TestMineralTenementFilter extends PortalTestClass {
      */
     @Test
     public void testEmptyComoodityFilter() throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter("", "", "", "", "");
+        MineralTenementFilter filter = new MineralTenementFilter("", "", "", "", "","");
 
         String result = filter.getFilterStringAllRecords();
         Assert.assertTrue(result.isEmpty());
@@ -44,7 +44,7 @@ public class TestMineralTenementFilter extends PortalTestClass {
      */
     @Test
     public void testAdditionalStyle() throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter("abc", "def", "ghi", "jkl", "mno");
+        MineralTenementFilter filter = new MineralTenementFilter("abc", "def", "ghi", "jkl", "mno","pqr");
 
         String result = filter.getFilterWithAdditionalStyle();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(result);
