@@ -21,7 +21,7 @@ public class MineralTenementFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate) {
+    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,String status) {
 
         fragments = new ArrayList<String>();
         if (name != null && !name.isEmpty()) {
@@ -43,6 +43,9 @@ public class MineralTenementFilter extends AbstractFilter {
             fragments.add(this.generatePropertyIsLessThanOrEqualTo("mt:expireDate", endDate));
         }
 
+        if (status != null && !status.isEmpty()) {
+            fragments.add(this.generatePropertyIsLikeFragment("mt:status", status));
+        }
     }
 
     public String getFilterStringAllRecords() {
