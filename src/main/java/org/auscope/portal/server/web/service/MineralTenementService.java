@@ -50,14 +50,27 @@ public class MineralTenementService extends BaseWFSService {
     public String getMineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,
             FilterBoundingBox bbox)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate);
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null);
         return generateFilterString(filter, bbox);
     }
-
+    public String getMineralTenementFilterCCStatus(String name, String tenementType, String owner, String size, String endDate,
+            FilterBoundingBox bbox,String status)
+            throws Exception {
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,status);
+        return generateFilterString(filter, bbox);
+    }
+    
+    public String getMineralTenementFilterCCType(String name, String tenementType, String owner, String size, String endDate, 
+            FilterBoundingBox bbox)
+            throws Exception {
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null);
+        return generateFilterString(filter, bbox);
+    }
+    
     public String getMineralTenementWithStyling(String name, String tenementType, String owner, String size,
             String endDate)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate);
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null);
         return generateAdditionalStyleFilter(filter);
     }
 
@@ -79,5 +92,7 @@ public class MineralTenementService extends BaseWFSService {
         }
 
     }
+
+
 
 }
