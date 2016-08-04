@@ -41,9 +41,9 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
             sldUrl = portal.util.URL.base + styleUrl + "?ccProperty=" + ccProperty;
             isSld_body = false;
         } else if (layer.id === "mineral-tenements") {
-            ccProperty = filter.getParameter('ccProperty') || 'TenementType';
-            sldUrl = portal.util.URL.base + styleUrl + "?ccProperty=" + ccProperty;
-            isSld_body = false;
+            ccProperty = filter.getParameter('ccProperty');
+            sldUrl = "getMineralTenementLegendStyle.do?ccProperty=" + ccProperty;
+            isSld_body = true;
         } else {
             sldUrl = styleUrl;
             isSld_body = true;
