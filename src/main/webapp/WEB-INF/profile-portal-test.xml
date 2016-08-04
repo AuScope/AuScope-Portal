@@ -16,8 +16,7 @@
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
-                <ref bean="knownTypeMineralTenements" />                
-                <ref bean="knownTypeColorCodeMineralTenements" />
+                <ref bean="knownTypeMineralTenements" />
                 <ref bean="knownTypeRemanentAnomalies" />
                 <ref bean="knownTypeRemanentAnomaliesTMI" />
                 <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
@@ -106,7 +105,6 @@
                 <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswAsterProduction" />
-                <ref bean="cswVeglProduction" />
             </list>
         </constructor-arg>
     </bean>

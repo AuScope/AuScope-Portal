@@ -41,9 +41,6 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             case 'mineral-tenements':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.MineralTenementFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
-            case 'colorcode-mineral-tenements':
-                baseFilterForm = Ext.create('auscope.layer.filterer.forms.ColorCodeMineralTenementFilterForm', baseFilterFormCfg);
-                return this._generateResult(baseFilterForm, true);                 
             case 'mineral-occ-view':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.MinOccurViewFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
