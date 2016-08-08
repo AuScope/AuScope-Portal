@@ -55,11 +55,11 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
         var tenementTypeStore = Ext.create('Ext.data.Store', {
             fields: ['displayText', 'valueText'],
             data : [
-                {displayText: 'Exploration', valueText: '*exploration*'},
-                {displayText: 'Prospecting', valueText: '*prospecting*'},
-                {displayText: 'Miscellaneous', valueText: '*miscellaneous*'},
-                {displayText: 'Mining Lease', valueText: '*mining*'},
-                {displayText: 'Licence', valueText: '*licence*'}
+                {displayText: 'Exploration', valueText: 'exploration*'},
+                {displayText: 'Prospecting', valueText: 'prospecting*'},
+                {displayText: 'Miscellaneous', valueText: 'miscellaneous*'},
+                {displayText: 'Mining Lease', valueText: 'mining*'},
+                {displayText: 'Licence', valueText: 'licence*'}
             ]
         });
         var ccPropertyStore = Ext.create('Ext.data.Store', {

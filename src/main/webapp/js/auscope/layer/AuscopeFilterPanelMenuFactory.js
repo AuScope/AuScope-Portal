@@ -36,10 +36,6 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                     + "?ccProperty=" + ccProperty
                     + "&ccLevels=" + ccLevels;
             isSld_body = false;
-        } else if (layer.id === "colorcode-mineral-tenements") {
-            ccProperty = filter.getParameter('ccProperty') || 'TenementType';
-            sldUrl = portal.util.URL.base + styleUrl + "?ccProperty=" + ccProperty;
-            isSld_body = false;
         } else if (layer.id === "mineral-tenements") {
             ccProperty = filter.getParameter('ccProperty');
             sldUrl = "getMineralTenementLegendStyle.do?ccProperty=" + ccProperty;
