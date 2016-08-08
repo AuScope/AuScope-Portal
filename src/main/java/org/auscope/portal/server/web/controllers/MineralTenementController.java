@@ -101,7 +101,6 @@ public class MineralTenementController extends BasePortalController {
             @RequestParam(required = false, value = "endDate") String endDate,
             @RequestParam(required = false, value = "ccProperty") String ccProperty,
             HttpServletResponse response) throws Exception {
-        //String ccProperty = "TenementType";
         String style = "";        
         switch (ccProperty) {
         case "TenementType" : 
@@ -171,288 +170,21 @@ public class MineralTenementController extends BasePortalController {
                 "</StyledLayerDescriptor>";
         return style;
     }
-    /**
-     * Handles getting the style of the color coding mineral tenement filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
-     * implicitly)
-     *
-     * @param serviceUrl
-     * @param ccProperty
-     * @throws Exception
-     */
-    @RequestMapping("/getColorCodeMineralTenementStyle.do")
-    public void doColorCodeMineralTenementStyle(
-            @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
-            @RequestParam(required = false, value = "ccProperty") String ccProperty,
-            HttpServletResponse response) throws Exception {
-    	String style = "";
-    	switch (ccProperty) {
-    	case "TenementType" : 
-    		style = this.getColorCodeTenementsTypeStyle(MINERAL_TENEMENT);
-    		break;
-    	case "TenementStatus": 
-    		style = this.getColorCodeTenementsStatusStyle(MINERAL_TENEMENT);
-    		break;
-    	default:
-    		break;    		
-    	}
-        response.setContentType("text/xml");
-
-        ByteArrayInputStream styleStream = new ByteArrayInputStream(
-                style.getBytes());
-        OutputStream outputStream = response.getOutputStream();
-
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
-
-        styleStream.close();
-        outputStream.close();
-    }
-    public String getColorCodeTenementsTypeStyle(String name) {
-
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>Default style</Title>" +
-                "<Abstract>A green default style</Abstract>" +
-                "<FeatureTypeStyle>" +
-                
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Exploration</Title>" +
-                    "<Abstract></Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
-                    "<ogc:Literal>Exploration*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#0000FF" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#0000FF" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-                    
-                    
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Prospecting</Title>" +
-                    "<Abstract></Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
-                    "<ogc:Literal>Prospecting*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#00FFFF" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#00FFFF" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-                    
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Miscellaneous</Title>" +
-                    "<Abstract></Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
-                    "<ogc:Literal>Miscellaneous*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#00FF00" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#00FF00" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-                    
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Mining Lease</Title>" +
-                    "<Abstract></Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
-                    "<ogc:Literal>Mining Lease*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#FFFF00" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#FFFF00" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +    
-                    
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Licence</Title>" +
-                    "<Abstract></Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:tenementType</ogc:PropertyName>" +
-                    "<ogc:Literal>Licence*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#FF0000" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#FF0000" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +                      
-                "</FeatureTypeStyle>" +
-                "</UserStyle>" +
-                "</NamedLayer>" +
-                "</StyledLayerDescriptor>";
-        return style;
-    }
-    
-    public String getColorCodeTenementsStatusStyle(String name) {
-
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>Default style</Title>" +
-                "<Abstract>A green default style</Abstract>" +
-                "<FeatureTypeStyle>" +
-                
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Live</Title>" +
-                    "<Abstract>Tenement Status Blue</Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:status</ogc:PropertyName>" +
-                    "<ogc:Literal>LIVE*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#0000FF" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#0000FF" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-                    
-                    
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Current</Title>" +
-                    "<Abstract>Tenement Status Green</Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:status</ogc:PropertyName>" +
-                    "<ogc:Literal>CURRENT*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#00FF00" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#00FF00" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-                    
-
-                    "<Rule>" +
-                    "<Name>Polygon for mineral tenement</Name>" +
-                    "<Title>Pending</Title>" +
-                    "<Abstract>Tenement Status Red</Abstract>" +
-                    "<ogc:Filter>" +
-                    "<ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\">" +
-                    "<ogc:PropertyName>mt:status</ogc:PropertyName>" +
-                    "<ogc:Literal>PENDING*</ogc:Literal>" +
-                    "</ogc:PropertyIsLike>" +
-                    "</ogc:Filter>" +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#FF0000" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#FF0000" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +                      
-                "</FeatureTypeStyle>" +
-                "</UserStyle>" +
-                "</NamedLayer>" +
-                "</StyledLayerDescriptor>";
-        return style;
-    }    
     
     public String getColorCodeStyleForType(String name, String tenementType,String owner, String size, String endDate) {
+
         String filterExploration = "";
         String filterProspecting = "";
         String filterMiscellaneous = "";
         String filterMiningLease = "";
         String filterLicence = "";        
        try {
-           if (tenementType == null || tenementType.isEmpty()) {
-               filterExploration = this.mineralTenementService.getMineralTenementFilterCCType(name, "Exploration*", owner, size, endDate, null);
-               filterProspecting = this.mineralTenementService.getMineralTenementFilterCCType(name ,"Prospecting*", owner, size, endDate, null);
-               filterMiscellaneous = this.mineralTenementService.getMineralTenementFilterCCType(name,"Miscellaneous*", owner, size, endDate, null);   
-               filterMiningLease = this.mineralTenementService.getMineralTenementFilterCCType(name ,"Mining Lease*", owner, size, endDate, null);
-               filterLicence = this.mineralTenementService.getMineralTenementFilterCCType(name ,"Licence*", owner, size, endDate, null);
-           } else {
-               filterExploration = this.mineralTenementService.getMineralTenementFilterCCType(name, tenementType, owner, size, endDate, null);
-               filterProspecting = filterExploration;
-               filterMiscellaneous = filterExploration;   
-               filterMiningLease = filterExploration;
-               filterLicence = filterExploration;               
-           }
+
+               filterExploration = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "exploration*");
+               filterProspecting = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "prospecting*");
+               filterMiscellaneous = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "miscellaneous*");   
+               filterMiningLease = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "mining*");
+               filterLicence = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "licence*");
        } catch (Exception e) {
            // TODO Auto-generated catch block
            e.printStackTrace();
@@ -825,5 +557,5 @@ public class MineralTenementController extends BasePortalController {
                 "</NamedLayer>" +
                 "</StyledLayerDescriptor>";
         return style;
-    }    
+    }        
 }

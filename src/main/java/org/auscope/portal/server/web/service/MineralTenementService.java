@@ -7,6 +7,7 @@ import org.auscope.portal.core.services.BaseWFSService;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
+import org.auscope.portal.mineraloccurrence.MineralTenementCCFilter;
 import org.auscope.portal.mineraloccurrence.MineralTenementFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,16 +55,18 @@ public class MineralTenementService extends BaseWFSService {
         return generateFilterString(filter, bbox);
     }
     public String getMineralTenementFilterCCStatus(String name, String tenementType, String owner, String size, String endDate,
-            FilterBoundingBox bbox,String status)
+            FilterBoundingBox bbox,String ccstatus)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,status);
+        MineralTenementCCFilter filter = new MineralTenementCCFilter(name, tenementType, owner, size, endDate);
+        filter.addCCStatusInFilter(ccstatus);
         return generateFilterString(filter, bbox);
     }
     
     public String getMineralTenementFilterCCType(String name, String tenementType, String owner, String size, String endDate, 
-            FilterBoundingBox bbox)
+            FilterBoundingBox bbox,String cctype)
             throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null);
+        MineralTenementCCFilter filter = new MineralTenementCCFilter(name, tenementType, owner, size, endDate);
+        filter.addCCTypeInFilter(cctype);
         return generateFilterString(filter, bbox);
     }
     
