@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.mineraloccurrence.MineralTenementColorCodeFilter;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.auscope.portal.server.web.service.MineralTenementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class MineralTenementController extends BasePortalController {
         String style = "";        
         switch (ccProperty) {
         case "TenementType" : 
-            style = this.getColorCodeLegendStyleForType();
+            style = this.getNewTypeLegendStyle();//this.getColorCodeLegendStyleForType();
             break;
         case "TenementStatus": 
             style = this.getColorCodeLegendStyleForStatus();
@@ -104,7 +105,7 @@ public class MineralTenementController extends BasePortalController {
         String style = "";        
         switch (ccProperty) {
         case "TenementType" : 
-            style = this.getColorCodeStyleForType(name,tenementType, owner, size, endDate);
+            style = this.getNewTypeStyle(name,tenementType, owner, size, endDate);
             break;
         case "TenementStatus": 
             style = this.getColorCodeStyleForStatus(name, tenementType, owner, size, endDate);
@@ -116,7 +117,6 @@ public class MineralTenementController extends BasePortalController {
             break;          
         }
         
-
         response.setContentType("text/xml");
 
         ByteArrayInputStream styleStream = new ByteArrayInputStream(
@@ -557,5 +557,109 @@ public class MineralTenementController extends BasePortalController {
                 "</NamedLayer>" +
                 "</StyledLayerDescriptor>";
         return style;
-    }        
+    }   
+    public String getNewTypeStyle(String name, String tenementType, String owner, String size, String endDate) {
+        
+        String filterProduction = "";
+        String filterExploration = "";
+        try {
+           MineralTenementColorCodeFilter filter = new MineralTenementColorCodeFilter(name, tenementType, owner, size, endDate);
+           filterProduction = filter.getFilterStringForTypeProduction();
+           filterExploration = filter.getFilterStringForTypeExploration();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"+
+                "<StyledLayerDescriptor version=\"1.0.0\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns=\"http://www.opengis.net/sld\" xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ows=\"http://www.opengis.net/ows\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"+
+                "<NamedLayer>"+
+                    "<Name>mt:MineralTenement</Name>"+
+                    "<UserStyle>"+
+                        "<Title>mt:tenementType ColorCode Style</Title>"+
+                        "<Abstract></Abstract>"+
+                        "<FeatureTypeStyle>"+
+                            "<Rule>"+
+                                "<Name>r1</Name>"+
+                                "<Title>Exploration</Title>"+
+                                "<Abstract/>"+
+                                filterExploration +
+                                "<PolygonSymbolizer>"+
+                                    "<Fill>"+
+                                        "<CssParameter name=\"fill\">#0000FF</CssParameter>"+
+                                        "<CssParameter name=\"fill opacity\">0.6</CssParameter>"+
+                                    "</Fill>"+
+                                    "<Stroke>"+
+                                        "<CssParameter name=\"stroke\">#0000FF</CssParameter>"+
+                                        "<CssParameter name=\"stroke width\">1</CssParameter>"+
+                                    "</Stroke>"+
+                                "</PolygonSymbolizer>"+
+                            "</Rule>"+
+                            "<Rule>"+
+                                "<Name>r2</Name>"+
+                                "<Title>Production</Title>"+
+                                "<Abstract/>"+
+                                filterProduction +
+                                "<PolygonSymbolizer>"+
+                                    "<Fill>"+
+                                        "<CssParameter name=\"fill\">#FF0000</CssParameter>"+
+                                        "<CssParameter name=\"fill opacity\">0.6</CssParameter>"+
+                                    "</Fill>"+
+                                    "<Stroke>"+
+                                        "<CssParameter name=\"stroke\">#FF0000</CssParameter>"+
+                                        "<CssParameter name=\"stroke width\">1</CssParameter>"+
+                                    "</Stroke>"+
+                                "</PolygonSymbolizer>"+
+                            "</Rule>"+
+                        "</FeatureTypeStyle>"+
+                    "</UserStyle>"+
+                "</NamedLayer>"+
+            "</StyledLayerDescriptor>";
+        return style;
+    }    
+    public String getNewTypeLegendStyle() {
+        
+       String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"+
+                "<StyledLayerDescriptor version=\"1.0.0\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns=\"http://www.opengis.net/sld\" xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ows=\"http://www.opengis.net/ows\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"+
+                "<NamedLayer>"+
+                    "<Name>mt:MineralTenement</Name>"+
+                    "<UserStyle>"+
+                        "<Title>mt:tenementType ColorCode Style</Title>"+
+                        "<Abstract></Abstract>"+
+                        "<FeatureTypeStyle>"+
+                            "<Rule>"+
+                                "<Name>r1</Name>"+
+                                "<Title>Exploration</Title>"+
+                                "<Abstract/>"+
+                                "<PolygonSymbolizer>"+
+                                    "<Fill>"+
+                                        "<CssParameter name=\"fill\">#0000FF</CssParameter>"+
+                                        "<CssParameter name=\"fill opacity\">0.6</CssParameter>"+
+                                    "</Fill>"+
+                                    "<Stroke>"+
+                                        "<CssParameter name=\"stroke\">#0000FF</CssParameter>"+
+                                        "<CssParameter name=\"stroke width\">1</CssParameter>"+
+                                    "</Stroke>"+
+                                "</PolygonSymbolizer>"+
+                            "</Rule>"+
+                            "<Rule>"+
+                                "<Name>r2</Name>"+
+                                "<Title>Production</Title>"+
+                                "<Abstract/>"+
+                                "<PolygonSymbolizer>"+
+                                    "<Fill>"+
+                                        "<CssParameter name=\"fill\">#FF0000</CssParameter>"+
+                                        "<CssParameter name=\"fill opacity\">0.6</CssParameter>"+
+                                    "</Fill>"+
+                                    "<Stroke>"+
+                                        "<CssParameter name=\"stroke\">#FF0000</CssParameter>"+
+                                        "<CssParameter name=\"stroke width\">1</CssParameter>"+
+                                    "</Stroke>"+
+                                "</PolygonSymbolizer>"+
+                            "</Rule>"+
+                        "</FeatureTypeStyle>"+
+                    "</UserStyle>"+
+                "</NamedLayer>"+
+            "</StyledLayerDescriptor>";
+        return style;
+    }     
 }
