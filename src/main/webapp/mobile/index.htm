@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+	<head>
+		<title>assets</title>
+		<meta charset="utf-8">
+		<meta name="description" content="MicroStore Responsive HTML5/CSS3 Template from angelostudio.net">
+		<meta name="author" content="ANGELOSTUDIO.NET">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		
+		<link rel="shortcut icon" href="img/logo-small.png" type="image/x-icon">
+		<!-- CSS -->
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://netdna.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="css/animate.css" rel="stylesheet">
+		<link href="css/theme.css" rel="stylesheet">
+		
+
+		
+		<link rel="apple-touch-icon-precomposed" href="img/ico/60.png" type="image/png"/>
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/ico/72.png" type="image/png"/>
+		<link rel="apple-touch-icon-precomposed" sizes="120x120" href="img/ico/120.png" type="image/png"/>
+		<link rel="apple-touch-icon-precomposed" sizes="152x152" href="img/ico/152.png" type="image/png"/>
+
+		<!-- javascript -->
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js" type="text/javascript" ></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js" type="text/javascript" ></script>		
+		<script src="js/assets/framework/ui-bootstrap/ui-bootstrap-tpls-2.0.1.min.js" type="text/javascript" ></script>
+		
+		<script src="//cdn.jsdelivr.net/lodash/4.14.1/lodash.min.js" type="text/javascript" ></script>		
+		<script src="js/assets/framework/angular/angular-simple-logger.js" type="text/javascript" ></script>
+		<script src="js/assets/framework/google-map/angular-google-maps.min.js" type="text/javascript" ></script>
+		
+		
+		
+
+
+		 <!-- IGSN js -->
+		 <!-- Angular javascript -->
+		<script src="js/assets/modules/app.js"></script>	  		
+  		<script src="js/assets/controllers/controllers.js"></script>
+  		<script src="js/assets/modules/service/modules.js"></script>
+  		
+  		<script src="js/assets/controllers/googlemap/googleMapCtrl.js"></script>
+  		<script src="js/assets/controllers/layer/layerPanelCtrl.js"></script>
+  		<script src="js/assets/controllers/active/activePanelCtrl.js"></script>
+  		<script src="js/assets/controllers/info/infoPanelCtrl.js"></script>
+  		<script src="js/assets/modules/service/http/GetCSWRecordService.js"></script>
+  	
+  	
+		
+	</head>
+	<body ng-app="app" ng-controller="googleMapCtrl">
+			
+		<div class="angular-google-map-container">
+			<layer-panel ng-show="showlayerPanel" class='layer-panel animated fadeInLeft' ></layer-panel>
+			<active-panel ng-show="showActivePanel" class='layer-panel animated fadeInLeft'  active-view="active" show-active-panel = "showActivePanel" ></active-panel>
+						
+			<div class="map-overlay-panel-toggle animated zoomIn">			   
+			    <div class="form-inline">
+				  <div class="form-group has-feedback inner-addon left-addon">					  	
+				    <span  class="leftglyphicon glyphicon glyphicon-menu-hamburger hasEvent"></span>
+				    <input type="text" class="form-control border-none" id="inputValidation" placeholder="Search"/>
+               		<span class="glyphicon glyphicon-search form-control-feedback hasEvent" ng-click="showlayerPanel = !showlayerPanel"></span>					    
+				  </div>
+				</div>						 
+			  </div>
+			  <div class="full-map">	
+				<ui-gmap-google-map id="main-map" center='map.center' zoom='map.zoom' options="map.options">
+					<ui-gmap-marker coords="marker.coords" events="marker.events" idkey="marker.id"></ui-gmap-marker>
+				</ui-gmap-google-map>
+			</div>
+		</div>
+	</body>
+	
+	
+	
+</html>
+
+		

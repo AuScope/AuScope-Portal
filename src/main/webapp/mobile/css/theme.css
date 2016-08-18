@@ -1,0 +1,123 @@
+html,body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.dark-blue {
+	color: #000080;
+}
+
+.activeView-table {
+	margin-left:10px;
+}
+
+.mini-map{
+	height: 150px;
+	width: 100%;
+}
+
+.full-map{
+	height: 100%;
+	width: 100%;		
+}
+.angular-google-map,
+.angular-google-map-container { 
+	height: 100%;	
+	width: 100%;
+}
+
+
+.map-overlay-panel-toggle {      
+  top : 50px;
+  left : 2em;	  
+  position: absolute;   
+  z-index: 50;
+ 
+}
+
+/* textbox css*/
+.border-none, .border-none:focus {
+	border: none;
+	box-shadow: none
+}
+
+/* enable absolute positioning */
+.inner-addon { 
+    position: relative; 
+}
+
+.hasEvent {
+	pointer-events: auto; 
+	cursor: pointer;
+}
+
+
+/* style icon */
+.inner-addon .leftglyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align icon */
+.left-addon .leftglyphicon  { left:  0px;}
+.right-addon .rightglyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+
+
+/*overlay layer panel*/
+.layer-panel{
+  background:  #ffffff;  
+  display: block;
+  width: 25em;
+  overflow: auto;
+  position: absolute;
+  left : 0em;	
+  height: 100%;
+  z-index: 55;    	
+ 
+}
+
+.layer-panel-nested{
+  background:  #ffffff;  
+  display: block;
+  width: 100%;
+  overflow: auto;
+  position: relative;
+  left : 0em;	
+  height: 100%;
+  z-index: 55;    	
+ 
+}
+
+.layer-panel-nested.ng-hide,
+.layer-panel.ng-hide {
+  animation: fadeOutLeft 1s;
+}
+
+.ng-leave {
+  animation: fadeOutRight 1s;
+}
+
+
+.layer-panel-header{
+	margin-top: 10px;
+    margin-bottom: 20px;
+    margin-right: 5px;
+    margin-left: 5px;
+	
+}
+
+.panel-layer-heading{
+	background-image: none;
+    background-color: red;
+    color: white;
+}
+
+
