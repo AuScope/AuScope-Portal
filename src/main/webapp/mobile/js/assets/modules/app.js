@@ -30,7 +30,7 @@ app.directive('activePanel', function() {
 app.directive('infoPanel', function() {
   return {
 	  scope: {
-		  
+	      infoPanelCsw: "="
 	    },  	    	    
 	  templateUrl: 'views/infoPanel.htm'
   };

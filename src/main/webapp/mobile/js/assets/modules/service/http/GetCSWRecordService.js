@@ -22,12 +22,6 @@ allModules.service('GetCSWRecordService',['$http','$q',function ($http,$q) {
      
      
         
-     this.getCSWKnownLayersGroup = function(){
-         var defer = $q.defer();
-         this.getCSWKnownLayers().then(function(data){
-             defer.resolve(data);
-         });
-         return defer.promise;
-     }
+    
      
 }]);

@@ -1,6 +1,6 @@
 allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', function ($scope,GetCSWRecordService) {
     $scope.cswRecords={};
-    GetCSWRecordService.getCSWKnownLayersGroup().then(function(data){
+    GetCSWRecordService.getCSWKnownLayers().then(function(data){
         $scope.cswRecords=data;
     });
     
@@ -8,9 +8,9 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
     
     
 	
-    $scope.status = {
-        
-    };
+    $scope.status = {};
+    $scope.isFilterCollapsed = {};
+    $scope.showInfoPanel ={};
     
     
 }]);

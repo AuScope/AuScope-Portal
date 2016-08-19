@@ -1,5 +1,5 @@
 <div class="animated fadeInleft" ng-controller="layerPanelCtrl">
-	<info-panel ng-if="showInfoPanel" class='layer-panel-nested animated fadeInLeft'  show-info-panel = "showInfoPanel" ></info-panel>
+	
 	<div>
 		<div>				
 			<div class="layer-panel-header">
@@ -9,20 +9,20 @@
 		</div>
 		<div>
 			<uib-accordion close-others="true">			   
-			   <div ng-repeat="(group,cswRecords) in cswRecords" uib-accordion-group class="panel-info" is-open="status[group]">
+			   <div ng-repeat="(group,records) in cswRecords" uib-accordion-group class="panel-info" is-open="status[group]">
 			   	 
 			      <uib-accordion-heading>
 			        {{group}} <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group], 'glyphicon glyphicon-plus': !status[group]}"></i>
 			      </uib-accordion-heading>
 			      <div>
 			      	<table class="table">
-					   <tr class="warning" ng-click="isFilterCollapsed = !isFilterCollapsed">
-						   	<td><label>Earth Resource Mine</label></td>
-						   	<td><i class="fa fa-info-circle hasEvent" aria-hidden="true" ng-click="showInfoPanel = !showInfoPanel;$event.stopPropagation();"></i></td>
+					   <tr ng-repeat-start="cswRecord in records" ng-click="isFilterCollapsed[cswRecord.id] = !isFilterCollapsed[cswRecord.id]">
+						   	<td><label>{{cswRecord.name}}</label></td>
+						   	<td><i class="fa fa-info-circle hasEvent" aria-hidden="true" ng-click="showInfoPanel[cswRecord.id] = !showInfoPanel[cswRecord.id];$event.stopPropagation();"></i></td>
 						   	<td><i class="fa fa-map" aria-hidden="true"></i></td>
 					   </tr>
-					   <tr uib-collapse="!showInfoPanel"><td colspan="3"><info-panel  ng-if="showInfoPanel" class='layer-panel-nested animated fadeInLeft'></info-panel><td></tr>
-					   <tr uib-collapse="!isFilterCollapsed">
+					   <tr uib-collapse="!showInfoPanel[cswRecord.id]"><td colspan="3"><info-panel  info-panel-csw="cswRecord" ng-if="showInfoPanel[cswRecord.id]" class='layer-panel-nested animated fadeInLeft'></info-panel><td></tr>
+					   <tr ng-repeat-end uib-collapse="!isFilterCollapsed[cswRecord.id]">
 				   		<td class="warning animated fadeInLeft" colspan="3">
 				   			<div class="form-group">
 						      Mine Name
@@ -34,21 +34,7 @@
 						    </div>
 				   		</td>
 					   </tr>
-					    <tr>
-						   	<td>Earth Resource Mineral Occurrence</td>
-						   	<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
-						   	<td><i class="fa fa-map" aria-hidden="true"></i></td>
-					   </tr>
-					   <tr>
-						   	<td>Earth Resource Mining Activity</td>
-						   	<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
-						   	<td><i class="fa fa-map" aria-hidden="true"></i></td>
-					   </tr>
-					   <tr>
-						   	<td>Mineral Occurence View</td>
-						   	<td><i class="fa fa-info-circle" aria-hidden="true"></i></td>
-						   	<td><i class="fa fa-map" aria-hidden="true"></i></td>
-					   </tr>
+					    
 					</table>
 			      
 			      </div>	
