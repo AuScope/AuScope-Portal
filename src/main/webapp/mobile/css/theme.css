@@ -101,9 +101,13 @@ html,body{
   animation: fadeOutLeft 1s;
 }
 
-.ng-leave {
-  animation: fadeOutRight 1s;
+.no-animation {
+    -webkit-animation-name: fadeOutLeft;
+    animation-name: fadeOutLeft;
+    -webkit-animation-duration: 0s;
+    animation-duration: 0s;
 }
+
 
 
 .layer-panel-header{

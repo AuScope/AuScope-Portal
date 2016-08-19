@@ -5,12 +5,29 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
     });
     
   
+    $scope.status = {};    
+    $scope.showPanel = {};
     
     
-	
-    $scope.status = {};
-    $scope.isFilterCollapsed = {};
-    $scope.showInfoPanel ={};
     
     
+    $scope.togglePanels=function(panelType,cswRecordId){
+        
+        var closeOthers = function(){
+            for (var showPanelType in $scope.showPanel) {
+                if(showPanelType != panelType){
+                    $scope.showPanel[showPanelType][cswRecordId]=false;
+                }
+            }
+        }
+        
+        if($scope.showPanel[panelType]===undefined ){  
+            $scope.showPanel[panelType]={};
+            $scope.showPanel[panelType][cswRecordId] = false;
+        }
+        $scope.showPanel[panelType][cswRecordId] = !$scope.showPanel[panelType][cswRecordId];
+        closeOthers();
+        return;
+        
+    }
 }]);

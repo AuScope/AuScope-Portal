@@ -16,24 +16,30 @@
 			      </uib-accordion-heading>
 			      <div>
 			      	<table class="table">
-					   <tr ng-repeat-start="cswRecord in records" ng-click="isFilterCollapsed[cswRecord.id] = !isFilterCollapsed[cswRecord.id]">
+					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('close',cswRecord.id)">
 						   	<td><label>{{cswRecord.name}}</label></td>
-						   	<td><i class="fa fa-info-circle hasEvent" aria-hidden="true" ng-click="showInfoPanel[cswRecord.id] = !showInfoPanel[cswRecord.id];$event.stopPropagation();"></i></td>
-						   	<td><i class="fa fa-map" aria-hidden="true"></i></td>
-					   </tr>
-					   <tr uib-collapse="!showInfoPanel[cswRecord.id]"><td colspan="3"><info-panel  info-panel-csw="cswRecord" ng-if="showInfoPanel[cswRecord.id]" class='layer-panel-nested animated fadeInLeft'></info-panel><td></tr>
-					   <tr ng-repeat-end uib-collapse="!isFilterCollapsed[cswRecord.id]">
-				   		<td class="warning animated fadeInLeft" colspan="3">
-				   			<div class="form-group">
-						      Mine Name
-						      <input type="text" class="form-control">
-						    </div>
-						    <div class="form-group">
-						      Drilling Date
-						      <input type="text" class="form-control">
-						    </div>
-				   		</td>
-					   </tr>
+						   	<td><i class="fa fa-filter hasEvent" aria-hidden="true" ng-click="togglePanels('filter',cswRecord.id);$event.stopPropagation();"></i></td>
+						   	<td><i class="fa fa-info-circle hasEvent" aria-hidden="true" ng-click="togglePanels('info',cswRecord.id);$event.stopPropagation();"></i></td>
+						   	<td><i class="fa fa-map hasEvent" aria-hidden="true" ng-click="togglePanels('analytic',cswRecord.id);$event.stopPropagation();"></i></td>
+					   </tr>					   
+					   <tr class="animated" ng-class="{'fadeInDown': showPanel.filter[cswRecord.id], 'no-animation': !showPanel.filter[cswRecord.id]}" ng-show="showPanel.filter[cswRecord.id]">
+                        <td class="warning" colspan="3">
+                            <div class="form-group">
+                              Mine Name
+                              <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                              Drilling Date
+                              <input type="text" class="form-control">
+                            </div>
+                        </td>
+                       </tr>
+					   <tr class="animated" ng-if="showPanel.info[cswRecord.id]" ng-class="{'fadeInDown': showPanel.info[cswRecord.id], 'no-animation': !showPanel.info[cswRecord.id]}" ng-repeat-end>
+					        <td colspan="3">
+					           <info-panel  info-panel-csw="cswRecord"  class='layer-panel-nested'></info-panel>
+					         <td>
+					    </tr>
+					   
 					    
 					</table>
 			      
