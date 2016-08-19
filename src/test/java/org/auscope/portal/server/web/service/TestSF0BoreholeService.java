@@ -112,7 +112,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         String filter = service.getFilter(nameFilter, custodianFilter,
                 filterDateStart, filterDateEnd, maxFeatures, bbox, null, null);
 
-        String style = service.getStyle(filter, "#2242c7", null, null);
+        String style = service.getStyle(Arrays.asList("style1"), Arrays.asList(filter), Arrays.asList("#2242c7"), null);
         Assert.assertNotNull(style);
         Assert.assertThat(style, Matchers.containsString("gsmlp:BoreholeView"));
 
@@ -169,7 +169,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         final String dateOfDrillingStart = "2010-01-02";
         final String dateOfDrillingEnd = "2010-01-03";
         final String gmlString = "xmlString";
-        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, null, null))
+        final String filterString = (new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, null, null, null))
                 .getFilterStringAllRecords();
 
         context.checking(new Expectations() {

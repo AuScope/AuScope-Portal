@@ -14,43 +14,43 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     supportsKnownLayer : function(knownLayer) {
         return knownLayer.getId() === 'nvcl-borehole';
     },
-    
+
     /**
      * Routine to start up an interactive plot where you the user can specify the kind of graph, apply smoothing etc.
      * Uses Rickshaw library.
      */
-    genericPlot : function(series, xaxis_name, yaxis_names, yaxis_keys) {
+    genericPlot : function(series, xaxis_name, yaxis_names, yaxis_keys, metric_colours) {
        var splot = Ext.create('auscope.chart.rickshawChart',{
            graphWidth : 600, // These values are used to set the size of the graph
            graphHeight : 300
        });
-       
+
        // Create an Ext window to house the chart (panel)
        var win = Ext.create('Ext.window.Window', {
            defaults    : { autoScroll:true }, // Enable scrollbars for underlying panel, if it is bigger than the window
            border      : true,
            items       : splot,
            id          : 'rkswWindow',
-           layout      : 'fit', 
+           layout      : 'fit',
            maximizable : true,
            modal       : true,
            title       : 'NVCL Interactive Plot: ',
            resizable   : true,
            height  : 700, // Height and width of window the houses the graph
-           width   : 1300,           
+           width   : 1300,
            x           : 10,
            y           : 10
        });
        win.show();
-       
+
        splot.mask("Rendering...");
-       splot.plot(series, xaxis_name, yaxis_names, yaxis_keys);
-       splot.maskClear();  
-       
+       splot.plot(series, xaxis_name, yaxis_names, yaxis_keys, metric_colours);
+       splot.maskClear();
+
        this.on('close',function(){
            win.close();
        });
-       
+
 
     },
 
@@ -63,6 +63,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     showDetailsWindow : function(datasetId, datasetName, omUrl, nvclDataServiceUrl,nvclDownloadServiceUrl, featureId, parentKnownLayer, parentOnlineResource,startDepth,endDepth,scope) {
 
         var me = scope;
+        var this_ptr = this;
         //We create an instance of our popup window but don't show it immediately
         //We need to dynamically add to its contents
         var win = Ext.create('Ext.Window', {
@@ -185,11 +186,10 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                             //Load our vocab string asynchronously
                             var logName = record.get('logName');
                             var vocabsQuery = 'getScalar.do?repository=nvcl-scalars&label=' + escape(logName);
-                            Ext.Ajax.request({
+                            portal.util.Ajax.request({
                                 url : vocabsQuery,
                                 logName : logName,
-                                success : function(pData, options) {
-                                    var pResponseCode = pData.status;
+                                callback : function(success, data, message) {
                                     var updateTipText = function(tip, text) {
                                         var tipBody = tip.body.down('.x-autocontainer-innerCt');
                                         if (tipBody) {
@@ -197,22 +197,17 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         }
                                         tip.doLayout();
                                     };
-                                    if(pResponseCode !== 200) {
-                                        updateTipText(tip, 'ERROR: ' + pResponseCode);
-                                        return;
-                                    }
 
-                                    var response = Ext.JSON.decode(pData.responseText);
-                                    if (!response.success) {
-                                        updateTipText(tip, 'ERROR: server returned error');
+                                    if (!success) {
+                                        updateTipText(tip, 'ERROR: ' + message);
                                         return;
                                     }
 
                                     //Update tool tip
-                                    if (response.data.definition && response.data.definition.length > 0) {
-                                        updateTipText(tip, response.data.definition);
-                                    } else if (response.data.scopeNote && response.data.scopeNote.length > 0) {
-                                        updateTipText(tip, response.data.scopeNote);
+                                    if (data.definition && data.definition.length > 0) {
+                                        updateTipText(tip, data.definition);
+                                    } else if (data.scopeNote && data.scopeNote.length > 0) {
+                                        updateTipText(tip, data.scopeNote);
                                     } else {
                                         updateTipText(tip, logName);
                                     }
@@ -301,12 +296,62 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                             buttons: Ext.Msg.OK
                                         });
                                     } else {
-                                        var datasetIds = scalarGrid.getSelectionModel().getSelection();
+
+                                        // There are async two ajax events to be fired off, the graph needs both to be completed
+                                        // I could make the first one synchronous, but this would be slower and force the GUI to freeze up momentarily
+                                        // while waiting for the second to complete.
+                                        // Instead I have both event handlers check to see if the other has completed, then draw the graph 
+                                        // i.e. the last ajax response handler to complete is the one that draws the graph
+                                        
+                                        // Variables shared by two ajax event handlers
+                                        var logid_colour_table = new Object;
+                                        var logid_colour_table_loaded = false;
+                                        var binned_data_response = new Object;
+                                        var binned_data_loaded = false;
+                                        var binned_data_success = false;
                                         var logIds = [];
-                                        for(var i=0;i<datasetIds.length;i++){
+                                        var logNames = [];
+                                        
+                                        // Collect logids and matching log names
+                                        var datasetIds = scalarGrid.getSelectionModel().getSelection();
+                                        for (var i=0;i<datasetIds.length;i++) {
                                             logIds[i] =  datasetIds[i].get('logId');
+                                            logNames[i] = datasetIds[i].get('logName');
                                         }
-                                        // Request plot data from server
+                                        
+                                        // Ajax request 1: Request colour data from server
+                                        Ext.Ajax.request({
+                                             url: 'getNVCL2_0_MineralColourTable.do',
+                                             //async: false,
+                                             scope : this,
+                                             timeout : 60000,
+                                             params: {
+                                                 serviceUrl: nvclDataServiceUrl, // for testing use "http://nvclwebservices.vm.csiro.au/NVCLDataServices",
+                                                 logIds : logIds
+                                             },
+                                             callback : function(options, success, response) {
+                                                 if (success) {
+                                                     // Assemble colour table indexed on logid
+                                                     var jsonObj = Ext.JSON.decode(response.responseText);
+                                                     if (jsonObj.data) {
+                                                         var jsonObj2 = Ext.JSON.decode(jsonObj.data);
+                                                         if (jsonObj2) {
+                                                             for (classElem in jsonObj2) {
+                                                                 logid_colour_table[classElem] = jsonObj2[classElem];
+                                                             }
+                                                         }
+                                                     }
+                                                 } 
+                                                 // If binned data was loaded first (improbable, but not impossible) then do graph
+                                                 if (binned_data_loaded) {
+                                                     this_ptr._drawNVCLGraph(binned_data_response, binned_data_success, logid_colour_table, logIds, logNames);
+                                                 }
+                                                 logid_colour_table_loaded = true;
+                                             }
+                                        });
+
+
+                                        // Ajax request 2: Request plot data from server
                                         Ext.Ajax.request({
                                              url: 'getNVCL2_0_CSVDataBinned.do',
                                              scope : this,
@@ -316,83 +361,16 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                  logIds : logIds
                                              },
                                              callback : function(options, success, response) {
-                                                 if (success) {
-                                                     // Once we have received the plot data, reformat it into (x,y) values
-                                                     var jsonObj = Ext.JSON.decode(response.responseText);
-                                                     var data_bin = new Object;
-                                                     var has_data = false;
-                                                     var yaxis_labels = new Object;
-                                                     var yaxis_keys = [];
-                                                     if ('success' in jsonObj && jsonObj.success==true && jsonObj.data.length>0 ) {
-                                                         jsonObj.data[0].binnedValues.forEach(function(bv) {
-                                                             ["stringValues","numericValues"].forEach(function(dataType) {
-                                                                 if (bv.startDepths.length==bv[dataType].length && bv[dataType].length>0) {
-                                                                     var metric_name = bv.name;
-                                                                     if (!(metric_name in data_bin)) {
-                                                                         data_bin[metric_name] = new Object;
-                                                                     }
-                                                                     
-                                                                     bv[dataType].forEach(function(val, idx, arr) {
-                                                                         
-                                                                         // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
-                                                                         if (dataType=="stringValues") {
-                                                                     
-                                                                             // Using entries(), make a name,value list, then use that to add to 'data_bin[metric_name]'
-                                                                             d3.entries(val).forEach(function(meas) {                                                                                 
-                                                                                 var key=meas.key+"_"+metric_name;
-                                                                                 if (!(key in data_bin[metric_name])) {
-                                                                                     data_bin[metric_name][key] = [];
-                                                                                     if (!(metric_name in yaxis_labels)) {
-                                                                                         yaxis_labels[metric_name] = "Sample Count";
-                                                                                         yaxis_keys.push(metric_name);
-                                                                                     }
-                                                                                 }
-                                                                                 
-                                                                                 // Depth is 'x' and 'y' is our measured value 
-                                                                                 data_bin[metric_name][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
-                                                                                 has_data=true;
-                                                                           
-                                                                             });
-                                                                         } else if (dataType=="numericValues") {
-                                                                             if (!(metric_name in data_bin[metric_name])) {
-                                                                                 data_bin[metric_name][metric_name] = [];
-                                                                                 if (!(metric_name in yaxis_labels)) {
-                                                                                     yaxis_labels[metric_name] = "Meter Average";
-                                                                                     yaxis_keys.push(metric_name);
-                                                                                 }
-                                                                             }
-                                                                             // Depth is 'x' and 'y' is our measured value 
-                                                                             data_bin[metric_name][metric_name].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(val)});
-                                                                             has_data=true;
-                                                                         }
-                                                                     });
-                                                                 }
-                                                             });
-                                                         });
-                                                     }
-                                                     
-                                                     // Call 'genericPlot()'
-                                                     if (has_data) {
-                                                         me.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys);
-                                                     } else {
-                                                         Ext.Msg.show({
-                                                             title:'No data',
-                                                             msg:'Sorry, the selected dataset has no data. Please select a different dataset',
-                                                             buttons: Ext.Msg.OK 
-                                                         });
-                                                     }
-                                                     
-                                                 } else {
-                                                     Ext.Msg.show({
-                                                         title:'Error',
-                                                         msg:'Failed to load resources',
-                                                         buttons: Ext.Msg.OK
-                                                     });                                 
+                                                 // If the colour table was loaded first (most likely scenario) then do graph
+                                                 if (logid_colour_table_loaded) {
+                                                     this_ptr._drawNVCLGraph(response, success, logid_colour_table, logIds, logNames);
                                                  }
-                                             }
-                                        });
-                                    }
-
+                                                 binned_data_response = response;
+                                                 binned_data_success = success;
+                                                 binned_data_loaded = true;
+                                             } // callback
+                                          }); // ajax 
+                                    }  // for loop
                                 }
                             },{
                                 text : 'Download',
@@ -446,11 +424,101 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             }
         });
     },
-    
 
-    
-    
-    
+
+    _drawNVCLGraph : function (response, success, logid_colour_table, logIds, logNames) {
+        if (success) {             
+            // Once we have received the plot data, reformat it into (x,y) values and create colour table
+            var metric_colours = new Object;
+            var data_bin = new Object;
+            var has_data = false;
+            var yaxis_labels = new Object;
+            var yaxis_keys = [];
+            var jsonObj = Ext.JSON.decode(response.responseText);
+            if ('success' in jsonObj && jsonObj.success==true && jsonObj.data.length>0 ) {
+                jsonObj.data[0].binnedValues.forEach(function(bv) {
+                    ["stringValues","numericValues"].forEach(function(dataType) {
+                        if (bv.startDepths.length==bv[dataType].length && bv[dataType].length>0) {
+                            var metric_name = bv.name;
+                            if (!(metric_name in data_bin)) {
+                                data_bin[metric_name] = new Object;
+                            }
+                                                                     
+                            bv[dataType].forEach(function(val, idx, arr) {
+                                                                         
+                                // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
+                                if (dataType=="stringValues") {
+                                                                     
+                                    // Using entries(), make a name,value list, then use that to add to 'data_bin[metric_name]'
+                                    d3.entries(val).forEach(function(meas) {                                                                                 
+                                        var key=meas.key+"_"+metric_name;
+                                        var logIdIdx=0;
+                                        // First, find the logid for the metric returned from the graph data so that mineral colours can be found for graph data
+                                        for (var j=0; j<logNames.length; j++) {
+                                            // Unfortunately the metric names from the two services do not correspond exactly
+                                            if (metric_name.replace(" ","").replace("_","").toUpperCase()==logNames[j].replace(" ","").replace("_","").toUpperCase()) {
+                                                logIdIdx = j;
+                                                break;
+                                            }
+                                        }
+                                        // If mineral name can be found in 'logid_colour_table' put the appropriate colour in the 'metric_colours' table
+                                        if ((logIds.length>logIdIdx) && (logIds[logIdIdx] in logid_colour_table) && (meas.key in logid_colour_table[logIds[logIdIdx]])) {
+                                            metric_colours[key] = logid_colour_table[logIds[logIdIdx]][meas.key];
+                                        }
+                                        // Start to create graphing data
+                                        if (!(key in data_bin[metric_name])) {
+                                            data_bin[metric_name][key] = [];
+                                            if (!(metric_name in yaxis_labels)) {
+                                                yaxis_labels[metric_name] = "Sample Count";
+                                                yaxis_keys.push(metric_name);
+                                            }
+                                        }
+                                                                                 
+                                        // Depth is 'x' and 'y' is our measured value 
+                                        data_bin[metric_name][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
+                                        has_data=true;
+                                                                           
+                                    });
+                                } else if (dataType=="numericValues") {
+                                    // Start to create graphing data
+                                    if (!(metric_name in data_bin[metric_name])) {
+                                        data_bin[metric_name][metric_name] = [];
+                                        if (!(metric_name in yaxis_labels)) {
+                                            yaxis_labels[metric_name] = "Meter Average";
+                                            yaxis_keys.push(metric_name);
+                                        }
+                                    }
+                                    // Depth is 'x' and 'y' is our measured value 
+                                    data_bin[metric_name][metric_name].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(val)});
+                                    has_data=true;
+                                } // if
+                            }); // for each
+                        } // if
+                    }); // for each
+                }); // for each
+            } // if
+            
+            // Call 'genericPlot()'
+            if (has_data) {
+                this.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys, metric_colours);
+            } else {
+                Ext.Msg.show({
+                    title:'No data',
+                    msg:'Sorry, the selected dataset has no data. Please select a different dataset',
+                    buttons: Ext.Msg.OK 
+                });
+            }
+
+        } else {
+            Ext.Msg.show({
+                title:'Error',
+                msg:'Failed to load resources',
+                buttons: Ext.Msg.OK
+            });                                 
+        } // if success
+    },
+
+
 
     /**
      * Shows the NVCL dataset download window for the given dataset (belonging to the selected known layer feature)

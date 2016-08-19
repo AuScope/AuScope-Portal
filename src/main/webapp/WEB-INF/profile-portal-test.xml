@@ -16,8 +16,7 @@
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
                 <ref bean="knownTypeMiningActivity" />
-                <ref bean="knownTypeMineralTenements" />                
-                <ref bean="knownTypeColorCodeMineralTenements" />
+                <ref bean="knownTypeMineralTenements" />
                 <ref bean="knownTypeRemanentAnomalies" />
                 <ref bean="knownTypeRemanentAnomaliesTMI" />
                 <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
@@ -76,11 +75,6 @@
                 <ref bean="knownTypeMagMap" />
                 <ref bean="knownTypeGocadModels" />
                 <ref bean="KnownTypeGeophysicsDatasets" />
-                <ref bean="knownTypeGswaMagMerge" />
-                <ref bean="knownTypeGswaUMerge" />
-                <ref bean="knownTypeGswaThMerge" />
-                <ref bean="knownTypeGswaTcMerge" />
-                <ref bean="knownTypeGswaKMerge" />
                 <ref bean="knownTypeGAAemSurvey" />
                 <ref bean="knownTypeGARumJungleAEM" />
                 <ref bean="knownTypeGAWoolnerAEM" />
@@ -89,6 +83,17 @@
                 <ref bean="knownTypeWesternAreaAem" />
                 <ref bean="knownTypeAshburtonAem" /-->
                 <!-- End Analytics -->
+                <ref bean="knownTypeGswaGravMerge" />
+                <ref bean="knownTypeGswa20mMagMerge"/>
+                <ref bean="knownTypeGswa40mMagMerge1VD"/>
+                <ref bean="knownTypeGswa40mMagMerge"/>
+                <ref bean="knownTypeGswa80mMagMerge1VD"/>
+                <ref bean="knownTypeGswa80mMagMergertp"/>
+                <ref bean="knownTypeGswa80mMagMerge"/>
+                <ref bean="knownTypeGswa80mKmerge"/>
+                <ref bean="knownTypeGswa80mTCmerge"/>
+                <ref bean="knownTypeGswa80mThmerge"/>
+                <ref bean="knownTypeGswa80mUmerge"/>
             </list>
         </constructor-arg>
     </bean>
@@ -100,7 +105,6 @@
                 <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswAsterProduction" />
-                <!-- ref bean="cswVeglProduction" /-->
             </list>
         </constructor-arg>
     </bean>

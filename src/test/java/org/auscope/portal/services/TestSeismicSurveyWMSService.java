@@ -1,23 +1,13 @@
 package org.auscope.portal.services;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
-import org.auscope.portal.core.services.methodmakers.WMSMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WMSMethodMakerInterface;
-import org.auscope.portal.core.services.responses.csw.CSWGeographicBoundingBox;
-import org.auscope.portal.core.services.responses.csw.CSWGetRecordResponse;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
-import org.auscope.portal.core.services.responses.csw.CSWRecordTransformerFactory;
-import org.auscope.portal.core.services.responses.wms.GetCapabilitiesRecord;
-import org.auscope.portal.core.services.responses.wms.GetCapabilitiesRecord_1_1_1;
-import org.auscope.portal.core.services.responses.wms.GetCapabilitiesWMSLayerRecord;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.server.web.service.SeismicSurveyWMSService;
@@ -28,7 +18,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for GetCapabilitiesService
- * 
+ *
  * @author Josh Vote
  *
  */
@@ -46,7 +36,7 @@ public class TestSeismicSurveyWMSService extends PortalTestClass {
 
     /**
      * Test that the function is able to actually load CSW records from multiple services
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -60,7 +50,7 @@ public class TestSeismicSurveyWMSService extends PortalTestClass {
             {
 
                 oneOf(mockServiceCaller).getMethodResponseAsStream(with(aHttpMethodBase(null, mockUrl, null)));
-                will(returnValue(is1));
+                will(returnValue(new HttpClientInputStream(is1, null)));
             }
         });
 

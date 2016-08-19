@@ -10,6 +10,8 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
+import org.auscope.portal.core.server.http.HttpClientResponse;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -31,7 +33,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for NVCLDataService
- * 
+ *
  * @author Josh Vote
  *
  */
@@ -45,7 +47,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a getDatasetCollectionResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -61,7 +63,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 oneOf(mockMethodMaker).getDatasetCollectionMethod(serviceUrl, holeIdentifier);
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(responseStream));
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
             }
         });
 
@@ -79,7 +81,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a getDatasetCollectionResponse fails when we fail to connect to the service
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = ConnectException.class)
@@ -102,7 +104,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a getLogCollectionResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -120,7 +122,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 oneOf(mockMethodMaker).getLogCollectionMethod(serviceUrl, datasetId, forMosaicService);
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(responseStream));
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
             }
         });
 
@@ -138,7 +140,7 @@ public class TestNVCLDataService extends PortalTestClass {
     /**
      * Unit test to ensure the NVCLDataService class correctly compensates for the service return 'logName' when mosaicsvc is omitted or false and 'LogName'
      * otherwise
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -157,9 +159,9 @@ public class TestNVCLDataService extends PortalTestClass {
                         with(any(Boolean.class)));
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(is1));
+                will(returnValue(new HttpClientInputStream(is1, null)));
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(is2));
+                will(returnValue(new HttpClientInputStream(is2, null)));
             }
         });
 
@@ -178,7 +180,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a getDatasetCollectionResponse fails when we fail to connect to the service
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = ConnectException.class)
@@ -202,7 +204,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a GetMosaicResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -224,7 +226,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 oneOf(mockMethodMaker).getMosaicMethod(serviceUrl, logId, width, startSampleNo, endSampleNo);
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 oneOf(httpEntity).getContent();
@@ -244,7 +246,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a GetMosaicResponse fails when we fail to connect to the service
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = ConnectException.class)
@@ -271,7 +273,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a PlotScalarResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -299,7 +301,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 will(returnValue(mockMethod));
 
                 oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 oneOf(httpEntity).getContent();
@@ -320,7 +322,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a GetMosaicResponse fails when we fail to connect to the service
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = ConnectException.class)
@@ -351,7 +353,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a CSVDownloadResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -377,7 +379,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 allowing(mockMethod).setURI(with(any(URI.class)));
 
                 oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 oneOf(httpEntity).getContent();
@@ -397,7 +399,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests a workaround for the dataservice to overcome omUrl pointing to a geoserver instance RATHER than a WFS endpoint
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -426,7 +428,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 allowing(mockMethod).setURI(with(any(URI.class)));
 
                 atLeast(1).of(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 exactly(2).of(httpEntity).getContent();
@@ -451,7 +453,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a CSVDownloadResponse fails when underlying service fails
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = ConnectException.class)
@@ -480,7 +482,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a TSGDownloadResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -509,7 +511,7 @@ public class TestNVCLDataService extends PortalTestClass {
                         spectra, profilometer, trayPics, mosaicPics, mapPics);
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 oneOf(httpEntity).getContent();
@@ -530,7 +532,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a TSGStatusResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -550,7 +552,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 oneOf(mockMethodMaker).getCheckTSGStatusMethod(serviceUrl, email);
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 oneOf(httpEntity).getContent();
@@ -570,7 +572,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a WFSDownloadResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -593,7 +595,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 oneOf(mockMethodMaker).getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 oneOf(httpEntity).getContent();
@@ -613,7 +615,7 @@ public class TestNVCLDataService extends PortalTestClass {
 
     /**
      * Tests parsing of a WFSStatusResponse
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -633,7 +635,7 @@ public class TestNVCLDataService extends PortalTestClass {
                 oneOf(mockMethodMaker).getCheckWFSStatusMethod(serviceUrl, email);
                 will(returnValue(mockMethod));
                 oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(httpResponse));
+                will(returnValue(new HttpClientResponse(httpResponse, null)));
                 atLeast(1).of(httpResponse).getEntity();
                 will(returnValue(httpEntity));
                 oneOf(httpEntity).getContent();

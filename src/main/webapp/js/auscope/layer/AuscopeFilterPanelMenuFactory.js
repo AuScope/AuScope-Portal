@@ -3,10 +3,10 @@
  */
 Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     extend : 'portal.widgets.FilterPanelMenuFactory',
- 
+
     map : null,
-    
-    
+
+
     constructor : function(config) {
         this.map = config.map;
         this.callParent(arguments);
@@ -36,10 +36,10 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                     + "?ccProperty=" + ccProperty
                     + "&ccLevels=" + ccLevels;
             isSld_body = false;
-        } else if (layer.id === "colorcode-mineral-tenements") {
-            ccProperty = filter.getParameter('ccProperty') || 'TenementType';
-            sldUrl = portal.util.URL.base + styleUrl + "?ccProperty=" + ccProperty; 
-            isSld_body = false;
+        } else if (layer.id === "mineral-tenements") {
+            ccProperty = filter.getParameter('ccProperty');
+            sldUrl = "getMineralTenementLegendStyle.do?ccProperty=" + ccProperty;
+            isSld_body = true;
         } else {
             sldUrl = styleUrl;
             isSld_body = true;
@@ -48,21 +48,18 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     },
     /**
      * Given an portal.layer.Layer, check if there are any additional action to display
-     * 
+     *
      * returns an array of menu action items.
      *
      */
     appendAdditionalActions : function(menuItems,layer,group) {
-        
- 
         //VT:Should have a download action except for Insar data.
         if((layer.get('cswRecords').length > 0 &&
                 layer.get('cswRecords')[0].get('noCache')==false) && layer.id != 'portal-reports' ){
                  menuItems.push(this._getDownloadAction(layer));
         }
-        
-        
-         //VT:  link layer to VGL if contain under the Analytic grouping                      
+
+         //VT:  link layer to VGL if contain under the Analytic grouping
         if(group && group.indexOf('Analytic') >= 0){
             menuItems.push(this._getAnalyticLink(layer));
         }
@@ -71,23 +68,21 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         if(analytics){
             menuItems.push(analytics);
         }
-        
-        
     },
-    
+
     layerRemoveHandler : function(layer){
         this.fireEvent('removelayer', layer);
     },
-    
+
     _getDownloadAction : function(layer){
         var me = this;
         var downloadLayerAction = new Ext.Action({
             text : 'Download Layer',
             iconCls : 'download',
-            handler : function(){              
+            handler : function(){
                 var downloader = layer.get('downloader');
                 var renderer = layer.get('renderer');
-                if (downloader) {// && renderer.getHasData() -> VT: It is too confusing when the download will be active. We will treat it as always active to 
+                if (downloader) {// && renderer.getHasData() -> VT: It is too confusing when the download will be active. We will treat it as always active to
                                  // make it easier for the user.
                     //We need a copy of the current filter object (in case the user
                     //has filled out filter options but NOT hit apply filter) and
@@ -106,19 +101,19 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                 }
             }
         });
-        
+
         return downloadLayerAction
     },
-    
-   
-    
-    _getAnalyticLink : function(layer){    
+
+
+
+    _getAnalyticLink : function(layer){
         var me=this;
         return new Ext.Action({
             text : 'Vgl Analytics',
             iconCls : 'link',
-            handler : function(){                
-                
+            handler : function(){
+
                 var mss = Ext.create('portal.util.permalink.MapStateSerializer');
                 var layerStore = Ext.create('portal.layer.LayerStore', {});
                 layerStore.insert(0,layer);
@@ -140,37 +135,51 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                     linkedUrl = Ext.urlAppend(linkedUrl, decodeURIComponent(params));
                     window.open(linkedUrl);
                 });
-                
+
             }
         });
-        
+
     },
-    
-    
-    _getlayerAnalytics : function(layer){ 
+
+
+    _getlayerAnalytics : function(layer){
         var me = this;
         if( auscope.layer.analytic.AnalyticFormFactory.supportLayer(layer)){
-            
-            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active') && layer.get('filterer').parameters.featureType){            
+
+            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active') && layer.get('filterer').parameters.featureType){
                 return new Ext.Action({
                     text : 'Graph',
-                    iconCls : 'graph',                    
-                    handler : function(){   
-                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)                        
+                    iconCls : 'graph',
+                    handler : function(){
+                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
                         win.show();
                         me.on('removelayer',function(closeLayer){
                             if(closeLayer.get('id')==layer.get('id')){
                                 win.close();
-                            }                            
-                        })                                               
+                            }
+                        });
+                    }
+                });
+            } else if (layer.id == 'sf0-borehole-nvcl') {
+                return new Ext.Action({
+                    iconCls : 'analytics-button',
+                    text: 'Analytical Jobs',
+                    handler: function() {
+                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
+                        win.show();
+                        me.on('removelayer',function(closeLayer){
+                            if(closeLayer.get('id')==layer.get('id')){
+                                win.close();
+                            }
+                        });
                     }
                 });
             }else{
                 return new Ext.Action({
                     text : '<span data-qtip="Add layer to map and select \'Group of Interest\' to enable this function">' + 'Graph',
                     disabled : true,
-                    iconCls : 'graph',                    
-                    handler : function(){   
+                    iconCls : 'graph',
+                    handler : function(){
                         Ext.Msg.alert('Alert', 'Add layer to map first.');
                     }
                 });
@@ -178,8 +187,8 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         }else{
             return null;
         }
-       
-        
+
+
     }
-    
+
 });

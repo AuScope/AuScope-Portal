@@ -7,12 +7,12 @@ Ext.require([ 'Ext.Window', 'Ext.fx.target.Sprite', 'Ext.layout.container.Fit', 
 Ext.define('Extjs.contribs.chart.axis.layout.Logarithmic', {
   extend: 'Ext.chart.axis.layout.Continuous',
   alias: 'axisLayout.logarithmic',
-  
+
   config: {
     adjustMinimumByMajorUnit: false,
     adjustMaximumByMajorUnit: false
   },
-  
+
   /**
    * Convert the value from the normal to the log10 version.
    * NB: The renderer for the field needs to do the inverse.
@@ -65,10 +65,10 @@ Ext.define('Extjs.contribs.chart.axis.layout.Logarithmic', {
         }
     };
   },
-  
+
   // Trimming by the range makes the graph look weird. So we don't.
   trimByRange: Ext.emptyFn
-  
+
 }, function() {
   // IE (and the PhantomJS system) do not have have a log10 function. So we polyfill it in if needed.
   Math.log10 = Math.log10 || function(x) {
@@ -82,7 +82,7 @@ Ext.define('Extjs.contribs.chart.axis.segmenter.Logarithmic', {
   config: {
     minimum: 200
   },
-  
+
   renderer: function (value, context) {
     return (Math.pow(10, value)).toFixed(3);
   }
@@ -91,12 +91,12 @@ Ext.define('Extjs.contribs.chart.axis.segmenter.Logarithmic', {
 
 Ext.define('Extjs.contribs.chart.axis.Logarithmic', {
   extend: 'Ext.chart.axis.Numeric',
-  
+
   requires: [
     'Extjs.contribs.chart.axis.layout.Logarithmic',
     'Extjs.contribs.chart.axis.segmenter.Logarithmic'
   ],
-  
+
   type: 'logarithmic',
   alias: [
     'axis.logarithmic',
@@ -123,7 +123,7 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
         });
     }
 
-    Ext.Ajax.request({
+    portal.util.Ajax.request({
         url : 'getMsclObservationsForGraph.do',
         params: {
             // .../wfs?request=GetFeature&typename=mscl:scanned_data&filter=%3CFilter%3E%0D%0A%09%3CPropertyIs%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Aborehole%3C%2FPropertyName%3E%0D%0A%09%09%3CLiteral%3EPRC-5%3C%2FLiteral%3E%0D%0A%09%3C%2FPropertyIs%3E%0D%0A%09%3CPropertyIsBetween%3E%0D%0A%09%09%3CPropertyName%3Emscl%3Adepth%3C%2FPropertyName%3E%0D%0A%09%09%3CLowerBoundary%3E%0D%0A%09%09%09%3CLiteral%3E66.9%3C%2FLiteral%3E%0D%0A%09%09%3C%2FLowerBoundary%3E%0D%0A%09%09%3CUpperBoundary%3E%0D%0A%09%09%09%3CLiteral%3E89%3C%2FLiteral%3E%0D%0A%09%09%3C%2FUpperBoundary%3E%0D%0A%09%3C%2FPropertyIsBetween%3E%0D%0A%3C%2FFilter%3E
@@ -133,14 +133,13 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
             endDepth : endDepth,
             observationsToReturn : observationsToReturn
         },
-        success: function(response) {
-            var responseObject = Ext.decode(response.responseText);
+        success: function(data) {
             var windowTitle = '';
             var charts = [];
             for (var i = 0; i < observationsToReturn.length; i++) {
                 var first = i === 0;
                 var last = i === observationsToReturn.length - 1;
-                
+
                 var xAxisType = ['magnetic_susceptibility', 'resistivity'].indexOf(observationsToReturn[i]) == -1 ? 'numeric' : 'logarithmic';
 
                 var xAxisTitle =
@@ -157,13 +156,13 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     undefined;
 
                 // Add a comma or ampersand if needed:
-                windowTitle += (!first ? (last ? ' &amp; ' : ', ') : '') + 
+                windowTitle += (!first ? (last ? ' &amp; ' : ', ') : '') +
                     // Remove the unit of measure:
                     new RegExp('^(.+?) \\(').exec(xAxisTitle)[1];
 
                 var store = Ext.create('Ext.data.Store', {
                     model : 'DynamicModel',
-                    data : responseObject.data.series
+                    data : data.series
                 });
 
                 store.filter({

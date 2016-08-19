@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.net.ConnectException;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
@@ -18,7 +19,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for YilgarnGeochemistryService
- * 
+ *
  * @author Josh Vote
  *
  */
@@ -39,7 +40,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
 
     /**
      * Tests that parsing works as expected
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -53,7 +54,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(responseStream));
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
 
                 oneOf(mockMethodMaker).makeGetMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME,
                         featureId, null);
@@ -83,7 +84,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
 
     /**
      * Tests that parsing returns null when ID doesnt match anything
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -97,7 +98,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(responseStream));
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
 
                 oneOf(mockMethodMaker).makeGetMethod(serviceUrl, YilgarnGeochemistryService.LOCATED_SPECIMEN_TYPENAME,
                         featureId, null);
@@ -113,7 +114,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
 
     /**
      * Tests that parsing fails if the service cant be connected to
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = PortalServiceException.class)
@@ -139,7 +140,7 @@ public class TestYilgarnGeochemistryService extends PortalTestClass {
 
     /**
      * Tests that parsing fails when there is an OWSException
-     * 
+     *
      * @throws Exception
      */
     @Test(expected = PortalServiceException.class)

@@ -49,7 +49,6 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
             reader: {
                 type : 'array'
             },
-            groupField : 'analyteName',
             sorters : ['analyteName']
         });
 
@@ -67,29 +66,25 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
                         msg : 'loading...'
                     });
                     loadMask.show();
-                    Ext.Ajax.request( {
+                    portal.util.Ajax.request( {
                         url : 'doLocatedSpecimenFeature.do',
                         callingInstance : this,
                         params : {
                             serviceUrl : wfsUrl,
                             featureId : gmlId
                         },
-                        failure: function (response, options){
+                        failure: function (message){
                             loadMask.hide();
-                            Ext.Msg.alert('Error Describing LocSpecimen Records', 'Error (' + response.status + '): ' + response.statusText);
+                            Ext.Msg.alert('Error Describing LocSpecimen Records', 'Error ' + message);
                         },
-                        success: function (response, options) {
+                        success: function (data, message) {
                             loadMask.hide();
-                            var jsonData = Ext.JSON.decode(response.responseText);
-                            if (!jsonData.success) {
-                                Ext.Msg.alert('Error Describing LocSpecimen Records', 'There was an error whilst communicating with ' + wfsUrl);
-                                return;
-                            } else if (jsonData.data.records.length === 0) {
+                            if (data.records.length === 0) {
                                 Ext.Msg.alert('Error Describing LocSpecimen Records', 'The URL ' + wfsUrl + ' returned no parsable LocatedSpecimen records');
                                 return;
                             }
 
-                            var records = jsonData.data.records;
+                            var records = data.records;
                             var recordItems = [];
                             for (var i = 0; i < records.length ; i++) {
                                 recordItems.push([
@@ -157,13 +152,25 @@ Ext.define('auscope.layer.querier.wfs.factories.LocatedSpecimenFactory', {
                         store: allAnalytes,
                         typeAhead: true,
                         forceSelection: true,
+                        id: 'LSFAnalyteSelector',
                         listeners: {
                             select : function(combo, records) {
                                 locSpecStore.clearFilter();
-                                if (records.length > 0) {
-                                    var selectedMineral = records[0].get('field1'); //TODO change to a proper field name
+                                if (records.data.field1) {
+                                    var selectedMineral = records.data.field1; //TODO change to a proper field name
                                     locSpecStore.filter('analyteName', selectedMineral, false, false);
                                 }
+                            }
+                        }
+                    },{
+                        xtype: 'button',
+                        text: 'Clear Selection',
+                        listeners: {
+                            click: function(thisButton, e, eOpts) {
+                                locSpecStore.clearFilter();
+                                var s = Ext.ComponentQuery.query('xcombo#LSFAnalyteSelector');
+                                if (s.length>0)
+                                    s[0].clearValue();
                             }
                         }
                     },{

@@ -16,11 +16,11 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
         this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
             iconUrl : config.icon ? config.icon.getUrl() : ''
         });
-        
+
         // Call our superclass constructor to complete construction process.
         this.callParent(arguments);
     },
-    
+
     /**
      * A handle to the currently executed ajax request. It's kept so
      * that we can abort the request if the user tries to remove the layer
@@ -47,31 +47,36 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
         var irisResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.IRIS);
         var irisResource = irisResources[0];
         var serviceUrl = irisResource.data.url;
-        var networkCode = irisResource.data.name;        
+        var networkCode = irisResource.data.name;
         me.renderStatus.initialiseResponses([serviceUrl], 'Loading...');
+
+        // Display rubbish bin icon so that layer can be deleted
+        this.fireEvent('renderstarted', this, [], filterer);
+
         var layer = me.parentLayer;
 
         // Keep track of the _ajaxRequest handle so that we can abort it if need be:
-        _ajaxRequest = Ext.Ajax.request({
+        _ajaxRequest = portal.util.Ajax.request({
             url : 'getIRISStations.do',
             params : {
                 serviceUrl : serviceUrl,
                 networkCode : networkCode
             },
-            success : function(response) {
-                var jsonReponse = Ext.JSON.decode(response.responseText);
-
+            success : function(data, msg) {
                 // This is a bit cheeky because I'm using the WFS KML parser but it's the same anyway as
                 // this is what I'm generating. I don't really know why the KML parser is in the WFS
                 // namespace because to me it seems like they shouldn't be coupled...
-                var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : jsonReponse.data.kml, map : me.map});
+                var parser = Ext.create('portal.layer.renderer.wfs.KMLParser', {kml : msg, map : me.map});
                 var primitives = parser.makePrimitives(me.icon, irisResource, layer);
-                
+
                 // Add our single points and overlays to the overlay manager (which will add them to the map)
                 me.primitiveManager.addPrimitives(primitives);
-                
+
                 var s = primitives.length == 1 ? '' : 's';
                 me.renderStatus.updateResponse(serviceUrl, primitives.length + " record" + s + " retrieved.");
+
+                // Display tick icon now that the download has finished
+                me.fireEvent('renderfinished', me);
             }
         });
     },

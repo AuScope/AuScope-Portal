@@ -55,14 +55,21 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
         var tenementTypeStore = Ext.create('Ext.data.Store', {
             fields: ['displayText', 'valueText'],
             data : [
-                {displayText: 'Exploration', valueText: '*exploration*'},
-                {displayText: 'Prospecting', valueText: '*prospecting*'},
-                {displayText: 'Miscellaneous', valueText: '*miscellaneous*'},
-                {displayText: 'Mining Lease', valueText: '*mining*'},
-                {displayText: 'Licence', valueText: '*licence*'}
+                {displayText: 'Exploration', valueText: 'exploration*'},
+                {displayText: 'Prospecting', valueText: 'prospecting*'},
+                {displayText: 'Miscellaneous', valueText: 'miscellaneous*'},
+                {displayText: 'Mining Lease', valueText: 'mining*'},
+                {displayText: 'Licence', valueText: 'licence*'}
             ]
         });
-
+        var ccPropertyStore = Ext.create('Ext.data.Store', {
+            fields: ['displayText', 'valueText'],
+            data : [
+                {displayText: 'Tenement Type', valueText: 'TenementType'},
+                {displayText: 'Tenement Status', valueText: 'TenementStatus'}
+            ]
+        });
+        
         Ext.apply(config, {
             delayedFormLoading: false,
             border: false,
@@ -138,6 +145,19 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
                     valueField: 'serviceFilter',
                     displayField: 'displayText',
                     hiddenName: 'serviceFilter'
+                },{
+                    xtype: 'combo',
+                    anchor: '100%',
+                    fieldLabel: 'Colorcode Property',
+                    name: 'ccProperty',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    lazyRender:true,
+                    mode: 'local',
+                    store: ccPropertyStore,
+                    valueField: 'valueText',
+                    displayField: 'displayText',
+                    hiddenName: 'ccProperty'
                 },{
                 	xtype: 'hidden',
                 	name: 'cswBbox',

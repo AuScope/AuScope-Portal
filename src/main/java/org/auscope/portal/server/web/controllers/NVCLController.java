@@ -6,12 +6,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.csw.CSWRecordsHostFilter;
@@ -20,6 +24,10 @@ import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.HttpUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AbstractStreamResponse;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
+import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputResponse;
+import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
+import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobStatus;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
@@ -36,6 +44,7 @@ import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphT
 import org.auscope.portal.server.web.service.BoreholeService;
 import org.auscope.portal.server.web.service.NVCL2_0_DataService;
 import org.auscope.portal.server.web.service.NVCLDataService;
+import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +64,7 @@ public class NVCLController extends BasePortalController {
     private NVCLDataService dataService;
     private NVCL2_0_DataService dataService2_0;
     private CSWCacheService cswService;
+    private SF0BoreholeService sf0BoreholeService;
 
     private int BUFFERSIZE = 1024 * 1024;
 
@@ -62,13 +72,14 @@ public class NVCLController extends BasePortalController {
     public NVCLController(BoreholeService boreholeService,
             CSWCacheService cswService,
             NVCLDataService dataService,
-            NVCL2_0_DataService dataService2_0) {
+            NVCL2_0_DataService dataService2_0,
+            SF0BoreholeService sf0BoreholeService) {
 
         this.boreholeService = boreholeService;
         this.cswService = cswService;
         this.dataService = dataService;
         this.dataService2_0 = dataService2_0;
-
+        this.sf0BoreholeService = sf0BoreholeService;
     }
 
     /**
@@ -613,6 +624,31 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
+    
+    /**
+     * Request for mineral colours for NVCL graphs
+     *
+     * @param serviceUrl
+     *          The URL of colour table request
+     * @param logId
+                logId of the dataset
+     *
+     * @return
+     */
+     @RequestMapping("getNVCL2_0_MineralColourTable.do")
+     public ModelAndView getNVCL2_0_MineralColourTable(@RequestParam("serviceUrl") String serviceUrl,
+                                            @RequestParam("logIds") String[] logIds) throws Exception {
+        //Make our request
+        try {
+            String responseStr = dataService2_0.getNVCL2_0_MineralColourTable(serviceUrl, logIds);
+            return generateJSONResponseMAV(true, responseStr, "");
+
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting colour table for logId '%1$s' from %2$s: %3$s", logIds, serviceUrl, ex));
+            log.debug("Exception:", ex);
+            return generateJSONResponseMAV(false);
+        }                               
+     }
 
     /**
      * Proxies a NVCL TSG download request. Writes directly to the HttpServletResponse
@@ -805,5 +841,167 @@ public class NVCLController extends BasePortalController {
     private static InputStream get404HTMLError() throws IOException {
         InputStream input = NVCLController.class.getResourceAsStream("/htmlerror/NVCL404Response.htm");
         return input;
+    }
+
+    /**
+     * Proxies a NVCL getAlgorithms request. Returns a JSON response
+     *
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @return
+     */
+    @RequestMapping("getNVCLAlgorithms.do")
+    public ModelAndView getNVCLWFSDownloadStatus(@RequestParam("serviceUrl") String serviceUrl) throws Exception {
+        try {
+            List<AlgorithmOutputResponse> algorithms = dataService2_0.getAlgorithms(serviceUrl);
+            return generateJSONResponseMAV(true, algorithms, "");
+        } catch (Exception ex) {
+            log.warn("Unable to fetch NVCL algorithms for " + serviceUrl, ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+
+    /**
+     * Proxies a NVCL getAlgorithms request. Returns a JSON response
+     *
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @return
+     */
+    @RequestMapping("getNVCLClassifications.do")
+    public ModelAndView getNVCLWFSDownloadStatus(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("algorithmOutputId") String[] algorithmOutputIdStrings) throws Exception {
+
+        int[] algorithmOutputIds = new int[algorithmOutputIdStrings.length];
+        for (int i = 0; i < algorithmOutputIds.length; i++) {
+            algorithmOutputIds[i] = Integer.parseInt(algorithmOutputIdStrings[i]);
+        }
+
+        try {
+            List<AlgorithmOutputClassification> classifications = dataService2_0.getClassifications(serviceUrl, algorithmOutputIds);
+            return generateJSONResponseMAV(true, classifications, "");
+        } catch (Exception ex) {
+            log.warn("Unable to fetch NVCL classifications for " + serviceUrl + " and algorithmOutputId " + algorithmOutputIdStrings, ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+
+    /**
+     * Submits an NVCL processing job to the remote analytical services
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/submitSF0NVCLProcessingJob.do")
+    public ModelAndView submitSF0NVCLProcessingJob(
+            @RequestParam("email") String email,
+            @RequestParam("jobName") String jobName,
+
+            @RequestParam("wfsUrl") String[] wfsUrls,
+
+            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+
+            @RequestParam(required = false, value = "algorithmOutputId") String[] algorithmOutputIds,
+            @RequestParam(required = false, value = "logName") String logName,
+
+            @RequestParam(required = false, value = "classification") String classification,
+            @RequestParam("startDepth") int startDepth,
+            @RequestParam("endDepth") int endDepth,
+            @RequestParam("operator") String operator,
+            @RequestParam("value") String value,
+            @RequestParam("units") String units,
+            @RequestParam("span") int span)
+            throws Exception {
+
+
+        if ((ArrayUtils.isEmpty(algorithmOutputIds) && StringUtils.isEmpty(logName)) ||
+             ArrayUtils.isNotEmpty(algorithmOutputIds) && StringUtils.isNotEmpty(logName)) {
+            return generateJSONResponseMAV(false, null, "Must define exactly one of algorithmOutputId or logName");
+        }
+
+        String filterString = null;
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        filterString = sf0BoreholeService.getFilter(boreholeName, "", dateOfDrillingStart, dateOfDrillingEnd, -1, bbox, null, true);
+
+        try {
+            boolean result = this.dataService2_0.submitProcessingJob(email, jobName, wfsUrls, filterString, algorithmOutputIds, logName, classification, startDepth, endDepth, operator, value, units, span);
+            return generateJSONResponseMAV(result);
+        } catch (Exception ex) {
+            log.error("Unable to submit processing job: " + ex.getMessage());
+            log.debug("Exception: ", ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+
+    /**
+     * Returns an array of JSON AnalyticalJobStatus objects describing job status responses for a given email
+     * @param email
+     * @return
+     */
+    @RequestMapping("/checkNVCLProcessingJob.do")
+    public ModelAndView checkNVCLProcessingJob(@RequestParam("email") String email) {
+        try {
+            List<AnalyticalJobStatus> statuses = this.dataService2_0.checkProcessingJobs(email);
+            return generateJSONResponseMAV(true, statuses, "");
+        } catch (Exception ex) {
+            log.error("Unable to check NVCL processing jobs: " + ex.getMessage());
+            log.debug("Exception: ", ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+
+    /**
+     * Returns an object containing passing, failing and erroring borehole ID's for a given processing job
+     * @param email
+     * @return
+     */
+    @RequestMapping("/getNVCLProcessingResults.do")
+    public ModelAndView getNVCLProcessingResults(@RequestParam("jobId") String jobId) {
+        try {
+            AnalyticalJobResults results = this.dataService2_0.getProcessingResults(jobId);
+            return generateJSONResponseMAV(true, Arrays.asList(results), "");
+        } catch (Exception ex) {
+            log.error("Unable to check NVCL processing jobs: " + ex.getMessage());
+            log.debug("Exception: ", ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+
+    @RequestMapping("/downloadNVCLProcessingResults.do")
+    public void downloadNVCLProcessingResults(@RequestParam("jobId") String jobId, HttpServletResponse response) throws Exception {
+        AnalyticalJobResults results = this.dataService2_0.getProcessingResults(jobId);
+
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition","inline; filename=nvclanalytics-" + jobId + ".zip;");
+        ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+
+        try{
+            zout.putNextEntry(new ZipEntry("passIds.csv"));
+            for (String id : results.getPassBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.putNextEntry(new ZipEntry("failIds.csv"));
+            for (String id : results.getFailBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.putNextEntry(new ZipEntry("errorIds.csv"));
+            for (String id : results.getErrorBoreholes()) {
+                zout.write((id + '\n').getBytes());
+            }
+            zout.closeEntry();
+
+            zout.finish();
+            zout.flush();
+        } finally {
+            zout.close();
+        }
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -40,7 +41,7 @@ public class TestPressureDBService extends PortalTestClass {
                 will(returnValue(mockHttpMethod));
 
                 oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
-                will(returnValue(responseStream));
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
 
                 oneOf(mockHttpMethod).releaseConnection();
             }
@@ -118,6 +119,7 @@ public class TestPressureDBService extends PortalTestClass {
         final String wellID = "123";
         final String serviceUrl = "http://example.com/pressure-db-dataservice";
         final String[] features = new String[] {"a", "b", "c"};
+        final HttpClientInputStream responseIs = new HttpClientInputStream(mockStream, null);
 
         context.checking(new Expectations() {
             {
@@ -125,13 +127,13 @@ public class TestPressureDBService extends PortalTestClass {
                 will(returnValue(mockHttpMethod));
 
                 oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
-                will(returnValue(mockStream));
+                will(returnValue(responseIs));
             }
         });
 
         //make the request - it should return a stream
         InputStream result = service.makeDownloadRequest(wellID, serviceUrl, features);
-        Assert.assertSame(mockStream, result);
+        Assert.assertSame(responseIs, result);
     }
 
     @Test(expected = IOException.class)
