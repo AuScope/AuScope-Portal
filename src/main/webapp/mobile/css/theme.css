@@ -88,7 +88,7 @@ html,body{
   background:  #ffffff;  
   display: block;
   width: 100%;
-  overflow: auto;
+  overflow: visible;
   position: relative;
   left : 0em;	
   height: 100%;

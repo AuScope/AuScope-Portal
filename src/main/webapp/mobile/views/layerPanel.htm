@@ -22,8 +22,8 @@
 						   	<td><i class="fa fa-info-circle hasEvent" aria-hidden="true" ng-click="togglePanels('info',cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td><i class="fa fa-map hasEvent" aria-hidden="true" ng-click="togglePanels('analytic',cswRecord.id);$event.stopPropagation();"></i></td>
 					   </tr>					   
-					   <tr class="animated" ng-class="{'fadeInDown': showPanel.filter[cswRecord.id], 'no-animation': !showPanel.filter[cswRecord.id]}" ng-show="showPanel.filter[cswRecord.id]">
-                        <td class="warning" colspan="3">
+					   <tr class="animated warning" ng-class="{'fadeInDown': showPanel.filter[cswRecord.id], 'no-animation': !showPanel.filter[cswRecord.id]}" ng-show="showPanel.filter[cswRecord.id]">
+                        <td colspan="3">
                             <div class="form-group">
                               Mine Name
                               <input type="text" class="form-control">
@@ -34,12 +34,16 @@
                             </div>
                         </td>
                        </tr>
-					   <tr class="animated" ng-if="showPanel.info[cswRecord.id]" ng-class="{'fadeInDown': showPanel.info[cswRecord.id], 'no-animation': !showPanel.info[cswRecord.id]}" ng-repeat-end>
+					   <tr ng-if="showPanel.info[cswRecord.id]"  >
 					        <td colspan="3">
 					           <info-panel  info-panel-csw="cswRecord"  class='layer-panel-nested'></info-panel>
 					         <td>
 					    </tr>
-					   
+					   <tr class="animated warning" ng-class="{'fadeInDown': showPanel.analytic[cswRecord.id], 'no-animation': !showPanel.analytic[cswRecord.id]}" ng-show="showPanel.analytic[cswRecord.id]" ng-repeat-end>
+                        <td colspan="3">
+                            <p>Add some analytic quick brown fox that jumped over the lazy dog here</p>
+                        </td>
+                       </tr>
 					    
 					</table>
 			      
