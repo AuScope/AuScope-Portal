@@ -88,7 +88,7 @@ html,body{
   background:  #ffffff;  
   display: block;
   width: 100%;
-  overflow: visible;
+  overflow: auto;
   position: relative;
   left : 0em;	
   height: 100%;
@@ -118,10 +118,35 @@ html,body{
 	
 }
 
-.panel-layer-heading{
-	background-image: none;
-    background-color: red;
-    color: white;
+
+
+.panel-selected .panel-heading {
+  background-color: #d14f30;
+  color: white;  
 }
 
+.fa-round {
+  padding-top: 3px;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  
+  color: #337ab7;
+}
+
+.fa-round-inverse,
+.icon-box:hover .fa-round,
+.icon-xs-side:hover .fa-round,
+.icon-sm-side:hover .fa-round,
+.icon-lg-side:hover .fa-round {
+  background-color: #d14f30;
+  color: white;
+}
+
+.layer-selected,
+.layer-selection .layer-row:hover{
+	background-color: #faf2cc;
+}
 

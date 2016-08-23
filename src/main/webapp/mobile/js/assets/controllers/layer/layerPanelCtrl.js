@@ -11,7 +11,7 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
     
     
     
-    $scope.togglePanels=function(panelType,cswRecordId){
+    $scope.togglePanels = function(panelType,cswRecordId){
         
         var closeOthers = function(){
             for (var showPanelType in $scope.showPanel) {
@@ -29,5 +29,15 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
         closeOthers();
         return;
         
-    }
+    };
+    
+    $scope.isExpanded = function(cswRecordId){
+        for (var showPanelType in $scope.showPanel) {
+            if($scope.showPanel[showPanelType][cswRecordId]==true){
+                return true;
+            };            
+        };
+        return false;
+    };
+    
 }]);
