@@ -4,7 +4,7 @@
 		<div>				
 			<div class="layer-panel-header">
 				<img src="img/AuScope-logo-220.jpg">
-				<i class="pull-right glyphicon hasEvent" ng-click="$parent.showlayerPanel = !$parent.showlayerPanel" ng-class="{'glyphicon glyphicon-minus': true}"></i>
+				<i class="pull-right glyphicon hasEvent" ng-click="$parent.showlayerPanel = !$parent.showlayerPanel" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
 			</div>			
 		</div>
 		<div>
@@ -15,31 +15,29 @@
 			        {{group}} <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group], 'glyphicon glyphicon-plus': !status[group]}"></i>
 			      </uib-accordion-heading>
 			      <div>
-			      	<table class="table table-sm layer-selection">
+			      	<table class="table table-sm table-inverse layer-selection">
+			      	  <thead>
+				        <tr>
+					      <th colspan="4">Layers</th>					      
+					    </tr>
+					  </thead>
 					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',cswRecord.id)" class="layer-row" ng-class="{'layer-selected': isExpanded(cswRecord.id)}">
 						   	<td>{{cswRecord.name}}</td>
 						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': showPanel.filter[cswRecord.id]}" aria-hidden="true" ng-click="togglePanels('filter',cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': showPanel.info[cswRecord.id]}" aria-hidden="true" ng-click="togglePanels('info',cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-map fa-round hasEvent" ng-class="{'fa-round-inverse': showPanel.analytic[cswRecord.id]}" aria-hidden="true" ng-click="togglePanels('analytic',cswRecord.id);$event.stopPropagation();"></i></td>
 					   </tr>					   
-					   <tr class="animated warning" ng-class="{'fadeInDown': showPanel.filter[cswRecord.id], 'no-animation': !showPanel.filter[cswRecord.id]}" ng-show="showPanel.filter[cswRecord.id]">
+					   <tr class="animated layer-selected" ng-class="{'fadeInDown': showPanel.filter[cswRecord.id], 'no-animation': !showPanel.filter[cswRecord.id]}" ng-show="showPanel.filter[cswRecord.id]">
                         <td colspan="4">
-                            <div class="form-group">
-                              Mine Name
-                              <input type="text" class="form-control">
-                            </div>
-                            <div class="form-group">
-                              Drilling Date
-                              <input type="text" class="form-control">
-                            </div>
+                            <filter-panel  filter-panel-csw="cswRecord"  class='layer-panel-nested'></filter-panel>
                         </td>
                        </tr>
-					   <tr class="warning" ng-if="showPanel.info[cswRecord.id]"  >
+					   <tr class="layer-selected" ng-if="showPanel.info[cswRecord.id]"  >
 					        <td colspan="4">
-					           <info-panel  info-panel-csw="cswRecord"  class='layer-panel-nested'></info-panel>
+					           <info-panel  info-panel-csw="cswRecord" ></info-panel>
 					         </td>
 					    </tr>
-					   <tr class="animated warning" ng-class="{'fadeInDown': showPanel.analytic[cswRecord.id], 'no-animation': !showPanel.analytic[cswRecord.id]}" ng-show="showPanel.analytic[cswRecord.id]" ng-repeat-end>
+					   <tr class="animated layer-selected" ng-class="{'fadeInDown': showPanel.analytic[cswRecord.id], 'no-animation': !showPanel.analytic[cswRecord.id]}" ng-show="showPanel.analytic[cswRecord.id]" ng-repeat-end>
                         <td colspan="4">
                             <p>Add some analytic quick brown fox that jumped over the lazy dog here</p>
                         </td>

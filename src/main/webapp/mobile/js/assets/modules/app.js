@@ -35,3 +35,14 @@ app.directive('infoPanel', function() {
 	  templateUrl: 'views/infoPanel.htm'
   };
 });
+
+
+app.directive('filterPanel', function($http,$templateCache,$compile) {
+    return {
+        scope: {
+            filterPanelCsw  : "=",                  
+        },
+        templateUrl: 'views/filters/loadFilter.htm'
+       
+    };
+});

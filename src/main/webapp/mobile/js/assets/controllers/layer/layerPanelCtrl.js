@@ -8,9 +8,6 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
     $scope.status = {};    
     $scope.showPanel = {};
     
-    
-    
-    
     $scope.togglePanels = function(panelType,cswRecordId){
         
         var closeOthers = function(){
@@ -39,5 +36,7 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
         };
         return false;
     };
+    
+   
     
 }]);

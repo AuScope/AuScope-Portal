@@ -84,22 +84,7 @@ html,body{
  
 }
 
-.layer-panel-nested{
-  background:  #ffffff;  
-  display: block;
-  width: 100%;
-  overflow: auto;
-  position: relative;
-  left : 0em;	
-  height: 100%;
-  z-index: 55;    	
- 
-}
 
-.layer-panel-nested.ng-hide,
-.layer-panel.ng-hide {
-  animation: fadeOutLeft 1s;
-}
 
 .no-animation {
     -webkit-animation-name: fadeOutLeft;
@@ -145,8 +130,12 @@ html,body{
   color: white;
 }
 
-.layer-selected,
+.layer-selection .layer-selected{
+    background-color:#f0f8ff;
+}
+
+
 .layer-selection .layer-row:hover{
-	background-color: #faf2cc;
+    background-color: #e1f1ff;
 }
 
