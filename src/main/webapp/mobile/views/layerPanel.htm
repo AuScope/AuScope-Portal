@@ -9,10 +9,10 @@
 		</div>
 		<div>
 			<uib-accordion close-others="true">			   
-			   <div ng-repeat="(group,records) in cswRecords" uib-accordion-group ng-class="{'panel-selected': status[group], 'panel-primary': !status[group]}" is-open="status[group]">
+			   <div ng-repeat="(group,records) in cswRecords" uib-accordion-group ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
 			   	 
 			      <uib-accordion-heading>
-			        {{group}} <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group], 'glyphicon glyphicon-plus': !status[group]}"></i>
+			        {{group}} <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group].isOpen, 'glyphicon glyphicon-plus': !status[group].isOpen}"></i>
 			      </uib-accordion-heading>
 			      <div>
 			      	<table class="table table-sm table-inverse layer-selection">
@@ -21,23 +21,23 @@
 					      <th colspan="4">Layers</th>					      
 					    </tr>
 					  </thead>
-					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',cswRecord.id)" class="layer-row" ng-class="{'layer-selected': isExpanded(cswRecord.id)}">
+					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',group,cswRecord.id)" class="layer-row" ng-class="{'layer-selected':  status[group][cswRecord.id].isExpanded}">
 						   	<td>{{cswRecord.name}}</td>
-						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': showPanel.filter[cswRecord.id]}" aria-hidden="true" ng-click="togglePanels('filter',cswRecord.id);$event.stopPropagation();"></i></td>
-						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': showPanel.info[cswRecord.id]}" aria-hidden="true" ng-click="togglePanels('info',cswRecord.id);$event.stopPropagation();"></i></td>
-						   	<td class="icon-box"><i class="fa fa-map fa-round hasEvent" ng-class="{'fa-round-inverse': showPanel.analytic[cswRecord.id]}" aria-hidden="true" ng-click="togglePanels('analytic',cswRecord.id);$event.stopPropagation();"></i></td>
+						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.filter}" aria-hidden="true" ng-click="togglePanels('filter',group,cswRecord.id);$event.stopPropagation();"></i></td>
+						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.info}" aria-hidden="true" ng-click="togglePanels('info',group,cswRecord.id);$event.stopPropagation();"></i></td>
+						   	<td class="icon-box"><i class="fa fa-map fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.analytic}" aria-hidden="true" ng-click="togglePanels('analytic',group,cswRecord.id);$event.stopPropagation();"></i></td>
 					   </tr>					   
-					   <tr class="animated layer-selected" ng-class="{'fadeInDown': showPanel.filter[cswRecord.id], 'no-animation': !showPanel.filter[cswRecord.id]}" ng-show="showPanel.filter[cswRecord.id]">
+					   <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.filter, 'no-animation': !status[group][cswRecord.id].panels.filter}" ng-show="status[group][cswRecord.id].panels.filter">
                         <td colspan="4">
                             <filter-panel  filter-panel-csw="cswRecord"  class='layer-panel-nested'></filter-panel>
                         </td>
                        </tr>
-					   <tr class="layer-selected" ng-if="showPanel.info[cswRecord.id]"  >
+					   <tr class="layer-selected" ng-if="status[group][cswRecord.id].panels.info"  >
 					        <td colspan="4">
 					           <info-panel  info-panel-csw="cswRecord" ></info-panel>
 					         </td>
 					    </tr>
-					   <tr class="animated layer-selected" ng-class="{'fadeInDown': showPanel.analytic[cswRecord.id], 'no-animation': !showPanel.analytic[cswRecord.id]}" ng-show="showPanel.analytic[cswRecord.id]" ng-repeat-end>
+					   <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.analytic, 'no-animation': !status[group][cswRecord.id].panels.analytic}" ng-show="status[group][cswRecord.id].panels.analytic" ng-repeat-end>
                         <td colspan="4">
                             <p>Add some analytic quick brown fox that jumped over the lazy dog here</p>
                         </td>

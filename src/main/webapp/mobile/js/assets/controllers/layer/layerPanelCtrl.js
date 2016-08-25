@@ -6,36 +6,57 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
     
   
     $scope.status = {};    
-    $scope.showPanel = {};
-    
-    $scope.togglePanels = function(panelType,cswRecordId){
+ 
+    //VT: we only want 1 panel open at a time
+    $scope.togglePanels = function(panelType,group,cswRecordId){
         
-        var closeOthers = function(){
-            for (var showPanelType in $scope.showPanel) {
+        var closeOtherPanels = function(){
+            for (var showPanelType in $scope.status[group][cswRecordId].panels) {
                 if(showPanelType != panelType){
-                    $scope.showPanel[showPanelType][cswRecordId]=false;
+                    $scope.status[group][cswRecordId].panels[showPanelType]=false;
                 }
             }
-        }
+        };
         
-        if($scope.showPanel[panelType]===undefined ){  
-            $scope.showPanel[panelType]={};
-            $scope.showPanel[panelType][cswRecordId] = false;
+        if($scope.status[group]===undefined){
+            $scope.status[group]={};                                   
+        } 
+      
+        if($scope.status[group][cswRecordId]===undefined){
+            $scope.status[group][cswRecordId]={};
+            $scope.status[group][cswRecordId].panels={};
+        }        
+        
+        $scope.status[group][cswRecordId].panels[panelType] = !$scope.status[group][cswRecordId].panels[panelType];
+        
+        if($scope.status[group][cswRecordId].panels[panelType] == true){
+            $scope.status[group][cswRecordId].isExpanded = true;
+            toggleLayers(group,cswRecordId);
+        }else{
+            $scope.status[group][cswRecordId].isExpanded = false;
         }
-        $scope.showPanel[panelType][cswRecordId] = !$scope.showPanel[panelType][cswRecordId];
-        closeOthers();
+        closeOtherPanels();
         return;
         
     };
     
-    $scope.isExpanded = function(cswRecordId){
-        for (var showPanelType in $scope.showPanel) {
-            if($scope.showPanel[showPanelType][cswRecordId]==true){
-                return true;
-            };            
-        };
-        return false;
+    
+    
+    //VT: we only want 1 layer open at a time
+    var toggleLayers = function(group,cswRecordId){
+        for(var cswRecord in $scope.status[group]){
+            if(cswRecord != cswRecordId){
+                if(cswRecord == "isOpen"){
+                    continue;
+                }
+                for (var panelType in $scope.status[group][cswRecord].panels) {                    
+                    $scope.status[group][cswRecord].panels[panelType]=false;                   
+                }
+                $scope.status[group][cswRecord].isExpanded = false;
+            }
+        }        
     };
+    
     
    
     
