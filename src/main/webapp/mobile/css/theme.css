@@ -22,12 +22,16 @@ html,body{
 	height: 100%;
 	width: 100%;		
 }
-.angular-google-map,
+.google-map,
 .angular-google-map-container { 
 	height: 100%;	
 	width: 100%;
 }
 
+.gm-style * {
+  width:auto;
+  height:auto;
+}
 
 .map-overlay-panel-toggle {      
   top : 50px;

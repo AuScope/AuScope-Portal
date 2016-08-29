@@ -14,7 +14,6 @@
 		<link href="css/animate.css" rel="stylesheet">
 		<link href="css/theme.css" rel="stylesheet">
 		
-
 		
 		<link rel="apple-touch-icon-precomposed" href="img/ico/60.png" type="image/png"/>
 		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/ico/72.png" type="image/png"/>
@@ -22,13 +21,14 @@
 		<link rel="apple-touch-icon-precomposed" sizes="152x152" href="img/ico/152.png" type="image/png"/>
 
 		<!-- javascript -->
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBArcbrWG8q6cUeP4WrhD3-s1D0aYbkxfA"></script>
+		
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js" type="text/javascript" ></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js" type="text/javascript" ></script>		
-		<script src="js/assets/framework/ui-bootstrap/ui-bootstrap-tpls-2.0.1.min.js" type="text/javascript" ></script>
-		
+		<script src="js/assets/framework/ui-bootstrap/ui-bootstrap-tpls-2.0.1.min.js" type="text/javascript" ></script>		
 		<script src="//cdn.jsdelivr.net/lodash/4.14.1/lodash.min.js" type="text/javascript" ></script>		
 		<script src="js/assets/framework/angular/angular-simple-logger.js" type="text/javascript" ></script>
-		<script src="js/assets/framework/google-map/angular-google-maps.min.js" type="text/javascript" ></script>
+		
 		
 		
 		
@@ -43,10 +43,18 @@
   		<script src="js/assets/controllers/googlemap/googleMapCtrl.js"></script>
   		<script src="js/assets/controllers/layer/layerPanelCtrl.js"></script>
   		<script src="js/assets/controllers/active/activePanelCtrl.js"></script>
-  		<script src="js/assets/controllers/info/infoPanelCtrl.js"></script>
-  		<script src="js/assets/controllers/filters/loadFilterCtrl.js"></script>
+  		<script src="js/assets/controllers/info/infoPanelCtrl.js"></script>  		
+  		
+  		
+  		<!-- Service -->
   		<script src="js/assets/modules/service/http/GetCSWRecordService.js"></script>
-  	
+  		<script src="js/assets/modules/service/map/GoogleMapService.js"></script>
+  		
+  		<!-- Filters -->
+  		<script src="js/assets/controllers/filters/loadFilterCtrl.js"></script>
+  		<script src="js/assets/controllers/filters/defaultFilterCtrl.js"></script>
+  		
+  	     
   	
 		
 	</head>
@@ -66,14 +74,14 @@
 				</div>						 
 			  </div>
 			  <div class="full-map">	
-				<ui-gmap-google-map id="main-map" center='map.center' zoom='map.zoom' options="map.options">
-					<ui-gmap-marker coords="marker.coords" events="marker.events" idkey="marker.id"></ui-gmap-marker>
-				</ui-gmap-google-map>
+				<div class="google-map" id="map"></div>
 			</div>
 		</div>
 	</body>
 	
-	
+	   
+        
+        
 	
 </html>
 
