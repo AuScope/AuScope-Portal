@@ -75,7 +75,7 @@ html,body{
 
 
 
-/*overlay layer panel*/
+/*overlay layer panel*/ 
 .layer-panel{
   background:  #ffffff;  
   display: block;
@@ -88,6 +88,9 @@ html,body{
  
 }
 
+.layer-panel.ng-hide {
+  animation: fadeOutLeft 1s;
+}
 
 
 .no-animation {
@@ -110,7 +113,7 @@ html,body{
 
 
 .panel-selected .panel-heading {
-  background-color: #d14f30;
+  background-color: #3cad1e;
   color: white;  
 }
 
@@ -130,7 +133,7 @@ html,body{
 .icon-xs-side:hover .fa-round,
 .icon-sm-side:hover .fa-round,
 .icon-lg-side:hover .fa-round {
-  background-color: #d14f30;
+  background-color: #3cad1e;
   color: white;
 }
 
