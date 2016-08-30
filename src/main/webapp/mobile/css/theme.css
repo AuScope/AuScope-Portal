@@ -41,12 +41,16 @@ html,body{
  
 }
 
-@media (min-width: 400px) {
+@media screen and (max-width: 658px) {
 	.map-overlay-panel-toggle {      
-	  top : 50px;
+	  top : 10px;
 	  left : 1em;     
 	  position: absolute;   
 	  z-index: 50;
+	}
+	
+	#inputValidation{
+	   width : 200px;
 	}
 }
 
