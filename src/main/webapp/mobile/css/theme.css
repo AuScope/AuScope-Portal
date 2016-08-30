@@ -41,6 +41,15 @@ html,body{
  
 }
 
+@media (min-width: 400px) {
+	.map-overlay-panel-toggle {      
+	  top : 50px;
+	  left : 1em;     
+	  position: absolute;   
+	  z-index: 50;
+	}
+}
+
 /* textbox css*/
 .border-none, .border-none:focus {
 	border: none;

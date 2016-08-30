@@ -1,11 +1,13 @@
-allModules.service('WMSService',['$q','googleMapService',function ($q,googleMapService) {
+allModules.service('WMSService',['$rootScope','googleMapService','layerManagerService','Constants',function ($rootScope,googleMapService,layerManagerService,Constants) {
    
     
     
-    this.generateWMS_1_1_1_Layer = function(cswRecords){
+    this.generateWMS_1_1_1_Layer = function(onlineResource){
         
+       var myOnlineResource =  onlineResource;
+       
        var map = googleMapService.getMap();
-       var layer = new google.maps.ImageMapType({
+       var imagelayer = new google.maps.ImageMapType({
            getTileUrl: function (coord, zoom) {
              
                var proj = map.getProjection();
@@ -25,11 +27,12 @@ allModules.service('WMSService',['$q','googleMapService',function ($q,googleMapS
                                (top.lat() + deltaY);
      
                //base WMS URL
-               var url = "http://remanentanomalies.csiro.au/geoserver/wms?";
+               var url = myOnlineResource.url + "?";
                url += "&REQUEST=GetMap"; //WMS operation
                url += "&SERVICE=WMS";    //WMS service
                url += "&VERSION=1.1.1";  //WMS version  
-               url += "&LAYERS=" + "mag%3AAUS5%20-%20Total%20Magnetic%20Intensity"; //WMS layers
+               url += "&STYLES=";  
+               url += "&LAYERS=" + myOnlineResource.name; //WMS layers
                url += "&FORMAT=image/png" ; //WMS format
                url += "&BGCOLOR=0xFFFFFF";  
                url += "&TRANSPARENT=TRUE";
@@ -40,20 +43,71 @@ allModules.service('WMSService',['$q','googleMapService',function ($q,googleMapS
                return url;                 // return URL for the tile
      
            },
-           //tileSize: new google.maps.Size(256, 256),
+           tileSize: new google.maps.Size(256, 256),
            isPng: true
        });
-        return layer;
+        return imagelayer;
     };
     
-    this.generateWMS_1_3_0_Layer = function(cswRecords){
+    this.generateWMS_1_3_0_Layer = function(onlineResource){
         
-       //VT: TODO;
+        var myOnlineResource =  onlineResource;
+        
+        var map = googleMapService.getMap();
+        var imagelayer = new google.maps.ImageMapType({
+            getTileUrl: function (coord, zoom) {
+              
+                var proj = map.getProjection();
+                var zfactor = Math.pow(2, zoom);
+                // get Long Lat coordinates
+                var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 256 / zfactor, coord.y * 256 / zfactor));
+                var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
+
+                //corrections for the slight shift of the SLP (mapserver)
+                var deltaX = 0;//0.0013;
+                var deltaY = 0;//0.00058;
+
+                
+                var bbox =      (top.lng() + deltaX) + "," +
+                                (bot.lat() + deltaY) + "," +
+                                (bot.lng() + deltaX) + "," +
+                                (top.lat() + deltaY);
+      
+                //base WMS URL
+                var url = myOnlineResource.url + "?";;
+                url += "&REQUEST=GetMap"; 
+                url += "&SERVICE=WMS";    
+                url += "&VERSION=1.3.0";
+                url += "&STYLES=";                
+                url += "&LAYERS=" + myOnlineResource.name; 
+                url += "&FORMAT=image/png" ; 
+                url += "&BGCOLOR=0xFFFFFF";  
+                url += "&TRANSPARENT=TRUE";
+                url += "&CRS=CRS:84";     //might need to set to CRS:84 for 1.3.0
+                url += "&BBOX=" + bbox;      
+                url += "&WIDTH=256";        
+                url += "&HEIGHT=256";
+                return url;                 
+      
+            },
+            tileSize: new google.maps.Size(256, 256),
+            isPng: true
+        });
+         return imagelayer;
     };
  
     this.renderLayer = function(layer){   
         var map =  googleMapService.getMap();
-        map.overlayMapTypes.push(this.generateWMS_1_1_1_Layer());               
+        
+        var onlineResources = layerManagerService.getWMS(layer);
+        for(var index in onlineResources){
+            if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
+                map.overlayMapTypes.push(this.generateWMS_1_1_1_Layer(onlineResources[index]));
+            }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
+                map.overlayMapTypes.push(this.generateWMS_1_3_0_Layer(onlineResources[index]));
+            }        
+        }
+  
     };
     
      

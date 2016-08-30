@@ -1,10 +1,10 @@
-allControllers.controller('googleMapCtrl', ['$scope','$rootScope','googleMapService','WMSService', function ($scope,$rootScope,googleMapService,WMSService) {
+allControllers.controller('googleMapCtrl', ['$scope','$rootScope','googleMapService', function ($scope,$rootScope,googleMapService) {
 	
 	$scope.active = {};
 
 	googleMapService.initMap();
 	
-	WMSService.renderLayer();
+	
 	  
 
 }]);

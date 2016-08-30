@@ -1,13 +1,17 @@
 var app = angular.module('app', ['ngAnimate','allControllers','allModules','ui.bootstrap']);
 
-
-//app.config(function(uiGmapGoogleMapApiProvider) {
-//    uiGmapGoogleMapApiProvider.configure({
-//        key: 'AIzaSyBArcbrWG8q6cUeP4WrhD3-s1D0aYbkxfA',
-//        //v: '3.20', //defaults to latest 3.X anyhow
-//        libraries: 'weather,geometry,visualization'
-//    });
-//});
+app.constant('Constants', {
+    resourceType: {
+        WMS: 'WMS',
+        WFS: 'WFS',
+        OTHERS: 'OTHERS'
+    },
+    WMSVersion:{
+        '1.1.1': '1.1.1',
+        '1.1.0': '1.1.0',
+        '1.3.0': '1.3.0'
+    }
+}); 
 
 
 app.directive('layerPanel', function() {

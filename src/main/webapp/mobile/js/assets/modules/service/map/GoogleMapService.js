@@ -1,4 +1,4 @@
-allModules.service('googleMapService',['$q','$rootScope',function ($q,$rootScope) {
+allModules.service('googleMapService',['$rootScope',function ($rootScope) {
    
     this.mainMap;
     
@@ -12,7 +12,7 @@ allModules.service('googleMapService',['$q','$rootScope',function ($q,$rootScope
            center: {lat: -28.397, lng: 132.644},
            zoom: 5,
            mapTypeControlOptions: {
-               style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+               style: google.maps.MapTypeControlStyle.DROPDOWN_MENU ,
                position: google.maps.ControlPosition.TOP_RIGHT
            },
          });

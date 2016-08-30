@@ -1,1 +1,5 @@
-<div>Contains nothing, default panel if not found {{filterPanelCsw.id}}  {{urlNotFound['views/filters/'+filterPanelCsw.id+'.htm']}} lala</div>
+<div ng-controller="defaultFilterCtrl">Contains nothing, default panel if not found {{filterPanelCsw.id}}  {{urlNotFound['views/filters/'+filterPanelCsw.id+'.htm']}} lala
+    <div>
+        <button type="button" class="btn btn-info" ng-click="addLayer(filterPanelCsw)">Add Layer</button>
+    </div>
+</div>
