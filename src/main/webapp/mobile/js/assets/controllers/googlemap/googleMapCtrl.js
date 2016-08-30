@@ -1,4 +1,4 @@
-allControllers.controller('googleMapCtrl', ['$scope','$rootScope','uiGmapGoogleMapApi', function ($scope,$rootScope,uiGmapGoogleMapApi) {
+allControllers.controller('googleMapCtrl', ['$scope','$rootScope','uiGmapGoogleMapApi', 'uiGmapIsReady', function ($scope,$rootScope,uiGmapGoogleMapApi, uiGmapIsReady) {
 	
 	$scope.active = {};
 
@@ -55,10 +55,18 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','uiGmapGoogleM
 	       }
 	}
 	
-//	uiGmapGoogleMapApi.then(function(maps) {
-//		maps
-//    });
+	uiGmapGoogleMapApi.then(function(maps) {
+	    console.log("uiGmapGoogleMapApi big map ok");
+    });
 	   
-	  
+	uiGmapIsReady.promise(1).then(function(instances) {
+        console.log("big map is ready 2");
+        instances.forEach(function(inst) {
+            var map = inst.map;
+            var uuid = map.uiGmap_id;
+            var mapInstanceNumber = inst.instance; // Starts at 1.
+            console.log("big map is ready");
+        });
+    });
 
 }]);

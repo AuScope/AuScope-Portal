@@ -2,15 +2,11 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
     $scope.cswRecords={};
     GetCSWRecordService.getCSWKnownLayers().then(function(data){
         $scope.cswRecords=data;
+        console.log("cswRecords=", $scope.cswRecords);
     });
-    
-  
+
     $scope.status = {};    
     $scope.showPanel = {};
-    
-    
-    
-    
     $scope.togglePanels=function(panelType,cswRecordId){
         
         var closeOthers = function(){
