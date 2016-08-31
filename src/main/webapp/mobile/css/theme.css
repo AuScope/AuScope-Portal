@@ -1,8 +1,20 @@
+body { font-size: 1.3em; }
+
 html,body{
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
+}
+
+
+.btn-block {
+    margin: 3px;
+}
+
+.ng-binding, .ng-scope  {
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .dark-blue {
@@ -22,7 +34,7 @@ html,body{
 	height: 100%;
 	width: 100%;		
 }
-.google-map,
+.google-map, .angular-google-map,
 .angular-google-map-container { 
 	height: 100%;	
 	width: 100%;

@@ -3,8 +3,8 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','googleMapServ
 	$scope.active = {};
 
 	googleMapService.initMap();
+
 	
 	
-	  
 
 }]);
