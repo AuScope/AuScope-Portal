@@ -55,19 +55,19 @@ public class MineralTenementController extends BasePortalController {
     public void doMineLegendStyle(
             @RequestParam(required = false, value = "ccProperty") String ccProperty,
             HttpServletResponse response) throws Exception {
-        String style = "";        
+        String style = "";
         switch (ccProperty) {
-        case "TenementType" : 
+        case "TenementType" :
             style = this.getColorCodeLegendStyleForType();
             break;
-        case "TenementStatus": 
+        case "TenementStatus":
             style = this.getColorCodeLegendStyleForStatus();
             break;
         default:
-            style = this.getPolygonLegendStyle();            
-            break;          
+            style = this.getPolygonLegendStyle();
+            break;
         }
-        
+
 
         response.setContentType("text/xml");
 
@@ -78,7 +78,7 @@ public class MineralTenementController extends BasePortalController {
         FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
         styleStream.close();
-        outputStream.close();        
+        outputStream.close();
     }
     /**
      * Handles getting the style of the mineral tenement filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
@@ -99,23 +99,24 @@ public class MineralTenementController extends BasePortalController {
             @RequestParam(required = false, value = "owner") String owner,
             @RequestParam(required = false, value = "size") String size,
             @RequestParam(required = false, value = "endDate") String endDate,
-            @RequestParam(required = false, value = "ccProperty") String ccProperty,
+            @RequestParam(required = false, value = "ccProperty", defaultValue="") String ccProperty,
             HttpServletResponse response) throws Exception {
-        String style = "";        
+        String style = "";
+
         switch (ccProperty) {
-        case "TenementType" : 
+        case "TenementType" :
             style = this.getColorCodeStyleForType(name,tenementType, owner, size, endDate);
             break;
-        case "TenementStatus": 
+        case "TenementStatus":
             style = this.getColorCodeStyleForStatus(name, tenementType, owner, size, endDate);
             break;
         default:
-            String stylefilter = this.mineralTenementService.getMineralTenementWithStyling(name, tenementType, owner, size,endDate); //VT:get filter from service            
+            String stylefilter = this.mineralTenementService.getMineralTenementWithStyling(name, tenementType, owner, size,endDate); //VT:get filter from service
             String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null); //VT:get filter from service
-            style = this.getPolygonStyle(stylefilter, filter, MINERAL_TENEMENT, "#00FF00", "#00FF00");            
-            break;          
+            style = this.getPolygonStyle(stylefilter, filter, MINERAL_TENEMENT, "#00FF00", "#00FF00");
+            break;
         }
-        
+
 
         response.setContentType("text/xml");
 
@@ -128,7 +129,7 @@ public class MineralTenementController extends BasePortalController {
         styleStream.close();
         outputStream.close();
     }
-    
+
     public String getPolygonStyle(String stylefilter, String filter, String name, String color, String borderColor) {
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
@@ -146,7 +147,7 @@ public class MineralTenementController extends BasePortalController {
                 "<Title>Default style</Title>" +
                 "<Abstract>A green default style</Abstract>" +
                 "<FeatureTypeStyle>" +
-                
+
                 "<Rule>" +
                 "<Name>Polygon for mineral tenement</Name>" +
                 "<Title>Mineral Tenement</Title>" +
@@ -170,41 +171,41 @@ public class MineralTenementController extends BasePortalController {
                 "</StyledLayerDescriptor>";
         return style;
     }
-    
+
     public String getColorCodeStyleForType(String name, String tenementType,String owner, String size, String endDate) {
 
         String filterExploration = "";
         String filterProspecting = "";
         String filterMiscellaneous = "";
         String filterMiningLease = "";
-        String filterLicence = "";        
-       try {
+        String filterLicence = "";
+        try {
 
-               filterExploration = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "exploration*");
-               filterProspecting = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "prospecting*");
-               filterMiscellaneous = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "miscellaneous*");   
-               filterMiningLease = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "mining*");
-               filterLicence = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "licence*");
-       } catch (Exception e) {
-           // TODO Auto-generated catch block
-           e.printStackTrace();
-       }
-       String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-               "<StyledLayerDescriptor version=\"1.0.0\" " +
-               "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-               "xmlns=\"http://www.opengis.net/sld\" " +
-               "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-               "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-               "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-               "xmlns:ows=\"http://www.opengis.net/ows\" " +
-               "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-               "<NamedLayer>" +
-               "<Name>" + MINERAL_TENEMENT + "</Name>" +
-               "<UserStyle>" +
-               "<Title>Type ColorCode Style</Title>" +
-               "<Abstract>A green default style</Abstract>" +
-               "<FeatureTypeStyle>" +
-               
+            filterExploration = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "exploration*");
+            filterProspecting = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "prospecting*");
+            filterMiscellaneous = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "miscellaneous*");
+            filterMiningLease = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "mining*");
+            filterLicence = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "licence*");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
+                "<StyledLayerDescriptor version=\"1.0.0\" " +
+                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
+                "xmlns=\"http://www.opengis.net/sld\" " +
+                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
+                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
+                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+                "xmlns:ows=\"http://www.opengis.net/ows\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
+                "<NamedLayer>" +
+                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<UserStyle>" +
+                "<Title>Type ColorCode Style</Title>" +
+                "<Abstract>A green default style</Abstract>" +
+                "<FeatureTypeStyle>" +
+
                    "<Rule>" +
                    "<Name>r1</Name>" +
                    "<Title>Exploration</Title>" +
@@ -221,8 +222,8 @@ public class MineralTenementController extends BasePortalController {
                    "</Stroke>" +
                    "</PolygonSymbolizer>" +
                    "</Rule>" +
-                   
-                   
+
+
                    "<Rule>" +
                    "<Name>r2</Name>" +
                    "<Title>Prospecting</Title>" +
@@ -239,7 +240,7 @@ public class MineralTenementController extends BasePortalController {
                    "</Stroke>" +
                    "</PolygonSymbolizer>" +
                    "</Rule>" +
-                   
+
                    "<Rule>" +
                    "<Name>r3</Name>" +
                    "<Title>Miscellaneous</Title>" +
@@ -256,7 +257,7 @@ public class MineralTenementController extends BasePortalController {
                    "</Stroke>" +
                    "</PolygonSymbolizer>" +
                    "</Rule>" +
-                   
+
                    "<Rule>" +
                    "<Name>r4</Name>" +
                    "<Title>Mining Lease</Title>" +
@@ -272,8 +273,8 @@ public class MineralTenementController extends BasePortalController {
                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
                    "</Stroke>" +
                    "</PolygonSymbolizer>" +
-                   "</Rule>" +    
-                   
+                   "</Rule>" +
+
                    "<Rule>" +
                    "<Name>r5</Name>" +
                    "<Title>Licence</Title>" +
@@ -289,29 +290,29 @@ public class MineralTenementController extends BasePortalController {
                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
                    "</Stroke>" +
                    "</PolygonSymbolizer>" +
-                   "</Rule>" +                      
-               "</FeatureTypeStyle>" +
-               "</UserStyle>" +
-               "</NamedLayer>" +
-               "</StyledLayerDescriptor>";
-       return style;
-    }    
+                   "</Rule>" +
+                   "</FeatureTypeStyle>" +
+                   "</UserStyle>" +
+                   "</NamedLayer>" +
+                   "</StyledLayerDescriptor>";
+        return style;
+    }
 
     public String getColorCodeStyleForStatus(String name, String tenementType, String owner, String size, String endDate) {
 
-         String filterLive = "";
-         String filterCurrent = "";
-         String filterPending = "";
-         
+        String filterLive = "";
+        String filterCurrent = "";
+        String filterPending = "";
+
         try {
             filterLive = this.mineralTenementService.getMineralTenementFilterCCStatus(name, tenementType, owner, size, endDate, null ,"LIVE*");
             filterCurrent = this.mineralTenementService.getMineralTenementFilterCCStatus(name, tenementType, owner, size, endDate, null ,"CURRENT*");
-            filterPending = this.mineralTenementService.getMineralTenementFilterCCStatus(name, tenementType, owner, size, endDate, null ,"PENDING*");   
+            filterPending = this.mineralTenementService.getMineralTenementFilterCCStatus(name, tenementType, owner, size, endDate, null ,"PENDING*");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-         
+
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                 "<StyledLayerDescriptor version=\"1.0.0\" " +
                 "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
@@ -327,7 +328,7 @@ public class MineralTenementController extends BasePortalController {
                 "<Title>Default style</Title>" +
                 "<Abstract>A green default style</Abstract>" +
                 "<FeatureTypeStyle>" +
-                
+
                     "<Rule>" +
                     "<Name>r</Name>" +
                     "<Title>Live</Title>" +
@@ -344,8 +345,8 @@ public class MineralTenementController extends BasePortalController {
                     "</Stroke>" +
                     "</PolygonSymbolizer>" +
                     "</Rule>" +
-                    
-                    
+
+
                     "<Rule>" +
                     "<Name>r</Name>" +
                     "<Title>Current</Title>" +
@@ -362,7 +363,7 @@ public class MineralTenementController extends BasePortalController {
                     "</Stroke>" +
                     "</PolygonSymbolizer>" +
                     "</Rule>" +
-                    
+
 
                     "<Rule>" +
                     "<Name>r</Name>" +
@@ -379,29 +380,29 @@ public class MineralTenementController extends BasePortalController {
                     "<CssParameter name=\"stroke-width\">1</CssParameter>" +
                     "</Stroke>" +
                     "</PolygonSymbolizer>" +
-                    "</Rule>" +                      
-                "</FeatureTypeStyle>" +
-                "</UserStyle>" +
-                "</NamedLayer>" +
-                "</StyledLayerDescriptor>";
+                    "</Rule>" +
+                    "</FeatureTypeStyle>" +
+                    "</UserStyle>" +
+                    "</NamedLayer>" +
+                    "</StyledLayerDescriptor>";
         return style;
-    }        
+    }
     String getColorCodeLegendStyleForType() {
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-            "<StyledLayerDescriptor version=\"1.0.0\" " +
-            "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-            "xmlns=\"http://www.opengis.net/sld\" " +
-            "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-            "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-            "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-            "xmlns:ows=\"http://www.opengis.net/ows\" " +
-            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-            "<NamedLayer>" +
-            "<Name>" + MINERAL_TENEMENT + "</Name>" +
-            "<UserStyle>" +
-            "<Title>Type ColorCode Style</Title>" +
-            "<FeatureTypeStyle>" +
-            
+                "<StyledLayerDescriptor version=\"1.0.0\" " +
+                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
+                "xmlns=\"http://www.opengis.net/sld\" " +
+                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
+                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
+                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+                "xmlns:ows=\"http://www.opengis.net/ows\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
+                "<NamedLayer>" +
+                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<UserStyle>" +
+                "<Title>Type ColorCode Style</Title>" +
+                "<FeatureTypeStyle>" +
+
                 "<Rule>" +
                 "<Name>r1</Name>" +
                 "<Title>Exploration</Title>" +
@@ -412,7 +413,7 @@ public class MineralTenementController extends BasePortalController {
                 "</Fill>" +
                 "</PolygonSymbolizer>" +
                 "</Rule>" +
-                
+
                 "<Rule>" +
                 "<Name>r2</Name>" +
                 "<Title>Prospecting</Title>" +
@@ -423,7 +424,7 @@ public class MineralTenementController extends BasePortalController {
                 "</Fill>" +
                 "</PolygonSymbolizer>" +
                 "</Rule>" +
-                
+
                 "<Rule>" +
                 "<Name>r3</Name>" +
                 "<Title>Miscellaneous</Title>" +
@@ -434,7 +435,7 @@ public class MineralTenementController extends BasePortalController {
                 "</Fill>" +
                 "</PolygonSymbolizer>" +
                 "</Rule>" +
-                
+
                 "<Rule>" +
                 "<Name>r4</Name>" +
                 "<Title>Mining Lease</Title>" +
@@ -444,8 +445,8 @@ public class MineralTenementController extends BasePortalController {
                 "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
                 "</Fill>" +
                 "</PolygonSymbolizer>" +
-                "</Rule>" +    
-                
+                "</Rule>" +
+
                 "<Rule>" +
                 "<Name>r5</Name>" +
                 "<Title>Licence</Title>" +
@@ -456,31 +457,31 @@ public class MineralTenementController extends BasePortalController {
                 "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
                 "</Fill>" +
                 "</PolygonSymbolizer>" +
-                "</Rule>" +                      
-            "</FeatureTypeStyle>" +
-            "</UserStyle>" +
-            "</NamedLayer>" +
-            "</StyledLayerDescriptor>";
+                "</Rule>" +
+                "</FeatureTypeStyle>" +
+                "</UserStyle>" +
+                "</NamedLayer>" +
+                "</StyledLayerDescriptor>";
         return style;
     }
-    
+
     public String getColorCodeLegendStyleForStatus() {
-       String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-               "<StyledLayerDescriptor version=\"1.0.0\" " +
-               "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-               "xmlns=\"http://www.opengis.net/sld\" " +
-               "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-               "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-               "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-               "xmlns:ows=\"http://www.opengis.net/ows\" " +
-               "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-               "<NamedLayer>" +
-               "<Name>" + MINERAL_TENEMENT + "</Name>" +
-               "<UserStyle>" +
-               "<Title>Default style</Title>" +
-               "<Abstract>A green default style</Abstract>" +
-               "<FeatureTypeStyle>" +
-               
+        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
+                "<StyledLayerDescriptor version=\"1.0.0\" " +
+                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
+                "xmlns=\"http://www.opengis.net/sld\" " +
+                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
+                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
+                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+                "xmlns:ows=\"http://www.opengis.net/ows\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
+                "<NamedLayer>" +
+                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<UserStyle>" +
+                "<Title>Default style</Title>" +
+                "<Abstract>A green default style</Abstract>" +
+                "<FeatureTypeStyle>" +
+
                    "<Rule>" +
                    "<Name>r1</Name>" +
                    "<Title>Live</Title>" +
@@ -491,8 +492,8 @@ public class MineralTenementController extends BasePortalController {
                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
                    "</Fill>" +
                    "</PolygonSymbolizer>" +
-                   "</Rule>" +                   
-                   
+                   "</Rule>" +
+
                    "<Rule>" +
                    "<Name>r2</Name>" +
                    "<Title>Current</Title>" +
@@ -504,7 +505,7 @@ public class MineralTenementController extends BasePortalController {
                    "</Fill>" +
                    "</PolygonSymbolizer>" +
                    "</Rule>" +
-                   
+
 
                    "<Rule>" +
                    "<Name>r3</Name>" +
@@ -516,13 +517,13 @@ public class MineralTenementController extends BasePortalController {
                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
                    "</Fill>" +
                    "</PolygonSymbolizer>" +
-                   "</Rule>" +                      
-               "</FeatureTypeStyle>" +
-               "</UserStyle>" +
-               "</NamedLayer>" +
-               "</StyledLayerDescriptor>";
-       return style;
-   }    
+                   "</Rule>" +
+                   "</FeatureTypeStyle>" +
+                   "</UserStyle>" +
+                   "</NamedLayer>" +
+                   "</StyledLayerDescriptor>";
+        return style;
+    }
     public String getPolygonLegendStyle() {
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
@@ -540,7 +541,7 @@ public class MineralTenementController extends BasePortalController {
                 "<Title>Default style</Title>" +
                 "<Abstract>A green default style</Abstract>" +
                 "<FeatureTypeStyle>" +
-                
+
                 "<Rule>" +
                 "<Name>Polygon for mineral tenement</Name>" +
                 "<Title>Mineral Tenement</Title>" +
@@ -557,5 +558,5 @@ public class MineralTenementController extends BasePortalController {
                 "</NamedLayer>" +
                 "</StyledLayerDescriptor>";
         return style;
-    }        
+    }
 }
