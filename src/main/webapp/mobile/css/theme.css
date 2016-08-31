@@ -34,7 +34,7 @@ html,body{
 	height: 100%;
 	width: 100%;		
 }
-.google-map,
+.google-map, .angular-google-map,
 .angular-google-map-container { 
 	height: 100%;	
 	width: 100%;
