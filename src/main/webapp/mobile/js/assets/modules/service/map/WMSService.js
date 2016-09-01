@@ -1,8 +1,8 @@
-allModules.service('WMSService',['$rootScope','googleMapService','layerManagerService','Constants',function ($rootScope,googleMapService,layerManagerService,Constants) {
+allModules.service('WMSService',['$rootScope','googleMapService','layerManagerService','Constants','GetWMSRelatedService',function ($rootScope,googleMapService,layerManagerService,Constants,GetWMSRelatedService) {
    
     
     
-    this.generateWMS_1_1_1_Layer = function(onlineResource){
+    this.generateWMS_1_1_1_Layer = function(onlineResource,style){
         
        var myOnlineResource =  onlineResource;
        
@@ -31,6 +31,9 @@ allModules.service('WMSService',['$rootScope','googleMapService','layerManagerSe
                url += "&REQUEST=GetMap"; //WMS operation
                url += "&SERVICE=WMS";    //WMS service
                url += "&VERSION=1.1.1";  //WMS version  
+               if(style){
+                   url += "&SLD_BODY=" + encodeURIComponent(style);
+               }
                url += "&STYLES=";  
                url += "&LAYERS=" + myOnlineResource.name; //WMS layers
                url += "&FORMAT=image/png" ; //WMS format
@@ -49,7 +52,7 @@ allModules.service('WMSService',['$rootScope','googleMapService','layerManagerSe
         return imagelayer;
     };
     
-    this.generateWMS_1_3_0_Layer = function(onlineResource){
+    this.generateWMS_1_3_0_Layer = function(onlineResource,style){
         
         var myOnlineResource =  onlineResource;
         
@@ -78,6 +81,9 @@ allModules.service('WMSService',['$rootScope','googleMapService','layerManagerSe
                 url += "&REQUEST=GetMap"; 
                 url += "&SERVICE=WMS";    
                 url += "&VERSION=1.3.0";
+                if(style){
+                    url += "&SLD_BODY=" + encodeURIComponent(style);
+                }
                 url += "&STYLES=";                
                 url += "&LAYERS=" + myOnlineResource.name; 
                 url += "&FORMAT=image/png" ; 
@@ -98,15 +104,17 @@ allModules.service('WMSService',['$rootScope','googleMapService','layerManagerSe
  
     this.renderLayer = function(layer){   
         var map =  googleMapService.getMap();
-        
-        var onlineResources = layerManagerService.getWMS(layer);
-        for(var index in onlineResources){
-            if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
-                map.overlayMapTypes.push(this.generateWMS_1_1_1_Layer(onlineResources[index]));
-            }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
-                map.overlayMapTypes.push(this.generateWMS_1_3_0_Layer(onlineResources[index]));
-            }        
-        }
+        var me = this;
+        GetWMSRelatedService.getWMSStyle(layer).then(function(style){
+            var onlineResources = layerManagerService.getWMS(layer);
+            for(var index in onlineResources){
+                if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
+                    map.overlayMapTypes.push(me.generateWMS_1_1_1_Layer(onlineResources[index],style));
+                }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
+                    map.overlayMapTypes.push(me.generateWMS_1_3_0_Layer(onlineResources[index],style));
+                }        
+            }
+        });
   
     };
     
