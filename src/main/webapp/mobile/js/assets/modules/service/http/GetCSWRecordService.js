@@ -1,5 +1,17 @@
+/**
+ * Service class related to handling all things related to making http cswrecords
+ * @module http
+ * @class GetCSWRecordService
+ * 
+ */
 allModules.service('GetCSWRecordService',['$http','$q',function ($http,$q) {
-     var promise;    
+     var promise; 
+     
+     /**
+      * Retrieve knownlayer csw records async
+      * @method getCSWKnownLayers
+      * @return promise - a promise of the csw records when it has complete
+      */
      this.getCSWKnownLayers = function(){    
          if ( !promise ) {
                 promise = $http.get('../getKnownLayers.do').then(function (response) {

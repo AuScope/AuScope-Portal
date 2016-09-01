@@ -1,14 +1,29 @@
-allModules.service('googleMapService',['$rootScope',function ($rootScope) {
+/**
+ * Service class related to handling all things related to google map.
+ * @module map
+ * @class GoogleMapService
+ * 
+ */
+allModules.service('GoogleMapService',['$rootScope',function ($rootScope) {
    
     this.mainMap;
     
+    /**
+     * Get an instance of the map
+     * @Method getMap
+     * @return map - an instance of the map. Make sure this is called after map has been initialized
+     */
     this.getMap = function(){
         return this.mainMap;
     };
     
    
      
-  
+    /**
+     * Initialize the map
+     * @Method initMap
+     * 
+     */
      this.initMap = function() {
          var mq = window.matchMedia( "(max-width: 658px)" );
          this.mainMap = new google.maps.Map(document.getElementById('google-map-main'), {

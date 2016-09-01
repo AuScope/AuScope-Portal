@@ -1,12 +1,24 @@
-allModules.service('WMSService',['$rootScope','googleMapService','layerManagerService','Constants','GetWMSRelatedService',function ($rootScope,googleMapService,layerManagerService,Constants,GetWMSRelatedService) {
+/**
+ * WMSService handles rendering of all wms layers onto the map
+ * @module map
+ * @class WMSService
+ * 
+ */
+allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService',function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService) {
    
     
-    
+    /**
+     * Generate wms 1.1.1 google.maps.ImageMapType layer 
+     * @method generateWMS_1_1_1_Layer
+     * @param onlineResource - WMS online resource
+     * @param style - sld if defined else default server sld will be used
+     * @return ImageMapType - google.maps.ImageMapType
+     */
     this.generateWMS_1_1_1_Layer = function(onlineResource,style){
         
        var myOnlineResource =  onlineResource;
        
-       var map = googleMapService.getMap();
+       var map = GoogleMapService.getMap();
        var imagelayer = new google.maps.ImageMapType({
            getTileUrl: function (coord, zoom) {
              
@@ -52,11 +64,18 @@ allModules.service('WMSService',['$rootScope','googleMapService','layerManagerSe
         return imagelayer;
     };
     
+    /**
+     * Generate wms 1.3 google.maps.ImageMapType layer 
+     * @method generateWMS_1_3_0_Layer
+     * @param onlineResource - WMS online resource
+     * @param style - sld if defined else default server sld will be used
+     * @return ImageMapType - google.maps.ImageMapType
+     */
     this.generateWMS_1_3_0_Layer = function(onlineResource,style){
         
         var myOnlineResource =  onlineResource;
         
-        var map = googleMapService.getMap();
+        var map = GoogleMapService.getMap();
         var imagelayer = new google.maps.ImageMapType({
             getTileUrl: function (coord, zoom) {
               
@@ -102,11 +121,16 @@ allModules.service('WMSService',['$rootScope','googleMapService','layerManagerSe
          return imagelayer;
     };
  
+    /**
+     * Method to decide how the wms should be rendered and add the wms to the map 
+     * @method renderLayer
+     * @param layer - The layer containing the wms to be rendered
+     */
     this.renderLayer = function(layer){   
-        var map =  googleMapService.getMap();
+        var map =  GoogleMapService.getMap();
         var me = this;
         GetWMSRelatedService.getWMSStyle(layer).then(function(style){
-            var onlineResources = layerManagerService.getWMS(layer);
+            var onlineResources = LayerManagerService.getWMS(layer);
             for(var index in onlineResources){
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
                     map.overlayMapTypes.push(me.generateWMS_1_1_1_Layer(onlineResources[index],style));

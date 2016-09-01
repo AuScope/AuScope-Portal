@@ -1,9 +1,9 @@
-allControllers.controller('defaultFilterCtrl', ['$scope','WMSService', function ($scope,WMSService) {
+allControllers.controller('defaultFilterCtrl', ['$scope','RenderHandlerService', function ($scope,RenderHandlerService) {
     
     
     
     $scope.addLayer = function(layer){
-        WMSService.renderLayer(layer);
+        RenderHandlerService.renderLayer(layer);
     };
     
 }]);

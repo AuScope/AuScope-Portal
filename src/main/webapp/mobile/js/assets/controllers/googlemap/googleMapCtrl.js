@@ -1,8 +1,8 @@
-allControllers.controller('googleMapCtrl', ['$scope','$rootScope','googleMapService', function ($scope,$rootScope,googleMapService) {
+allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapService', function ($scope,$rootScope,GoogleMapService) {
 	
 	$scope.active = {};
 
-	googleMapService.initMap();
+	GoogleMapService.initMap();
 
 	
 	
