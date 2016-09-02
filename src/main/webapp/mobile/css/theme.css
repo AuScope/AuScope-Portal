@@ -1,11 +1,16 @@
 body { font-size: 1.3em; }
 
-html,body{
+html,body {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
 }
+
+.glyphicon.glyphicon-menu-left {
+	font-size: 1.8em;
+}
+
 
 
 .btn-block {
@@ -149,7 +154,7 @@ html,body{
   width: 20px;
   height: 20px;
   text-align: center;
-  
+  font-size: 1.5em;
   color: #337ab7;
 }
 
@@ -160,6 +165,7 @@ html,body{
 .icon-lg-side:hover .fa-round {
   background-color: #d14f30;
   color: white;
+  font-size: 1.2em;
 }
 
 .layer-selection .layer-selected{
