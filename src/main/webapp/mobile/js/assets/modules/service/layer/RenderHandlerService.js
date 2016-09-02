@@ -3,7 +3,7 @@
  * @class RenderHandlerService
  * 
  */
-allModules.service('RenderHandlerService',['$rootScope','WMSService','LayerManagerService',function ($rootScope,WMSService,LayerManagerService) {
+allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService',function ($rootScope,WMSService,WFSService,LayerManagerService) {
      
     /**
      * Decides how to renders a layer automatically
@@ -12,8 +12,10 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','LayerManag
      * @param layer - the layer for rendering
      */
      this.renderLayer = function(layer){    
-       if(LayerManagerService.getWMS().length() > 0){
+       if(LayerManagerService.getWMS(layer).length > 0){
          WMSService.renderLayer(layer);          
+       }else if(LayerManagerService.getWFS(layer).length > 0){
+           WFSService.renderLayer(layer);          
        }
      };
      

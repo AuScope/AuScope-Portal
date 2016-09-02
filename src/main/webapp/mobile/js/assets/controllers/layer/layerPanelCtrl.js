@@ -1,8 +1,7 @@
 allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', function ($scope,GetCSWRecordService) {
     $scope.cswRecords={};
     GetCSWRecordService.getCSWKnownLayers().then(function(data){
-        $scope.cswRecords=data;
-        console.log("cswRecords=", $scope.cswRecords);
+        $scope.cswRecords=data;      
     });
 
     $scope.status = {};    
