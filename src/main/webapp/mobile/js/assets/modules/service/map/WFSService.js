@@ -22,10 +22,11 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                 
         var onlineResources = LayerManagerService.getWFS(layer);
         for(var index in onlineResources){
-            if(true){//onlineResources[index].url=="http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs"){
+            if(onlineResources[index].url=="http://www.mrt.tas.gov.au:80/web-services/wfs"){
                 GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index]).then(function(gml){
                     console.log(gml);
                 },function(error){
+                    //VT: Some sort of error handling here
                     console.log(error);
                 });
             }

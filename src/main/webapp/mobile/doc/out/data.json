@@ -12,6 +12,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js": {
+            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+            "modules": {},
+            "classes": {
+                "GetWFSRelatedService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js": {
             "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
             "modules": {},
@@ -21,8 +30,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManager.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManager.js",
+        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js": {
+            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "modules": {
                 "layer": 1
             },
@@ -52,6 +61,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js": {
+            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "modules": {},
+            "classes": {
+                "WFSService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js": {
             "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js",
             "modules": {},
@@ -69,6 +87,7 @@
             "elements": {},
             "classes": {
                 "GetCSWRecordService": 1,
+                "GetWFSRelatedService": 1,
                 "GetWMSRelatedService": 1
             },
             "fors": {},
@@ -99,6 +118,7 @@
             "elements": {},
             "classes": {
                 "GoogleMapService": 1,
+                "WFSService": 1,
                 "WMSService": 1
             },
             "fors": {},
@@ -124,6 +144,20 @@
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
         },
+        "GetWFSRelatedService": {
+            "name": "GetWFSRelatedService",
+            "shortname": "GetWFSRelatedService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "http",
+            "namespace": "",
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+            "line": 1,
+            "description": "All things related to making http wfs request such as get feature"
+        },
         "GetWMSRelatedService": {
             "name": "GetWMSRelatedService",
             "shortname": "GetWMSRelatedService",
@@ -148,7 +182,7 @@
             "extension_for": [],
             "module": "layer",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManager.js",
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 1,
             "description": "LayerManagerService handles layer manipulation and extraction of information from the layer/csw records"
         },
@@ -180,6 +214,20 @@
             "line": 1,
             "description": "Service class related to handling all things related to google map."
         },
+        "WFSService": {
+            "name": "WFSService",
+            "shortname": "WFSService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "map",
+            "namespace": "",
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "line": 1,
+            "description": "WFSService handles rendering of all wfs layers onto the map"
+        },
         "WMSService": {
             "name": "WMSService",
             "shortname": "WMSService",
@@ -210,6 +258,28 @@
             "module": "http"
         },
         {
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+            "line": 9,
+            "description": "Make a get wfs request",
+            "itemtype": "method",
+            "name": "getFeature",
+            "params": [
+                {
+                    "name": "proxyUrl",
+                    "description": "- The URL of the feature service"
+                },
+                {
+                    "name": "onlineResource",
+                    "description": "- onlineResource of the wfs"
+                }
+            ],
+            "return": {
+                "description": "promise - a promise containing the features for the layer"
+            },
+            "class": "GetWFSRelatedService",
+            "module": "http"
+        },
+        {
             "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
             "line": 9,
             "description": "Get the wms style if proxyStyleUrl is valid",
@@ -228,7 +298,7 @@
             "module": "http"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManager.js",
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 10,
             "description": "Retrieve WMS resource if available",
             "itemtype": "method",
@@ -246,7 +316,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManager.js",
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 20,
             "description": "Retrieve WFS resource if available",
             "itemtype": "method",
@@ -264,7 +334,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManager.js",
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 31,
             "description": "Retrieve the arrays of csw records from the layer",
             "itemtype": "method",
@@ -282,7 +352,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManager.js",
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 41,
             "description": "Extract resources based on the type. If type is not defined, return all the resource",
             "itemtype": "method",
@@ -337,6 +407,21 @@
             "itemtype": "method",
             "name": "initMap",
             "class": "GoogleMapService",
+            "module": "map"
+        },
+        {
+            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "line": 14,
+            "description": "Method to decide how the wms should be rendered and add the wms to the map",
+            "itemtype": "method",
+            "name": "renderLayer",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "- The layer containing the wms to be rendered"
+                }
+            ],
+            "class": "WFSService",
             "module": "map"
         },
         {

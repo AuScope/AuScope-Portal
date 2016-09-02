@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>GoogleMapService</title>
+    <title>GetWFSRelatedService</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -86,21 +86,21 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>GoogleMapService Class</h1>
+<h1>GetWFSRelatedService Class</h1>
 <div class="box meta">
 
 
         <div class="foundat">
-            Defined in: <a href="../files/C:_VWork_GitProject_AuscopePortal_src_main_webapp_mobile_js_assets_modules_service_map_GoogleMapService.js.html#l1"><code>C:\VWork\GitProject\AuscopePortal\src\main\webapp\mobile\js\assets\modules\service\map\GoogleMapService.js:1</code></a>
+            Defined in: <a href="../files/C:_VWork_GitProject_AuscopePortal_src_main_webapp_mobile_js_assets_modules_service_http_GetWFSRelatedService.js.html#l1"><code>C:\VWork\GitProject\AuscopePortal\src\main\webapp\mobile\js\assets\modules\service\http\GetWFSRelatedService.js:1</code></a>
         </div>
 
-            Module: <a href="../modules/map.html">map</a>
+            Module: <a href="../modules/http.html">http</a>
 
 </div>
 
 
 <div class="box intro">
-    <p>Service class related to handling all things related to google map.</p>
+    <p>All things related to making http wfs request such as get feature</p>
 
 </div>
 
@@ -121,11 +121,7 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
-                                <a href="#method_getMap">getMap</a>
-
-                            </li>
-                            <li class="index-item method">
-                                <a href="#method_initMap">initMap</a>
+                                <a href="#method_getFeature">getFeature</a>
 
                             </li>
                     </ul>
@@ -138,10 +134,19 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_getMap" class="method item">
-    <h3 class="name"><code>getMap</code></h3>
+<div id="method_getFeature" class="method item">
+    <h3 class="name"><code>getFeature</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>proxyUrl</code>
+                </li>
+                <li class="arg">
+                        <code>onlineResource</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
         <span class="returns-inline">
             <span class="type"></span>
@@ -156,7 +161,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/C:_VWork_GitProject_AuscopePortal_src_main_webapp_mobile_js_assets_modules_service_map_GoogleMapService.js.html#l11"><code>C:\VWork\GitProject\AuscopePortal\src\main\webapp\mobile\js\assets\modules\service\map\GoogleMapService.js:11</code></a>
+        <a href="../files/C:_VWork_GitProject_AuscopePortal_src_main_webapp_mobile_js_assets_modules_service_http_GetWFSRelatedService.js.html#l9"><code>C:\VWork\GitProject\AuscopePortal\src\main\webapp\mobile\js\assets\modules\service\http\GetWFSRelatedService.js:9</code></a>
         </p>
 
 
@@ -164,50 +169,51 @@
     </div>
 
     <div class="description">
-        <p>Get an instance of the map</p>
+        <p>Make a get wfs request</p>
 
     </div>
 
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">proxyUrl</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The URL of the feature service</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">onlineResource</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>onlineResource of the wfs</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                    <p>map - an instance of the map. Make sure this is called after map has been initialized</p>
+                    <p>promise - a promise containing the features for the layer</p>
 
             </div>
         </div>
-
-
-</div>
-<div id="method_initMap" class="method item">
-    <h3 class="name"><code>initMap</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/C:_VWork_GitProject_AuscopePortal_src_main_webapp_mobile_js_assets_modules_service_map_GoogleMapService.js.html#l22"><code>C:\VWork\GitProject\AuscopePortal\src\main\webapp\mobile\js\assets\modules\service\map\GoogleMapService.js:22</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Initialize the map</p>
-
-    </div>
-
-
 
 
 </div>
