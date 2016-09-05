@@ -1,10 +1,15 @@
+/**
+ * infoPanelCtrl class handles rendering of left hand side information panels
+ * @module controllers
+ * @class infoPanelCtrl
+ */
 allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$element', 'GetMinOccurViewFilterStyle', function ($scope,$rootScope,$timeout, $element, GetMinOccurViewFilterStyle) {
 
     // Setup a small preview map. Centre on Australia by default. 
     // The map is fixed, it cannot be zoomed or panned.
     // Add a 'tiles loaded' event to add in the grey boxes that show the effective range of the layers
     var mapInitConfig = {
-	    center: {latitude: -30.5, longitude: 136},
+        center: {latitude: -30.5, longitude: 136},
         zoom: 2,
         control: {},
         options: {
@@ -22,6 +27,11 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$
             zoomControl: false 
         },
         events: {
+            /**
+             * tile loaded event, adds the grey bounding boxes to show the effective range of the layers
+             * @function tilesloaded
+             * @param map
+             */             
             tilesloaded: function (map) {
                 $scope.$apply(function () {
                     // Add the grey boxes to show the effective range of the layers
@@ -36,15 +46,15 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$
                                 { lat: bbox.southBoundLatitude, lng: bbox.eastBoundLongitude },
                                 { lat: bbox.northBoundLatitude, lng: bbox.eastBoundLongitude }
                             ];
-	                        map.data.add({
-		                        geometry: new google.maps.Data.Polygon([outerCoords])
-	                        })
+                            map.data.add({
+                                geometry: new google.maps.Data.Polygon([outerCoords])
+                            })
                         }
                     };
                 });
             }
         }
-	};
+    };
     
     // Gather up BBOX coordinates to calculate the centre and envelope
     var cswRecords = $scope.$parent.infoPanelCsw.cswRecords;
@@ -131,7 +141,13 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$
     $scope.map = mapInitConfig;
     
 }]);
-    
+
+/**
+ * CollapseDemoCtrl class holds state variables used to control collapsible information panels
+ * @module controllers
+ * @class CollapseDemoCtrl
+ * 
+ */ 
 allControllers.controller('CollapseDemoCtrl', function ($scope) {
   $scope.isCollapsed = true;
   $scope.isCollapsedHorizontal = false;
