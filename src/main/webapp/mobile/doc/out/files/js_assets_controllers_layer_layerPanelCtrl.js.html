@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>map</title>
+    <title>js\assets\controllers\layer\layerPanelCtrl.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -93,49 +93,92 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>map Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: js\assets\controllers\layer\layerPanelCtrl.js</h1>
 
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * layerPanelCtrl class handles rendering of left hand side layer reports
+ * @module controllers
+ * @class layerPanelCtrl
+ * 
+ */
+allControllers.controller(&#x27;layerPanelCtrl&#x27;, [&#x27;$scope&#x27;,&#x27;GetCSWRecordService&#x27;, function ($scope,GetCSWRecordService) {
+    $scope.cswRecords={};
+    GetCSWRecordService.getCSWKnownLayers().then(function(data){
+        $scope.cswRecords=data;      
+    });
 
-        <div class="foundat">
-            Defined in: <a href="../files/js_assets_modules_service_map_WMSService.js.html#l1"><code>js\assets\modules\service\map\WMSService.js:1</code></a>
-        </div>
+    $scope.status = {};    
+ 
+    
+    /**
+    * @method togglePanels
+    * @param panelType type of panel
+    * @param group group
+    * @param cswRecordId record identifier
+    */
+    $scope.togglePanels = function(panelType,group,cswRecordId){
+        //VT: we only want 1 panel open at a time
+        var closeOtherPanels = function(){
+            for (var showPanelType in $scope.status[group][cswRecordId].panels) {
+                if(showPanelType != panelType){
+                    $scope.status[group][cswRecordId].panels[showPanelType]=false;
+                }
+            }
+        };
+        
+        if($scope.status[group]===undefined){
+            $scope.status[group]={};                                   
+        } 
+      
+        if($scope.status[group][cswRecordId]===undefined){
+            $scope.status[group][cswRecordId]={};
+            $scope.status[group][cswRecordId].panels={};
+        }        
+        
+        $scope.status[group][cswRecordId].panels[panelType] = !$scope.status[group][cswRecordId].panels[panelType];
+        
+        if($scope.status[group][cswRecordId].panels[panelType] == true){
+            $scope.status[group][cswRecordId].isExpanded = true;
+            toggleLayers(group,cswRecordId);
+        }else{
+            $scope.status[group][cswRecordId].isExpanded = false;
+        }
+        closeOtherPanels();
+        return;
+        
+    };
+    
+    
+    
+    
+    /**
+    * @method toggleLayers
+    * @param group group
+    * @param cswRecordId record identifier
+    */
+    var toggleLayers = function(group,cswRecordId){
+        //VT: we only want 1 layer open at a time
+        for(var cswRecord in $scope.status[group]){
+            if(cswRecord != cswRecordId){
+                if(cswRecord == &quot;isOpen&quot;){
+                    continue;
+                }
+                for (var panelType in $scope.status[group][cswRecord].panels) {                    
+                    $scope.status[group][cswRecord].panels[panelType]=false;                   
+                }
+                $scope.status[group][cswRecord].isExpanded = false;
+            }
+        }        
+    };
+    
+    
+   
+    
+}]);
 
-</div>
-
-
-<div class="box intro">
-    <p>Service class related to handling all things related to google map.</p>
-
-</div>
-
-
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/GoogleMapService.html">
-                        GoogleMapService
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/WFSService.html">
-                        WFSService
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/WMSService.html">
-                        WMSService
-                    </a>
-                </li>
-            </ul>
-    </div>
-
-
-    <div class="yui3-u-1-2">
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

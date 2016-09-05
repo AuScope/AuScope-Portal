@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>map</title>
+    <title>js\assets\modules\service\http\GetCSWRecordService.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -93,49 +93,50 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>map Module</h1>
-<div class="box clearfix meta">
+<h1 class="file-heading">File: js\assets\modules\service\http\GetCSWRecordService.js</h1>
 
-
-        <div class="foundat">
-            Defined in: <a href="../files/js_assets_modules_service_map_WMSService.js.html#l1"><code>js\assets\modules\service\map\WMSService.js:1</code></a>
-        </div>
-
-</div>
-
-
-<div class="box intro">
-    <p>Service class related to handling all things related to google map.</p>
-
-</div>
-
-
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-            <p>This module provides the following classes:</p>
-
-            <ul class="module-classes">
-                <li class="module-class">
-                    <a href="../classes/GoogleMapService.html">
-                        GoogleMapService
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/WFSService.html">
-                        WFSService
-                    </a>
-                </li>
-                <li class="module-class">
-                    <a href="../classes/WMSService.html">
-                        WMSService
-                    </a>
-                </li>
-            </ul>
-    </div>
-
-
-    <div class="yui3-u-1-2">
-    </div>
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * Service class related to handling all things related to making http cswrecords
+ * @module http
+ * @class GetCSWRecordService
+ * 
+ */
+allModules.service(&#x27;GetCSWRecordService&#x27;,[&#x27;$http&#x27;,&#x27;$q&#x27;,function ($http,$q) {
+     var promise; 
+     
+     /**
+      * Retrieve knownlayer csw records async
+      * @method getCSWKnownLayers
+      * @return promise - a promise of the csw records when it has complete
+      */
+     this.getCSWKnownLayers = function(){    
+         if ( !promise ) {
+                promise = $http.get(&#x27;../getKnownLayers.do&#x27;).then(function (response) {
+                    var data = response.data.data;
+                    var cswRecords = {};
+                    
+                    data.forEach(function(item, i, ar){ 
+                        if(cswRecords[item.group]===undefined){
+                            cswRecords[item.group] = [];
+                        }
+                        cswRecords[item.group].push(item);                                                  
+                    });
+               
+                return cswRecords; 
+             });
+         }
+         return promise;
+                 
+     };
+     
+     
+        
+    
+     
+}]);
+    </pre>
 </div>
                     </div>
                 </div>

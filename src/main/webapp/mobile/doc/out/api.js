@@ -1,6 +1,7 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
+        "CollapseDemoCtrl",
         "GetCSWRecordService",
         "GetWFSRelatedService",
         "GetWMSRelatedService",
@@ -8,14 +9,25 @@ YUI.add("yuidoc-meta", function(Y) {
         "LayerManagerService",
         "RenderHandlerService",
         "WFSService",
-        "WMSService"
+        "WMSService",
+        "defaultFilterCtrl",
+        "googleMapCtrl",
+        "infoPanelCtrl",
+        "layerPanelCtrl",
+        "loadFilterCtrl"
     ],
     "modules": [
+        "controllers",
         "http",
         "layer",
         "map"
     ],
     "allModules": [
+        {
+            "displayName": "controllers",
+            "name": "controllers",
+            "description": "defaultFilterCtrl class used to add layers to the main map"
+        },
         {
             "displayName": "http",
             "name": "http",

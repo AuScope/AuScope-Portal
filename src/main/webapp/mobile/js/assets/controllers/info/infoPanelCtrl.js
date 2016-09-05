@@ -29,7 +29,7 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$
         events: {
             /**
              * tile loaded event, adds the grey bounding boxes to show the effective range of the layers
-             * @function tilesloaded
+             * @event tilesloaded
              * @param map
              */             
             tilesloaded: function (map) {
