@@ -7,6 +7,12 @@
 allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService',
                                  function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService) {
    
+      /**
+        * Render a point data to the map 
+        * @method renderPoint
+        * @param point - the point to render
+        * @param map - The map where the point is to be rendered
+        */  
        this.renderPoint = function(point,map){                     
            var marker = new google.maps.Marker({
                position:point.coords,
@@ -15,10 +21,22 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             });          
        };
        
+       /**
+        * Render a LINESTRING data to the map 
+        * @method renderLineString
+        * @param linestring - the linestring to render
+        * @param map - The map where the point is to be rendered
+        */  
        this.renderLineString = function(linestring,map){
            
        };
        
+       /**
+        * Render a POLYGON data to the map 
+        * @method renderPolygon
+        * @param polygon - the polygon to render
+        * @param map - The map where the point is to be rendered
+        */
        this.renderPolygon = function(polygon,map){
            
        };   

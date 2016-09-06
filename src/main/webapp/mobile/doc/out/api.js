@@ -1,33 +1,24 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "CollapseDemoCtrl",
+        "GMLParserService",
         "GetCSWRecordService",
         "GetWFSRelatedService",
         "GetWMSRelatedService",
         "GoogleMapService",
         "LayerManagerService",
         "RenderHandlerService",
+        "SimpleXPathService",
         "WFSService",
-        "WMSService",
-        "defaultFilterCtrl",
-        "googleMapCtrl",
-        "infoPanelCtrl",
-        "layerPanelCtrl",
-        "loadFilterCtrl"
+        "WMSService"
     ],
     "modules": [
-        "controllers",
         "http",
         "layer",
-        "map"
+        "map",
+        "utility"
     ],
     "allModules": [
-        {
-            "displayName": "controllers",
-            "name": "controllers",
-            "description": "defaultFilterCtrl class used to add layers to the main map"
-        },
         {
             "displayName": "http",
             "name": "http",
@@ -42,6 +33,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "map",
             "name": "map",
             "description": "Service class related to handling all things related to google map."
+        },
+        {
+            "displayName": "utility",
+            "name": "utility",
+            "description": "GMLParserService handles the parsing of GML documents"
         }
     ],
     "elements": []

@@ -6,11 +6,25 @@
  */
 allModules.service('GMLParserService',['$rootScope','SimpleXMLService','UtilitiesService','Constants',function ($rootScope,SimpleXMLService,UtilitiesService,Constants) {
    
-   
+    /**
+     * Get rootnode from a gml string
+     * 
+     * @method getRootNode
+     * @param gml - GML String
+     * @return dom - the root node
+     */
     this.getRootNode = function(gml) {
         return SimpleXMLService.parseStringToDOM(gml);               
     },
     
+    /**
+     * create a point object
+     * 
+     * @method createPoint
+     * @param lat - latitude
+     * @param lon - longtitude
+     * @return point - point object
+     */
     this.createPoint = function(lat,lon){
         return {
             lat : lat,
@@ -19,6 +33,13 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
     };
 
     //Given a series of space seperated tuples, return a list of object
+    /**
+     * Create line string objects in a array
+     * @method generateCoordList
+     * @param coordsAsString - The coordinates in a string from the feature gml
+     * @param srsName - the srs of the feature
+     * @return array - an array of points
+     */
     this.generateCoordList = function(coordsAsString, srsName) {
         var coordinateList = coordsAsString.split(' ');
         var parsedCoordList = [];
@@ -32,6 +53,13 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
         return parsedCoordList;
     },
     
+    /**
+     * Get the srs name
+     * 
+     * @method getSrsName
+     * @param node - coordinate node
+     * @return string - srs name
+     */
     this.getSrsName = function(node) {
         var srsName = node.getAttribute("srsName");
         if (UtilitiesService.isEmpty(srsName)) {
@@ -47,6 +75,11 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
     
     /**
      * Forces lon/lat coords into coords (an array). Swaps coords[offset] and coords[offset + 1] if srsName requires it
+     * @method forceLonLat
+     * @param coords - the coordinates
+     * @param srsName - the srs
+     * @param offset - offset the coord if required.
+     * 
      */
     this.forceLonLat = function(coords, srsName, offset) {
         if (!offset) {
@@ -67,6 +100,14 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
         }
     },
 
+    /**
+     * Create line string objects in a array
+     * @method parseLineString
+     * @param name - the name of the feature
+     * @param description - description of the feature
+     * @param lineStringNode - the coordinate node containing the linestring
+     * @return array - an array of points
+     */
     this.parseLineString = function(name, description,lineStringNode) {
         var srsName = this.getSrsName(lineStringNode);
         var parsedCoordList = this.generateCoordList(SimpleXMLService.getNodeTextContent(lineStringNode.getElementsByTagNameNS("*", "posList")[0]), srsName);
@@ -91,8 +132,15 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
         };
     },
 
-    //Given a root placemark node attempt to parse it as a single point and return it
-    //Returns a single portal.map.primitives.Polygon
+
+    /**
+     * Given a root placemark node attempt to parse it as a single point and return it. Returns a single portal.map.primitives.Polygon
+     * @method parsePolygon
+     * @param name - the name of the feature
+     * @param description - description of the feature
+     * @param polygonNode - the coordinate node containing the polygonNode
+     * @return array - an array of points
+     */
     this.parsePolygon = function(name, description,polygonNode) {
         var srsName = this.getSrsName(polygonNode);
         var parsedCoordList = this.generateCoordList(SimpleXMLService.getNodeTextContent(polygonNode.getElementsByTagNameNS("*", "posList")[0]), srsName);
@@ -119,8 +167,15 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
         
     },
 
-    //Given a root placemark node attempt to parse it as a single point and return it
-    //Returns a single portal.map.primitives.Marker
+    
+    /**
+     * Given a root placemark node attempt to parse it as a single point and return it.Returns a single portal.map.primitives.Marker
+     * @method parsePoint
+     * @param name - the name of the feature
+     * @param description - description of the feature
+     * @param pointNode - the coordinate node containing the pointNode
+     * @return point - a point
+     */
     this.parsePoint = function(name, description,pointNode) {
         var rawPoints = SimpleXMLService.getNodeTextContent(pointNode.getElementsByTagNameNS("*", "pos")[0]);
         var coordinates = rawPoints.split(' ');
@@ -149,6 +204,9 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
 
     /**
      * Returns the feature count as reported by the WFS response. Returns null if the count cannot be parsed.
+     * @method getFeatureCount
+     * @param rootNode - rootNode
+     * @return Number - the feature count
      */
     this.getFeatureCount = function(rootNode) {
         var wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureCollection");
@@ -164,6 +222,18 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
         return null;
     },
     
+    /**
+     * Top level function  that organize how the gml should be parsed
+     * @method makePrimitives
+     * @param rootNode - the root node of the gml
+     * @return Array - can be anything from a single point to a array for polygons and line string:{
+            name : name,
+            description: description,
+            srsName:srsName,
+            coords: point,
+            geometryType : Constants.geometryType.POINT
+        }
+     */
     this.makePrimitives = function(rootNode) {
         var primitives = [];
         var wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureCollection");

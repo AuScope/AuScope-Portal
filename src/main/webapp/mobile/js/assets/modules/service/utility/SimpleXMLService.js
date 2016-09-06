@@ -6,8 +6,18 @@
  */
 allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootScope,Constants) {
    
-   
-    
+    /**
+     * A wrapper around the DOM defined Document.evaluate function
+     * Because not every browser supports document.evaluate we need to have a pure javascript
+     * backup in place
+     * 
+     * @method evaluateXPath
+     * @param document - document
+     * @param domNode - domNode
+     * @param xPath - xPath
+     * @param resultType - https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate#Result_types
+     * @return dom - the dom result
+     */
     this.evaluateXPath = function(document, domNode, xPath, resultType) {
         if (document.evaluate) {
             return document.evaluate(xPath, domNode, document.createNSResolver(domNode), resultType, null);
@@ -49,6 +59,14 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
     };
     
     
+    /**
+     * Evaluates an XPath which will return an array of W3C DOM nodes
+     * 
+     * @method evaluateXPathNodeArray
+     * @param domNode - domNode
+     * @param xPath - xPath
+     * @return dom - the dom result
+     */
     this.evaluateXPathNodeArray = function(domNode, xPath) {
         var document = domNode.ownerDocument;
         var xpathResult = null;
@@ -86,8 +104,10 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
    
     /**
      * Utility for retrieving a W3C DOM Node 'localName' attribute across browsers.
-     *
      * The localName is the node name without any namespace prefixes
+     * @method getNodeLocalName
+     * @param domNode - domNode
+     * @return String - local name of the node
      */
     this.getNodeLocalName = function(domNode) {
         return domNode.localName ? domNode.localName : domNode.baseName;
@@ -95,6 +115,9 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
 
     /**
      * Returns the set of classes this node belongs to as an array of strings
+     * @method getClassList
+     * @param domNode - domNode
+     * @return dom - the dom result
      */
     this.getClassList = function(domNode) {
         if (domNode.classList) {
@@ -110,6 +133,9 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
     /**
      * Figure out if domNode is a leaf or not
      * (Leaves have no nodes from XML_NODE_ELEMENT)
+     * @method isLeafNode
+     * @param domNode - domNode
+     * @return boolean - is leaf or not
      */
     this.isLeafNode = function(domNode) {
         var isLeaf = true;
@@ -122,10 +148,12 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
 
     /**
      * Filters an array of DOM Nodes according to the specified parameters
+     * @method filterNodeArray
      * @param nodeArray An Array of DOM Nodes
      * @param nodeType [Optional] An integer node type
      * @param namespaceUri [Optional] String to compare against node namespaceURI
      * @param nodeName [Optional] String to compare against the node localName
+     * @return dom - return the result in a dom
      */
    this.filterNodeArray = function(nodeArray, nodeType, namespaceUri, nodeName) {
         var matchingNodes = [];
@@ -152,8 +180,10 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
 
     /**
      * Gets all children of domNode as an Array that match the specified filter parameters
+     * @method getMatchingChildNodes
      * @param childNamespaceURI [Optional] The URI to lookup as a String
      * @param childNodeName [Optional] The node name to lookup as a String
+     * @return dom - return the result in a dom
      */
     this.getMatchingChildNodes = function(domNode, childNamespaceURI, childNodeName) {
         return this.filterNodeArray(domNode.childNodes, this.XML_NODE.XML_NODE_ELEMENT, childNamespaceURI, childNodeName);
@@ -161,8 +191,10 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
 
     /**
      * Gets all Attributes of domNode as an Array that match the specified filter parameters
+     * @method getMatchingAttributes
      * @param childNamespaceURI [Optional] The URI to lookup as a String
      * @param childNodeName [Optional] The node name to lookup as a String
+     * @return dom - return the result in a dom
      */
     this.getMatchingAttributes = function(domNode, attributeNamespaceURI, attributeName) {
         //VT: cannot find the _fitlerNodeArray, suspect bug
@@ -172,6 +204,9 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
 
     /**
      * Given a DOM node, return its text content (however the browser defines it)
+     * @method getNodeTextContent
+     * @param domNode - domNode
+     * @return string - text content
      */
     this.getNodeTextContent = function(domNode) {
         return domNode.textContent ? domNode.textContent : domNode.text;
@@ -179,6 +214,9 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
 
     /**
      * Parse string to DOM
+     * @method parseStringToDOM
+     * @param xmlString - xml string
+     * @return dom - return the result in a dom
      */
     this.parseStringToDOM = function(xmlString){
         var isIE11 = !!navigator.userAgent.match(/Trident.*rv[ :]*11\./);
