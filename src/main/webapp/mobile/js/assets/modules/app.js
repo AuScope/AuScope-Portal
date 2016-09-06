@@ -10,7 +10,14 @@ app.constant('Constants', {
         '1.1.1': '1.1.1',
         '1.1.0': '1.1.0',
         '1.3.0': '1.3.0'
-    }
+    }, 
+    geometryType:{
+        'POINT': 'POINT',
+        'LINESTRING': 'LINESTRING',
+        'POLYGON': 'POLYGON'
+    },
+    XPATH_STRING_TYPE : (window.XPathResult ? XPathResult.STRING_TYPE : 0),
+    XPATH_UNORDERED_NODE_ITERATOR_TYPE: (window.XPathResult ? XPathResult.UNORDERED_NODE_ITERATOR_TYPE : 1)
 }); 
 
 

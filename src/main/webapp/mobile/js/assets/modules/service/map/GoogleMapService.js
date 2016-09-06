@@ -7,6 +7,7 @@
 allModules.service('GoogleMapService',['$rootScope',function ($rootScope) {
    
     this.mainMap;
+    this.activeLayers = {};
     
     /**
      * Get an instance of the map
@@ -17,7 +18,17 @@ allModules.service('GoogleMapService',['$rootScope',function ($rootScope) {
         return this.mainMap;
     };
     
-   
+    this.getMapActiveLayer = function(){
+        return this.activeLayers;
+    };
+    
+    this.setMapActiveLayer = function(name,mapLayer){
+        this.activeLayers[name] = mapLayer;
+    };
+    
+    this.removeActiveLayer = function(name){
+        
+    };
      
     /**
      * Initialize the map

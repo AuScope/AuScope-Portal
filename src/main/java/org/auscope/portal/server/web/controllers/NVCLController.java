@@ -105,7 +105,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "outputFormat") String outputFormat)
-            throws Exception {
+                    throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
 
@@ -149,7 +149,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
-            throws Exception {
+                    throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
 
@@ -194,7 +194,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "outputFormat") String outputFormat)
-            throws Exception {
+                    throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
 
@@ -213,7 +213,7 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         // show all NVCL boreholes
-        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, -1, bbox, onlyHylogger, outputFormat, false);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, 2, bbox, onlyHylogger, outputFormat, false);
     }
 
     @RequestMapping("/doNVCLFilterHits.do")
@@ -226,7 +226,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter)
-            throws Exception {
+                    throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
 
@@ -624,7 +624,7 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
-    
+
     /**
      * Request for mineral colours for NVCL graphs
      *
@@ -635,9 +635,9 @@ public class NVCLController extends BasePortalController {
      *
      * @return
      */
-     @RequestMapping("getNVCL2_0_MineralColourTable.do")
-     public ModelAndView getNVCL2_0_MineralColourTable(@RequestParam("serviceUrl") String serviceUrl,
-                                            @RequestParam("logIds") String[] logIds) throws Exception {
+    @RequestMapping("getNVCL2_0_MineralColourTable.do")
+    public ModelAndView getNVCL2_0_MineralColourTable(@RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam("logIds") String[] logIds) throws Exception {
         //Make our request
         try {
             String responseStr = dataService2_0.getNVCL2_0_MineralColourTable(serviceUrl, logIds);
@@ -647,8 +647,8 @@ public class NVCLController extends BasePortalController {
             log.warn(String.format("Error requesting colour table for logId '%1$s' from %2$s: %3$s", logIds, serviceUrl, ex));
             log.debug("Exception:", ex);
             return generateJSONResponseMAV(false);
-        }                               
-     }
+        }
+    }
 
     /**
      * Proxies a NVCL TSG download request. Writes directly to the HttpServletResponse
@@ -915,11 +915,11 @@ public class NVCLController extends BasePortalController {
             @RequestParam("value") String value,
             @RequestParam("units") String units,
             @RequestParam("span") int span)
-            throws Exception {
+                    throws Exception {
 
 
         if ((ArrayUtils.isEmpty(algorithmOutputIds) && StringUtils.isEmpty(logName)) ||
-             ArrayUtils.isNotEmpty(algorithmOutputIds) && StringUtils.isNotEmpty(logName)) {
+                ArrayUtils.isNotEmpty(algorithmOutputIds) && StringUtils.isNotEmpty(logName)) {
             return generateJSONResponseMAV(false, null, "Must define exactly one of algorithmOutputId or logName");
         }
 
