@@ -1,8 +1,63 @@
 {
     "project": {},
     "files": {
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+        "js\\assets\\controllers\\filters\\defaultFilterCtrl.js": {
+            "name": "js\\assets\\controllers\\filters\\defaultFilterCtrl.js",
+            "modules": {
+                "controllers": 1
+            },
+            "classes": {
+                "defaultFilterCtrl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\controllers\\filters\\loadFilterCtrl.js": {
+            "name": "js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "modules": {},
+            "classes": {
+                "loadFilterCtrl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\controllers\\googlemap\\googleMapCtrl.js": {
+            "name": "js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+            "modules": {},
+            "classes": {
+                "googleMapCtrl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\controllers\\info\\infoPanelCtrl.js": {
+            "name": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
+            "modules": {},
+            "classes": {
+                "infoPanelCtrl": 1,
+                "CollapseDemoCtrl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\controllers\\layer\\layerPanelCtrl.js": {
+            "name": "js\\assets\\controllers\\layer\\layerPanelCtrl.js",
+            "modules": {},
+            "classes": {
+                "layerPanelCtrl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\framework\\angular\\angular-simple-logger.js": {
+            "name": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\modules\\service\\http\\GetCSWRecordService.js": {
+            "name": "js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
             "modules": {
                 "http": 1
             },
@@ -12,8 +67,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+        "js\\assets\\modules\\service\\http\\GetWFSRelatedService.js": {
+            "name": "js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
             "modules": {},
             "classes": {
                 "GetWFSRelatedService": 1
@@ -21,8 +76,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+        "js\\assets\\modules\\service\\http\\GetWMSRelatedService.js": {
+            "name": "js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
             "modules": {},
             "classes": {
                 "GetWMSRelatedService": 1
@@ -30,8 +85,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+        "js\\assets\\modules\\service\\layer\\LayerManagerService.js": {
+            "name": "js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "modules": {
                 "layer": 1
             },
@@ -41,8 +96,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\RenderHandlerService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
+        "js\\assets\\modules\\service\\layer\\RenderHandlerService.js": {
+            "name": "js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
             "modules": {},
             "classes": {
                 "RenderHandlerService": 1
@@ -50,8 +105,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\GoogleMapService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+        "js\\assets\\modules\\service\\map\\GoogleMapService.js": {
+            "name": "js\\assets\\modules\\service\\map\\GoogleMapService.js",
             "modules": {
                 "map": 1
             },
@@ -61,8 +116,17 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+        "js\\assets\\modules\\service\\map\\PreviewMapService.js": {
+            "name": "js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "modules": {},
+            "classes": {
+                "PreviewMapService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\modules\\service\\map\\WFSService.js": {
+            "name": "js\\assets\\modules\\service\\map\\WFSService.js",
             "modules": {},
             "classes": {
                 "WFSService": 1
@@ -70,8 +134,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js",
+        "js\\assets\\modules\\service\\map\\WMSService.js": {
+            "name": "js\\assets\\modules\\service\\map\\WMSService.js",
             "modules": {},
             "classes": {
                 "WMSService": 1
@@ -79,8 +143,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+        "js\\assets\\modules\\service\\utility\\GMLParserService.js": {
+            "name": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "modules": {
                 "utility": 1
             },
@@ -90,15 +154,15 @@
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+        "js\\assets\\modules\\service\\utility\\SimpleXMLService.js": {
+            "name": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\UtilitiesService.js": {
-            "name": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+        "js\\assets\\modules\\service\\utility\\UtilitiesService.js": {
+            "name": "js\\assets\\modules\\service\\utility\\UtilitiesService.js",
             "modules": {},
             "classes": {
                 "SimpleXPathService": 1
@@ -108,6 +172,25 @@
         }
     },
     "modules": {
+        "controllers": {
+            "name": "controllers",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "defaultFilterCtrl": 1,
+                "loadFilterCtrl": 1,
+                "googleMapCtrl": 1,
+                "infoPanelCtrl": 1,
+                "CollapseDemoCtrl": 1,
+                "layerPanelCtrl": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js\\assets\\controllers\\layer\\layerPanelCtrl.js",
+            "line": 1,
+            "description": "defaultFilterCtrl class used to add layers to the main map"
+        },
         "http": {
             "name": "http",
             "submodules": {},
@@ -120,7 +203,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+            "file": "js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
         },
@@ -135,7 +218,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
             "line": 1,
             "description": "LayerManagerService handles layer manipulation and extraction of information from the layer/csw records"
         },
@@ -145,13 +228,14 @@
             "elements": {},
             "classes": {
                 "GoogleMapService": 1,
+                "PreviewMapService": 1,
                 "WFSService": 1,
                 "WMSService": 1
             },
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WMSService.js",
             "line": 1,
             "description": "Service class related to handling all things related to google map."
         },
@@ -166,12 +250,96 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "js\\assets\\modules\\service\\utility\\UtilitiesService.js",
             "line": 3,
             "description": "GMLParserService handles the parsing of GML documents"
         }
     },
     "classes": {
+        "defaultFilterCtrl": {
+            "name": "defaultFilterCtrl",
+            "shortname": "defaultFilterCtrl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "js\\assets\\controllers\\filters\\defaultFilterCtrl.js",
+            "line": 1,
+            "description": "defaultFilterCtrl class used to add layers to the main map"
+        },
+        "loadFilterCtrl": {
+            "name": "loadFilterCtrl",
+            "shortname": "loadFilterCtrl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "line": 1,
+            "description": "loadFilterCtrl class used to draw the filter panel for the layer reports"
+        },
+        "googleMapCtrl": {
+            "name": "googleMapCtrl",
+            "shortname": "googleMapCtrl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+            "line": 1,
+            "description": "googleMapCtrl class initialises the Google map used to display the main map"
+        },
+        "infoPanelCtrl": {
+            "name": "infoPanelCtrl",
+            "shortname": "infoPanelCtrl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
+            "line": 1,
+            "description": "infoPanelCtrl class handles rendering of left hand side information panels"
+        },
+        "CollapseDemoCtrl": {
+            "name": "CollapseDemoCtrl",
+            "shortname": "CollapseDemoCtrl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
+            "line": 94,
+            "description": "CollapseDemoCtrl class holds state variables used to control collapsible information panels"
+        },
+        "layerPanelCtrl": {
+            "name": "layerPanelCtrl",
+            "shortname": "layerPanelCtrl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "js\\assets\\controllers\\layer\\layerPanelCtrl.js",
+            "line": 1,
+            "description": "layerPanelCtrl class handles rendering of left hand side layer reports"
+        },
         "GetCSWRecordService": {
             "name": "GetCSWRecordService",
             "shortname": "GetCSWRecordService",
@@ -182,7 +350,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
         },
@@ -196,7 +364,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+            "file": "js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
             "line": 1,
             "description": "All things related to making http wfs request such as get feature"
         },
@@ -210,7 +378,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+            "file": "js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
             "line": 1,
             "description": "All things related to making http wms request such as get style, get legend etc"
         },
@@ -224,7 +392,7 @@
             "extension_for": [],
             "module": "layer",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 1,
             "description": "LayerManagerService handles layer manipulation and extraction of information from the layer/csw records"
         },
@@ -238,7 +406,7 @@
             "extension_for": [],
             "module": "layer",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
             "line": 1,
             "description": "Service class used for handling all layer rendering related methods"
         },
@@ -252,9 +420,23 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "js\\assets\\modules\\service\\map\\GoogleMapService.js",
             "line": 1,
             "description": "Service class related to handling all things related to google map."
+        },
+        "PreviewMapService": {
+            "name": "PreviewMapService",
+            "shortname": "PreviewMapService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "map",
+            "namespace": "",
+            "file": "js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "line": 1,
+            "description": "Service class for creating and manipulating the layer report preview map"
         },
         "WFSService": {
             "name": "WFSService",
@@ -266,7 +448,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WFSService.js",
             "line": 1,
             "description": "WFSService handles rendering of all wfs layers onto the map"
         },
@@ -280,7 +462,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WMSService.js",
             "line": 1,
             "description": "WMSService handles rendering of all wms layers onto the map"
         },
@@ -294,7 +476,7 @@
             "extension_for": [],
             "module": "utility",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 1,
             "description": "GMLParserService handles the parsing of GML documents"
         },
@@ -308,7 +490,7 @@
             "extension_for": [],
             "module": "utility",
             "namespace": "",
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "js\\assets\\modules\\service\\utility\\UtilitiesService.js",
             "line": 3,
             "description": "SimpleXPathService handles xml file manipulation."
         }
@@ -316,7 +498,421 @@
     "elements": {},
     "classitems": [
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "js\\assets\\controllers\\filters\\defaultFilterCtrl.js",
+            "line": 8,
+            "description": "A function used to add a layer to the main map",
+            "itemtype": "method",
+            "name": "addLayer",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "layer object"
+                }
+            ],
+            "class": "defaultFilterCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "line": 14,
+            "description": "A function which returns the URL used to load the filter panel",
+            "itemtype": "method",
+            "name": "getFilterPanel",
+            "class": "loadFilterCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
+            "line": 104,
+            "description": "Changes a rectangle in the preview map to a special highlighted colour",
+            "itemtype": "method",
+            "name": "highlightOnPreviewMap",
+            "params": [
+                {
+                    "name": "reportName",
+                    "description": "Name of the reports displayed in the preview map"
+                },
+                {
+                    "name": "adminArea",
+                    "description": "Name of the region where the reports apply"
+                }
+            ],
+            "class": "CollapseDemoCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
+            "line": 115,
+            "description": "Returns a rectangle on the preview map to the default non-highlighted colour",
+            "itemtype": "method",
+            "name": "lowlightOnPreviewMap",
+            "params": [
+                {
+                    "name": "reportName",
+                    "description": "Name of the reports displayed in the preview map"
+                },
+                {
+                    "name": "adminArea",
+                    "description": "Name of the region where the reports apply"
+                }
+            ],
+            "class": "CollapseDemoCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\controllers\\layer\\layerPanelCtrl.js",
+            "line": 16,
+            "itemtype": "method",
+            "name": "togglePanels",
+            "params": [
+                {
+                    "name": "panelType",
+                    "description": "type of panel"
+                },
+                {
+                    "name": "group",
+                    "description": "group"
+                },
+                {
+                    "name": "cswRecordId",
+                    "description": "record identifier"
+                }
+            ],
+            "class": "layerPanelCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\controllers\\layer\\layerPanelCtrl.js",
+            "line": 57,
+            "itemtype": "method",
+            "name": "toggleLayers",
+            "params": [
+                {
+                    "name": "group",
+                    "description": "group"
+                },
+                {
+                    "name": "cswRecordId",
+                    "description": "record identifier"
+                }
+            ],
+            "class": "layerPanelCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 141,
+            "description": "This is the web browser implementation of `debug()`.\n\nExpose `debug()` as the module.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 158,
+            "description": "Colors.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 171,
+            "description": "Currently only WebKit-based Web Inspectors, Firefox >= v31,\nand the Firebug extension (any Firefox version) are known\nto support \"%c\" CSS customizations.\n\nTODO: add a `localStorage` variable to explicitly enable/disable colors",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 189,
+            "description": "Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 198,
+            "description": "Colorize log arguments if enabled.",
+            "api": "public",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 239,
+            "description": "Invokes `console.log()` when available.\nNo-op when `console.log` is not a \"function\".",
+            "api": "public",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 254,
+            "description": "Save `namespaces`.",
+            "params": [
+                {
+                    "name": "namespaces",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 271,
+            "description": "Load `namespaces`.",
+            "return": {
+                "description": "returns the previously persisted debug modes",
+                "type": "String"
+            },
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 286,
+            "description": "Enable namespaces listed in `localStorage.debug` initially.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 292,
+            "description": "Localstorage attempts to return the localstorage.\n\nThis is necessary because safari throws\nwhen a user disables cookies/localstorage\nand you attempt to access it.",
+            "return": {
+                "description": "",
+                "type": "LocalStorage"
+            },
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 311,
+            "description": "This is the common logic for both the Node.js and web browser\nimplementations of `debug()`.\n\nExpose `debug()` as the module.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 325,
+            "description": "The currently active debug mode names, and names to skip.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 332,
+            "description": "Map of special \"%n\" handling functions, for the debug \"format\" argument.\n\nValid key names are a single, lowercased letter, i.e. \"n\".",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 340,
+            "description": "Previously assigned color.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 346,
+            "description": "Previous log timestamp.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 352,
+            "description": "Select a color.",
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 363,
+            "description": "Create a debugger with the given `namespace`.",
+            "params": [
+                {
+                    "name": "namespace",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "api": "public",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 437,
+            "description": "Enables a debug mode by namespaces. This can include modes\nseparated by a colon and wildcards.",
+            "params": [
+                {
+                    "name": "namespaces",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "api": "public",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 462,
+            "description": "Disable debug output.",
+            "api": "public",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 472,
+            "description": "Returns true if the given mode name is enabled, false otherwise.",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "api": "public",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 495,
+            "description": "Coerce `val`.",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Mixed"
+            },
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 509,
+            "description": "Helpers.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 519,
+            "description": "Parse or format the given `val`.\n\nOptions:\n\n - `long` verbose formatting [false]",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "",
+                    "type": "String|Number"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String|Number"
+            },
+            "api": "public",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 540,
+            "description": "Parse the given `str` and return milliseconds.",
+            "params": [
+                {
+                    "name": "str",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 593,
+            "description": "Short format for `ms`.",
+            "params": [
+                {
+                    "name": "ms",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 609,
+            "description": "Long format for `ms`.",
+            "params": [
+                {
+                    "name": "ms",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "api": "private",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "line": 625,
+            "description": "Pluralization helper.",
+            "class": "GetCSWRecordService",
+            "module": "controllers"
+        },
+        {
+            "file": "js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
             "line": 10,
             "description": "Retrieve knownlayer csw records async",
             "itemtype": "method",
@@ -328,7 +924,7 @@
             "module": "http"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+            "file": "js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
             "line": 9,
             "description": "Make a get wfs request",
             "itemtype": "method",
@@ -350,7 +946,7 @@
             "module": "http"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+            "file": "js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
             "line": 9,
             "description": "Get the wms style if proxyStyleUrl is valid",
             "itemtype": "method",
@@ -368,7 +964,7 @@
             "module": "http"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 10,
             "description": "Retrieve WMS resource if available",
             "itemtype": "method",
@@ -386,7 +982,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 20,
             "description": "Retrieve WFS resource if available",
             "itemtype": "method",
@@ -404,7 +1000,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 31,
             "description": "Retrieve the arrays of csw records from the layer",
             "itemtype": "method",
@@ -422,7 +1018,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\LayerManagerService.js",
             "line": 41,
             "description": "Extract resources based on the type. If type is not defined, return all the resource",
             "itemtype": "method",
@@ -444,7 +1040,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
+            "file": "js\\assets\\modules\\service\\layer\\RenderHandlerService.js",
             "line": 8,
             "description": "Decides how to renders a layer automatically",
             "itemtype": "method",
@@ -459,7 +1055,7 @@
             "module": "layer"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "js\\assets\\modules\\service\\map\\GoogleMapService.js",
             "line": 12,
             "description": "Get an instance of the map",
             "itemtype": "method",
@@ -471,7 +1067,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "js\\assets\\modules\\service\\map\\GoogleMapService.js",
             "line": 33,
             "description": "Initialize the map",
             "itemtype": "method",
@@ -480,7 +1076,69 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "file": "js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "line": 13,
+            "description": "Retrieve knownlayer csw records async",
+            "itemtype": "method",
+            "name": "mapInit",
+            "params": [
+                {
+                    "name": "reportName",
+                    "description": "Name of the reports displayed in the preview map"
+                },
+                {
+                    "name": "$scope",
+                    "description": "The $scope variable of the controller instance which contains the map. This code assumes the \n       map config is stored in '$scope.map'"
+                },
+                {
+                    "name": "reCentrePt",
+                    "description": "By default draws map centred in middle of Australia, but a different centre can be specified\n       e.g.",
+                    "type": "latitude: -34.5, longitude: 138"
+                }
+            ],
+            "class": "PreviewMapService",
+            "module": "map"
+        },
+        {
+            "file": "js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "line": 48,
+            "description": "tile loaded event, adds the grey bounding boxes to show the effective range of the layers",
+            "itemtype": "event",
+            "name": "tilesloaded",
+            "params": [
+                {
+                    "name": "map",
+                    "description": ""
+                }
+            ],
+            "class": "PreviewMapService",
+            "module": "map"
+        },
+        {
+            "file": "js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "line": 86,
+            "itemtype": "method",
+            "name": "setBBoxOptions",
+            "params": [
+                {
+                    "name": "reportName",
+                    "description": "Name of the reports displayed in the preview map"
+                },
+                {
+                    "name": "adminArea",
+                    "description": "Name of the region where the reports apply"
+                },
+                {
+                    "name": "options",
+                    "description": "Options used to style the bounding box (google.maps.Rectangle)\n       e.g.",
+                    "type": "StrokeColor: '#CAFF06'"
+                }
+            ],
+            "class": "PreviewMapService",
+            "module": "map"
+        },
+        {
+            "file": "js\\assets\\modules\\service\\map\\WFSService.js",
             "line": 10,
             "description": "Render a point data to the map",
             "itemtype": "method",
@@ -499,7 +1157,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WFSService.js",
             "line": 24,
             "description": "Render a LINESTRING data to the map",
             "itemtype": "method",
@@ -518,7 +1176,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WFSService.js",
             "line": 34,
             "description": "Render a POLYGON data to the map",
             "itemtype": "method",
@@ -537,7 +1195,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WFSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WFSService.js",
             "line": 44,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
@@ -552,7 +1210,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WMSService.js",
             "line": 10,
             "description": "Generate wms 1.1.1 google.maps.ImageMapType layer",
             "itemtype": "method",
@@ -574,7 +1232,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WMSService.js",
             "line": 67,
             "description": "Generate wms 1.3 google.maps.ImageMapType layer",
             "itemtype": "method",
@@ -596,7 +1254,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\map\\WMSService.js",
+            "file": "js\\assets\\modules\\service\\map\\WMSService.js",
             "line": 124,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
@@ -611,7 +1269,7 @@
             "module": "map"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 9,
             "description": "Get rootnode from a gml string",
             "itemtype": "method",
@@ -629,7 +1287,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 20,
             "description": "create a point object",
             "itemtype": "method",
@@ -651,7 +1309,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 36,
             "description": "Create line string objects in a array",
             "itemtype": "method",
@@ -673,7 +1331,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 56,
             "description": "Get the srs name",
             "itemtype": "method",
@@ -691,7 +1349,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 76,
             "description": "Forces lon/lat coords into coords (an array). Swaps coords[offset] and coords[offset + 1] if srsName requires it",
             "itemtype": "method",
@@ -714,7 +1372,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 103,
             "description": "Create line string objects in a array",
             "itemtype": "method",
@@ -740,7 +1398,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 136,
             "description": "Given a root placemark node attempt to parse it as a single point and return it. Returns a single portal.map.primitives.Polygon",
             "itemtype": "method",
@@ -766,7 +1424,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 171,
             "description": "Given a root placemark node attempt to parse it as a single point and return it.Returns a single portal.map.primitives.Marker",
             "itemtype": "method",
@@ -792,7 +1450,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 205,
             "description": "Returns the feature count as reported by the WFS response. Returns null if the count cannot be parsed.",
             "itemtype": "method",
@@ -810,7 +1468,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "js\\assets\\modules\\service\\utility\\GMLParserService.js",
             "line": 225,
             "description": "Top level function  that organize how the gml should be parsed",
             "itemtype": "method",
@@ -829,7 +1487,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 9,
             "description": "A wrapper around the DOM defined Document.evaluate function\nBecause not every browser supports document.evaluate we need to have a pure javascript\nbackup in place",
             "itemtype": "method",
@@ -859,7 +1517,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 62,
             "description": "Evaluates an XPath which will return an array of W3C DOM nodes",
             "itemtype": "method",
@@ -881,7 +1539,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 105,
             "description": "Utility for retrieving a W3C DOM Node 'localName' attribute across browsers.\nThe localName is the node name without any namespace prefixes",
             "itemtype": "method",
@@ -899,7 +1557,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 116,
             "description": "Returns the set of classes this node belongs to as an array of strings",
             "itemtype": "method",
@@ -917,7 +1575,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 133,
             "description": "Figure out if domNode is a leaf or not\n(Leaves have no nodes from XML_NODE_ELEMENT)",
             "itemtype": "method",
@@ -935,7 +1593,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 149,
             "description": "Filters an array of DOM Nodes according to the specified parameters",
             "itemtype": "method",
@@ -965,7 +1623,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 181,
             "description": "Gets all children of domNode as an Array that match the specified filter parameters",
             "itemtype": "method",
@@ -987,7 +1645,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 192,
             "description": "Gets all Attributes of domNode as an Array that match the specified filter parameters",
             "itemtype": "method",
@@ -1009,7 +1667,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 205,
             "description": "Given a DOM node, return its text content (however the browser defines it)",
             "itemtype": "method",
@@ -1027,7 +1685,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
             "line": 215,
             "description": "Parse string to DOM",
             "itemtype": "method",
@@ -1045,7 +1703,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "js\\assets\\modules\\service\\utility\\UtilitiesService.js",
             "line": 11,
             "description": "Test if the object is empty",
             "itemtype": "method",
@@ -1063,7 +1721,7 @@
             "module": "utility"
         },
         {
-            "file": "C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "js\\assets\\modules\\service\\utility\\UtilitiesService.js",
             "line": 29,
             "description": "Test if the object is a number",
             "itemtype": "method",
@@ -1081,8 +1739,176 @@
     ],
     "warnings": [
         {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:198"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:239"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:254"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:271"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:292"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:352"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:363"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:437"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:462"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:472"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:495"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:519"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:540"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:593"
+        },
+        {
+            "message": "unknown tag: api",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:609"
+        },
+        {
             "message": "unknown tag: retun",
-            "line": " C:\\VWork\\GitProject\\AuscopePortal\\src\\main\\webapp\\mobile\\js\\assets\\modules\\service\\utility\\UtilitiesService.js:29"
+            "line": " js\\assets\\modules\\service\\utility\\UtilitiesService.js:29"
+        },
+        {
+            "message": "Missing item type\nThis is the web browser implementation of `debug()`.\n\nExpose `debug()` as the module.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:141"
+        },
+        {
+            "message": "Missing item type\nColors.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:158"
+        },
+        {
+            "message": "Missing item type\nCurrently only WebKit-based Web Inspectors, Firefox >= v31,\nand the Firebug extension (any Firefox version) are known\nto support \"%c\" CSS customizations.\n\nTODO: add a `localStorage` variable to explicitly enable/disable colors",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:171"
+        },
+        {
+            "message": "Missing item type\nMap %j to `JSON.stringify()`, since no Web Inspectors do that by default.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:189"
+        },
+        {
+            "message": "Missing item type\nColorize log arguments if enabled.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:198"
+        },
+        {
+            "message": "Missing item type\nInvokes `console.log()` when available.\nNo-op when `console.log` is not a \"function\".",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:239"
+        },
+        {
+            "message": "Missing item type\nSave `namespaces`.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:254"
+        },
+        {
+            "message": "Missing item type\nLoad `namespaces`.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:271"
+        },
+        {
+            "message": "Missing item type\nEnable namespaces listed in `localStorage.debug` initially.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:286"
+        },
+        {
+            "message": "Missing item type\nLocalstorage attempts to return the localstorage.\n\nThis is necessary because safari throws\nwhen a user disables cookies/localstorage\nand you attempt to access it.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:292"
+        },
+        {
+            "message": "Missing item type\nThis is the common logic for both the Node.js and web browser\nimplementations of `debug()`.\n\nExpose `debug()` as the module.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:311"
+        },
+        {
+            "message": "Missing item type\nThe currently active debug mode names, and names to skip.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:325"
+        },
+        {
+            "message": "Missing item type\nMap of special \"%n\" handling functions, for the debug \"format\" argument.\n\nValid key names are a single, lowercased letter, i.e. \"n\".",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:332"
+        },
+        {
+            "message": "Missing item type\nPreviously assigned color.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:340"
+        },
+        {
+            "message": "Missing item type\nPrevious log timestamp.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:346"
+        },
+        {
+            "message": "Missing item type\nSelect a color.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:352"
+        },
+        {
+            "message": "Missing item type\nCreate a debugger with the given `namespace`.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:363"
+        },
+        {
+            "message": "Missing item type\nEnables a debug mode by namespaces. This can include modes\nseparated by a colon and wildcards.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:437"
+        },
+        {
+            "message": "Missing item type\nDisable debug output.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:462"
+        },
+        {
+            "message": "Missing item type\nReturns true if the given mode name is enabled, false otherwise.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:472"
+        },
+        {
+            "message": "Missing item type\nCoerce `val`.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:495"
+        },
+        {
+            "message": "Missing item type\nHelpers.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:509"
+        },
+        {
+            "message": "Missing item type\nParse or format the given `val`.\n\nOptions:\n\n - `long` verbose formatting [false]",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:519"
+        },
+        {
+            "message": "Missing item type\nParse the given `str` and return milliseconds.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:540"
+        },
+        {
+            "message": "Missing item type\nShort format for `ms`.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:593"
+        },
+        {
+            "message": "Missing item type\nLong format for `ms`.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:609"
+        },
+        {
+            "message": "Missing item type\nPluralization helper.",
+            "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:625"
         }
     ]
 }
