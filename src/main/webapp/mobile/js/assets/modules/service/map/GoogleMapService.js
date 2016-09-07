@@ -4,7 +4,7 @@
  * @class GoogleMapService
  * 
  */
-allModules.service('GoogleMapService',['$rootScope',function ($rootScope) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService',function ($rootScope,UtilitiesService) {
    
     this.mainMap;
     this.activeLayers = {};
@@ -18,16 +18,46 @@ allModules.service('GoogleMapService',['$rootScope',function ($rootScope) {
         return this.mainMap;
     };
     
+    
+    this.addMarkerToActive = function(layerId, marker){
+        //VT: if not initialized, init the object.
+        if(!this.activeLayers[layerId]){
+            this.activeLayers[layerId]={};
+            this.activeLayers[layerId].markers = [];
+        }
+        this.activeLayers[layerId].markers.push(marker);
+    };
+    
+    this.addLayerToActive = function(layerId,mapLayer){
+        if(!this.activeLayers[layerId]){
+            this.activeLayers[layerId]={};
+            this.activeLayers[layerId].layers = [];
+        }
+        this.activeLayers[layerId].layers.push(mapLayer);
+    };
+    
     this.getMapActiveLayer = function(){
         return this.activeLayers;
     };
     
-    this.setMapActiveLayer = function(name,mapLayer){
-        this.activeLayers[name] = mapLayer;
-    };
+   
     
-    this.removeActiveLayer = function(name){
-        
+    this.removeActiveLayer = function(layerId){
+        if(this.activeLayers[layerId]){
+            if(!UtilitiesService.isEmpty(this.activeLayers[layerId].markers)){
+                for (var i = 0; i < this.activeLayers[layerId].markers.length; i++) {
+                    this.activeLayers[layerId].markers[i].setMap(null);
+                 };
+            };
+            
+            if(!UtilitiesService.isEmpty(this.activeLayers[layerId].layers)){
+                for (var i = 0; i < this.activeLayers[layerId].layers.length; i++) {
+                    var layerIndex = this.mainMap.overlayMapTypes.indexOf(this.activeLayers[layerId].layers[i]);
+                    this.mainMap.overlayMapTypes.removeAt(layerIndex);
+                 };
+                 this.activeLayers[layerId].layers=[];
+            };
+        };
     };
      
     /**

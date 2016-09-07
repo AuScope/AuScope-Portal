@@ -12,10 +12,11 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
      * @param layer - the layer for rendering
      */
      this.renderLayer = function(layer){    
-//       if(LayerManagerService.getWMS(layer).length > 0){
-//         WMSService.renderLayer(layer);          
-//       }else 
-       if(LayerManagerService.getWFS(layer).length > 0){
+       if(layer.id="nvcl-borehole"){
+           WFSService.renderLayer(layer);
+       }else if(LayerManagerService.getWMS(layer).length > 0){
+         WMSService.renderLayer(layer);          
+       }else if(LayerManagerService.getWFS(layer).length > 0){
            WFSService.renderLayer(layer);          
        }
      };

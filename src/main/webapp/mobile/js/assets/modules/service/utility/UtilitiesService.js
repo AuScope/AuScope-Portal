@@ -19,9 +19,9 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
             return obj.length == 0;
         }else{
             if(obj){
-                return true;
-            }else{
                 return false;
+            }else{
+                return true;
             }
         }
     };

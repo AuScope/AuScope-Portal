@@ -3,7 +3,7 @@
  * @module controllers
  * @class defaultFilterCtrl
  */
-allControllers.controller('defaultFilterCtrl', ['$scope','RenderHandlerService', function ($scope,RenderHandlerService) {
+allControllers.controller('defaultFilterCtrl', ['$scope','RenderHandlerService','GoogleMapService', function ($scope,RenderHandlerService,GoogleMapService) {
     
     /**
     * A function used to add a layer to the main map
@@ -12,6 +12,10 @@ allControllers.controller('defaultFilterCtrl', ['$scope','RenderHandlerService',
     */       
     $scope.addLayer = function(layer){
         RenderHandlerService.renderLayer(layer);
+    };
+    
+    $scope.removeLayer = function(filterPanelCsw){
+        GoogleMapService.removeActiveLayer(filterPanelCsw.id);
     };
     
 }]);

@@ -14,7 +14,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
      * @param style - sld if defined else default server sld will be used
      * @return ImageMapType - google.maps.ImageMapType
      */
-    this.generateWMS_1_1_1_Layer = function(onlineResource,style){
+    this.generateWMS_1_1_1_Layer = function(layerId,onlineResource,style){
         
        var myOnlineResource =  onlineResource;
        
@@ -58,6 +58,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
                return url;                 // return URL for the tile
      
            },
+           layerId : layerId,
            tileSize: new google.maps.Size(256, 256),
            isPng: true
        });
@@ -71,7 +72,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
      * @param style - sld if defined else default server sld will be used
      * @return ImageMapType - google.maps.ImageMapType
      */
-    this.generateWMS_1_3_0_Layer = function(onlineResource,style){
+    this.generateWMS_1_3_0_Layer = function(layerId,onlineResource,style){
         
         var myOnlineResource =  onlineResource;
         
@@ -115,6 +116,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
                 return url;                 
       
             },
+            layerId : layerId,
             tileSize: new google.maps.Size(256, 256),
             isPng: true
         });
@@ -133,9 +135,13 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
             var onlineResources = LayerManagerService.getWMS(layer);
             for(var index in onlineResources){
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
-                    map.overlayMapTypes.push(me.generateWMS_1_1_1_Layer(onlineResources[index],style));
+                    var mapLayer = me.generateWMS_1_1_1_Layer(layer.id,onlineResources[index],style);                    
+                    map.overlayMapTypes.push(mapLayer);
+                    GoogleMapService.addLayerToActive(layer.id,mapLayer);
                 }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
-                    map.overlayMapTypes.push(me.generateWMS_1_3_0_Layer(onlineResources[index],style));
+                    var mapLayer = me.generateWMS_1_3_0_Layer(layer.id,onlineResources[index],style);                    
+                    map.overlayMapTypes.push(mapLayer);
+                    GoogleMapService.addLayerToActive(layer.id,mapLayer);
                 }        
             }
         });

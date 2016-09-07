@@ -18,7 +18,8 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                position:point.coords,
                map: map,
                title: point.name
-            });          
+            });    
+           return marker;
        };
        
        /**
@@ -47,7 +48,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
          * @param layer - The layer containing the wms to be rendered
          */
         this.renderLayer = function(layer){   
-            var map =  GoogleMapService.getMap();
+            var map =  GoogleMapService.getMap();            
             var me = this;
             var onlineResources = LayerManagerService.getWFS(layer);
             for(var index in onlineResources){
@@ -59,7 +60,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                     for(var key in primitives){
                         switch(primitives[key].geometryType){
                             case Constants.geometryType.POINT:
-                                me.renderPoint(primitives[key],map);
+                                GoogleMapService.addMarkerToActive(layer.id,me.renderPoint(primitives[key],map));
                                 break;
                             case Constants.geometryType.LINESTRING:
                                 me.renderLineString(primitives[key],map);
