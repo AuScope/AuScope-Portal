@@ -4,7 +4,7 @@
  * @class PreviewMapService
  * 
  */
-allControllers.factory('PreviewMapService', function() {
+allControllers.factory('PreviewMapService', ['GoogleMapService', function(GoogleMapService) {
     // Keeps copies of the maps and rectangles
     var mapStore = {};
     var rectStore = {};
@@ -22,7 +22,7 @@ allControllers.factory('PreviewMapService', function() {
         */
         mapInit: function (reportName, $scope, reCentrePt) {
             var centrePoint = reCentrePt.latitude != undefined && reCentrePt.longitude != undefined ? reCentrePt : {latitude: -30.5, longitude: 136};
-            
+            var mainMap = GoogleMapService.getMap();
             // Setup a small preview map. Centre on Australia by default. 
             // The map is fixed, it cannot be zoomed or panned.
             // Add a 'tiles loaded' event to add in the grey boxes that show the effective range of the layers
@@ -73,6 +73,13 @@ allControllers.factory('PreviewMapService', function() {
                                             west: bbox.westBoundLongitude
                                         }
                                     });
+                                    /**
+                                    * If the user clicks on a bounding box in the preview map then the main map will zoom and pan to the box
+                                    * @event click
+                                    */
+                                    rectangle.addListener('click', function() {
+                                        mainMap.fitBounds(this.bounds);
+                                    });
                                     mapStore[reportName][cswRecords[i].adminArea] = rectangle;
                                 }
                             };
@@ -100,6 +107,6 @@ allControllers.factory('PreviewMapService', function() {
         
         
     }  
-});
+}]);
 
 

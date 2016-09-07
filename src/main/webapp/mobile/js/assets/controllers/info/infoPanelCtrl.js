@@ -91,38 +91,6 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
     
 }]);
 
-/**
- * CollapseDemoCtrl class holds state variables used to control collapsible information panels
- * @module controllers
- * @class CollapseDemoCtrl
- * 
- */ 
-allControllers.controller('CollapseDemoCtrl', ['$scope', '$element', 'PreviewMapService', function ($scope, $element, PreviewMapService) {
-  $scope.isCollapsed = true;
-  $scope.isCollapsedHorizontal = false;
-  
-  /**
-  * Changes a rectangle in the preview map to a special highlighted colour
-  * @method highlightOnPreviewMap
-  * @param reportName Name of the reports displayed in the preview map
-  * @param adminArea Name of the region where the reports apply
-  *
-  */
-  $scope.highlightOnPreviewMap = function(reportName, adminArea) {
-      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: '#00FF00'});
-  };
-  
-  /**
-  * Returns a rectangle on the preview map to the default non-highlighted colour
-  * @method lowlightOnPreviewMap 
-  * @param reportName Name of the reports displayed in the preview map
-  * @param adminArea Name of the region where the reports apply
-  *
-  */
-  $scope.lowlightOnPreviewMap = function(reportName, adminArea) {
-      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: '#FF0000'});
-  }
-}]);
 
 
 

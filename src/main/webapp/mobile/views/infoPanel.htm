@@ -1,22 +1,21 @@
 <div  ng-controller="infoPanelCtrl">
-	<div>		
-		<div>
-			
-			<div id="map" class="mini-map">
+    <div>        
+        <div>
+            <div id="map" class="mini-map">
                 <ui-gmap-google-map  center='map.center' zoom='map.zoom' options="map.options" events="map.events" control="map.control">
-				</ui-gmap-google-map>
-			</div>
-			<hr>            
-			<div class="row">
-				<div ng-if="infoPanelCsw.name != undefined" class="col-xs-12"><h4>Abstract</h4>{{infoPanelCsw.name}}</div>
-				<div ng-if="infoPanelCsw.description != undefined && infoPanelCsw.description != ''" class="col-xs-12"><h4>Summary</h4>{{infoPanelCsw.description}}</div>
+                </ui-gmap-google-map>
+            </div>
+            <hr>            
+            <div class="row">
+                <div ng-if="infoPanelCsw.name != undefined" class="col-xs-12"><h4>Abstract</h4>{{infoPanelCsw.name}}</div>
+                <div ng-if="infoPanelCsw.description != undefined && infoPanelCsw.description != ''" class="col-xs-12"><h4>Summary</h4>{{infoPanelCsw.description}}</div>
                 <div ng-if="infoPanelCsw.iconUrl != undefined" class="col-xs-12">
                     <h4>Icon</h4>
-                    <img ng-src="{{infoPanelCsw.iconUrl}}" height="{{infoPanelCsw.iconSize.height}}" width="{{infoPanelCsw.iconSize.width}}">
+                    <img ng-src="{{infoPanelCsw.iconUrl}}" height="16" width="16">
                 </div>
                 <div ng-if="infoPanelCsw.cswRecords.length > 0" class="col-xs-12"><h4>Details</h4>
                     <small>
-                        <div ng-controller="CollapseDemoCtrl">
+                        <div ng-controller="collapseInfoPanelCtrl">
                             <div ng-repeat="cswRecord in infoPanelCsw.cswRecords.slice(0,10)"> <!-- NB: only display 10 1st 10 items -->
                                 <button type="button" class="btn btn-xs btn-block btn-default" ng-click="isCollapsed = !isCollapsed; isCollapsed ? lowlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea) : highlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)" ng-mouseenter="isCollapsed && highlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)" ng-mouseleave="isCollapsed && lowlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)">
                                     {{cswRecord.adminArea!="" && cswRecord.adminArea!=null ? cswRecord.adminArea : "More Information" }}
@@ -45,10 +44,8 @@
                         </div>
                     </small>
                 </div>
-			</div>	
-			<hr>
-			
-		</div>				
-	</div>
+            </div>                
+        </div>                
+    </div>
 </div>
 
