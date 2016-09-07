@@ -18,7 +18,9 @@
                     <small>
                         <div ng-controller="CollapseDemoCtrl">
                             <div ng-repeat="cswRecord in infoPanelCsw.cswRecords.slice(0,10)"> <!-- NB: only display 10 1st 10 items -->
-                                <button type="button" class="btn btn-xs btn-block btn-default" ng-click="isCollapsed = !isCollapsed">{{cswRecord.adminArea!="" && cswRecord.adminArea!=null ? cswRecord.adminArea : "More Information" }}</button>
+                                <button type="button" class="btn btn-xs btn-block btn-default" ng-click="isCollapsed = !isCollapsed; isCollapsed ? lowlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea) : highlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)" ng-mouseenter="isCollapsed && highlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)" ng-mouseleave="isCollapsed && lowlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)">
+                                    {{cswRecord.adminArea!="" && cswRecord.adminArea!=null ? cswRecord.adminArea : "More Information" }}
+                                </button>
                                 <div uib-collapse="isCollapsed">
                                     <div class="col-xs-12"><strong>Contact Org:</strong> {{cswRecord.contactOrg}}</div>
                                     <div class="col-xs-12"><strong>Description:</strong> {{cswRecord.description}}</div>

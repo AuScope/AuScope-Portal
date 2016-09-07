@@ -2,64 +2,12 @@
  * infoPanelCtrl class handles rendering of left hand side information panels
  * @module controllers
  * @class infoPanelCtrl
+ *
  */
-allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$element', 'GetMinOccurViewFilterStyle', function ($scope,$rootScope,$timeout, $element, GetMinOccurViewFilterStyle) {
+allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', 'GetMinOccurViewFilterStyle', 'PreviewMapService', function ($scope,$rootScope, $element, GetMinOccurViewFilterStyle, PreviewMapService) {
 
-    // Setup a small preview map. Centre on Australia by default. 
-    // The map is fixed, it cannot be zoomed or panned.
-    // Add a 'tiles loaded' event to add in the grey boxes that show the effective range of the layers
-    var mapInitConfig = {
-        center: {latitude: -30.5, longitude: 136},
-        zoom: 2,
-        control: {},
-        options: {
-            clickableIcons: false,
-            disableDoubleClickZoom: true,
-            draggable: false,
-            fullScreenControl: false,
-            keyboardShortcuts: false,
-            mapTypeControl: false,
-            panControl: false,
-            rotateControl: false,
-            scaleConrol: false,
-            scrollwheel: false,
-            streetViewControl: false,
-            zoomControl: false 
-        },
-        events: {
-            /**
-             * tile loaded event, adds the grey bounding boxes to show the effective range of the layers
-             * @event tilesloaded
-             * @param map
-             */             
-            tilesloaded: function (map) {
-                $scope.$apply(function () {
-                    // Add the grey boxes to show the effective range of the layers
-                    //console.log("$scope.map.control=", $scope.map.control); // control works
-                    var cswRecords = $scope.$parent.infoPanelCsw.cswRecords;
-                    for (i=0; i<cswRecords.length; i++) {
-                        var bbox = cswRecords[i].geographicElements[0];
-                        if (bbox != undefined) {
-                            var outerCoords = [
-                                { lat: bbox.northBoundLatitude, lng: bbox.westBoundLongitude },
-                                { lat: bbox.southBoundLatitude, lng: bbox.westBoundLongitude },
-                                { lat: bbox.southBoundLatitude, lng: bbox.eastBoundLongitude },
-                                { lat: bbox.northBoundLatitude, lng: bbox.eastBoundLongitude }
-                            ];
-                            map.data.add({
-                                geometry: new google.maps.Data.Polygon([outerCoords])
-                            })
-                        }
-                    };
-                });
-            }
-        }
-    };
-    
     // Gather up BBOX coordinates to calculate the centre and envelope
     var cswRecords = $scope.$parent.infoPanelCsw.cswRecords;
-    //console.log("$scope.$parent.infoPanelCsw=", $scope.$parent.infoPanelCsw);
-    //console.log("cswRecords=", cswRecords);
     var featureArr = [];
     var i,j;
     $scope.wmsUrls = {};
@@ -75,7 +23,6 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$
         }
 
         // Gather up lists of information URLs and legend URLs
-
         var hasMinOccView = false;
         var onlineResources=cswRecords[i].onlineResources;
         for (j=0; j<onlineResources.length; j++) {
@@ -122,23 +69,25 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$
 
     // Use 'turf' to calculate the centre point of the BBOXES, use this to re-centre the map
     // Only calculate centre if the coords are not dispersed over the globe
+    var reCentrePt = {};
     if (featureArr.length>0) {
         // Calculate the envelope, if not too big then re-centred map can be calculated
         var fc = turf.featureCollection(featureArr);
         var envelopePoly = turf.envelope(fc);
+       
         if (envelopePoly.geometry.coordinates[0][1][0] - envelopePoly.geometry.coordinates[0][0][0] < 30 && envelopePoly.geometry.coordinates[0][2][1] - envelopePoly.geometry.coordinates[0][0][1] < 30) {
             var featureColl = turf.featureCollection(featureArr);
             // Calculate centre and re-centre the map
             var centerPt = turf.center(featureColl);
             if (centerPt.geometry.coordinates != undefined && centerPt.geometry.coordinates.length==2 
                 && !isNaN(centerPt.geometry.coordinates[0]) && !isNaN(centerPt.geometry.coordinates[1])) {            
-                mapInitConfig.center = { latitude: centerPt.geometry.coordinates[1], longitude: centerPt.geometry.coordinates[0] };
+                reCentrePt = { latitude: centerPt.geometry.coordinates[1], longitude: centerPt.geometry.coordinates[0] };
             }
         }
     }
     
     // Set initial configuration of the map
-    $scope.map = mapInitConfig;
+    PreviewMapService.mapInit($scope.$parent.infoPanelCsw.name, $scope, reCentrePt);
     
 }]);
 
@@ -148,10 +97,32 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope','$timeout', '$
  * @class CollapseDemoCtrl
  * 
  */ 
-allControllers.controller('CollapseDemoCtrl', function ($scope) {
+allControllers.controller('CollapseDemoCtrl', ['$scope', '$element', 'PreviewMapService', function ($scope, $element, PreviewMapService) {
   $scope.isCollapsed = true;
   $scope.isCollapsedHorizontal = false;
-});
+  
+  /**
+  * Changes a rectangle in the preview map to a special highlighted colour
+  * @method highlightOnPreviewMap
+  * @param reportName Name of the reports displayed in the preview map
+  * @param adminArea Name of the region where the reports apply
+  *
+  */
+  $scope.highlightOnPreviewMap = function(reportName, adminArea) {
+      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: '#00FF00'});
+  };
+  
+  /**
+  * Returns a rectangle on the preview map to the default non-highlighted colour
+  * @method lowlightOnPreviewMap 
+  * @param reportName Name of the reports displayed in the preview map
+  * @param adminArea Name of the region where the reports apply
+  *
+  */
+  $scope.lowlightOnPreviewMap = function(reportName, adminArea) {
+      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: '#FF0000'});
+  }
+}]);
 
 
 
