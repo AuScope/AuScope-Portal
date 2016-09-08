@@ -4,13 +4,16 @@
  * @class layerPanelCtrl
  * 
  */
-allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', function ($scope,GetCSWRecordService) {
+allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','RenderStatusService','$timeout', function ($scope,GetCSWRecordService,RenderStatusService,$timeout) {
     $scope.cswRecords={};
-    
+    GetCSWRecordService.getCSWKnownLayers().then(function(data){
+        $scope.cswRecords=data;      
+    });
+
 
     $scope.status = {};  
     
-    $scope.renderStatus = newRenderStatus;
+    $scope.renderStatus = RenderStatusService.getRenderStatus();
     
     RenderStatusService.onUpdate($scope, function (newRenderStatus) {
         //VT: Inconsistent API (Sync/Async): https://docs.angularjs.org/error/$rootScope/inprog?p0=$digest
