@@ -4,7 +4,7 @@
  * @class GoogleMapService
  * 
  */
-allModules.service('GoogleMapService',['$rootScope','UtilitiesService',function ($rootScope,UtilitiesService) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService',function ($rootScope,UtilitiesService,RenderStatusService) {
    
     this.mainMap;
     this.activeLayers = {};
@@ -57,6 +57,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService',function 
                  };
                  this.activeLayers[layerId].layers=[];
             };
+            RenderStatusService.clearStatus(layerId);
         };
     };
      

@@ -16,6 +16,11 @@ app.constant('Constants', {
         'LINESTRING': 'LINESTRING',
         'POLYGON': 'POLYGON'
     },
+    statusProgress:{
+        'RUNNING': 'RUNNING',
+        'COMPLETED': 'COMPLETED',
+        'ERROR': 'ERROR'
+    },
     XPATH_STRING_TYPE : (window.XPathResult ? XPathResult.STRING_TYPE : 0),
     XPATH_UNORDERED_NODE_ITERATOR_TYPE: (window.XPathResult ? XPathResult.UNORDERED_NODE_ITERATOR_TYPE : 1)
 }); 

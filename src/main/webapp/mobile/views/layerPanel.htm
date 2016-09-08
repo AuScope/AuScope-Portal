@@ -22,14 +22,22 @@
 					    </tr>
 					  </thead>
 					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',group,cswRecord.id)" class="layer-row" ng-class="{'layer-selected':  status[group][cswRecord.id].isExpanded}">
-						   	<td>{{cswRecord.name}}</td>
+						   	<td>{{cswRecord.name}}<br>
+						   	  <div ng-show="renderStatus[cswRecord.id].max"><uib-progressbar  class="progress-striped active" style="height:3px" type="warning" max="renderStatus[cswRecord.id].max" value="renderStatus[cswRecord.id].complete"></uib-progressbar></div>
+						   	</td>
 						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.filter}" aria-hidden="true" ng-click="togglePanels('filter',group,cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.info}" aria-hidden="true" ng-click="togglePanels('info',group,cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-map fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.analytic}" aria-hidden="true" ng-click="togglePanels('analytic',group,cswRecord.id);$event.stopPropagation();"></i></td>
-					   </tr>					   
+					   </tr>
+					  	
+                             
+                       	
+					  
+					 
+					  				   
 					   <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.filter, 'no-animation': !status[group][cswRecord.id].panels.filter}" ng-show="status[group][cswRecord.id].panels.filter">
                         <td colspan="4">
-                            <filter-panel  filter-panel-csw="cswRecord"  class='layer-panel-nested'></filter-panel>
+                            <filter-panel  filter-panel-csw="cswRecord"  class='layer-panel-nested'></filter-panel>                                  
                         </td>
                        </tr>
 					   <tr class="layer-selected" ng-if="status[group][cswRecord.id].panels.info"  >

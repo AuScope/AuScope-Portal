@@ -4,6 +4,8 @@
  * 
  */
 allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService',function ($rootScope,WMSService,WFSService,LayerManagerService) {
+    
+  
      
     /**
      * Decides how to renders a layer automatically
@@ -12,8 +14,10 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
      * @param layer - the layer for rendering
      */
      this.renderLayer = function(layer){    
-       if(layer.id="nvcl-borehole"){
+       if(layer.id=="nvcl-borehole"){
            WFSService.renderLayer(layer);
+       }else if(layer.id=="mineral-tenements"){
+           WMSService.renderLayer(layer);
        }else if(LayerManagerService.getWMS(layer).length > 0){
          WMSService.renderLayer(layer);          
        }else if(LayerManagerService.getWFS(layer).length > 0){
