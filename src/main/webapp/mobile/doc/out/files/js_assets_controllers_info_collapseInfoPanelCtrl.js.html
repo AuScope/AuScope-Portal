@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>js\assets\modules\service\utility\UtilitiesService.js</title>
+    <title>js\assets\controllers\info\collapseInfoPanelCtrl.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -98,50 +98,43 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: js\assets\modules\service\utility\UtilitiesService.js</h1>
+<h1 class="file-heading">File: js\assets\controllers\info\collapseInfoPanelCtrl.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
- 
-    
 /**
- * SimpleXPathService handles xml file manipulation.
- * @module utility
- * @class SimpleXPathService
+ * collapseInfoPanelCtrl class holds state and manipulates the preview map of the collapsible information panels
+ * @module controllers
+ * @class collapseInfoPanelCtrl
  * 
- */
-allModules.service(&#x27;UtilitiesService&#x27;,[&#x27;$rootScope&#x27;,function ($rootScope) {
-   
-    /**
-     * Test if the object is empty
-     * @method isEmpty
-     * @param obj - the object to test for emptiness
-     * @return boolean - true if object is empty.
-     */
-    this.isEmpty = function(obj){
-        if(obj instanceof Array || (typeof obj === &#x27;string&#x27;)){
-            return obj.length == 0;
-        }else{
-            if(obj){
-                return true;
-            }else{
-                return false;
-            }
-        }
-    };
-    
-    /**
-     * Test if the object is a number
-     * @method isNumber
-     * @param obj - the object to test for numeric value
-     * @retun boolean - true if obj is a number
-     */
-    this.isNumber = function(obj){
-        !isNaN(parseFloat(n)) &amp;&amp; isFinite(n);
-    };
-    
-     
-}]);    
+ */ 
+allControllers.controller(&#x27;collapseInfoPanelCtrl&#x27;, [&#x27;$scope&#x27;, &#x27;PreviewMapService&#x27;, function ($scope, PreviewMapService) {
+  $scope.isCollapsed = true;
+  $scope.isCollapsedHorizontal = false;
+  
+  /**
+  * Changes a rectangle in the preview map to a special highlighted colour
+  * @method highlightOnPreviewMap
+  * @param reportName Name of the reports displayed in the preview map
+  * @param adminArea Name of the region where the reports apply
+  *
+  */
+  $scope.highlightOnPreviewMap = function(reportName, adminArea) {
+      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: &#x27;#00FF00&#x27;});
+  };
+  
+  /**
+  * Returns a rectangle on the preview map to the default non-highlighted colour
+  * @method lowlightOnPreviewMap 
+  * @param reportName Name of the reports displayed in the preview map
+  * @param adminArea Name of the region where the reports apply
+  *
+  */
+  $scope.lowlightOnPreviewMap = function(reportName, adminArea) {
+      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: &#x27;#FF0000&#x27;});
+  }
+}]);
+
     </pre>
 </div>
                     </div>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>js\assets\modules\service\utility\UtilitiesService.js</title>
+    <title>js\assets\modules\service\http\GetMinOccurViewFilterStyle.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -98,50 +98,36 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: js\assets\modules\service\utility\UtilitiesService.js</h1>
+<h1 class="file-heading">File: js\assets\modules\service\http\GetMinOccurViewFilterStyle.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
- 
-    
 /**
- * SimpleXPathService handles xml file manipulation.
- * @module utility
- * @class SimpleXPathService
+ * Service class used to fetch style information for mineral occurrence reports
+ * @module http
+ * @class GetMinOccurViewFilterStyle
  * 
  */
-allModules.service(&#x27;UtilitiesService&#x27;,[&#x27;$rootScope&#x27;,function ($rootScope) {
-   
+allModules.service(&#x27;GetMinOccurViewFilterStyle&#x27;,[&#x27;$http&#x27;,function ($http) {
+    var promise = false; 
+    
     /**
-     * Test if the object is empty
-     * @method isEmpty
-     * @param obj - the object to test for emptiness
-     * @return boolean - true if object is empty.
-     */
-    this.isEmpty = function(obj){
-        if(obj instanceof Array || (typeof obj === &#x27;string&#x27;)){
-            return obj.length == 0;
-        }else{
-            if(obj){
-                return true;
-            }else{
-                return false;
-            }
+    * @method getFilterStyle
+    * @returns returns filter style string or an empty string upon comms error or promise
+    */
+    this.getFilterStyle = function(){
+        if ( !promise ) {
+            promise = $http.get(&#x27;../doMinOccurViewFilterStyle.do&#x27;).then(function (response) {
+                var data = &quot;&quot;;             
+                if (response.status==200) {
+                    data = response.data;
+                }
+                return data;
+            });
         }
-    };
-    
-    /**
-     * Test if the object is a number
-     * @method isNumber
-     * @param obj - the object to test for numeric value
-     * @retun boolean - true if obj is a number
-     */
-    this.isNumber = function(obj){
-        !isNaN(parseFloat(n)) &amp;&amp; isFinite(n);
-    };
-    
-     
-}]);    
+        return promise;
+    }
+}]);
     </pre>
 </div>
                     </div>

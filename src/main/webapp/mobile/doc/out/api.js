@@ -1,9 +1,9 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "CollapseDemoCtrl",
         "GMLParserService",
         "GetCSWRecordService",
+        "GetMinOccurViewFilterStyle",
         "GetWFSRelatedService",
         "GetWMSRelatedService",
         "GoogleMapService",
@@ -13,6 +13,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "SimpleXPathService",
         "WFSService",
         "WMSService",
+        "collapseInfoPanelCtrl",
         "defaultFilterCtrl",
         "googleMapCtrl",
         "infoPanelCtrl",

@@ -30,12 +30,20 @@
             "fors": {},
             "namespaces": {}
         },
+        "js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js": {
+            "name": "js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+            "modules": {},
+            "classes": {
+                "collapseInfoPanelCtrl": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "js\\assets\\controllers\\info\\infoPanelCtrl.js": {
             "name": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
             "modules": {},
             "classes": {
-                "infoPanelCtrl": 1,
-                "CollapseDemoCtrl": 1
+                "infoPanelCtrl": 1
             },
             "fors": {},
             "namespaces": {}
@@ -63,6 +71,15 @@
             },
             "classes": {
                 "GetCSWRecordService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "js\\assets\\modules\\service\\http\\GetMinOccurViewFilterStyle.js": {
+            "name": "js\\assets\\modules\\service\\http\\GetMinOccurViewFilterStyle.js",
+            "modules": {},
+            "classes": {
+                "GetMinOccurViewFilterStyle": 1
             },
             "fors": {},
             "namespaces": {}
@@ -180,8 +197,8 @@
                 "defaultFilterCtrl": 1,
                 "loadFilterCtrl": 1,
                 "googleMapCtrl": 1,
+                "collapseInfoPanelCtrl": 1,
                 "infoPanelCtrl": 1,
-                "CollapseDemoCtrl": 1,
                 "layerPanelCtrl": 1
             },
             "fors": {},
@@ -197,6 +214,7 @@
             "elements": {},
             "classes": {
                 "GetCSWRecordService": 1,
+                "GetMinOccurViewFilterStyle": 1,
                 "GetWFSRelatedService": 1,
                 "GetWMSRelatedService": 1
             },
@@ -298,6 +316,20 @@
             "line": 1,
             "description": "googleMapCtrl class initialises the Google map used to display the main map"
         },
+        "collapseInfoPanelCtrl": {
+            "name": "collapseInfoPanelCtrl",
+            "shortname": "collapseInfoPanelCtrl",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "controllers",
+            "namespace": "",
+            "file": "js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+            "line": 1,
+            "description": "collapseInfoPanelCtrl class holds state and manipulates the preview map of the collapsible information panels"
+        },
         "infoPanelCtrl": {
             "name": "infoPanelCtrl",
             "shortname": "infoPanelCtrl",
@@ -311,20 +343,6 @@
             "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
             "line": 1,
             "description": "infoPanelCtrl class handles rendering of left hand side information panels"
-        },
-        "CollapseDemoCtrl": {
-            "name": "CollapseDemoCtrl",
-            "shortname": "CollapseDemoCtrl",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "controllers",
-            "namespace": "",
-            "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
-            "line": 94,
-            "description": "CollapseDemoCtrl class holds state variables used to control collapsible information panels"
         },
         "layerPanelCtrl": {
             "name": "layerPanelCtrl",
@@ -353,6 +371,20 @@
             "file": "js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
+        },
+        "GetMinOccurViewFilterStyle": {
+            "name": "GetMinOccurViewFilterStyle",
+            "shortname": "GetMinOccurViewFilterStyle",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "http",
+            "namespace": "",
+            "file": "js\\assets\\modules\\service\\http\\GetMinOccurViewFilterStyle.js",
+            "line": 1,
+            "description": "Service class used to fetch style information for mineral occurrence reports"
         },
         "GetWFSRelatedService": {
             "name": "GetWFSRelatedService",
@@ -522,8 +554,8 @@
             "module": "controllers"
         },
         {
-            "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
-            "line": 104,
+            "file": "js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+            "line": 11,
             "description": "Changes a rectangle in the preview map to a special highlighted colour",
             "itemtype": "method",
             "name": "highlightOnPreviewMap",
@@ -537,12 +569,12 @@
                     "description": "Name of the region where the reports apply"
                 }
             ],
-            "class": "CollapseDemoCtrl",
+            "class": "collapseInfoPanelCtrl",
             "module": "controllers"
         },
         {
-            "file": "js\\assets\\controllers\\info\\infoPanelCtrl.js",
-            "line": 115,
+            "file": "js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+            "line": 22,
             "description": "Returns a rectangle on the preview map to the default non-highlighted colour",
             "itemtype": "method",
             "name": "lowlightOnPreviewMap",
@@ -556,7 +588,7 @@
                     "description": "Name of the region where the reports apply"
                 }
             ],
-            "class": "CollapseDemoCtrl",
+            "class": "collapseInfoPanelCtrl",
             "module": "controllers"
         },
         {
@@ -924,6 +956,17 @@
             "module": "http"
         },
         {
+            "file": "js\\assets\\modules\\service\\http\\GetMinOccurViewFilterStyle.js",
+            "line": 10,
+            "itemtype": "method",
+            "name": "getFilterStyle",
+            "return": {
+                "description": "returns filter style string or an empty string upon comms error or promise"
+            },
+            "class": "GetMinOccurViewFilterStyle",
+            "module": "http"
+        },
+        {
             "file": "js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
             "line": 9,
             "description": "Make a get wfs request",
@@ -1116,7 +1159,16 @@
         },
         {
             "file": "js\\assets\\modules\\service\\map\\PreviewMapService.js",
-            "line": 86,
+            "line": 76,
+            "description": "If the user clicks on a bounding box in the preview map then the main map will zoom and pan to the box",
+            "itemtype": "event",
+            "name": "click",
+            "class": "PreviewMapService",
+            "module": "map"
+        },
+        {
+            "file": "js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "line": 93,
             "itemtype": "method",
             "name": "setBBoxOptions",
             "params": [
@@ -1797,6 +1849,10 @@
         {
             "message": "unknown tag: api",
             "line": " js\\assets\\framework\\angular\\angular-simple-logger.js:609"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " js\\assets\\modules\\service\\http\\GetMinOccurViewFilterStyle.js:10"
         },
         {
             "message": "unknown tag: retun",

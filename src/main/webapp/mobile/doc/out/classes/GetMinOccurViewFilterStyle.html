@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>js\assets\modules\service\utility\UtilitiesService.js</title>
+    <title>GetMinOccurViewFilterStyle</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -98,51 +98,100 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: js\assets\modules\service\utility\UtilitiesService.js</h1>
+<h1>GetMinOccurViewFilterStyle Class</h1>
+<div class="box meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
- 
-    
-/**
- * SimpleXPathService handles xml file manipulation.
- * @module utility
- * @class SimpleXPathService
- * 
- */
-allModules.service(&#x27;UtilitiesService&#x27;,[&#x27;$rootScope&#x27;,function ($rootScope) {
-   
-    /**
-     * Test if the object is empty
-     * @method isEmpty
-     * @param obj - the object to test for emptiness
-     * @return boolean - true if object is empty.
-     */
-    this.isEmpty = function(obj){
-        if(obj instanceof Array || (typeof obj === &#x27;string&#x27;)){
-            return obj.length == 0;
-        }else{
-            if(obj){
-                return true;
-            }else{
-                return false;
-            }
-        }
-    };
-    
-    /**
-     * Test if the object is a number
-     * @method isNumber
-     * @param obj - the object to test for numeric value
-     * @retun boolean - true if obj is a number
-     */
-    this.isNumber = function(obj){
-        !isNaN(parseFloat(n)) &amp;&amp; isFinite(n);
-    };
-    
-     
-}]);    
-    </pre>
+
+        <div class="foundat">
+            Defined in: <a href="../files/js_assets_modules_service_http_GetMinOccurViewFilterStyle.js.html#l1"><code>js\assets\modules\service\http\GetMinOccurViewFilterStyle.js:1</code></a>
+        </div>
+
+            Module: <a href="../modules/http.html">http</a>
+
+</div>
+
+
+<div class="box intro">
+    <p>Service class used to fetch style information for mineral occurrence reports</p>
+
+</div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method">
+                                <a href="#method_getFilterStyle">getFilterStyle</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_getFilterStyle" class="method item">
+    <h3 class="name"><code>getFilterStyle</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/js_assets_modules_service_http_GetMinOccurViewFilterStyle.js.html#l10"><code>js\assets\modules\service\http\GetMinOccurViewFilterStyle.js:10</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                    <p>returns filter style string or an empty string upon comms error or promise</p>
+
+            </div>
+        </div>
+
+
+</div>
+            </div>
+
+
+
+    </div>
 </div>
                     </div>
                 </div>

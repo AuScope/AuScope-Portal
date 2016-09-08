@@ -38,9 +38,10 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
-                                <li><a href="../classes/CollapseDemoCtrl.html">CollapseDemoCtrl</a></li>
+                                <li><a href="../classes/collapseInfoPanelCtrl.html">collapseInfoPanelCtrl</a></li>
                                 <li><a href="../classes/defaultFilterCtrl.html">defaultFilterCtrl</a></li>
                                 <li><a href="../classes/GetCSWRecordService.html">GetCSWRecordService</a></li>
+                                <li><a href="../classes/GetMinOccurViewFilterStyle.html">GetMinOccurViewFilterStyle</a></li>
                                 <li><a href="../classes/GetWFSRelatedService.html">GetWFSRelatedService</a></li>
                                 <li><a href="../classes/GetWMSRelatedService.html">GetWMSRelatedService</a></li>
                                 <li><a href="../classes/GMLParserService.html">GMLParserService</a></li>
@@ -194,38 +195,6 @@ allControllers.controller(&#x27;infoPanelCtrl&#x27;, [&#x27;$scope&#x27;,&#x27;$
     
 }]);
 
-/**
- * CollapseDemoCtrl class holds state variables used to control collapsible information panels
- * @module controllers
- * @class CollapseDemoCtrl
- * 
- */ 
-allControllers.controller(&#x27;CollapseDemoCtrl&#x27;, [&#x27;$scope&#x27;, &#x27;$element&#x27;, &#x27;PreviewMapService&#x27;, function ($scope, $element, PreviewMapService) {
-  $scope.isCollapsed = true;
-  $scope.isCollapsedHorizontal = false;
-  
-  /**
-  * Changes a rectangle in the preview map to a special highlighted colour
-  * @method highlightOnPreviewMap
-  * @param reportName Name of the reports displayed in the preview map
-  * @param adminArea Name of the region where the reports apply
-  *
-  */
-  $scope.highlightOnPreviewMap = function(reportName, adminArea) {
-      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: &#x27;#00FF00&#x27;});
-  };
-  
-  /**
-  * Returns a rectangle on the preview map to the default non-highlighted colour
-  * @method lowlightOnPreviewMap 
-  * @param reportName Name of the reports displayed in the preview map
-  * @param adminArea Name of the region where the reports apply
-  *
-  */
-  $scope.lowlightOnPreviewMap = function(reportName, adminArea) {
-      PreviewMapService.setBBoxOptions(reportName, adminArea, { strokeColor: &#x27;#FF0000&#x27;});
-  }
-}]);
 
 
 

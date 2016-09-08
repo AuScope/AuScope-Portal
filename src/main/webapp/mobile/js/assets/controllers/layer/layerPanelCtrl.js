@@ -4,21 +4,14 @@
  * @class layerPanelCtrl
  * 
  */
-allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','RenderStatusService','$timeout', function ($scope,GetCSWRecordService,RenderStatusService,$timeout) {
+allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', function ($scope,GetCSWRecordService) {
     $scope.cswRecords={};
-    GetCSWRecordService.getCSWKnownLayers().then(function(data){
-        $scope.cswRecords=data;      
-    });
-
-    //VT: For maintaining the UI accordion and UI layout 
-    $scope.status = {}; 
-    
-    $scope.renderStatus = RenderStatusService.getRenderStatus();
-    $scope.trackRenderCompletion = -1;
-    
     
 
-   
+    $scope.status = {};  
+    
+    $scope.renderStatus = newRenderStatus;
+    
     RenderStatusService.onUpdate($scope, function (newRenderStatus) {
         //VT: Inconsistent API (Sync/Async): https://docs.angularjs.org/error/$rootScope/inprog?p0=$digest
         $timeout(function() {
@@ -28,7 +21,17 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
        
     });
  
-    
+
+    /**
+     * @method getCswRecords
+     * @return cswRecords - csw records that match the search, or all known layer csw records if search is empty
+     */
+    this.getCswRecords = function() {
+        // if there was a search, return search result
+        $scope.cswRecords = GetCSWRecordService.getSearchedLayers();
+        return $scope.cswRecords;
+    }; 
+       
     /**
     * @method togglePanels
     * @param panelType type of panel
