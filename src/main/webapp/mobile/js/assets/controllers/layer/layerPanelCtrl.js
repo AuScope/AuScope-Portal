@@ -11,8 +11,17 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService', fun
     });
 
     $scope.status = {};    
- 
-    
+
+    /**
+     * @method getCswRecords
+     * @return cswRecords - csw records that match the search, or all known layer csw records if search is empty
+     */
+    this.getCswRecords = function() {
+        // if there was a search, return search result
+        $scope.cswRecords = GetCSWRecordService.getSearchedLayers();
+        return $scope.cswRecords;
+    }; 
+       
     /**
     * @method togglePanels
     * @param panelType type of panel

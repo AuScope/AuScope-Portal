@@ -1,4 +1,4 @@
-<div class="animated fadeInleft" ng-controller="layerPanelCtrl">
+<div class="animated fadeInleft" ng-controller="layerPanelCtrl as layerPanel">
 	
 	<div>
 		<div>				
@@ -8,9 +8,9 @@
 			</div>			
 		</div>
 		<div>
-			<uib-accordion close-others="true">			   
-			   <div ng-repeat="(group,records) in cswRecords" uib-accordion-group ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
-			   	 
+			<uib-accordion close-others="true">	
+			   <div ng-repeat="(group,records) in layerPanel.getCswRecords()" uib-accordion-group ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
+			   
 			      <uib-accordion-heading>
 			        {{group}} <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group].isOpen, 'glyphicon glyphicon-plus': !status[group].isOpen}"></i>
 			      </uib-accordion-heading>
