@@ -177,3 +177,14 @@ html,body {
     background-color: #e1f1ff;
 }
 
+.layer-progress-bar{
+	height:5px;
+	padding:0;
+	margin:0;
+}
+
+.progress {
+  background-color: #757575;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}

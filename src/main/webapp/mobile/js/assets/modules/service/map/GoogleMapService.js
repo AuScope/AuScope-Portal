@@ -18,7 +18,12 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         return this.mainMap;
     };
     
-    
+    /**
+     * Holds a array reference to the active markers on the map referenced by the layerId
+     * @method addMarkerToActive
+     * @param layerId - layerId
+     * @param marker - the marker to add 
+     */
     this.addMarkerToActive = function(layerId, marker){
         //VT: if not initialized, init the object.
         if(!this.activeLayers[layerId]){
@@ -28,6 +33,12 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         this.activeLayers[layerId].markers.push(marker);
     };
     
+    /**
+     * Holds a array reference to the active layers on the map referenced by the layerId
+     * @method addLayerToActive
+     * @param layerId - layerId
+     * @param mapLayer - the map layer to add 
+     */
     this.addLayerToActive = function(layerId,mapLayer){
         if(!this.activeLayers[layerId]){
             this.activeLayers[layerId]={};
@@ -36,12 +47,21 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         this.activeLayers[layerId].layers.push(mapLayer);
     };
     
+    /**
+     * Return the list of active layers
+     * @method getMapActiveLayer
+     * @return activeLayers - the list of active layers
+     */
     this.getMapActiveLayer = function(){
         return this.activeLayers;
     };
     
    
-    
+   /**
+    * Remove the layer if it is rendered on the map
+    * @method removeActiveLayer
+    * @param layerId - the layerId to remove 
+    */ 
     this.removeActiveLayer = function(layerId){
         if(this.activeLayers[layerId]){
             if(!UtilitiesService.isEmpty(this.activeLayers[layerId].markers)){
