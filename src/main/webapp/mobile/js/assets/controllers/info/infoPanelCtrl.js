@@ -4,14 +4,57 @@
  * @class infoPanelCtrl
  *
  */
-allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', 'GetMinOccurViewFilterStyle', 'PreviewMapService', function ($scope,$rootScope, $element, GetMinOccurViewFilterStyle, PreviewMapService) {
+allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', 'StyleService', 'PreviewMapService', function ($scope,$rootScope, $element, StyleService, PreviewMapService) {
 
-    // Gather up BBOX coordinates to calculate the centre and envelope
     var cswRecords = $scope.$parent.infoPanelCsw.cswRecords;
     var featureArr = [];
     var i,j;
+    var sld_body = "";
     $scope.wmsUrls = {};
     $scope.wmsLegends = {};
+    
+    // Get the legend style, if there is one
+    if ($scope.$parent.infoPanelCsw.proxyStyleUrl != undefined && $scope.$parent.infoPanelCsw.proxyStyleUrl.length>0) {
+        StyleService.getLegendStyle($scope.$parent.infoPanelCsw.proxyStyleUrl).then(
+        
+        function(response) {
+            // AngularJS will come here if status code is 200..299, but only status code 200 will return a complete response
+            if (response.status==200 && response.data.length < 2000) {
+                sld_body = escape(response.data);
+                // Gather up lists of legend URLs
+                for (i=0; i<cswRecords.length; i++) {
+                    var onlineResources=cswRecords[i].onlineResources;
+                    for (j=0; j<onlineResources.length; j++) {
+                        if (onlineResources[j].type=='WMS') {
+                            var url = onlineResources[j].url + 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
+                                        +'&LAYER='+onlineResources[j].name+'&LAYERS='+onlineResources[j].name;
+                            
+                            // If there is a style, then use it
+                            if (sld_body.length>0) {
+                                url += '&SLD_BODY='+sld_body+'&LEGEND_OPTIONS=forceLabels:on;minSymbolSize:16';
+                            }
+                            $scope.wmsLegends[cswRecords[i].adminArea]=url;
+                        }
+                    }
+                }     
+            }
+        });
+        
+    } else {
+        for (i=0; i<cswRecords.length; i++) {
+            var onlineResources=cswRecords[i].onlineResources;
+            for (j=0; j<onlineResources.length; j++) {
+                if (onlineResources[j].type=='WMS') {
+                    //http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc?REQUEST=GetLegendGraphic&SERVICE=WMS&VERSION=1.3.0&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF&LAYER=z&LAYERS=z&WIDTH=188
+                    var url = onlineResources[j].url + 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
+                                        +'&LAYER='+onlineResources[j].name+'&LAYERS='+onlineResources[j].name+'&WIDTH=188';
+                    $scope.wmsLegends[cswRecords[i].adminArea]=url;
+                }
+            }
+        }
+    }
+    
+    // Gather up BBOX coordinates to calculate the centre and envelope
     for (i=0; i<cswRecords.length; i++) {
         var bbox = cswRecords[i].geographicElements[0];
         if (bbox != undefined && (bbox.westBoundLongitude!=0 || bbox.northBoundLatitude!=0 || bbox.eastBoundLongitude!=0 || bbox.southBoundLatitude!=0) 
@@ -22,8 +65,7 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
             featureArr.push(turf.point([bbox.eastBoundLongitude, bbox.northBoundLatitude]));
         }
 
-        // Gather up lists of information URLs and legend URLs
-        var hasMinOccView = false;
+        // Gather up lists of information URLs 
         var onlineResources=cswRecords[i].onlineResources;
         for (j=0; j<onlineResources.length; j++) {
             if (onlineResources[j].type=='WMS') {
@@ -31,41 +73,11 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
                         + escape(onlineResources[j].name) + "&SRS=EPSG:4326&BBOX="+bbox.westBoundLongitude+","+bbox.southBoundLatitude+","+bbox.eastBoundLongitude+","+bbox.northBoundLatitude
                         + "&WIDTH=400&HEIGHT=400";
                 $scope.wmsUrls[cswRecords[i].adminArea]=url;
-                // Mineral Occurrences report has its own style for the legend, set a flag and fetch it later
-                if (onlineResources[j].name=='mo:MinOccView') {
-                    hasMinOccView = true;
-                } else {
-                    // Apply generic URL to get the icon for the legend
-                    var url = onlineResources[j].url + 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
-                                +'&LAYER='+onlineResources[j].name+'&LAYERS='+onlineResources[j].name+
-                                '&WIDTH=188';
-                    $scope.wmsLegends[cswRecords[i].adminArea]=url;
-                    //http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc?REQUEST=GetLegendGraphic&SERVICE=WMS&VERSION=1.3.0&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF&LAYER=z&LAYERS=z&WIDTH=188
-                }
             }
         }
     }
+    
 
-    // Mineral Occurrences report has its own style for the legend, it is time to fetch it.
-    if (hasMinOccView==true) {
-        GetMinOccurViewFilterStyle.getFilterStyle().then(function(data) {
-            if (data!="" && data.length < 2000) {
-                for (i=0; i<cswRecords.length; i++) {
-                    var onlineResources=cswRecords[i].onlineResources;
-                    for (j=0; j<onlineResources.length; j++) {
-                        if (onlineResources[j].type=='WMS') {
-                            if (onlineResources[j].name=='mo:MinOccView') {
-                                var url = onlineResources[j].url + 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
-                                 +'&LAYER=mo:MinOccView&LAYERS=mo:MinOccView&SLD_BODY='+escape(data)
-                                 +'&LEGEND_OPTIONS=forceLabels:on;minSymbolSize:16';
-                                $scope.wmsLegends[cswRecords[i].adminArea]=url;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
 
     // Use 'turf' to calculate the centre point of the BBOXES, use this to re-centre the map
     // Only calculate centre if the coords are not dispersed over the globe
