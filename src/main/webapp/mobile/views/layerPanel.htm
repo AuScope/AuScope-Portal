@@ -13,7 +13,7 @@
 			   
 			      <uib-accordion-heading>
 			        <span><i ng-if="renderStatus.group[group].activeLayerCount > 0" class="pull-left margin-right">
-			        <round-progress max="renderStatus.group[group].max" current="renderStatus.group[group].current" radius="9" stroke="4" color="#acea44">
+			        <round-progress max="renderStatus.group[group].max+1" current="renderStatus.group[group].current+1" radius="9" stroke="4" color="#acea44">
 			        </round-progress></i>{{group}}</span> 
 			        <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group].isOpen, 'glyphicon glyphicon-plus': !status[group].isOpen}"></i>
 			        
@@ -27,7 +27,7 @@
 					  </thead>
 					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',group,cswRecord.id)" class="layer-row" ng-class="{'layer-selected':  status[group][cswRecord.id].isExpanded}">
 						   	<td>{{cswRecord.name}}<br>
-						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max"><uib-progressbar  class="progress-striped active" style="height:5px" type="success" max="renderStatus[cswRecord.id].max" value="renderStatus[cswRecord.id].completed"></uib-progressbar></div>
+						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max"><uib-progressbar  class="progress-striped active" style="height:5px" type="success" max="renderStatus[cswRecord.id].max +1" value="renderStatus[cswRecord.id].completed +1"></uib-progressbar></div>
 						   	</td>
 						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.filter}" aria-hidden="true" ng-click="togglePanels('filter',group,cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.info}" aria-hidden="true" ng-click="togglePanels('info',group,cswRecord.id);$event.stopPropagation();"></i></td>

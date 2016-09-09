@@ -130,6 +130,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
     this.renderLayer = function(layer){   
         var map =  GoogleMapService.getMap();
         var me = this;
+        var maxSldLength = 2000;
         
         var registerTileLoadedEvent = function(mapLayer, layer,onlineResource,status){
             google.maps.event.addListener(mapLayer, 'tilesloaded', function(evt) {
@@ -145,12 +146,12 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
-                    var mapLayer = me.generateWMS_1_1_1_Layer(onlineResources[index],style);                        
+                    var mapLayer = me.generateWMS_1_1_1_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null));                        
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer.id,mapLayer);                   
                 }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
-                    var mapLayer = me.generateWMS_1_3_0_Layer(onlineResources[index],style); 
+                    var mapLayer = me.generateWMS_1_3_0_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null)); 
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer.id,mapLayer);

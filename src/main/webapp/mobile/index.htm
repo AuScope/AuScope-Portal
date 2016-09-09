@@ -91,6 +91,12 @@
 	<body ng-app="app" ng-controller="googleMapCtrl">
 			
 		<div class="angular-google-map-container">
+		    <div id="floating-progressbar">
+		      <div class="row">		
+			        <div ng-repeat="(group,status) in floatingGroupStatus" class="col-sm-12"><uib-progressbar ng-if="status.activeLayerCount!=0" class="progress-striped" max="status.max+1" value="status.current+1" type="success">{{group}}</uib-progressbar></div>
+			    </div>
+		    </div>
+		      
 			<layer-panel ng-show="showlayerPanel" class='layer-panel animated fadeInLeft' ></layer-panel>
 			<active-panel ng-show="showActivePanel" class='layer-panel animated fadeInLeft'  active-view="active" show-active-panel = "showActivePanel" ></active-panel>
 						

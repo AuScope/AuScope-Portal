@@ -65,7 +65,7 @@ app.directive('infoPanel', function() {
 app.directive('filterPanel', function($http,$templateCache,$compile) {
     return {
         scope: {
-            filterPanelCsw  : "=",                  
+            filterPanelCsw  : "=",  
         },
         templateUrl: 'views/filters/loadFilter.htm'
        

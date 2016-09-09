@@ -58,6 +58,10 @@ html,body {
  
 }
 
+#floating-progressbar{
+	  display : none;  
+}
+
 @media screen and (max-width: 658px) {
 	.map-overlay-panel-toggle {      
 	  top : 10px;
@@ -69,7 +73,21 @@ html,body {
 	#inputValidation{
 	   width : 200px;
 	}
+	
+	#floating-progressbar{	
+	  display:block;  
+	  top : 60px;
+	  left : 2em;     
+	  position: absolute;   
+	  z-index: 50;
+	  width:150px;  
+	}
 }
+
+
+
+
+
 
 /* textbox css*/
 .border-none, .border-none:focus {
@@ -102,7 +120,6 @@ html,body {
 /* add padding  */
 .left-addon input  { padding-left:  30px; }
 .right-addon input { padding-right: 30px; }
-
 
 
 /*overlay layer panel*/ 
