@@ -4,8 +4,8 @@
  * @class WFSService
  * 
  */
-allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService) {
+allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService','RenderStatusService',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService,RenderStatusService) {
    
       /**
         * Render a point data to the map 
@@ -51,11 +51,15 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             var map =  GoogleMapService.getMap();            
             var me = this;
             var onlineResources = LayerManagerService.getWFS(layer);
+            RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){
-             
+                RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
+                
                 GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index]).then(function(response){
                     var rootNode = GMLParserService.getRootNode(response.data.gml);
                     var primitives = GMLParserService.makePrimitives(rootNode);
+                    
+                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     
                     for(var key in primitives){
                         switch(primitives[key].geometryType){

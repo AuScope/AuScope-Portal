@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngAnimate','allControllers','allModules','ui.bootstrap','uiGmapgoogle-maps']);
+var app = angular.module('app', ['ngAnimate','allControllers','allModules','ui.bootstrap','uiGmapgoogle-maps','angular-svg-round-progressbar']);
 
 app.constant('Constants', {
     resourceType: {

@@ -140,7 +140,9 @@ html,body {
 	
 }
 
-
+.accordion-header-override .panel-title{
+	font-size:15px;
+}
 
 .panel-selected .panel-heading {
   background-color: #d14f30;  
@@ -183,8 +185,4 @@ html,body {
 	margin:0;
 }
 
-.progress {
-  background-color: #757575;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
+

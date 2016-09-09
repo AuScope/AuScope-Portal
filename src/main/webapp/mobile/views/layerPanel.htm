@@ -9,10 +9,10 @@
 		</div>
 		<div>
 			<uib-accordion close-others="true">	
-			   <div ng-repeat="(group,records) in layerPanel.getCswRecords()" uib-accordion-group ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
+			   <div ng-repeat="(group,records) in layerPanel.getCswRecords()" uib-accordion-group class="accordion-header-override" ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
 			   
 			      <uib-accordion-heading>
-			        {{group}} <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group].isOpen, 'glyphicon glyphicon-plus': !status[group].isOpen}"></i>
+			        <i class="pull-left"><round-progress max="3" current="1" radius="9" stroke="4"></round-progress></i>&nbsp; {{group}} <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group].isOpen, 'glyphicon glyphicon-plus': !status[group].isOpen}"></i>
 			      </uib-accordion-heading>
 			      <div>
 			      	<table class="table table-sm table-inverse layer-selection">
@@ -23,7 +23,7 @@
 					  </thead>
 					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',group,cswRecord.id)" class="layer-row" ng-class="{'layer-selected':  status[group][cswRecord.id].isExpanded}">
 						   	<td>{{cswRecord.name}}<br>
-						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max"><uib-progressbar  class="progress-striped active" style="height:5px" type="success" max="renderStatus[cswRecord.id].max" value="renderStatus[cswRecord.id].complete"></uib-progressbar></div>
+						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max"><uib-progressbar  class="progress-striped active" style="height:5px" type="success" max="renderStatus[cswRecord.id].max" value="renderStatus[cswRecord.id].completed"></uib-progressbar></div>
 						   	</td>
 						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.filter}" aria-hidden="true" ng-click="togglePanels('filter',group,cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.info}" aria-hidden="true" ng-click="togglePanels('info',group,cswRecord.id);$event.stopPropagation();"></i></td>

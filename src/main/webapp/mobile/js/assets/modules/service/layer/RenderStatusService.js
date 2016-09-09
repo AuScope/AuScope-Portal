@@ -18,15 +18,28 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
     /**
      * Set the total number of request, used in progress bar
      * @method setMaxValue
-     * @param layerId - layerId
+     * @param layer - layer
      * @param maxValue - the max value used in progress bar
      */
-    this.setMaxValue = function(layerId,maxValue){
-        if(UtilitiesService.isEmpty(this.renderStatus[layerId])){
-            this.renderStatus[layerId]={};
+    this.setMaxValue = function(layer,maxValue){
+        if(UtilitiesService.isEmpty(this.renderStatus[layer.id])){
+            this.renderStatus[layer.id]={};
         }
-        this.renderStatus[layerId].max=maxValue;
-        this.renderStatus[layerId].complete = 0;
+        this.renderStatus[layer.id].max=maxValue;
+        this.renderStatus[layer.id].completed = 0;
+        
+        if(UtilitiesService.isEmpty(this.renderStatus.group)){
+            this.renderStatus.group={};
+            this.renderStatus.group[layer.group]={};
+            this.renderStatus.group[layer.group].max=0;
+        }
+        
+        if(UtilitiesService.isEmpty(this.renderStatus.group[layer.group])){          
+            this.renderStatus.group[layer.group]={};
+            this.renderStatus.group[layer.group].max=0;
+        }
+        
+        this.renderStatus.group[layer.group].max += maxValue;
     };
     
     /**
@@ -48,21 +61,22 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
     /**
      * update the status of the rendering request
      * @method updateCompleteStatus
-     * @param layerId - the id of the layer
+     * @param layer - the layer
      * @param resource - the resource
      * @param status - Constants.statusProgress
      */
-    this.updateCompleteStatus = function(layerId,resource,status){  
-        if(UtilitiesService.isEmpty(this.renderStatus[layerId])){
-            this.renderStatus[layerId]={};
+    this.updateCompleteStatus = function(layer,resource,status){  
+        if(UtilitiesService.isEmpty(this.renderStatus[layer.id])){
+            this.renderStatus[layer.id]={};
         }
-        if(UtilitiesService.isEmpty(this.renderStatus[layerId].resources)){
-            this.renderStatus[layerId].resources = {};
+        if(UtilitiesService.isEmpty(this.renderStatus[layer.id].resources)){
+            this.renderStatus[layer.id].resources = {};
         }
-        this.renderStatus[layerId].resources[resource.url] = resource;
-        this.renderStatus[layerId].resources[resource.url].status = status;
+        this.renderStatus[layer.id].resources[resource.url] = resource;
+        this.renderStatus[layer.id].resources[resource.url].status = status;
         if(status == Constants.statusProgress.COMPLETED || status == Constants.statusProgress.ERROR){
-            this.renderStatus[layerId].complete = this.renderStatus[layerId].complete + 1;
+            this.renderStatus[layer.id].completed +=  1;
+            this.renderStatus.group[layer.group].max -= 1;
         };
         
         this.broadcast(this.renderStatus);
