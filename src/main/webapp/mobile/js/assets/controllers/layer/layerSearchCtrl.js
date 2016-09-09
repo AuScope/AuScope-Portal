@@ -4,7 +4,7 @@
  * @class layerSearchCtrl
  * 
  */
-allControllers.controller('searchController', ['$scope', 'GetCSWRecordService', function ($scope,GetCSWRecordService) {
+allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', function ($scope,GetCSWRecordService) {
     /**
      * This is triggered after the user types inside the search text field and press enter.
      * It will search through all known layers CSW records name and description that matches the keywords.
