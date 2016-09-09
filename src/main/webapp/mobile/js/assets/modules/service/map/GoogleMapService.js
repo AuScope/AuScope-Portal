@@ -60,24 +60,24 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
    /**
     * Remove the layer if it is rendered on the map
     * @method removeActiveLayer
-    * @param layerId - the layerId to remove 
+    * @param layer - the csw layer to remove from map 
     */ 
-    this.removeActiveLayer = function(layerId){
-        if(this.activeLayers[layerId]){
-            if(!UtilitiesService.isEmpty(this.activeLayers[layerId].markers)){
-                for (var i = 0; i < this.activeLayers[layerId].markers.length; i++) {
-                    this.activeLayers[layerId].markers[i].setMap(null);
+    this.removeActiveLayer = function(layer){
+        if(this.activeLayers[layer.id]){
+            if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].markers)){
+                for (var i = 0; i < this.activeLayers[layer.id].markers.length; i++) {
+                    this.activeLayers[layer.id].markers[i].setMap(null);
                  };
             };
             
-            if(!UtilitiesService.isEmpty(this.activeLayers[layerId].layers)){
-                for (var i = 0; i < this.activeLayers[layerId].layers.length; i++) {
-                    var layerIndex = this.mainMap.overlayMapTypes.indexOf(this.activeLayers[layerId].layers[i]);
+            if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)){
+                for (var i = 0; i < this.activeLayers[layer.id].layers.length; i++) {
+                    var layerIndex = this.mainMap.overlayMapTypes.indexOf(this.activeLayers[layer.id].layers[i]);
                     this.mainMap.overlayMapTypes.removeAt(layerIndex);
                  };
-                 this.activeLayers[layerId].layers=[];
+                 this.activeLayers[layer.id].layers=[];
             };
-            RenderStatusService.clearStatus(layerId);
+            RenderStatusService.clearStatus(layer);
         };
     };
      

@@ -32,14 +32,19 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
             this.renderStatus.group={};
             this.renderStatus.group[layer.group]={};
             this.renderStatus.group[layer.group].max=0;
+            this.renderStatus.group[layer.group].current=0;
+            this.renderStatus.group[layer.group].activeLayerCount = 0;
         }
         
         if(UtilitiesService.isEmpty(this.renderStatus.group[layer.group])){          
             this.renderStatus.group[layer.group]={};
             this.renderStatus.group[layer.group].max=0;
+            this.renderStatus.group[layer.group].current=0;
+            this.renderStatus.group[layer.group].activeLayerCount = 0;
         }
         
         this.renderStatus.group[layer.group].max += maxValue;
+        this.renderStatus.group[layer.group].activeLayerCount += 1;
     };
     
     /**
@@ -76,7 +81,7 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
         this.renderStatus[layer.id].resources[resource.url].status = status;
         if(status == Constants.statusProgress.COMPLETED || status == Constants.statusProgress.ERROR){
             this.renderStatus[layer.id].completed +=  1;
-            this.renderStatus.group[layer.group].max -= 1;
+            this.renderStatus.group[layer.group].current += 1;
         };
         
         this.broadcast(this.renderStatus);
@@ -89,8 +94,9 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      * @method clearStatus
      * @param layerId - layerId
      */
-    this.clearStatus = function(layerId){
-        this.renderStatus[layerId] = {};
+    this.clearStatus = function(layer){
+        this.renderStatus[layer.id] = {};
+        this.renderStatus.group[layer.group].activeLayerCount -= 1;
     };
      
    

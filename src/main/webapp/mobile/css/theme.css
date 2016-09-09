@@ -185,4 +185,12 @@ html,body {
 	margin:0;
 }
 
+.progress {
+  background-color: #838383;
 
+}
+
+
+.margin-right{
+	margin-right: 5px;
+}
