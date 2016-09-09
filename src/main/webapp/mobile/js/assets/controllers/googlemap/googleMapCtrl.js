@@ -7,6 +7,16 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
                                             function ($scope,$rootScope,GoogleMapService,RenderStatusService,$timeout) {
     
     $scope.active = {};
+    
+    $scope.showlayerPanel=false;
+    
+    //VT: on a small screen, close the panel after adding the layer
+    var mq = window.matchMedia( "(max-width: 658px)" );
+    if(mq.matches){
+        $scope.$on('layer.add', function (evt,layer) {
+            $scope.showlayerPanel=false;
+        });
+    }
 
     GoogleMapService.initMap();
 

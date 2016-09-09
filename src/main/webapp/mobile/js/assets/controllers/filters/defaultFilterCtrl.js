@@ -14,8 +14,6 @@ allControllers.controller('defaultFilterCtrl', ['$scope','RenderHandlerService',
         RenderHandlerService.renderLayer(layer);
     };
     
-    $scope.removeLayer = function(filterPanelCsw){
-        GoogleMapService.removeActiveLayer(filterPanelCsw);
-    };
+   
     
 }]);
