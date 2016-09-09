@@ -99,9 +99,11 @@ allControllers.factory('PreviewMapService', ['GoogleMapService', function(Google
         *
         */
         setBBoxOptions: function(reportName, adminArea, options) {
-            var rectObj = mapStore[reportName][adminArea];
-            if (rectObj != undefined) {
-                rectObj.setOptions(options);
+            if (mapStore[reportName]!= undefined) {
+                var rectObj = mapStore[reportName][adminArea];
+                if (rectObj != undefined) {
+                    rectObj.setOptions(options);
+                }
             }
         }
         
