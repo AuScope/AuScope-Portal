@@ -59,7 +59,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                     var rootNode = GMLParserService.getRootNode(response.data.gml);
                     var primitives = GMLParserService.makePrimitives(rootNode);
                     
-                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.COMPLETED);
+                    RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.COMPLETED);
                     
                     for(var key in primitives){
                         switch(primitives[key].geometryType){

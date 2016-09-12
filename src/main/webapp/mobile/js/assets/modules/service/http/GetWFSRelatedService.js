@@ -22,6 +22,8 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
                      typeName : onlineResource.name
                  }
              }).then(function (response) {
+                 //VT: include the corresponding resource used to retrieve this result.
+                 response.data.resource = onlineResource;
                  return response.data;
              });
         }else{

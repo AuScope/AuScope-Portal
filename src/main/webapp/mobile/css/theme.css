@@ -135,6 +135,13 @@ html,body {
  
 }
 
+@media screen and (min-width: 658px) {
+    .layer-panel{
+	  width: 30em;	 
+	}
+}
+
+
 .layer-panel.ng-hide {
   animation: fadeOutLeft 1s;
 }
@@ -188,7 +195,8 @@ html,body {
 }
 
 .layer-selection .layer-selected{
-    background-color:#f0f8ff;
+    background-color:#f0f8ff;    
+    
 }
 
 
@@ -199,7 +207,8 @@ html,body {
 .layer-progress-bar{
 	height:5px;
 	padding:0;
-	margin:0;
+	margin:5px 0 0 0;
+	width: 80%;
 }
 
 .progress {
@@ -210,4 +219,9 @@ html,body {
 
 .margin-right{
 	margin-right: 5px;
+}
+
+.render-status-panel div{
+	font-size:12px;
+	padding-left:3px;
 }

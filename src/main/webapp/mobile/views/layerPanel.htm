@@ -27,7 +27,7 @@
 					  </thead>
 					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',group,cswRecord.id)" class="layer-row" ng-class="{'layer-selected':  status[group][cswRecord.id].isExpanded}">
 						   	<td><span ng-if="renderStatus[cswRecord.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(cswRecord)" style="color:red;font-size: 15px;margin-right:3px;" aria-hidden="true"></span>{{cswRecord.name}}<br>
-						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max">  
+						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max" ng-click="togglePanels('statusInfo',group,cswRecord.id);$event.stopPropagation();">  
 						   	  <uib-progressbar  class="progress-striped active" style="height:5px" type="success" max="renderStatus[cswRecord.id].max +1" value="renderStatus[cswRecord.id].completed +1">
 						   	  </uib-progressbar>
 						   	  </div>
@@ -36,13 +36,7 @@
 						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.info}" aria-hidden="true" ng-click="togglePanels('info',group,cswRecord.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-map fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][cswRecord.id].panels.analytic}" aria-hidden="true" ng-click="togglePanels('analytic',group,cswRecord.id);$event.stopPropagation();"></i></td>
 					   </tr>
-					  	
-                             removeLayer
-                       	
-					  
-					 
-					  				   
-					   <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.filter, 'no-animation': !status[group][cswRecord.id].panels.filter}" ng-show="status[group][cswRecord.id].panels.filter">
+                       <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.filter, 'no-animation': !status[group][cswRecord.id].panels.filter}" ng-show="status[group][cswRecord.id].panels.filter">
                         <td colspan="4">
                             <filter-panel  filter-panel-csw="cswRecord"  class='layer-panel-nested'></filter-panel>                                  
                         </td>
@@ -51,10 +45,21 @@
 					        <td colspan="4">
 					           <info-panel  info-panel-csw="cswRecord" ></info-panel>
 					         </td>
-					    </tr>
-					   <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.analytic, 'no-animation': !status[group][cswRecord.id].panels.analytic}" ng-show="status[group][cswRecord.id].panels.analytic" ng-repeat-end>
+					   </tr>
+					   <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.analytic, 'no-animation': !status[group][cswRecord.id].panels.analytic}" ng-show="status[group][cswRecord.id].panels.analytic">
                         <td colspan="4">
                             <p>Add some analytic quick brown fox that jumped over the lazy dog here</p>
+                        </td>
+                       </tr>
+                       <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.statusInfo, 'no-animation': !status[group][cswRecord.id].panels.statusInfo}" ng-show="status[group][cswRecord.id].panels.statusInfo" ng-repeat-end>
+                        <td colspan="4">                           
+                           <div ng-repeat="resource in renderStatus[cswRecord.id].resources" class="render-status-panel">                                  
+                              <div ng-switch on="resource.status">
+	                             <div ng-switch-when="RUNNING"><span class="fa fa-spinner fa-spin" style="color:orange"></span> {{ resource.url | limitTo: 40 }}{{resource.url.length > 20 ? "..." : resource.url}}</div>
+	                             <div ng-switch-when="COMPLETED"><span  class="fa fa-check-square" style="color:green"></span> {{ resource.url | limitTo: 40 }}{{resource.url.length > 20 ? "..." : resource.url}}</div>
+	                             <div ng-switch-when="ERROR"><span ng-switch-when="ERROR" class="fa fa-exclamation-triangle" style="color:red"></span> {{ resource.url | limitTo: 40 }}{{resource.url.length > 20 ? "..." : resource.url}}</div>
+                              </div>	                              	                               
+                           </div>                                                                 
                         </td>
                        </tr>
 					    
