@@ -26,6 +26,10 @@ html,body {
 	color: #000080;
 }
 
+.white {
+    color: #ffffff;
+}
+
 .activeView-table {
 	margin-left:10px;
 }
@@ -55,17 +59,38 @@ html,body {
   left : 2em;	  
   position: absolute;   
   z-index: 50;
- 
+  width: 280px;
+  background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
+  background: rgba(54, 25, 25, .5);
+  padding:20px 20px 20px 20px;
 }
 
 #floating-progressbar{
 	  display : none;  
 }
 
+
+
+#logo-menu{  
+     margin: 0px 20px 10px 0px 
+}
+
+#logo-menu-mobile{  
+     display:none;
+    }
+
+#logo-menu > img{  
+    width:180px;  
+}
+
+
+
+
 @media screen and (max-width: 658px) {
 	.map-overlay-panel-toggle {      
 	  top : 10px;
 	  left : 1em;     
+	  width: auto;
 	  position: absolute;   
 	  z-index: 50;
 	}
@@ -81,6 +106,31 @@ html,body {
 	  position: absolute;   
 	  z-index: 50;
 	  width:150px;  
+	}
+	
+	#logo-menu-mobile{  
+      bottom : 60px;
+      left : 0.5em;     
+      width:100px;  
+      display:block;  
+      position: absolute;   
+      z-index: 50;
+	}
+	
+	#logo-menu{  
+        display:none;
+    }
+	
+	#logo-menu-mobile > img{  
+	    width:120px;  
+	}
+	
+	.map-overlay-panel-toggle {      	 
+	  background: none;	  	
+	}
+	
+	.quick-menu div{    
+	   display:none;
 	}
 }
 
@@ -107,15 +157,16 @@ html,body {
 
 
 /* style icon */
-.inner-addon .leftglyphicon {
+.inner-addon .leftglyphicon{
   position: absolute;
   padding: 10px;
-  pointer-events: none;
 }
 
 /* align icon */
 .left-addon .leftglyphicon  { left:  0px;}
-.right-addon .rightglyphicon { right: 0px;}
+.right-addon .rightglyphicon { right: 0px;
+}
+
 
 /* add padding  */
 .left-addon input  { padding-left:  30px; }
@@ -221,7 +272,17 @@ html,body {
 	margin-right: 5px;
 }
 
+.margin-top-5{
+    margin-top: 5px;
+}
+
 .render-status-panel div{
 	font-size:12px;
 	padding-left:3px;
+}
+
+.quick-menu div,
+.quick-menu div a{	
+	font-weight: bold;
+	color: white;
 }
