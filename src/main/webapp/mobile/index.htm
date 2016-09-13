@@ -92,12 +92,12 @@
 			<layer-panel ng-show="showlayerPanel" class='layer-panel animated fadeInLeft' ></layer-panel>
 			<active-panel ng-show="showActivePanel" class='layer-panel animated fadeInLeft'  active-view="active" show-active-panel = "showActivePanel" ></active-panel>
 						
-			<div class="map-overlay-panel-toggle animated zoomIn">	
+			<div class="map-overlay-panel-toggle animated zoomIn" ng-controller="layerSearchCtrl as searchCtrl">	
 			   	<div id="logo-menu">             
                   <img src="img/AuScope-logo-220.jpg">
                 </div>   
 			    <div class="form-inline">
-				  <div class="form-group has-feedback inner-addon left-addon" ng-controller="layerSearchCtrl as searchCtrl">
+				  <div class="form-group has-feedback inner-addon left-addon" >
  					<form ng-submit="searchCtrl.submit()">
 						<span ng-click="searchCtrl.submit()" class="leftglyphicon glyphicon glyphicon-menu-hamburger hasEvent"></span>
 						<input type="text" class="form-control border-none" id="inputValidation" placeholder="Search" ng-model="keywords" />
@@ -109,7 +109,7 @@
 				</div>				   
 				<div class="row quick-menu">				    
 			       <div class="col-xs-3"><i ng-click="addHeatMapOverlay()" class="fa fa-object-group fa-2x white hasEvent" aria-hidden="true"></i><br><small>Heat Map</small></div>
-                   <div class="col-xs-3"><i class="fa fa-cog fa-2x white hasEvent" aria-hidden="true"></i><br><small>More Settings</small></div>
+                   <div class="col-xs-3"><i ng-click="searchCtrl.submit()" class="fa fa-bars fa-2x white hasEvent" aria-hidden="true"></i><br><small>View Layers</small></div>
                    <div class="col-xs-3"><a href="mailto:cg-admin@csiro.au" target="_top"><i class="fa fa-envelope fa-2x white hasEvent" aria-hidden="true"></i><br><small>Email us</small></a></div>                   
                    <div class="col-xs-3"><a href="http://www.auscope.org/" target="_blank"><i class="fa fa-bookmark fa-2x white hasEvent" aria-hidden="true"></i><br><small>Auscope Website</small></a></div>
                 </div>                  						
