@@ -29,5 +29,17 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
         },0);
     });
     
+    
+    $scope.addHeatMapOverlay = function(){
+        if(GoogleMapService.heatmap==null){
+            var containsPoint = GoogleMapService.addHeatMapOverlay();
+            if(!containsPoint){
+                alert("No Points rendered on Map yet. Add a point layer to utilize heatmap");
+            }
+        }else{
+            GoogleMapService.removeHeatMapOverlay();
+        }
+    };
+    
 
 }]);

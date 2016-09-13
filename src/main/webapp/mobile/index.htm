@@ -93,9 +93,9 @@
 			<active-panel ng-show="showActivePanel" class='layer-panel animated fadeInLeft'  active-view="active" show-active-panel = "showActivePanel" ></active-panel>
 						
 			<div class="map-overlay-panel-toggle animated zoomIn">	
-			    <div id="logo-menu">             
-	              <img src="img/AuScope-logo-220.jpg">
-	            </div>		   
+			   	<div id="logo-menu">             
+                  <img src="img/AuScope-logo-220.jpg">
+                </div>   
 			    <div class="form-inline">
 				  <div class="form-group has-feedback inner-addon left-addon" ng-controller="layerSearchCtrl as searchCtrl">
  					<form ng-submit="searchCtrl.submit()">
@@ -106,13 +106,13 @@
 						<input type="submit" style="height: 0px; width: 0px; border: none; padding: 0px;" hidefocus="true" />  
  					</form>
 				  </div>
-				</div>
+				</div>				   
 				<div class="row quick-menu">				    
-				    <div class="col-xs-3"><i class="fa fa-subway fa-2x white hasEvent" aria-hidden="true"></i><br><small>Transit</small></div>
-                    <div class="col-xs-3"><i class="fa fa-car fa-2x white hasEvent" aria-hidden="true"></i><br><small>Traffic</small></div>
-                    <div class="col-xs-3"><a href="mailto:cg-admin@csiro.au" target="_top"><i class="fa fa-envelope fa-2x white hasEvent" aria-hidden="true"></i><br><small>Email us</small></a></div>                   
-                    <div class="col-xs-3"><a href="http://www.auscope.org/" target="_top"><i class="fa fa-bookmark fa-2x white hasEvent" aria-hidden="true"></i><br><small>Auscope Website</small></a></div>
-                 </div> 						 
+			       <div class="col-xs-3"><i ng-click="addHeatMapOverlay()" class="fa fa-object-group fa-2x white hasEvent" aria-hidden="true"></i><br><small>Heat Map</small></div>
+                   <div class="col-xs-3"><i class="fa fa-cog fa-2x white hasEvent" aria-hidden="true"></i><br><small>More Settings</small></div>
+                   <div class="col-xs-3"><a href="mailto:cg-admin@csiro.au" target="_top"><i class="fa fa-envelope fa-2x white hasEvent" aria-hidden="true"></i><br><small>Email us</small></a></div>                   
+                   <div class="col-xs-3"><a href="http://www.auscope.org/" target="_blank"><i class="fa fa-bookmark fa-2x white hasEvent" aria-hidden="true"></i><br><small>Auscope Website</small></a></div>
+                </div>                  						
 			</div>
 			<div class="full-map">	
 				<div class="google-map" id="google-map-main"></div>

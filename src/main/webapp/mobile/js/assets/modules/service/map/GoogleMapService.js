@@ -8,7 +8,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
    
     this.mainMap;
     this.activeLayers = {};
-    
+    this.heatmap = null;
     /**
      * Get an instance of the map
      * @Method getMap
@@ -32,6 +32,40 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         }
         this.activeLayers[layerId].markers.push(marker);
     };
+    
+    /**
+     * Overlay a heat map to the data set
+     * @method addHeatMapOverlay
+     */
+    this.addHeatMapOverlay = function(){
+        var heatmapData = [];        
+        for(var i in this.activeLayers){
+            for(var j in this.activeLayers[i].markers){
+                heatmapData.push(new google.maps.LatLng(this.activeLayers[i].markers[j].position.lat(),this.activeLayers[i].markers[j].position.lng()));
+            }
+        }
+        if(!UtilitiesService.isEmpty(heatmapData)){
+            this.heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatmapData
+            });
+            this.heatmap.set('radius', 20);
+            this.heatmap.setMap(this.mainMap);
+            return true;
+        }
+        return false;
+    };
+    
+    /**
+     * remove the heatmap overlay
+     * @method removeHeatMapOverlay
+     */
+    this.removeHeatMapOverlay = function(){  
+        
+        this.heatmap.setMap(null);        
+        this.heatmap=null;
+    };
+    
+    
     
     /**
      * Holds a array reference to the active layers on the map referenced by the layerId
@@ -66,8 +100,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         if(this.activeLayers[layer.id]){
             if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].markers)){
                 for (var i = 0; i < this.activeLayers[layer.id].markers.length; i++) {
-                    this.activeLayers[layer.id].markers[i].setMap(null);
+                    this.activeLayers[layer.id].markers[i].setMap(null);                    
                  };
+                 this.activeLayers[layer.id].markers=[];
             };
             
             if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)){
@@ -93,7 +128,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
            zoom: (mq.matches? 3 : 5),
            mapTypeControlOptions: {
                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU ,
-               position: google.maps.ControlPosition.TOP_RIGHT
+               position: google.maps.ControlPosition.TOP_LEFT
            },
          });
 

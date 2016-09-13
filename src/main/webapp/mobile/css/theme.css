@@ -56,7 +56,7 @@ html,body {
 
 .map-overlay-panel-toggle {      
   top : 50px;
-  left : 2em;	  
+  right : 2em;	  
   position: absolute;   
   z-index: 50;
   width: 280px;
@@ -88,8 +88,8 @@ html,body {
 
 @media screen and (max-width: 658px) {
 	.map-overlay-panel-toggle {      
-	  top : 10px;
-	  left : 1em;     
+	  top : -10px;
+	  right : 1em;     
 	  width: auto;
 	  position: absolute;   
 	  z-index: 50;
@@ -285,4 +285,5 @@ html,body {
 .quick-menu div a{	
 	font-weight: bold;
 	color: white;
+	text-align: center;
 }

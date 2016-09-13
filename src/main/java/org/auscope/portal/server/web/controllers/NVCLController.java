@@ -213,7 +213,7 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         // show all NVCL boreholes
-        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, 2, bbox, onlyHylogger, outputFormat, false);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, 20, bbox, onlyHylogger, outputFormat, false);
     }
 
     @RequestMapping("/doNVCLFilterHits.do")
