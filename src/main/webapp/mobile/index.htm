@@ -21,7 +21,7 @@
 		<link rel="apple-touch-icon-precomposed" sizes="152x152" href="img/ico/152.png" type="image/png"/>
 
 		<!-- javascript -->
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBArcbrWG8q6cUeP4WrhD3-s1D0aYbkxfA&libraries=visualization"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBArcbrWG8q6cUeP4WrhD3-s1D0aYbkxfA&libraries=visualization&libraries=drawing"></script>
 		
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js" type="text/javascript" ></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js" type="text/javascript" ></script>		
@@ -31,6 +31,7 @@
 		<script src="js/assets/framework/google-map/angular-google-maps.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/turf/turf.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/widgets/roundProgress.min.js" type="text/javascript" ></script>
+		<script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
 		
 		
 		
@@ -47,7 +48,9 @@
   		<script src="js/assets/controllers/layer/layerSearchCtrl.js"></script>
   		<script src="js/assets/controllers/active/activePanelCtrl.js"></script>
   		<script src="js/assets/controllers/info/infoPanelCtrl.js"></script>
-        <script src="js/assets/controllers/info/collapseInfoPanelCtrl.js"></script>  		
+        <script src="js/assets/controllers/info/collapseInfoPanelCtrl.js"></script>
+        <script src="js/assets/controllers/analytics/defaultAnalyticCtrl.js"></script> 
+        <script src="js/assets/controllers/analytics/loadAnalyticCtrl.js"></script>   		
   		
   		
   		<!-- Service -->
@@ -108,11 +111,22 @@
 				  </div>
 				</div>				   
 				<div class="row quick-menu">				    
-			       <div class="col-xs-3"><i ng-click="addHeatMapOverlay()" class="fa fa-object-group fa-2x white hasEvent" aria-hidden="true"></i><br><small>Heat Map</small></div>
-                   <div class="col-xs-3"><i ng-click="searchCtrl.submit()" class="fa fa-bars fa-2x white hasEvent" aria-hidden="true"></i><br><small>View Layers</small></div>
+			       <div class="col-xs-3"><i ng-click="addHeatMapOverlay()" class="fa fa-object-group fa-2x white hasEvent" aria-hidden="true"></i><br><small>Heat Map</small></div>			       
+                   <div class="col-xs-3"><i ng-click="toggleZoomDraw()" ng-class="{'fa fa-search-plus fa-2x white hasEvent': !zoomDrawActive, 'fa fa-pencil-square fa-2x red':zoomDrawActive}"  aria-hidden="true"></i><br>                    
+                    <div ng-switch on="zoomDrawActive">
+					      <div ng-switch-when="true"><small class="red">Draw bounds</small></div>
+					      <div ng-switch-when="false"><small class="white">Zoom Bound</small></div>
+					  </div>                   
+                   </div>                                      
                    <div class="col-xs-3"><a href="mailto:cg-admin@csiro.au" target="_top"><i class="fa fa-envelope fa-2x white hasEvent" aria-hidden="true"></i><br><small>Email us</small></a></div>                   
                    <div class="col-xs-3"><a href="http://www.auscope.org/" target="_blank"><i class="fa fa-bookmark fa-2x white hasEvent" aria-hidden="true"></i><br><small>Auscope Website</small></a></div>
-                </div>                  						
+                </div>  
+                
+                <div ng-hide="zoomDrawActive" class="quick-menu">
+                    <hr>
+                    <div class="col-xs-6" id="mouse-move-display-lat"></div>
+                    <div class="col-xs-6" id="mouse-move-display-lng"></div>
+                </div>                						
 			</div>
 			<div class="full-map">	
 				<div class="google-map" id="google-map-main"></div>

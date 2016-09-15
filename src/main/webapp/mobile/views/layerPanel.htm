@@ -38,17 +38,17 @@
 					   </tr>
                        <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.filter, 'no-animation': !status[group][cswRecord.id].panels.filter}" ng-show="status[group][cswRecord.id].panels.filter">
                         <td colspan="4">
-                            <filter-panel  filter-panel-csw="cswRecord"  class='layer-panel-nested'></filter-panel>                                  
+                            <filter-panel  cswrecord="cswRecord"  class='layer-panel-nested'></filter-panel>                                  
                         </td>
                        </tr>
 					   <tr class="layer-selected" ng-if="status[group][cswRecord.id].panels.info"  >
 					        <td colspan="4">
-					           <info-panel  info-panel-csw="cswRecord" ></info-panel>
+					              <info-panel  info-panel-csw="cswRecord" ></info-panel>
 					         </td>
 					   </tr>
 					   <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.analytic, 'no-animation': !status[group][cswRecord.id].panels.analytic}" ng-show="status[group][cswRecord.id].panels.analytic">
                         <td colspan="4">
-                            <p>Add some analytic quick brown fox that jumped over the lazy dog here</p>
+                            <analytic-panel  cswrecord="cswRecord" ></analytic-panel>
                         </td>
                        </tr>
                        <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][cswRecord.id].panels.statusInfo, 'no-animation': !status[group][cswRecord.id].panels.statusInfo}" ng-show="status[group][cswRecord.id].panels.statusInfo" ng-repeat-end>

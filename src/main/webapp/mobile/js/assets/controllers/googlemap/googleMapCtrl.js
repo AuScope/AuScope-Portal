@@ -10,6 +10,16 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
     
     $scope.showlayerPanel=false;
     
+    $scope.zoomDrawActive = false;
+    
+    GoogleMapService.onDrawZoomStart($scope,function(){
+        $scope.zoomDrawActive = true;
+    });
+    
+    GoogleMapService.onDrawZoomEnd($scope,function(){
+        $scope.zoomDrawActive = false;
+    });
+    
     //VT: on a small screen, close the panel after adding the layer
     var mq = window.matchMedia( "(max-width: 658px)" );
     if(mq.matches){
@@ -39,6 +49,14 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
         }else{
             GoogleMapService.removeHeatMapOverlay();
         }
+    };
+    
+    $scope.toggleZoomDraw = function(){
+        if($scope.zoomDrawActive){
+            GoogleMapService.zoomDrawCancel();
+        }else{
+            GoogleMapService.zoomDraw();
+        }        
     };
     
 

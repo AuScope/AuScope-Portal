@@ -16,10 +16,10 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout', f
     * @method getFilterPanel
     */
     $scope.getFilterPanel = function(){
-        if($scope.urlNotFound['views/filters/'+$scope.filterPanelCsw.id+'.htm']==false){
+        if($scope.urlNotFound['views/filters/'+$scope.cswrecord.id+'.htm']==false){
             return 'views/filters/defaultFilter.htm';
         }else{
-            return 'views/filters/'+ $scope.filterPanelCsw.id+'.htm';
+            return 'views/filters/'+ $scope.cswrecord.id+'.htm';
         }
     };
 

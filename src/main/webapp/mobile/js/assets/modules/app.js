@@ -62,12 +62,22 @@ app.directive('infoPanel', function() {
 });
 
 
-app.directive('filterPanel', function($http,$templateCache,$compile) {
+app.directive('filterPanel', function() {
     return {
         scope: {
-            filterPanelCsw  : "=",  
+            cswrecord  : "=",  
         },
         templateUrl: 'views/filters/loadFilter.htm'
+       
+    };
+});
+
+app.directive('analyticPanel', function() {
+    return {
+        scope: {
+            cswrecord  : "=",  
+        },
+        templateUrl: 'views/analytic/loadAnalytic.htm'
        
     };
 });

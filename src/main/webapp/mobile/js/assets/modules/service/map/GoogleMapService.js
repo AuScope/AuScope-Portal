@@ -4,11 +4,15 @@
  * @class GoogleMapService
  * 
  */
-allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService',function ($rootScope,UtilitiesService,RenderStatusService) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter',
+                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter) {
    
     this.mainMap;
     this.activeLayers = {};
     this.heatmap = null;
+    this.drawingManager = null;
+    
+    
     /**
      * Get an instance of the map
      * @Method getMap
@@ -131,12 +135,95 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                position: google.maps.ControlPosition.TOP_LEFT
            },
          });
-
+         
+         this.mainMap.addListener('mousemove', function(evt) {
+             $("#mouse-move-display-lat").text("Lat: " + $filter('number')(evt.latLng.lat(),2));
+             $("#mouse-move-display-lng").text("Lng: " + $filter('number')(evt.latLng.lng(),2));
+          });
+         
+      };
+      
+      /**
+       * Enable the drawing of rectangle and zooming to the area drawn
+       * @method zoomDraw
+       */
+      this.zoomDraw = function(){
+          this.broadcast('draw.zoom.start');
+          if(!this.drawingManager){
+              this.drawingManager = new google.maps.drawing.DrawingManager();
+              this.drawingManager.setOptions({
+                  drawingMode : google.maps.drawing.OverlayType.RECTANGLE,
+                  drawingControl : true,
+                  drawingControlOptions : {
+                      position : google.maps.ControlPosition.TOP_CENTER,
+                      drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE ]
+                  },
+                  rectangleOptions : {
+                      strokeColor : '#6c6c6c',
+                      strokeWeight : 3.5,
+                      fillColor : '#926239',
+                      fillOpacity : 0.6,
+                      editable: false,
+                      draggable: false
+                  }   
+              });
+          }          
+         
+          var me = this;
+          var afterZoomHandler = google.maps.event.addListener(this.drawingManager, 'rectanglecomplete', function(rect) {
+              me.mainMap.fitBounds(rect.bounds);
+              me.broadcast('draw.zoom.end');
+              google.maps.event.removeListener(afterZoomHandler);                
+              $timeout(function() {
+                  rect.setMap(null);
+              }, 1500);
+              me.drawingManager.setMap(null);
+          });
+          
+          // Loading the drawing Tool in the Map.
+          this.drawingManager.setMap(this.mainMap);
+      };
+      
+      /**
+       * cancel the drawing of rectangle and zooming to the area drawn
+       * @method zoomDrawCancel
+       */
+      this.zoomDrawCancel = function(){
+          this.broadcast('draw.zoom.end');              
+          this.drawingManager.setMap(null);
       };
    
     
     
-    
+      /**
+       * event to capture the start of the draw zoom event
+       * @method onDrawZoomStart
+       * @param $scope of the caller
+       * @param callback - callback function
+       */            
+      this.onDrawZoomStart = function ($scope, callback) {
+          $scope.$on('draw.zoom.start', function (evt) {
+              callback(evt);
+            });
+      };
+      
+      /**
+       * event to capture the end of the draw zoom event
+       * @method onDrawZoomEnd
+       * @param $scope of the caller
+       * @param callback - callback function
+       */  
+      this.onDrawZoomEnd = function ($scope, callback) {
+          $scope.$on('draw.zoom.end', function (evt) {
+              callback(evt);
+            });
+      };
+      
+      
+      
+      this.broadcast = function (event) {
+          $rootScope.$broadcast(event);
+      };
      
     
      
