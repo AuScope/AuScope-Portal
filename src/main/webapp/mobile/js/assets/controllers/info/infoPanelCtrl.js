@@ -4,7 +4,8 @@
  * @class infoPanelCtrl
  *
  */
-allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', 'StyleService', 'PreviewMapService', function ($scope,$rootScope, $element, StyleService, PreviewMapService) {
+allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', 'StyleService', 'PreviewMapService','RenderHandlerService', 
+                                            function ($scope,$rootScope, $element, StyleService, PreviewMapService,RenderHandlerService) {
 
     var cswRecords = $scope.$parent.infoPanelCsw.cswRecords;
     var featureArr = [];
@@ -12,6 +13,10 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
     var sld_body = "";
     $scope.wmsUrls = {};
     $scope.wmsLegends = {};
+    
+    $scope.addCSWRecord = function(layer,cswRecord){
+        RenderHandlerService.renderCSWRecord(layer,cswRecord);
+    };
     
     // Get the legend style, if there is one
     if ($scope.$parent.infoPanelCsw.proxyStyleUrl != undefined && $scope.$parent.infoPanelCsw.proxyStyleUrl.length>0) {

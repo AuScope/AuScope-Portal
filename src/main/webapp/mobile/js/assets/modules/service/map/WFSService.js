@@ -43,7 +43,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
        };   
  
         /**
-         * Method to decide how the wms should be rendered and add the wms to the map 
+         * Method to decide how the wms layer should be rendered and add the wms to the map 
          * @method renderLayer
          * @param layer - The layer containing the wms to be rendered
          */
@@ -84,6 +84,50 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                     console.log(error);
                 });
           
+            }
+            
+        };
+        
+        /**
+         * Method to decide how the wms resource should be rendered and add the wms to the map 
+         * @method renderResource
+         * @param resource - The resource containing the wms to be rendered
+         */
+        this.renderCSWRecord = function(layer,cswRecord){   
+            var map =  GoogleMapService.getMap();            
+            var me = this;
+            var onlineResources = LayerManagerService.getWFSFromCSW(cswRecord);
+            RenderStatusService.setMaxValue(layer,onlineResources.length);
+                        
+            
+            for(var index in onlineResources){
+                RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
+                GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index]).then(function(response){
+                    var rootNode = GMLParserService.getRootNode(response.data.gml);
+                    var primitives = GMLParserService.makePrimitives(rootNode);
+                    
+                    RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.COMPLETED);
+                    
+                    for(var key in primitives){
+                        switch(primitives[key].geometryType){
+                            case Constants.geometryType.POINT:
+                                GoogleMapService.addMarkerToActive(layer.id,me.renderPoint(primitives[key],map));
+                                break;
+                            case Constants.geometryType.LINESTRING:
+                                me.renderLineString(primitives[key],map);
+                                break;
+                            case Constants.geometryType.POLYGON:
+                                me.renderPolygon(primitives[key],map);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    
+                },function(error){
+                    //VT: Some sort of error handling here
+                    console.log(error);
+                });
             }
             
         };

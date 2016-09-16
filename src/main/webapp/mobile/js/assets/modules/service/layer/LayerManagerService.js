@@ -27,6 +27,26 @@ allModules.service('LayerManagerService',['$rootScope','Constants',function ($ro
         return this.getOnlineResources(layer, Constants.resourceType['WFS']);
     };
     
+    /**
+     * Retrieve WFS resource if available
+     * @method getWFSFromCSW
+     * @param cswRecord - the cswRecord we would like to extract wfs from
+     * @return resources - an array of the wfs resource. empty array if none is found
+     */
+    this.getWFSFromCSW = function(cswRecord){
+        return this.getOnlineResourcesFromCSW(cswRecord, Constants.resourceType['WFS']);
+    };
+    
+    /**
+     * Retrieve WFS resource if available
+     * @method getWFSFromCSW
+     * @param cswRecord - the cswRecord we would like to extract wfs from
+     * @return resources - an array of the wfs resource. empty array if none is found
+     */
+    this.getWMSFromCSW = function(cswRecord){
+        return this.getOnlineResourcesFromCSW(cswRecord, Constants.resourceType['WMS']);
+    };
+    
     
     /**
      * Retrieve the arrays of csw records from the layer
@@ -66,6 +86,30 @@ allModules.service('LayerManagerService',['$rootScope','Constants',function ($ro
             }
         }  
         
+        return onlineResource;
+    };
+    
+    /**
+     * Extract resources based on the type. If type is not defined, return all the resource
+     * @method getOnlineResourcesFromCSW
+     * @param cswRecord - the cswRecord we would like to extract cswRecords from
+     * @param resourceType - a enum of the resource type. The ENUM constant is defined on app.js
+     * @return resources - an array of the resource. empty array if none is found
+     */
+    this.getOnlineResourcesFromCSW = function(cswRecord,resourceType){
+        var onlineResource = [];
+        //VT: Loop through all the online resource
+        for(var j=0; j < cswRecord.onlineResources.length;j++){
+            if(!resourceType){//VT: if not defined add all
+                onlineResource.push(cswRecord.onlineResources[j]);
+            }else{
+                //VT: if defined, only add those that matched.
+                if(cswRecord.onlineResources[j].type==resourceType){
+                    onlineResource.push(cswRecord.onlineResources[j]);
+                }
+            }
+            
+        }
         return onlineResource;
     };
      

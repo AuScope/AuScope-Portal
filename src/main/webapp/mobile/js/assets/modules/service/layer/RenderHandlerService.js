@@ -34,6 +34,34 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
      };
      
      
+     /**
+      * Decides how to renders a layer automatically
+      * 
+      * @method renderCSWRecord 
+      * @param layer - the layer for rendering
+      * @param cswRecord - the cswRecord for rendering
+      */
+     this.renderCSWRecord = function(layer,cswRecord){   
+        
+         //VT: on a small screen, broadcast a request to add a layer has been established so that 
+         //VT:action like closing panels can be act on. 
+         var mq = window.matchMedia( "(max-width: 658px)" );
+         if(mq.matches){
+             $rootScope.$broadcast('layer.add', layer);
+         }
+         
+         if(layer.id=="nvcl-borehole"){
+             WFSService.renderCSWRecord(layer,cswRecord);
+         }else if(layer.id=="mineral-tenements"){
+             WMSService.renderCSWRecord(layer,cswRecord);
+         }else if(LayerManagerService.getWMS(layer).length > 0){
+             WMSService.renderCSWRecord(layer,cswRecord);          
+         }else if(LayerManagerService.getWFS(layer).length > 0){
+             WFSService.renderCSWRecord(layer,cswRecord);          
+         }
+      };
+     
+     
         
     
      
