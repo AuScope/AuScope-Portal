@@ -33,18 +33,20 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
             this.renderStatus.group[layer.group]={};
             this.renderStatus.group[layer.group].max=0;
             this.renderStatus.group[layer.group].current=0;
-            this.renderStatus.group[layer.group].activeLayerCount = 0;
+            this.renderStatus.group[layer.group].activeLayer = [];
         }
         
         if(UtilitiesService.isEmpty(this.renderStatus.group[layer.group])){          
             this.renderStatus.group[layer.group]={};
             this.renderStatus.group[layer.group].max=0;
             this.renderStatus.group[layer.group].current=0;
-            this.renderStatus.group[layer.group].activeLayerCount = 0;
+            this.renderStatus.group[layer.group].activeLayer = [];
         }
         
         this.renderStatus.group[layer.group].max += maxValue;
-        this.renderStatus.group[layer.group].activeLayerCount += 1;
+        if(this.renderStatus.group[layer.group].activeLayer.indexOf(layer)== -1){            
+            this.renderStatus.group[layer.group].activeLayer.push(layer);
+        }
     };
     
     /**
@@ -96,7 +98,11 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      */
     this.clearStatus = function(layer){
         this.renderStatus[layer.id] = {};
-        this.renderStatus.group[layer.group].activeLayerCount -= 1;
+        for(var index in this.renderStatus.group[layer.group].activeLayer){
+            if(this.renderStatus.group[layer.group].activeLayer[index].id == layer.id){
+                this.renderStatus.group[layer.group].activeLayer.splice(index, 1);
+            }
+        }
     };
      
    

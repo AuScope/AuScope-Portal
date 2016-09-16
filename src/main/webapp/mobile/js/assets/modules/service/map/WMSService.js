@@ -162,5 +162,47 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
   
     };
     
+    
+    /**
+     * Method to decide how the wms csw record should be rendered and add the wms to the map 
+     * @method renderCSWRecord
+     * @param layer - The layer containing the wms to be rendered
+     * @param cswRecord - The cswRecord containing the wms to be rendered
+     */
+    this.renderCSWRecord = function(layer,cswRecord){   
+        var map =  GoogleMapService.getMap();
+        var me = this;
+        var maxSldLength = 2000;
+        
+        var registerTileLoadedEvent = function(mapLayer, layer,onlineResource,status){
+            google.maps.event.addListener(mapLayer, 'tilesloaded', function(evt) {
+                RenderStatusService.updateCompleteStatus(layer,onlineResource,status);
+              });
+        };
+        
+        GetWMSRelatedService.getWMSStyle(layer).then(function(style){
+            var onlineResources = LayerManagerService.getWMSFromCSW(cswRecord);            
+            RenderStatusService.setMaxValue(layer,onlineResources.length);
+            for(var index in onlineResources){  
+                
+                RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
+                
+                if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
+                    var mapLayer = me.generateWMS_1_1_1_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null));                        
+                    registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
+                    map.overlayMapTypes.push(mapLayer);
+                    GoogleMapService.addLayerToActive(layer.id,mapLayer);                   
+                }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
+                    var mapLayer = me.generateWMS_1_3_0_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null)); 
+                    registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
+                    map.overlayMapTypes.push(mapLayer);
+                    GoogleMapService.addLayerToActive(layer.id,mapLayer);
+                    
+                }        
+            }
+        });
+  
+    };
+    
      
 }]);

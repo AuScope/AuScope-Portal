@@ -12,7 +12,7 @@
 			   <div ng-repeat="(group,records) in layerPanel.getCswRecords()" uib-accordion-group class="accordion-header-override" ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
 			   
 			      <uib-accordion-heading>
-			        <span><i ng-if="renderStatus.group[group].activeLayerCount > 0" class="pull-left margin-right">
+			        <span><i ng-if="renderStatus.group[group].activeLayer.length > 0" class="pull-left margin-right">
 			        <round-progress max="renderStatus.group[group].max+1" current="renderStatus.group[group].current+1" radius="9" stroke="4" color="#acea44">
 			        </round-progress></i>{{group}}</span> 
 			        <i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[group].isOpen, 'glyphicon glyphicon-plus': !status[group].isOpen}"></i>
