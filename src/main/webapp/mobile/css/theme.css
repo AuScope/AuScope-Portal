@@ -222,9 +222,23 @@ html,body {
 	font-size:15px;
 }
 
-.panel-selected .panel-heading {
+.panel-selected>.panel-heading {
   background-color: #d14f30;  
   color: white;  
+}
+
+.analytic-accordion .panel-heading {
+    padding: 5px 5px;
+    background-color: #c2dcea;
+    color: #086f84;
+}
+
+.analytic-accordion select{
+	width:100%;
+}
+
+.analytic-accordion .row{
+    padding:3px 3px;
 }
 
 .fa-round {

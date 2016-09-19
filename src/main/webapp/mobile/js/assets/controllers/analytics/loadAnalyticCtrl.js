@@ -12,7 +12,7 @@ allControllers.controller('loadAnalyticCtrl', ['$scope','$rootScope','$timeout',
     */
     $scope.getAnalyticPanel = function(){
         if($scope.cswrecord.id == "capdf-hydrogeochem"){
-            return 'views/analytic/defaultAnalytic.htm';
+            return 'views/analytic/capdf-hydrogeochem.htm';
         }else{
             return 'views/analytic/defaultAnalytic.htm';
         }
