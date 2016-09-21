@@ -1,10 +1,11 @@
 /**
- * WMSService handles rendering of all wms layers onto the map
+ * CapdfWMSService handles rendering of all capdf layers onto the map. A custom wms renderer is require because capdf
+ * gets it layer name from user input parameter and not based on the default csw selection
  * @module map
- * @class WMSService
+ * @class CapdfWMSService
  * 
  */
-allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService',
+allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService',
                                  function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService) {
     
   
@@ -16,7 +17,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
      * @param style - sld if defined else default server sld will be used
      * @return ImageMapType - google.maps.ImageMapType
      */
-    this.generateWMS_1_1_1_Layer = function(onlineResource,style){
+    this.generateWMS_1_1_1_Layer = function(layername,onlineResource,style){
         
        var myOnlineResource =  onlineResource;       
        var map = GoogleMapService.getMap();
@@ -48,7 +49,8 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
                    url += "&SLD_BODY=" + encodeURIComponent(style);
                }
                url += "&STYLES=";  
-               url += "&LAYERS=" + myOnlineResource.name; //WMS layers
+               //VT: this is the only difference with the normal wms renderer
+               url += "&LAYERS=" + layername; //WMS layers
                url += "&FORMAT=image/png" ; //WMS format
                url += "&BGCOLOR=0xFFFFFF";  
                url += "&TRANSPARENT=TRUE";
@@ -72,7 +74,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
      * @param style - sld if defined else default server sld will be used
      * @return ImageMapType - google.maps.ImageMapType
      */
-    this.generateWMS_1_3_0_Layer = function(onlineResource,style){
+    this.generateWMS_1_3_0_Layer = function(layername,onlineResource,style){
         
         var myOnlineResource =  onlineResource;
         
@@ -104,8 +106,9 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
                 if(style){
                     url += "&SLD_BODY=" + encodeURIComponent(style);
                 }
-                url += "&STYLES=";                
-                url += "&LAYERS=" + myOnlineResource.name; 
+                url += "&STYLES=";    
+                //VT: this is the only difference with the normal wms renderer
+                url += "&LAYERS=" + layername; 
                 url += "&FORMAT=image/png" ; 
                 url += "&BGCOLOR=0xFFFFFF";  
                 url += "&TRANSPARENT=TRUE";
@@ -128,7 +131,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
      * @param layer - The layer containing the wms to be rendered
      * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.
      */
-    this.renderLayer = function(layer,param){   
+    this.renderLayer = function(layername,layer,param){   
         var map =  GoogleMapService.getMap();
         var me = this;
         var maxSldLength = 2000;
@@ -139,7 +142,7 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
               });
         };
         
-        GetWMSRelatedService.getWMSStyle(layer,param).then(function(style){
+        GetWMSRelatedService.getWMSStyle(layer,param).then(function(style){           
             var onlineResources = LayerManagerService.getWMS(layer);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){  
@@ -147,12 +150,12 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
-                    var mapLayer = me.generateWMS_1_1_1_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null));                        
+                    var mapLayer = me.generateWMS_1_1_1_Layer(layername,onlineResources[index],(style!=null && style.length<maxSldLength?style:null));                        
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer.id,mapLayer);                   
                 }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
-                    var mapLayer = me.generateWMS_1_3_0_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null)); 
+                    var mapLayer = me.generateWMS_1_3_0_Layer(layername,onlineResources[index],(style!=null && style.length<maxSldLength?style:null)); 
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer.id,mapLayer);

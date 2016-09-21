@@ -223,6 +223,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
             tableRow.add(record.get("min"));
             tableRow.add(record.get("max"));
             dataItems.add(tableRow);
+
         }
         parser.close();
         return generateJSONResponseMAV(true, dataItems, "");
@@ -230,7 +231,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     /**
      * Returns a list of values for graphing scatter plot
-     * 
+     *
      * @param serviceUrl
      *            - serviceUrl
      * @param xaxis
@@ -292,7 +293,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 relatedValues.put("yaxis", yValue.get(i));
                 relatedValues.put("tooltip",
                         "sample type:" + (sample_type.get(i).isEmpty() ? "unknown" : sample_type.get(i))
-                                + "<br>sample Id:" + (name.get(i).isEmpty() ? "unknown" : name.get(i)));
+                        + "<br>sample Id:" + (name.get(i).isEmpty() ? "unknown" : name.get(i)));
                 if (boundFilterGeom.contains(geom.get(i))) {
                     relatedValues.put("highlight", "Inside Bound");
                 } else {
@@ -310,7 +311,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     /**
      * Returns a list of values for graphing scatter plot
-     * 
+     *
      * @param serviceUrl
      *            - serviceUrl
      * @param box1
@@ -432,11 +433,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
         if (poi != null && !poi.isEmpty()) {
             String[] splitMinMAx = minMax.split(",");
-            CapdfHydroChemColorCoding ccq = new CapdfHydroChemColorCoding(poi, Double.parseDouble(splitMinMAx[0]),
-                    Double.parseDouble(splitMinMAx[1]));
-            List<IFilter> stylefilterRules = this.capdfHydroGeoChemService.getHydroGeoChemFilterWithColorCoding(
-                    batchid, ccq); //VT:get filter from service
-            style = this.getColorCodedStyle(stylefilterRules, ccq.getColorCodingConfig(), featureType);
+            style = this.getColorCodedStyle(splitMinMAx[0],splitMinMAx[1],poi, featureType);
         } else {
             String stylefilterRules = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, bbox); //VT:get filter from service
             style = this.getStyle(stylefilterRules, CAPDF_HYDROGEOCHEMTYPE, "#DB70B8");
@@ -454,9 +451,11 @@ public class CapdfHydroGeoChemController extends BasePortalController {
         outputStream.close();
     }
 
+
+
     /**
      * Returns the style for color coding.
-     * 
+     *
      * @param stylefilterRules
      *            - filter rules for color coding
      * @param ccc
@@ -465,7 +464,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      *            - the name of the layer.
      * @return
      */
-    public String getColorCodedStyle(List<IFilter> stylefilterRules, ColorCodingConfig ccc, String name) {
+    public String getColorCodedStyle(String min, String max, String poi, String featureType) {
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                 "<StyledLayerDescriptor version=\"1.0.0\" " +
@@ -478,32 +477,52 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
+                "<Name>" + featureType + "</Name>" +
                 "<UserStyle>" +
-                "<Title>default Title</Title>" +
-                "<Abstract>default abstract</Abstract>" +
+                "<Title>Capdf</Title>" +
+                "<Abstract>Capdf</Abstract>" +
                 "<FeatureTypeStyle>";
 
-        for (int i = 0; i < stylefilterRules.size(); i++) {
 
-            style += "<Rule>" +
-                    "<Name>Hydrogeo Chemistry</Name>" +
-                    "<Title>Hydrogeo Chemistry</Title>" +
-                    "<Abstract>Light purple square boxes</Abstract>" +
-                    stylefilterRules.get(i).getFilterStringAllRecords() +
-                    "<PointSymbolizer>" +
-                    "<Graphic>" +
-                    "<Mark>" +
-                    "<WellKnownName>square</WellKnownName>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + ccc.getColor(i) + "</CssParameter>" +
-                    "</Fill>" +
-                    "</Mark>" +
-                    "<Size>6</Size>" +
-                    "</Graphic>" +
-                    "</PointSymbolizer>" +
-                    "</Rule>";
-        }
+        style += "<Rule>" +
+                "<Name>Capdf</Name>" +
+                "<Title>Capdf</Title>" +
+                "<Abstract>Capdf</Abstract>" +
+                "<ogc:Filter>" +
+                "<ogc:Not>" +
+                "<ogc:PropertyIsNull>" +
+                "<ogc:PropertyName>" +poi+ "</ogc:PropertyName>" +
+                "</ogc:PropertyIsNull>" +
+                "</ogc:Not>" +
+                "</ogc:Filter>" +
+                "<PointSymbolizer>" +
+                "<Graphic>" +
+                "<Mark>" +
+                "<WellKnownName>circle</WellKnownName>" +
+                "<Fill>" +
+                "<CssParameter name=\"fill\">" +
+                "<ogc:Function name=\"Interpolate\">" +
+                "<ogc:PropertyName>" +poi+ "</ogc:PropertyName>" +
+                "<ogc:Literal>"+min+"</ogc:Literal>" +
+                "<ogc:Literal>#FFFFFF</ogc:Literal>" +
+                //                "<ogc:Literal>"+firstQuaq+"</ogc:Literal>" +
+                //                "<ogc:Literal>#00ff00</ogc:Literal>" +
+                //                "<ogc:Literal>"+mid+"</ogc:Literal>" +
+                //                "<ogc:Literal>#fcf505</ogc:Literal>" +
+                //                "<ogc:Literal>"+thirdQuaq+"</ogc:Literal>" +
+                //                "<ogc:Literal>#ff702b</ogc:Literal>" +
+                "<ogc:Literal>" + max + "</ogc:Literal>" +
+                "<ogc:Literal>" + ColorCodingConfig.getRandomColor() +"</ogc:Literal>" +
+                "<ogc:Literal>color</ogc:Literal>" +
+                "</ogc:Function>" +
+                "</CssParameter>" +
+                "</Fill>" +
+                "</Mark>" +
+                "<Size>6</Size>" +
+                "</Graphic>" +
+                "</PointSymbolizer>" +
+                "</Rule>";
+
 
         style += "</FeatureTypeStyle>" +
                 "</UserStyle>" +
@@ -516,7 +535,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     /**
      * Returns the style for wms request.
-     * 
+     *
      * @param stylefilterRules
      *            - filter rules for color coding
      * @param name
