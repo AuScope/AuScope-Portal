@@ -11,6 +11,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     this.activeLayers = {};
     this.heatmap = null;
     this.drawingManager = null;
+    this.dataSelectDrawingManager = null;
     
     
     /**
@@ -183,6 +184,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
           // Loading the drawing Tool in the Map.
           this.drawingManager.setMap(this.mainMap);
       };
+                 
       
       /**
        * cancel the drawing of rectangle and zooming to the area drawn
@@ -215,6 +217,83 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
        */  
       this.onDrawZoomEnd = function ($scope, callback) {
           $scope.$on('draw.zoom.end', function (evt) {
+              callback(evt);
+            });
+      };
+      
+      
+      /**
+       * Enable the drawing of bounding box for selecting data
+       * @method selectMapData
+       */
+      this.selectMapData = function(){
+          this.broadcast('data.select.start');
+          if(!this.dataSelectDrawingManager){
+              this.dataSelectDrawingManager = new google.maps.drawing.DrawingManager();
+              this.dataSelectDrawingManager.setOptions({
+                  drawingMode : google.maps.drawing.OverlayType.RECTANGLE,
+                  drawingControl : true,
+                  drawingControlOptions : {
+                      position : google.maps.ControlPosition.TOP_CENTER,
+                      drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE ]
+                  },
+                  rectangleOptions : {
+                      strokeColor : '#6c6c6c',
+                      strokeWeight : 3.5,
+                      fillColor : '#926239',
+                      fillOpacity : 0.6,
+                      editable: false,
+                      draggable: false
+                  }   
+              });
+          }          
+         
+          var me = this;
+          var afterZoomHandler = google.maps.event.addListener(this.dataSelectDrawingManager, 'rectanglecomplete', function(rect) {
+              me.mainMap.fitBounds(rect.bounds);
+              me.broadcast('data.select.end');
+              google.maps.event.removeListener(afterZoomHandler);                
+              $timeout(function() {
+                  rect.setMap(null);
+              }, 1500);
+              me.dataSelectDrawingManager.setMap(null);
+          });
+          
+          // Loading the drawing Tool in the Map.
+          this.dataSelectDrawingManager.setMap(this.mainMap);
+      };
+      
+      /**
+       * cancel the drawing of rectangle and data selection
+       * @method selectDataDrawCancel
+       */
+      this.selectDataDrawCancel = function(){
+          this.broadcast('data.select.end');              
+          this.drawingManager.setMap(null);
+      };
+   
+    
+    
+      /**
+       * event to capture the start of the data selection event
+       * @method onSelectDataStart
+       * @param $scope of the caller
+       * @param callback - callback function
+       */            
+      this.onSelectDataStart = function ($scope, callback) {
+          $scope.$on('data.select.start', function (evt) {
+              callback(evt);
+            });
+      };
+      
+      /**
+       * event to capture the end of the data selection event
+       * @method onSelectDataEnd
+       * @param $scope of the caller
+       * @param callback - callback function
+       */  
+      this.onSelectDataEnd = function ($scope, callback) {
+          $scope.$on('data.select.end', function (evt) {
               callback(evt);
             });
       };

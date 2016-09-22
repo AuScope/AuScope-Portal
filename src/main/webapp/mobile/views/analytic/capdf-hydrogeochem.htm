@@ -13,7 +13,7 @@
 	                    <div ng-if="goi" class="row">
 	                       <div class="col-sm-3"><label>Parameter</label></div>
                            <div class="col-sm-9">
-                                <div ng-if="pois.length > 0"><select ng-change="renderSlider(paramOfInterest[2],paramOfInterest[3],paramOfInterest)" ng-model="paramOfInterest" ng-options="parameter as augmentLabel(parameter[0],parameter[1]) for parameter in pois track by parameter[0]"></select></div>
+                                <div ng-if="pois.length > 0"><select ng-change="renderSlider(paramOfInterest[2],paramOfInterest[3],paramOfInterest)" ng-model="paramOfInterest" ng-options="parameter as augmentLabel(parameter[0],parameter[1]) for parameter in pois"></select></div>
                                 <div ng-if="pois.length == 0" class="text-danger">No corresponding parameter found. Try another group</div>
                             </div>
 	                    </div>
@@ -34,8 +34,32 @@
 	                    </div>	                                    						
 	                </div>
 	               
-	                <div uib-accordion-group class="panel-info" heading="Graph Plat">
-	                   somethign with plotting graph
+	                <div uib-accordion-group class="panel-info" heading="Graph">
+	                   <div class="row">
+                           <div class="col-sm-3"><label>Group</label></div>
+                           <div class="col-sm-9"><select ng-change="getPOIs(graphGroup)" ng-model="graphGroup" ng-options="group[1] as group[0] for group in gois"></select></div>                        
+                        </div>  
+                        <div ng-if="graphGroup" class="row">
+                           <div class="col-sm-3"><label>x-axis</label></div>
+                           <div class="col-sm-9">
+                                <div ng-if="pois.length > 0"><select  ng-model="axis.x"  ng-options="parameter[0] as augmentLabel(parameter[0],parameter[1]) for parameter in pois"></select></div>
+                                <div ng-if="pois.length == 0" class="text-danger">No corresponding parameter found. Try another group</div>
+                            </div>
+                        </div>
+                        <div ng-if="graphGroup" class="row">
+                           <div class="col-sm-3"><label>y-axis</label></div>
+                           <div class="col-sm-9">
+                                <div ng-if="pois.length > 0"><select  ng-model="axis.y"  ng-options="parameter[0] as augmentLabel(parameter[0],parameter[1]) for parameter in pois"></select></div>
+                                <div ng-if="pois.length == 0" class="text-danger">No corresponding parameter found. Try another group</div>
+                            </div>
+                        </div>
+                         <div class="row">
+                           <div class="col-sm-offset-3 col-sm-9">
+                              <button type="submit" class="btn btn-primary btn-sm" ng-click="">Select bound</button>
+                            </div>                      
+                        </div>  
+                        
+                        
 	                </div>
 	               
                 </uib-accordion>

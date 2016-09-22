@@ -237,19 +237,22 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
     this.makePrimitives = function(rootNode) {
         var primitives = [];
         var wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureCollection");
-
+        var features = null;
         //Read through our wfs:FeatureCollection and gml:featureMember(s) elements
         if (UtilitiesService.isEmpty(wfsFeatureCollection)) {
             return primitives;
         }
-        var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");
+        var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");        
         if (UtilitiesService.isEmpty(featureMembers)) {
             featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMember");
+            features = featureMembers;
+        }else{
+            features = featureMembers[0].childNodes;
         }
         if (UtilitiesService.isEmpty(featureMembers)) {
             return primitives;
         }
-        var features = featureMembers[0].childNodes;
+        
         
         for(var i = 0; i < features.length; i++) {
             //Pull out some general stuff that we expect all features to have

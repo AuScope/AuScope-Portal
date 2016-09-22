@@ -505,14 +505,8 @@ public class CapdfHydroGeoChemController extends BasePortalController {
                 "<ogc:PropertyName>" +poi+ "</ogc:PropertyName>" +
                 "<ogc:Literal>"+min+"</ogc:Literal>" +
                 "<ogc:Literal>#FFFFFF</ogc:Literal>" +
-                //                "<ogc:Literal>"+firstQuaq+"</ogc:Literal>" +
-                //                "<ogc:Literal>#00ff00</ogc:Literal>" +
-                //                "<ogc:Literal>"+mid+"</ogc:Literal>" +
-                //                "<ogc:Literal>#fcf505</ogc:Literal>" +
-                //                "<ogc:Literal>"+thirdQuaq+"</ogc:Literal>" +
-                //                "<ogc:Literal>#ff702b</ogc:Literal>" +
                 "<ogc:Literal>" + max + "</ogc:Literal>" +
-                "<ogc:Literal>" + ColorCodingConfig.getRandomColor() +"</ogc:Literal>" +
+                "<ogc:Literal>#993333</ogc:Literal>" +
                 "<ogc:Literal>color</ogc:Literal>" +
                 "</ogc:Function>" +
                 "</CssParameter>" +

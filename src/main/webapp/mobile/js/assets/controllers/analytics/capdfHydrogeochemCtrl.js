@@ -9,6 +9,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
     //VT: there should only be one wms resource for capdf
     var wfsResource = LayerManagerService.getWFS($scope.cswrecord)[0];
     $scope.paramOfInterest=[];
+    $scope.axis={};
     
      var getGOIs = function(){ 
         $http.get('../doGetGroupOfInterest.do',{
@@ -47,13 +48,13 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
      $scope.renderSlider=function(min,max,paramOfInterest){
          //VT: A strange bug where the ng-model in <select> is not bind to ng-model outside of select
          $scope.paramOfInterest=paramOfInterest;
-         var minNumber=Number($filter('number')(min, 2)) ;
-         var maxNumber=Number($filter('number')(Number(max), 2)) ;
+         var minNumber=Math.round(Number(min) * Math.pow(10,2))/Math.pow(10,2);
+         var maxNumber=Math.round(Number(max) * Math.pow(10,2))/Math.pow(10,2);
          if(min == max){
             $scope.noRangeFound = true;
          }else{
              $scope.noRangeFound=false;
-         }                  
+         }                       
          
          $scope.slider = {                 
                  minValue: minNumber,
@@ -61,7 +62,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
                  options: {
                      floor: minNumber,
                      ceil:  maxNumber,
-                     step: 0.1                    
+                     step: 0.1                     
                  }
              };
          $timeout(function () {
@@ -79,5 +80,8 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
              minMax:[minValue,maxValue]
          }); 
      };
+     
+     
+    
     
 }]);
