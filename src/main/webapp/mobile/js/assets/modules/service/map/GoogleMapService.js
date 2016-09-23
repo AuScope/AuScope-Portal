@@ -24,6 +24,15 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     };
     
     /**
+     * Return the current bounds of the map
+     * @Method getCurrentViewPort
+     * @return Bounds - the bounds of the view port.
+     */
+    this.getCurrentViewPort = function(){
+        return this.mainMap.getBounds();
+    };
+    
+    /**
      * Holds a array reference to the active markers on the map referenced by the layerId
      * @method addMarkerToActive
      * @param layerId - layerId
@@ -177,7 +186,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
               google.maps.event.removeListener(afterZoomHandler);                
               $timeout(function() {
                   rect.setMap(null);
-              }, 1500);
+              }, 100);
               me.drawingManager.setMap(null);
           });
           
@@ -238,9 +247,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                       drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE ]
                   },
                   rectangleOptions : {
-                      strokeColor : '#6c6c6c',
+                      strokeColor : '#00cc00',
                       strokeWeight : 3.5,
-                      fillColor : '#926239',
+                      fillColor : '#b3ffb3',
                       fillOpacity : 0.6,
                       editable: false,
                       draggable: false
@@ -249,10 +258,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
           }          
          
           var me = this;
-          var afterZoomHandler = google.maps.event.addListener(this.dataSelectDrawingManager, 'rectanglecomplete', function(rect) {
-              me.mainMap.fitBounds(rect.bounds);
-              me.broadcast('data.select.end');
-              google.maps.event.removeListener(afterZoomHandler);                
+          var afterSelectionHandler = google.maps.event.addListener(this.dataSelectDrawingManager, 'rectanglecomplete', function(rect) {              
+              me.broadcast('data.select.end',rect.bounds);
+              google.maps.event.removeListener(afterSelectionHandler);                
               $timeout(function() {
                   rect.setMap(null);
               }, 1500);
@@ -293,15 +301,15 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
        * @param callback - callback function
        */  
       this.onSelectDataEnd = function ($scope, callback) {
-          $scope.$on('data.select.end', function (evt) {
-              callback(evt);
+          $scope.$on('data.select.end', function (evt,bound) {
+              callback(evt,bound);
             });
       };
       
       
       
-      this.broadcast = function (event) {
-          $rootScope.$broadcast(event);
+      this.broadcast = function (event,result) {
+          $rootScope.$broadcast(event,result);
       };
      
     

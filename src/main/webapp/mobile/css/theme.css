@@ -12,7 +12,6 @@ html,body {
 }
 
 
-
 .btn-block {
     margin: 3px;
 }
@@ -180,7 +179,7 @@ html,body {
 .layer-panel{
   background:  #ffffff;  
   display: block;
-  width: 25em;
+  width: 30em;
   overflow: auto;
   position: absolute;
   left : 0em;	
@@ -189,11 +188,7 @@ html,body {
  
 }
 
-@media screen and (min-width: 658px) {
-    .layer-panel{
-	  width: 30em;	 
-	}
-}
+
 
 
 .layer-panel.ng-hide {

@@ -52,13 +52,44 @@
                                 <div ng-if="pois.length > 0"><select  ng-model="axis.y"  ng-options="parameter[0] as augmentLabel(parameter[0],parameter[1]) for parameter in pois"></select></div>
                                 <div ng-if="pois.length == 0" class="text-danger">No corresponding parameter found. Try another group</div>
                             </div>
-                        </div>
-                         <div class="row">
-                           <div class="col-sm-offset-3 col-sm-9">
-                              <button type="submit" class="btn btn-primary btn-sm" ng-click="">Select bound</button>
-                            </div>                      
+                        </div>                        
+                        <fieldset ng-if="axis.x && axis.y">
+                            <legend ng-if="graphGroup">
+                                <button ng-if="!selectingData" type="submit" class="btn btn-warning btn-sm" ng-click="selectBound()"><span class="fa fa-crop" aria-hidden="true"></span> Select bound</button>
+                                <small ng-if="selectingData" class="text-danger">Select bound from map by drawing</small> 
+                            </legend>
+                            <div  ng-if="selectedBoundData && !selectingData">
+		                        <div class="row">
+		                           <div class="col-xs-offset-4 col-xs-4">
+		                                  <button type="button" class="btn btn-info btn-xs disabled">N <span class="badge"> {{selectedBoundData.getNorthEast().lat() | number : 2}}</span></button>                       
+		                            </div>                                            
+		                        </div> 
+		                         <div class="row">
+		                         <div class="col-xs-4">
+		                                  <button type="button" class="btn btn-info btn-xs disabled">W <span class="badge"> {{selectedBoundData.getSouthWest().lng() | number : 2}}</span></button>                       
+		                            </div>
+		                           <div class="col-xs-offset-4 col-xs-4">
+		                                  <button type="button" class="btn btn-info btn-xs disabled">E <span class="badge"> {{selectedBoundData.getNorthEast().lng() | number : 2}}</span></button>                       
+		                            </div>                                            
+		                        </div> 
+		                        <div  class="row">
+		                           <div class="col-xs-offset-4 col-xs-4">
+		                                  <button type="button" class="btn btn-info btn-xs disabled">S <span class="badge"> {{selectedBoundData.getSouthWest().lat() | number : 2}}</span></button>                       
+		                            </div>                                            
+		                        </div>
+	                        </div>  
+                        </fieldset> 
+                        <div ng-if="selectedBoundData && !selectingData" class="row">
+                            <hr>
+                           <div class="col-xs-3">
+                              <button type="submit" class="btn btn-primary btn-sm" ng-click="plotBox(graphGroup)">Plot Box</button>
+                           </div>
+                           <div class="col-xs-offset-5 col-xs-3">
+                              <button type="submit" class="btn btn-primary btn-sm" ng-click="platScatter(graphGroup)">Plot Scatter</button>
+                            </div>                                             
                         </div>  
-                        
+                        <hr>
+                        <div id="capdf-graph-analytic" style="width:100%;height:400px;"></div>
                         
 	                </div>
 	               
