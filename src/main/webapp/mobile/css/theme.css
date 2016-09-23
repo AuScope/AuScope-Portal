@@ -89,6 +89,10 @@ html,body {
 
 
 @media screen and (max-width: 658px) {
+	body { 
+	   font-size: 1.2em; 
+	}
+	
 	.map-overlay-panel-toggle {      
 	  top : -10px;
 	  right : 1em;     
@@ -179,7 +183,7 @@ html,body {
 .layer-panel{
   background:  #ffffff;  
   display: block;
-  width: 27em;
+  width: 30em;
   overflow: auto;
   position: absolute;
   left : 0em;	

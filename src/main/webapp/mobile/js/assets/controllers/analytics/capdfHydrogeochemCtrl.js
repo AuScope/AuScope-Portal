@@ -152,7 +152,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
              }
          }).then(function (response) {
              
-             var targetWidth = 300;
+             var targetWidth = $("#capdf-graph-analytic").width();
              var targetHeight = 400;
              var container = d3.select("#capdf-graph-analytic");
              this.preserveAspectRatio = true;
