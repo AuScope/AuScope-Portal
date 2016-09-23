@@ -179,7 +179,7 @@ html,body {
 .layer-panel{
   background:  #ffffff;  
   display: block;
-  width: 30em;
+  width: 27em;
   overflow: auto;
   position: absolute;
   left : 0em;	
