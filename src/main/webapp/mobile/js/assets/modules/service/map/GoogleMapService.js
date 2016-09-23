@@ -186,7 +186,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
               google.maps.event.removeListener(afterZoomHandler);                
               $timeout(function() {
                   rect.setMap(null);
-              }, 100);
+              }, 1500);
               me.drawingManager.setMap(null);
           });
           
@@ -263,7 +263,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
               google.maps.event.removeListener(afterSelectionHandler);                
               $timeout(function() {
                   rect.setMap(null);
-              }, 1500);
+              }, 200);
               me.dataSelectDrawingManager.setMap(null);
           });
           
