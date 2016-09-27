@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngAnimate','allControllers','allModules','ui.bootstrap','uiGmapgoogle-maps','angular-svg-round-progressbar','rzModule']);
+var app = angular.module('app', ['ngAnimate','allControllers','allModules','ui.bootstrap','uiGmapgoogle-maps','angular-svg-round-progressbar','rzModule','ngSanitize']);
 
 app.constant('Constants', {
     resourceType: {
@@ -41,13 +41,13 @@ app.directive('layerPanel', function() {
   };
 });
 
-app.directive('activePanel', function() {
+app.directive('querierPanel', function() {
   return {
 	  scope: {
 		  activeView: '=',
-		  showActivePanel: '='		
+		  showQuerierPanel: '='		
 	    },  
-	  templateUrl: 'views/activePanel.htm'
+	  templateUrl: 'views/querierPanel.htm'
   };
 });
 

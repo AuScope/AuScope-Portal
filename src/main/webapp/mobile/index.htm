@@ -31,9 +31,11 @@
 		<script src="js/assets/framework/ui-bootstrap/ui-bootstrap-tpls-2.0.1.min.js" type="text/javascript" ></script>		
 		<script src="//cdn.jsdelivr.net/lodash/4.14.1/lodash.min.js" type="text/javascript" ></script>		
 		<script src="js/assets/framework/angular/angular-simple-logger.js" type="text/javascript" ></script>
+		<script src="js/assets/framework/angular/angular-sanitize.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/google-map/angular-google-maps.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/turf/turf.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/widgets/roundProgress.min.js" type="text/javascript" ></script>
+		<script src="js/assets/framework/proj4/proj4.js" type="text/javascript" ></script>
 		<script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
 		<script src="js/assets/framework/widgets/rzslider.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/charts/d3/d3.min.js" type="text/javascript" ></script>
@@ -53,7 +55,7 @@
   		<script src="js/assets/controllers/googlemap/googleMapCtrl.js"></script>
   		<script src="js/assets/controllers/layer/layerPanelCtrl.js"></script>
   		<script src="js/assets/controllers/layer/layerSearchCtrl.js"></script>
-  		<script src="js/assets/controllers/active/activePanelCtrl.js"></script>
+  		<script src="js/assets/controllers/querier/querierPanelCtrl.js"></script>
   		<script src="js/assets/controllers/info/infoPanelCtrl.js"></script>
         <script src="js/assets/controllers/info/collapseInfoPanelCtrl.js"></script>
         <script src="js/assets/controllers/analytics/defaultAnalyticCtrl.js"></script> 
@@ -70,9 +72,10 @@
   		<script src="js/assets/modules/service/map/CapdfWMSService.js"></script>
   		<script src="js/assets/modules/service/map/WFSService.js"></script>
   		<script src="js/assets/modules/service/layer/LayerManagerService.js"></script>
+		<script src="js/assets/modules/service/layer/QuerierPanelService.js"></script>
   		<script src="js/assets/modules/service/http/GetWMSRelatedService.js"></script>
   		<script src="js/assets/modules/service/http/GetWFSRelatedService.js"></script>
-        <script src="js/assets/modules/service/http/StyleService.js"></script>
+		<script src="js/assets/modules/service/http/StyleService.js"></script>
   		<script src="js/assets/modules/service/layer/RenderHandlerService.js"></script>
   		<script src="js/assets/modules/service/utility/SimpleXMLService.js"></script>
   		<script src="js/assets/modules/service/utility/GMLParserService.js"></script>
@@ -103,7 +106,7 @@
 		    
 		      
 			<layer-panel ng-show="showlayerPanel" class='layer-panel animated fadeInLeft' ></layer-panel>
-			<active-panel ng-show="showActivePanel" class='layer-panel animated fadeInLeft'  active-view="active" show-active-panel = "showActivePanel" ></active-panel>
+			<querier-panel ng-show="showQuerierPanel" class='layer-panel animated fadeInLeft'  active-view="active" show-querier-panel = "showQuerierPanel" ></querier-panel>
 						
 			<div class="map-overlay-panel-toggle animated zoomIn" ng-controller="layerSearchCtrl as searchCtrl">	
 			   	<div id="logo-menu">             
