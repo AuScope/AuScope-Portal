@@ -1,7 +1,14 @@
 <div ng-controller="capdfHydrogeochemCtrl"> 
     
     <div>
-        <div class="row">
+        <div ng-if="!isLayerActive" class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-danger" role="alert">This layer has to be active on map to perform analytic.  <br><br>
+                <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(cswrecord)">Add Layer</button>
+                </div> 
+            </div>
+        </div>
+        <div ng-show="isLayerActive" class="row">
             <div class="col-md-12">
                 <uib-accordion close-others="true" class="analytic-accordion">
 	                <div uib-accordion-group class="panel-info" heading="Color Coding" is-open="true" is-disabled="false">	      
@@ -54,10 +61,11 @@
                             </div>
                         </div>                        
                         <fieldset ng-if="axis.x && axis.y">
-                            <legend ng-if="graphGroup">
+                            <hr>
+                            <div ng-if="graphGroup">
                                 <button ng-if="!selectingData" type="submit" class="btn btn-warning btn-sm" ng-click="selectBound()"><span class="fa fa-crop" aria-hidden="true"></span> Select bound</button>
                                 <small ng-if="selectingData" class="text-danger">Select bound from map by drawing</small> 
-                            </legend>
+                            </div>
                             <div  ng-if="selectedBoundData && !selectingData">
 		                        <div class="row">
 		                           <div class="col-xs-offset-4 col-xs-4">
@@ -81,15 +89,20 @@
                         </fieldset> 
                         <div ng-if="selectedBoundData && !selectingData" class="row">
                             <hr>
-                           <div class="col-xs-3">
+                           <div class="col-xs-4">
                               <button type="submit" class="btn btn-primary btn-sm" ng-click="plotBox(graphGroup)">Plot Box</button>
                            </div>
-                           <div class="col-xs-offset-5 col-xs-3">
+                           <div class="col-xs-4">
+                                <div ng-if="plotting" class="middle-mask"><span class="fa fa-spinner fa-2x fa-fw" ng-class="{'fa-spin':plotting,'':!plotting}"></span></div>
+                           </div>
+                           <div class="col-xs-4">
                               <button type="submit" class="btn btn-primary btn-sm" ng-click="platScatter(graphGroup)">Plot Scatter</button>
                             </div>                                             
-                        </div>  
-                        <hr>
-                        <div id="capdf-graph-analytic" style="width:100%;height:400px;"></div>
+                        </div>
+                        <div ng-if="selectedBoundData && !selectingData">  
+                            <hr>                           
+                            <div id="capdf-graph-analytic" style="width:100%;height:400px;"><div class="text-danger">Select Graph type to start plotting!</div></div>
+                        </div>
                         
 	                </div>
 	               

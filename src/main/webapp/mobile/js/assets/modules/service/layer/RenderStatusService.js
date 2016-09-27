@@ -105,7 +105,15 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
         }
     };
      
-   
+    /**
+     * Check if the layer is still active
+     * @method isLayerActive
+     * @param layerId - layerId
+     */
+    this.isLayerActive = function(layer){
+       return !this.renderStatus[layer.id] == {};
+       
+    };
      
      
         

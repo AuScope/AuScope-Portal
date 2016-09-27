@@ -48,6 +48,16 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     };
     
     /**
+     * Check if the layer is still active
+     * @method isLayerActive
+     * @param layerId - layerId
+     */
+    this.isLayerActive = function(layer){
+       return RenderStatusService.isLayerActive(layer);
+       
+    };
+    
+    /**
      * Overlay a heat map to the data set
      * @method addHeatMapOverlay
      */
@@ -127,6 +137,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                  this.activeLayers[layer.id].layers=[];
             };
             RenderStatusService.clearStatus(layer);
+            this.broadcast('layer.removed',layer);
         };
     };
      
@@ -304,6 +315,12 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
           $scope.$on('data.select.end', function (evt,bound) {
               callback(evt,bound);
             });
+      };
+      
+      this.onLayerRemoved = function($scope,callback){
+        return $scope.$on('layer.removed',function(evt,layer){
+            callback(evt,layer);
+        }); 
       };
       
       
