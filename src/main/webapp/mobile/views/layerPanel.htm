@@ -26,7 +26,7 @@
 					    </tr>
 					  </thead>
 					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',group,cswRecord.id)" class="layer-row" ng-class="{'layer-selected':  status[group][cswRecord.id].isExpanded}">
-						   	<td><span ng-if="renderStatus[cswRecord.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(cswRecord)" style="color:red;font-size: 15px;margin-right:3px;" aria-hidden="true"></span>{{cswRecord.name}}<br>
+						   	<td><span ng-if="renderStatus[cswRecord.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(cswRecord);$event.stopPropagation();" style="color:red;font-size: 15px;margin-right:3px;" aria-hidden="true"></span>{{cswRecord.name}}<br>
 						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max" ng-click="togglePanels('statusInfo',group,cswRecord.id);$event.stopPropagation();">  
 						   	  <uib-progressbar  class="progress-striped active" style="height:5px" type="success" max="renderStatus[cswRecord.id].max +1" value="renderStatus[cswRecord.id].completed +1">
 						   	  </uib-progressbar>
