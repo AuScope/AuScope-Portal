@@ -226,17 +226,17 @@ html,body {
   color: white;  
 }
 
-.analytic-accordion .panel-heading {
+.nested-accordion .panel-heading {
     padding: 5px 5px;
     background-color: #c2dcea;
     color: #086f84;
 }
 
-.analytic-accordion select{
+.nested-accordion select{
 	width:100%;
 }
 
-.analytic-accordion .row{
+.nested-accordion .row{
     padding:3px 3px;
 }
 
