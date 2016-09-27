@@ -1,0 +1,43 @@
+<div class="container-fluid animated fadeInleft" ng-controller="querierPanelCtrl">
+	<div>
+		<div>				
+			<div class="layer-panel-header">
+				<img src="img/AuScope-logo-220.jpg">
+				<i class="pull-right glyphicon hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
+			</div>			
+		</div>
+		<div>
+            <div ng-bind-html="panelHtml"></div>
+			<div ng-if="pointObj != null">
+				<table class="table activeView-table">
+					<tr ng-if="pointObj.name != ''">
+						<td><label><small>Name:</small></label></td>
+						<td><small>{{pointObj.name}}</small></td>
+					</tr>
+					<tr ng-if="pointObj.description!=''">
+						<td><label><small>Description:</small></label></td>
+						<td><small>{{pointObj.description}}</small></td>
+					</tr>
+					<tr ng-if="pointObj.latitude!='' && pointObj.longitude!=''">
+						<td><label><small>Latitude:<br/>Longitude:</small></label></td>
+						<td><small>{{pointObj.latitude}}<br/>{{pointObj.longitude}}</small></td>
+					</tr>
+					<tr ng-if="pointObj.srsUrl!=''">
+						<td><label><small>SRS URL:</small></label></td>
+						<td><small>{{pointObj.srsUrl}}</small></td>
+					</tr>
+				</table>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-xs-3"><i class="fa fa-area-chart fa-2x dark-blue" aria-hidden="true"></i></div>
+				<div class="col-xs-3"><i class="fa fa-download fa-2x dark-blue" aria-hidden="true"></i></div>
+				<div class="col-xs-3"><i class="fa fa-key fa-2x dark-blue" aria-hidden="true"></i></div>
+				<div class="col-xs-3"><i class="fa fa-ellipsis-v fa-2x dark-blue" aria-hidden="true"></i></div>
+			</div>	
+		</div>				
+	</div>
+</div>
+
+
+

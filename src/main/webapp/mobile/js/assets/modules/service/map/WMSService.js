@@ -4,8 +4,8 @@
  * @class WMSService
  * 
  */
-allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService) {
+allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService) {
     
   
     
@@ -139,6 +139,27 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
               });
         };
         
+        // Register map click/touch events to allow creation of the query information panel
+        var registerClickEvent = function(map, mapLayer, onlineResource){
+            google.maps.event.addListener(map, 'mousedown', function(evt) {
+                GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource).then(function(response) 
+                    { 
+                        // Used to check for an empty response, which occurs when user clicks/touches on empty space
+                        var empty_body = /<body>\s*<\/body>/g;
+
+                        // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
+                        if (response.status==200 && empty_body.test(response.data)==false) {
+                            QuerierPanelService.setPanelHtml(response.data);
+                            QuerierPanelService.openPanel(false);
+                        }
+                    },
+                    function(errorResponse) {
+                        console.log("WMS Service Error: ", errorResponse);
+                    }
+                );
+            });
+        };
+        
         GetWMSRelatedService.getWMSStyle(layer,param).then(function(style){
             var onlineResources = LayerManagerService.getWMS(layer);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
@@ -149,11 +170,15 @@ allModules.service('WMSService',['$rootScope','GoogleMapService','LayerManagerSe
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
                     var mapLayer = me.generateWMS_1_1_1_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null));                        
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
+                    //console.log("onlineResources[index]=", onlineResources[index]);
+                    registerClickEvent(map, mapLayer, onlineResources[index]);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer.id,mapLayer);                   
                 }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
                     var mapLayer = me.generateWMS_1_3_0_Layer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null)); 
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
+                    //console.log("onlineResources[index]=", onlineResources[index]);
+                    registerClickEvent(map, mapLayer, onlineResources[index]);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer.id,mapLayer);
                     

@@ -54,7 +54,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
      * retrieve grouping for dropdown
      * @method getGOIs
      */
-     var getGOIs = function(){ 
+     var getGOIs = function(){
         $http.get('../doGetGroupOfInterest.do',{
             params:{
                 serviceUrl:wfsResource.url            
@@ -63,7 +63,8 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
             $scope.gois = response.data.data;
         });
      };
-     getGOIs();
+     
+     if (wfsResource != undefined && wfsResource.url != undefined) getGOIs();
    
      /**
       * get parameter based on group

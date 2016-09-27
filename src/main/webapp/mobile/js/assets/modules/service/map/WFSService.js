@@ -4,8 +4,8 @@
  * @class WFSService
  * 
  */
-allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService','RenderStatusService',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService,RenderStatusService) {
+allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService','QuerierPanelService','RenderStatusService',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService,QuerierPanelService,RenderStatusService) {
    
       /**
         * Render a point data to the map 
@@ -19,6 +19,11 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                map: map,
                title: point.name
             });    
+            marker.addListener('click', function() {
+                QuerierPanelService.setQueryPoint(point);
+                QuerierPanelService.openPanel(true);
+
+            });
            return marker;
        };
        
@@ -81,7 +86,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
 
                 },function(error){
                     //VT: Some sort of error handling here
-                    console.log(error);
+                    console.log("WFS Service Error:", error);
                 });
           
             }
