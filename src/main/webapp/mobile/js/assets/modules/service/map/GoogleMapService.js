@@ -261,7 +261,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                   drawingMode : google.maps.drawing.OverlayType.RECTANGLE,
                   drawingControl : true,
                   drawingControlOptions : {
-                      position : google.maps.ControlPosition.TOP_CENTER,
+                      position : google.maps.ControlPosition.RIGHT_BOTTOM,
                       drawingModes : [ google.maps.drawing.OverlayType.RECTANGLE ]
                   },
                   rectangleOptions : {
