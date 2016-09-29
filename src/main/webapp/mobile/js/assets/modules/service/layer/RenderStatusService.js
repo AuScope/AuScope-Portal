@@ -111,7 +111,7 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      * @param layerId - layerId
      */
     this.isLayerActive = function(layer){
-       return !this.renderStatus[layer.id] == {};
+       return !(UtilitiesService.isEmpty(this.renderStatus[layer.id]));
        
     };
      

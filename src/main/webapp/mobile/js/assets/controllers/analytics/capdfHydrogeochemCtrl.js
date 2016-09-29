@@ -1,5 +1,6 @@
 /**
- * capdfHydrogeochemCtrl class used for capdf hydrogeochem controller
+ * capdfHydrogeochemCtrl class used for capdf hydrogeochem controller. This controller sits under loadAnalayticCtrl
+ * @extends loadAnalayticCtrl
  * @module controllers
  * @class capdfHydrogeochemCtrl
  */
@@ -10,23 +11,26 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
     var wfsResource = LayerManagerService.getWFS($scope.cswrecord)[0];
     var graphId = "capdf-graph-analytic";
     var layerId = "capdf-hydrogeochem";
-    $scope.isLayerActive = GoogleMapService.isLayerActive(layerId);
+    $scope.isLayerActive = GoogleMapService.isLayerActive($scope.cswrecord);
     $scope.paramOfInterest=[];
     $scope.axis={};
     
+    GoogleMapService.onLayerAdded($scope, function(evt,layer){
+        if(layer.id===layerId){
+            $scope.isLayerActive = true; 
+        }
+    })
+  
+   
+    GoogleMapService.onLayerRemoved($scope, function(evt,layer){
+        if(layer.id===layerId){
+            $scope.isLayerActive = false; 
+        }
+    })
+    
     $scope.addLayer = function(){
         $scope.isLayerActive = true;
-        RenderHandlerService.renderLayer($scope.cswrecord);
-        
-        //VT: register a handler to listen is this layer is removed so that we can update $scope.isLayerActive
-        //VT: once the layer is removed, we have no need for the listerner therefore removed it so that it doesn't
-        // get spammed
-        var deregisterhandler = GoogleMapService.onLayerRemoved($scope,function(evt,layer){
-            if(layer.id == layerId){
-                $scope.isLayerActive = false; 
-                deregisterhandler();
-            }
-        });
+        RenderHandlerService.renderLayer($scope.cswrecord);              
     };
     
    

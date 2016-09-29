@@ -14,9 +14,11 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
      * @param obj - the object to test for emptiness
      * @return boolean - true if object is empty.
      */
-    this.isEmpty = function(obj){
+    this.isEmpty = function(obj){        
         if(obj instanceof Array || (typeof obj === 'string')){
             return obj.length == 0;
+        }else if(typeof obj === 'object'){
+            return jQuery.isEmptyObject(obj);
         }else{
             if(obj){
                 return false;

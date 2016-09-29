@@ -20,12 +20,22 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
         $scope.zoomDrawActive = false;
     });
     
+
     //VT: on a small screen, close the panel after adding the layer
     var mq = window.matchMedia( "(max-width: 658px)" );
     if(mq.matches){
         $scope.$on('layer.add', function (evt,layer) {
             $scope.showlayerPanel=false;
         });
+        
+        GoogleMapService.onSelectDataStart($scope,function(){
+            $scope.showlayerPanel=false;
+        });
+
+        GoogleMapService.onSelectDataEnd($scope,function(){
+            $scope.showlayerPanel=true;
+        });
+        
     }
 
     GoogleMapService.initMap();

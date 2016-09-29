@@ -2,7 +2,11 @@
  * Service class related to handling all things related to google map.
  * @module map
  * @class GoogleMapService
- * 
+ * @event draw.zoom.start - start of the drawing for the zoom event
+ * @event draw.zoom.end - end of the drawing for the zoom event
+ * @event data.select.start - start of the drawing for the data selection event
+ * @event data.select.end - end of the drawing for the data selection event
+ * @event layer.removed - removing of a layer from map event
  */
 allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter',
                                        function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter) {
@@ -48,9 +52,10 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     };
     
     /**
-     * Check if the layer is still active
+     * Check if the layer is still active. This reuse RenderStatusService.isLayerActive. Alternatively you can check
+     * this.activeLayers[layerId]
      * @method isLayerActive
-     * @param layerId - layerId
+     * @param layer - layer
      */
     this.isLayerActive = function(layer){
        return RenderStatusService.isLayerActive(layer);
@@ -94,15 +99,17 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     /**
      * Holds a array reference to the active layers on the map referenced by the layerId
      * @method addLayerToActive
-     * @param layerId - layerId
+     * @param layer - layer
      * @param mapLayer - the map layer to add 
      */
-    this.addLayerToActive = function(layerId,mapLayer){
+    this.addLayerToActive = function(layer,mapLayer){
+        var layerId = layer.id;
         if(!this.activeLayers[layerId]){
             this.activeLayers[layerId]={};
             this.activeLayers[layerId].layers = [];
         }
         this.activeLayers[layerId].layers.push(mapLayer);
+        this.broadcast('layer.added',layer);
     };
     
     /**
@@ -207,7 +214,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                  
       
       /**
-       * cancel the drawing of rectangle and zooming to the area drawn
+       * event for cancellation of the drawing of rectangle and zooming to the area drawn
        * @method zoomDrawCancel
        */
       this.zoomDrawCancel = function(){
@@ -317,12 +324,30 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
             });
       };
       
+      
+      /**
+       * event to capture the removal of a layer
+       * @method onLayerRemoved
+       * @param $scope of the caller
+       * @param callback - callback function
+       */  
       this.onLayerRemoved = function($scope,callback){
         return $scope.$on('layer.removed',function(evt,layer){
             callback(evt,layer);
         }); 
       };
       
+      /**
+       * event to capture the adding of a layer
+       * @method onLayerAdded
+       * @param $scope of the caller
+       * @param callback - callback function
+       */ 
+      this.onLayerAdded = function($scope,callback){
+          return $scope.$on('layer.added',function(evt,layer){
+              callback(evt,layer);
+          }); 
+        };
       
       
       this.broadcast = function (event,result) {
