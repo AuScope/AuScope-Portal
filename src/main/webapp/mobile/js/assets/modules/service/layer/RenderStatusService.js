@@ -91,6 +91,9 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
         if(status == Constants.statusProgress.COMPLETED || status == Constants.statusProgress.ERROR){
             this.renderStatus[layer.id].completed +=  1;
             this.renderStatus.group[layer.group].current += 1;
+            if(status==Constants.statusProgress.ERROR){
+                this.renderStatus[layer.id].errorFound =  true;
+            }
         };
         
         this.broadcast(this.renderStatus);
