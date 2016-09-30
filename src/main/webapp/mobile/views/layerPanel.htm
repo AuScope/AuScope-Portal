@@ -27,8 +27,8 @@
 					  </thead>
 					   <tr ng-repeat-start="cswRecord in records" ng-click="togglePanels('filter',group,cswRecord.id)" class="layer-row" ng-class="{'layer-selected':  status[group][cswRecord.id].isExpanded}">
 						   	<td><span ng-if="renderStatus[cswRecord.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(cswRecord);$event.stopPropagation();" style="color:red;font-size: 15px;margin-right:3px;" aria-hidden="true"></span>{{cswRecord.name}}<br>
-						   	  <div class="layer-progress-bar" ng-if="renderStatus[cswRecord.id].max" ng-click="togglePanels('statusInfo',group,cswRecord.id);$event.stopPropagation();">  
-						   	  <uib-progressbar  class="progress-striped active" style="height:5px" type="success" max="renderStatus[cswRecord.id].max +1" value="renderStatus[cswRecord.id].completed +1">
+						   	  <div ng-if="renderStatus[cswRecord.id].max" ng-click="togglePanels('statusInfo',group,cswRecord.id);$event.stopPropagation();">  
+						   	  <uib-progressbar  class="progress-striped active" style="height:15px;margin-bottom: 0px;margin-top:5px;" type="success" max="renderStatus[cswRecord.id].max +1" value="renderStatus[cswRecord.id].completed +1">
 						   	  </uib-progressbar>
 						   	  </div>
 						   	</td>
@@ -57,7 +57,7 @@
                               <div ng-switch on="resource.status">
 	                             <div ng-switch-when="RUNNING"><span class="fa fa-spinner fa-spin" style="color:orange"></span> {{ resource.url | limitTo: 40 }}{{resource.url.length > 20 ? "..." : resource.url}}</div>
 	                             <div ng-switch-when="COMPLETED"><span  class="fa fa-check-square" style="color:green"></span> {{ resource.url | limitTo: 40 }}{{resource.url.length > 20 ? "..." : resource.url}}</div>
-	                             <div ng-switch-when="ERROR"><span ng-switch-when="ERROR" class="fa fa-exclamation-triangle" style="color:red"></span> {{ resource.url | limitTo: 40 }}{{resource.url.length > 20 ? "..." : resource.url}}</div>
+	                             <div ng-switch-when="ERROR"><span class="fa fa-exclamation-triangle" style="color:red"></span> {{ resource.url | limitTo: 40 }}{{resource.url.length > 20 ? "..." : resource.url}}</div>
                               </div>	                              	                               
                            </div>                                                                 
                         </td>

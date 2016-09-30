@@ -79,6 +79,13 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
         if(UtilitiesService.isEmpty(this.renderStatus[layer.id].resources)){
             this.renderStatus[layer.id].resources = {};
         }
+        
+        //VT: The status has already been set and completed. This may get spammed because of the onerror catch at the img level
+        if(this.renderStatus[layer.id].resources[resource.url] && (this.renderStatus[layer.id].resources[resource.url].status == Constants.statusProgress.ERROR || 
+                this.renderStatus[layer.id].resources[resource.url].status == Constants.statusProgress.COMPLETED)){
+            return;
+        }
+            
         this.renderStatus[layer.id].resources[resource.url] = resource;
         this.renderStatus[layer.id].resources[resource.url].status = status;
         if(status == Constants.statusProgress.COMPLETED || status == Constants.statusProgress.ERROR){
