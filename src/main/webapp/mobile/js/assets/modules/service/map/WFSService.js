@@ -61,32 +61,34 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
                 GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index]).then(function(response){
-                    var rootNode = GMLParserService.getRootNode(response.data.gml);
-                    var primitives = GMLParserService.makePrimitives(rootNode);
-                    
-                    RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.COMPLETED);
-                    
-                    for(var key in primitives){
-                        switch(primitives[key].geometryType){
-                            case Constants.geometryType.POINT:
-                                GoogleMapService.addMarkerToActive(layer.id,me.renderPoint(primitives[key],map));
-                                break;
-                            case Constants.geometryType.LINESTRING:
-                                me.renderLineString(primitives[key],map);
-                                break;
-                            case Constants.geometryType.POLYGON:
-                                me.renderPolygon(primitives[key],map);
-                                break;
-                            default:
-                                break;
+                    try{
+                        var rootNode = GMLParserService.getRootNode(response.data.gml);
+                        var primitives = GMLParserService.makePrimitives(rootNode);
+                        
+                        RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.COMPLETED);
+                        
+                        for(var key in primitives){
+                            switch(primitives[key].geometryType){
+                                case Constants.geometryType.POINT:
+                                    GoogleMapService.addMarkerToActive(layer.id,me.renderPoint(primitives[key],map));
+                                    break;
+                                case Constants.geometryType.LINESTRING:
+                                    me.renderLineString(primitives[key],map);
+                                    break;
+                                case Constants.geometryType.POLYGON:
+                                    me.renderPolygon(primitives[key],map);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                    }catch(err){
+                        RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR); 
                     }
-                    
                    
 
                 },function(error){
-                    //VT: Some sort of error handling here
-                    console.log("WFS Service Error:", error);
+                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR);
                 });
           
             }
@@ -108,30 +110,33 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             for(var index in onlineResources){
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index]).then(function(response){
-                    var rootNode = GMLParserService.getRootNode(response.data.gml);
-                    var primitives = GMLParserService.makePrimitives(rootNode);
-                    
-                    RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.COMPLETED);
-                    
-                    for(var key in primitives){
-                        switch(primitives[key].geometryType){
-                            case Constants.geometryType.POINT:
-                                GoogleMapService.addMarkerToActive(layer.id,me.renderPoint(primitives[key],map));
-                                break;
-                            case Constants.geometryType.LINESTRING:
-                                me.renderLineString(primitives[key],map);
-                                break;
-                            case Constants.geometryType.POLYGON:
-                                me.renderPolygon(primitives[key],map);
-                                break;
-                            default:
-                                break;
+                    try{
+                        var rootNode = GMLParserService.getRootNode(response.data.gml);
+                        var primitives = GMLParserService.makePrimitives(rootNode);
+                        
+                        RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.COMPLETED);
+                        
+                        for(var key in primitives){
+                            switch(primitives[key].geometryType){
+                                case Constants.geometryType.POINT:
+                                    GoogleMapService.addMarkerToActive(layer.id,me.renderPoint(primitives[key],map));
+                                    break;
+                                case Constants.geometryType.LINESTRING:
+                                    me.renderLineString(primitives[key],map);
+                                    break;
+                                case Constants.geometryType.POLYGON:
+                                    me.renderPolygon(primitives[key],map);
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                    }catch(err){
+                        RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR); 
                     }
                     
                 },function(error){
-                    //VT: Some sort of error handling here
-                    console.log(error);
+                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR);
                 });
             }
             
