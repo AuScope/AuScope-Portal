@@ -7,9 +7,10 @@
  * @class QuerierPanelService
  * 
  */
-allModules.service('QuerierPanelService',['$compile',function ($compile) {
+allModules.service('QuerierPanelService', function () {
     this.pointObj = null;
     this.panelHtml = null;
+    this.layerList = [];
 
     /**
     * Register the 
@@ -84,4 +85,42 @@ allModules.service('QuerierPanelService',['$compile',function ($compile) {
         this.scopeObj.panelHtml = html;
     };
     
-}]);
+    /**
+    * Disable click events on the map layer to prevent opening up of the query panel
+    * This should be called after the layer has been deleted from the map
+    * @method deregisterLayer
+    * @param filterPanelCsw CSW object of the layer that has been deleted from the map
+    */
+    this.deregisterLayer = function(filterPanelCsw)
+    {   
+        for (var i=0; i<filterPanelCsw.cswRecords[0].onlineResources.length; i++) {
+            var onlineResource = filterPanelCsw.cswRecords[0].onlineResources[i];
+            for (var j=0; j<this.layerList.length; j++) {
+                if (this.layerList[j].resource==onlineResource) {
+                    // Remove event listener from map
+                    this.layerList[j].listener.remove();
+                    // Delete from list
+                    this.layerList.splice(j,1);
+                    return;
+                }
+            }
+        }
+    };
+    
+    /**
+    * Registers the mapEventListener object and onlineResource object
+    * This should be called after the 'mousedown' event is registered with the google map.
+    * @method registerLayer
+    * @param onlineResource object representing the WMS resource displayed as a map layer
+    * @param mapEventListener 'MapsEventListener' object created when map listener routine is registered using 'google.maps.event' namespace
+    */
+    this.registerLayer = function(onlineResource, mapEventListener)
+    {
+        // Add to list
+        this.layerList.push({
+            resource: onlineResource,
+            listener: mapEventListener 
+        });
+    };
+    
+});
