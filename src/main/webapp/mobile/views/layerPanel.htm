@@ -29,8 +29,8 @@
 						   	<td><span ng-if="renderStatus[cswRecord.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(cswRecord);$event.stopPropagation();" style="color:red;font-size: 15px;margin-right:3px;" aria-hidden="true"></span>{{cswRecord.name}}
 						   	  <div ng-if="renderStatus[cswRecord.id].max" ng-click="togglePanels('statusInfo',group,cswRecord.id);$event.stopPropagation();"> 						   	     
 							   	  <uib-progressbar  class="progress-striped active hasEvent" style="height:15px;margin-bottom: 0px;margin-top:5px;" type="{{renderStatus[cswRecord.id].errorFound? 'warning':'success'}}" max="renderStatus[cswRecord.id].max +1" value="renderStatus[cswRecord.id].completed +1">
-							   	      <div ng-if="renderStatus[cswRecord.id].errorFound"><span class="fa fa-exclamation-triangle" style="color:red;"></span> Incomplete, click here</div>
-							   	      <div ng-if="!renderStatus[cswRecord.id].errorFound && renderStatus[cswRecord.id].max==renderStatus[cswRecord.id].completed"><span  class="fa fa-check-square" style="color:green;"></span> Success</div>							   	      
+							   	      <div ng-if="renderStatus[cswRecord.id].errorFound"><span class="fa fa-exclamation-triangle" style="color:red;"></span> Incomplete report</div>
+							   	      <div ng-if="!renderStatus[cswRecord.id].errorFound && renderStatus[cswRecord.id].max==renderStatus[cswRecord.id].completed"><span  class="fa fa-check-square" style="color:green;"></span> Success report</div>							   	      					   	      
 							   	  </uib-progressbar>
 						   	  </div>
 						   	</td>
