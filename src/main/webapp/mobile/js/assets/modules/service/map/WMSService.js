@@ -27,14 +27,15 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
         
         // Register map click/touch events to allow creation of the query information panel
         var registerClickEvent = function(map, mapLayer, onlineResource){
-            google.maps.event.addListener(map, 'mousedown', function(evt) {
+            var mapEventListener = google.maps.event.addListener(map, 'mousedown', function(evt) {
                 GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource).then(function(response) 
                     { 
                         // Used to check for an empty response, which occurs when user clicks/touches on empty space
                         var empty_body = /<body>\s*<\/body>/g;
+                        var empty_body2 = /<body>\s*<script .+<\/script>\s*<\/body>/g;
 
                         // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
-                        if (response.status==200 && empty_body.test(response.data)==false) {
+                        if (response.status==200 && empty_body.test(response.data)==false && empty_body2.test(response.data)==false) {
                             QuerierPanelService.setPanelHtml(response.data);
                             QuerierPanelService.openPanel(false);
                         }
@@ -44,6 +45,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                     }
                 );
             });
+            QuerierPanelService.registerLayer(onlineResource, mapEventListener);
         };
         
         /**
