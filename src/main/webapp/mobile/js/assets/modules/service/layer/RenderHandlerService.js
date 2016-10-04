@@ -3,8 +3,8 @@
  * @class RenderHandlerService
  * 
  */
-allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService','GoogleMapService',
-                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService) {
+allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService','GoogleMapService','RenderStatusService','LayerManagerService',
+                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService,RenderStatusService,LayerManagerService) {
     
   
      
@@ -43,7 +43,13 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
       * @param cswRecord - the cswRecord for rendering
       */
      this.renderCSWRecord = function(layer,cswRecord){   
-        
+         if(RenderStatusService.getRenderStatus()[layer.id]){
+             for(var resourceUrl in RenderStatusService.getRenderStatus()[layer.id].resources){
+                 if(LayerManagerService.CSWContainsResource(cswRecord,RenderStatusService.getRenderStatus()[layer.id].resources[resourceUrl])){
+                     return;
+                 };
+             };
+         }
          //VT: on a small screen, broadcast a request to add a layer has been established so that 
          //VT:action like closing panels can be act on. 
          var mq = window.matchMedia( "(max-width: 658px)" );

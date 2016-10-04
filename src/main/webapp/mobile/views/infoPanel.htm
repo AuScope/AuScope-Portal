@@ -18,17 +18,21 @@
                         <div ng-controller="collapseInfoPanelCtrl">
                         
                              <uib-accordion close-others="true" class="nested-accordion">
-                                <div ng-repeat="cswRecord in infoPanelCsw.cswRecords.slice(0,10)" uib-accordion-group class="panel-info" heading= "{{ cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information' }}" is-open="false" 
+                                <div ng-repeat="cswRecord in infoPanelCsw.cswRecords.slice(0,10)" uib-accordion-group class="panel-info" is-open="false" 
                                     ng-mouseenter="highlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)" 
                                     ng-mouseleave="lowlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)">
+                                    
+                                    <uib-accordion-heading>{{ cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information' }}
+                                       <span ng-click="addCSWRecord(infoPanelCsw,cswRecord);$event.stopPropagation();$event.preventDefault();" class="pull-right label label-primary" style='padding:2px 2px 2px 2px;'><i class="fa fa-map-marker" aria-hidden="true"></i> Add</span>                                                                       
+                                    </uib-accordion-heading>
                                     
                                     <div class="row"><strong>Contact Org:</strong> {{cswRecord.contactOrg}}</div>
                                     <div class="row"><strong>Description:</strong> {{cswRecord.description}}</div>
                                     <div class="row"><strong>Name:</strong> {{cswRecord.name}}</div>
-                                    <div class="row"><strong>Info URL:</strong><a ng-href="{{cswRecord.recordInfoUrl}}">Link to Geonetwork Record</a></div>
+                                    <div class="row"><strong>Info URL:</strong><a target="_blank" ng-href="{{cswRecord.recordInfoUrl}}">Link to Geonetwork Record</a></div>
                                     <div ng-repeat="onlineResource in cswRecord.onlineResources">
                                         <div ng-if="onlineResource.type != 'Unsupported'">
-                                            <div class="row"><a ng-href="{{onlineResource.url}}">Link to {{onlineResource.type}} url</a>  <span class="label label-default">{{onlineResource.type}} </span></div>
+                                            <div class="row"><a target="_blank" ng-href="{{onlineResource.url}}">{{onlineResource.type}} endpoint url</a>  <span class="label label-default">{{onlineResource.type}} </span></div>
                                         </div>
                                     </div>
                                     <div class="row" ng-if="wmsUrls[cswRecord.adminArea]!=undefined">
@@ -40,7 +44,7 @@
                                         <img ng-src="{{wmsLegends[cswRecord.adminArea]}}" alt="Loading legend...">
                                     </div>
                                     <hr>
-                                    <button type="button" class="btn btn-info btn-sm" ng-click="addCSWRecord(infoPanelCsw,cswRecord)">Add Resource</button>
+                                    
                                 </div>
                              </uib-accordion>  
                         </div>

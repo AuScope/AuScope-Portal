@@ -62,7 +62,7 @@ allModules.service('LayerManagerService',['$rootScope','Constants',function ($ro
      * Extract resources based on the type. If type is not defined, return all the resource
      * @method getOnlineResources
      * @param layer - the layer we would like to extract cswRecords from
-     * @param resourceType - a enum of the resource type. The ENUM constant is defined on app.js
+     * @param resourceType - OPTIONAL a enum of the resource type. The ENUM constant is defined on app.js
      * @return resources - an array of the resource. empty array if none is found
      */
     this.getOnlineResources = function(layer,resourceType){
@@ -93,7 +93,7 @@ allModules.service('LayerManagerService',['$rootScope','Constants',function ($ro
      * Extract resources based on the type. If type is not defined, return all the resource
      * @method getOnlineResourcesFromCSW
      * @param cswRecord - the cswRecord we would like to extract cswRecords from
-     * @param resourceType - a enum of the resource type. The ENUM constant is defined on app.js
+     * @param resourceType - OPTIONAL a enum of the resource type. The ENUM constant is defined on app.js
      * @return resources - an array of the resource. empty array if none is found
      */
     this.getOnlineResourcesFromCSW = function(cswRecord,resourceType){
@@ -111,6 +111,24 @@ allModules.service('LayerManagerService',['$rootScope','Constants',function ($ro
             
         }
         return onlineResource;
+    };
+    
+    
+    /**
+     * Check if resource exist in the cswRecord
+     * @method CSWContainsResource
+     * @param cswRecord - the cswRecord we would like to extract cswRecords from
+     * @param resource - the resource to match
+     * @return boolean - true if contain matching resource else false;
+     */
+    this.CSWContainsResource = function(cswRecord,resource){
+        var onlineResource = this.getOnlineResourcesFromCSW(cswRecord);
+        for(var index in onlineResource){
+            if(resource == onlineResource[index]){
+                return true;
+            }
+        }
+        return false;
     };
      
 }]);

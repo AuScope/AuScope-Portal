@@ -87,64 +87,6 @@ html,body {
 
 
 
-
-@media screen and (max-width: 658px) {
-	body { 
-	   font-size: 1.2em; 
-	}
-	
-	.map-overlay-panel-toggle {      
-	  top : -10px;
-	  right : 1em;     
-	  width: auto;
-	  position: absolute;   
-	  z-index: 50;
-	}
-	
-	#inputValidation{
-	   width : 200px;
-	}
-	
-	#floating-progressbar{	
-	  display:block;  
-	  top : 60px;
-	  left : 2em;     
-	  position: absolute;   
-	  z-index: 50;
-	  width:150px;  
-	}
-	
-	#logo-menu-mobile{  
-      bottom : 60px;
-      left : 0.5em;     
-      width:100px;  
-      display:block;  
-      position: absolute;   
-      z-index: 50;
-	}
-	
-	#logo-menu{  
-        display:none;
-    }
-	
-	#logo-menu-mobile > img{  
-	    width:120px;  
-	}
-	
-	.map-overlay-panel-toggle {      	 
-	  background: none;	  	
-	}
-	
-	.quick-menu div{    
-	   display:none;
-	}
-}
-
-
-
-
-
-
 /* textbox css*/
 .border-none, .border-none:focus {
 	border: none;
@@ -311,6 +253,12 @@ html,body {
   display: table-cell;
   vertical-align: middle;    
 }
+
+
+.desktop-only{
+	display:block;
 }
 
-
+.mobile-only{
+    display:none;
+}
