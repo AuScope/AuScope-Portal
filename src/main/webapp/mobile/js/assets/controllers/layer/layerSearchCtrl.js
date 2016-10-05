@@ -15,7 +15,12 @@ allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', f
         // search layers that matches keywords and flag them
         GetCSWRecordService.searchLayers($scope.keywords); 
         // show layers
-        $scope.$parent.showlayerPanel = !$scope.$parent.showlayerPanel;
+        $scope.$parent.showlayerPanel = true;
+    }; 
+    
+    this.openMenu = function() {
+        $scope.keywords = "";
+        this.submit();
     }; 
     
 }]);

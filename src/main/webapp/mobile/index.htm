@@ -120,7 +120,7 @@
 			    <div class="form-inline">
 				  <div class="form-group has-feedback inner-addon left-addon" >
  					<form ng-submit="searchCtrl.submit()">
-						<span ng-click="searchCtrl.submit()" class="leftglyphicon glyphicon glyphicon-menu-hamburger hasEvent"></span>
+						<span ng-click="searchCtrl.openMenu()" class="leftglyphicon glyphicon glyphicon-menu-hamburger hasEvent"></span>
 						<input type="text" class="form-control border-none" id="inputValidation" placeholder="Search" ng-model="keywords" />
 						<span class="glyphicon glyphicon-search form-control-feedback hasEvent" ng-click="searchCtrl.submit()"></span>						
 						<!-- Hidden submit button so we can have a simple ng-submit to detect keywords have been searched -->
