@@ -57,14 +57,24 @@ html,body {
 }
 
 .map-overlay-panel-toggle {      
-  top : 50px;
-  right : 2em;	  
+  top : 10px;
+  right : 10px; /*2em;*/	  
   position: absolute;   
   z-index: 50;
-  width: 280px;
+  width: 180px;
   background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
   background: rgba(54, 25, 25, .5);
-  padding:20px 20px 20px 20px;
+  padding:10px 10px 10px 10px;
+}
+
+.menu-icon-toggle {      
+  top : 4em;
+  left : 2em; /*2em;*/      
+  position: absolute;   
+  z-index: 50;
+  background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
+  background: rgba(54, 25, 25, .5);
+  padding:10px 10px 10px 10px;
 }
 
 #floating-progressbar{
@@ -74,15 +84,17 @@ html,body {
 
 
 #logo-menu{  
-     margin: 0px 20px 10px 0px 
+  bottom : 60px;
+  left : 0.5em;     
+  width:100px;  
+  display:block;  
+  position: absolute;   
+  z-index: 50;
 }
-
-#logo-menu-mobile{  
-     display:none;
-    }
-
-#logo-menu > img{  
-    width:240px;  
+    
+    
+#logo-menu  img{  
+  width:120px;  
 }
 
 
@@ -227,6 +239,11 @@ html,body {
 
 .margin-top-5{
     margin-top: 5px;
+}
+
+.hr-10{
+	margin-top:10px;
+	margin-bottom:10px;
 }
 
 .render-status-panel div{

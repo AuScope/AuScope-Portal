@@ -160,7 +160,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
            zoom: (mq.matches? 3 : 5),
            mapTypeControlOptions: {
                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU ,
-               position: google.maps.ControlPosition.TOP_LEFT
+               position: google.maps.ControlPosition.RIGHT_BOTTOM
            },
          });
          

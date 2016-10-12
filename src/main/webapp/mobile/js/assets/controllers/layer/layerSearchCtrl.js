@@ -5,6 +5,8 @@
  * 
  */
 allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', function ($scope,GetCSWRecordService) {
+    
+    $scope.showClearGlyph=false;
     /**
      * This is triggered after the user types inside the search text field and press enter.
      * It will search through all known layers CSW records name and description that matches the keywords.
@@ -14,13 +16,23 @@ allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', f
     this.submit = function() {
         // search layers that matches keywords and flag them
         GetCSWRecordService.searchLayers($scope.keywords); 
-        // show layers
-        $scope.$parent.showlayerPanel = true;
+        $scope.showClearGlyph=true;      
     }; 
     
-    this.openMenu = function() {
-        $scope.keywords = "";
-        this.submit();
+    /**
+     * This will clear all search selection
+     * @method submit
+     */
+    this.clear = function() {
+        // search layers that matches keywords and flag them
+        $scope.keywords ="";
+        GetCSWRecordService.searchLayers("");
+        $scope.showClearGlyph=false;
+              
+    }; 
+    
+    this.openMenu = function() {       
+        $scope.$parent.showlayerPanel = true;
     }; 
     
 }]);

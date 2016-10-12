@@ -24,22 +24,7 @@
       width:150px;  
     }
     
-    #logo-menu-mobile{  
-      bottom : 60px;
-      left : 0.5em;     
-      width:100px;  
-      display:block;  
-      position: absolute;   
-      z-index: 50;
-    }
-    
-    #logo-menu{  
-        display:none;
-    }
-    
-    #logo-menu-mobile > img{  
-        width:120px;  
-    }
+   
     
     .map-overlay-panel-toggle {          
       background: none;     
