@@ -104,7 +104,7 @@
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
-                <ref bean="cswAsterProduction" />
+                <!-- LJ:aster was down, remove it. ref bean="cswAsterProduction" /-->
             </list>
         </constructor-arg>
     </bean>
