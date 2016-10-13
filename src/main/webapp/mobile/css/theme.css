@@ -12,14 +12,11 @@ html,body {
 }
 
 
-.btn-block {
-    margin: 3px;
+.main-search{
+	padding-bottom:10px;
+	padding-left:10px;
 }
 
-.ng-binding, .ng-scope  {
-    padding-left: 0px;
-    padding-right: 0px;
-}
 
 .dark-blue {
 	color: #000080;
@@ -51,17 +48,13 @@ html,body {
 	width: 100%;
 }
 
-.gm-style * {
-  width:auto;
-  height:auto;
-}
 
 .map-overlay-panel-toggle {      
   top : 10px;
   right : 10px; /*2em;*/	  
   position: absolute;   
   z-index: 50;
-  width: 180px;
+  width: 150px;
   background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
   background: rgba(54, 25, 25, .5);
   padding:10px 10px 10px 10px;
@@ -77,9 +70,6 @@ html,body {
   padding:10px 10px 10px 10px;
 }
 
-#floating-progressbar{
-	  display : none;  
-}
 
 
 

@@ -98,7 +98,7 @@
 	<body ng-app="app" ng-controller="googleMapCtrl">
 			
 		<div class="angular-google-map-container">
-		    <div id="floating-progressbar">
+		    <div id="floating-progressbar" class="mobile-only">
 		      <div class="row">		
 			        <div ng-repeat="(group,status) in floatingGroupStatus" class="col-sm-12"><uib-progressbar ng-if="status.activeLayer.length!=0" class="progress-striped" max="status.max+1" value="status.current+1" type="success">{{group}}</uib-progressbar></div>
 			    </div>
@@ -114,11 +114,14 @@
 			<querier-panel ng-show="showQuerierPanel" class='layer-panel animated fadeInLeft'  active-view="active" show-querier-panel = "showQuerierPanel" ></querier-panel>
 			
 			<div ng-controller="layerSearchCtrl as searchCtrl">
-				<div class="menu-icon-toggle">
-	                 <span class="fa fa-bars white fa-2x animated zoomIn hasEvent" aria-hidden="true" ng-click="searchCtrl.openMenu()"></span>
+				<div class="menu-icon-toggle mobile-only">
+	                 <span class="fa fa-bars white fa-2x animated zoomIn hasEvent" aria-hidden="true" ng-click="searchCtrl.toggleMenu()"></span>
 	            </div>						
 				<div class="map-overlay-panel-toggle animated zoomIn">			   
-					<div class="row quick-menu">				    				       			       
+					<div class="row quick-menu">	
+					    <div class="col-xs-4">                              
+                            <i ng-click="searchCtrl.toggleMenu()" class="fa fa-bars fa-2x white hasEvent" aria-hidden="true"></i>                  
+                         </div>			    				       			       
 	                    <div class="col-xs-4">                   
 		                    <div ng-switch on="zoomDrawActive">
 							      <div ng-switch-when="false"><small class="white"><i ng-click="toggleZoomDraw()" class="fa fa-search-plus fa-2x white hasEvent"  aria-hidden="true"></i></small></div>
@@ -127,10 +130,7 @@
 	                     </div>
 	                     <div class="col-xs-4">                              
 	                        <a href="mailto:cg-admin@csiro.au" target="_top"><small><i class="fa fa-envelope-o fa-2x white hasEvent" aria-hidden="true"></i><br></small></a>                   
-	                     </div>
-	                     <div class="col-xs-4">                              
-	                        <a href="http://www.auscope.org" target="_top"><small><i class="fa fa-external-link fa-2x white hasEvent" aria-hidden="true"></i><br></small></a>                   
-	                     </div>
+	                     </div>	                     
 	                </div>  
 	                
 	                <div ng-hide="zoomDrawActive" class="quick-menu">
