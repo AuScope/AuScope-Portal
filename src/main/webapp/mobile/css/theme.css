@@ -29,6 +29,51 @@ html,body {
     color: #ffffff;
 }
 
+.btn-red { 
+  color: #FFFFFF; 
+  background-color: #D14F30; 
+  border-color: #D14F30; 
+} 
+ 
+.btn-red:hover, 
+.btn-red:focus,  
+.btn-red.active, 
+.open .dropdown-toggle.btn-red { 
+  color: #FFFFFF; 
+  background-color: #BA2B07; 
+  border-color: #D14F30; 
+} 
+ 
+
+.btn-red.active, 
+.open .dropdown-toggle.btn-red { 
+  background-image: none; 
+} 
+ 
+.btn-red.disabled, 
+.btn-red[disabled], 
+fieldset[disabled] .btn-red, 
+.btn-red.disabled:hover, 
+.btn-red[disabled]:hover, 
+fieldset[disabled] .btn-red:hover, 
+.btn-red.disabled:focus, 
+.btn-red[disabled]:focus, 
+fieldset[disabled] .btn-red:focus, 
+.btn-red.disabled:active, 
+.btn-red[disabled]:active, 
+fieldset[disabled] .btn-red:active, 
+.btn-red.disabled.active, 
+.btn-red[disabled].active, 
+fieldset[disabled] .btn-red.active { 
+  background-color: #D14F30; 
+  border-color: #D14F30; 
+} 
+ 
+.btn-red .badge { 
+  color: #D14F30; 
+  background-color: #FFFFFF; 
+}
+
 .activeView-table {
 	margin-left:10px;
 }

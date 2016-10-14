@@ -8,17 +8,32 @@
 			</div>			
 		</div>
 		<div>
-		   <div class="form-inline main-search" ng-controller="layerSearchCtrl as searchCtrl">
-              <div class="form-group has-feedback inner-addon">
-                <form ng-submit="searchCtrl.submit()">   
-                    <label for="main-search">Search: </label>                
-                    <input type="text" class="form-control" id="main-search" placeholder="Enter Search Text" ng-model="keywords" />
-                    <span ng-if="!showClearGlyph" class="glyphicon glyphicon-search form-control-feedback hasEvent" ng-click="searchCtrl.submit()"></span>
-                    <span ng-if="showClearGlyph" class="glyphicon glyphicon-remove-sign form-control-feedback hasEvent" ng-click="searchCtrl.clear();"></span>                                                                                    
-                </form>
-              </div>
+		   <div class="row main-search" ng-controller="layerSearchCtrl as searchCtrl">
+		          <div class="col-xs-9">
+		              <div class="form-group has-feedback inner-addon">
+		                <form ng-submit="searchCtrl.submit()">   
+		                   
+		                    <input type="text" class="form-control" id="main-search" placeholder="Enter Search Text" ng-model="keywords" />
+		                    <span ng-if="!showClearGlyph" class="glyphicon glyphicon-search form-control-feedback hasEvent" ng-click="searchCtrl.submit()"></span>
+		                    <span ng-if="showClearGlyph" class="glyphicon glyphicon-remove-sign form-control-feedback hasEvent" ng-click="searchCtrl.clear();"></span>                                                                                                      
+		                </form>                
+		              </div>
+	              </div>
+	               <div class="btn-group col-xs-3"  style="padding-left:0;" uib-dropdown>
+				      <button id="single-button" type="button" class="btn btn-red" uib-dropdown-toggle ng-disabled="disabled">
+				        Filter <span class="caret"></span>
+				      </button>
+				      <ul class="dropdown-menu pull-right" style="z-index:50" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+				        <li role="menuitem"><a href="#">WFS Layers</a></li>
+				        <li role="menuitem"><a href="#">WMS Layers</a></li>
+				        <li role="menuitem"><a href="#">Current Active</a></li>
+				        <li class="divider"></li>
+				        <li role="menuitem"><a href="#">Analytic</a></li>
+				      </ul>
+				    </div>
+				  
             </div>    		
-		</div>
+		</div>			                
 		<div>
 			<uib-accordion close-others="true">	
 			   <div ng-repeat="(group,records) in layerPanel.getCswRecords()" uib-accordion-group class="accordion-header-override" ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
