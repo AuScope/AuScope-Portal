@@ -7,10 +7,6 @@ html,body {
     padding: 0;
 }
 
-.glyphicon.glyphicon-menu-left {
-	font-size: 1.8em;
-}
-
 
 .main-search{
 	padding-bottom:10px;
@@ -27,6 +23,10 @@ html,body {
 }
 .white {
     color: #ffffff;
+}
+
+.cyan {
+	color: #3dd6ad
 }
 
 .btn-red { 
@@ -99,20 +99,22 @@ fieldset[disabled] .btn-red.active {
   right : 10px; /*2em;*/	  
   position: absolute;   
   z-index: 50;
-  width: 150px;
+  width: 200px;
   background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
   background: rgba(54, 25, 25, .5);
-  padding:10px 10px 10px 10px;
+  padding:8px 10px 8px 10px;
+}
+
+.map-overlay-panel-toggle .col-xs-3{
+	padding:0px 8px 0px 8px;
 }
 
 .menu-icon-toggle {      
   top : 4em;
-  left : 2em; /*2em;*/      
+  left : 0px;      
   position: absolute;   
   z-index: 50;
-  background: rgb(54, 25, 25); /* Fall-back for browsers that don't support rgba */
-  background: rgba(54, 25, 25, .5);
-  padding:10px 10px 10px 10px;
+  padding:10px 10px 10px 0px;
 }
 
 
@@ -275,6 +277,9 @@ fieldset[disabled] .btn-red.active {
 .margin-top-5{
     margin-top: 5px;
 }
+
+.gi-2x{font-size: 2em;}
+.gi-3x{font-size: 3em;}
 
 .hr-10{
 	margin-top:10px;

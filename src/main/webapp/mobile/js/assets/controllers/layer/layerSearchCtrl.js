@@ -32,7 +32,7 @@ allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', f
     }; 
     
     this.toggleMenu = function() {       
-        $scope.$parent.showlayerPanel = !$scope.$parent.showlayerPanel;
+        $scope.$parent.showlayerPanel = true;
     }; 
     
 }]);
