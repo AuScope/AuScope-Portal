@@ -4,7 +4,7 @@
  * @class GetCSWRecordService
  * 
  */
-allModules.service('GetCSWRecordService',['$http','$q',function ($http,$q) {
+allModules.service('GetCSWRecordService',['$http','$q','LayerManagerService','Constants','GoogleMapService',function ($http,$q,LayerManagerService,Constants,GoogleMapService) {
      var promise; 
      
      var allKnownLayers;
@@ -72,6 +72,103 @@ allModules.service('GetCSWRecordService',['$http','$q',function ($http,$q) {
             searchedLayers = null;
         }
     };
+    
+    /**
+     * Filter out all WMS layer
+     * @method searchLayers
+     */
+    this.filterImageRecord = function() {       
+        searchedLayers = {};
+        for ( var i in allKnownLayers) {
+            var layerGroup = allKnownLayers[i];
+            for ( var j in layerGroup) {
+                var layer = layerGroup[j];                    
+                var onlineResources=LayerManagerService.getOnlineResources(layer);                    
+                var containsImageService = false;                    
+                for (var i = 0; i < onlineResources.length; i++) {
+                    switch(onlineResources[i].type) {                       
+                        case Constants.resourceType.WMS:
+                        case Constants.resourceType.WWW:
+                        case Constants.resourceType.FTP:
+                        case Constants.resourceType.CSW:
+                        case Constants.resourceType.UNSUPPORTED:
+                            containsImageService = true;
+                            break;
+                    }
+                }
+                
+               if(containsImageService){
+                   if (searchedLayers[layer.group] === undefined) {
+                       searchedLayers[layer.group] = [];
+                   }                   
+                   searchedLayers[layer.group].push(layer);
+               }                    
+            }
+        }
+        
+        
+    };
+    
+    /**
+     * Filter out all WMS layer
+     * @method searchLayers
+     */
+    this.filterDataRecord = function() {        
+        searchedLayers = {};
+        for ( var i in allKnownLayers) {
+            var layerGroup = allKnownLayers[i];
+            for ( var j in layerGroup) {
+                var layer = layerGroup[j];                    
+                var onlineResources=LayerManagerService.getOnlineResources(layer);                  
+                var containsDataService = false;                    
+                for (var i = 0; i < onlineResources.length; i++) {
+                    switch(onlineResources[i].type) {                       
+                        case Constants.resourceType.WFS:
+                        case Constants.resourceType.WCS:
+                        case Constants.resourceType.SOS:
+                        case Constants.resourceType.OPeNDAP:
+                        case Constants.resourceType.CSWService:
+                        case Constants.resourceType.IRIS:
+                            containsDataService = true;
+                            break;
+                    }
+                }                    
+               if(containsDataService){
+                   if (searchedLayers[layer.group] === undefined) {
+                       searchedLayers[layer.group] = [];
+                   }
+                   searchedLayers[layer.group].push(layer);
+               }                    
+            }
+        }
+        
+
+    };
+    
+    
+    
+    /**
+     * Filter out all Active layer
+     * @method searchLayers
+     */
+    this.filterActiveRecord = function() {
+        searchedLayers = {};
+        for ( var i in allKnownLayers) {
+            var layerGroup = allKnownLayers[i];
+            for ( var j in layerGroup) {
+                var layer = layerGroup[j];                    
+                             
+               if(GoogleMapService.isLayerActive(layer)){
+                   if (searchedLayers[layer.group] === undefined) {
+                       searchedLayers[layer.group] = [];
+                   }
+                   searchedLayers[layer.group].push(layer);
+               }                    
+            }
+        }
+    };
+    
+    
 
     /**
      * Return csw records to be displayed in the layer panel.

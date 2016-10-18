@@ -31,6 +31,36 @@ allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', f
               
     }; 
     
+    /**
+     * This will filter data record
+     * @method filterDataRecord
+     */
+    this.filterDataRecord = function(){
+        $scope.keywords ="Filter Data Layer"
+        $scope.showClearGlyph=true;    
+        GetCSWRecordService.filterDataRecord();
+    };
+    
+    /**
+     * This will filter image record
+     * @method filterImageRecord
+     */
+    this.filterImageRecord = function(){
+        $scope.keywords ="Filter Image Layer"
+        $scope.showClearGlyph=true;
+        GetCSWRecordService.filterImageRecord();
+    };
+    
+    /**
+     * This will filter active record
+     * @method filterActiveRecord
+     */
+    this.filterActiveRecord = function(){
+        $scope.keywords ="Filter Current Active Layer"
+        $scope.showClearGlyph=true;
+        GetCSWRecordService.filterActiveRecord();
+    };
+    
     this.toggleMenu = function() {       
         $scope.$parent.showlayerPanel = true;
     }; 

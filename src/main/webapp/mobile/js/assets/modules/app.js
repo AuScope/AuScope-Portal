@@ -4,6 +4,15 @@ app.constant('Constants', {
     resourceType: {
         WMS: 'WMS',
         WFS: 'WFS',
+        WCS: 'WCS',
+        WWW: 'WWW',
+        OPeNDAP : 'OPeNDAP',
+        FTP : 'FTP',
+        SOS : 'SOS',
+        IRIS : 'IRIS',
+        CSWService : 'CSWService',
+        NCSS : 'NCSS',
+        UNSUPPORTED : 'Unsupported',        
         OTHERS: 'OTHERS'
     },
     WMSVersion:{

@@ -13,7 +13,7 @@
 		              <div class="form-group has-feedback inner-addon">
 		                <form ng-submit="searchCtrl.submit()">   
 		                   
-		                    <input type="text" class="form-control" id="main-search" placeholder="Enter Search Text" ng-model="keywords" />
+		                    <input type="text" class="form-control" ng-disabled="showClearGlyph"  id="main-search" placeholder="Enter Search Text" ng-model="keywords" />
 		                    <span ng-if="!showClearGlyph" class="glyphicon glyphicon-search form-control-feedback hasEvent" ng-click="searchCtrl.submit()"></span>
 		                    <span ng-if="showClearGlyph" class="glyphicon glyphicon-remove-sign form-control-feedback hasEvent" ng-click="searchCtrl.clear();"></span>                                                                                                      
 		                </form>                
@@ -23,12 +23,12 @@
 				      <button id="single-button" type="button" class="btn btn-red" uib-dropdown-toggle ng-disabled="disabled">
 				        Filter <span class="caret"></span>
 				      </button>
-				      <ul class="dropdown-menu pull-right" style="z-index:50" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-				        <li role="menuitem"><a href="#">WFS Layers</a></li>
-				        <li role="menuitem"><a href="#">WMS Layers</a></li>
-				        <li role="menuitem"><a href="#">Current Active</a></li>
+				      <ul class="dropdown-menu pull-right" style="z-index:50" uib-dropdown-menu role="menu" aria-labelledby="single-button">				      
+				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterDataRecord()"><i class="fa fa-sliders" aria-hidden="true"></i> Data Layers</a></li>
+				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterImageRecord()"><i class="fa fa-file-image-o" aria-hidden="true"></i> Image Layers</a></li>
+				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterActiveRecord()"><i class="fa fa-check-square" aria-hidden="true"></i> Current Active</a></li>
 				        <li class="divider"></li>
-				        <li role="menuitem"><a href="#">Analytic</a></li>
+				        <li class="hasEvent" role="menuitem"><a href="#"><i class="fa fa-line-chart" aria-hidden="true"></i> Analytic</a></li>
 				      </ul>
 				    </div>
 				  
