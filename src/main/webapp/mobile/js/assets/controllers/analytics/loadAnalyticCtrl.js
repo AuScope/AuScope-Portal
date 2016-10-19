@@ -3,7 +3,7 @@
  * @module controllers
  * @class loadAnalyticCtrl
  */
-allControllers.controller('loadAnalyticCtrl', ['$scope','$rootScope','$timeout', function ($scope,$rootScope,$timeout) {
+allControllers.controller('loadAnalyticCtrl', ['$scope','$rootScope','$timeout','Constants', function ($scope,$rootScope,$timeout,Constants) {
     
     
     /**
@@ -11,8 +11,8 @@ allControllers.controller('loadAnalyticCtrl', ['$scope','$rootScope','$timeout',
     * @method getAnalyticPanel
     */
     $scope.getAnalyticPanel = function(){
-        if($scope.cswrecord.id == "capdf-hydrogeochem"){
-            return 'views/analytic/capdf-hydrogeochem.htm';
+        if(Constants.analyticLoader[$scope.cswrecord.id]){
+            return Constants.analyticLoader[$scope.cswrecord.id];
         }else{
             return 'views/analytic/defaultAnalytic.htm';
         }

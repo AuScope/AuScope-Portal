@@ -3,8 +3,8 @@
  * @class RenderHandlerService
  * 
  */
-allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService','GoogleMapService','RenderStatusService','LayerManagerService',
-                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService,RenderStatusService,LayerManagerService) {
+allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService','GoogleMapService','RenderStatusService','LayerManagerService','Constants','$injector',
+                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService,RenderStatusService,LayerManagerService,Constants,$injector) {
     
   
      
@@ -23,10 +23,9 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
             $rootScope.$broadcast('layer.add', layer);
         }
         
-        if(layer.id=="nvcl-borehole"){
-            WFSService.renderLayer(layer);
-        }else if(layer.id=="mineral-tenements"){
-            WMSService.renderLayer(layer);
+        if(Constants.rendererLoader[layer.id]){
+            var RenderService = $injector.get(Constants.rendererLoader[layer.id]);
+            RenderService.renderLayer(layer);
         }else if(LayerManagerService.getWMS(layer).length > 0){
             WMSService.renderLayer(layer);          
         }else if(LayerManagerService.getWFS(layer).length > 0){
@@ -57,10 +56,9 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
              $rootScope.$broadcast('layer.add', layer);
          }
          
-         if(layer.id=="nvcl-borehole"){
-             WFSService.renderCSWRecord(layer,cswRecord);
-         }else if(layer.id=="mineral-tenements"){
-             WMSService.renderCSWRecord(layer,cswRecord);
+         if(Constants.rendererLoader[layer.id]){
+             var RenderService = $injector.get(Constants.rendererLoader[layer.id]);
+             RenderService.renderCSWRecord(layer);
          }else if(LayerManagerService.getWMS(layer).length > 0){
              WMSService.renderCSWRecord(layer,cswRecord);          
          }else if(LayerManagerService.getWFS(layer).length > 0){

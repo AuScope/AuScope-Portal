@@ -30,8 +30,16 @@ app.constant('Constants', {
         'COMPLETED': 'COMPLETED',
         'ERROR': 'ERROR'
     },
+    analyticLoader:{        
+        'capdf-hydrogeochem' : 'views/analytic/capdf-hydrogeochem.htm'       
+    },
+    rendererLoader:{
+        'nvcl-borehole': 'WFSService',
+        'mineral-tenements' : 'WMSService'
+    },
     XPATH_STRING_TYPE : (window.XPathResult ? XPathResult.STRING_TYPE : 0),
-    XPATH_UNORDERED_NODE_ITERATOR_TYPE: (window.XPathResult ? XPathResult.UNORDERED_NODE_ITERATOR_TYPE : 1)
+    XPATH_UNORDERED_NODE_ITERATOR_TYPE: (window.XPathResult ? XPathResult.UNORDERED_NODE_ITERATOR_TYPE : 1),
+    
 }); 
 
 

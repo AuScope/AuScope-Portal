@@ -75,7 +75,7 @@ allModules.service('GetCSWRecordService',['$http','$q','LayerManagerService','Co
     
     /**
      * Filter out all WMS layer
-     * @method searchLayers
+     * @method filterImageRecord
      */
     this.filterImageRecord = function() {       
         searchedLayers = {};
@@ -111,7 +111,7 @@ allModules.service('GetCSWRecordService',['$http','$q','LayerManagerService','Co
     
     /**
      * Filter out all WMS layer
-     * @method searchLayers
+     * @method filterDataRecord
      */
     this.filterDataRecord = function() {        
         searchedLayers = {};
@@ -149,7 +149,7 @@ allModules.service('GetCSWRecordService',['$http','$q','LayerManagerService','Co
     
     /**
      * Filter out all Active layer
-     * @method searchLayers
+     * @method filterActiveRecord
      */
     this.filterActiveRecord = function() {
         searchedLayers = {};
@@ -159,6 +159,28 @@ allModules.service('GetCSWRecordService',['$http','$q','LayerManagerService','Co
                 var layer = layerGroup[j];                    
                              
                if(GoogleMapService.isLayerActive(layer)){
+                   if (searchedLayers[layer.group] === undefined) {
+                       searchedLayers[layer.group] = [];
+                   }
+                   searchedLayers[layer.group].push(layer);
+               }                    
+            }
+        }
+    };
+    
+    
+    /**
+     * Filter out all analytic layer
+     * @method filterAnalyticRecord
+     */
+    this.filterAnalyticRecord = function() {
+        searchedLayers = {};
+        for ( var i in allKnownLayers) {
+            var layerGroup = allKnownLayers[i];
+            for ( var j in layerGroup) {
+                var layer = layerGroup[j];                    
+                             
+               if(Constants.analyticLoader[layer.id]){
                    if (searchedLayers[layer.group] === undefined) {
                        searchedLayers[layer.group] = [];
                    }

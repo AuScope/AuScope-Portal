@@ -7,12 +7,6 @@
 allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service',
                                  function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service) {
     
-  
-   
-    
-    
-    
-    
    
     var addLayerToGoogleMap = function(mapLayer,layer,onlineResource){
         

@@ -36,7 +36,7 @@ allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', f
      * @method filterDataRecord
      */
     this.filterDataRecord = function(){
-        $scope.keywords ="Filter Data Layer"
+        $scope.keywords ="Display Data Layer";
         $scope.showClearGlyph=true;    
         GetCSWRecordService.filterDataRecord();
     };
@@ -46,7 +46,7 @@ allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', f
      * @method filterImageRecord
      */
     this.filterImageRecord = function(){
-        $scope.keywords ="Filter Image Layer"
+        $scope.keywords ="Display Image Layer";
         $scope.showClearGlyph=true;
         GetCSWRecordService.filterImageRecord();
     };
@@ -56,9 +56,19 @@ allControllers.controller('layerSearchCtrl', ['$scope', 'GetCSWRecordService', f
      * @method filterActiveRecord
      */
     this.filterActiveRecord = function(){
-        $scope.keywords ="Filter Current Active Layer"
+        $scope.keywords ="Display Active Layer";
         $scope.showClearGlyph=true;
         GetCSWRecordService.filterActiveRecord();
+    };
+    
+    /**
+     * This will filter active record
+     * @method filterActiveRecord
+     */
+    this.filterAnalyticRecord = function(){
+        $scope.keywords ="Display Analytic Layer";
+        $scope.showClearGlyph=true;
+        GetCSWRecordService.filterAnalyticRecord();
     };
     
     this.toggleMenu = function() {       
