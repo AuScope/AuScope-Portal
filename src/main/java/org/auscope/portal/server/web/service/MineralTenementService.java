@@ -30,7 +30,7 @@ public class MineralTenementService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param filter
      *            The filter
      * @param bbox
@@ -49,52 +49,30 @@ public class MineralTenementService extends BaseWFSService {
     }
 
     public String getMineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,
-            FilterBoundingBox bbox)
-            throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null);
+            FilterBoundingBox bbox,String selectedFilters)
+                    throws Exception {
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null,selectedFilters);
         return generateFilterString(filter, bbox);
     }
     public String getMineralTenementFilterCCStatus(String name, String tenementType, String owner, String size, String endDate,
             FilterBoundingBox bbox,String ccstatus)
-            throws Exception {
+                    throws Exception {
         MineralTenementCCFilter filter = new MineralTenementCCFilter(name, tenementType, owner, size, endDate);
         filter.addCCStatusInFilter(ccstatus);
         return generateFilterString(filter, bbox);
     }
-    
-    public String getMineralTenementFilterCCType(String name, String tenementType, String owner, String size, String endDate, 
+
+    public String getMineralTenementFilterCCType(String name, String tenementType, String owner, String size, String endDate,
             FilterBoundingBox bbox,String cctype)
-            throws Exception {
+                    throws Exception {
         MineralTenementCCFilter filter = new MineralTenementCCFilter(name, tenementType, owner, size, endDate);
         filter.addCCTypeInFilter(cctype);
         return generateFilterString(filter, bbox);
     }
-    
-    public String getMineralTenementWithStyling(String name, String tenementType, String owner, String size,
-            String endDate)
-            throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null);
-        return generateAdditionalStyleFilter(filter);
-    }
 
-    /**
-     * Utility for turning a filter and add additional styling to the filter.
-     * 
-     * @param filter
-     *            The filter
-     * @return
-     * @throws OperationNotSupportedException
-     */
-    public static String generateAdditionalStyleFilter(IFilter filter) throws OperationNotSupportedException {
-        if (filter instanceof MineralTenementFilter) {
-            MineralTenementFilter mtFilter = (MineralTenementFilter) filter;
-            return mtFilter.getFilterWithAdditionalStyle();
-        } else {
-            throw new OperationNotSupportedException(
-                    "Only MineralTenementFilter supports the use of additional style filtering");
-        }
 
-    }
+
+
 
 
 

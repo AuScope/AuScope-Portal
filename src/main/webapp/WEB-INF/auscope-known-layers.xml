@@ -129,20 +129,7 @@
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
-        <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>
-        <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>-->
+        <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>       
         <property name="order" value="150" />
     </bean>
     
@@ -369,6 +356,38 @@
             </bean>
         </property>
         <property name="order" value="50" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="collection">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="gml:name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.UIDate">
+                            <constructor-arg name="label" value="FromDate"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.UIDate">
+                            <constructor-arg name="label" value="ToDate"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                    </list>
+                </property>
+            </bean>        
+        </property>
     </bean>
     
      <bean id="knownTypeTimaGeoSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">

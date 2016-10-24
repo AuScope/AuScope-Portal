@@ -13,13 +13,14 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
      * @param onlineResource - onlineResource of the wfs
      * @return promise - a promise containing the features for the layer
      */
-     this.getFeature = function(proxyUrl, onlineResource){ 
+     this.getFeature = function(proxyUrl, onlineResource,selectedFilters){ 
          
         if(proxyUrl){
              return $http.get('../' + proxyUrl,{
                  params:{
                      serviceUrl:onlineResource.url,
-                     typeName : onlineResource.name
+                     typeName : onlineResource.name,
+                     selectedFilters : selectedFilters
                  }
              }).then(function (response) {
                  //VT: include the corresponding resource used to retrieve this result.

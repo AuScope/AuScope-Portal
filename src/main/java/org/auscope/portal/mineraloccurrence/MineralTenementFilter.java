@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.uifilter.GenericFilter;
 
 /**
  * Class that represents ogc:Filter markup for mt:mineralTenement queries
@@ -12,7 +13,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
  * @author Victor Tey
  * @version
  */
-public class MineralTenementFilter extends AbstractFilter {
+public class MineralTenementFilter extends GenericFilter {
     List<String> fragments;
 
     /**
@@ -21,30 +22,38 @@ public class MineralTenementFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,String status) {
-
+    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,String status,String selectedFilters) {
+        super(selectedFilters);
         fragments = new ArrayList<String>();
-        if (name != null && !name.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:name", name));
-        }
-        if (tenementType != null && !tenementType.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
-        }
 
-        if (owner != null && !owner.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:owner", owner));
-        }
+        if(selectedFilters == null || selectedFilters.isEmpty()){
 
-        if (size != null && !size.isEmpty()) {
-            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("mt:area", size));
-        }
 
-        if (endDate != null && !endDate.isEmpty()) {
-            fragments.add(this.generatePropertyIsLessThanOrEqualTo("mt:expireDate", endDate));
-        }
+            if (name != null && !name.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment("mt:name", name));
+            }
+            if (tenementType != null && !tenementType.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
+            }
 
-        if (status != null && !status.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:status", status));
+            if (owner != null && !owner.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment("mt:owner", owner));
+            }
+
+            if (size != null && !size.isEmpty()) {
+                fragments.add(this.generatePropertyIsGreaterThanOrEqualTo("mt:area", size));
+            }
+
+            if (endDate != null && !endDate.isEmpty()) {
+                fragments.add(this.generatePropertyIsLessThanOrEqualTo("mt:expireDate", endDate));
+            }
+
+            if (status != null && !status.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment("mt:status", status));
+            }
+        }else{
+            fragments = this.generateParameterFragments();
+
         }
     }
     /**
@@ -76,17 +85,19 @@ public class MineralTenementFilter extends AbstractFilter {
         }
 
     }
+    @Override
     public String getFilterStringAllRecords() {
         return this.generateFilter(this.generateAndComparisonFragment(fragments.toArray(new String[fragments.size()])));
     }
 
+    @Override
     public String getFilterStringBoundingBox(FilterBoundingBox bbox) {
 
         List<String> localFragment = new ArrayList<String>(fragments);
         localFragment.add(this.generateBboxFragment(bbox, "mt:shape"));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment
-                .size()])));
+                                                                                                       .size()])));
     }
 
     public String getFilterWithAdditionalStyle() {
@@ -96,7 +107,7 @@ public class MineralTenementFilter extends AbstractFilter {
                 this.generatePropertyIsLikeFragment("mt:status", "GRANTED")));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment
-                .size()])));
+                                                                                                       .size()])));
     }
 
 }

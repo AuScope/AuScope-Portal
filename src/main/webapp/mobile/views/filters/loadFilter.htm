@@ -1,3 +1,40 @@
  <div ng-controller="loadFilterCtrl">
-    <div ng-include="getFilterPanel()"></div>   
+ 
+    <form>
+	    <div class="form-group">
+	    <label for="form-filter-selection">Select Filter:</label>
+	    <select class="form-control" id="form-filter-selection" ng-change="addFilter(filter)" ng-model="filter" ng-options="filter as filter.label for filter in cswrecord.filterCollection.collection"></select>
+	   </div>
+    </form>
+
+    <form>    
+        <div ng-repeat="selectedFilter in selectedFilters">
+            <div ng-if="selectedFilter.type=='TEXT'">
+                <div class="form-group  form-group-sm">
+				    <label for="{{ 'filter-object' + $index }}">{{selectedFilter.label}}</label>
+				    <input type="text" class="form-control" id="{{ 'filter-object' + $index }}" ng-model="selectedFilter.value">				   
+				</div>
+            </div> 
+            <div ng-if="selectedFilter.type=='DATE'">
+                <div class="form-group  form-group-sm">
+                    <label for="{{ 'filter-object' + $index }}">{{selectedFilter.label}}</label>                     
+                  
+			          <div class="input-group" id="{{ 'filter-object' + $index }}">
+				          <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" is-open="popup1.opened"  ng-model="selectedFilter.value" close-text="Close" alt-input-formats="altInputFormats" />
+				          <span class="input-group-btn">
+				            <button type="button" class="btn btn-default btn-sm" ng-click="popup1.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+				          </span>
+				      </div>
+			               
+                </div>
+            </div>       
+        </div>
+    </form>
+ 
+    
+   
+ 
+    <div>
+        <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(cswrecord)">Add Layer</button>      
+    </div>
  </div>

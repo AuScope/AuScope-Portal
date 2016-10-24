@@ -3,25 +3,22 @@
  * @module controllers
  * @class loadFilterCtrl
  */
-allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout', function ($scope,$rootScope,$timeout) {
+allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService', function ($scope,$rootScope,$timeout,RenderHandlerService) {
     
-    $scope.urlNotFound={};
-    
-    $rootScope.$on('$includeContentError', function (event, url) {      
-        $scope.urlNotFound[url]=false;
-    });
-    
+   $scope.selectedFilters=[];
+   
     /**
-    * A function which returns the URL used to load the filter panel
-    * @method getFilterPanel
-    */
-    $scope.getFilterPanel = function(){
-        if($scope.urlNotFound['views/filters/'+$scope.cswrecord.id+'.htm']==false){
-            return 'views/filters/defaultFilter.htm';
-        }else{
-            return 'views/filters/'+ $scope.cswrecord.id+'.htm';
-        }
-    };
+     * A function used to add a layer to the main map
+     * @method addLayer
+     * @param layer layer object
+     */       
+     $scope.addLayer = function(layer){
+         RenderHandlerService.renderLayer(layer,$scope.selectedFilters);
+     };
+     
 
+     $scope.addFilter = function(filter){
+         $scope.selectedFilters.push(filter)
+     };
     
 }]);

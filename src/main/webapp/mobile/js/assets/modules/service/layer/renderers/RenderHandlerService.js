@@ -14,7 +14,7 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
      * @method renderLayer 
      * @param layer - the layer for rendering
      */
-    this.renderLayer = function(layer){   
+    this.renderLayer = function(layer,selectedFilters){   
         GoogleMapService.removeActiveLayer(layer);
         //VT: on a small screen, broadcast a request to add a layer has been established so that 
         //VT:action like closing panels can be act on. 
@@ -25,11 +25,11 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
         
         if(Constants.rendererLoader[layer.id]){
             var RenderService = $injector.get(Constants.rendererLoader[layer.id]);
-            RenderService.renderLayer(layer);
+            RenderService.renderLayer(layer,selectedFilters);
         }else if(LayerManagerService.getWMS(layer).length > 0){
-            WMSService.renderLayer(layer);          
+            WMSService.renderLayer(layer,selectedFilters);          
         }else if(LayerManagerService.getWFS(layer).length > 0){
-            WFSService.renderLayer(layer);          
+            WFSService.renderLayer(layer,selectedFilters);          
         }
      };
      
@@ -58,7 +58,7 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
          
          if(Constants.rendererLoader[layer.id]){
              var RenderService = $injector.get(Constants.rendererLoader[layer.id]);
-             RenderService.renderCSWRecord(layer);
+             RenderService.renderCSWRecord(layer,cswRecord);
          }else if(LayerManagerService.getWMS(layer).length > 0){
              WMSService.renderCSWRecord(layer,cswRecord);          
          }else if(LayerManagerService.getWFS(layer).length > 0){

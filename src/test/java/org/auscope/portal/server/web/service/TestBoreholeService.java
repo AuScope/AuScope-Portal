@@ -93,7 +93,7 @@ public class TestBoreholeService extends PortalTestClass {
         });
 
         WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
-                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, restrictedIds, outputFormat);
+                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, restrictedIds, outputFormat,"");
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getData());
         Assert.assertSame(mockMethod, result.getMethod());
@@ -131,7 +131,7 @@ public class TestBoreholeService extends PortalTestClass {
         });
 
         WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
-                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, restrictedIds, outputFormat);
+                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, restrictedIds, outputFormat,"");
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getData());
         Assert.assertSame(mockMethod, result.getMethod());
@@ -194,7 +194,7 @@ public class TestBoreholeService extends PortalTestClass {
         });
 
         WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
-                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, null, restrictedIds, outputFormat);
+                dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, null, restrictedIds, outputFormat,"");
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getData());
         Assert.assertSame(mockMethod, result.getMethod());

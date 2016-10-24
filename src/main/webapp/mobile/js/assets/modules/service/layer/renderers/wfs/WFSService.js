@@ -52,7 +52,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
          * @method renderLayer
          * @param layer - The layer containing the wms to be rendered
          */
-        this.renderLayer = function(layer){   
+        this.renderLayer = function(layer,selectedFilters){   
             var map =  GoogleMapService.getMap();            
             var me = this;
             var onlineResources = LayerManagerService.getWFS(layer);
@@ -60,7 +60,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             for(var index in onlineResources){
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
-                GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index]).then(function(response){
+                GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index],selectedFilters).then(function(response){
                     try{
                         var rootNode = GMLParserService.getRootNode(response.data.gml);
                         var primitives = GMLParserService.makePrimitives(rootNode);
@@ -83,7 +83,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                             }
                         }
                     }catch(err){
-                        RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR); 
+                        RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.ERROR); 
                     }
                    
 
@@ -132,7 +132,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                             }
                         }
                     }catch(err){
-                        RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR); 
+                        RenderStatusService.updateCompleteStatus(layer,response.resource,Constants.statusProgress.ERROR); 
                     }
                     
                 },function(error){

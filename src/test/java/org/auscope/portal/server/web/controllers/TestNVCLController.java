@@ -105,7 +105,7 @@ public class TestNVCLController extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
-                        filterDateStart, filterDateEnd, maxFeatures, bbox, null, outputFormat);
+                        filterDateStart, filterDateEnd, maxFeatures, bbox, null, outputFormat,"");
                 will(returnValue(new WFSResponse(nvclWfsResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();
@@ -115,7 +115,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false,"");
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -152,7 +152,7 @@ public class TestNVCLController extends PortalTestClass {
                 will(returnValue(restrictedIds));
 
                 oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
-                        filterDateStart, filterDateEnd, maxFeatures, bbox, restrictedIds, outputFormat);
+                        filterDateStart, filterDateEnd, maxFeatures, bbox, restrictedIds, outputFormat,"");
                 will(returnValue(new WFSResponse(nvclWfsResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();
@@ -161,7 +161,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false,"");
         Assert.assertTrue((Boolean) response.getModel().get("success"));
 
         Map data = (Map) response.getModel().get("data");
@@ -201,7 +201,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false,"");
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
@@ -237,7 +237,7 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         ModelAndView response = this.nvclController.doBoreholeFilter(serviceUrl, nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false,"");
         Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
@@ -742,7 +742,7 @@ public class TestNVCLController extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 oneOf(mockBoreholeService).getAllBoreholes(serviceUrl, nameFilter, custodianFilter,
-                        filterDateStart, filterDateEnd, maxFeatures, null, null, outputFormat);
+                        filterDateStart, filterDateEnd, maxFeatures, null, null, outputFormat,"");
                 will(returnValue(new WFSResponse(nvclWfsResponse, mockHttpMethodBase)));
 
                 allowing(mockHttpMethodBase).getURI();

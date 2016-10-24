@@ -41,7 +41,7 @@ public class MineralTenementController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,
-                bbox); //VT:get filter from service
+                bbox,null); //VT:get filter from service
 
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
@@ -100,6 +100,7 @@ public class MineralTenementController extends BasePortalController {
             @RequestParam(required = false, value = "size") String size,
             @RequestParam(required = false, value = "endDate") String endDate,
             @RequestParam(required = false, value = "ccProperty", defaultValue="") String ccProperty,
+            @RequestParam(required = false, value = "selectedFilters") String selectedFilters,
             HttpServletResponse response) throws Exception {
         String style = "";
 
@@ -111,9 +112,8 @@ public class MineralTenementController extends BasePortalController {
             style = this.getColorCodeStyleForStatus(name, tenementType, owner, size, endDate);
             break;
         default:
-            String stylefilter = this.mineralTenementService.getMineralTenementWithStyling(name, tenementType, owner, size,endDate); //VT:get filter from service
-            String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null); //VT:get filter from service
-            style = this.getPolygonStyle(stylefilter, filter, MINERAL_TENEMENT, "#00FF00", "#00FF00");
+            String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,selectedFilters); //VT:get filter from service
+            style = this.getPolygonStyle(filter, MINERAL_TENEMENT, "#00FF00", "#00FF00");
             break;
         }
 
@@ -130,7 +130,7 @@ public class MineralTenementController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getPolygonStyle(String stylefilter, String filter, String name, String color, String borderColor) {
+    public String getPolygonStyle(String filter, String name, String color, String borderColor) {
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                 "<StyledLayerDescriptor version=\"1.0.0\" " +

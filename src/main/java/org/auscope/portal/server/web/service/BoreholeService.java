@@ -27,6 +27,7 @@ import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.gsml.BoreholeFilter;
+import org.auscope.portal.gsml.BoreholeWithConfigurableFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,15 +95,29 @@ public class BoreholeService extends BaseWFSService {
      * @throws Exception
      */
     public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
-            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat)
-            throws Exception {
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat,String selectedFilters)
+                    throws Exception {
         String filterString;
-        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
-        if (bbox == null) {
-            filterString = nvclFilter.getFilterStringAllRecords();
-        } else {
-            filterString = nvclFilter.getFilterStringBoundingBox(bbox);
+
+
+
+        if(selectedFilters==null || selectedFilters.isEmpty()){
+            BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
+            if (bbox == null) {
+                filterString = nvclFilter.getFilterStringAllRecords();
+            } else {
+                filterString = nvclFilter.getFilterStringBoundingBox(bbox);
+            }
+        }else{
+            BoreholeWithConfigurableFilter nvclFilter = new BoreholeWithConfigurableFilter(selectedFilters,restrictToIDList);
+            if (bbox == null) {
+                filterString = nvclFilter.getFilterStringAllRecords();
+            } else {
+                filterString = nvclFilter.getFilterStringBoundingBox(bbox);
+            }
         }
+
+
 
         HttpRequestBase method = null;
         try {
@@ -130,7 +145,7 @@ public class BoreholeService extends BaseWFSService {
      */
     public int countAllBoreholes(String serviceURL, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
-            throws Exception {
+                    throws Exception {
         String filterString;
         BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
         if (bbox == null) {
@@ -169,10 +184,10 @@ public class BoreholeService extends BaseWFSService {
 
             //Get our ID's
             NodeList publishedDatasets = (NodeList) DOMUtil.compileXPathExpr("/wfs:FeatureCollection/gml:featureMembers/" + NVCLNamespaceContext.PUBLISHED_DATASETS_TYPENAME + "/nvcl:scannedBorehole", nc)
-                                                            .evaluate(doc, XPathConstants.NODESET);
+                    .evaluate(doc, XPathConstants.NODESET);
             for (int i = 0; i < publishedDatasets.getLength(); i++) {
                 Node holeIdentifier = (Node) DOMUtil.compileXPathExpr("@xlink:href", nc)
-                                                    .evaluate(publishedDatasets.item(i), XPathConstants.NODE);
+                        .evaluate(publishedDatasets.item(i), XPathConstants.NODE);
                 if (holeIdentifier != null) {
                     String[] urnBlocks = holeIdentifier.getTextContent().split("/");
                     if (urnBlocks.length > 1) {
