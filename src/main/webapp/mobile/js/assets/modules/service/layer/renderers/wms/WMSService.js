@@ -7,7 +7,6 @@
 allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service',
                                  function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service) {
     
-   
     var addLayerToGoogleMap = function(mapLayer,layer,onlineResource){
         
         var map =  GoogleMapService.getMap();
@@ -18,26 +17,32 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
               });
         };
         
-        
         // Register map click/touch events to allow creation of the query information panel
-        var registerClickEvent = function(map, mapLayer, onlineResource){
+        var registerClickEvent = function(map, onlineResource, bbox){
             var mapEventListener = google.maps.event.addListener(map, 'mousedown', function(evt) {
-                GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource).then(function(response) 
-                    { 
-                        // Used to check for an empty response, which occurs when user clicks/touches on empty space
-                        var empty_body = /<body>\s*<\/body>/g;
-                        var empty_body2 = /<body>\s*<script .+<\/script>\s*<\/body>/g;
+                // Send a request to the WMS service if the click is within the resource's bounding box
+                if (evt.latLng.lat() < bbox.northBoundLatitude && evt.latLng.lat() > bbox.southBoundLatitude &&
+                    evt.latLng.lng() < bbox.eastBoundLongitude && evt.latLng.lng() > bbox.westBoundLongitude) {
+                        
+                    // Send request to WMS service
+                    GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource).then(function(response) 
+                        { 
+                            // Used to check for an empty response, which occurs when user clicks/touches on empty space
+                            var empty_html_body = /<body>\s*<\/body>/g;
+                            var empty_html_body2 = /<body>\s*<script .+<\/script>\s*<\/body>/g;
+                            var empty_gml_body = /<wfs:FeatureCollection .+\/>$/g;
 
-                        // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
-                        if (response.status==200 && empty_body.test(response.data)==false && empty_body2.test(response.data)==false) {
-                            QuerierPanelService.setPanelHtml(response.data);
-                            QuerierPanelService.openPanel(false);
+                            // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
+                            if (response.status==200 && empty_gml_body.test(response.data)==false) {
+                                QuerierPanelService.setPanelXml(response.data);
+                                QuerierPanelService.openPanel(false);
+                            }
+                        },
+                        function(errorResponse) {
+                            console.log("WMS Service Error: ", errorResponse);
                         }
-                    },
-                    function(errorResponse) {
-                        console.log("WMS Service Error: ", errorResponse);
-                    }
-                );
+                    );
+                }
             });
             QuerierPanelService.registerLayer(onlineResource, mapEventListener);
         };
@@ -63,8 +68,23 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             return mapLayer;
         };
         
-        registerTileLoadedEvent(mapLayer,layer,onlineResource,Constants.statusProgress.COMPLETED);                   
-        registerClickEvent(map, mapLayer, onlineResource);
+        registerTileLoadedEvent(mapLayer,layer,onlineResource,Constants.statusProgress.COMPLETED);
+        
+        // Get the bounding box for the 'onlineResource', then register for click events within that bounding box
+        var cswRecords = LayerManagerService.getCSWRecords(layer);
+        var done = false;
+        for (var i=0; i<cswRecords.length && !done; i++) {
+            var onlineResources = cswRecords[i].onlineResources;
+            for (var j=0; j<onlineResources.length; j++) {
+                if (onlineResource==onlineResources[j]) {
+                    var bbox = cswRecords[i].geographicElements[0];
+                    registerClickEvent(map, onlineResource, bbox);
+                    done = true;
+                    break;
+                }
+            }
+        }
+        
         mapLayer = overrideToRegisterFailureEvent(mapLayer,function(){
             RenderStatusService.updateCompleteStatus(layer,onlineResource,Constants.statusProgress.ERROR);
         });
@@ -91,7 +111,6 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             for(var index in onlineResources){  
                 
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
-                
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
                     var mapLayer = WMS_1_1_0_Service.generateLayer(onlineResources[index],(style!=null && style.length<maxSldLength?style:null));                        
                     addLayerToGoogleMap(mapLayer,layer,onlineResources[index]);                    

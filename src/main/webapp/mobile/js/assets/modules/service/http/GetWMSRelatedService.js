@@ -53,12 +53,9 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         
         // Get bounds of map, within the current viewport
         var bounds = map.getBounds();
-        //console.log("map bounds=", bounds);
         
         var neBndsLatLng = bounds.getNorthEast();
         var swBndsLatLng = bounds.getSouthWest();
-        //console.log("neBnds=", neBndsLatLng.lng(), neBndsLatLng.lat());
-        //console.log("swBnds=", swBndsLatLng.lng(), swBndsLatLng.lat());
         var nePt = proj4("EPSG:4326", "EPSG:3857", [neBndsLatLng.lng(), neBndsLatLng.lat()]);
         var swPt = proj4("EPSG:4326", "EPSG:3857", [swBndsLatLng.lng(), swBndsLatLng.lat()]);
         
@@ -68,18 +65,16 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         // Get span of current viewport and convert to pixels
         var gglWorldCoordsNE = proj.fromLatLngToPoint(neBndsLatLng);
         var gglWorldCoordsSW = proj.fromLatLngToPoint(swBndsLatLng);
-        //console.log("gglWorldCoordsNE,gglWorldCoordsSW=", gglWorldCoordsNE,gglWorldCoordsSW);
         
         // Convert Google Map World coords to Google Map Pixel coords
         var gglPixelCoordsNE = new google.maps.Point(gglWorldCoordsNE.x*scale, gglWorldCoordsNE.y*scale);
         var gglPixelCoordsSW = new google.maps.Point(gglWorldCoordsSW.x*scale, gglWorldCoordsSW.y*scale);
-        //console.log("gglPixelCoordsNE,gglPixelCoordsSW=", gglPixelCoordsNE, gglPixelCoordsSW);
         
         var bbWidth = Math.floor(Math.abs(gglPixelCoordsNE.x-gglPixelCoordsSW.x));
         var bbHeight = Math.floor(Math.abs(gglPixelCoordsNE.y-gglPixelCoordsSW.y));
          
         // NB: If SLD_BODY is used in future, look out for ArcGIS which does not like SLD_BODY (see Querier.js)
-        var get_params= "WMS_URL="+ encodeURIComponent(serviceInfo.url)+
+        var get_params= "WMS_URL="+encodeURIComponent(serviceInfo.url)+
             "&lat="+pt[1]+ // NB: 'lat' and 'lng' are projection map coords, not latitude, longitude angles
             "&lng="+pt[0]+
             "&QUERY_LAYERS="+encodeURIComponent(serviceInfo.name)+
@@ -88,11 +83,10 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
             "&BBOX="+encodeURIComponent(bbox3)+ // The relevant Google Map tile's bounds, converted to projection map coords
             "&WIDTH="+bbWidth+ // Map panel width, in pixels (not Google Map pixel coords)
             "&HEIGHT="+bbHeight+ // Map panel height, in pixels (not Google Map pixel coords)
-            "&INFO_FORMAT="+encodeURIComponent("text/html")+ // Simple HTML for the moment
+            //Invalid format 'application/xml', supported formats are [text/plain, application/vnd.ogc.gml, application/vnd.ogc.gml/3.1.1, text/html, application/json] 
+            "&INFO_FORMAT="+encodeURIComponent("application/vnd.ogc.gml/3.1.1")+ //+encodeURIComponent("text/html")+ // Simple HTML for the moment // application/vnd.ogc.gml
             "&SLD_BODY="+ // No styling for the moment
             "&version="+encodeURIComponent(serviceInfo.version);
-
-        //console.log("get_params=",get_params);
 
         return $http({
             method: "POST",
