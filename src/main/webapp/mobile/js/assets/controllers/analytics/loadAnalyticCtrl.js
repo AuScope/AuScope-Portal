@@ -11,8 +11,8 @@ allControllers.controller('loadAnalyticCtrl', ['$scope','$rootScope','$timeout',
     * @method getAnalyticPanel
     */
     $scope.getAnalyticPanel = function(){
-        if(Constants.analyticLoader[$scope.cswrecord.id]){
-            return Constants.analyticLoader[$scope.cswrecord.id];
+        if(Constants.analyticLoader[$scope.layer.id]){
+            return Constants.analyticLoader[$scope.layer.id];
         }else{
             return 'views/analytic/defaultAnalytic.htm';
         }

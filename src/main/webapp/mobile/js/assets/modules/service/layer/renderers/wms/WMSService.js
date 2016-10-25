@@ -98,14 +98,15 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
      * Method to decide how the wms should be rendered and add the wms to the map 
      * @method renderLayer
      * @param layer - The layer containing the wms to be rendered
-     * @param selectedFilters - OPTIONAL - parameter to be passed into retrieving the SLD.
+     * @param param - OPTIONAL - parameter to be passed into retrieving the SLD. 
+     * 
      */
-    this.renderLayer = function(layer,selectedFilters){   
+    this.renderLayer = function(layer,param){   
 
         var me = this;
         var maxSldLength = 2000;
 
-        GetWMSRelatedService.getWMSStyle(layer,selectedFilters).then(function(style){
+        GetWMSRelatedService.getWMSStyle(layer,param).then(function(style){
             var onlineResources = LayerManagerService.getWMS(layer);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){  

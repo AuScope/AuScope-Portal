@@ -3,7 +3,7 @@
     <form>
 	    <div class="form-group">
 	    <label for="form-filter-selection">Select Filter:</label>
-	    <select class="form-control" id="form-filter-selection" ng-change="addFilter(filter)" ng-model="filter" ng-options="filter as filter.label for filter in cswrecord.filterCollection.collection"></select>
+	    <select class="form-control" id="form-filter-selection" ng-change="addFilter(filter)" ng-model="filter" ng-options="filter as filter.label for filter in layer.filterCollection.collection"></select>
 	   </div>
     </form>
 
@@ -35,6 +35,6 @@
    
  
     <div>
-        <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(cswrecord)">Add Layer</button>      
+        <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(layer)">Add Layer</button>      
     </div>
  </div>

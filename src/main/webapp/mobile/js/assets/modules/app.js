@@ -82,7 +82,7 @@ app.directive('infoPanel', function() {
 app.directive('filterPanel', function() {
     return {
         scope: {
-            cswrecord  : "=",  
+            layer  : "=",  
         },
         templateUrl: 'views/filters/loadFilter.htm'
        
@@ -92,7 +92,7 @@ app.directive('filterPanel', function() {
 app.directive('analyticPanel', function() {
     return {
         scope: {
-            cswrecord  : "=",  
+            layer  : "=",  
         },
         templateUrl: 'views/analytic/loadAnalytic.htm'
        

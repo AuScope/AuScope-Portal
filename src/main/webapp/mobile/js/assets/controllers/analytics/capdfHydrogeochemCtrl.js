@@ -8,10 +8,10 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
                                                     function ($scope,GoogleMapService,$http,LayerManagerService,UtilitiesService,$timeout,CapdfWMSService,$filter,D3PlotService,RenderHandlerService) {
     
     //VT: there should only be one wms resource for capdf
-    var wfsResource = LayerManagerService.getWFS($scope.cswrecord)[0];
+    var wfsResource = LayerManagerService.getWFS($scope.layer)[0];
     var graphId = "capdf-graph-analytic";
     var layerId = "capdf-hydrogeochem";
-    $scope.isLayerActive = GoogleMapService.isLayerActive($scope.cswrecord);
+    $scope.isLayerActive = GoogleMapService.isLayerActive($scope.layer);
     $scope.paramOfInterest=[];
     $scope.axis={};
     
@@ -30,7 +30,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
     
     $scope.addLayer = function(){
         $scope.isLayerActive = true;
-        RenderHandlerService.renderLayer($scope.cswrecord);              
+        RenderHandlerService.renderLayer($scope.layer);              
     };
     
    
@@ -140,8 +140,8 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
       */
      $scope.renderColorCode = function(goi,poi,minValue, maxValue){
          
-         GoogleMapService.removeActiveLayer($scope.cswrecord);
-         CapdfWMSService.renderLayer(goi,$scope.cswrecord,{
+         GoogleMapService.removeActiveLayer($scope.layer);
+         CapdfWMSService.renderLayer(goi,$scope.layer,{
              featureType:goi,
              poi : poi,
              minMax:[minValue,maxValue]

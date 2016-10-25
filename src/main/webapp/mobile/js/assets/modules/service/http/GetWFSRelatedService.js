@@ -23,8 +23,11 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
                 selectedFilters : selectedFilters
          };
         
-        //VT: this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true        
-        var fixedAttributes = layer.filterCollection.fixedAttributes;        
+        //VT: this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
+        var fixedAttributes = [];
+        if(layer.filterCollection.fixedAttributes){
+            fixedAttributes = layer.filterCollection.fixedAttributes;   
+        }
         for(var idx in fixedAttributes){
             parameters[fixedAttributes[idx].parameter] = fixedAttributes[idx].value;
         }
