@@ -123,9 +123,14 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         if (xmlString.length > 0) {
             var XML = new DOMParser().parseFromString(xmlString, "text/xml");
             if (XML.childNodes && XML.childNodes.length > 0) {
+                var startNode = document.getElementById($scope.xmlPanelId);
+                // Remove old nodes
+                while (startNode.hasChildNodes()) {
+                    startNode.removeChild(startNode.lastChild);
+                }
                 // Call parse() to parse the XML tree, and create accordion DOM objects for display
-                $scope.parse(XML.childNodes[0], document.getElementById($scope.xmlPanelId));
-                $compile(document.getElementById($scope.xmlPanelId))($scope);
+                $scope.parse(XML.childNodes[0], startNode);
+                $compile(startNode)($scope);
             }
         } else {
             document.getElementById($scope.xmlPanelId).innerHTML = "";
