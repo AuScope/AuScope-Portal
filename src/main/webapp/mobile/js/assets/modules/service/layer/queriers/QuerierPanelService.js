@@ -1,26 +1,33 @@
 /**
  * QuerierPanelService handles layer manipulation and extraction of information from the layer/csw records.
- * To use this class you must first call 'registerParentScope' which registers the parent scope of the panel object.
- * This is called from the querier panel's controller. It assumes that there is a variable named 'showQuerierPanel' 
- * in the parent scope which can be used to open and close the panel via  ' ng-show="showQuerierPanel" '.  
+ * To use this class you must first call 'registerPanel'.   
  * @module layer
  * @class QuerierPanelService
  * 
  */
-allModules.service('QuerierPanelService', function () {
-    this.pointObj = null;
-    this.panelHtml = null;
+allModules.service('QuerierPanelService', ['$compile', function ($compile) {
     this.layerList = [];
-
+	
     /**
-    * Register the 
-    * @method registerParentScope
-    * @param parentObj
-    * @param scopeObj
+    * Register the panel by passing in some querier panel controller functions.
+    * @method registerPanel
+	* @param openPanelFn used to open and close the panel
+    *    function openPanelFn(ctrlBool, useApply)
+	*    'ctrlBool' if true panel will open, if false panel will close
+	*    'useApply' boolean parameter. Set to true and 'openPanelFn()' will use the '$apply()' method to make the panel open. Set to false and '$apply()' will not be used. 
+    *    It is recommended to set to false in places where you would get an '$digest already in progress' error, e.g. calling 'setPanel(true)' from within a 'then()' function
+	* @param setPointFn function used to display point information in panel. It has the format:
+	*    function setPointFn(pointObj) { ... }
+	*    'pointObj' is the point to be displayed. Format: {name: <name>, description: <description>, latitude: <latitude>, longitude: <longitude>, srsUrl: <srsUrl> }
+	* @param setXMLFn function used to display XML data in the panel
+	*    function setXMLFn(xmlString) { ... }
+	*    'xmlString' is a string of xml to be displayed
     */
-    this.registerParentScope = function (parentObj, scopeObj) {
-        this.scopeObj = scopeObj;
-        this.parentObj = parentObj;
+    this.registerPanel = function (openPanelFn, setPointFn, setXMLFn) {
+		// Store the controller functions for future use
+        this.openPanelFn = openPanelFn;
+		this.setPointFn = setPointFn;
+		this.setXMLFn = setXMLFn;
     };
     
     /**
@@ -31,32 +38,20 @@ allModules.service('QuerierPanelService', function () {
     */
     this.openPanel = function (useApply)
     {
-        this.parentObj.showQuerierPanel = true;
-        if (useApply)
-            this.parentObj.$apply();
+		// Call the corresponding controller function
+		this.openPanelFn(true, useApply);
     };
     
     /**
     * Closes the query panel
     * @method closePanel
-    * @param useApply boolean parameter. Set to true and 'openPanel()' will use the '$apply()' method to make the panel open. Set to false and '$apply()' will not be used. 
+    * @param useApply boolean parameter. Set to true and 'closePanel()' will use the '$apply()' method to make the panel open. Set to false and '$apply()' will not be used. 
     * It is recommended to set to false in places where you would get an '$digest already in progress' error, e.g. calling 'setPanel(true)' from within a 'then()' function
     */
     this.closePanel = function (useApply)
     {
-        this.parentObj.showQuerierPanel = false;
-        if (useApply)
-            this.parentObj.$apply();
-    };
-    
-    /**
-    * Retrieves the point object for the most recent query
-    * @method getQueryPoint
-    * @return the point object for most recent query
-    */
-    this.getQueryPoint = function () 
-    {
-        return this.pointObj;
+		// Call the corresponding controller function
+        this.openPanelFn(false, useApply);
     };
     
     /**
@@ -66,23 +61,25 @@ allModules.service('QuerierPanelService', function () {
     */
     this.setQueryPoint = function (point)
     {
-        this.pointObj = point;
         if (point != null) {
-            this.scopeObj.pointObj = {name: point.name, description: point.description, latitude: point.coords.lat, longitude: point.coords.lng, srsUrl: point.srsName };
+			// Set the point datum, unset the XML string
+			this.setPointFn({name: point.name, description: point.description, latitude: point.coords.lat, longitude: point.coords.lng, srsUrl: point.srsName });
+			this.setXMLFn(""); 
         }
-        this.scopeObj.panelHtml = "";
     };
-    
-    /**
+    	
+	/**
     * Set the HTML string to be displayed on the panel
-    * @method setPanelHtml
-    * @param html
+    * @method setPanelXml
+    * @param xmlString
     */
-    this.setPanelHtml = function (html)
+    this.setPanelXml = function(xmlString)
     {
-        this.pointObj = null;
-        this.scopeObj.pointObj = null;
-        this.scopeObj.panelHtml = html;
+        if (xmlString.length > 0) {
+			// Set the XML string, unset the point datum
+			this.setXMLFn(xmlString);
+			this.setPointFn(null);
+        }
     };
     
     /**
@@ -119,8 +116,8 @@ allModules.service('QuerierPanelService', function () {
         // Add to list
         this.layerList.push({
             resource: onlineResource,
-            listener: mapEventListener 
+            listener: mapEventListener
         });
     };
     
-});
+}]);

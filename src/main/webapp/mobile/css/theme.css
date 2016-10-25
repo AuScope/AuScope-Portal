@@ -327,3 +327,54 @@ fieldset[disabled] .btn-red.active {
 .mobile-only{
     display:none;
 }
+
+
+.querier-div .panel-heading {
+	background-color: #CCEBF6;
+	border-radius: 4px 4px 20px 20px;
+	word-wrap: break-word;
+}
+
+.querier-div .panel-title {
+	font-size: 13px;
+	
+}
+
+.querier-div .panel-default {
+	border-color: lightblue;
+	border-radius: 4px 4px 20px 20px;
+	border-width: 2px;
+	border-style: solid;
+}
+
+.querier-div  .panel-body {
+	border-top-color: #FFFFFF !important; /* "!important" prevents this rule being overridden by Bootstrap default */
+	border-style: none;
+	color: blue;
+	word-wrap: break-word;
+	padding: 7px;
+}
+
+.querier-xml-tag {
+	color: #180A92;
+	font-weight: bold;
+}
+
+.querier-div a:hover {
+	text-decoration: underline #2D76C4;
+}
+
+.querier-div a {
+	text-decoration: none;
+}
+
+.querier-xml-attrname {
+	color: #2D76C4;
+	font-weight: normal;
+}
+
+.querier-xml-attrval {
+	color: #4997EB;
+	font-style: italic;
+	font-weight: normal;
+}

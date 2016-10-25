@@ -1,13 +1,13 @@
-<div class="container-fluid animated fadeInleft" ng-controller="querierPanelCtrl">
+<div class="container-fluid animated fadeInleft" ng-controller="querierPanelCtrl" ng-init="init('xmlPanel')">
 	<div>
 		<div>				
 			<div class="layer-panel-header">
 				<img src="img/AuScope-logo-220.jpg">
-				<i class="pull-right glyphicon hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
+				<i class="pull-right glyphicon gi-2x hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
 			</div>			
 		</div>
 		<div>
-            <div ng-bind-html="panelHtml"></div>
+			<div id="xmlPanel" class="querier-div"></div>
 			<div ng-if="pointObj != null">
 				<table class="table activeView-table">
 					<tr ng-if="pointObj.name != ''">
