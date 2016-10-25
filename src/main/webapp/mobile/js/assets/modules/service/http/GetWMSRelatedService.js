@@ -10,16 +10,15 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
      * Get the wms style if proxyStyleUrl is valid
      * @method getWMSStyle
      * @param layer - the layer we would like to retrieve the sld for if proxyStyleUrl is defined
-     * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.
+     * @param selectedFilters - OPTIONAL - parameter to be passed into retrieving the SLD.
      * @return promise - a promise containing the sld for the layer
      */
-     this.getWMSStyle = function(layer,param){ 
-         if(!param){
-             param = {};
-         }
+     this.getWMSStyle = function(layer,selectedFilters){         
         if(layer.proxyStyleUrl){
              return $http.get('../' + layer.proxyStyleUrl,{
-                 params:param
+                 params:{
+                     selectedFilters : selectedFilters
+                 }
              }).then(function (response) {
                  return response.data;
              });

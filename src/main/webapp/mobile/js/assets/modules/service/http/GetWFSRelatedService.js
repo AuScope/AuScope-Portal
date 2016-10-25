@@ -13,15 +13,26 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
      * @param onlineResource - onlineResource of the wfs
      * @return promise - a promise containing the features for the layer
      */
-     this.getFeature = function(proxyUrl, onlineResource,selectedFilters){ 
+     this.getFeature = function(layer, onlineResource,selectedFilters){ 
+         
+        var proxyUrl = layer.proxyUrl;
+        
+        var parameters={
+                serviceUrl:onlineResource.url,
+                typeName : onlineResource.name,
+                selectedFilters : selectedFilters
+         };
+        
+        //VT: this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true        
+        var fixedAttributes = layer.filterCollection.fixedAttributes;        
+        for(var idx in fixedAttributes){
+            parameters[fixedAttributes[idx].parameter] = fixedAttributes[idx].value;
+        }
+        
          
         if(proxyUrl){
              return $http.get('../' + proxyUrl,{
-                 params:{
-                     serviceUrl:onlineResource.url,
-                     typeName : onlineResource.name,
-                     selectedFilters : selectedFilters
-                 }
+                 params:parameters
              }).then(function (response) {
                  //VT: include the corresponding resource used to retrieve this result.
                  response.data.resource = onlineResource;

@@ -386,6 +386,14 @@
                         </bean>
                     </list>
                 </property>
+                <property name ="fixedAttributes">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.FixedFilterObject">
+                            <constructor-arg name="parameter" type="java.lang.String" value="onlyHylogger"></constructor-arg>                            
+                            <constructor-arg name="value" type="java.lang.String" value="true"></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>
             </bean>        
         </property>
     </bean>

@@ -60,7 +60,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             for(var index in onlineResources){
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
-                GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index],selectedFilters).then(function(response){
+                GetWFSRelatedService.getFeature(layer, onlineResources[index],selectedFilters).then(function(response){
                     try{
                         var rootNode = GMLParserService.getRootNode(response.data.gml);
                         var primitives = GMLParserService.makePrimitives(rootNode);

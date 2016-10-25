@@ -19,14 +19,14 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         if(layer.id===layerId){
             $scope.isLayerActive = true; 
         }
-    })
+    });
   
    
     GoogleMapService.onLayerRemoved($scope, function(evt,layer){
         if(layer.id===layerId){
             $scope.isLayerActive = false; 
         }
-    })
+    });
     
     $scope.addLayer = function(){
         $scope.isLayerActive = true;

@@ -18,7 +18,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      
 
      $scope.addFilter = function(filter){
-         $scope.selectedFilters.push(filter)
+         $scope.selectedFilters.push(filter);
      };
     
 }]);
