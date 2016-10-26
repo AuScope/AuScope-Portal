@@ -14,7 +14,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         // Create var name
         var varName = "openSubQueryPanel_"+Math.floor(Math.random()*10000000).toString();
         // Register var name
-        $scope.status[varName] = true;
+        $scope.status[varName] = false;
         // Return var name
         return varName;
     }
@@ -48,6 +48,11 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
             var textNode = document.createTextNode(body);
             parentDiv.appendChild(textNode);
             return;
+        }
+
+        // Do not display attributes for 'wfs:FeatureCollection'
+        if (xmlDoc.nodeName=='wfs:FeatureCollection') {
+            hasAttributes = false;
         }
         
         // Set up 'accordion'
