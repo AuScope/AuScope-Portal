@@ -11,31 +11,42 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
      * @method getFeature
      * @param proxyUrl - The URL of the feature service
      * @param onlineResource - onlineResource of the wfs
+     * @param param - addtional parameter
      * @return promise - a promise containing the features for the layer
      */
-     this.getFeature = function(layer, onlineResource,selectedFilters){ 
+     this.getFeature = function(layer, onlineResource,param){ 
          
         var proxyUrl = layer.proxyUrl;
         
-        var parameters={
-                serviceUrl:onlineResource.url,
-                typeName : onlineResource.name,
-                selectedFilters : selectedFilters
-         };
+        param.serviceUrl = onlineResource.url;
+        param.typeName  = onlineResource.name;
         
-        //VT: this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
-        var fixedAttributes = [];
-        if(layer.filterCollection.fixedAttributes){
-            fixedAttributes = layer.filterCollection.fixedAttributes;   
+      //VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
+        var hiddenParams = [];
+        if(layer.filterCollection.hiddenParams){
+            hiddenParams = layer.filterCollection.hiddenParams;   
         }
-        for(var idx in fixedAttributes){
-            parameters[fixedAttributes[idx].parameter] = fixedAttributes[idx].value;
+        for(var idx in hiddenParams){
+            if(hiddenParams[idx].type=="UIHiddenResourceAttribute"){
+                param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
+            }else{
+                param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
+            }
+        }
+        
+        //VT: mandatoryFilters
+        var mandatoryFilters = [];
+        if(layer.filterCollection.mandatoryFilters){
+            mandatoryFilters = layer.filterCollection.mandatoryFilters;   
+        }
+        for(var idx in mandatoryFilters){            
+            param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
         }
         
          
         if(proxyUrl){
              return $http.get('../' + proxyUrl,{
-                 params:parameters
+                 params:angular.copy(param)
              }).then(function (response) {
                  //VT: include the corresponding resource used to retrieve this result.
                  response.data.resource = onlineResource;

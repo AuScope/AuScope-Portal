@@ -100,7 +100,7 @@ public class MineralTenementController extends BasePortalController {
             @RequestParam(required = false, value = "size") String size,
             @RequestParam(required = false, value = "endDate") String endDate,
             @RequestParam(required = false, value = "ccProperty", defaultValue="") String ccProperty,
-            @RequestParam(required = false, value = "selectedFilters") String selectedFilters,
+            @RequestParam(required = false, value = "xPathFilters") String xPathFilters,
             HttpServletResponse response) throws Exception {
         String style = "";
 
@@ -112,7 +112,7 @@ public class MineralTenementController extends BasePortalController {
             style = this.getColorCodeStyleForStatus(name, tenementType, owner, size, endDate);
             break;
         default:
-            String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,selectedFilters); //VT:get filter from service
+            String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,xPathFilters); //VT:get filter from service
             style = this.getPolygonStyle(filter, MINERAL_TENEMENT, "#00FF00", "#00FF00");
             break;
         }

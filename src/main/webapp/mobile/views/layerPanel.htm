@@ -24,11 +24,11 @@
 				        Filter <span class="caret"></span>
 				      </button>
 				      <ul class="dropdown-menu pull-right" style="z-index:50" uib-dropdown-menu role="menu" aria-labelledby="single-button">				      
-				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterDataRecord()"><i class="fa fa-sliders" aria-hidden="true"></i> Data Layers</a></li>
-				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterImageRecord()"><i class="fa fa-file-image-o" aria-hidden="true"></i> Image Layers</a></li>
-				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterActiveRecord()"><i class="fa fa-check-square" aria-hidden="true"></i> Current Active</a></li>
+				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterDataRecord()"><i class="fa fa-sliders"></i> Data Layers</a></li>
+				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterImageRecord()"><i class="fa fa-file-image-o"></i> Image Layers</a></li>
+				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterActiveRecord()"><i class="fa fa-check-square"></i> Current Active</a></li>
 				        <li class="divider"></li>
-				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterAnalyticRecord()" ><i class="fa fa-line-chart" aria-hidden="true"></i> Analytic</a></li>
+				        <li class="hasEvent" role="menuitem"><a ng-click="searchCtrl.filterAnalyticRecord()" ><i class="fa fa-line-chart"></i> Analytic</a></li>
 				      </ul>
 				    </div>
 				  
@@ -53,7 +53,7 @@
 					    </tr>
 					  </thead>
 					   <tr ng-repeat-start="layer in records" ng-click="togglePanels('filter',group,layer.id)" class="layer-row" ng-class="{'layer-selected':  status[group][layer.id].isExpanded}">
-						   	<td><span ng-if="renderStatus[layer.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(layer);$event.stopPropagation();" style="color:red;font-size: 15px;margin-right:3px;" aria-hidden="true"></span>{{layer.name}}
+						   	<td><span ng-if="renderStatus[layer.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(layer);$event.stopPropagation();" style="color:red;font-size: 15px;margin-right:3px;"></span>{{layer.name}}
 						   	  <div ng-if="renderStatus[layer.id].max" ng-click="togglePanels('statusInfo',group,layer.id);$event.stopPropagation();"> 						   	     
 							   	  <uib-progressbar  class="progress-striped active hasEvent" style="height:15px;margin-bottom: 0px;margin-top:5px;" type="{{renderStatus[layer.id].errorFound? 'warning':'success'}}" max="renderStatus[layer.id].max +1" value="renderStatus[layer.id].completed +1">
 							   	      <div ng-if="renderStatus[layer.id].errorFound"><span class="fa fa-exclamation-triangle" style="color:red;"></span> Incomplete report</div>
@@ -61,9 +61,9 @@
 							   	  </uib-progressbar>
 						   	  </div>
 						   	</td>
-						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter}" aria-hidden="true" ng-click="togglePanels('filter',group,layer.id);$event.stopPropagation();"></i></td>
-						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" aria-hidden="true" ng-click="togglePanels('info',group,layer.id);$event.stopPropagation();"></i></td>
-						   	<td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic}" aria-hidden="true" ng-click="togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
+						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter}" ng-click="togglePanels('filter',group,layer.id);$event.stopPropagation();"></i></td>
+						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" ng-click="togglePanels('info',group,layer.id);$event.stopPropagation();"></i></td>
+						   	<td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic}" ng-click="togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
 					   </tr>
                        <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
                         <td colspan="4">

@@ -52,7 +52,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
          * @method renderLayer
          * @param layer - The layer containing the wms to be rendered
          */
-        this.renderLayer = function(layer,selectedFilters){   
+        this.renderLayer = function(layer,param){   
             var map =  GoogleMapService.getMap();            
             var me = this;
             var onlineResources = LayerManagerService.getWFS(layer);
@@ -60,7 +60,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             for(var index in onlineResources){
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
-                GetWFSRelatedService.getFeature(layer, onlineResources[index],selectedFilters).then(function(response){
+                GetWFSRelatedService.getFeature(layer, onlineResources[index],param).then(function(response){
                     try{
                         var rootNode = GMLParserService.getRootNode(response.data.gml);
                         var primitives = GMLParserService.makePrimitives(rootNode);

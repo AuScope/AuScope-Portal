@@ -194,7 +194,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "outputFormat") String outputFormat,
-            @RequestParam(required = false, value = "selectedFilters") String selectedFilters)
+            @RequestParam(required = false, value = "xPathFilters") String xPathFilters)
                     throws Exception {
 
         String[] serviceFilterArray = serviceFilter.split(",");
@@ -214,7 +214,7 @@ public class NVCLController extends BasePortalController {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         // show all NVCL boreholes
-        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false,selectedFilters);
+        return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false,xPathFilters);
     }
 
     @RequestMapping("/doNVCLFilterHits.do")
@@ -262,7 +262,7 @@ public class NVCLController extends BasePortalController {
      */
     public ModelAndView doBoreholeFilter(String serviceUrl, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox,
-            boolean onlyHylogger, String outputFormat, boolean countOnly,String selectedFilters) throws Exception {
+            boolean onlyHylogger, String outputFormat, boolean countOnly,String xPathFilters) throws Exception {
         List<String> hyloggerBoreholeIDs = null;
         if (onlyHylogger) {
             try {
@@ -288,7 +288,7 @@ public class NVCLController extends BasePortalController {
                 return generateJSONResponseMAV(true, count, "");
             } else {
                 WFSResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
-                        dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, hyloggerBoreholeIDs, outputFormat,selectedFilters);
+                        dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, hyloggerBoreholeIDs, outputFormat,xPathFilters);
                 return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
             }
         } catch (Exception e) {

@@ -22,11 +22,11 @@ public class MineralTenementFilter extends GenericFilter {
      * @param mineName
      *            the main name
      */
-    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,String status,String selectedFilters) {
-        super(selectedFilters);
+    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,String status,String xPathFilters) {
+        super(xPathFilters);
         fragments = new ArrayList<String>();
 
-        if(selectedFilters == null || selectedFilters.isEmpty()){
+        if(xPathFilters == null || xPathFilters.isEmpty()){
 
 
             if (name != null && !name.isEmpty()) {

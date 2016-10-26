@@ -5,7 +5,7 @@
  */
 allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService', function ($scope,$rootScope,$timeout,RenderHandlerService) {
     
-   $scope.selectedFilters=[];
+   $scope.xPathFilters=[];
    
     /**
      * A function used to add a layer to the main map
@@ -13,12 +13,15 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      * @param layer layer object
      */       
      $scope.addLayer = function(layer){
-         RenderHandlerService.renderLayer(layer,$scope.selectedFilters);
+         var param  = {};
+         param.xPathFilters = $scope.xPathFilters;
+         
+         RenderHandlerService.renderLayer(layer,param);
      };
      
 
      $scope.addFilter = function(filter){
-         $scope.selectedFilters.push(filter);
+         $scope.xPathFilters.push(filter);
      };
     
 }]);

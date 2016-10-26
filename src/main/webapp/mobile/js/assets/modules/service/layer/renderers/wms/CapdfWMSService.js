@@ -128,6 +128,7 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
     /**
      * Method to decide how the wms should be rendered and add the wms to the map 
      * @method renderLayer
+     * @param layername - Written to cater for the possible different layername in capdf
      * @param layer - The layer containing the wms to be rendered
      * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.
      */
@@ -142,7 +143,7 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
               });
         };
         
-        GetWMSRelatedService.getWMSStyle(layer,param).then(function(style){           
+        GetWMSRelatedService.getWMSStyle(layer,null,param).then(function(style){           
             var onlineResources = LayerManagerService.getWMS(layer);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){  

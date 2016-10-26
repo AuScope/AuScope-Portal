@@ -48,6 +48,7 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                if(style){
                    url += "&SLD_BODY=" + encodeURIComponent(style);
                }
+               url += "&TILED=TRUE";
                url += "&STYLES=";  
                url += "&LAYERS=" + myOnlineResource.name; //WMS layers
                url += "&FORMAT=image/png" ; //WMS format

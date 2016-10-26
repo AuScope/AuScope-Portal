@@ -358,9 +358,9 @@
         <property name="order" value="50" />
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <property name ="collection">
+                <property name ="xpathFilters">
                     <list>
-                        <bean class="org.auscope.portal.core.uifilter.UITextBox">
+                        <bean class="org.auscope.portal.core.uifilter.xpathfilter.UITextBox">
                             <constructor-arg name="label" value="Name"></constructor-arg>
                             <constructor-arg name="xpath" value="gml:name"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
@@ -368,7 +368,7 @@
                                 <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
                             </constructor-arg>
                         </bean>
-                        <bean class="org.auscope.portal.core.uifilter.UIDate">
+                        <bean class="org.auscope.portal.core.uifilter.xpathfilter.UIDate">
                             <constructor-arg name="label" value="FromDate"></constructor-arg>
                             <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
@@ -376,7 +376,7 @@
                                 <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
                             </constructor-arg>
                         </bean>
-                        <bean class="org.auscope.portal.core.uifilter.UIDate">
+                        <bean class="org.auscope.portal.core.uifilter.xpathfilter.UIDate">
                             <constructor-arg name="label" value="ToDate"></constructor-arg>
                             <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
@@ -386,9 +386,9 @@
                         </bean>
                     </list>
                 </property>
-                <property name ="fixedAttributes">
+                <property name ="hiddenParams">
                     <list>
-                        <bean class="org.auscope.portal.core.uifilter.FixedFilterObject">
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UIHiddenParam">
                             <constructor-arg name="parameter" type="java.lang.String" value="onlyHylogger"></constructor-arg>                            
                             <constructor-arg name="value" type="java.lang.String" value="true"></constructor-arg>                                                        
                         </bean>
@@ -478,6 +478,28 @@
             </bean>
         </property>
         <property name="order" value="51" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
+                <property name ="mandatoryFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UICheckbox">
+                            <constructor-arg name="label" type="java.lang.String" value="Show Hylogged boreholes"></constructor-arg>
+                            <constructor-arg name="parameter" type="java.lang.String" value="showNoneHylogged"></constructor-arg>                         
+                            <constructor-arg name="value" type="java.lang.String" value="false"></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>
+                <property name ="hiddenParams">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UIHiddenResourceAttribute">
+                            <constructor-arg name="parameter" type="java.lang.String" value="serviceUrl"></constructor-arg>
+                            <constructor-arg name="attribute" type="java.lang.String" value="url"></constructor-arg>                         
+                            <constructor-arg name="value" type="java.lang.String" value="true"></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>
+            </bean>        
+        </property>
     </bean>
 
     <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">

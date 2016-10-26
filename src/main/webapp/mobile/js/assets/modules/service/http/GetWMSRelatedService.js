@@ -10,19 +10,46 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
      * Get the wms style if proxyStyleUrl is valid
      * @method getWMSStyle
      * @param layer - the layer we would like to retrieve the sld for if proxyStyleUrl is defined
+     * @param onlineResource - the onlineResource of the layer we are rendering
      * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.Used in capdf
      * @return promise - a promise containing the sld for the layer
      */
-     this.getWMSStyle = function(layer,param){    
+     this.getWMSStyle = function(layer,onlineResource,param){         
          if(!param){
              param = {};
          }
+         //VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
+         var hiddenParams = [];
+         if(layer.filterCollection.hiddenParams){
+             hiddenParams = layer.filterCollection.hiddenParams;   
+         }
+         for(var idx in hiddenParams){
+             if(hiddenParams[idx].type=="UIHiddenResourceAttribute"){
+                 param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
+             }else{
+                 param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
+             }
+         }
+         
+         //VT: mandatoryFilters
+         var mandatoryFilters = [];
+         if(layer.filterCollection.mandatoryFilters){
+             mandatoryFilters = layer.filterCollection.mandatoryFilters;   
+         }
+         for(var idx in mandatoryFilters){            
+             param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
+         }
+         
 
         if(layer.proxyStyleUrl){
              return $http.get('../' + layer.proxyStyleUrl,{
-                 params:param
-             }).then(function (response) {
-                 return response.data;
+                 params:angular.copy(param)
+             }).then(function (response) {  
+                 var response={
+                       onlineResource:onlineResource,
+                       style : response.data 
+                 }
+                 return response
              });
         }else{
             var deferred = $q.defer();

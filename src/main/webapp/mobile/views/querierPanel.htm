@@ -6,6 +6,10 @@
 				<i class="pull-right glyphicon gi-2x hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
 			</div>			
 		</div>
+		<span>
+		    <i class="fa fa-angle-double-down fa-2x" ng-click="expandAll()" title="Expand All"></i>
+			<i class="fa fa-angle-double-up fa-2x" ng-click="collapseAll()" title="Collapse All"></i>
+        </span>
 		<div>
 			<div id="xmlPanel" class="querier-div"></div>
 			<div ng-if="pointObj != null">
