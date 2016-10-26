@@ -159,6 +159,29 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         $scope.status = {};
         QuerierPanelService.registerPanel($scope.openPanel, $scope.setPoint, $scope.setPanelTree);
     };
+	
+	/**
+	* Used to expand all the accordion elements in the panel at once
+	* @method expandAll
+	*/
+	$scope.expandAll = function() {
+		var varName;
+	    for (varName in $scope.status) {
+			$scope.status[varName] = true;
+		} 
+		
+	};
+
+	/**
+	* Used to collapse all the accordion elements in the panel at once
+	* @method collapseAll
+	*/
+	$scope.collapseAll = function() {
+		var varName;
+	    for (varName in $scope.status) {
+			$scope.status[varName] = false;
+		}
+	};
 
 
 }]);
