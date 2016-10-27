@@ -7,10 +7,10 @@
 			</div>			
 		</div>
 		<div class="row">
-		    <div class="col-xs-1" ng-if="expandFlag"><i ng-click="collapseAll()" style="background-color: #CCEBF6;" class="fa fa-minus-square-o fa-2x"></i></div>
-			<div class="col-xs-4 querier-expandall-label" ng-if="expandFlag" ng-click="collapseAll()">Collapse All</div>
-			<div class="col-xs-1" ng-if="!expandFlag"><i ng-click="expandAll()" style="background-color: #CCEBF6;" class="fa fa-plus-square-o fa-2x"></i></div>
-			<div class="col-xs-4 querier-expandall-label" ng-if="!expandFlag" ng-click="expandAll()" >Expand All</div>
+		    <div class="col-xs-1" ng-if="pointObj == null && expandFlag"><i ng-click="collapseAll()" style="background-color: #CCEBF6;" class="fa fa-minus-square-o fa-2x"></i></div>
+			<div class="col-xs-4 querier-expandall-label" ng-if="pointObj == null && expandFlag" ng-click="collapseAll()">Collapse All</div>
+			<div class="col-xs-1" ng-if="pointObj == null && !expandFlag"><i ng-click="expandAll()" style="background-color: #CCEBF6;" class="fa fa-plus-square-o fa-2x"></i></div>
+			<div class="col-xs-4 querier-expandall-label" ng-if="pointObj == null && !expandFlag" ng-click="expandAll()" >Expand All</div>
 		</div>
 		<div>
 			<div id="xmlPanel" class="querier-div"></div>
