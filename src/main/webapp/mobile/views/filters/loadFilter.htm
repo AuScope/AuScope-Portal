@@ -18,30 +18,35 @@
     <form>
 	    <div class="form-group form-group-sm">
 	    <label for="form-filter-selection">Select Filter:</label>
-	    <select class="form-control" id="form-filter-selection" ng-change="addFilter(filter)" ng-model="filter" ng-options="filter as filter.label for filter in layer.filterCollection.xpathFilters"></select>
+	    <select class="form-control" id="form-filter-selection" ng-change="addFilter(filter)" ng-model="filter" ng-options="filter as filter.label for filter in layer.filterCollection.optionalFilters"></select>
 	   </div>
     </form>
 
     <form>    
-        <div ng-repeat="xPathFilter in xPathFilters">
-            <div ng-if="xPathFilter.type=='TEXT'">
+        <div ng-repeat="optionalFilter in optionalFilters">
+            <div ng-if="optionalFilter.type=='TEXT'">
                 <div class="form-group  form-group-sm">
-				    <label for="{{ 'filter-object' + $index }}">{{xPathFilter.label}}</label>
-				    <input type="text" class="form-control" id="{{ 'filter-object' + $index }}" ng-model="xPathFilter.value">				   
+				    <label for="{{ 'filter-TEXT' + $index }}">{{optionalFilter.label}}</label>
+				    <input type="text" class="form-control" id="{{ 'filter-TEXT' + $index }}" ng-model="optionalFilter.value">				   
 				</div>
             </div> 
-            <div ng-if="xPathFilter.type=='DATE'">
+            <div ng-if="optionalFilter.type=='DATE'">
                 <div class="form-group  form-group-sm">
-                    <label for="{{ 'filter-object' + $index }}">{{xPathFilter.label}}</label>                     
+                    <label for="{{ 'filter-DATE' + $index }}">{{optionalFilter.label}}</label>                     
                   
-			          <div class="input-group" id="{{ 'filter-object' + $index }}">
-				          <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" is-open="popup1.opened"  ng-model="xPathFilter.value" close-text="Close" alt-input-formats="altInputFormats" />
+			          <div class="input-group" id="{{ 'filter-DATE' + $index }}">
+				          <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" is-open="popup1.opened"  ng-model="optionalFilter.value" close-text="Close" alt-input-formats="altInputFormats" />
 				          <span class="input-group-btn">
 				            <button type="button" class="btn btn-default btn-sm" ng-click="popup1.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
 				          </span>
-				      </div>
-			               
+				      </div>			               
                 </div>
+            </div> 
+            <div ng-if="optionalFilter.type=='DROPDOWNSELECTLIST'">
+                <div class="form-group form-group-sm">
+			        <label for="{{ 'filter-DROPDOWNSELECTLIST' + $index }}">{{optionalFilter.label}}</label>
+			        <select class="form-control" id="{{ 'filter-DROPDOWNSELECTLIST' + $index }}"  ng-model="optionalFilter.value" ng-options="option.value as option.key for option in optionalFilter.options"></select>
+			    </div>
             </div>       
         </div>
     </form>

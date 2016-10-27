@@ -29,8 +29,8 @@ public class BoreholeWithConfigurableFilter extends GenericFilter {
 
     // ----------------------------------------------------------- Constructors
 
-    public BoreholeWithConfigurableFilter(String xPathFilters,List<String> restrictToIDList) {
-        super(xPathFilters);
+    public BoreholeWithConfigurableFilter(String optionalFilters,List<String> restrictToIDList) {
+        super(optionalFilters);
         this.restrictToIDList = restrictToIDList;
     }
 

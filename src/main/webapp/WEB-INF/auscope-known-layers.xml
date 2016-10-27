@@ -131,6 +131,58 @@
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>       
         <property name="order" value="150" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="mt:name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean> 
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownSelectList">
+                            <constructor-arg name="label" value="Tenement Type"></constructor-arg>  
+                             <constructor-arg name="xpath" value="mt:tenementType"></constructor-arg>                          
+                            <constructor-arg name="value"><null/></constructor-arg>
+                             <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>                            
+                            <constructor-arg name="options">
+                                <list>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">ExplorationDisplay</value></constructor-arg>
+                                        <constructor-arg name="right"><value  type="java.lang.String">exploration</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Prospecting</value></constructor-arg>
+                                        <constructor-arg name="right"><value type="java.lang.String">prospecting</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Miscellaneous</value></constructor-arg>
+                                        <constructor-arg name="right"><value type="java.lang.String">miscellaneous</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Mining Lease</value></constructor-arg>
+                                        <constructor-arg name="right"><value type="java.lang.String">mining</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Licence</value></constructor-arg>
+                                        <constructor-arg name="right"><value  type="java.lang.String">licence</value></constructor-arg>
+                                    </bean>
+                                </list>                               
+                            </constructor-arg>
+                        </bean> 
+                         <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                     
+                    </list>
+                </property>                
+            </bean>        
+        </property>
     </bean>
     
     <bean id="knownTypeColorCodeMineralTenements" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -358,9 +410,9 @@
         <property name="order" value="50" />
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <property name ="xpathFilters">
+                <property name ="optionalFilters">
                     <list>
-                        <bean class="org.auscope.portal.core.uifilter.xpathfilter.UITextBox">
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
                             <constructor-arg name="label" value="Name"></constructor-arg>
                             <constructor-arg name="xpath" value="gml:name"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
@@ -368,7 +420,7 @@
                                 <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
                             </constructor-arg>
                         </bean>
-                        <bean class="org.auscope.portal.core.uifilter.xpathfilter.UIDate">
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
                             <constructor-arg name="label" value="FromDate"></constructor-arg>
                             <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
@@ -376,7 +428,7 @@
                                 <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
                             </constructor-arg>
                         </bean>
-                        <bean class="org.auscope.portal.core.uifilter.xpathfilter.UIDate">
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
                             <constructor-arg name="label" value="ToDate"></constructor-arg>
                             <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            

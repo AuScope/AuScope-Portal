@@ -95,13 +95,13 @@ public class BoreholeService extends BaseWFSService {
      * @throws Exception
      */
     public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
-            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat,String xPathFilters)
+            String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat,String optionalFilters)
                     throws Exception {
         String filterString;
 
 
 
-        if(xPathFilters==null || xPathFilters.isEmpty()){
+        if(optionalFilters==null || optionalFilters.isEmpty()){
             BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
             if (bbox == null) {
                 filterString = nvclFilter.getFilterStringAllRecords();
@@ -109,7 +109,7 @@ public class BoreholeService extends BaseWFSService {
                 filterString = nvclFilter.getFilterStringBoundingBox(bbox);
             }
         }else{
-            BoreholeWithConfigurableFilter nvclFilter = new BoreholeWithConfigurableFilter(xPathFilters,restrictToIDList);
+            BoreholeWithConfigurableFilter nvclFilter = new BoreholeWithConfigurableFilter(optionalFilters,restrictToIDList);
             if (bbox == null) {
                 filterString = nvclFilter.getFilterStringAllRecords();
             } else {

@@ -49,9 +49,9 @@ public class MineralTenementService extends BaseWFSService {
     }
 
     public String getMineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,
-            FilterBoundingBox bbox,String xPathFilters)
+            FilterBoundingBox bbox,String optionalFilters)
                     throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null,xPathFilters);
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters);
         return generateFilterString(filter, bbox);
     }
     public String getMineralTenementFilterCCStatus(String name, String tenementType, String owner, String size, String endDate,
