@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.uifilter.GenericFilter;
 
 /**
  * Class that represents ogc:Filter markup for er:MineralOccurrence queries
@@ -15,7 +16,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
  * @author Jarek Sanders
  * @version $Id$
  */
-public class MineralOccurrenceFilter extends AbstractFilter {
+public class MineralOccurrenceFilter extends GenericFilter {
 
     public enum MeasureTypes {
         ENDOWMENT, RESERVE, RESOURCE, ANY, NONE
@@ -41,16 +42,24 @@ public class MineralOccurrenceFilter extends AbstractFilter {
             String minOreAmount,
             String minOreAmountUOM,
             String minCommodityAmount,
-            String minCommodityAmountUOM) {
-        this.commodityName = commodityName == null ? "" : commodityName;
-        this.minOreAmount = minOreAmount;
-        this.minOreAmountUOM = minOreAmountUOM;
-        this.minCommodityAmount = minCommodityAmount;
-        this.minCommodityAmountUOM = minCommodityAmountUOM;
+            String minCommodityAmountUOM,
+            String optionalFilters) {
 
-        this.measureType = getMeasureType(measureType);
-        this.paramsCount = getParameterCount();
-        this.filterStr = makeFilter();
+        super(optionalFilters);
+
+        if(optionalFilters.isEmpty()){
+            this.commodityName = commodityName == null ? "" : commodityName;
+            this.minOreAmount = minOreAmount;
+            this.minOreAmountUOM = minOreAmountUOM;
+            this.minCommodityAmount = minCommodityAmount;
+            this.minCommodityAmountUOM = minCommodityAmountUOM;
+
+            this.measureType = getMeasureType(measureType);
+            this.paramsCount = getParameterCount();
+            this.filterStr = makeFilter();
+        }else{
+            this.filterStr = this.generateFilterFragment();
+        }
     }
 
     @Override
@@ -162,29 +171,29 @@ public class MineralOccurrenceFilter extends AbstractFilter {
         if (!this.minOreAmount.isEmpty()) {
             fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(
                     "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
-                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
+                    + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
         }
         if (!this.minOreAmountUOM.isEmpty()) {
             fragments.add(this.generatePropertyIsEqualToFragment(
                     "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
-                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
+                    + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
         }
         if (!this.minCommodityAmount.isEmpty()) {
             fragments
-                    .add(this
-                            .generatePropertyIsGreaterThanOrEqualTo(
-                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
-                                            + measure
-                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue",
+            .add(this
+                    .generatePropertyIsGreaterThanOrEqualTo(
+                            "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                    + measure
+                                    + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue",
                                     this.minCommodityAmount));
         }
         if (!this.minCommodityAmountUOM.isEmpty()) {
             fragments
-                    .add(this
-                            .generatePropertyIsEqualToFragment(
-                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
-                                            + measure
-                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+            .add(this
+                    .generatePropertyIsEqualToFragment(
+                            "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                    + measure
+                                    + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom",
                                     this.minCommodityAmountUOM));
         }
 
@@ -200,29 +209,29 @@ public class MineralOccurrenceFilter extends AbstractFilter {
         if (!this.minOreAmount.isEmpty()) {
             fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(
                     "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
-                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
+                    + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue", this.minOreAmount));
         }
         if (!this.minOreAmountUOM.isEmpty()) {
             fragments.add(this.generatePropertyIsEqualToFragment(
                     "gsml:specification/er:MineralOccurrence/er:oreAmount/" + measure
-                            + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
+                    + "/er:ore/gsml:CGI_NumericValue/gsml:principalValue/@uom", this.minOreAmountUOM));
         }
         if (!this.minCommodityAmount.isEmpty()) {
             fragments
-                    .add(this
-                            .generatePropertyIsEqualToFragment(
-                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
-                                            + measure
-                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue",
+            .add(this
+                    .generatePropertyIsEqualToFragment(
+                            "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                    + measure
+                                    + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue",
                                     this.minCommodityAmount));
         }
         if (!this.minCommodityAmountUOM.isEmpty()) {
             fragments
-                    .add(this
-                            .generatePropertyIsEqualToFragment(
-                                    "gsml:specification/er:MineralOccurrence/er:oreAmount/"
-                                            + measure
-                                            + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+            .add(this
+                    .generatePropertyIsEqualToFragment(
+                            "gsml:specification/er:MineralOccurrence/er:oreAmount/"
+                                    + measure
+                                    + "/er:measureDetails/er:CommodityMeasure/er:commodityAmount/gsml:CGI_NumericValue/gsml:principalValue/@uom",
                                     this.minCommodityAmountUOM));
         }
 

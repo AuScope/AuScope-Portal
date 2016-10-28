@@ -4,10 +4,12 @@
  * @class WMSService
  * 
  */
-allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service',
-                                 function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service) {
+allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service','UtilitiesService',
+                                 function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service,UtilitiesService) {
     
-    var addLayerToGoogleMap = function(mapLayer,layer,onlineResource){
+    var maxSldLength = 6000; //2000; 6000 worked on chrome
+    
+    var addLayerToGoogleMap = function(mapLayer,layer,onlineResource,style){
         
         var map =  GoogleMapService.getMap();
         
@@ -18,14 +20,14 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
         };
         
         // Register map click/touch events to allow creation of the query information panel
-        var registerClickEvent = function(map, onlineResource, bbox){
+        var registerClickEvent = function(map, onlineResource, bbox,style){
             var mapEventListener = google.maps.event.addListener(map, 'mousedown', function(evt) {
                 // Send a request to the WMS service if the click is within the resource's bounding box
                 if (evt.latLng.lat() < bbox.northBoundLatitude && evt.latLng.lat() > bbox.southBoundLatitude &&
                     evt.latLng.lng() < bbox.eastBoundLongitude && evt.latLng.lng() > bbox.westBoundLongitude) {
                         
                     // Send request to WMS service
-                    GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource).then(function(response) 
+                    GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource,style).then(function(response) 
                         { 
                             // Used to check for an empty response, which occurs when user clicks/touches on empty space
                             var empty_html_body = /<body>\s*<\/body>/g;
@@ -78,7 +80,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             for (var j=0; j<onlineResources.length; j++) {
                 if (onlineResource==onlineResources[j]) {
                     var bbox = cswRecords[i].geographicElements[0];
-                    registerClickEvent(map, onlineResource, bbox);
+                    registerClickEvent(map, onlineResource, bbox,style);
                     done = true;
                     break;
                 }
@@ -104,20 +106,22 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
     this.renderLayer = function(layer,param){   
 
         var me = this;
-        var maxSldLength = 2000;
 
-       
             var onlineResources = LayerManagerService.getWMS(layer);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
-            for(var index in onlineResources){  
+            for(var index in onlineResources){ 
+                if(!UtilitiesService.paramContains(param.optionalFilters, onlineResources[index].url)){
+                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.SKIPPED);
+                    continue;
+                }
                 GetWMSRelatedService.getWMSStyle(layer,onlineResources[index],param).then(function(response){                    
                     RenderStatusService.updateCompleteStatus(layer,response.onlineResource,Constants.statusProgress.RUNNING);
                     if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
                         var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
-                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource);                    
+                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style);                    
                     }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
                         var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
-                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource); 
+                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style); 
                         
                     } 
                 });
@@ -138,7 +142,6 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
      */
     this.renderCSWRecord = function(layer,cswRecord){         
         var me = this;
-        var maxSldLength = 2000;
         
             var onlineResources = LayerManagerService.getWMSFromCSW(cswRecord);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);

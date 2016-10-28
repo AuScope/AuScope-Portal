@@ -196,7 +196,7 @@ public class EarthResourcesDownloadController extends BasePortalController {
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
             @RequestParam(required = false, value = "startIndex") String startIndex,
             HttpServletResponse response)
-            throws Exception
+                    throws Exception
     {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -259,7 +259,7 @@ public class EarthResourcesDownloadController extends BasePortalController {
             @RequestParam(required = false, value = "minReserves") String minResources,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 

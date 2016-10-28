@@ -127,7 +127,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
                 minOreAmount,
                 minOreAmountUOM,
                 minCommodityAmount,
-                minCommodityAmountUOM);
+                minCommodityAmountUOM,"");
 
         String filterString = generateFilterString(filter, bbox);
 

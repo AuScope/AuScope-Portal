@@ -80,15 +80,16 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
             this.renderStatus[layer.id].resources = {};
         }
         
-        //VT: The status has already been set and completed. This may get spammed because of the onerror catch at the img level
+        //VT: The status has already been set and completed. This may get spammed because of the onerror catch at the img tile level
         if(this.renderStatus[layer.id].resources[resource.url] && (this.renderStatus[layer.id].resources[resource.url].status == Constants.statusProgress.ERROR || 
-                this.renderStatus[layer.id].resources[resource.url].status == Constants.statusProgress.COMPLETED)){
+                this.renderStatus[layer.id].resources[resource.url].status == Constants.statusProgress.COMPLETED || 
+                this.renderStatus[layer.id].resources[resource.url].status == Constants.statusProgress.SKIPPED)){
             return;
         }
             
         this.renderStatus[layer.id].resources[resource.url] = resource;
         this.renderStatus[layer.id].resources[resource.url].status = status;
-        if(status == Constants.statusProgress.COMPLETED || status == Constants.statusProgress.ERROR){
+        if(status == Constants.statusProgress.COMPLETED || status == Constants.statusProgress.ERROR || status == Constants.statusProgress.SKIPPED){
             this.renderStatus[layer.id].completed +=  1;
             this.renderStatus.group[layer.group].current += 1;
             if(status==Constants.statusProgress.ERROR){

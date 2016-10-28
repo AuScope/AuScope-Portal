@@ -28,6 +28,7 @@ app.constant('Constants', {
     statusProgress:{
         'RUNNING': 'RUNNING',
         'COMPLETED': 'COMPLETED',
+        'SKIPPED' : 'SKIPPED',
         'ERROR': 'ERROR'
     },
     analyticLoader:{        

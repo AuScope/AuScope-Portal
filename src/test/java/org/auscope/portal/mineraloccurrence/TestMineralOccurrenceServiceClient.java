@@ -176,7 +176,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
                 minOreAmount,
                 minOreAmountUOM,
                 minCommodityAmount,
-                minCommodityAmountUOM);
+                minCommodityAmountUOM,"");
 
         context.checking(new Expectations() {
             {

@@ -4,8 +4,8 @@
  * @class WFSService
  * 
  */
-allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService','QuerierPanelService','RenderStatusService',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService,QuerierPanelService,RenderStatusService) {
+allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService','QuerierPanelService','RenderStatusService','UtilitiesService',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService,QuerierPanelService,RenderStatusService,UtilitiesService) {
    
       /**
         * Render a point data to the map 
@@ -58,6 +58,12 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             var onlineResources = LayerManagerService.getWFS(layer);
             RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){
+                
+                if(!UtilitiesService.paramContains(param.optionalFilters, onlineResources[index].url)){
+                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.SKIPPED);
+                    continue;
+                }
+                
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
                 GetWFSRelatedService.getFeature(layer, onlineResources[index],param).then(function(response){

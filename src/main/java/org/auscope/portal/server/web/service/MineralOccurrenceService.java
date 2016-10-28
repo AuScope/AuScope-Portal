@@ -192,7 +192,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                 minOreAmount,
                 minOreAmountUOM,
                 minCommodityAmount,
-                minCommodityAmountUOM);
+                minCommodityAmountUOM,"");
 
         String filterString = generateFilterString(filter, bbox);
 
@@ -238,7 +238,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                 minOreAmount,
                 minOreAmountUOM,
                 minCommodityAmount,
-                minCommodityAmountUOM);
+                minCommodityAmountUOM,"");
 
         String filterString = generateFilterString(filter, bbox);
         HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
@@ -345,15 +345,15 @@ public class MineralOccurrenceService extends BaseWFSService {
         return generateFilterString(filter, bbox);
     }
 
-    public String getMineralOccurrenceFilter(String commodityName, FilterBoundingBox bbox)
+    public String getMineralOccurrenceFilter(String commodityName, FilterBoundingBox bbox,String optionalFilters)
             throws Exception {
-        MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName, "", "", "", "", "");
+        MineralOccurrenceFilter filter = new MineralOccurrenceFilter(commodityName, "", "", "", "", "",optionalFilters);
         return generateFilterString(filter, bbox);
     }
 
     public String getMinOccurViewFilter(String commodityName, String minOreAmount, String minReserves,
             String minResources, FilterBoundingBox bbox)
-            throws Exception {
+                    throws Exception {
         MinOccurViewFilter filter = new MinOccurViewFilter(commodityName, minOreAmount, minReserves, minResources);
         return generateFilterString(filter, bbox);
     }

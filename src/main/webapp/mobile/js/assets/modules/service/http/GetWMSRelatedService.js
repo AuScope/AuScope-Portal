@@ -63,9 +63,10 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
      * @method getWMSMarkerInfo
      * @param ptLatLng Lat Lng object of the clicked/touched on point on map
      * @param pixel These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.
-     * @serviceInfo CSW service information object 
+     * @param serviceInfo CSW service information object
+     * @param style OPTIONAL style to use when making the GetFeatureInfo request
      */
-    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo) {
+    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo,style) {
         
         // This latLng needs to be converted into EPSG:3857 rect coords
         proj4.defs("EPSG:4326","+proj=longlat +datum=WGS84 +no_defs");
@@ -113,9 +114,14 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
             "&WIDTH="+bbWidth+ // Map panel width, in pixels (not Google Map pixel coords)
             "&HEIGHT="+bbHeight+ // Map panel height, in pixels (not Google Map pixel coords)
             //Invalid format 'application/xml', supported formats are [text/plain, application/vnd.ogc.gml, application/vnd.ogc.gml/3.1.1, text/html, application/json] 
-            "&INFO_FORMAT="+encodeURIComponent("application/vnd.ogc.gml/3.1.1")+ //+encodeURIComponent("text/html")+ // Simple HTML for the moment // application/vnd.ogc.gml
-            "&SLD_BODY="+ // No styling for the moment
+            "&INFO_FORMAT="+encodeURIComponent("application/vnd.ogc.gml/3.1.1")+ //+encodeURIComponent("text/html")+ // Simple HTML for the moment // application/vnd.ogc.gml                    
             "&version="+encodeURIComponent(serviceInfo.version);
+        
+        if(style){
+            get_params += "&SLD_BODY=" + encodeURIComponent(style);
+        }else{
+            get_params += "&SLD_BODY="
+        }   
 
         return $http({
             method: "POST",

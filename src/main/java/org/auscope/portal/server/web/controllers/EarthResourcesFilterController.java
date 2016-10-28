@@ -67,7 +67,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam("mineName") String mineName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -104,7 +104,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "mineName") String mineName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -148,7 +148,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(value = "minCommodityAmountUOM", required = false) String minCommodityAmountUOM,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
         //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -202,7 +202,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(value = "minCommodityAmountUOM", required = false) String minCommodityAmountUOM,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
         //The presence of a bounding box causes us to assume we will be using this GML for visualising on a map
         //This will in turn limit the number of points returned to 200
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
@@ -256,7 +256,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "production", defaultValue = "") String production,
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception
+                    throws Exception
     {
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -310,7 +310,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "production", defaultValue = "") String production,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
 
         //The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
         //This will in turn limit the number of points returned to 200
@@ -362,7 +362,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "production", defaultValue = "") String production,
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
         // Get the mining activities
@@ -401,7 +401,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
         // Get the mining activities
@@ -436,8 +436,9 @@ public class EarthResourcesFilterController extends BasePortalController {
             HttpServletResponse response,
             @RequestParam(value = "commodityName", required = false) String commodityName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
         // Get the mining activities
@@ -446,7 +447,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             unescapeCommodityName = URLDecoder.decode(commodityName, "UTF-8");
         }
         String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(unescapeCommodityName,
-                bbox);
+                bbox,optionalFilters);
 
         String style = this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
 
@@ -481,7 +482,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             @RequestParam(required = false, value = "minResources") String minResources,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
+                    throws Exception {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
         // Get the mining activities

@@ -74,6 +74,23 @@
             </bean>
         </property>
         <property name="order" value="11" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsml:specification/er:MineralOccurrence/er:commodityDescription/er:Commodity/er:commodityName"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                            <constructor-arg name="getAllCommodities.do"></constructor-arg>
+                        </bean>                 
+                    </list>
+                </property>                             
+            </bean>        
+        </property>
     </bean>
     <bean id="knownTypeMiningActivity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-miningactivity"/>
@@ -180,7 +197,32 @@
                             <constructor-arg name="value"><null/></constructor-arg>                                                        
                         </bean>                     
                     </list>
-                </property>                
+                </property> 
+                <property name ="mandatoryFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UIDropDownSelectList">
+                            <constructor-arg name="label" type="java.lang.String" value="Color Code"></constructor-arg>
+                            <constructor-arg name="parameter" type="java.lang.String" value="ccProperty"></constructor-arg>                         
+                            <constructor-arg name="value" type="java.lang.String" value=""></constructor-arg>  
+                            <constructor-arg name="options">
+                                <list>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Tenement Type</value></constructor-arg>
+                                        <constructor-arg name="right"><value  type="java.lang.String">TenementType</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Tenement Status</value></constructor-arg>
+                                        <constructor-arg name="right"><value type="java.lang.String">TenementStatus</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Default</value></constructor-arg>
+                                        <constructor-arg name="right"><value type="java.lang.String"></value></constructor-arg>
+                                    </bean>                                    
+                                </list>                               
+                            </constructor-arg>                                                      
+                        </bean>
+                    </list>
+                </property>               
             </bean>        
         </property>
     </bean>

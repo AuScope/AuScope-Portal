@@ -15,7 +15,7 @@ public class TestMineralOccurrenceFilter extends PortalTestClass {
         final String commodityName = "urn:cgi:feature:GSV:MineralOccurrence:361179";
 
         MineralOccurrenceFilter mineralOccurrenceFilter =
-                new MineralOccurrenceFilter(commodityName, "Any", "1234567", "urn:ogc:def:uom:UCUM:t", "", "");
+                new MineralOccurrenceFilter(commodityName, "Any", "1234567", "urn:ogc:def:uom:UCUM:t", "", "","");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
 
@@ -31,7 +31,7 @@ public class TestMineralOccurrenceFilter extends PortalTestClass {
     @Test
     public void testReserveMinimumOreAmount() throws Exception {
         MineralOccurrenceFilter mineralOccurrenceFilter =
-                new MineralOccurrenceFilter("", "Reserve", "2000000", "urn:ogc:def:uom:UCUM:t", "", "");
+                new MineralOccurrenceFilter("", "Reserve", "2000000", "urn:ogc:def:uom:UCUM:t", "", "","");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
@@ -44,7 +44,7 @@ public class TestMineralOccurrenceFilter extends PortalTestClass {
     @Test
     public void testAnyMinimumOreAmount() throws Exception {
         MineralOccurrenceFilter mineralOccurrenceFilter =
-                new MineralOccurrenceFilter("", "Any", "1000000", "urn:ogc:def:uom:UCUM:t", "", "");
+                new MineralOccurrenceFilter("", "Any", "1000000", "urn:ogc:def:uom:UCUM:t", "", "","");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
@@ -58,7 +58,7 @@ public class TestMineralOccurrenceFilter extends PortalTestClass {
     @Test
     public void testResourceMinimumCommodityAmount() throws Exception {
         MineralOccurrenceFilter mineralOccurrenceFilter =
-                new MineralOccurrenceFilter("", "Resource", "", "", "6000000", "urn:ogc:def:uom:UCUM:t");
+                new MineralOccurrenceFilter("", "Resource", "", "", "6000000", "urn:ogc:def:uom:UCUM:t","");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
@@ -70,7 +70,7 @@ public class TestMineralOccurrenceFilter extends PortalTestClass {
     @Test
     public void testAnyMinimumCommodityAmount() throws Exception {
         MineralOccurrenceFilter mineralOccurrenceFilter =
-                new MineralOccurrenceFilter("", "Any", "", "", "7000000", "urn:ogc:def:uom:UCUM:t");
+                new MineralOccurrenceFilter("", "Any", "", "", "7000000", "urn:ogc:def:uom:UCUM:t","");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
@@ -81,13 +81,13 @@ public class TestMineralOccurrenceFilter extends PortalTestClass {
 
     /**
      * Ensures that matchCase is always set to false
-     * 
+     *
      * @throws Exception
      */
     @Test
     public void testMatchCaseDefault() throws Exception {
         MineralOccurrenceFilter mineralOccurrenceFilter =
-                new MineralOccurrenceFilter("commodityName", "None", "", "", "", "");
+                new MineralOccurrenceFilter("commodityName", "None", "", "", "", "","");
 
         String filter = mineralOccurrenceFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);

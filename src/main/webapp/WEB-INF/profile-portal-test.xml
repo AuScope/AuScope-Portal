@@ -16,6 +16,8 @@
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />
+                <ref bean="knownTypeMineralOccurrence" />
+                
                
                          
                 

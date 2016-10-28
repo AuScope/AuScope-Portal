@@ -38,5 +38,30 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
         !isNaN(parseFloat(n)) && isFinite(n);
     };
     
+    /**
+     * Extract the domain from any url
+     * @method getUrlDomain
+     * @param url to extract the domain
+     */
+    this.getUrlDomain = function(url){
+        var    a      = document.createElement('a');
+        a.href = url;
+        return a.hostname;
+    };
+    
+    
+    this.paramContains =  function(params, url){
+        for(idx in params){
+            if(params[idx].type=="OPTIONAL.PROVIDER"){
+                for(domain in params[idx].value ){
+                    if(url.indexOf(domain) != -1){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    };
+    
      
 }]);    
