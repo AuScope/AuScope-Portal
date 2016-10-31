@@ -110,7 +110,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             var onlineResources = LayerManagerService.getWMS(layer);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){ 
-                if(!UtilitiesService.paramContains(param.optionalFilters, onlineResources[index].url)){
+                if(UtilitiesService.filterProviderSkip(param.optionalFilters, onlineResources[index].url)){
                     RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.SKIPPED);
                     continue;
                 }

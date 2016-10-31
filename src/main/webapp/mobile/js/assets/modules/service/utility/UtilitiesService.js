@@ -50,17 +50,27 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
     };
     
     
-    this.paramContains =  function(params, url){
+    this.filterProviderSkip =  function(params, url){
+        var containProviderFilter = false;
+        var urlMatch = false;
+        
         for(idx in params){
             if(params[idx].type=="OPTIONAL.PROVIDER"){
+                containProviderFilter = true;
                 for(domain in params[idx].value ){
                     if(url.indexOf(domain) != -1){
-                        return true;
+                        urlMatch = true;
                     }
                 }
             }
         }
-        return false;
+        
+        if(containProviderFilter && !urlMatch){
+            return true;
+        }else{
+            return false;
+        }
+               
     };
     
      

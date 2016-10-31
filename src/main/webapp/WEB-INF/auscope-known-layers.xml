@@ -79,13 +79,13 @@
                 <property name ="optionalFilters">
                     <list>
                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
-                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="label" value="Commodity"></constructor-arg>
                             <constructor-arg name="xpath" value="gsml:specification/er:MineralOccurrence/er:commodityDescription/er:Commodity/er:commodityName"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
                             <constructor-arg name="predicate">
                                 <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
                             </constructor-arg>
-                            <constructor-arg name="getAllCommodities.do"></constructor-arg>
+                            <constructor-arg name="url" value="../getAllCommodities.do"></constructor-arg>
                         </bean>                 
                     </list>
                 </property>                             

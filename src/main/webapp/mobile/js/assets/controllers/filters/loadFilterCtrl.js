@@ -3,8 +3,8 @@
  * @module controllers
  * @class loadFilterCtrl
  */
-allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService',
-                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService) {
+allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService','GetFilterParamService',
+                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService,GetFilterParamService) {
     
    $scope.optionalFilters=[];
    $scope.providers=[];
@@ -41,7 +41,14 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      */       
      $scope.addLayer = function(layer){
          var param  = {};
-         param.optionalFilters = $scope.optionalFilters;
+         param.optionalFilters = angular.copy($scope.optionalFilters);
+         
+         //VT: remove options to save bandwidth
+         for(var idx in param.optionalFilters){
+             if(param.optionalFilters[idx].options){
+                 param.optionalFilters[idx].options = [];
+             }
+         }
          
          RenderHandlerService.renderLayer(layer,param);
      };
@@ -53,11 +60,10 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
              filter.value={};
          }
          if(UtilitiesService.isEmpty($scope.providers) && filter.type=="OPTIONAL.DROPDOWNREMOTE"){
-             //VT: get commodity
-             //then after its done populate filter.options
-             //VT: may require some massaging of data to return array of object as option.value as option.key
-             filter.option = getCommodity;
-             $scope.optionalFilters.push(filter);
+             GetFilterParamService.getParam(filter.url).then(function(response){
+                 filter.options = response;
+                 $scope.optionalFilters.push(filter);                
+             });             
              return;
          }
          $scope.optionalFilters.push(filter);
