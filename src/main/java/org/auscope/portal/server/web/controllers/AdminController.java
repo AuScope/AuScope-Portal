@@ -12,7 +12,6 @@ import org.auscope.portal.core.services.admin.AdminDiagnosticResponse;
 import org.auscope.portal.core.services.admin.EndpointAndSelector;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.view.JSONView;
 import org.auscope.portal.server.web.service.AuScopeAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +21,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**
  * Provides a controller interface into some basic administration functionality/tests
@@ -61,7 +61,7 @@ public class AdminController {
      * @return
      */
     private ModelAndView generateTestResponse(AdminDiagnosticResponse response) {
-        JSONView view = new JSONView();
+        MappingJackson2JsonView view = new MappingJackson2JsonView();
         ModelMap model = new ModelMap();
 
         model.put("success", response.isSuccess());
