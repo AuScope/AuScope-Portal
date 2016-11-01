@@ -294,6 +294,12 @@ fieldset[disabled] .btn-red.active {
 	margin-bottom:10px;
 }
 
+.hr-dark-scheme{
+    border-color:#c4c4c4;
+    background-color:#c4c4c4;    
+    color: #c4c4c4;
+}
+
 .render-status-panel div{
 	font-size:12px;
 	padding-left:3px;
@@ -326,6 +332,18 @@ fieldset[disabled] .btn-red.active {
 
 .mobile-only{
     display:none;
+}
+
+fieldset.show-fieldset-borders{
+	border: 1px solid #c4c4c4;
+    padding: 0 1.4em 1.4em 1.4em;
+    margin: 0 0 1.5em 0;
+}
+
+.show-fieldset-borders legend{
+	width:inherit; /* Or auto */
+    padding:0 10px; /* To give a bit of padding on the left and right */
+    border-bottom:none;
 }
 
 

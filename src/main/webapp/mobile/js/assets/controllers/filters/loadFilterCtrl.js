@@ -8,6 +8,11 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     
    $scope.optionalFilters=[];
    $scope.providers=[];
+   $scope.select={
+           filter:{}
+   };
+  
+  
    
    var getProvider = function(){
        var cswRecords = $scope.layer.cswRecords;
@@ -55,6 +60,9 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      
 
      $scope.addFilter = function(filter){
+         if(filter==null){
+             return;
+         }
          if(UtilitiesService.isEmpty($scope.providers) && filter.type=="OPTIONAL.PROVIDER"){
              getProvider();
              filter.value={};
@@ -67,6 +75,12 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
              return;
          }
          $scope.optionalFilters.push(filter);
+         
+     };
+     
+     $scope.clearFilter = function(){
+         $scope.optionalFilters=[];
+         $scope.select.filter={};
      };
     
 }]);

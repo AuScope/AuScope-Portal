@@ -21,61 +21,75 @@
         </div>
     </form>
  
-    <form>
-	    <div class="form-group form-group-sm">
-	    <label for="form-filter-selection">Select Filter:</label>
-	    <select class="form-control" id="form-filter-selection" ng-change="addFilter(filter)" ng-model="filter" ng-options="filter as filter.label for filter in layer.filterCollection.optionalFilters"></select>
-	   </div>
-    </form>
-
-    <form>    
-        <div ng-repeat="optionalFilter in optionalFilters">
-            <div ng-if="optionalFilter.type=='OPTIONAL.TEXT'">
-                <div class="form-group  form-group-sm">
-				    <label for="{{ 'filter-OPTIONAL.TEXT' + $index }}">{{optionalFilter.label}}</label>
-				    <input type="text" class="form-control" id="{{ 'filter-OPTIONAL.TEXT' + $index }}" ng-model="optionalFilter.value">				   
-				</div>
-            </div> 
-            <div ng-if="optionalFilter.type=='OPTIONAL.DATE'">
-                <div class="form-group  form-group-sm">
-                    <label for="{{ 'filter-OPTIONAL.DATE' + $index }}">{{optionalFilter.label}}</label>                     
-                  
-			          <div class="input-group" id="{{ 'filter-OPTIONAL.DATE' + $index }}">
-				          <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" is-open="popup1.opened"  ng-model="optionalFilter.value" close-text="Close" alt-input-formats="altInputFormats" />
-				          <span class="input-group-btn">
-				            <button type="button" class="btn btn-default btn-sm" ng-click="popup1.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
-				          </span>
-				      </div>			               
-                </div>
-            </div> 
-            <div ng-if="optionalFilter.type=='OPTIONAL.DROPDOWNSELECTLIST'">
-                <div class="form-group form-group-sm">
-			        <label for="{{ 'filter-OPTIONAL.DROPDOWNSELECTLIST' + $index }}">{{optionalFilter.label}}</label>
-			        <select class="form-control" id="{{ 'filter-OPTIONAL.DROPDOWNSELECTLIST' + $index }}"  ng-model="optionalFilter.value" ng-options="option.value as option.key for option in optionalFilter.options"></select>
-			    </div>
-            </div>
-            <div ng-if="optionalFilter.type=='OPTIONAL.DROPDOWNREMOTE'">
-                <div class="form-group form-group-sm">
-                    <label for="{{ 'filter-OPTIONAL.DROPDOWNREMOTE' + $index }}">{{optionalFilter.label}}</label>
-                    <select class="form-control" id="{{ 'filter-OPTIONAL.DROPDOWNREMOTE' + $index }}"  ng-model="optionalFilter.value" ng-options="option.value as option.key for option in optionalFilter.options"></select>
-                </div>
-            </div>
-            <div ng-if="optionalFilter.type=='OPTIONAL.PROVIDER'">
-                <div class="form-group  form-group-sm">                   
-                      <div class="checkbox" ng-repeat="provider in providers">
-						  <label class="form-check-label" >
-						      <input class="form-check-input" type="checkbox" value="provider.value" ng-model="optionalFilter.value[provider.value]">
-	                       {{provider.label}}</label>
-					</div>                                  
-                </div>
-            </div>
-        </div>
-    </form>
+    <div ng-if="!layer.filterCollection.optionalFilters" class="alert alert-danger" role="alert">No Filtering option available for this layer.  <br><br>
+                <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(layer)">Add Layer</button>
+     </div> 
  
+ 
+    <fieldset ng-if="layer.filterCollection.optionalFilters" class="show-fieldset-borders">
+         <legend>Optional Filters</legend>
+	    <form>
+		    <div ng-if="layer.filterCollection.optionalFilters" class="form-group form-group-sm">
+		    <label for="form-filter-selection">Select Filter:</label>
+		    <select class="form-control" id="form-filter-selection" ng-change="addFilter(select.filter)" ng-model="select.filter" ng-options="filter as filter.label for filter in layer.filterCollection.optionalFilters">
+		      <option value="">-- choose a filter --</option>
+		    </select>
+		   </div>
+		     
+	    </form>
+	    
+	    <hr  class="hr-dark-scheme">
+	    
+	    <form>    
+	        <div ng-repeat="optionalFilter in optionalFilters">
+	            <div ng-if="optionalFilter.type=='OPTIONAL.TEXT'">
+	                <div class="form-group  form-group-sm">
+					    <label for="{{ 'filter-OPTIONAL.TEXT' + $index }}">{{optionalFilter.label}}</label>
+					    <input type="text" class="form-control" id="{{ 'filter-OPTIONAL.TEXT' + $index }}" ng-model="optionalFilter.value">				   
+					</div>
+	            </div> 
+	            <div ng-if="optionalFilter.type=='OPTIONAL.DATE'">
+	                <div class="form-group  form-group-sm">
+	                    <label for="{{ 'filter-OPTIONAL.DATE' + $index }}">{{optionalFilter.label}}</label>                     
+	                  
+				          <div class="input-group" id="{{ 'filter-OPTIONAL.DATE' + $index }}">
+					          <input type="text" class="form-control" uib-datepicker-popup="yyyy-MM-dd" is-open="popup1.opened"  ng-model="optionalFilter.value" close-text="Close" alt-input-formats="altInputFormats" />
+					          <span class="input-group-btn">
+					            <button type="button" class="btn btn-default btn-sm" ng-click="popup1.opened=true;"><i class="glyphicon glyphicon-calendar"></i></button>
+					          </span>
+					      </div>			               
+	                </div>
+	            </div> 
+	            <div ng-if="optionalFilter.type=='OPTIONAL.DROPDOWNSELECTLIST'">
+	                <div class="form-group form-group-sm">
+				        <label for="{{ 'filter-OPTIONAL.DROPDOWNSELECTLIST' + $index }}">{{optionalFilter.label}}</label>
+				        <select class="form-control" id="{{ 'filter-OPTIONAL.DROPDOWNSELECTLIST' + $index }}"  ng-model="optionalFilter.value" ng-options="option.value as option.key for option in optionalFilter.options"></select>
+				    </div>
+	            </div>
+	            <div ng-if="optionalFilter.type=='OPTIONAL.DROPDOWNREMOTE'">
+	                <div class="form-group form-group-sm">
+	                    <label for="{{ 'filter-OPTIONAL.DROPDOWNREMOTE' + $index }}">{{optionalFilter.label}}</label>
+	                    <select class="form-control" id="{{ 'filter-OPTIONAL.DROPDOWNREMOTE' + $index }}"  ng-model="optionalFilter.value" ng-options="option.value as option.key for option in optionalFilter.options"></select>
+	                </div>
+	            </div>
+	            <div ng-if="optionalFilter.type=='OPTIONAL.PROVIDER'">
+	                <div class="form-group  form-group-sm">                   
+	                      <div class="checkbox" ng-repeat="provider in providers">
+							  <label class="form-check-label" >
+							      <input class="form-check-input" type="checkbox" value="provider.value" ng-model="optionalFilter.value[provider.value]">
+		                       {{provider.label}}</label>
+						</div>                                  
+	                </div>
+	            </div>	            
+	        </div>
+	         <button type="button" class="btn btn-info btn-sm btn-red" ng-click="clearFilter()">Clear Filter</button>
+	    </form>
+ 
+    </fieldset>
     
    
  
-    <div>
+    <div ng-if="layer.filterCollection.optionalFilters">
         <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(layer)">Add Layer</button>      
     </div>
  </div>
