@@ -14,7 +14,7 @@
             <div ng-if="mandatoryFilter.type == 'MANDATORY.DROPDOWNSELECTLIST'">
                 <div class="form-group  form-group-sm">
                     <label for="{{ 'filter-MANDATORY.DROPDOWNSELECTLIST' + $index }}">{{mandatoryFilter.label}}</label>
-                    <select class="form-control" id="{{ 'filter-MANDATORY.DROPDOWNSELECTLIST' + $index }}"  ng-model="mandatoryFilter.value" ng-options="option.value as option.key for option in mandatoryFilter.options"></select> 
+                    <select class="form-control" id="{{ 'filter-MANDATORY.DROPDOWNSELECTLIST' + $index }}" ng-model="mandatoryFilter.value" ng-options="option[getKey(option)] as getKey(option)  for option in mandatoryFilter.options"></select> 
                 </div>
             </div>
                          

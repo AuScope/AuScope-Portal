@@ -82,5 +82,11 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
          $scope.optionalFilters=[];
          $scope.select.filter={};
      };
+     
+     $scope.getKey = function(options) {
+         return Object.keys(options)[0];
+     };
+
+     
     
 }]);

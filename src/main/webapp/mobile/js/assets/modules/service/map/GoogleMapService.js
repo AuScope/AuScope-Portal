@@ -143,9 +143,10 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                  };
                  this.activeLayers[layer.id].layers=[];
             };
-            RenderStatusService.clearStatus(layer);
+           
             this.broadcast('layer.removed',layer);
         };
+        RenderStatusService.clearStatus(layer);
     };
      
     /**
