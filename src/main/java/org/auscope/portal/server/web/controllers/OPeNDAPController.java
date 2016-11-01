@@ -9,7 +9,6 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
@@ -21,7 +20,6 @@ import org.auscope.portal.core.services.methodmakers.OPeNDAPGetDataMethodMaker.O
 import org.auscope.portal.core.services.responses.opendap.AbstractViewVariable;
 import org.auscope.portal.core.services.responses.opendap.ViewVariableFactory;
 import org.auscope.portal.core.util.FileIOUtil;
-import org.auscope.portal.core.view.JSONModelAndView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * A controller for marshaling requests for an arbitrary OPeNDAP resource.
- * 
+ *
  * @author vot002
  *
  */
@@ -66,12 +64,7 @@ public class OPeNDAPController extends BasePortalController {
      */
     @RequestMapping("/opendapGetSupportedFormats.do")
     public ModelAndView getSupportedFormats() {
-        JSONArray items = new JSONArray();
-
-        items.add(new String[] {"ascii"});
-        items.add(new String[] {"dods"});
-
-        return new JSONModelAndView(items);
+        return generateJSONResponseMAV(true, new String[] {"ascii", "dods"}, "");
     }
 
     /**

@@ -1,7 +1,5 @@
 package org.auscope.portal.server.web.controllers;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +15,7 @@ import net.sf.json.JSONObject;
 
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
+import org.auscope.portal.core.test.ByteBufferedServletOutputStream;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
@@ -26,8 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.AbstractView;
-
 /**
  * User: Mathew Wyatt Date: 27/08/2009.
  *
@@ -81,6 +78,24 @@ public class TestCSWCacheController extends PortalTestClass {
         cswController = new CSWCacheController(mockCSWService, mockViewCSWRecordFactory, mockViewKnownLayerFactory);
     }
 
+    private String renderMav(ModelAndView mav) throws Exception {
+        final ByteBufferedServletOutputStream rawResponse = new ByteBufferedServletOutputStream(1024 * 200);
+        context.checking(new Expectations() {
+            {
+                allowing(mockHttpResponse).setContentType(with(any(String.class)));
+                allowing(mockHttpResponse).setCharacterEncoding(with(any(String.class)));
+                allowing(mockHttpResponse).addHeader(with(any(String.class)), with(any(String.class)));
+                allowing(mockHttpResponse).getOutputStream();will(returnValue(rawResponse));
+
+                allowing(mockHttpRequest).getParameter(with(any(String.class)));will(returnValue(null));
+                allowing(mockHttpRequest).getAttribute(with(any(String.class)));will(returnValue(null));
+            }
+        });
+        mav.getView().render(mav.getModel(), mockHttpRequest, mockHttpResponse);
+
+        return rawResponse.getStream().toString("UTF-8");
+    }
+
     /**
      * Test get record response_ success.
      *
@@ -89,7 +104,6 @@ public class TestCSWCacheController extends PortalTestClass {
      */
     @Test
     public void testGetRecordResponse_Success() throws Exception {
-        final StringWriter actualJSONResponse = new StringWriter();
         final ModelMap viewCSWRecord1 = new ModelMap();
         final ModelMap viewCSWRecord2 = new ModelMap();
 
@@ -105,19 +119,13 @@ public class TestCSWCacheController extends PortalTestClass {
                 will(returnValue(viewCSWRecord1));
                 oneOf(mockViewCSWRecordFactory).toView(mockCSWRecord2);
                 will(returnValue(viewCSWRecord2));
-
-                //check that the correct response is getting output
-                oneOf(mockHttpResponse).setContentType(with(any(String.class)));
-                oneOf(mockHttpResponse).getWriter();
-                will(returnValue(new PrintWriter(actualJSONResponse)));
             }
         });
 
         //Run the method, get our response rendered as a JSONObject
         ModelAndView mav = cswController.getCSWRecords();
-        ((AbstractView) mav.getView()).setExposePathVariables(false);
-        mav.getView().render(mav.getModel(), mockHttpRequest, mockHttpResponse);
-        JSONObject jsonObj = JSONObject.fromObject(actualJSONResponse.toString());
+        String json = renderMav(mav);
+        JSONObject jsonObj = JSONObject.fromObject(json);
 
         //Check our response contains useful info...
         Assert.assertEquals(true, jsonObj.getBoolean(SUCCESSJSON));
@@ -140,7 +148,6 @@ public class TestCSWCacheController extends PortalTestClass {
      */
     @Test
     public void testGetRecordResponse_TransformError() throws Exception {
-        final StringWriter actualJSONResponse = new StringWriter();
         final ModelMap viewCSWRecord1 = new ModelMap();
         final ModelMap viewCSWRecord2 = new ModelMap();
 
@@ -156,19 +163,13 @@ public class TestCSWCacheController extends PortalTestClass {
                 will(returnValue(viewCSWRecord1));
                 oneOf(mockViewCSWRecordFactory).toView(mockCSWRecord2);
                 will(throwException(new Exception()));
-
-                //check that the correct response is getting output
-                oneOf(mockHttpResponse).setContentType(with(any(String.class)));
-                oneOf(mockHttpResponse).getWriter();
-                will(returnValue(new PrintWriter(actualJSONResponse)));
             }
         });
 
         //Run the method, get our response rendered as a JSONObject
         ModelAndView mav = cswController.getCSWRecords();
-        ((AbstractView) mav.getView()).setExposePathVariables(false);
-        mav.getView().render(mav.getModel(), mockHttpRequest, mockHttpResponse);
-        JSONObject jsonObj = JSONObject.fromObject(actualJSONResponse.toString());
+        String json = renderMav(mav);
+        JSONObject jsonObj = JSONObject.fromObject(json);
 
         //Check our response contains useful info...
         Assert.assertEquals(false, jsonObj.getBoolean(SUCCESSJSON));
