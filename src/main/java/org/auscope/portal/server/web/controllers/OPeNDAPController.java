@@ -9,6 +9,7 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * A controller for marshaling requests for an arbitrary OPeNDAP resource.
- * 
+ *
  * @author vot002
  *
  */
