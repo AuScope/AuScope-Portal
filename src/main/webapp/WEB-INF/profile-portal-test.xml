@@ -11,16 +11,89 @@
     <!-- All elements must be of type org.auscope.portal.server.web.KnownLayer -->
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
-            <list>       
-                <ref bean="knownTypeMineralTenements" />
-                <ref bean="knownTypeBoreholeNvcl" />
+            <list>                
                 <ref bean="knownTypehydrogeochem" />
-                <ref bean="knownTypeSF0BoreholeNVCL" />
+                <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
-                
-               
-                         
-                
+                <ref bean="knownTypeMiningActivity" />
+                <ref bean="knownTypeMineralTenements" />
+                <ref bean="knownTypeRemanentAnomalies" />
+                <ref bean="knownTypeRemanentAnomaliesTMI" />
+                <ref bean="knownTypeRemanentAnomaliesAutoSearch" />
+                <ref bean="knownTypeEMAGRemanentAnomalies" />
+                <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
+                <ref bean="knownTypeMineralOccurrenceView" />
+                <ref bean="knownTypeBoreholeNvcl" />
+                <ref bean="knownTypeBoreholePressureDB" />
+                <ref bean="knownTypeGSMLBorehole" />
+                <ref bean="knownTypeReports" />
+                <ref bean="knownTypeInSarReports" />
+                <ref bean="knownTypeGeotransects" />
+                <ref bean="knownTypeTimaGeoSample" />
+                <ref bean="knownTypeYilgarnGeochemistry"/>
+                <ref bean="knownTypeSamplingPoint"/>
+                <ref bean="knownTypeFeatureCollection"/>
+                <ref bean="knownTypeLateriteYilgarnGeoChem"/>
+                <ref bean="knownTypeHighPSiteFeatureType"/>
+                <ref bean="knownTypeHighPFeatureType"/>
+                <ref bean="knownTypeHighPREIronLayer"/>
+                <ref bean="knownTypeHighPREPhosLayer"/>
+                <ref bean="knownTypeHighPSiteIronLayer"/>
+                <ref bean="knownTypeHighPSitePhosLayer"/>
+                <ref bean="knownTypePortals"/>
+                <ref bean="knownTypeGeoNetworks"/>
+                <ref bean="knownTypeAster" />
+                <ref bean="knownTypeAsterAloh" />
+                <ref bean="knownTypeAsterFerrous" />
+                <ref bean="knownTypeAsterOpaque" />
+                <ref bean="knownTypeAsterFerricOxideContent" />
+                <ref bean="knownTypeAsterFeoh" />
+                <ref bean="knownTypeFerricOxideComp" />
+                <ref bean="knownTypeAsterChileSandToClay" />
+                <ref bean="knownTypeAsterChileWaterIndex" />
+                <ref bean="knownTypeAsterChileAlOHComp" />
+                <ref bean="knownTypeAsterChileFalseColour" />
+                <ref bean="knownTypeGroupIndex" />
+                <ref bean="knownTypeQuartzIndex" />
+                <ref bean="knownTypeMgohContent" />
+                <ref bean="knownTypeGreenVeg" />
+                <ref bean="knownTypeFerrCarb" />
+                <ref bean="knownTypeMgohGroupComp" />
+                <ref bean="knownTypeFalseColor" />
+                <ref bean="knownTypeRegolithRatios" />
+                <ref bean="knownTypeAlohGroupContent" />
+                <ref bean="knownTypeGypsumContent" />
+                <ref bean="knownTypeSilicaContent" />
+                <ref bean="knownTypeBoreholeMSCL" />
+                <ref bean="knownTypeSeismologyInSchool" />
+                <ref bean="knownTypeSF0BoreholeNVCL" />             
+                <ref bean="knownTypeSurfaceAftershock" />
+                <!-- Analytics -->
+                <!-- ref bean="knownTypeBouguerGeodetic" />
+                <ref bean="knownTypeGravAnomalyGeodetic" />
+                <ref bean="knownTypeRadMapTotaldose" />
+                <ref bean="knownTypeMagMap" />
+                <ref bean="knownTypeGocadModels" />
+                <ref bean="KnownTypeGeophysicsDatasets" />
+                <ref bean="knownTypeGAAemSurvey" />
+                <ref bean="knownTypeGARumJungleAEM" />
+                <ref bean="knownTypeGAWoolnerAEM" />
+                <ref bean="knownTypeGAGravitySurvey" />
+                <ref bean="knownTypeMusgraveAem" />
+                <ref bean="knownTypeWesternAreaAem" />
+                <ref bean="knownTypeAshburtonAem" /-->
+                <!-- End Analytics -->
+                <ref bean="knownTypeGswaGravMerge" />
+                <ref bean="knownTypeGswa20mMagMerge"/>
+                <ref bean="knownTypeGswa40mMagMerge1VD"/>
+                <ref bean="knownTypeGswa40mMagMerge"/>
+                <ref bean="knownTypeGswa80mMagMerge1VD"/>
+                <ref bean="knownTypeGswa80mMagMergertp"/>
+                <ref bean="knownTypeGswa80mMagMerge"/>
+                <ref bean="knownTypeGswa80mKmerge"/>
+                <ref bean="knownTypeGswa80mTCmerge"/>
+                <ref bean="knownTypeGswa80mThmerge"/>
+                <ref bean="knownTypeGswa80mUmerge"/>
             </list>
         </constructor-arg>
     </bean>
@@ -29,7 +102,9 @@
         <constructor-arg>
             <list>
                 <ref bean="cswAuscopeTest" />
-             
+                <ref bean="cswInSarProduction" />
+                <ref bean="cswMDUTest" />
+                <!-- LJ:aster was down, remove it. ref bean="cswAsterProduction" /-->
             </list>
         </constructor-arg>
     </bean>
