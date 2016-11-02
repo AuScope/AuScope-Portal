@@ -184,7 +184,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         $scope.$parent.showQuerierPanel = ctrlBool;
         if (useApply)
             $scope.$parent.$apply();
-    }
+    };
 
 
     
@@ -192,10 +192,9 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
     * Used to expand all the accordion elements in the panel at once
     * @method expandAll
     */
-    $scope.expandAll = function() {
-        var varName;
+    $scope.expandAll = function() {       
         $scope.expandFlag = true;
-        for (varName in $scope.status) {
+        for (var varName in $scope.status) {
             $scope.status[varName] = true;
         } 
         
@@ -206,9 +205,9 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
     * @method collapseAll
     */
     $scope.collapseAll = function() {
-        var varName;
+      
         $scope.expandFlag = false;
-        for (varName in $scope.status) {
+        for (var varName in $scope.status) {
             $scope.status[varName] = false;
         }
     };
