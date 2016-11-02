@@ -109,9 +109,11 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      */
     this.clearStatus = function(layer){
         this.renderStatus[layer.id] = {};
-        for(var index in this.renderStatus.group[layer.group].activeLayer){
-            if(this.renderStatus.group[layer.group].activeLayer[index].id == layer.id){
-                this.renderStatus.group[layer.group].activeLayer.splice(index, 1);
+        if(this.renderStatus.group && !UtilitiesService.isEmpty(this.renderStatus.group[layer.group])){
+            for(var index in this.renderStatus.group[layer.group].activeLayer){
+                if(this.renderStatus.group[layer.group].activeLayer[index].id == layer.id){
+                    this.renderStatus.group[layer.group].activeLayer.splice(index, 1);
+                }
             }
         }
     };
