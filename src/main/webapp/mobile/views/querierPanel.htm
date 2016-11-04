@@ -6,34 +6,28 @@
 				<i class="pull-right glyphicon gi-2x hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
 			</div>			
 		</div>
-		<div class="row">
-		    <div class="col-xs-1" ng-if="pointObj == null && expandFlag"><i ng-click="collapseAll()" style="background-color: #CCEBF6;" class="fa fa-minus-square-o fa-2x"></i></div>
-			<div class="col-xs-4 querier-expandall-label" ng-if="pointObj == null && expandFlag" ng-click="collapseAll()">Collapse All</div>
-			<div class="col-xs-1" ng-if="pointObj == null && !expandFlag"><i ng-click="expandAll()" style="background-color: #CCEBF6;" class="fa fa-plus-square-o fa-2x"></i></div>
-			<div class="col-xs-4 querier-expandall-label" ng-if="pointObj == null && !expandFlag" ng-click="expandAll()" >Expand All</div>
-		</div>
+		
 		<div>
-			<div id="xmlPanel" class="querier-div"></div>
-			<div ng-if="pointObj != null">
-				<table class="table activeView-table">
-					<tr ng-if="pointObj.name != ''">
-						<td><label><small>Name:</small></label></td>
-						<td><small>{{pointObj.name}}</small></td>
-					</tr>
-					<tr ng-if="pointObj.description!=''">
-						<td><label><small>Description:</small></label></td>
-						<td><small>{{pointObj.description}}</small></td>
-					</tr>
-					<tr ng-if="pointObj.latitude!='' && pointObj.longitude!=''">
-						<td><label><small>Latitude:<br/>Longitude:</small></label></td>
-						<td><small>{{pointObj.latitude}}<br/>{{pointObj.longitude}}</small></td>
-					</tr>
-					<tr ng-if="pointObj.srsUrl!=''">
-						<td><label><small>SRS URL:</small></label></td>
-						<td><small>{{pointObj.srsUrl}}</small></td>
-					</tr>
-				</table>
-			</div>
+			 <div id="xmlPanel" class="querier-div">			
+			     <uib-accordion close-others="true">
+	                   <div ng-repeat="(name,node) in treeStruct" uib-accordion-group is-open="status[name].isOpen" class="panel-default">
+	                       
+	                       <uib-accordion-heading><span ng-click="parseTree(name)">{{name}}<i class="pull-right glyphicon" ng-class="{'glyphicon glyphicon-minus': status[name].isOpen, 'glyphicon glyphicon-plus': !status[name].isOpen}"></i></span></uib-accordion-heading>
+	                       <div>
+	                            <div
+								    data-angular-treeview="true"
+								    data-tree-id="{{'querierxmltreeviewer' + $index}}"
+								    data-tree-model="JSONTreeStruct[name]"
+								    data-node-id="id"
+								    data-node-label="label"
+								    data-node-children="children" >
+								</div>
+								
+	                       </div>     
+	                      
+	                   </div>
+	                </uib-accordion>  
+	            </div>   
 			<hr>
 			<div class="row">
 				<div class="col-xs-3"><i class="fa fa-area-chart fa-2x dark-blue" aria-hidden="true"></i></div>
@@ -41,7 +35,7 @@
 				<div class="col-xs-3"><i class="fa fa-key fa-2x dark-blue" aria-hidden="true"></i></div>
 				<div class="col-xs-3"><i class="fa fa-ellipsis-v fa-2x dark-blue" aria-hidden="true"></i></div>
 			</div>	
-		</div>				
+	   </div>				
 	</div>
 </div>
 

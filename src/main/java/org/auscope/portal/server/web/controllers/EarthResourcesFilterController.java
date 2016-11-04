@@ -436,7 +436,7 @@ public class EarthResourcesFilterController extends BasePortalController {
             HttpServletResponse response,
             @RequestParam(value = "commodityName", required = false) String commodityName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
+            @RequestParam(required = false, defaultValue="", value = "optionalFilters") String optionalFilters,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
                     throws Exception {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));

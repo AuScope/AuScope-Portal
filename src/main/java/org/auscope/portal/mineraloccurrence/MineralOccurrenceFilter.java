@@ -47,7 +47,7 @@ public class MineralOccurrenceFilter extends GenericFilter {
 
         super(optionalFilters);
 
-        if(optionalFilters.isEmpty()){
+        if(optionalFilters != null && optionalFilters.isEmpty()){
             this.commodityName = commodityName == null ? "" : commodityName;
             this.minOreAmount = minOreAmount;
             this.minOreAmountUOM = minOreAmountUOM;

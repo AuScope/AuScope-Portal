@@ -22,27 +22,28 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
         param.typeName  = onlineResource.name;
         
       //VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
-        var hiddenParams = [];
-        if(layer.filterCollection.hiddenParams){
-            hiddenParams = layer.filterCollection.hiddenParams;   
-        }
-        for(var idx in hiddenParams){
-            if(hiddenParams[idx].type=="UIHiddenResourceAttribute"){
-                param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
-            }else{
-                param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
+        if(layer.filterCollection){
+            var hiddenParams = [];
+            if(layer.filterCollection.hiddenParams){
+                hiddenParams = layer.filterCollection.hiddenParams;   
+            }
+            for(var idx in hiddenParams){
+                if(hiddenParams[idx].type=="UIHiddenResourceAttribute"){
+                    param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
+                }else{
+                    param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
+                }
+            }
+            
+            //VT: mandatoryFilters
+            var mandatoryFilters = [];
+            if(layer.filterCollection.mandatoryFilters){
+                mandatoryFilters = layer.filterCollection.mandatoryFilters;   
+            }
+            for(var idx in mandatoryFilters){            
+                param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
             }
         }
-        
-        //VT: mandatoryFilters
-        var mandatoryFilters = [];
-        if(layer.filterCollection.mandatoryFilters){
-            mandatoryFilters = layer.filterCollection.mandatoryFilters;   
-        }
-        for(var idx in mandatoryFilters){            
-            param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
-        }
-        
          
         if(proxyUrl){
              return $http.get('../' + proxyUrl,{
