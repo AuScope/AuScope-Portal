@@ -20,7 +20,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                title: point.name
             });    
             marker.addListener('click', function() {
-                QuerierPanelService.setQueryPoint(point);
+                QuerierPanelService.setPanelNode(point.featureNode);
                 QuerierPanelService.openPanel(true);
 
             });
@@ -115,7 +115,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
             
             for(var index in onlineResources){
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
-                GetWFSRelatedService.getFeature(layer.proxyUrl, onlineResources[index]).then(function(response){
+                GetWFSRelatedService.getFeature(layer, onlineResources[index]).then(function(response){
                     try{
                         var rootNode = GMLParserService.getRootNode(response.data.gml);
                         var primitives = GMLParserService.makePrimitives(rootNode);

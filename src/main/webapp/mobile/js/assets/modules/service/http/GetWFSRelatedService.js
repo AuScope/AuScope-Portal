@@ -18,6 +18,10 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
          
         var proxyUrl = layer.proxyUrl;
         
+        if(!param){
+            param = {};
+        }
+        
         param.serviceUrl = onlineResource.url;
         param.typeName  = onlineResource.name;
         

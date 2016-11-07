@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngAnimate','allControllers','allModules','ui.bootstrap','uiGmapgoogle-maps','angular-svg-round-progressbar','rzModule','ngSanitize','angularTreeview']);
+var app = angular.module('app', ['ngAnimate','allControllers','allModules','ui.bootstrap','uiGmapgoogle-maps','angular-svg-round-progressbar','rzModule','ngSanitize','angularTreeview','ngTouch']);
 
 app.constant('Constants', {
     resourceType: {

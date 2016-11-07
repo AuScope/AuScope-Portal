@@ -73,13 +73,10 @@ allModules.service('QuerierPanelService', ['$compile', function ($compile) {
     * @method setPanelXml
     * @param xmlString
     */
-    this.setPanelXml = function(xmlString)
-    {
-        if (xmlString.length > 0) {
-			// Set the XML string, unset the point datum
-			this.setXMLFn(xmlString);
-			this.setPointFn(null);
-        }
+    this.setPanelNode = function(node)
+    {       
+		this.setXMLFn(node);
+
     };
     
     /**

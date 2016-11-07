@@ -4,8 +4,8 @@
  * @class WMSService
  * 
  */
-allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service','UtilitiesService',
-                                 function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service,UtilitiesService) {
+allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service','UtilitiesService','GMLParserService',
+                                 function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service,UtilitiesService,GMLParserService) {
     
     var maxSldLength = 6000; //2000; 6000 worked on chrome
     
@@ -36,7 +36,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
 
                             // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
                             if (response.status==200 && empty_gml_body.test(response.data)==false) {
-                                QuerierPanelService.setPanelXml(response.data);
+                                QuerierPanelService.setPanelNode(GMLParserService.getRootNode(response.data));
                                 QuerierPanelService.openPanel(false);
                             }
                         },

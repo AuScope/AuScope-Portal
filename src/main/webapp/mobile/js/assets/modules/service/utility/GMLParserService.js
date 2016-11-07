@@ -108,7 +108,7 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
      * @param lineStringNode - the coordinate node containing the linestring
      * @return array - an array of points
      */
-    this.parseLineString = function(name, description,lineStringNode) {
+    this.parseLineString = function(name, description,lineStringNode,featureNode) {
         var srsName = this.getSrsName(lineStringNode);
         var parsedCoordList = this.generateCoordList(SimpleXMLService.getNodeTextContent(lineStringNode.getElementsByTagNameNS("*", "posList")[0]), srsName);
         if (parsedCoordList.length === 0) {
@@ -128,7 +128,8 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
             description: description,
             srsName:srsName,
             coords: parsedCoordList,
-            geometryType : Constants.geometry.LINESTRING
+            geometryType : Constants.geometry.LINESTRING,
+            featureNode:featureNode
         };
     },
 
@@ -141,7 +142,7 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
      * @param polygonNode - the coordinate node containing the polygonNode
      * @return array - an array of points
      */
-    this.parsePolygon = function(name, description,polygonNode) {
+    this.parsePolygon = function(name, description,polygonNode,featureNode) {
         var srsName = this.getSrsName(polygonNode);
         var parsedCoordList = this.generateCoordList(SimpleXMLService.getNodeTextContent(polygonNode.getElementsByTagNameNS("*", "posList")[0]), srsName);
         if (parsedCoordList.length === 0) {
@@ -161,7 +162,8 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
             description: description,
             srsName:srsName,
             coords: parsedCoordList,
-            geometryType : Constants.geometry.POLYGON
+            geometryType : Constants.geometry.POLYGON,
+            featureNode:featureNode
         };
             
         
@@ -174,9 +176,10 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
      * @param name - the name of the feature
      * @param description - description of the feature
      * @param pointNode - the coordinate node containing the pointNode
+     * @param featureNode - the featureNode of the feature we are parsing
      * @return point - a point
      */
-    this.parsePoint = function(name, description,pointNode) {
+    this.parsePoint = function(name, description,pointNode,featureNode) {
         var rawPoints = SimpleXMLService.getNodeTextContent(pointNode.getElementsByTagNameNS("*", "pos")[0]);
         var coordinates = rawPoints.split(' ');
         if (!coordinates || coordinates.length < 2) {
@@ -196,7 +199,8 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
             description: description,
             srsName:srsName,
             coords: point,
-            geometryType : Constants.geometryType.POINT
+            geometryType : Constants.geometryType.POINT,
+            featureNode:featureNode
         };
             
        
@@ -273,21 +277,21 @@ allModules.service('GMLParserService',['$rootScope','SimpleXMLService','Utilitie
             
             //Parse the geometry we found into map primitives
             for (var geomIndex = 0; geomIndex < polygonNodes.length; geomIndex++) {
-                mapItem = this.parsePolygon(name, description, polygonNodes[geomIndex]);
+                mapItem = this.parsePolygon(name, description, polygonNodes[geomIndex],featureNode);
                 if (mapItem !== null) {
                     primitives.push(mapItem);
                 }
             }
             
             for (var geomIndex = 0; geomIndex < pointNodes.length; geomIndex++) {
-                mapItem = this.parsePoint(name, description, pointNodes[geomIndex]);
+                mapItem = this.parsePoint(name, description, pointNodes[geomIndex],featureNode);
                 if (mapItem !== null) {
                     primitives.push(mapItem);
                 }
             }
             
             for (var geomIndex = 0; geomIndex < lineStringNodes.length; geomIndex++) {
-                mapItem = this.parseLineString(name, description, lineStringNodes[geomIndex]);
+                mapItem = this.parseLineString(name, description, lineStringNodes[geomIndex],featureNode);
                 if (mapItem !== null) {
                     primitives.push(mapItem);
                 }

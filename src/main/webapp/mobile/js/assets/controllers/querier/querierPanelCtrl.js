@@ -42,31 +42,34 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
     /**
     * Used to display XML in tree form in the panel, calls parse() function
     * Passed to 'QuerierPanelService' as a parameter, then called by 'QuerierPanelService'
+    * It is possible for node to be passed in as a feature node or the whole collection. We attempt to be smart
+    * by assuming it is a feature collection and if it fails, we assume it to be a feature node.
     * @method setPanelTree
     * @param xmlString string which will be displayed
     */
-    $scope.setPanelTree = function(xmlString) {
+    $scope.setPanelTree = function(node) {
         $scope.treeStruct={};
         
-        if (xmlString.length > 0) {
+        if (node) {
 
-           var rootNode = SimpleXMLService.parseStringToDOM(xmlString);
+           var rootNode = node;
            var wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureCollection");
             
             var features = null;
-            //Read through our wfs:FeatureCollection and gml:featureMember(s) elements
+            //Read through our wfs:FeatureCollection and gml:featureMember(s) elements 
+            //If it not found, we assume the node to be a feature node already.
             if (UtilitiesService.isEmpty(wfsFeatureCollection)) {
-                document.getElementById($scope.xmlPanelId).innerHTML = "";
-                return
-            }
-            var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");        
-            if (UtilitiesService.isEmpty(featureMembers)) {
-                featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMember");
-                features = featureMembers;
+                features = [node];
             }else{
-                features = featureMembers[0].childNodes;
+                var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");        
+                if (UtilitiesService.isEmpty(featureMembers)) {
+                    featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMember");
+                    features = featureMembers;
+                }else{
+                    features = featureMembers[0].childNodes;
+                }
             }
-            
+                 
             for(var i = 0; i < features.length; i++) {
                 //Pull out some general stuff that we expect all features to have
                 var featureNode = features[i]; 
