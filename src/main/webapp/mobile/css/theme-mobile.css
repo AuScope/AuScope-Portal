@@ -1,6 +1,6 @@
-@media screen and (max-width: 658px) {
+@media screen and (max-width: 640px) {
     body { 
-       font-size: 1.2em; 
+       font-size: 1.1em; 
     }
     
     .map-overlay-panel-toggle {      
@@ -40,6 +40,15 @@
         display:none;
     }
 }
+
+
+@media screen and (max-width: 568px) {
+    body { 
+       font-size: 1.0em; 
+    }
+    
+}
+
 
 
 

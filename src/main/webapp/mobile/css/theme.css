@@ -217,7 +217,7 @@ fieldset[disabled] .btn-red.active {
 }
 
 .accordion-header-override .panel-title{
-	font-size:15px;
+	font-size:1.1em;
 }
 
 .panel-selected>.panel-heading {
@@ -301,7 +301,7 @@ fieldset[disabled] .btn-red.active {
 }
 
 .render-status-panel div{
-	font-size:12px;
+	font-size:1em;
 	padding-left:3px;
 }
 
@@ -354,7 +354,7 @@ fieldset.show-fieldset-borders{
 }
 
 .querier-div .panel-title {
-	font-size: 13px;
+	font-size: 1em;
 	
 }
 
