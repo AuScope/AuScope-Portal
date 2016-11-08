@@ -39,7 +39,7 @@
 		<script src="js/assets/framework/turf/turf.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/widgets/roundProgress.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/proj4/proj4.js" type="text/javascript" ></script>
-		<script   src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
 		<script src="js/assets/framework/widgets/rzslider.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/charts/d3/d3.min.js" type="text/javascript" ></script>
 		<script src="js/assets/framework/charts/d3/box.js" type="text/javascript" ></script>		
@@ -101,12 +101,12 @@
   		
 		
 	</head>
-	<body ng-app="app" ng-controller="googleMapCtrl">
+	<body ng-app="app" ng-controller="googleMapCtrl" ng-swipe-right="showlayerPanel=true;">
 			
 		<div class="angular-google-map-container" >
 		    <div id="floating-progressbar" class="mobile-only">
 		      <div class="row">		
-			        <div ng-repeat="(group,status) in floatingGroupStatus" class="col-sm-12"><uib-progressbar ng-if="status.activeLayer.length!=0" class="progress-striped" max="status.max+1" value="status.current+1" type="success">{{group}}</uib-progressbar></div>
+			        <div ng-repeat="(layerid,status) in floatingLayerStatus" class="col-sm-12"><uib-progressbar ng-if="status.max" class="progress-striped" max="status.max+1" value="status.completed+1" type="success">{{layerid}}</uib-progressbar></div>
 			    </div>
 		    </div>
 

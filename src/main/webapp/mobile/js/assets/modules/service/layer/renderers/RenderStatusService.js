@@ -27,26 +27,7 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
         }
         this.renderStatus[layer.id].max=maxValue;
         this.renderStatus[layer.id].completed = 0;
-        
-        if(UtilitiesService.isEmpty(this.renderStatus.group)){
-            this.renderStatus.group={};
-            this.renderStatus.group[layer.group]={};
-            this.renderStatus.group[layer.group].max=0;
-            this.renderStatus.group[layer.group].current=0;
-            this.renderStatus.group[layer.group].activeLayer = [];
-        }
-        
-        if(UtilitiesService.isEmpty(this.renderStatus.group[layer.group])){          
-            this.renderStatus.group[layer.group]={};
-            this.renderStatus.group[layer.group].max=0;
-            this.renderStatus.group[layer.group].current=0;
-            this.renderStatus.group[layer.group].activeLayer = [];
-        }
-        
-        this.renderStatus.group[layer.group].max += maxValue;
-        if(this.renderStatus.group[layer.group].activeLayer.indexOf(layer)== -1){            
-            this.renderStatus.group[layer.group].activeLayer.push(layer);
-        }
+
     };
     
     /**
@@ -91,7 +72,7 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
         this.renderStatus[layer.id].resources[resource.url].status = status;
         if(status == Constants.statusProgress.COMPLETED || status == Constants.statusProgress.ERROR || status == Constants.statusProgress.SKIPPED){
             this.renderStatus[layer.id].completed +=  1;
-            this.renderStatus.group[layer.group].current += 1;
+           
             if(status==Constants.statusProgress.ERROR){
                 this.renderStatus[layer.id].errorFound =  true;
             }
@@ -108,14 +89,8 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      * @param layerId - layerId
      */
     this.clearStatus = function(layer){
-        this.renderStatus[layer.id] = {};
-        if(this.renderStatus.group && !UtilitiesService.isEmpty(this.renderStatus.group[layer.group])){
-            for(var index in this.renderStatus.group[layer.group].activeLayer){
-                if(this.renderStatus.group[layer.group].activeLayer[index].id == layer.id){
-                    this.renderStatus.group[layer.group].activeLayer.splice(index, 1);
-                }
-            }
-        }
+        this.renderStatus[layer.id] = {};  
+        this.broadcast(this.renderStatus);
     };
      
     /**

@@ -45,7 +45,7 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
     RenderStatusService.onUpdate($scope, function (newRenderStatus) {
         //VT: Inconsistent API (Sync/Async): https://docs.angularjs.org/error/$rootScope/inprog?p0=$digest
         $timeout(function() {
-            $scope.floatingGroupStatus = newRenderStatus.group;
+            $scope.floatingLayerStatus = newRenderStatus;
         },0);
     });
     
