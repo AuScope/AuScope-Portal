@@ -122,7 +122,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         if(style){
             get_params += "&SLD_BODY=" + encodeURIComponent(style);
         }else{
-            get_params += "&SLD_BODY="
+            get_params += "&SLD_BODY=";
         }   
 
         return $http({

@@ -21,7 +21,9 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
         
         // Register map click/touch events to allow creation of the query information panel
         var registerClickEvent = function(map, onlineResource, bbox,style){
-            var mapEventListener = google.maps.event.addListener(map, 'mousedown', function(evt) {
+            
+            var mapEventListener = google.maps.event.addListener(map, 'click', function(evt) {
+               
                 // Send a request to the WMS service if the click is within the resource's bounding box
                 if (evt.latLng.lat() < bbox.northBoundLatitude && evt.latLng.lat() > bbox.southBoundLatitude &&
                     evt.latLng.lng() < bbox.eastBoundLongitude && evt.latLng.lng() > bbox.westBoundLongitude) {
