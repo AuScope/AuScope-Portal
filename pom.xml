@@ -74,6 +74,11 @@
                     <parallel>methods</parallel>
                     <threadCount>10</threadCount>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <!-- Exclude selenium tests by default -->
+                    <excludes>
+                        <exclude>org/auscope/portal/ui/*</exclude>
+                        <exclude>org/auscope/portal/ui/mobile/*</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         
