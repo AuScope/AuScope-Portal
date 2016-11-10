@@ -7,27 +7,23 @@
  */
 allModules.service('QuerierPanelService', ['$compile', function ($compile) {
     this.layerList = [];
-	
+    
     /**
     * Register the panel by passing in some querier panel controller functions.
     * @method registerPanel
-	* @param openPanelFn used to open and close the panel
+    * @param openPanelFn used to open and close the panel
     *    function openPanelFn(ctrlBool, useApply)
-	*    'ctrlBool' if true panel will open, if false panel will close
-	*    'useApply' boolean parameter. Set to true and 'openPanelFn()' will use the '$apply()' method to make the panel open. Set to false and '$apply()' will not be used. 
+    *    'ctrlBool' if true panel will open, if false panel will close
+    *    'useApply' boolean parameter. Set to true and 'openPanelFn()' will use the '$apply()' method to make the panel open. Set to false and '$apply()' will not be used. 
     *    It is recommended to set to false in places where you would get an '$digest already in progress' error, e.g. calling 'setPanel(true)' from within a 'then()' function
-	* @param setPointFn function used to display point information in panel. It has the format:
-	*    function setPointFn(pointObj) { ... }
-	*    'pointObj' is the point to be displayed. Format: {name: <name>, description: <description>, latitude: <latitude>, longitude: <longitude>, srsUrl: <srsUrl> }
-	* @param setXMLFn function used to display XML data in the panel
-	*    function setXMLFn(xmlString) { ... }
-	*    'xmlString' is a string of xml to be displayed
+    * @param setXMLFn function used to display XML data in the panel
+    *    function setXMLFn(xmlString) { ... }
+    *    'xmlString' is a string of xml to be displayed
     */
-    this.registerPanel = function (openPanelFn, setPointFn, setXMLFn) {
-		// Store the controller functions for future use
+    this.registerPanel = function (openPanelFn, setXMLFn) {
+        // Store the controller functions for future use
         this.openPanelFn = openPanelFn;
-		this.setPointFn = setPointFn;
-		this.setXMLFn = setXMLFn;
+        this.setXMLFn = setXMLFn;
     };
     
     /**
@@ -38,8 +34,8 @@ allModules.service('QuerierPanelService', ['$compile', function ($compile) {
     */
     this.openPanel = function (useApply)
     {
-		// Call the corresponding controller function
-		this.openPanelFn(true, useApply);
+        // Call the corresponding controller function
+        this.openPanelFn(true, useApply);
     };
     
     /**
@@ -50,33 +46,18 @@ allModules.service('QuerierPanelService', ['$compile', function ($compile) {
     */
     this.closePanel = function (useApply)
     {
-		// Call the corresponding controller function
+        // Call the corresponding controller function
         this.openPanelFn(false, useApply);
     };
-    
+        
     /**
-    * Set the point data for the query point
-    * @method setQueryPoint
-    * @param point
-    */
-    this.setQueryPoint = function (point)
-    {
-        if (point != null) {
-			// Set the point datum, unset the XML string
-			this.setPointFn({name: point.name, description: point.description, latitude: point.coords.lat, longitude: point.coords.lng, srsUrl: point.srsName });
-			this.setXMLFn(""); 
-        }
-    };
-    	
-	/**
     * Set the HTML string to be displayed on the panel
     * @method setPanelXml
     * @param xmlString
     */
     this.setPanelNode = function(node)
     {       
-		this.setXMLFn(node);
-
+        this.setXMLFn(node);
     };
     
     /**

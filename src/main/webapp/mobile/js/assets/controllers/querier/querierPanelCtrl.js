@@ -11,7 +11,6 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
     $scope.JSONTreeStruct = [];
    
 
-    
     /**
     * Used to initialise the controller.
     * @method init
@@ -19,26 +18,10 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
     */
     $scope.init = function(xmlPanelId) { 
         $scope.xmlPanelId = xmlPanelId;
-        // This stores the open/closed state of each accordion node
-        $scope.status = {};
-        // This stores the state of the "Expand All"/"Collapse All" toggle button
-        $scope.expandFlag = false;
         // This registers this class' functions with the QuerierPanelService
-        QuerierPanelService.registerPanel($scope.openPanel, $scope.setPoint, $scope.setPanelTree);
+        QuerierPanelService.registerPanel($scope.openPanel, $scope.setPanelTree);
     };
-    
-
-    /**
-    * Used to display point in panel
-    * Passed to 'QuerierPanelService' as a parameter, then called by 'QuerierPanelService'
-    * @method setPoint 
-    * @param pointObj point object for panel display, it has following format:
-    *   {name: <name>, description: <description>, latitude: <latitude>, longitude: <longitude>, srsUrl: <srsUrl> }
-    */
-    $scope.setPoint = function(pointObj) {
-        $scope.pointObj = pointObj;
-    };
-      
+          
     /**
     * Used to display XML in tree form in the panel, calls parse() function
     * Passed to 'QuerierPanelService' as a parameter, then called by 'QuerierPanelService'
@@ -51,42 +34,53 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         $scope.treeStruct={};
         
         if (node) {
-
-           var rootNode = node;
-           var wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureCollection");
-            
+            // First try to find any "FeatureCollection" elements 
+            // If it not found, and no error report was found, we assume the node to be a feature node.
+            var rootNode = node;
+            var wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureCollection");
             var features = null;
-            //Read through our wfs:FeatureCollection and gml:featureMember(s) elements 
-            //If it not found, we assume the node to be a feature node already.
             if (UtilitiesService.isEmpty(wfsFeatureCollection)) {
-                features = [node];
-            }else{
-                var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");        
+                var exceptionNode = SimpleXMLService.evaluateXPath(rootNode, rootNode, "//ServiceException", Constants.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
+                var thisNode = exceptionNode.iterateNext();
+                if (thisNode) {
+                    // There is an error report from the server
+                    $scope.treeStruct["Sorry - server has returned an error message."] = thisNode;
+                    console.error("querierPanelCtrl.setPanelTree(): Server returned error", thisNode);
+                    return;
+                } else {
+                    // Assume the node to be a feature node. 
+                    features = [node];
+                }
+            } else {
+                // Read through our wfs:FeatureCollection and gml:featureMember(s) elements 
+                var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");              
                 if (UtilitiesService.isEmpty(featureMembers)) {
                     featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMember");
                     features = featureMembers;
-                }else{
+                } else {
                     features = featureMembers[0].childNodes;
                 }
             }
-                 
-            for(var i = 0; i < features.length; i++) {
+            for (var i = 0; i < features.length; i++) {
                 //Pull out some general stuff that we expect all features to have
-                var featureNode = features[i]; 
-                
-                var name = SimpleXMLService.evaluateXPath(rootNode, featureNode, "gml:name", Constants.XPATH_STRING_TYPE).stringValue
-                if(UtilitiesService.isEmpty(name)){
+                var featureNode = features[i];
+                var name = SimpleXMLService.evaluateXPath(rootNode, featureNode, "gml:name", Constants.XPATH_STRING_TYPE).stringValue;
+                if (UtilitiesService.isEmpty(name)) {
                     name = featureNode.getAttribute('gml:id');
                 }
-                
-                $scope.treeStruct[name] = featureNode;                
-               
+                $scope.treeStruct[name] = featureNode;
             };
-        } else {
-            document.getElementById($scope.xmlPanelId).innerHTML = "";
         }
     };
     
+    /**
+    * This is called from the Angular HTML template. It parses the XML tree,
+    * creating a JSON representation which is passed in to create a tree view
+    * via the "$scope.JSONTreeStruct[]" array
+    *
+    * @method parseTree
+    * @param name - a label displayed at the top of the tree
+    */
     $scope.parseTree = function(name){
         
         if($scope.JSONTreeStruct[name]){
@@ -128,12 +122,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
             }  
             
         };
-        
-        
-        
-        
         value.push(parseNodeToJson($scope.treeStruct[name],0,0));
-        
         
         $timeout(function() {           
             $scope.JSONTreeStruct[name] = value;          
@@ -153,32 +142,5 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         if (useApply)
             $scope.$parent.$apply();
     };
-
-
-    
-    /**
-    * Used to expand all the accordion elements in the panel at once
-    * @method expandAll
-    */
-    $scope.expandAll = function() {       
-        $scope.expandFlag = true;
-        for (var varName in $scope.status) {
-            $scope.status[varName] = true;
-        } 
-        
-    };
-
-    /**
-    * Used to collapse all the accordion elements in the panel at once
-    * @method collapseAll
-    */
-    $scope.collapseAll = function() {
-      
-        $scope.expandFlag = false;
-        for (var varName in $scope.status) {
-            $scope.status[varName] = false;
-        }
-    };
-
 
 }]);
