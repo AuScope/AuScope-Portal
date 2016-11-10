@@ -63,7 +63,7 @@ public class SearchLayerTest {
      */
     public void testSearchAndEnter() {
         // give 30s to load up search box 
-        WebElement searchBox = new WebDriverWait(driver, 60).until(ExpectedConditions.visibilityOf(
+        WebElement searchBox = new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOf(
                 driver.findElement(By.id("main-search"))));
 
         // type "tenement" in search
@@ -79,7 +79,7 @@ public class SearchLayerTest {
      */
     public void testSearchAndClickIcon() {
         // give 30s to load up search box 
-        WebElement searchBox = new WebDriverWait(driver, 60).until(ExpectedConditions.visibilityOf(
+        WebElement searchBox = new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOf(
                 driver.findElement(By.id("main-search"))));
 
         // type "tenement" in search
