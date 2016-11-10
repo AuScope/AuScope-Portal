@@ -88,6 +88,12 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         
         var neBndsLatLng = bounds.getNorthEast();
         var swBndsLatLng = bounds.getSouthWest();
+        
+        if(neBndsLatLng.lng()<swBndsLatLng.lng()){
+            neBndsLatLng=new google.maps.LatLng(neBndsLatLng.lat(), 175);
+        }
+        
+       
         var nePt = proj4("EPSG:4326", "EPSG:3857", [neBndsLatLng.lng(), neBndsLatLng.lat()]);
         var swPt = proj4("EPSG:4326", "EPSG:3857", [swBndsLatLng.lng(), swBndsLatLng.lat()]);
         
