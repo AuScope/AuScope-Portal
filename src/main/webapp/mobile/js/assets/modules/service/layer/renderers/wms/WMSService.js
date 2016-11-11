@@ -83,7 +83,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                 if (onlineResource==onlineResources[j]) {
                     var bbox = cswRecords[i].geographicElements[0];
                     // ArcGIS servers do not accept styles
-                    if (onlineResources[j].applicationProfile && onlineResources[j].applicationProfile.indexOf("Esri:ArcGIS Yerver") > -1) {
+                    if (onlineResources[j].applicationProfile && onlineResources[j].applicationProfile.indexOf("Esri:ArcGIS Server") > -1) {
                         registerClickEvent(map, onlineResource, bbox,"");
                     } else {
                         registerClickEvent(map, onlineResource, bbox,style);
