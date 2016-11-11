@@ -16,18 +16,35 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
      * @param domNode - domNode
      * @param xPath - xPath
      * @param resultType - https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate#Result_types
-     * @return dom - the dom result or null upon error
+     * @return dom - the dom result
      */
     this.evaluateXPath = function(document, domNode, xPath, resultType) {
         if (document.evaluate) {
             var result;
             try {
                 result = document.evaluate(xPath, domNode, document.createNSResolver(domNode), resultType, null);
+                return result;
             } catch(e) {
                 console.error("SimpleXMLService.evaluateXPath() Exception", e);
-                result = null;
-            }
-            return result;
+                // Return empty result
+                switch(resultType) {
+                    case Constants.XPATH_STRING_TYPE:
+                        return {
+                            stringValue : ""
+                        };
+                    case Constants.XPATH_UNORDERED_NODE_ITERATOR_TYPE:
+                        return {
+                            _arr : [],
+                            _i : 0,
+                            iterateNext : function() {
+                                return null;
+                            }
+                        };
+                    default:
+                        throw 'Unrecognised resultType';
+                }
+            };
+            
         } else {
             //This gets us a list of dom nodes
             var matchingNodeArray = XPath.selectNodes(xPath, domNode);
@@ -42,7 +59,6 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
                 if (matchingNodeArray.length > 0) {
                     stringValue = this.getNodeTextContent(matchingNodeArray[0]);
                 }
-
                 return {
                     stringValue : stringValue
                 };
@@ -114,12 +130,12 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
      * The localName is the node name without any namespace prefixes
      * @method getNodeLocalName
      * @param domNode - domNode
-     * @return String - local name of the node or null upon error
+     * @return String - local name of the node or empty string upon error
      */
     this.getNodeLocalName = function(domNode) {
         if (domNode)
             return domNode.localName ? domNode.localName : domNode.baseName;
-        return null;
+        return "";
     };
 
     /**
