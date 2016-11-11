@@ -47,10 +47,22 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
                     $scope.treeStruct["Sorry - server has returned an error message."] = thisNode;
                     console.error("querierPanelCtrl.setPanelTree(): Server returned error", thisNode);
                     return;
-                } else {
+                }
+                var featureInfoNode =  SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureInfoResponse");
+                if (UtilitiesService.isEmpty(featureInfoNode)) {
                     // Assume the node to be a feature node. 
                     features = [node];
+                } else {
+                    // ArcGIS special format - not standard XML
+                    var fieldNodes = SimpleXMLService.getMatchingChildNodes(featureInfoNode[0], null, "FIELDS");
+                    features = fieldNodes;
+                    for (var i = 0; i < features.length; i++) {
+                        var name = features[i].getAttribute('identifier');
+                        $scope.treeStruct[name] = features[i];
+                    }
+                    return;
                 }
+
             } else {
                 // Read through our wfs:FeatureCollection and gml:featureMember(s) elements 
                 var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");              
@@ -67,7 +79,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
                 var name = SimpleXMLService.evaluateXPath(rootNode, featureNode, "gml:name", Constants.XPATH_STRING_TYPE).stringValue;
                 if (UtilitiesService.isEmpty(name)) {
                     name = featureNode.getAttribute('gml:id');
-                }
+                } 
                 $scope.treeStruct[name] = featureNode;
             };
         }
@@ -90,15 +102,21 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         var value=[];
         
         var parseNodeToJson = function(node,tier,child){
+            var attrArr = SimpleXMLService.getMatchingAttributes(node);
+            var attrChildren = [];
+            for (var i=0; i< attrArr.length; i++) {
+                if (attrArr[i].name && attrArr[i].value)
+                    attrChildren.push({label: attrArr[i].name+": "+attrArr[i].value, children : []});
+            }
             if(SimpleXMLService.isLeafNode(node)){
-               
+                
                 return ({
                     label : SimpleXMLService.getNodeLocalName(node),
                     id:'id'+tier+child,
                     children : [{
                         label : SimpleXMLService.getNodeTextContent(node),
                         id:'id'+(tier+1)+child,
-                        children : []     
+                        children : attrChildren     
                     }]                    
                 });
                
@@ -111,7 +129,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
                         label : SimpleXMLService.getNodeLocalName(node),
                         id:'id' + tier,
                         collapsed:collapsed,
-                        children : []                    
+                        children : attrChildren                    
                 };
                 
                 var child = SimpleXMLService.getMatchingChildNodes(node); 
