@@ -108,26 +108,28 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
     this.renderLayer = function(layer,param){   
 
         var me = this;
-
-            var onlineResources = LayerManagerService.getWMS(layer);            
-            RenderStatusService.setMaxValue(layer,onlineResources.length);
-            for(var index in onlineResources){ 
-                if(UtilitiesService.filterProviderSkip(param.optionalFilters, onlineResources[index].url)){
-                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.SKIPPED);
-                    continue;
-                }
-                GetWMSRelatedService.getWMSStyle(layer,onlineResources[index],param).then(function(response){                    
-                    RenderStatusService.updateCompleteStatus(layer,response.onlineResource,Constants.statusProgress.RUNNING);
-                    if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
-                        var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
-                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style);                    
-                    }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
-                        var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
-                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style); 
-                        
-                    } 
-                });
+        if(!param){
+            param = {};
+        }
+        var onlineResources = LayerManagerService.getWMS(layer);            
+        RenderStatusService.setMaxValue(layer,onlineResources.length);
+        for(var index in onlineResources){ 
+            if(UtilitiesService.filterProviderSkip(param.optionalFilters, onlineResources[index].url)){
+                RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.SKIPPED);
+                continue;
             }
+            GetWMSRelatedService.getWMSStyle(layer,onlineResources[index],param).then(function(response){                    
+                RenderStatusService.updateCompleteStatus(layer,response.onlineResource,Constants.statusProgress.RUNNING);
+                if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
+                    var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
+                    addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style);                    
+                }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
+                    var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
+                    addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style); 
+                    
+                } 
+            });
+        }
        
   
     };

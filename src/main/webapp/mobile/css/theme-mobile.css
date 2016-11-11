@@ -47,6 +47,21 @@
        font-size: 1.0em; 
     }
     
+    #logo-menu{  
+	  bottom : 3em;
+	  left : 0.5em;     
+	  width:80px;  
+	  display:block;  
+	  position: absolute;   
+	  z-index: 50;
+	}
+	    
+	    
+	#logo-menu  img{  
+	  width:80px;  
+	}
+	    
+    
 }
 
 

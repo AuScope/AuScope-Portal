@@ -143,7 +143,7 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
               });
         };
         
-        GetWMSRelatedService.getWMSStyle(layer,null,param).then(function(style){           
+        GetWMSRelatedService.getWMSStyle(layer,null,param).then(function(response){           
             var onlineResources = LayerManagerService.getWMS(layer);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){  
@@ -151,12 +151,12 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
-                    var mapLayer = me.generateWMS_1_1_1_Layer(layername,onlineResources[index],(style!=null && style.length<maxSldLength?style:null));                        
+                    var mapLayer = me.generateWMS_1_1_1_Layer(layername,onlineResources[index],(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer,mapLayer);                   
                 }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
-                    var mapLayer = me.generateWMS_1_3_0_Layer(layername,onlineResources[index],(style!=null && style.length<maxSldLength?style:null)); 
+                    var mapLayer = me.generateWMS_1_3_0_Layer(layername,onlineResources[index],(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer,mapLayer);
