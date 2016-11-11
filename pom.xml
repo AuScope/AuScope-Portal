@@ -357,6 +357,12 @@
                                 <suiteXmlFile>src/test/java/org/auscope/portal/ui/testng.xml</suiteXmlFile>
                             </suiteXmlFiles>    
                         </configuration>
+                        <systemPropertyVariables>
+                            <!-- If we need to run the tests and browser in different machines, we need RemoteWebDriver. 
+                            This parameter turns on the RemoteWebDriver. You will need selenium standalone server to be running first.
+                            -->
+                            <hub>${env.HUB}</hub>
+                        </systemPropertyVariables>
                     </plugin>                                                            
                 </plugins>
             </build>

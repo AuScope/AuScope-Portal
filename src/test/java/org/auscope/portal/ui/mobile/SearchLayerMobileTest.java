@@ -3,15 +3,12 @@ package org.auscope.portal.ui.mobile;
 import static org.junit.Assert.assertEquals;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
+import org.auscope.portal.ui.SearchLayerTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -26,31 +23,24 @@ import org.testng.annotations.Test;
  * @author Rini Angreani
  *
  */
-public class SearchLayerTest {
-    public WebDriver driver = null;
-    private String portal_url = null;
+public class SearchLayerMobileTest extends SearchLayerTest {
 
-    @Parameters({ "browser", "port", "portal_url" })
+    @Parameters({ "browser", "version", "port", "portal_url" })
     @BeforeClass
-    public void setup(String browser, String port, String portal)
+    public void setup(String browser, String version, String port, String portal)
             throws MalformedURLException {
-        DesiredCapabilities capability = new DesiredCapabilities();
-        capability.setBrowserName(browser);
-        driver = new RemoteWebDriver(
-                new URL("http://localhost:".concat(port).concat("/wd/hub")),
-                capability);
-        this.portal_url = portal;
+        super.setup(browser, version, port, portal);
     }
 
     @AfterClass
     public void tearDown() {
-        driver.quit();
+        super.tearDown();
     }
 
     @BeforeMethod
     public void openPageAndClickMenuToggle() {
         // open portal
-        driver.get(portal_url);
+        super.openPage();
         // bring up menu toggle
         WebElement menuToggle = driver
                 .findElement(By.cssSelector(".menu-icon-toggle"));

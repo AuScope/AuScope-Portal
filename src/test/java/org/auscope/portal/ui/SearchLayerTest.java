@@ -3,15 +3,12 @@ package org.auscope.portal.ui;
 import static org.junit.Assert.assertEquals;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -25,19 +22,14 @@ import org.testng.annotations.Test;
  *
  */
 public class SearchLayerTest {
-    public WebDriver driver = null;
-    private String portal_url = null;
+    protected WebDriver driver = null;
+    protected String portal_url = null;
 
-    @Parameters({ "browser", "port", "portal_url" })
+    @Parameters({ "browser", "version", "port", "portal_url" })
     @BeforeClass
-    public void setup(String browser, String port, String portal)
+    public void setup(String browser, String version, String port, String portal)
             throws MalformedURLException {
-        DesiredCapabilities capability = new DesiredCapabilities();
-        capability.setBrowserName(browser);
-        driver = new RemoteWebDriver(
-                // new URL("http://130.116.24.73:5555/wd/hub"),
-                new URL("http://localhost:".concat(port).concat("/wd/hub")),
-                capability);
+        this.driver = SeleniumTestUtil.getWebDriver(browser, version, port);
         this.portal_url = portal;
     }
 
