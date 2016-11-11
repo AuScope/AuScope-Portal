@@ -271,7 +271,7 @@ public class WMSController extends BaseCSWController {
             @RequestParam("WIDTH") String width,
             @RequestParam("HEIGHT") String height,
             @RequestParam("INFO_FORMAT") String infoFormat,
-            @RequestParam("SLD_BODY") String sldBody,
+            @RequestParam(value = "SLD_BODY", defaultValue = "") String sldBody,
             @RequestParam(value = "postMethod", defaultValue = "false") Boolean postMethod,
             @RequestParam("version") String version,
             @RequestParam(value = "feature_count", defaultValue = "0") String feature_count) throws Exception {
