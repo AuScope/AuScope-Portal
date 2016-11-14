@@ -4,28 +4,79 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.auscope.portal.server.web.service.MineralTenementService;
+import org.auscope.portal.xslt.ArcGISToMineralTenement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.w3c.dom.Document;
 
 @Controller
 public class MineralTenementController extends BasePortalController {
 
     private MineralTenementService mineralTenementService;
+    private WMSService mineralTenementWMSService;
+    
+    private ArcGISToMineralTenement arcGISToMineralTenementTransformer;
 
-    public static final String MINERAL_TENEMENT = "mt:MineralTenement";
+    public static final String MINERAL_TENEMENT_TYPE = "mt:MineralTenement";
+    public static final String ARCGIS_MINERAL_TENEMENT_TYPE = "MineralTenement";
+
+    private static final String ENCODING = "ISO-8859-1";
+    private static final int BUFFERSIZE = 1024 * 1024;
 
     @Autowired
     public MineralTenementController(MineralTenementService mineralTenementService) {
         this.mineralTenementService = mineralTenementService;
+    }
+
+    @RequestMapping("/getMineralTenementFeatureInfo.do")
+    public void getMineralTenementFeatureInfo(HttpServletRequest request, HttpServletResponse response,
+            @RequestParam("WMS_URL") String wmsUrl, @RequestParam("lat") String latitude,
+            @RequestParam("lng") String longitude, @RequestParam("QUERY_LAYERS") String queryLayers,
+            @RequestParam("x") String x, @RequestParam("y") String y, @RequestParam("BBOX") String bbox,
+            @RequestParam("WIDTH") String width, @RequestParam("HEIGHT") String height,
+            @RequestParam("INFO_FORMAT") String infoFormat, @RequestParam("SLD_BODY") String sldBody,
+            @RequestParam(value = "postMethod", defaultValue = "false") Boolean postMethod,
+            @RequestParam("version") String version,
+            @RequestParam(value = "feature_count", defaultValue = "0") String feature_count) throws Exception {
+
+        String[] bboxParts = bbox.split(",");
+        double lng1 = Double.parseDouble(bboxParts[0]);
+        double lng2 = Double.parseDouble(bboxParts[2]);
+        double lat1 = Double.parseDouble(bboxParts[1]);
+        double lat2 = Double.parseDouble(bboxParts[3]);
+        String responseString = "";
+        String featureInfoString = mineralTenementWMSService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857",
+        Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
+        Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude),
+        Double.parseDouble(latitude), (int) (Double.parseDouble(x)), (int) (Double.parseDouble(y)), "", sldBody,
+            postMethod, version, feature_count, true);
+
+        Document xmlDocument = getDocumentFromString(featureInfoString);
+        
+        
+        if (xmlDocument.getDocumentElement().getLocalName().equals("FeatureInfoResponse")) {
+            responseString = this.arcGISToMineralTenementTransformer.convert(featureInfoString, wmsUrl);
+        } else {
+            responseString = featureInfoString;
+        };
+        
+        // responseString = getModifiedHTMLForFeatureInfoWindow(responseString);
+
+        InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
+        FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
     }
 
     @RequestMapping("/doMineralTenementDownload.do")
@@ -46,7 +97,7 @@ public class MineralTenementController extends BasePortalController {
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
 
-        InputStream results = this.mineralTenementService.downloadWFS(serviceUrl, MINERAL_TENEMENT, filter, null);
+        InputStream results = this.mineralTenementService.downloadWFS(serviceUrl, MINERAL_TENEMENT_TYPE, filter, null);
         FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
         outputStream.close();
 
@@ -113,7 +164,7 @@ public class MineralTenementController extends BasePortalController {
             break;
         default:
             String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters); //VT:get filter from service
-            style = this.getPolygonStyle(filter, MINERAL_TENEMENT, "#00FF00", "#00FF00");
+            style = this.getPolygonStyle(filter, MINERAL_TENEMENT_TYPE, "#00FF00", "#00FF00");
             break;
         }
 
@@ -200,7 +251,7 @@ public class MineralTenementController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<Name>" + MINERAL_TENEMENT_TYPE + "</Name>" +
                 "<UserStyle>" +
                 "<Title>Type ColorCode Style</Title>" +
                 "<Abstract>A green default style</Abstract>" +
@@ -323,7 +374,7 @@ public class MineralTenementController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<Name>" + MINERAL_TENEMENT_TYPE + "</Name>" +
                 "<UserStyle>" +
                 "<Title>Default style</Title>" +
                 "<Abstract>A green default style</Abstract>" +
@@ -398,7 +449,7 @@ public class MineralTenementController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<Name>" + MINERAL_TENEMENT_TYPE + "</Name>" +
                 "<UserStyle>" +
                 "<Title>Type ColorCode Style</Title>" +
                 "<FeatureTypeStyle>" +
@@ -476,7 +527,7 @@ public class MineralTenementController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<Name>" + MINERAL_TENEMENT_TYPE + "</Name>" +
                 "<UserStyle>" +
                 "<Title>Default style</Title>" +
                 "<Abstract>A green default style</Abstract>" +
@@ -536,7 +587,7 @@ public class MineralTenementController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + MINERAL_TENEMENT + "</Name>" +
+                "<Name>" + MINERAL_TENEMENT_TYPE + "</Name>" +
                 "<UserStyle>" +
                 "<Title>Default style</Title>" +
                 "<Abstract>A green default style</Abstract>" +
@@ -559,4 +610,14 @@ public class MineralTenementController extends BasePortalController {
                 "</StyledLayerDescriptor>";
         return style;
     }
+
+    private Document getDocumentFromString(String responseString)
+                throws Exception {
+
+        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        domFactory.setNamespaceAware(true);
+        DocumentBuilder builder = domFactory.newDocumentBuilder();
+        return builder.parse(new ByteArrayInputStream(responseString.getBytes(ENCODING)));
+    }
 }
+
