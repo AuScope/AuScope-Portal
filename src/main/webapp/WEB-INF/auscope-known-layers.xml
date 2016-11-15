@@ -147,7 +147,6 @@
         <property name="proxyCountUrl" value="getMineralTenementCount.do"/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>       
-	<property name="forceWMSGet" value="false"/>
         <property name="order" value="40_Tenements_010" />
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
