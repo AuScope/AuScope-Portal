@@ -9,6 +9,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.mineraloccurrence.MineralTenementCCFilter;
 import org.auscope.portal.mineraloccurrence.MineralTenementFilter;
+import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +50,9 @@ public class MineralTenementService extends BaseWFSService {
     }
 
     public String getMineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,
-            FilterBoundingBox bbox,String optionalFilters)
+            FilterBoundingBox bbox,String optionalFilters, MineralTenementServiceProviderType mineralTenementServiceProviderType)
                     throws Exception {
-        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters);
+        MineralTenementFilter filter = new MineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters, mineralTenementServiceProviderType);
         return generateFilterString(filter, bbox);
     }
     public String getMineralTenementFilterCCStatus(String name, String tenementType, String owner, String size, String endDate,

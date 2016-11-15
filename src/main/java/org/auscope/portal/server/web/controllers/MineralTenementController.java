@@ -15,6 +15,7 @@ import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.auscope.portal.server.web.service.MineralTenementService;
 import org.auscope.portal.xslt.ArcGISToMineralTenement;
@@ -61,6 +62,7 @@ public class MineralTenementController extends BasePortalController {
                FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
                WFSResponse response = null;
                try {
+		   // FIXME
                    //response = this.mineralTenementService.getAllTenements(serviceUrl, tenementName, owner,
                    //    maxFeatures, bbox, null);
                } catch (Exception e) {
@@ -121,8 +123,9 @@ public class MineralTenementController extends BasePortalController {
             HttpServletResponse response) throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+	MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
         String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,
-                bbox,null); //VT:get filter from service
+                bbox,null,  mineralTenementServiceProviderType); //VT:get filter from service
 
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
@@ -193,15 +196,9 @@ public class MineralTenementController extends BasePortalController {
             style = this.getColorCodeStyleForStatus(name, tenementType, owner, size, endDate);
             break;
         default:
-            OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
-           
-            String mineralTenementFeatureType = MINERAL_TENEMENT_TYPE;
-	            
-            if (ogcServiceProviderType == OgcServiceProviderType.ArcGis) {
-                mineralTenementFeatureType = ARCGIS_MINERAL_TENEMENT_TYPE;
-            }
-            String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters); //VT:get filter from service
-            style = this.getPolygonStyle(filter, mineralTenementFeatureType, "#00FF00", "#00FF00");
+	    MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
+            String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters, mineralTenementServiceProviderType); //VT:get filter from service
+            style = this.getPolygonStyle(filter, mineralTenementServiceProviderType.featureType(), mineralTenementServiceProviderType.colour(), mineralTenementServiceProviderType.colour());
             break;
         }
 
@@ -245,7 +242,7 @@ public class MineralTenementController extends BasePortalController {
                 "<PolygonSymbolizer>" +
                 "<Fill>" +
                 "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
+                "<CssParameter name=\"fill-opacity\">1</CssParameter>" +
                 "</Fill>" +
                 "<Stroke>" +
                 "<CssParameter name=\"stroke\">" + borderColor + "</CssParameter>" +
