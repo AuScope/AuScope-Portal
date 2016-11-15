@@ -133,21 +133,22 @@
     <bean id="knownTypeMineralTenements" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="mineral-tenements"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSWFSSelector">
                 <constructor-arg name="featureTypeName" value="mt:MineralTenement"/>
+                <constructor-arg name="layerName" value="MineralTenement"/>
             </bean>
         </constructor-arg>
 
         <property name="name" value="Mineral Tenements"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
         <property name="group" value="Tenements"/>
-
-        <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
-        <property name="proxyUrl" value=""/>
-        <property name="proxyCountUrl" value=""/>
+        <property name="proxyUrl" value="getAllMineralTenementFeatures.do"/>
+	<property name="proxyGetFeatureInfoUrl" value="getMineralTenementFeatureInfo.do" />
+        <property name="proxyCountUrl" value="getMineralTenementCount.do"/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>       
-        <property name="order" value="150" />
+	<property name="forceWMSGet" value="false"/>
+        <property name="order" value="40_Tenements_010" />
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
