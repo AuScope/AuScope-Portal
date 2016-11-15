@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.auscope.portal.server.web.service.MineralTenementService;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 
 @Controller
@@ -37,9 +40,37 @@ public class MineralTenementController extends BasePortalController {
     private static final int BUFFERSIZE = 1024 * 1024;
 
     @Autowired
-    public MineralTenementController(MineralTenementService mineralTenementService) {
+    public MineralTenementController(MineralTenementService mineralTenementService, WMSService wmsService, ArcGISToMineralTenement arcGISToMineralTenement) {
         this.mineralTenementService = mineralTenementService;
+        this.mineralTenementWMSService = wmsService;
+        this.arcGISToMineralTenementTransformer = arcGISToMineralTenement;
     }
+
+    @RequestMapping("/getAllMineralTenementFeatures.do")
+       public ModelAndView getAllMineralTenementFeatures(
+                   @RequestParam("serviceUrl") String serviceUrl,
+		   @RequestParam(required = false, value = "tenementName") String tenementName,
+		   @RequestParam(required = false, value = "owner") String owner,
+		   @RequestParam(required = false, value = "bbox") String bboxJson,
+                   @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+                       throws Exception {
+
+               // The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
+               // This will in turn limit the number of points returned to 200
+               OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+               FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
+               WFSResponse response = null;
+               try {
+                   //response = this.mineralTenementService.getAllTenements(serviceUrl, tenementName, owner,
+                   //    maxFeatures, bbox, null);
+               } catch (Exception e) {
+	           log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
+                   log.debug("Exception: ", e);
+                   return this.generateExceptionResponse(e, serviceUrl);
+               }
+	       log.warn("GML: " + response.getData());
+               return generateJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
+      }
 
     @RequestMapping("/getMineralTenementFeatureInfo.do")
     public void getMineralTenementFeatureInfo(HttpServletRequest request, HttpServletResponse response,
@@ -57,8 +88,7 @@ public class MineralTenementController extends BasePortalController {
         double lng2 = Double.parseDouble(bboxParts[2]);
         double lat1 = Double.parseDouble(bboxParts[1]);
         double lat2 = Double.parseDouble(bboxParts[3]);
-        String responseString = "";
-        String featureInfoString = mineralTenementWMSService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857",
+        String featureInfoString = this.mineralTenementWMSService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857",
         Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
         Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude),
         Double.parseDouble(latitude), (int) (Double.parseDouble(x)), (int) (Double.parseDouble(y)), "", sldBody,
@@ -66,7 +96,7 @@ public class MineralTenementController extends BasePortalController {
 
         Document xmlDocument = getDocumentFromString(featureInfoString);
         
-        
+        String responseString = "";
         if (xmlDocument.getDocumentElement().getLocalName().equals("FeatureInfoResponse")) {
             responseString = this.arcGISToMineralTenementTransformer.convert(featureInfoString, wmsUrl);
         } else {
@@ -163,8 +193,15 @@ public class MineralTenementController extends BasePortalController {
             style = this.getColorCodeStyleForStatus(name, tenementType, owner, size, endDate);
             break;
         default:
+            OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+           
+            String mineralTenementFeatureType = MINERAL_TENEMENT_TYPE;
+	            
+            if (ogcServiceProviderType == OgcServiceProviderType.ArcGis) {
+                mineralTenementFeatureType = ARCGIS_MINERAL_TENEMENT_TYPE;
+            }
             String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters); //VT:get filter from service
-            style = this.getPolygonStyle(filter, MINERAL_TENEMENT_TYPE, "#00FF00", "#00FF00");
+            style = this.getPolygonStyle(filter, mineralTenementFeatureType, "#00FF00", "#00FF00");
             break;
         }
 
@@ -203,6 +240,7 @@ public class MineralTenementController extends BasePortalController {
                 "<Name>Polygon for mineral tenement</Name>" +
                 "<Title>Mineral Tenement</Title>" +
                 "<Abstract>50 percent transparent green fill with a red outline 1 pixel in width</Abstract>" +
+		"<Name>mineralTenementStyle</Name>" +
                 filter +
                 "<PolygonSymbolizer>" +
                 "<Fill>" +
