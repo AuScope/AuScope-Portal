@@ -24,9 +24,9 @@ public enum MineralTenementServiceProviderType {
         this.featureType = featureType;
         this.fillColour = fillColour;
         this.borderColour = borderColour;
-        this.nameField = nameField;
-        this.ownerField = ownerField;
-        this.shapeField = shapeField;
+        this.nameField = tenementName;
+        this.ownerField = owner;
+        this.shapeField = shape;
     }
 
     public String featureType() {

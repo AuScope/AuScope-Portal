@@ -33,14 +33,14 @@ public class MineralTenementFilter extends GenericFilter {
         if(optionalFilters == null || optionalFilters.isEmpty()){
 
             if (tenementName != null && !tenementName.isEmpty()) {
-                fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.tenementName(), "*" + tenementName + "*"));
+                fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.nameField(), "*" + tenementName + "*"));
             }
             if (tenementType != null && !tenementType.isEmpty()) {
                 fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
             }
 
             if (owner != null && !owner.isEmpty()) {
-	        fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.owner(), owner));
+	        fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
             }
 
             if (size != null && !size.isEmpty()) {
@@ -71,14 +71,14 @@ public class MineralTenementFilter extends GenericFilter {
         }
         fragments = new ArrayList<String>();
         if (tenementName != null && !tenementName.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.tenementName(), "*" + tenementName + "*"));
+            fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.nameField(), "*" + tenementName + "*"));
         }
         if (tenementType != null && !tenementType.isEmpty()) {
             fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
         }
 
         if (owner != null && !owner.isEmpty()) {
-	    fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.owner(), owner));
+	    fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
         }
 
         if (size != null && !size.isEmpty()) {
