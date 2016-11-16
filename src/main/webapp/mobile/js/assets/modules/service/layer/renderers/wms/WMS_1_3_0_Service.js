@@ -42,7 +42,7 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                                 (top.lat() + deltaY);
       
                 //base WMS URL
-                var url = myOnlineResource.url + "?";
+                var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
                 url += "&REQUEST=GetMap"; 
                 url += "&SERVICE=WMS";    
                 url += "&VERSION=1.3.0";

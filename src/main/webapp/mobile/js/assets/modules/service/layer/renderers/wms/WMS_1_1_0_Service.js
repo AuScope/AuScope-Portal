@@ -41,7 +41,7 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                                (top.lat() + deltaY);
      
                //base WMS URL
-               var url = myOnlineResource.url + "?";
+               var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
                url += "&REQUEST=GetMap"; //WMS operation
                url += "&SERVICE=WMS";    //WMS service
                url += "&VERSION=1.1.1";  //WMS version  
@@ -49,7 +49,8 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                    url += "&SLD_BODY=" + encodeURIComponent(style);
                }
                url += "&TILED=TRUE";
-               url += "&STYLES=";  
+               url += "&DISPLAYOUTSIDEMAXEXTENT=true";  
+               url += "&EXCEPTIONS=BLANK";
                url += "&LAYERS=" + myOnlineResource.name; //WMS layers
                url += "&FORMAT=image/png" ; //WMS format
                url += "&BGCOLOR=0xFFFFFF";  
