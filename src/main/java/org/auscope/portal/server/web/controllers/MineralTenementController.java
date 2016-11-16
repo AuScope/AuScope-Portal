@@ -130,7 +130,7 @@ public class MineralTenementController extends BasePortalController {
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
 
-        InputStream results = this.mineralTenementService.downloadWFS(serviceUrl, MINERAL_TENEMENT_TYPE, filter, null);
+        InputStream results = this.mineralTenementService.downloadWFS(serviceUrl, mineralTenementServiceProviderType.featureType(), filter, null);
         FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
         outputStream.close();
 
