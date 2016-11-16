@@ -8,8 +8,8 @@
  * @event data.select.end - end of the drawing for the data selection event
  * @event layer.removed - removing of a layer from map event
  */
-allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter',
-                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter','QuerierPanelService',
+                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter,QuerierPanelService) {
    
     this.mainMap;
     this.activeLayers = {};
@@ -146,6 +146,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
            
             this.broadcast('layer.removed',layer);
         };
+        
+        QuerierPanelService.deregisterLayer(layer);
+        
         RenderStatusService.clearStatus(layer);
     };
      

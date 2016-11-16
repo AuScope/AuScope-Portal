@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.uifilter.GenericFilter;
 import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
 
 /**
@@ -13,7 +14,7 @@ import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
  * @author Victor Tey
  * @version
  */
-public class CapdfHydroGeoChemFilter extends AbstractFilter {
+public class CapdfHydroGeoChemFilter extends GenericFilter {
     List<String> fragments;
 
     /**
@@ -22,19 +23,25 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public CapdfHydroGeoChemFilter(String batchid, CapdfHydroChemColorCoding ccq, Double min, Double max) {
+    public CapdfHydroGeoChemFilter(String batchid, CapdfHydroChemColorCoding ccq, Double min, Double max,String optionalFilters) {
 
-        fragments = new ArrayList<String>();
-        if (batchid != null && !batchid.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("batch_id", batchid));
-        }
+        super(optionalFilters);
 
-        if (ccq != null && min != null) {
-            fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(ccq.getPOI(), Double.toString(min)));
-        }
+        if(optionalFilters==null || optionalFilters.isEmpty()){
+            fragments = new ArrayList<String>();
+            if (batchid != null && !batchid.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment("batch_id", batchid));
+            }
 
-        if (ccq != null && max != null) {
-            fragments.add(this.generatePropertyIsLessThan(ccq.getPOI(), Double.toString(max)));
+            if (ccq != null && min != null) {
+                fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(ccq.getPOI(), Double.toString(min)));
+            }
+
+            if (ccq != null && max != null) {
+                fragments.add(this.generatePropertyIsLessThan(ccq.getPOI(), Double.toString(max)));
+            }
+        }else{
+            fragments = this.generateParameterFragments();
         }
 
     }
@@ -51,7 +58,7 @@ public class CapdfHydroGeoChemFilter extends AbstractFilter {
         localFragment.add(this.generateBboxFragment(bbox, "geom"));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment
-                .size()])));
+                                                                                                       .size()])));
     }
 
 }

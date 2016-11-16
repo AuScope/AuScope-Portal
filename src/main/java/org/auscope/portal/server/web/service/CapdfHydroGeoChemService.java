@@ -34,7 +34,7 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param filter
      *            The filter
      * @param bbox
@@ -54,21 +54,21 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param batch
      *            The batchid filter
      * @param bbox
      *            [Optional] the spatial bounds to constrain the result set
      * @return
      */
-    public String getHydroGeoChemFilter(String batchid, FilterBoundingBox bbox) {
-        CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid, null, null, null);
+    public String getHydroGeoChemFilter(String batchid, FilterBoundingBox bbox,String optionalFilters) {
+        CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid, null, null, null,optionalFilters);
         return generateFilterString(filter, bbox);
     }
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param group
      *            The filter
      * @return String - the filter string
@@ -80,7 +80,7 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
 
     /**
      * Generate a list of filters for color coding sld rules
-     * 
+     *
      * @param batchid
      *            - filter
      * @param ccq
@@ -98,7 +98,7 @@ public class CapdfHydroGeoChemService extends BaseWFSService {
         for (int iteration = 0; iteration < ccc.getIntervals(); iteration++) {
             HashMap<String, Double> config = ccc.getIteration(iteration);
             CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid, ccq,
-                    ccc.getIterationLowerBound(config), ccc.getIterationUpperBound(config));
+                    ccc.getIterationLowerBound(config), ccc.getIterationUpperBound(config),null);
             result.add(filter);
         }
 

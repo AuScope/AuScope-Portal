@@ -17,7 +17,7 @@ public class TestMineFilter extends PortalTestClass {
      */
     @Test
     public void testWithNoMineName() throws Exception {
-        MineFilter mineFilter = new MineFilter("");
+        MineFilter mineFilter = new MineFilter("",null);
 
         String filter = mineFilter.getFilterStringAllRecords();
         Assert.assertTrue(xmlStringEquals(
@@ -31,7 +31,7 @@ public class TestMineFilter extends PortalTestClass {
      */
     @Test
     public void testWithAMineName() throws Exception {
-        MineFilter mineFilter = new MineFilter("Dominion Copper Mine");
+        MineFilter mineFilter = new MineFilter("Dominion Copper Mine",null);
 
         String filter = mineFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);
@@ -48,7 +48,7 @@ public class TestMineFilter extends PortalTestClass {
      */
     @Test
     public void testMatchCaseDefault() throws Exception {
-        MineFilter mineFilter = new MineFilter("mineNameToTest");
+        MineFilter mineFilter = new MineFilter("mineNameToTest",null);
 
         String filter = mineFilter.getFilterStringAllRecords();
         Document doc = AbstractFilterTestUtilities.parsefilterStringXML(filter);

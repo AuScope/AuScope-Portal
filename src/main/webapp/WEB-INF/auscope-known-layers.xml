@@ -38,6 +38,26 @@
             </bean>
         </property>
         <property name="order" value="10" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Mine Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="er:specification/er:Mine/er:mineName/er:MineName/er:mineName"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>                          
+                         <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                     
+                    </list>
+                </property>                       
+            </bean>        
+        </property>
     </bean>
     <bean id="knownTypeMineralOccurrence" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="erml-mineraloccurrence"/>
@@ -277,7 +297,23 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getCapdfHydroGeoChemStyle.do"/>
         <property name="proxyDownloadUrl" value="doCapdfHydroGeoChemDownload.do"/>
-        <property name="order" value="160" />   
+        <property name="order" value="160" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Batch Id"></constructor-arg>
+                            <constructor-arg name="xpath" value="batch_id"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>                                             
+                    </list>
+                </property>                       
+            </bean>        
+        </property>   
     </bean>
 
     <bean id="knownTypeMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">

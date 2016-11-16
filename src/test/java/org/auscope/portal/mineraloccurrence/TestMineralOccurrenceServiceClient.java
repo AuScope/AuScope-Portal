@@ -87,7 +87,7 @@ public class TestMineralOccurrenceServiceClient extends PortalTestClass {
         final String serviceURL = "http://localhost?";
         final String mineName = "SomeName";
 
-        final MineFilter mineFilter = new MineFilter(mineName);
+        final MineFilter mineFilter = new MineFilter(mineName,null);
         final HttpGet mockMethod = context.mock(HttpGet.class);
         final String mockMineResponse = new String();
         @SuppressWarnings("unchecked")

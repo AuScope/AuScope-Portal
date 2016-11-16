@@ -90,7 +90,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      */
     public WFSResponse getMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox,
             int maxFeatures) throws PortalServiceException {
-        MineFilter filter = new MineFilter(mineName);
+        MineFilter filter = new MineFilter(mineName,null);
         String filterString = generateFilterString(filter, bbox);
 
         HttpRequestBase method = null;
@@ -122,7 +122,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      */
     public List<Mine> getMines(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures)
             throws PortalServiceException, URISyntaxException {
-        MineFilter filter = new MineFilter(mineName);
+        MineFilter filter = new MineFilter(mineName,null);
         String filterString = generateFilterString(filter, bbox);
 
         HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures,
@@ -152,7 +152,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      */
     public WFSCountResponse getMinesCount(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures)
             throws PortalServiceException, URISyntaxException {
-        MineFilter filter = new MineFilter(mineName);
+        MineFilter filter = new MineFilter(mineName,null);
         String filterString = generateFilterString(filter, bbox);
 
         HttpRequestBase method = generateWFSRequest(serviceUrl, MINE_FEATURE_TYPE, null, filterString, maxFeatures,
@@ -339,9 +339,9 @@ public class MineralOccurrenceService extends BaseWFSService {
         return generateFilterString(filter, bbox);
     }
 
-    public String getMineFilter(String mineName, FilterBoundingBox bbox)
+    public String getMineFilter(String mineName, FilterBoundingBox bbox, String optionalFilters)
             throws Exception {
-        MineFilter filter = new MineFilter(mineName);
+        MineFilter filter = new MineFilter(mineName, optionalFilters);
         return generateFilterString(filter, bbox);
     }
 

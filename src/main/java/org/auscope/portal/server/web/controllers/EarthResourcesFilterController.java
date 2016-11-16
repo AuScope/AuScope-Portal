@@ -400,13 +400,14 @@ public class EarthResourcesFilterController extends BasePortalController {
             HttpServletResponse response,
             @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
                     throws Exception {
         //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
         FilterBoundingBox bbox = null;
         // Get the mining activities
         String filter = this.mineralOccurrenceService.getMineFilter(mineName,
-                bbox);
+                bbox,optionalFilters);
 
         String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "#AA0078");
 

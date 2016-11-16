@@ -4,8 +4,8 @@
  * @class layerPanelCtrl
  * 
  */
-allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService','QuerierPanelService',
-                                             function ($scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,QuerierPanelService) {
+allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService',
+                                             function ($scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService) {
     $scope.cswRecords={};
     GetCSWRecordService.getCSWKnownLayers().then(function(data){
         $scope.cswRecords=data;      
@@ -29,11 +29,11 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
     /**
      * remove the cswLayer
      * @method removeLayer
-     * 
+     * @param layer - the layer to remove
      */
-     $scope.removeLayer = function(filterPanelCsw){
-        GoogleMapService.removeActiveLayer(filterPanelCsw);
-        QuerierPanelService.deregisterLayer(filterPanelCsw);
+     $scope.removeLayer = function(layer){
+        GoogleMapService.removeActiveLayer(layer);
+        
     };
 
     /**

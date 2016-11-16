@@ -5,7 +5,7 @@
  * @class QuerierPanelService
  * 
  */
-allModules.service('QuerierPanelService', ['$compile', function ($compile) {
+allModules.service('QuerierPanelService', ['$compile','LayerManagerService', function ($compile,LayerManagerService) {
     this.layerList = [];
     
     /**
@@ -64,19 +64,20 @@ allModules.service('QuerierPanelService', ['$compile', function ($compile) {
     * Disable click events on the map layer to prevent opening up of the query panel
     * This should be called after the layer has been deleted from the map
     * @method deregisterLayer
-    * @param filterPanelCsw CSW object of the layer that has been deleted from the map
+    * @param layer CSW object of the layer that has been deleted from the map
     */
-    this.deregisterLayer = function(filterPanelCsw)
-    {   
-        for (var i=0; i<filterPanelCsw.cswRecords[0].onlineResources.length; i++) {
-            var onlineResource = filterPanelCsw.cswRecords[0].onlineResources[i];
+    this.deregisterLayer = function(layer)
+    {           
+        var onlineResources = LayerManagerService.getOnlineResources(layer)
+        for (var i=0; i< onlineResources.length; i++) {
+            var onlineResource = onlineResources[i];
             for (var j=0; j<this.layerList.length; j++) {
                 if (this.layerList[j].resource==onlineResource) {
                     // Remove event listener from map
                     this.layerList[j].listener.remove();
                     // Delete from list
                     this.layerList.splice(j,1);
-                    return;
+                    
                 }
             }
         }

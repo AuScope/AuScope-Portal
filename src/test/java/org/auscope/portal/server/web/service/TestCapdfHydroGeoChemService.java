@@ -30,7 +30,7 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
         String batchid = "1234";
         FilterBoundingBox bbox = null;
 
-        String result = service.getHydroGeoChemFilter(batchid, bbox);
+        String result = service.getHydroGeoChemFilter(batchid, bbox,null);
         Assert.assertEquals(204, result.length());
         String expected = "<ogc:Filter><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" ><ogc:PropertyName>batch_id</ogc:PropertyName><ogc:Literal>1234</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>";
         Assert.assertTrue(xmlStringEquals(expected, result, false));
@@ -69,7 +69,7 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
         for (int iteration = 0; iteration < ccc.getIntervals(); iteration++) {
             HashMap<String, Double> config = ccc.getIteration(iteration);
             CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid, ccq, config.get("lowerBound"),
-                    config.get("upperBound"));
+                    config.get("upperBound"),null);
             result.add(filter);
         }
 
@@ -89,7 +89,7 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
 
         HashMap<String, Double> config = ccc.getIteration(0);
         CapdfHydroGeoChemFilter filter = new CapdfHydroGeoChemFilter(batchid, ccq, ccc.getIterationLowerBound(config),
-                ccc.getIterationUpperBound(config));
+                ccc.getIterationUpperBound(config),null);
         String result = filter.getFilterStringAllRecords();
         String expected = "<ogc:Filter><ogc:And><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" >"
                 + "<ogc:PropertyName>batch_id</ogc:PropertyName><ogc:Literal>1234</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsLessThan matchCase=\"false\" >"
@@ -98,7 +98,7 @@ public class TestCapdfHydroGeoChemService extends PortalTestClass {
 
         config = ccc.getIteration(5);
         filter = new CapdfHydroGeoChemFilter(batchid, ccq, ccc.getIterationLowerBound(config),
-                ccc.getIterationUpperBound(config));
+                ccc.getIterationUpperBound(config),null);
         result = filter.getFilterStringAllRecords();
         expected = "<ogc:Filter><ogc:And><ogc:PropertyIsLike escapeChar=\"!\" wildCard=\"*\" matchCase=\"false\" singleChar=\"#\" >"
                 + "<ogc:PropertyName>batch_id</ogc:PropertyName><ogc:Literal>1234</ogc:Literal></ogc:PropertyIsLike><ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"

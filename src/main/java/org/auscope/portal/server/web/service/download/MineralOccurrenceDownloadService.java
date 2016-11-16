@@ -80,7 +80,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
      */
     public InputStream downloadMinesGml(String serviceUrl, String mineName, FilterBoundingBox bbox, int maxFeatures,
             String startIndex, String outputFormat) throws PortalServiceException {
-        MineFilter filter = new MineFilter(mineName);
+        MineFilter filter = new MineFilter(mineName,null);
         String filterString = generateFilterString(filter, bbox);
 
         HttpRequestBase method = null;
