@@ -356,6 +356,13 @@
                             <suiteXmlFiles>
                                 <suiteXmlFile>src/test/java/org/auscope/portal/ui/testng.xml</suiteXmlFile>
                             </suiteXmlFiles>    
+                            <systemPropertyVariables>
+                                <!-- If we need to run the tests and browser in different machines, we need RemoteWebDriver. 
+                                This parameter tells RemoteWebDriver to use this particular hub, i.e. if running from jenkins.
+                                If the parameter is missing, it will use localhost.
+                                -->
+                                <hub>${env.HUB}</hub>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>                                                            
                 </plugins>
