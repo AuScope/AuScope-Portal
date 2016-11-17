@@ -21,13 +21,14 @@ public class SeleniumTestUtil {
         Object hub = System.getProperty("hub");        
         if (hub != null) {
             // Use specified hub
-            hubHost = "http://" + hub.toString() + ":";
+            hubHost = hub.toString();
         } else {
             // defaults to localhost
-            hubHost = "http://localhost:";
+            hubHost = "localhost";
         }
         
-        driver = new RemoteWebDriver(new URL(hubHost.concat(port).concat("/wd/hub")), capability);
+        driver = new RemoteWebDriver(new URL("http://".concat(hubHost)
+                .concat(":").concat(port).concat("/wd/hub")), capability);
 
         return driver;
     }

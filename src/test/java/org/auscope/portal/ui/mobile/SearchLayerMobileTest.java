@@ -42,8 +42,8 @@ public class SearchLayerMobileTest extends SearchLayerTest {
         // open portal
         super.openPage();
         // bring up menu toggle
-        WebElement menuToggle = driver
-                .findElement(By.cssSelector(".menu-icon-toggle"));
+        WebElement menuToggle = new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(
+                driver.findElement(By.cssSelector(".menu-icon-toggle"))));
         menuToggle.click();
     }
 
@@ -52,8 +52,8 @@ public class SearchLayerMobileTest extends SearchLayerTest {
      * Test typing keyword in the search box and pressing enter.
      */
     public void testSearchAndEnter() {
-        // give 30s to load up search box 
-        WebElement searchBox = new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOf(
+        // give 60s to load up search box 
+        WebElement searchBox = new WebDriverWait(driver, 60).until(ExpectedConditions.visibilityOf(
                 driver.findElement(By.id("main-search"))));
 
         // type "tenement" in search
@@ -68,8 +68,8 @@ public class SearchLayerMobileTest extends SearchLayerTest {
      * Test typing keyword in the search box and press search icon.
      */
     public void testSearchAndClickIcon() {
-        // give 30s to load up search box 
-        WebElement searchBox = new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOf(
+        // give 60s to load up search box 
+        WebElement searchBox = new WebDriverWait(driver, 60).until(ExpectedConditions.visibilityOf(
                 driver.findElement(By.id("main-search"))));
 
         // type "tenement" in search
