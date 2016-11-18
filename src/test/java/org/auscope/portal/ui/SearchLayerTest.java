@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -104,8 +106,8 @@ public class SearchLayerTest {
         searchBox.sendKeys("tenement");
 
         // Find the first (and only) search button on the page and click it
-        WebElement searchIcon = driver
-                .findElement(By.id("hh-searchfield-Featured-trigger-search"));
+        WebElement searchIcon = new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOf(
+                driver.findElement(By.id("hh-searchfield-Featured-trigger-search"))));
 
         searchIcon.click();
 
