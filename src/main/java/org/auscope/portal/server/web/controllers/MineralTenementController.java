@@ -142,9 +142,9 @@ public class MineralTenementController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + "a" + "</Name>" +
+                "<Name>" + name + "</Name>" +
                 "<UserStyle>" +
-                "<Title>s</Title>" +
+                "<Title>style</Title>" +
                 "<FeatureTypeStyle>" +
                 "<Rule>" +
                 filter +
