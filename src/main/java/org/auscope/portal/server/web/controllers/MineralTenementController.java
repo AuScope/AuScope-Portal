@@ -142,16 +142,11 @@ public class MineralTenementController extends BasePortalController {
                 "xmlns:ows=\"http://www.opengis.net/ows\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
                 "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
+                "<Name>" + "a" + "</Name>" +
                 "<UserStyle>" +
-                "<Title>Default style</Title>" +
-                "<Abstract>A green default style</Abstract>" +
+                "<Title>s</Title>" +
                 "<FeatureTypeStyle>" +
-
                 "<Rule>" +
-                "<Name>Polygon for mineral tenement</Name>" +
-                "<Title>Mineral Tenement</Title>" +
-                "<Abstract>50 percent transparent green fill with a red outline 1 pixel in width</Abstract>" +
                 filter +
                 "<PolygonSymbolizer>" +
                 "<Fill>" +

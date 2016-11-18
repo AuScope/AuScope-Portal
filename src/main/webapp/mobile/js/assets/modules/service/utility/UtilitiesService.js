@@ -131,7 +131,7 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
             if(params[idx].type=="OPTIONAL.PROVIDER"){
                 containProviderFilter = true;
                 for(domain in params[idx].value ){
-                    if(url.indexOf(domain) != -1){
+                    if(params[idx].value[domain] && url.indexOf(domain) != -1){
                         urlMatch = true;
                     }
                 }

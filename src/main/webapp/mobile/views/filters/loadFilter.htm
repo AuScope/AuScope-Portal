@@ -63,7 +63,7 @@
 	            <div ng-if="optionalFilter.type=='OPTIONAL.DROPDOWNSELECTLIST'">
 	                <div class="form-group form-group-sm">
 				        <label for="{{ 'filter-OPTIONAL.DROPDOWNSELECTLIST' + $index }}">{{optionalFilter.label}}</label>
-				        <select class="form-control" id="{{ 'filter-OPTIONAL.DROPDOWNSELECTLIST' + $index }}"  ng-model="optionalFilter.value" ng-options="option.value as option.key for option in optionalFilter.options"></select>
+				        <select class="form-control" id="{{ 'filter-OPTIONAL.DROPDOWNSELECTLIST' + $index }}"  ng-model="optionalFilter.value" ng-options="option[getKey(option)] as getKey(option) for option in optionalFilter.options"></select>
 				    </div>
 	            </div>
 	            <div ng-if="optionalFilter.type=='OPTIONAL.DROPDOWNREMOTE'">

@@ -106,7 +106,11 @@
                                 <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
                             </constructor-arg>
                             <constructor-arg name="url" value="../getAllCommodities.do"></constructor-arg>
-                        </bean>                 
+                        </bean>  
+                         <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                  
                     </list>
                 </property>                             
             </bean>        
@@ -147,6 +151,18 @@
             </bean>
         </property>
         <property name="order" value="12" />
+         <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>                        
+                         <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                  
+                    </list>
+                </property>                             
+            </bean>        
+        </property>
     </bean>
 
 
@@ -333,6 +349,18 @@
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
         <property name="order" value="13" />
+         <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>                        
+                         <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                  
+                    </list>
+                </property>                             
+            </bean>        
+        </property>
     </bean>
 
   

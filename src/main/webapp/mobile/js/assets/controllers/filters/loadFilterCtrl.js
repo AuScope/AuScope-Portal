@@ -67,7 +67,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
              getProvider();
              filter.value={};
          }
-         if(UtilitiesService.isEmpty($scope.providers) && filter.type=="OPTIONAL.DROPDOWNREMOTE"){
+         if(UtilitiesService.isEmpty(filter.options) && filter.type=="OPTIONAL.DROPDOWNREMOTE"){
              GetFilterParamService.getParam(filter.url).then(function(response){
                  filter.options = response;
                  $scope.optionalFilters.push(filter);                
