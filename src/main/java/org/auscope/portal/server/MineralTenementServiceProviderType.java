@@ -9,24 +9,26 @@ package org.auscope.portal.server;
  * 
  */
 public enum MineralTenementServiceProviderType {
-    GeoServer("mt:MineralTenement", "#66ff66", "#a3ffa3", "mt:name", "mt:owner", "mt:shape"), 
-    ArcGIS("MineralTenement", "#00ff00", "#66ff66", "TENNAME", "TENOWNER", "SHAPE");
+    GeoServer("mt:MineralTenement", "#66ff66", "#a3ffa3", "mt:name", "mt:owner", "mt:shape","Polygon for mineral tenement"), 
+    ArcGIS("MineralTenement", "#00ff00", "#66ff66", "TENNAME", "TENOWNER", "SHAPE","");
 
     private final String featureType;
+    private final String styleName;
     private final String fillColour;
     private final String borderColour;
     private final String nameField;
     private final String ownerField;
-    private String shapeField;
+    private final String shapeField;
 
     private MineralTenementServiceProviderType(String featureType, String fillColour, String borderColour, String tenementName, String owner,
-                String shape) {
+                String shape, String style) {
         this.featureType = featureType;
         this.fillColour = fillColour;
         this.borderColour = borderColour;
         this.nameField = tenementName;
         this.ownerField = owner;
         this.shapeField = shape;
+        this.styleName = style;
     }
 
     public String featureType() {
@@ -51,6 +53,10 @@ public enum MineralTenementServiceProviderType {
 
     public String shapeField() {
         return shapeField;
+    }
+    
+    public String styleName() {
+        return styleName;
     }
 
     public static MineralTenementServiceProviderType parseUrl(String serviceUrl) {

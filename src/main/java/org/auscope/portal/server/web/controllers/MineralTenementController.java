@@ -198,7 +198,8 @@ public class MineralTenementController extends BasePortalController {
         default:
 	    MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
             String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters, mineralTenementServiceProviderType); //VT:get filter from service
-            style = this.getPolygonStyle(filter, mineralTenementServiceProviderType.featureType(), mineralTenementServiceProviderType.fillColour(), mineralTenementServiceProviderType.borderColour());
+            style = this.getPolygonStyle(filter, mineralTenementServiceProviderType.featureType(), mineralTenementServiceProviderType.fillColour(), mineralTenementServiceProviderType.borderColour(),
+                                             mineralTenementServiceProviderType.styleName());
             break;
         }
 
@@ -215,7 +216,7 @@ public class MineralTenementController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getPolygonStyle(String filter, String name, String color, String borderColor) {
+    public String getPolygonStyle(String filter, String name, String color, String borderColor, String styleName) {
 
         String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
                 "<StyledLayerDescriptor version=\"1.0.0\" " +
@@ -234,7 +235,7 @@ public class MineralTenementController extends BasePortalController {
                 "<FeatureTypeStyle>" +
 
                 "<Rule>" +
-                "<Name>Polygon for mineral tenement</Name>" +
+                "<Name>"+styleName+"</Name>" +
                 "<Title>Mineral Tenement</Title>" +
                 "<Abstract>50 percent transparent green fill with a red outline 1 pixel in width</Abstract>" +
 		"<Name>mineralTenementStyle</Name>" +
