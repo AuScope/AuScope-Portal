@@ -206,7 +206,7 @@
                             <constructor-arg name="options">
                                 <list>
                                     <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <constructor-arg name="left"><value  type="java.lang.String">ExplorationDisplay</value></constructor-arg>
+                                        <constructor-arg name="left"><value  type="java.lang.String">Exploration</value></constructor-arg>
                                         <constructor-arg name="right"><value  type="java.lang.String">exploration</value></constructor-arg>
                                     </bean>
                                     <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
@@ -227,7 +227,31 @@
                                     </bean>
                                 </list>                               
                             </constructor-arg>
-                        </bean> 
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Owner"></constructor-arg>
+                            <constructor-arg name="xpath" value="mt:owner"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>                         
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Expiry From"></constructor-arg>
+                            <constructor-arg name="xpath" value="mt:expireDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Expiry To"></constructor-arg>
+                            <constructor-arg name="xpath" value="mt:expireDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
+                            </constructor-arg>
+                        </bean>                      
                          <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
                             <constructor-arg name="label" value="Provider"></constructor-arg>                            
                             <constructor-arg name="value"><null/></constructor-arg>                                                        

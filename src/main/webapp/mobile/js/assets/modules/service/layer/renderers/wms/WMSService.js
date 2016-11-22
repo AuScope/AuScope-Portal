@@ -123,16 +123,22 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.SKIPPED);
                 continue;
             }
-            GetWMSRelatedService.getWMSStyle(layer,onlineResources[index],param).then(function(response){                    
-                RenderStatusService.updateCompleteStatus(layer,response.onlineResource,Constants.statusProgress.RUNNING);
-                if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
-                    var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
-                    addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style);                    
-                }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
-                    var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
-                    addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style); 
-                    
-                } 
+            RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
+            GetWMSRelatedService.getWMSStyle(layer,onlineResources[index],param).then(function(response){
+                try{
+                    if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
+                        var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
+                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style);                    
+                    }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
+                        var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
+                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style); 
+                        
+                    } 
+                }catch(err){
+                    RenderStatusService.updateCompleteStatus(layer,response.onlineResource,Constants.statusProgress.ERROR);
+                }
+            },function(error){
+                RenderStatusService.updateCompleteStatus(layer,error.onlineResource,Constants.statusProgress.ERROR);
             });
         }
        
@@ -155,17 +161,21 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             var onlineResources = LayerManagerService.getWMSFromCSW(cswRecord);            
             RenderStatusService.setMaxValue(layer,onlineResources.length);
             for(var index in onlineResources){  
+                RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 GetWMSRelatedService.getWMSStyle(layer,onlineResources[index]).then(function(response){
-                    
-                    RenderStatusService.updateCompleteStatus(layer,response.onlineResource,Constants.statusProgress.RUNNING);
-                    
-                    if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
-                        var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
-                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource);                  
-                    }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
-                        var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
-                        addLayerToGoogleMap(mapLayer,layer,response.onlineResource);  
-                    } 
+                    try{
+                        if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
+                            var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
+                            addLayerToGoogleMap(mapLayer,layer,response.onlineResource);                  
+                        }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
+                            var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
+                            addLayerToGoogleMap(mapLayer,layer,response.onlineResource);  
+                        } 
+                    }catch(err){
+                        RenderStatusService.updateCompleteStatus(layer,response.onlineResource,Constants.statusProgress.ERROR);
+                    }
+                },function(error){
+                    RenderStatusService.updateCompleteStatus(layer,error.onlineResource,Constants.statusProgress.ERROR);
                 });
             }
         

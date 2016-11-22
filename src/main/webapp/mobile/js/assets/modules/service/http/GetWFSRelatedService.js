@@ -56,6 +56,10 @@ allModules.service('GetWFSRelatedService',['$http','$q',function ($http,$q) {
                  //VT: include the corresponding resource used to retrieve this result.
                  response.data.resource = onlineResource;
                  return response.data;
+             },function(err){
+                 var deferred = $q.defer();
+                 err.onlineResource = onlineResource;
+                 return $q.reject(err);
              });
         }else{
             var deferred = $q.defer();

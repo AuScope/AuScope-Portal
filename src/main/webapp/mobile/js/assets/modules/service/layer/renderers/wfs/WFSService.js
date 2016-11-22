@@ -94,7 +94,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                    
 
                 },function(error){
-                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR);
+                    RenderStatusService.updateCompleteStatus(layer,error.onlineResource,Constants.statusProgress.ERROR);
                 });
           
             }
@@ -142,7 +142,7 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                     }
                     
                 },function(error){
-                    RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.ERROR);
+                    RenderStatusService.updateCompleteStatus(layer,error.onlineResource,Constants.statusProgress.ERROR);
                 });
             }
             

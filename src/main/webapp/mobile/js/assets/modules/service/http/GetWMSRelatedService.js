@@ -52,6 +52,10 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
                        style : response.data 
                  }
                  return response
+             },function(err){
+                 var deferred = $q.defer();
+                 err.onlineResource = onlineResource;
+                 return $q.reject(err);//throw "err";
              });
         }else{
             var deferred = $q.defer();
