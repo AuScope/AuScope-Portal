@@ -35,7 +35,7 @@ public class RemanentAnomaliesController extends BasePortalController {
             HttpServletResponse response) throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name, bbox);
+        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name,null, bbox);
 
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
@@ -59,13 +59,14 @@ public class RemanentAnomaliesController extends BasePortalController {
     public void doRemanentAnomaliesStyle(
             @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "name") String name,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             HttpServletResponse response) throws Exception {
 
         //Vt: wms shouldn't need the bbox because it is tiled.
         FilterBoundingBox bbox = null;
         //String stylefilter=this.remanentAnomaliesService.getRemanentAnomaliesWithStyling(name); //VT:get filter from service
 
-        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name, bbox); //VT:get filter from service
+        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name,optionalFilters, bbox); //VT:get filter from service
 
         String style = this.getStyle(filter, "#0000FF");
 

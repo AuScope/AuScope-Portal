@@ -606,6 +606,30 @@
             </bean>
         </property>
         <property name="order" value="180" />
+         <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean> 
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="IGSN"></constructor-arg>
+                            <constructor-arg name="xpath" value="igsn"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>                                                                       
+                    </list>
+                </property>                       
+            </bean>        
+        </property>
     </bean>
 
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1183,6 +1207,22 @@
         <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
         <property name="order" value="80" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Remanent Anomaly Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="RemAnom:AnomalyName"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>                                                                       
+                    </list>
+                </property>                       
+            </bean>        
+        </property>
     </bean>
 
     <bean id="knownTypeRemanentAnomaliesAutoSearch" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
@@ -1241,6 +1281,22 @@
         <property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do"/>
         <property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do"/>
         <property name="order" value="83" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Remanent Anomaly Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="RemAnom:AnomalyName"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>                                                                       
+                    </list>
+                </property>                       
+            </bean>        
+        </property>
     </bean>
 
     <bean id="knownTypeEMAGRemanentAnomaliesTMI" class="org.auscope.portal.core.view.knownlayer.KnownLayer">

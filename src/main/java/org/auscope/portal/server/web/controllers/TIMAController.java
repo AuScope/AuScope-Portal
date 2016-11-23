@@ -39,13 +39,14 @@ public class TIMAController extends BasePortalController {
             @RequestParam(required = false, value = "igsn") String igsn,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             @RequestParam(required = false, value = "outputFormat") String outputFormat)
-            throws Exception {
+                    throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
 
         //Build our filter details
-        String filterString = generateGeoSampleFilter(sampleName, igsn, bboxJson);
+        String filterString = generateGeoSampleFilter(sampleName, igsn, bboxJson,optionalFilters);
 
         //Make our request and get it transformed
         WFSResponse response = null;
@@ -67,9 +68,9 @@ public class TIMAController extends BasePortalController {
      *
      * @return
      */
-    private String generateGeoSampleFilter(String name, String igsn, String bboxString) {
+    private String generateGeoSampleFilter(String name, String igsn, String bboxString,String optionalFilters) {
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxString);
-        TIMAGeosampleFilter timaGeosampleFilter = new TIMAGeosampleFilter(name, igsn);
+        TIMAGeosampleFilter timaGeosampleFilter = new TIMAGeosampleFilter(name, igsn,optionalFilters);
         if (bbox == null) {
             return timaGeosampleFilter.getFilterStringAllRecords();
         } else {

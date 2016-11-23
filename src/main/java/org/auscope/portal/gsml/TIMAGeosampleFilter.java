@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.uifilter.GenericFilter;
 import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
 
 /**
@@ -13,7 +14,7 @@ import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
  * @author Victor Tey
  * @version
  */
-public class TIMAGeosampleFilter extends AbstractFilter {
+public class TIMAGeosampleFilter extends GenericFilter {
     List<String> fragments;
 
     /**
@@ -22,15 +23,20 @@ public class TIMAGeosampleFilter extends AbstractFilter {
      * @param mineName
      *            the main name
      */
-    public TIMAGeosampleFilter(String name, String igsn) {
+    public TIMAGeosampleFilter(String name, String igsn,String optionalFilters) {
+        super(optionalFilters);
 
-        fragments = new ArrayList<String>();
-        if (name != null && !name.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("name", name));
-        }
+        if(optionalFilters == null || optionalFilters.isEmpty()){
+            fragments = new ArrayList<String>();
+            if (name != null && !name.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment("name", name));
+            }
 
-        if (igsn != null && !igsn.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("igsn", igsn));
+            if (igsn != null && !igsn.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment("igsn", igsn));
+            }
+        }else{
+            fragments = this.generateParameterFragments();
         }
 
     }
@@ -47,7 +53,7 @@ public class TIMAGeosampleFilter extends AbstractFilter {
         localFragment.add(this.generateBboxFragment(bbox, "location"));
 
         return this.generateFilter(this.generateAndComparisonFragment(localFragment.toArray(new String[localFragment
-                .size()])));
+                                                                                                       .size()])));
     }
 
 }

@@ -29,7 +29,7 @@ public class RemanentAnomaliesService extends BaseWFSService {
 
     /**
      * Utility for turning a filter and optional bounding box into a OGC filter string
-     * 
+     *
      * @param filter
      *            The filter
      * @param bbox
@@ -47,34 +47,11 @@ public class RemanentAnomaliesService extends BaseWFSService {
         return filterString;
     }
 
-    public String getRemanentAnomaliesFilter(String name, FilterBoundingBox bbox)
+    public String getRemanentAnomaliesFilter(String name,String optionalFilters, FilterBoundingBox bbox)
             throws Exception {
-        RemanentAnomaliesFilter filter = new RemanentAnomaliesFilter(name);
+        RemanentAnomaliesFilter filter = new RemanentAnomaliesFilter(name, optionalFilters);
         return generateFilterString(filter, bbox);
     }
 
-    public String getRemanentAnomaliesWithStyling(String name)
-            throws Exception {
-        RemanentAnomaliesFilter filter = new RemanentAnomaliesFilter(name);
-        return generateAdditionalStyleFilter(filter);
-    }
 
-    /**
-     * Utility for turning a filter and add additional styling to the filter.
-     * 
-     * @param filter
-     *            The filter
-     * @return
-     * @throws OperationNotSupportedException
-     */
-    public static String generateAdditionalStyleFilter(IFilter filter) throws OperationNotSupportedException {
-        if (filter instanceof RemanentAnomaliesFilter) {
-            RemanentAnomaliesFilter remanomFilter = (RemanentAnomaliesFilter) filter;
-            return remanomFilter.getFilterWithAdditionalStyle();
-        } else {
-            throw new OperationNotSupportedException(
-                    "Only MineralTenementFilter supports the use of additional style filtering");
-        }
-
-    }
 }
