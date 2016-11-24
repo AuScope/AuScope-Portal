@@ -243,7 +243,7 @@ public class MineralTenementController extends BasePortalController {
                 "<PolygonSymbolizer>" +
                 "<Fill>" +
                 "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">1</CssParameter>" +
+                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
                 "</Fill>" +
                 "<Stroke>" +
                 "<CssParameter name=\"stroke\">" + borderColor + "</CssParameter>" +
