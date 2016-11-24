@@ -36,6 +36,7 @@ app.constant('Constants', {
     },
     rendererLoader:{
         'nvcl-borehole': 'WFSService',
+        'gsml-borehole': 'WFSService',        
         'mineral-tenements' : 'WMSService'
     },
     XPATH_STRING_TYPE : (window.XPathResult ? XPathResult.STRING_TYPE : 0),

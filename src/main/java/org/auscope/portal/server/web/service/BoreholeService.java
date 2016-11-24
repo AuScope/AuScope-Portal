@@ -102,7 +102,7 @@ public class BoreholeService extends BaseWFSService {
 
 
         if(optionalFilters==null || optionalFilters.isEmpty()){
-            BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
+            BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList,null);
             if (bbox == null) {
                 filterString = nvclFilter.getFilterStringAllRecords();
             } else {
@@ -147,7 +147,7 @@ public class BoreholeService extends BaseWFSService {
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
                     throws Exception {
         String filterString;
-        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList);
+        BoreholeFilter nvclFilter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd,restrictToIDList,null);
         if (bbox == null) {
             filterString = nvclFilter.getFilterStringAllRecords();
         } else {
@@ -233,8 +233,8 @@ public class BoreholeService extends BaseWFSService {
     }
 
     public String getFilter(String boreholeName, String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,
-            int maxFeatures, FilterBoundingBox bbox, List<String> ids, Boolean justNVCL) throws Exception {
-        BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, ids);
+            int maxFeatures, FilterBoundingBox bbox, List<String> ids, Boolean justNVCL,String optionalFilters) throws Exception {
+        BoreholeFilter filter = new BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, ids,optionalFilters);
         return generateFilterString(filter, bbox);
     }
 

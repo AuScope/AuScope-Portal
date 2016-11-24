@@ -551,7 +551,7 @@
                             </constructor-arg>
                         </bean>
                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <constructor-arg name="label" value="FromDate"></constructor-arg>
+                            <constructor-arg name="label" value="Drilling Start Date"></constructor-arg>
                             <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
                             <constructor-arg name="predicate">
@@ -559,12 +559,16 @@
                             </constructor-arg>
                         </bean>
                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <constructor-arg name="label" value="ToDate"></constructor-arg>
+                            <constructor-arg name="label" value="Drilling End Date"></constructor-arg>
                             <constructor-arg name="xpath" value="gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
                             <constructor-arg name="predicate">
                                 <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
                             </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
                         </bean>
                     </list>
                 </property>
@@ -704,6 +708,54 @@
                         </bean>
                     </list>
                 </property>
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling Start From"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillStartDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling Start To"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillStartDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling End From"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillEndDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling End To"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillEndDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>                
             </bean>        
         </property>
     </bean>
@@ -840,22 +892,41 @@
         <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="proxyStyleUrl" value="doPressureDBFilterStyle.do"/>
-        <!--
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property> -->
+        <property name="proxyStyleUrl" value="doPressureDBFilterStyle.do"/>       
         <property name="order" value="52"/>
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Borehole Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling Start Date"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillStartDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling End Date"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillStartDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                       
+                    </list>
+                </property>               
+            </bean>        
+        </property>
     </bean>
     <bean id="knownTypeGSMLBorehole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="gsml-borehole"/>

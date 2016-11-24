@@ -122,7 +122,12 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
         return a.hostname;
     };
     
-    
+    /**
+     * Based on the filter parameter, this is a utility to decide if we should skip this provider
+     * @method filterProviderSkip
+     * @param params - filter parameter
+     * @param url - the url of the resource we are matching
+     */
     this.filterProviderSkip =  function(params, url){
         var containProviderFilter = false;
         var urlMatch = false;
@@ -144,6 +149,22 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
             return false;
         }
                
+    };
+    
+    /**
+     * count the number of unique urls in onlineResources
+     * @method uniqueCountOfResourceByUrl
+     * @param onlineResources
+     * @return unique count by url
+     */
+    this.uniqueCountOfResourceByUrl = function(onlineResources){
+        var unique={};
+        
+        for(var key in onlineResources){
+           unique[onlineResources[key].url]=true;           
+        }
+        
+        return Object.keys(unique).length;
     };
     
      

@@ -2,10 +2,12 @@ package org.auscope.portal.gsml;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.core.uifilter.GenericFilter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -16,7 +18,7 @@ import org.joda.time.format.DateTimeFormatter;
  * @version $Id$
  */
 
-public class BoreholeFilter extends AbstractFilter {
+public class BoreholeFilter extends GenericFilter {
 
     protected String boreholeName;
     protected String custodian;
@@ -32,7 +34,9 @@ public class BoreholeFilter extends AbstractFilter {
     // ----------------------------------------------------------- Constructors
 
     public BoreholeFilter(String boreholeName, String custodian,
-            String dateOfDrillingStart, String dateOfDrillingEnd,List<String> restrictToIDList) {
+            String dateOfDrillingStart, String dateOfDrillingEnd,List<String> restrictToIDList,String optionalFilters) {
+        super(optionalFilters);
+
         this.boreholeName = boreholeName;
         this.custodian = custodian;
         this.dateOfDrillingStart = dateOfDrillingStart;
@@ -54,55 +58,64 @@ public class BoreholeFilter extends AbstractFilter {
                 .generateFilter(this.generateAndComparisonFragment(
                         this.generateBboxFragment(bbox,
                                 "gsml:collarLocation/gsml:BoreholeCollar/gsml:location"),
-                        this.generateFilterFragment()));
+                                this.generateFilterFragment()));
     }
 
     // -------------------------------------------------------- Private Methods
+    @Override
     protected String generateFilterFragment() {
-        List<String> parameterFragments = new ArrayList<String>();
-        if (boreholeName != null && !boreholeName.isEmpty()) {
-            parameterFragments.add(this.generatePropertyIsLikeFragment(
-                    "gml:name", this.boreholeName));
+        String optionalFilters = this.getxPathFilters();
+        List<String> parameterFragments =null;
+        if(optionalFilters == null || optionalFilters.isEmpty()){
+            parameterFragments = new ArrayList<String>();
+            if (boreholeName != null && !boreholeName.isEmpty()) {
+                parameterFragments.add(this.generatePropertyIsLikeFragment(
+                        "gml:name", this.boreholeName));
+            }
+
+            if (custodian != null && !custodian.isEmpty()) {
+                parameterFragments
+                .add(this
+                        .generatePropertyIsLikeFragment(
+                                "gsml:indexData/gsml:BoreholeDetails/gsml:coreCustodian/@xlink:title",
+                                this.custodian));
+            }
+
+
+            if (dateOfDrillingStart != null && !dateOfDrillingStart.isEmpty()
+                    && dateOfDrillingEnd != null && !dateOfDrillingEnd.isEmpty()) {
+                // AUS-2595 Due to the date compare does not like the
+                // PropertyIsLike, it was change to use PropertyIsGreaterThan & PropertyIsLessThan.
+                DateTimeFormatter formatter = DateTimeFormat
+                        .forPattern("yyyy-MM-dd");
+                DateTime dtStart = formatter
+                        .parseDateTime(this.dateOfDrillingStart);
+                DateTime dtEnd = formatter.parseDateTime(this.dateOfDrillingEnd);
+                // LJ: Need to minus 1 second for startDate to cover the time of
+                // 00:00:00
+                // Need to plus 1 second for endDate to cover the time of 00:00:00
+                dtStart = dtStart.minusSeconds(1);
+                dtEnd = dtEnd.plusSeconds(1);
+                DateTimeFormatter outFormatter = DateTimeFormat
+                        .forPattern("yyyy-MM-dd HH:mm:ss");
+                String utcDateofDrillingStart = outFormatter.print(dtStart);
+                String utcDateofDrillingEnd = outFormatter.print(dtEnd);
+                parameterFragments.add(this.generateDatePropertyIsGreaterThan(
+                        "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",false,
+                        this.generateFunctionDateParse(utcDateofDrillingStart)));
+
+                parameterFragments
+                .add(this
+                        .generateDatePropertyIsLessThan(
+                                "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",false,
+                                this.generateFunctionDateParse(utcDateofDrillingEnd)));
+
+            }
+        }else{
+            parameterFragments = this.generateParameterFragments();
         }
 
-        if (custodian != null && !custodian.isEmpty()) {
-            parameterFragments
-                    .add(this
-                            .generatePropertyIsLikeFragment(
-                                    "gsml:indexData/gsml:BoreholeDetails/gsml:coreCustodian/@xlink:title",
-                                    this.custodian));
-        }
 
-
-        if (dateOfDrillingStart != null && !dateOfDrillingStart.isEmpty()
-                && dateOfDrillingEnd != null && !dateOfDrillingEnd.isEmpty()) {
-            // AUS-2595 Due to the date compare does not like the
-            // PropertyIsLike, it was change to use PropertyIsGreaterThan & PropertyIsLessThan.
-            DateTimeFormatter formatter = DateTimeFormat
-                    .forPattern("yyyy-MM-dd");
-            DateTime dtStart = formatter
-                    .parseDateTime(this.dateOfDrillingStart);
-            DateTime dtEnd = formatter.parseDateTime(this.dateOfDrillingEnd);
-            // LJ: Need to minus 1 second for startDate to cover the time of
-            // 00:00:00
-            // Need to plus 1 second for endDate to cover the time of 00:00:00
-            dtStart = dtStart.minusSeconds(1);
-            dtEnd = dtEnd.plusSeconds(1);
-            DateTimeFormatter outFormatter = DateTimeFormat
-                    .forPattern("yyyy-MM-dd HH:mm:ss");
-            String utcDateofDrillingStart = outFormatter.print(dtStart);
-            String utcDateofDrillingEnd = outFormatter.print(dtEnd);
-            parameterFragments.add(this.generateDatePropertyIsGreaterThan(
-                    "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",false,
-                    this.generateFunctionDateParse(utcDateofDrillingStart)));
-
-            parameterFragments
-                    .add(this
-                            .generateDatePropertyIsLessThan(
-                                    "gsml:indexData/gsml:BoreholeDetails/gsml:dateOfDrilling",false,
-                                    this.generateFunctionDateParse(utcDateofDrillingEnd)));
-
-        }
 
         if (this.restrictToIDList != null && !this.restrictToIDList.isEmpty()) {
             List<String> idFragments = new ArrayList<String>();

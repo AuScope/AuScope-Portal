@@ -25,7 +25,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
                  hiddenParams = layer.filterCollection.hiddenParams;   
              }
              for(var idx in hiddenParams){
-                 if(hiddenParams[idx].type=="UIHiddenResourceAttribute"){
+                 if(hiddenParams[idx].type=="MANDATORY.UIHiddenResourceAttribute"){
                      param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
                  }else{
                      param[hiddenParams[idx].parameter] = hiddenParams[idx].value;

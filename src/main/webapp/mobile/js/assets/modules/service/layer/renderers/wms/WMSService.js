@@ -117,7 +117,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             param = {};
         }
         var onlineResources = LayerManagerService.getWMS(layer);            
-        RenderStatusService.setMaxValue(layer,onlineResources.length);
+        RenderStatusService.setMaxValue(layer,UtilitiesService.uniqueCountOfResourceByUrl(onlineResources));
         for(var index in onlineResources){ 
             if(UtilitiesService.filterProviderSkip(param.optionalFilters, onlineResources[index].url)){
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.SKIPPED);
@@ -159,7 +159,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
         var me = this;
         
             var onlineResources = LayerManagerService.getWMSFromCSW(cswRecord);            
-            RenderStatusService.setMaxValue(layer,onlineResources.length);
+            RenderStatusService.setMaxValue(layer,UtilitiesService.uniqueCountOfResourceByUrl(onlineResources));
             for(var index in onlineResources){  
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 GetWMSRelatedService.getWMSStyle(layer,onlineResources[index]).then(function(response){

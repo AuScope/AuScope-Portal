@@ -63,7 +63,7 @@ public class SF0BoreholeService extends BoreholeService {
     public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, String outputFormat) throws Exception {
         String filterString;
-        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, null, null,null);
+        SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, null, null,null,null);
         if (bbox == null) {
             filterString = sf0BoreholeFilter.getFilterStringAllRecords();
         } else {
@@ -85,14 +85,14 @@ public class SF0BoreholeService extends BoreholeService {
 
     @Override
     public String getFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,
-            int maxFeatures, FilterBoundingBox bbox, List<String> ids, Boolean justNVCL) throws Exception {
-        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids, null, justNVCL);
+            int maxFeatures, FilterBoundingBox bbox, List<String> ids, Boolean justNVCL,String optionalFilters) throws Exception {
+        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids, null, justNVCL,optionalFilters);
         return generateFilterString(filter, bbox);
     }
 
     public String getFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd,
-            int maxFeatures, FilterBoundingBox bbox, List<String> ids, List<String> identifiers, Boolean justNVCL) throws Exception {
-        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids, identifiers, justNVCL);
+            int maxFeatures, FilterBoundingBox bbox, List<String> ids, List<String> identifiers, Boolean justNVCL,String optionalFilters) throws Exception {
+        SF0BoreholeFilter filter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, ids, identifiers, justNVCL,optionalFilters);
         return generateFilterString(filter, bbox);
     }
 

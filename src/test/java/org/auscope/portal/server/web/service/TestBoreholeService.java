@@ -150,7 +150,7 @@ public class TestBoreholeService extends PortalTestClass {
         final FilterBoundingBox bbox = null;
 
         String filter = service.getFilter(nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, null, null);
+                filterDateStart, filterDateEnd, maxFeatures, bbox, null, null,null);
 
 
         String style = service.getStyle(Arrays.asList("style1"), Arrays.asList(filter), Arrays.asList("#2242c7"), null);
@@ -178,7 +178,7 @@ public class TestBoreholeService extends PortalTestClass {
         final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
         final String outputFormat = "text/xml";
         final String filterString = (new BoreholeFilter(boreholeName, custodian,
-                dateOfDrillingStart, dateOfDrillingEnd, restrictedIds))
+                dateOfDrillingStart, dateOfDrillingEnd, restrictedIds,null))
                 .getFilterStringAllRecords();
 
         context.checking(new Expectations() {
@@ -218,7 +218,7 @@ public class TestBoreholeService extends PortalTestClass {
         final String kmlString = "kmlString";
         final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
         final String filterString = (new BoreholeFilter(boreholeName, custodian,
-                dateOfDrillingStart, dateOfDrillingEnd, restrictedIds))
+                dateOfDrillingStart, dateOfDrillingEnd, restrictedIds,null))
                 .getFilterStringAllRecords();
 
         context.checking(new Expectations() {

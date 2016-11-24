@@ -1,7 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
@@ -27,7 +26,7 @@ import net.sf.json.JSONArray;
 
 /**
  * A controller class containing methods for supporting the Pressure DB layer and associated dataservice
- * 
+ *
  * @author Josh Vote
  *
  */
@@ -39,10 +38,10 @@ public class PressureDBController extends BasePortalController {
     private PressureDBService pressureDBService;
 
     private int BUFFERSIZE = 1024 * 32;
-    
+
     public HashMap<Integer, String> PRESSURE_DB_COLOUR_MAP = new HashMap<Integer, String>();
     public HashMap<Integer, Integer> PRESSURE_DB_LENGTH_MAP = new HashMap<Integer, Integer>();
-    public HashMap<Integer, Integer> PRESSURE_DB_ELEVATION_MAP = new HashMap<Integer, Integer>();   
+    public HashMap<Integer, Integer> PRESSURE_DB_ELEVATION_MAP = new HashMap<Integer, Integer>();
     public HashMap<String, String> PRESSURE_DB_POI_MAP;
 
     @Autowired
@@ -56,38 +55,38 @@ public class PressureDBController extends BasePortalController {
         PRESSURE_DB_COLOUR_MAP.put(5, "#80FF00");
         PRESSURE_DB_COLOUR_MAP.put(6, "#FFFF00");
         PRESSURE_DB_COLOUR_MAP.put(7, "#FF8000");
-        PRESSURE_DB_COLOUR_MAP.put(8, "#FF0000");    
-        
+        PRESSURE_DB_COLOUR_MAP.put(8, "#FF0000");
+
         PRESSURE_DB_LENGTH_MAP.put(0, 500);
         PRESSURE_DB_LENGTH_MAP.put(1, 1000);
         PRESSURE_DB_LENGTH_MAP.put(2, 1500);
         PRESSURE_DB_LENGTH_MAP.put(3, 2000);
         PRESSURE_DB_LENGTH_MAP.put(4, 2500);
         PRESSURE_DB_LENGTH_MAP.put(5, 3000);
-        PRESSURE_DB_LENGTH_MAP.put(6, 3500);    
+        PRESSURE_DB_LENGTH_MAP.put(6, 3500);
         PRESSURE_DB_LENGTH_MAP.put(7, 4000);
-        PRESSURE_DB_LENGTH_MAP.put(8, 4500);   
-        
+        PRESSURE_DB_LENGTH_MAP.put(8, 4500);
+
         PRESSURE_DB_ELEVATION_MAP.put(0, -200);
         PRESSURE_DB_ELEVATION_MAP.put(1, -150);
         PRESSURE_DB_ELEVATION_MAP.put(2, -100);
         PRESSURE_DB_ELEVATION_MAP.put(3, -50);
         PRESSURE_DB_ELEVATION_MAP.put(4, 0);
         PRESSURE_DB_ELEVATION_MAP.put(5, 50);
-        PRESSURE_DB_ELEVATION_MAP.put(6, 100);    
+        PRESSURE_DB_ELEVATION_MAP.put(6, 100);
         PRESSURE_DB_ELEVATION_MAP.put(7, 150);
-        PRESSURE_DB_ELEVATION_MAP.put(8, 200);   
-        
+        PRESSURE_DB_ELEVATION_MAP.put(8, 200);
+
         PRESSURE_DB_POI_MAP = new HashMap<String, String>();
         PRESSURE_DB_POI_MAP.put("Elevation", "public:measurement_general");
-        PRESSURE_DB_POI_MAP.put("Length", "public:measurement_index");        
-        
+        PRESSURE_DB_POI_MAP.put("Length", "public:measurement_index");
+
     }
     /**
-     * Handles requests for the doGetPropertyOfInterest 
+     * Handles requests for the doGetPropertyOfInterest
      *
      * Will return a JSON encoded PropertyOfInterest
-     * 
+     *
      * @param serviceUrl
      * @return
      */
@@ -108,7 +107,7 @@ public class PressureDBController extends BasePortalController {
      * Handles requests for the getAvailableOM method
      *
      * Will return a JSON encoded AvailableOMResponse
-     * 
+     *
      * @param serviceUrl
      * @param wellID
      * @return
@@ -132,7 +131,7 @@ public class PressureDBController extends BasePortalController {
      * Handles requests for the download method
      *
      * Will return a stream directly from the service
-     * 
+     *
      * @param serviceUrl
      * @param wellID
      * @return
@@ -171,7 +170,7 @@ public class PressureDBController extends BasePortalController {
      * Handles requests for the pressuredb-plot method
      *
      * Will return a JSON encoded pressuredb-plot data
-     * 
+     *
      * @param serviceUrl
      * @param wellID
      * @return
@@ -184,7 +183,7 @@ public class PressureDBController extends BasePortalController {
             return generateJSONResponseMAV(true, response, "");
         } catch (Exception e) {
             log.warn(String.format("Error making pressure-db download request for '%1$s' to '%2$s': %3$s",
-                            wellID, serviceUrl, e));
+                    wellID, serviceUrl, e));
             log.debug("Exception: ", e);
             return generateJSONResponseMAV(false, null, "Failure communicating with Pressure DB data service");
         }
@@ -201,9 +200,10 @@ public class PressureDBController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "color", defaultValue = "") String color,
-            @RequestParam(required = false, value = "ccProperty", defaultValue = "") String ccProperty ,     
-            @RequestParam(required = false, value = "ccLevels", defaultValue = "9") int ccLevels )               
-            throws Exception {
+            @RequestParam(required = false, value = "ccProperty", defaultValue = "") String ccProperty ,
+            @RequestParam(required = false, value = "ccLevels", defaultValue = "9") int ccLevels,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters)
+                    throws Exception {
 
         String style = "";
         int propertyMode = 0;
@@ -223,9 +223,9 @@ public class PressureDBController extends BasePortalController {
             style = getStyle("gsmlp:BoreholeView", "gsmlp:shape", "#2242c7");
             break;
         }
-        
-        //String style = getColorCodedStyle("gsmlp:BoreholeView" , "gsmlp:elevation_m",ccLevels);        
-        
+
+        //String style = getColorCodedStyle("gsmlp:BoreholeView" , "gsmlp:elevation_m",ccLevels);
+
         response.setContentType("text/xml");
         ByteArrayInputStream styleStream = new ByteArrayInputStream(
                 style.getBytes());
@@ -235,77 +235,77 @@ public class PressureDBController extends BasePortalController {
 
         styleStream.close();
         outputStream.close();
-    } 
+    }
 
     String getStyle(String layerName, String geometryName, String color) {
-    	
-    String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
-            + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-            + "<NamedLayer>" + "<Name>"
-            + layerName
-            + "</Name>"
-            + "<UserStyle>"
-            + "<Name>portal-style</Name>"
-            + "<Title>portal-style</Title>"
-            + "<Abstract>portal-style</Abstract>"
-            + "<IsDefault>1</IsDefault>"
-            + "<FeatureTypeStyle>"
-            + "<Rule>"
-            + "<Name>Boreholes</Name>"
-            + "<PointSymbolizer>"
-            + "<Geometry><ogc:PropertyName>" + geometryName + "</ogc:PropertyName></Geometry>"
-            + "<Graphic>"
-            + "<Mark>"
-            + "<WellKnownName>square</WellKnownName>"
-            + "<Fill>"
-            + "<CssParameter name=\"fill\">"
-            + color
-            + "</CssParameter>"
-            + "</Fill>"
-            + "</Mark>"
-            + "<Size>8</Size>"
-            + "</Graphic>"
-            + "</PointSymbolizer>"
-            + "</Rule>"
-            + "</FeatureTypeStyle>"
-            + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
 
-    return style;
-	}    
+        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
+                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>"
+                + layerName
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>portal-style</Name>"
+                + "<Title>portal-style</Title>"
+                + "<Abstract>portal-style</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>Boreholes</Name>"
+                + "<PointSymbolizer>"
+                + "<Geometry><ogc:PropertyName>" + geometryName + "</ogc:PropertyName></Geometry>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">"
+                + color
+                + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>8</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+
+        return style;
+    }
     /**
-    * Returns the style for color coding.
-    * 
-    * @param stylefilterRules
-    *            - filter rules for color coding
-    * @param ccc
-    *            - ColorCodingConfig object
-    * @param name
-    *            - the name of the layer.
-    * @return
-    */
-   public String getColorCodedStyle(String layerName,String propertyName,int ccLevels,int propertyMode) {
-	   String styleRules = getStyleRules(propertyName,ccLevels, propertyMode);
-       String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-    		   + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
-               + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
-               + "<NamedLayer>" 
-               + "<Name>" 
-               + layerName 
-               + "</Name>"
-               + "<UserStyle>"
-               + "<Name>portal-style</Name>"
-               + "<Title>portal-style</Title>"
-               + "<Abstract>portal-style</Abstract>"
-               + "<IsDefault>1</IsDefault>"
-               + "<FeatureTypeStyle>"   	
-               + styleRules
-               + "</FeatureTypeStyle>" 
-               + "</UserStyle>"
-               + "</NamedLayer>" 
-               + "</StyledLayerDescriptor>";
-       return style;
-   }
+     * Returns the style for color coding.
+     *
+     * @param stylefilterRules
+     *            - filter rules for color coding
+     * @param ccc
+     *            - ColorCodingConfig object
+     * @param name
+     *            - the name of the layer.
+     * @return
+     */
+    public String getColorCodedStyle(String layerName,String propertyName,int ccLevels,int propertyMode) {
+        String styleRules = getStyleRules(propertyName,ccLevels, propertyMode);
+        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
+                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>"
+                + "<Name>"
+                + layerName
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>portal-style</Name>"
+                + "<Title>portal-style</Title>"
+                + "<Abstract>portal-style</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + styleRules
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>"
+                + "</NamedLayer>"
+                + "</StyledLayerDescriptor>";
+        return style;
+    }
 
     public String getStyleRules(String propertyName, int numRules,
             int propertyMode) {
@@ -320,32 +320,32 @@ public class PressureDBController extends BasePortalController {
                 + "<Title>Boreholes less than "
                 + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
                         .get(i) : PRESSURE_DB_ELEVATION_MAP.get(i))
-                + "</Title>"
-                + "<Abstract>Light purple square boxes</Abstract>"
-                + "<ogc:Filter>"
-                + "	<ogc:PropertyIsLessThan matchCase=\"false\" >"
-                + "<ogc:PropertyName>"
-                + propertyName
-                + "</ogc:PropertyName>"
-                + "<ogc:Literal>"
-                + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                        .get(i) : PRESSURE_DB_ELEVATION_MAP.get(i))
-                + "</ogc:Literal>"
-                + "</ogc:PropertyIsLessThan>"
-                + "</ogc:Filter>"
-                + "<PointSymbolizer>"
-                + "<Graphic>"
-                + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
-                + "<Fill>"
-                + "<CssParameter name=\"fill\">"
-                + PRESSURE_DB_COLOUR_MAP.get(i)
-                + "</CssParameter>"
-                + "</Fill>"
-                + "</Mark>"
-                + "<Size>8</Size>"
-                + "</Graphic>"
-                + "</PointSymbolizer>" + "</Rule>";
+                        + "</Title>"
+                        + "<Abstract>Light purple square boxes</Abstract>"
+                        + "<ogc:Filter>"
+                        + "	<ogc:PropertyIsLessThan matchCase=\"false\" >"
+                        + "<ogc:PropertyName>"
+                        + propertyName
+                        + "</ogc:PropertyName>"
+                        + "<ogc:Literal>"
+                        + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
+                                .get(i) : PRESSURE_DB_ELEVATION_MAP.get(i))
+                                + "</ogc:Literal>"
+                                + "</ogc:PropertyIsLessThan>"
+                                + "</ogc:Filter>"
+                                + "<PointSymbolizer>"
+                                + "<Graphic>"
+                                + "<Mark>"
+                                + "<WellKnownName>square</WellKnownName>"
+                                + "<Fill>"
+                                + "<CssParameter name=\"fill\">"
+                                + PRESSURE_DB_COLOUR_MAP.get(i)
+                                + "</CssParameter>"
+                                + "</Fill>"
+                                + "</Mark>"
+                                + "<Size>8</Size>"
+                                + "</Graphic>"
+                                + "</PointSymbolizer>" + "</Rule>";
 
         for (i = 1; i < (numRules - 1); i++) {
             int low = (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i - 1)
@@ -398,34 +398,34 @@ public class PressureDBController extends BasePortalController {
                 + "<Title>Boreholes greater than "
                 + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
                         .get(i - 1) : PRESSURE_DB_ELEVATION_MAP.get(i - 1))
-                + "</Title>"
-                + "<Abstract>Light purple square boxes</Abstract>"
-                + "<ogc:Filter>"
-                + "	<ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"
-                + "<ogc:PropertyName>"
-                + propertyName
-                + "</ogc:PropertyName>"
-                + "<ogc:Literal>"
-                + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                        .get(i - 1) : PRESSURE_DB_ELEVATION_MAP.get(i - 1))
-                + "</ogc:Literal>"
-                + "</ogc:PropertyIsGreaterThanOrEqualTo>"
-                + "</ogc:Filter>"
-                + "<PointSymbolizer>"
-                + "<Graphic>"
-                + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
-                + "<Fill>"
-                + "<CssParameter name=\"fill\">"
-                + PRESSURE_DB_COLOUR_MAP.get(i)
-                + "</CssParameter>"
-                + "</Fill>"
-                + "</Mark>"
-                + "<Size>8</Size>"
-                + "</Graphic>"
-                + "</PointSymbolizer>" + "</Rule>";
+                        + "</Title>"
+                        + "<Abstract>Light purple square boxes</Abstract>"
+                        + "<ogc:Filter>"
+                        + "	<ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"
+                        + "<ogc:PropertyName>"
+                        + propertyName
+                        + "</ogc:PropertyName>"
+                        + "<ogc:Literal>"
+                        + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
+                                .get(i - 1) : PRESSURE_DB_ELEVATION_MAP.get(i - 1))
+                                + "</ogc:Literal>"
+                                + "</ogc:PropertyIsGreaterThanOrEqualTo>"
+                                + "</ogc:Filter>"
+                                + "<PointSymbolizer>"
+                                + "<Graphic>"
+                                + "<Mark>"
+                                + "<WellKnownName>square</WellKnownName>"
+                                + "<Fill>"
+                                + "<CssParameter name=\"fill\">"
+                                + PRESSURE_DB_COLOUR_MAP.get(i)
+                                + "</CssParameter>"
+                                + "</Fill>"
+                                + "</Mark>"
+                                + "<Size>8</Size>"
+                                + "</Graphic>"
+                                + "</PointSymbolizer>" + "</Rule>";
         styleRules = header + middle + tail;
         return styleRules;
     }
-    
+
 }

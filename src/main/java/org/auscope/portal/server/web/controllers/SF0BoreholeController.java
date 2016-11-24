@@ -99,9 +99,10 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "analyticsJobId") String analyticsJobId,
             @RequestParam(required = false, value = "failIds") String failIds,
             @RequestParam(required = false, value = "errorIds") String errorIds,
-            @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged )
+            @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters)
 
-            throws Exception {
+                    throws Exception {
 
         FilterBoundingBox bbox = null;
         //				FilterBoundingBox
@@ -133,32 +134,32 @@ public class SF0BoreholeController extends BasePortalController {
         List<Mark> filterMarks = new ArrayList<Mark>();
         String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         if (StringUtils.isNotEmpty(analyticsJobId)) {
-          //Generate a style for displaying pass/fail/error holes
+            //Generate a style for displaying pass/fail/error holes
             AnalyticalJobResults analyticsResults = nvclDataService.getProcessingResults(analyticsJobId);
 
             if (!analyticsResults.getErrorBoreholes().isEmpty()) {
                 filterNames.add("Error Boreholes");
                 filterColors.add("#ff0000");
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true));
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true,optionalFilters));
                 filterMarks.add(Mark.X);
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
                 filterColors.add("#8390C6");
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true));
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true,optionalFilters));
                 filterMarks.add(Mark.SQUARE);
             }
 
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
                 filterColors.add(color.isEmpty() ? "#2242c7" : color);
-                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true));
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true,optionalFilters));
                 filterMarks.add(Mark.SQUARE);
             }
         } else {
             //Generate a Hylogged vs Non Hylogged style
-            filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, null, null));
+            filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, null, null,optionalFilters));
             filterColors.add(color.isEmpty() ? "#2242c7" : color);
             filterNames.add("Boreholes");
             filterMarks.add(Mark.SQUARE);
@@ -168,7 +169,7 @@ public class SF0BoreholeController extends BasePortalController {
             if (justNVCL && this.boreholeService.namespaceSupportsHyloggerFilter(gsmlpNameSpace)) {
                 filters.add(this.boreholeService.getFilter(boreholeName,
                         custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
-                        hyloggerBoreholeIDs, justNVCL));
+                        hyloggerBoreholeIDs, justNVCL,optionalFilters));
                 filterColors.add("#FF0000");
                 filterNames.add("Hylogged");
                 filterMarks.add(Mark.SQUARE);
