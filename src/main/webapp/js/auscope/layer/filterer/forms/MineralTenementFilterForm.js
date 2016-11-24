@@ -15,11 +15,6 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
 
         var cswRecords = config.layer.get('cswRecords');
 
-        var filterer=config.layer.get('filterer');
-       
-	filterer.setParameter('opacity',this.OPACITY,true);
-
-
         //Set up a map of admin areas + URL's that belong to each
         var adminAreasMap = {};
         var bbox = null;
@@ -170,6 +165,10 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
                 	xtype: 'hidden',
                 	name: 'cswBbox',
                 	value: Ext.JSON.encode(bbox)
+                },{
+                    xtype: 'hidden',
+                    name: 'opacity',
+                    value: this.OPACITY
                 }]
             }]
         });
