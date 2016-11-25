@@ -29,6 +29,10 @@ html,body {
 	color: #3dd6ad
 }
 
+.small-icon-font{
+	font-size:0.5em
+}
+
 .btn-red { 
   color: #FFFFFF; 
   background-color: #D14F30; 
