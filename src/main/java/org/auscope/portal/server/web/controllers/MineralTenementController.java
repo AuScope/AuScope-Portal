@@ -14,6 +14,7 @@ import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
+import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
@@ -106,6 +107,38 @@ public class MineralTenementController extends BasePortalController {
 
         InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
         FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
+    }
+    
+    
+        
+    @RequestMapping("/getMineralTenementCount.do")
+    public ModelAndView getMineralTenementCount(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "tenementName") String tenementName,
+            @RequestParam(required = false, value = "owner") String owner,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+                    throws Exception {
+
+        // The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
+        // This will in turn limit the number of points returned to 200
+        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
+        MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
+        WFSCountResponse response = null;
+        try {
+            response = this.mineralTenementService.getTenementCount(serviceUrl, tenementName, owner,
+                    maxFeatures, bbox, mineralTenementServiceProviderType);
+
+            
+        } catch (Exception e) {
+            log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
+            log.debug("Exception: ", e);
+            return this.generateExceptionResponse(e, serviceUrl);
+        }
+      
+        
+        return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
     }
 
     @RequestMapping("/doMineralTenementDownload.do")
