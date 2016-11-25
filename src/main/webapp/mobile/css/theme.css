@@ -9,8 +9,19 @@ html,body {
 
 
 .main-search{
-	padding-bottom:10px;
+	padding-top:1.5em;	
 	padding-left:10px;
+}
+
+#layer-menu{
+    padding-left:0.7em;
+    padding-right:0.7em;
+    font-size:1em;	   
+}
+
+#layer-menu span{
+    font-size:0.8em;	
+    display : block;
 }
 
 
@@ -29,8 +40,9 @@ html,body {
 	color: #3dd6ad
 }
 
-.small-icon-font{
-	font-size:0.5em
+.border-right{
+	border-right:2px solid;
+	border-right-color:#808000
 }
 
 .btn-red { 
