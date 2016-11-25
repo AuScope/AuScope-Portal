@@ -59,7 +59,12 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
              });
         }else{
             var deferred = $q.defer();
-            deferred.resolve(null);
+            var response={
+                    onlineResource:onlineResource,
+                    style : null 
+            };
+             
+            deferred.resolve(response);
             return deferred.promise;
         }
     };
