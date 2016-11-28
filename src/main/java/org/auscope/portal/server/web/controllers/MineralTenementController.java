@@ -64,7 +64,7 @@ public class MineralTenementController extends BasePortalController {
                    response = this.mineralTenementService.getAllTenements(serviceUrl, tenementName, owner,
                        maxFeatures, bbox, null, mineralTenementServiceProviderType);
                } catch (Exception e) {
-               log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
+                   log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
                    log.debug("Exception: ", e);
                    return this.generateExceptionResponse(e, serviceUrl);
                }
@@ -157,9 +157,12 @@ public class MineralTenementController extends BasePortalController {
         String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,
                 bbox, null,  mineralTenementServiceProviderType); //VT:get filter from service
 
+        // Some ArcGIS servers do not support filters (not enabled?) 
+        if (mineralTenementServiceProviderType == MineralTenementServiceProviderType.ArcGIS) {
+            filter = "";
+        }
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
-
         InputStream results = this.mineralTenementService.downloadWFS(serviceUrl, mineralTenementServiceProviderType.featureType(), filter, null);
         FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
         outputStream.close();
@@ -218,10 +221,6 @@ public class MineralTenementController extends BasePortalController {
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             HttpServletResponse response) throws Exception {
         String style = "";
-        if (name == null || name.equals("")) {
-            MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
-            name = mineralTenementServiceProviderType.featureType();
-        }
         switch (ccProperty) {
         case "TenementType" :
             style = this.getColorCodeStyleForType(name, tenementType, owner, size, endDate);
