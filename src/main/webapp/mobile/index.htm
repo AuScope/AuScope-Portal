@@ -119,8 +119,8 @@
 	         
 		    
 		      
-			<layer-panel ng-show="showlayerPanel" class='layer-panel animated fadeInLeft' ></layer-panel>
-			<querier-panel ng-show="showQuerierPanel" class='layer-panel animated fadeInLeft'  active-view="active" show-querier-panel = "showQuerierPanel" ></querier-panel>
+			<layer-panel ng-show="showlayerPanel" class='layer-panel animated fadeInLeft' ng-swipe-left="showlayerPanel = false" ng-swipe-disable-mouse></layer-panel>
+			<querier-panel ng-show="showQuerierPanel" class='layer-panel animated fadeInLeft'  active-view="active" show-querier-panel = "showQuerierPanel" ng-swipe-left="showQuerierPanel = false"></querier-panel>
 			
 			<div class="menu-icon-toggle animated zoomIn" ng-controller="layerSearchCtrl as searchCtrl">                
                 <button ng-click="searchCtrl.toggleMenu()" class="animated zoomIn" style="padding-left: 3px;padding-right: 3px;font-size: 2.2em;">
