@@ -36,10 +36,10 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                 var deltaY = 0;//0.00058;
 
                 
-                var bbox =      (top.lng() + deltaX) + "," +
-                                (bot.lat() + deltaY) + "," +
-                                (bot.lng() + deltaX) + "," +
-                                (top.lat() + deltaY);
+                var bbox =      (bot.lat() + deltaY) + "," +
+                                (top.lng() + deltaX) + "," +                                
+                                (top.lat() + deltaY) + "," +
+                                (bot.lng() + deltaX);
       
                 //base WMS URL
                 var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
@@ -48,8 +48,7 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                 url += "&VERSION=1.3.0";
                 if(style){
                     url += "&SLD_BODY=" + encodeURIComponent(style);
-                }
-                url += "&TILED=TRUE";
+                }                
                 url += "&STYLES=";                
                 url += "&LAYERS=" + myOnlineResource.name; 
                 url += "&FORMAT=image/png" ; 

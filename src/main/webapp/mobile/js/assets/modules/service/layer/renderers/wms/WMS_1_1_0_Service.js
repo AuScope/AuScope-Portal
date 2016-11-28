@@ -47,14 +47,13 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                url += "&VERSION=1.1.1";  //WMS version  
                if(style){
                    url += "&SLD_BODY=" + encodeURIComponent(style);
-               }
-               url += "&TILED=TRUE";
+               }               
                url += "&DISPLAYOUTSIDEMAXEXTENT=true";  
                url += "&EXCEPTIONS=BLANK";
                url += "&LAYERS=" + myOnlineResource.name; //WMS layers
                url += "&FORMAT=image/png" ; //WMS format
                url += "&transparent=true" ; //WMS format               
-               //url += "&BGCOLOR=0xFF00FF";  
+               url += "&BGCOLOR=0xFFFFFF";  
                url += "&TRANSPARENT=TRUE";
                url += "&SRS=EPSG:4326";     //set WGS84 
                url += "&BBOX=" + bbox;      // set bounding box
