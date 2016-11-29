@@ -131,7 +131,7 @@ public class TestWCSController extends PortalTestClass {
                         with(outputCrs),
                         with(inputCrs),
                         with(any(CSWGeographicBoundingBox.class)),
-                        with(any(TimeConstraint.class)),
+                        with((TimeConstraint) null),
                         with(aMap(new String[] {"param1", "param2"}, new String[] {"1/2/3,5", "4"})));
                 will(returnValue(new ByteArrayInputStream(geotiffData)));
 
