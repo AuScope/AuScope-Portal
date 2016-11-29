@@ -3,6 +3,10 @@
  */
 Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
     extend: 'portal.layer.filterer.BaseFilterForm',
+    /*
+     * Hardcode opacity to handle the fact that ArcGIS does not handle opacity properly
+    */
+    OPACITY : 0.6,
 
     /**
      * Accepts a config for portal.layer.filterer.BaseFilterForm
@@ -10,7 +14,6 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
     constructor : function(config) {
 
         var cswRecords = config.layer.get('cswRecords');
-
 
         //Set up a map of admin areas + URL's that belong to each
         var adminAreasMap = {};
@@ -162,6 +165,10 @@ Ext.define('auscope.layer.filterer.forms.MineralTenementFilterForm', {
                 	xtype: 'hidden',
                 	name: 'cswBbox',
                 	value: Ext.JSON.encode(bbox)
+                },{
+                    xtype: 'hidden',
+                    name: 'opacity',
+                    value: this.OPACITY
                 }]
             }]
         });
