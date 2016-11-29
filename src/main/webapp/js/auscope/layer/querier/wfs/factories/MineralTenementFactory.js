@@ -19,7 +19,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MineralTenementFactory', {
     /**
      * Generates a simple tree panel that represents the specified node
      */
-    parseNode : function(domNode, wfsUrl) {
+    parseNode : function(domNode, wfsUrl, applicationProfile) {
         var bf = this;
 
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
@@ -33,6 +33,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MineralTenementFactory', {
         var applicationDate = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'mt:applicationDate');
         var expireDate = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'mt:expireDate');
         var status_uri = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'mt:status_uri');
+        var identifier = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'mt:identifier');
 
         if(applicationDate){
             applicationDate = new Date(applicationDate.replace("Z", '')).toDateString();
@@ -100,7 +101,15 @@ Ext.define('auscope.layer.querier.wfs.factories.MineralTenementFactory', {
                 text : 'Download Feature',
                 iconCls : 'download',
                 handler : function() {
-                    var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, domNode.nodeName, gmlId);
+                    var featureId = gmlId;
+                    // ArcGIS outputs its feature id in a different place, at the end of the 'mt:identifier' string
+                    if (applicationProfile && applicationProfile.indexOf("Esri:ArcGIS Server") > -1) {
+                        var idPos = identifier.lastIndexOf('/');
+                        if (idPos>=0) {
+                            featureId = identifier.substr(idPos+1);
+                        }
+                    }
+                    var getXmlUrl = bf._makeFeatureRequestUrl(wfsUrl, domNode.nodeName, featureId);
                     portal.util.FileDownloader.downloadFile('downloadGMLAsZip.do',{
                         serviceUrls : getXmlUrl
                     });

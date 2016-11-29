@@ -9,7 +9,7 @@ package org.auscope.portal.mineraloccurrence;
 public class MineralTenementCCFilter extends  MineralTenementFilter {
 
     public MineralTenementCCFilter(String name, String tenementType, String owner, String size, String endDate) {
-        super(name, tenementType, owner, size, endDate);
+        super(name, tenementType, owner, size, endDate, null);
 
     }
     /**

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
+import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.auscope.portal.core.uifilter.GenericFilter;
 
 /**
@@ -22,22 +23,24 @@ public class MineralTenementFilter extends GenericFilter {
      * @param mineName
      *            the main name
      */
-    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate,String status,String optionalFilters) {
+    public MineralTenementFilter(String tenementName, String tenementType, String owner, String size, String endDate,String status,String optionalFilters, MineralTenementServiceProviderType mineralTenementServiceProviderType) {
         super(optionalFilters);
+	if (mineralTenementServiceProviderType == null) {
+            mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
+        }
         fragments = new ArrayList<String>();
 
         if(optionalFilters == null || optionalFilters.isEmpty()){
 
-
-            if (name != null && !name.isEmpty()) {
-                fragments.add(this.generatePropertyIsLikeFragment("mt:name", name));
+            if (tenementName != null && !tenementName.isEmpty()) {
+                fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.nameField(), "*" + tenementName + "*"));
             }
             if (tenementType != null && !tenementType.isEmpty()) {
                 fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
             }
 
             if (owner != null && !owner.isEmpty()) {
-                fragments.add(this.generatePropertyIsLikeFragment("mt:owner", owner));
+	        fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
             }
 
             if (size != null && !size.isEmpty()) {
@@ -62,18 +65,20 @@ public class MineralTenementFilter extends GenericFilter {
      * @param mineName
      *            the main name
      */
-    public MineralTenementFilter(String name, String tenementType, String owner, String size, String endDate) {
-
+    public MineralTenementFilter(String tenementName, String tenementType, String owner, String size, String endDate, MineralTenementServiceProviderType mineralTenementServiceProviderType) {
+	if (mineralTenementServiceProviderType == null) {
+            mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
+        }
         fragments = new ArrayList<String>();
-        if (name != null && !name.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:name", name));
+        if (tenementName != null && !tenementName.isEmpty()) {
+            fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.nameField(), "*" + tenementName + "*"));
         }
         if (tenementType != null && !tenementType.isEmpty()) {
             fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", tenementType));
         }
 
         if (owner != null && !owner.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:owner", owner));
+	    fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
         }
 
         if (size != null && !size.isEmpty()) {

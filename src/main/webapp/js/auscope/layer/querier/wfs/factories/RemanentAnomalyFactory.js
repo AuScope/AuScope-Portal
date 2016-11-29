@@ -19,7 +19,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
     /**
      * Generates a simple panel that represents the specified node
      */
-    parseNode : function(domNode, wfsUrl, rootCfg) {
+    parseNode : function(domNode, wfsUrl) {
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var actualId = gmlId.substring('anomaly.'.length);
 
@@ -122,7 +122,7 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
             }]
         };
 
-        return Ext.create('portal.layer.querier.BaseComponent', Ext.apply(panelConfig, rootCfg));
+        return Ext.create('portal.layer.querier.BaseComponent', panelConfig);
     },
 
     /**
