@@ -161,6 +161,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
          var mq = window.matchMedia( "(max-width: 658px)" );
          this.mainMap = new google.maps.Map(document.getElementById('google-map-main'), {
            center: {lat: -28.397, lng: 132.644},
+           minZoom:(mq.matches? 3 : 4),
            zoom: (mq.matches? 3 : 5),
            mapTypeControlOptions: {
                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU ,

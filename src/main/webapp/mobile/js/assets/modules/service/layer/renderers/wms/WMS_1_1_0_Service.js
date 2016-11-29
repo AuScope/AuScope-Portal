@@ -31,13 +31,19 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
 
                //corrections for the slight shift of the SLP (mapserver)
-               var deltaX = 0;//0.0013;
-               var deltaY = 0;//0.00058;
+               var deltaX = 0; //0.0013;
+               var deltaY = 0; //0.00058;
 
+               var leftLng = top.lng() + deltaX;
+               leftLng = leftLng < 0?leftLng + 360:leftLng;
                
-               var bbox =      (top.lng() + deltaX) + "," +
+               var rightLng = (bot.lng()+deltaX);
+               rightLng = rightLng < 0?rightLng + 360:rightLng;
+               
+               
+               var bbox =      leftLng + "," +
                                (bot.lat() + deltaY) + "," +
-                               (bot.lng() + deltaX) + "," +
+                               rightLng + "," +
                                (top.lat() + deltaY);
      
                //base WMS URL
@@ -52,8 +58,7 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                url += "&EXCEPTIONS=BLANK";
                url += "&LAYERS=" + myOnlineResource.name; //WMS layers
                url += "&FORMAT=image/png" ; //WMS format
-               url += "&transparent=true" ; //WMS format               
-               url += "&BGCOLOR=0xFFFFFF";  
+               url += "&transparent=true" ; //WMS format                             
                url += "&TRANSPARENT=TRUE";
                url += "&SRS=EPSG:4326";     //set WGS84 
                url += "&BBOX=" + bbox;      // set bounding box

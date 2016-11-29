@@ -34,12 +34,18 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                 //corrections for the slight shift of the SLP (mapserver)
                 var deltaX = 0;//0.0013;
                 var deltaY = 0;//0.00058;
+                
+                var leftLng = top.lng() + deltaX;
+                leftLng = leftLng < 0?leftLng + 360:leftLng;
+                
+                var rightLng = (bot.lng()+deltaX);
+                rightLng = rightLng < 0?180:rightLng;
 
                 
                 var bbox =      (bot.lat() + deltaY) + "," +
-                                (top.lng() + deltaX) + "," +                                
+                                leftLng + "," +                                
                                 (top.lat() + deltaY) + "," +
-                                (bot.lng() + deltaX);
+                                rightLng;
       
                 //base WMS URL
                 var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
@@ -51,8 +57,7 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                 }                
                 url += "&STYLES=";                
                 url += "&LAYERS=" + myOnlineResource.name; 
-                url += "&FORMAT=image/png" ; 
-                url += "&BGCOLOR=0xFFFFFF";  
+                url += "&FORMAT=image/png" ;                
                 url += "&TRANSPARENT=TRUE";
                 url += "&CRS=CRS:84";     //might need to set to CRS:84 for 1.3.0
                 url += "&BBOX=" + bbox;      
