@@ -25,7 +25,7 @@ public class MineralTenementFilter extends GenericFilter {
      */
     public MineralTenementFilter(String tenementName, String tenementType, String owner, String size, String endDate,String status,String optionalFilters, MineralTenementServiceProviderType mineralTenementServiceProviderType) {
         super(optionalFilters);
-	if (mineralTenementServiceProviderType == null) {
+        if (mineralTenementServiceProviderType == null) {
             mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
         }
         fragments = new ArrayList<String>();
@@ -40,7 +40,7 @@ public class MineralTenementFilter extends GenericFilter {
             }
 
             if (owner != null && !owner.isEmpty()) {
-	        fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
+            fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
             }
 
             if (size != null && !size.isEmpty()) {
@@ -66,7 +66,7 @@ public class MineralTenementFilter extends GenericFilter {
      *            the main name
      */
     public MineralTenementFilter(String tenementName, String tenementType, String owner, String size, String endDate, MineralTenementServiceProviderType mineralTenementServiceProviderType) {
-	if (mineralTenementServiceProviderType == null) {
+        if (mineralTenementServiceProviderType == null) {
             mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
         }
         fragments = new ArrayList<String>();
@@ -78,7 +78,7 @@ public class MineralTenementFilter extends GenericFilter {
         }
 
         if (owner != null && !owner.isEmpty()) {
-	    fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
+            fragments.add(this.generatePropertyIsLikeFragment(mineralTenementServiceProviderType.ownerField(), owner));
         }
 
         if (size != null && !size.isEmpty()) {
