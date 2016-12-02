@@ -14,10 +14,11 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
      * Generate wms 1.3 google.maps.ImageMapType layer 
      * @method generateLayer
      * @param onlineResource - WMS online resource
-     * @param style - sld if defined else default server sld will be used
+     * @param sld - sld if defined else default server sld will be used
+     * @param sldUrl - url to the sld file if the sld is too long
      * @return ImageMapType - google.maps.ImageMapType
      */
-    this.generateLayer = function(onlineResource,style){
+    this.generateLayer = function(onlineResource,sld,sldUrl){
         
         var myOnlineResource =  onlineResource;
         
@@ -46,25 +47,40 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                                 leftLng + "," +                                
                                 (top.lat() + deltaY) + "," +
                                 rightLng;
+
+                //VT: if the sld is too long, we will proxy the request via the server using httpPost
+                if(sldUrl){
+                    var url="../getWMSMapViaProxy.do?";                   
+                    var parameter = {
+                            url :  myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":""),
+                            layer: myOnlineResource.name,
+                            bbox:bbox,
+                            sldUrl : "/" + sldUrl,                         
+                            version : "1.3.0",                      
+                    };                                      
+                    return url+=$.param(parameter);                                        
+                }else{
+                  //base WMS URL
+                    var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
+                    url += "&REQUEST=GetMap"; 
+                    url += "&SERVICE=WMS";    
+                    url += "&VERSION=1.3.0";
+                    if(sld){
+                        url += "&SLD_BODY=" + encodeURIComponent(sld);
+                    }                
+                    url += "&STYLES=";                
+                    url += "&LAYERS=" + myOnlineResource.name; 
+                    url += "&FORMAT=image/png" ;                
+                    url += "&TRANSPARENT=TRUE";
+                    url += "&CRS=EPSG:4326";     //might need to set to CRS:84 for 1.3.0
+                    url += "&BBOX=" + bbox;      
+                    url += "&WIDTH=256";        
+                    url += "&HEIGHT=256";
+                    return url;                 
+          
+                }
       
-                //base WMS URL
-                var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
-                url += "&REQUEST=GetMap"; 
-                url += "&SERVICE=WMS";    
-                url += "&VERSION=1.3.0";
-                if(style){
-                    url += "&SLD_BODY=" + encodeURIComponent(style);
-                }                
-                url += "&STYLES=";                
-                url += "&LAYERS=" + myOnlineResource.name; 
-                url += "&FORMAT=image/png" ;                
-                url += "&TRANSPARENT=TRUE";
-                url += "&CRS=CRS:84";     //might need to set to CRS:84 for 1.3.0
-                url += "&BBOX=" + bbox;      
-                url += "&WIDTH=256";        
-                url += "&HEIGHT=256";
-                return url;                 
-      
+                
             },
             tileSize: new google.maps.Size(256, 256),
             isPng: true

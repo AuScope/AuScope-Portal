@@ -1,0 +1,33 @@
+<div ng-controller="pressureDbCtrl">    
+
+	<div>
+	  <form>
+	     <fieldset class="show-fieldset-borders">
+		    <legend><small>Color Code Filter:</small></legend>
+		     <div class="form-group form-group-sm row">
+	          <label for="pressureDb-colorcode" class="col-sm-3 col-form-label">Property</label>
+	          <div class="col-sm-9">
+	            <select class ="form-control" ng-change="broadcast()" id="pressureDb-colorcode" ng-model="param.ccProperty">
+	               <option value="">-- choose a filter --</option>
+	               <option value="Elevation">Elevation</option>
+	               <option value="Length">Length</option>
+	             </select>
+	          </div>
+	        </div>
+	        <div ng-show="param.ccProperty" class="form-group form-group-sm row">
+	          <label for="pressureDb-slider-ccLevel" class="col-sm-3 col-form-label">Level</label>
+	          <div class="col-sm-9">
+	            <rzslider  id = "pressureDb-slider-ccLevel" rz-slider-model="param.ccLevels" rz-slider-options="slider.options"></rzslider>
+	          </div>
+	        </div>     
+	        
+	        <div class="form-group form-group-sm row">
+	          <div class="col-sm-offset-3 col-sm-9">
+	            <button type="submit" class="btn btn-primary" ng-click="addLayer(layer)">Apply</button>
+	          </div>
+	        </div>  
+		 </fieldset>
+	   
+	  </form>
+	</div>    
+</div>

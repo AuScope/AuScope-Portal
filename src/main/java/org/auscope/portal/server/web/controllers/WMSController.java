@@ -12,10 +12,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BaseCSWController;
+import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.responses.csw.AbstractCSWOnlineResource;
@@ -73,17 +75,17 @@ public class WMSController extends BaseCSWController {
      *
      * @param serviceUrl
      *            The WMS URL to query
-     *            
+     *
      * @param weakCheck
      *            Turns off checking for the correct EPSG records before URL resolution
-     *             
+     *
      * @return a JSON representation of the CSWRecord equivalent records
      *
      * @throws Exception
      */
     @RequestMapping("/getCustomLayers.do")
-    public ModelAndView getCustomLayers(@RequestParam("service_URL") String serviceUrl, 
-                                        @RequestParam(required = false, value="weakCheck", defaultValue = "N") String weakCheck) throws Exception {
+    public ModelAndView getCustomLayers(@RequestParam("service_URL") String serviceUrl,
+            @RequestParam(required = false, value="weakCheck", defaultValue = "N") String weakCheck) throws Exception {
 
         CSWRecord[] records;
         int invalidLayerCount = 0;
@@ -149,7 +151,7 @@ public class WMSController extends BaseCSWController {
                 log.debug("Cannot find any WMS capability records");
                 return generateJSONResponseMAV(false, "I can resolve your WMS URL, but cannot find any WMS capability records", null);
             }
-            
+
             //generate the same response from a getCachedCSWRecords call
             records = cswRecords.toArray(new CSWRecord[cswRecords.size()]);
         } catch (MalformedURLException e) {
@@ -161,11 +163,11 @@ public class WMSController extends BaseCSWController {
             // Fix up the least informative messages
             if (excStr.equals("Not Found")) {
                 return generateJSONResponseMAV(false, "I cannot resolve your WMS URL: page not found", null);
-                
+
             } else if (excStr.equals("null")) {
                 return generateJSONResponseMAV(false, "I cannot resolve your WMS URL", null);
             }
-            
+
             return generateJSONResponseMAV(false, excStr, null);
         }
 
@@ -210,7 +212,7 @@ public class WMSController extends BaseCSWController {
 
     /**
      * Gets all the valid GetMap formats that a service defines
-     * 
+     *
      * @param serviceUrl
      *            The WMS URL to query
      */
@@ -306,7 +308,7 @@ public class WMSController extends BaseCSWController {
     public void getDefaultStyle(
             HttpServletResponse response,
             @RequestParam("layerName") String layerName)
-            throws Exception {
+                    throws Exception {
 
         String style = this.getStyle(layerName, "#ed9c38");
 
@@ -318,6 +320,33 @@ public class WMSController extends BaseCSWController {
 
         FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
 
+        styleStream.close();
+        outputStream.close();
+    }
+
+    /**
+     * A proxy to make http post request to get map.
+     * @param response
+     * @param layerName
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getWMSMapViaProxy.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public void getWMSMapViaProxy(
+            @RequestParam("url") String url,
+            @RequestParam("layer") String layer,
+            @RequestParam("bbox") String bbox,
+            @RequestParam("sldUrl") String sldUrl,
+            @RequestParam("version") String version,
+            HttpServletResponse response,
+            HttpServletRequest request)
+                    throws Exception {
+
+        response.setContentType("image/png");
+
+        HttpClientInputStream styleStream = this.wmsService.getMap(url, layer, bbox, request.getRequestURL().toString().replace(request.getServletPath(),"") + sldUrl, version);
+        OutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(styleStream,outputStream);
+        //FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
         styleStream.close();
         outputStream.close();
     }

@@ -32,7 +32,8 @@ app.constant('Constants', {
         'ERROR': 'ERROR'
     },
     analyticLoader:{        
-        'capdf-hydrogeochem' : 'views/analytic/capdf-hydrogeochem.htm'       
+        'capdf-hydrogeochem' : 'views/analytic/capdf-hydrogeochem.htm',
+        'pressuredb-borehole' : 'views/analytic/pressureDb.htm'
     },
     rendererLoader:{
         'nvcl-borehole': 'WFSService',

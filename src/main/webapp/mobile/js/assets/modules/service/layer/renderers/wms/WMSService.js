@@ -7,7 +7,7 @@
 allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service','UtilitiesService','GMLParserService',
                                  function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service,UtilitiesService,GMLParserService) {
     
-    var maxSldLength = 6000; //2000; 6000 worked on chrome
+    var maxSldLength = 2000; 
     
     var addLayerToGoogleMap = function(mapLayer,layer,onlineResource,style){
         
@@ -126,11 +126,16 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
             GetWMSRelatedService.getWMSStyle(layer,onlineResources[index],param).then(function(response){
                 try{
-                    if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
-                        var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
+                    var useSldUrl = false;
+                    if(response.style!=null && response.style.length>maxSldLength){
+                        useSldUrl = true;
+                    }  
+                    
+                    if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){                                                                        
+                        var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,response.style,useSldUrl?GetWMSRelatedService.getWMSStyleUrl(layer,response.onlineResource,param):null);                                                
                         addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style);                    
                     }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
-                        var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
+                        var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,response.style,useSldUrl?GetWMSRelatedService.getWMSStyleUrl(layer,response.onlineResource,param):null); 
                         addLayerToGoogleMap(mapLayer,layer,response.onlineResource,response.style); 
                         
                     } 
@@ -164,11 +169,15 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                 RenderStatusService.updateCompleteStatus(layer,onlineResources[index],Constants.statusProgress.RUNNING);
                 GetWMSRelatedService.getWMSStyle(layer,onlineResources[index]).then(function(response){
                     try{
+                        var useSldUrl = false;
+                        if(response.style!=null && response.style.length>maxSldLength){
+                            useSldUrl = true;
+                        } 
                         if(response.onlineResource.version === Constants.WMSVersion['1.1.1'] || response.onlineResource.version === Constants.WMSVersion['1.1.0']){
-                            var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
+                            var mapLayer = WMS_1_1_0_Service.generateLayer(response.onlineResource,response.style,useSldUrl?GetWMSRelatedService.getWMSStyleUrl(layer,response.onlineResource,null):null);                        
                             addLayerToGoogleMap(mapLayer,layer,response.onlineResource);                  
                         }else if(response.onlineResource.version === Constants.WMSVersion['1.3.0']){
-                            var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
+                            var mapLayer = WMS_1_3_0_Service.generateLayer(response.onlineResource,response.style,useSldUrl?GetWMSRelatedService.getWMSStyleUrl(layer,response.onlineResource,null):null); 
                             addLayerToGoogleMap(mapLayer,layer,response.onlineResource);  
                         } 
                     }catch(err){

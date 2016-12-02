@@ -14,10 +14,11 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
      * Generate wms 1.1.1 google.maps.ImageMapType layer 
      * @method generateLayer
      * @param onlineResource - WMS online resource
-     * @param style - sld if defined else default server sld will be used
+     * @param sld - sld if defined else default server sld will be used
+     * @param sldUrl - url to the sld file if the sld is too long
      * @return ImageMapType - google.maps.ImageMapType
      */
-    this.generateLayer = function(onlineResource,style){
+    this.generateLayer = function(onlineResource,sld,sldUrl){
         
        var myOnlineResource =  onlineResource;       
        var map = GoogleMapService.getMap();
@@ -45,26 +46,42 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                                (bot.lat() + deltaY) + "," +
                                rightLng + "," +
                                (top.lat() + deltaY);
-     
-               //base WMS URL
-               var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
-               url += "&REQUEST=GetMap"; //WMS operation
-               url += "&SERVICE=WMS";    //WMS service
-               url += "&VERSION=1.1.1";  //WMS version  
-               if(style){
-                   url += "&SLD_BODY=" + encodeURIComponent(style);
-               }               
-               url += "&DISPLAYOUTSIDEMAXEXTENT=true";  
-               url += "&EXCEPTIONS=BLANK";
-               url += "&LAYERS=" + myOnlineResource.name; //WMS layers
-               url += "&FORMAT=image/png" ; //WMS format
-               url += "&transparent=true" ; //WMS format                             
-               url += "&TRANSPARENT=TRUE";
-               url += "&SRS=EPSG:4326";     //set WGS84 
-               url += "&BBOX=" + bbox;      // set bounding box
-               url += "&WIDTH=256";         //tile size in google
-               url += "&HEIGHT=256";               
-               return url;                 // return URL for the tile
+               //VT: if the sld is too long, we will proxy the request via the server using httpPost
+               if(sldUrl){
+                   var url="../getWMSMapViaProxy.do?";                   
+                   var parameter = {
+                           url :  myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":""),
+                           layer: myOnlineResource.name,
+                           bbox:bbox,
+                           sldUrl : "/" + sldUrl,                         
+                           version : "1.1.1",                      
+                   };
+                  
+                   return url+=$.param(parameter);
+                   
+                   
+               }else{
+                   //base WMS URL
+                   var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
+                   url += "&REQUEST=GetMap"; //WMS operation
+                   url += "&SERVICE=WMS";    //WMS service
+                   url += "&VERSION=1.1.1";  //WMS version  
+                   if(sld){
+                       url += "&SLD_BODY=" + encodeURIComponent(sld);
+                   }               
+                   url += "&DISPLAYOUTSIDEMAXEXTENT=true";  
+                   url += "&EXCEPTIONS=BLANK";
+                   url += "&LAYERS=" + myOnlineResource.name; //WMS layers
+                   url += "&FORMAT=image/png" ; //WMS format
+                   url += "&transparent=true" ; //WMS format                             
+                   url += "&TRANSPARENT=TRUE";
+                   url += "&SRS=EPSG:4326";     //set WGS84 
+                   url += "&BBOX=" + bbox;      // set bounding box
+                   url += "&WIDTH=256";         //tile size in google
+                   url += "&HEIGHT=256";               
+                   return url;                 // return URL for the tile 
+               }
+              
      
            },           
            tileSize: new google.maps.Size(256, 256),
