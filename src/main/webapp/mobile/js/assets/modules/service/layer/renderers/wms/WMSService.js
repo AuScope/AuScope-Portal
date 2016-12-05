@@ -7,7 +7,7 @@
 allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service','UtilitiesService','GMLParserService',
                                  function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service,UtilitiesService,GMLParserService) {
     
-    var maxSldLength = 2000; 
+    var maxSldLength = 1900; 
     
     var addLayerToGoogleMap = function(mapLayer,layer,onlineResource,style){
         
@@ -127,7 +127,7 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
             GetWMSRelatedService.getWMSStyle(layer,onlineResources[index],param).then(function(response){
                 try{
                     var useSldUrl = false;
-                    if(response.style!=null && response.style.length>maxSldLength){
+                    if(response.style!=null && encodeURIComponent(response.style).length>maxSldLength){
                         useSldUrl = true;
                     }  
                     

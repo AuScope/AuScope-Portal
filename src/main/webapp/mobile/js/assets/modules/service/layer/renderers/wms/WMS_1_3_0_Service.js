@@ -68,7 +68,9 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                     if(sld){
                         url += "&SLD_BODY=" + encodeURIComponent(sld);
                     }                
-                    url += "&STYLES=";                
+                    url += "&STYLES=";  
+                    url += "&DISPLAYOUTSIDEMAXEXTENT=true";  
+                    url += "&EXCEPTIONS=BLANK";
                     url += "&LAYERS=" + myOnlineResource.name; 
                     url += "&FORMAT=image/png" ;                
                     url += "&TRANSPARENT=TRUE";

@@ -68,7 +68,8 @@ allModules.service('WMS_1_1_0_Service',['$rootScope','GoogleMapService','LayerMa
                    url += "&VERSION=1.1.1";  //WMS version  
                    if(sld){
                        url += "&SLD_BODY=" + encodeURIComponent(sld);
-                   }               
+                   }
+                   url += "&STYLES=";
                    url += "&DISPLAYOUTSIDEMAXEXTENT=true";  
                    url += "&EXCEPTIONS=BLANK";
                    url += "&LAYERS=" + myOnlineResource.name; //WMS layers
