@@ -28,6 +28,10 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                 if (evt.latLng.lat() < bbox.northBoundLatitude && evt.latLng.lat() > bbox.southBoundLatitude &&
                     evt.latLng.lng() < bbox.eastBoundLongitude && evt.latLng.lng() > bbox.westBoundLongitude) {
                         
+                    // Show loading mask 
+                    GoogleMapService.busyStart();
+                    
+                        
                     // Send request to WMS service
                     GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource,style).then(function(response) 
                         { 
@@ -41,9 +45,13 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                                 QuerierPanelService.setPanelNode(GMLParserService.getRootNode(response.data));
                                 QuerierPanelService.openPanel(false);
                             }
+                            // Hide loading mask
+                            GoogleMapService.busyEnd();
                         },
                         function(errorResponse) {
                             console.log("WMS Service Error: ", errorResponse);
+                            // Hide loading mask
+                            GoogleMapService.busyEnd();
                         }
                     );
                 }

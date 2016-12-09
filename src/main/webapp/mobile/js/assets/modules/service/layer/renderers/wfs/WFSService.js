@@ -20,9 +20,15 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                title: point.name
             });    
             marker.addListener('click', function() {
+                // Ask the map to display a loading mask
+                GoogleMapService.busyStart();
+                
+                // Set data for the query panel and display it
                 QuerierPanelService.setPanelNode(point.featureNode);
                 QuerierPanelService.openPanel(true);
-
+                
+                // Ask the map to dissolve the loading mask
+                GoogleMapService.busyEnd();
             });
            return marker;
        };
