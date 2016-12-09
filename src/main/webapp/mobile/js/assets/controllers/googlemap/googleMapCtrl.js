@@ -12,12 +12,31 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
     
     $scope.zoomDrawActive = false;
     
+    // Used to control the map's loading mask
+    $scope.mapMaskFlag = false;
+    
     GoogleMapService.onDrawZoomStart($scope,function(){
         $scope.zoomDrawActive = true;
     });
     
     GoogleMapService.onDrawZoomEnd($scope,function(){
         $scope.zoomDrawActive = false;
+    });
+    
+    // Register a function that will be called when the website is busy,
+    // thus it will enable the map's loading mask
+    GoogleMapService.onBusyStart(function(){        
+        $scope.mapMaskFlag = true;             
+    });
+    
+    // Register a function that will be called when the website is not busy anymore,
+    // thus it will disable the map's loading mask
+    GoogleMapService.onBusyEnd(function(){
+       // When the user clicks multiple times on many features, this timeout makes sure that the mask is always disabled in the end
+       $timeout(function() {           
+            $scope.mapMaskFlag = false;         
+       },0);
+
     });
     
 

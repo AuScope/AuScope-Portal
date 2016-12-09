@@ -16,6 +16,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     this.heatmap = null;
     this.drawingManager = null;
     this.dataSelectDrawingManager = null;
+    this.onBusyStartFn = null;
+    this.onBusyEndFn = null;
+    this.isBusy = false;
     
     
     /**
@@ -172,7 +175,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
          this.mainMap.addListener('mousemove', function(evt) {
              $("#mouse-move-display-lat").text("Lat: " + $filter('number')(evt.latLng.lat(),2));
              $("#mouse-move-display-lng").text("Lng: " + $filter('number')(evt.latLng.lng(),2));
-          });
+         });
          
       };
       
@@ -359,6 +362,45 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
           $rootScope.$broadcast(event,result);
       };
      
-    
+      /**
+      * Register a callback function belonging to the map controller that this service will call when told a busy period has started
+      * @method onBusyStart
+      * @param callback - callback function
+      */
+      this.onBusyStart = function(callback) {
+          this.onBusyStartFn  = callback;
+      };
+      
+      /**
+      * Register a callback function belonging to the map controller that this service will call when told that the busy period is over
+      * @method onBusyEnd
+      * @param callback - callback function
+      */
+      this.onBusyEnd = function(callback) {
+          this.onBusyEndFn = callback;
+      };
+      
+      /**
+      * Function to set the map to busy, i.e. show a loading image
+      * @method busyStart
+      */
+      this.busyStart = function() {
+          
+          if (!this.isBusy && this.onBusyStartFn) {
+              this.onBusyStartFn();
+              this.isBusy = true;
+          }
+      };
+      
+      /**
+      * Function to stop the map being busy, i.e. stop showing a loading image
+      * @method busyEnd
+      */
+      this.busyEnd = function() {
+          if (this.isBusy && this.onBusyEndFn) {
+              this.onBusyEndFn();
+              this.isBusy = false;
+          }
+      };
      
 }]);

@@ -36,19 +36,21 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         if (node) {
             // First try to find any "FeatureCollection" elements 
             // If it not found, and no error report was found, we assume the node to be a feature node.
-            var rootNode = node;
+            var rootNode = node;            
             var wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureCollection");
             var features = null;
             if (UtilitiesService.isEmpty(wfsFeatureCollection)) {
-                var exceptionNode = SimpleXMLService.evaluateXPath(rootNode, rootNode, "//ServiceException", Constants.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
-                var thisNode = exceptionNode.iterateNext();
-                if (thisNode) {
+                // Check for error reports- some WMS servers mark their error reports with <ServiceExceptionReport>, some with <html> 
+                var exceptionNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, "ServiceExceptionReport");
+                var serviceErrorNode = SimpleXMLService.evaluateXPath(rootNode, rootNode, "html", Constants.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
+                var nextNode=serviceErrorNode.iterateNext();
+                if (!UtilitiesService.isEmpty(exceptionNode) || nextNode!=null) {
                     // There is an error report from the server
-                    $scope.treeStruct["Sorry - server has returned an error message."] = thisNode;
-                    console.error("querierPanelCtrl.setPanelTree(): Server returned error", thisNode);
+                    $scope.treeStruct["Sorry - server has returned an error message."] = document.createTextNode("See browser console for more information");
+                    console.error("querierPanelCtrl.setPanelTree(): Server returned error", rootNode);
                     return;
                 }
-                var featureInfoNode =  SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureInfoResponse");
+                var featureInfoNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, "FeatureInfoResponse");
                 if (UtilitiesService.isEmpty(featureInfoNode)) {
                     // Assume the node to be a feature node. 
                     features = [node];
@@ -65,7 +67,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
 
             } else {
                 // Read through our wfs:FeatureCollection and gml:featureMember(s) elements 
-                var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");              
+                var featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMembers");                 
                 if (UtilitiesService.isEmpty(featureMembers)) {
                     featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, "featureMember");
                     features = featureMembers;
@@ -79,7 +81,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
                 var name = SimpleXMLService.evaluateXPath(rootNode, featureNode, "gml:name", Constants.XPATH_STRING_TYPE).stringValue;
                 if (UtilitiesService.isEmpty(name)) {
                     name = featureNode.getAttribute('gml:id');
-                } 
+                }
                 $scope.treeStruct[name] = featureNode;
             };
         }
@@ -104,11 +106,13 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'QuerierPa
         var parseNodeToJson = function(node,tier,child){
             var attrArr = SimpleXMLService.getMatchingAttributes(node);
             var attrChildren = [];
-            for (var i=0; i< attrArr.length; i++) {
-                if (attrArr[i].name && attrArr[i].value)
-                    attrChildren.push({label: attrArr[i].name+": "+attrArr[i].value, children : []});
+            if (attrArr) {
+                for (var i=0; i< attrArr.length; i++) {
+                    if (attrArr[i].name && attrArr[i].value)
+                        attrChildren.push({label: attrArr[i].name+": "+attrArr[i].value, children : []});
+                }
             }
-            if(SimpleXMLService.isLeafNode(node)){
+            if (SimpleXMLService.isLeafNode(node)) {
                 
                 return ({
                     label : SimpleXMLService.getNodeLocalName(node),
