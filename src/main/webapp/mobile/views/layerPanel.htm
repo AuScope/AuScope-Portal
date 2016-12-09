@@ -33,8 +33,8 @@
                     <span>Analytic</span>
                 </div>                   
                 <div class="col-xs-2 text-center hasEvent hvr-float-shadow" ng-click="searchCtrl.clear()">
-                    <i class="fa fa-times fa-2x" ng-class="{'red':keywords=='','dark-blue':keywords!=''}" aria-hidden="true"></i>                    
-                    <span>Clear</span>
+                    <i class="fa fa-refresh fa-2x" ng-class="{'red':keywords=='','dark-blue':keywords!=''}" aria-hidden="true"></i>                    
+                    <span>Reset</span>
                 </div>              
             </div>
             <div class="row main-search" uib-collapse="!searchCollapsed" vertical style="margin-right:0;" >
@@ -80,7 +80,7 @@
 						   	</td>
 						   	<td class="icon-box"><i class="fa fa-filter fa-round hasEvent hvr-glow" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter}" ng-click="togglePanels('filter',group,layer.id);$event.stopPropagation();"></i></td>
 						   	<td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent hvr-glow" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" ng-click="togglePanels('info',group,layer.id);$event.stopPropagation();"></i></td>
-						   	<td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic}" ng-click="togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
+						   	<td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]}" ng-click="togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
 					   </tr>
                        <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
                         <td colspan="4">

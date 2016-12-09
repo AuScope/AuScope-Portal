@@ -276,6 +276,14 @@ fieldset[disabled] .btn-red.active {
   font-size: 1.2em;
 }
 
+.fa-round-disable {
+  background-color: #808080;
+  color: white;
+  font-size: 1.2em;
+  cursor: not-allowed;
+  opacity: .65;
+}
+
 .layer-selection .layer-selected{
     background-color:#f0f8ff;    
     
