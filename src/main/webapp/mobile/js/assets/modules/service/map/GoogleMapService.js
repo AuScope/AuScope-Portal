@@ -168,7 +168,8 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
            zoom: (mq.matches? 3 : 5),
            mapTypeControlOptions: {
                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU ,
-               position: google.maps.ControlPosition.RIGHT_BOTTOM
+               // Move the control to the top right corner for small screens so it won't obscure Victoria & Tasmania
+               position: (mq.matches? google.maps.ControlPosition.TOP_RIGHT : google.maps.ControlPosition.RIGHT_BOTTOM)
            },
          });
          
