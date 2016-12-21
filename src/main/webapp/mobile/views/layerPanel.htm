@@ -4,33 +4,33 @@
         <div>                
             <div class="layer-panel-header" >
                 <img src="img/AuScope-logo-220.jpg">
-                <i class="pull-right glyphicon glyphicon-menu-left gi-3x hasEvent" ng-click="$parent.showlayerPanel = !$parent.showlayerPanel" ></i>
+                <i class="pull-right glyphicon glyphicon-menu-left hasEvent" ng-click="$parent.showlayerPanel = !$parent.showlayerPanel" ></i>
             </div>            
         </div>
         
         <div ng-controller="layerSearchCtrl as searchCtrl">
             <div class="row" id="layer-menu">
-                <div class="col-xs-2 text-center hasEvent border-right hvr-float-shadow" ng-click="searchCollapsed=!searchCollapsed">
+                <div class="col-xs-2 text-center hasEvent search-icon-border-right hvr-float-shadow layer-icon" ng-click="searchCollapsed=!searchCollapsed">
                     <i class="fa fa-search fa-2x" ng-class="{'cyan':searchCollapsed,'dark-blue':!searchCollapsed}" aria-hidden="true"></i>                    
                     <span>Search</span>
                 </div>
-                <div class="col-xs-2 text-center hasEvent hvr-float-shadow" ng-click="searchCtrl.filterDataRecord()">
+                <div class="col-xs-2 text-center hasEvent hvr-float-shadow layer-icon" ng-click="searchCtrl.filterDataRecord()">
                     <i class="fa fa-sliders fa-2x" ng-class="{'red':keywords=='Display Data Layer','dark-blue':keywords!='Display Data Layer'}" aria-hidden="true"></i>
                     <span class="small-icon-font">Data</span>
                 </div>
-                <div class="col-xs-2 text-center hasEvent hvr-float-shadow" ng-click="searchCtrl.filterImageRecord()">
+                <div class="col-xs-2 text-center hasEvent hvr-float-shadow layer-icon" ng-click="searchCtrl.filterImageRecord()">
                     <i class="fa fa-file-image-o fa-2x" ng-class="{'red':keywords=='Display Image Layer','dark-blue':keywords!='Display Data Layer'}" aria-hidden="true"></i>                    
                     <span>Image</span>
                 </div>
-                <div class="col-xs-2 text-center hasEvent hvr-float-shadow" ng-click="searchCtrl.filterActiveRecord()">
+                <div class="col-xs-2 text-center hasEvent hvr-float-shadow layer-icon" ng-click="searchCtrl.filterActiveRecord()">
                     <i class="fa fa-check-square-o fa-2x" ng-class="{'red':keywords=='Display Active Layer','dark-blue':keywords!='Display Data Layer'}" aria-hidden="true"></i>                   
                     <span>Active</span>
                 </div>
-                <div class="col-xs-2 text-center hasEvent hvr-float-shadow" ng-click="searchCtrl.filterAnalyticRecord()">
+                <div class="col-xs-2 text-center hasEvent hvr-float-shadow layer-icon" ng-click="searchCtrl.filterAnalyticRecord()">
                     <i class="fa fa-line-chart fa-2x" ng-class="{'red':keywords=='Display Analytic Layer','dark-blue':keywords!='Display Data Layer'}" aria-hidden="true"></i>                    
                     <span>Analytic</span>
                 </div>                   
-                <div class="col-xs-2 text-center hasEvent hvr-float-shadow" ng-click="searchCtrl.clear()">
+                <div class="col-xs-2 text-center hasEvent hvr-float-shadow layer-icon" ng-click="searchCtrl.clear()">
                     <i class="fa fa-refresh fa-2x" ng-class="{'red':keywords=='','dark-blue':keywords!=''}" aria-hidden="true"></i>                    
                     <span>Reset</span>
                 </div>              
@@ -65,7 +65,7 @@
                                 </tr>
                             </thead>
                             <tr ng-repeat-start="layer in records" ng-click="togglePanels('filter',group,layer.id)" class="layer-row" ng-class="{'layer-selected':  status[group][layer.id].isExpanded}">
-                                <td><span ng-if="renderStatus[layer.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(layer);$event.stopPropagation();" style="color:red;font-size: 25px;margin-right:3px;"></span>{{layer.name}}
+                                <td class="layer-name"><span ng-if="renderStatus[layer.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(layer);$event.stopPropagation();"></span>{{layer.name}}
                                     <div ng-if="renderStatus[layer.id].max" ng-click="togglePanels('statusInfo',group,layer.id);$event.stopPropagation();">                                     
                                         <uib-progressbar  class="progress-striped active hasEvent" style="height:20px;margin-bottom: 0px;margin-top:5px;" type="{{renderStatus[layer.id].errorFound? 'warning':'success'}}" max="renderStatus[layer.id].max +1" value="renderStatus[layer.id].completed +1">
                                             <div ng-if="renderStatus[layer.id].errorFound"><span class="fa fa-exclamation-triangle" style="color:red;"></span> Incomplete report</div>
@@ -73,9 +73,9 @@
                                         </uib-progressbar>
                                     </div>
                                 </td>
-                                <td class="icon-box"><i class="fa fa-filter fa-round hasEvent hvr-glow" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter}" ng-click="togglePanels('filter',group,layer.id);$event.stopPropagation();"></i></td>
-                                <td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent hvr-glow" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" ng-click="togglePanels('info',group,layer.id);$event.stopPropagation();"></i></td>
-                                <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]}" ng-click="togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
+                                <td class="icon-box"><i class="fa fa-filter fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter}" ng-click="togglePanels('filter',group,layer.id);$event.stopPropagation();"></i></td>
+                                <td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" ng-click="togglePanels('info',group,layer.id);$event.stopPropagation();"></i></td>
+                                <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]}" ng-click="analyticLayerList[layer.id] && togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
                             </tr>
                             <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
                                 <td colspan="4">
