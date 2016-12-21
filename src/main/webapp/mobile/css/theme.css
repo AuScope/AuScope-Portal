@@ -1,4 +1,4 @@
-body { font-size: 1.3em; }
+body, .filter-form { font-size: 1.3em; }
 
 html,body {
     height: 100%;
@@ -7,6 +7,15 @@ html,body {
     padding: 0;
 }
 
+.filter-form-button {
+    font-size: 12px !important;
+    min-width: 170px;
+}
+
+div.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
 
 .main-search{
 	padding-top:1.5em;	
@@ -16,12 +25,24 @@ html,body {
 #layer-menu{
     padding-left:0.7em;
     padding-right:0.7em;
-    font-size:1em;	   
+    font-size:1em;
+    margin-left: 0em;
+    margin-right: 0em;    
 }
 
 #layer-menu span{
     font-size:0.8em;	
     display : block;
+}
+
+.layer-name {
+    vertical-align: middle !important;
+}
+
+/* The icons at the top of the layer panel */
+.layer-icon {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 
@@ -40,7 +61,7 @@ html,body {
 	color: #3dd6ad
 }
 
-.border-right{
+.search-icon-border-right{
 	border-right:2px solid;
 	border-right-color:#808000
 }
@@ -142,10 +163,10 @@ fieldset[disabled] .btn-red.active {
     margin-left: -33px;
 }
 
-
+/* Controller with magnifier, envelope & lat/lng coords */
 .map-overlay-panel-toggle {      
   top : 10px;
-  right : 10px; /*2em;*/	  
+  right : 10px;	  
   position: absolute;   
   z-index: 50;
   width: 200px;
@@ -154,24 +175,39 @@ fieldset[disabled] .btn-red.active {
   padding:8px 10px 8px 10px;
 }
 
+/* Controller with magnifier, envelope & lat/lng coords */
 .map-overlay-panel-toggle .col-xs-3{
 	padding:0px 8px 0px 8px;
 }
 
+/* show layer panel toggle */
 .menu-icon-toggle {      
   top : .1em;
   left : 0px;      
   position: absolute;   
   z-index: 50;
-  padding:5px 5px 5px 5px;
-  font-size: 2.5em;
   background-color: #ffffff;
+  padding: 2px 2px 2px 2px;
+  font-size: 1.6em;
+
 }
 
+/* show layer panel toggle */
 .glyphicon.glyphicon-menu-right {
-    padding-top: 8px; /* Centre the '>' in the middle of its box */
+    padding-top: 3px; /* Centre the '>' in the middle of its box */
 }
 
+/* hide layer panel toggle */
+.glyphicon.glyphicon-menu-left {
+    font-size: 2em;
+}
+
+/* delete layer icon */
+.glyphicon.glyphicon-ban-circle {
+    color:red;
+    font-size: 1.5em;
+    margin-right:3px;
+}
 
 #logo-menu{  
   bottom : 4em;
@@ -223,7 +259,7 @@ fieldset[disabled] .btn-red.active {
 .right-addon input { padding-right: 30px; }
 
 
-/*overlay layer panel*/ 
+/* layer panel*/ 
 .layer-panel{
   background:  #ffffff;  
   display: block;
@@ -252,7 +288,7 @@ fieldset[disabled] .btn-red.active {
 }
 
 
-
+/* header of the layer panel */
 .layer-panel-header{
 	margin-top: 10px;
     margin-bottom: 20px;
@@ -262,7 +298,8 @@ fieldset[disabled] .btn-red.active {
 }
 
 .accordion-header-override .panel-title{
-	font-size:1.1em;
+	font-size:1.0em;
+    display: inline;
 }
 
 .panel-selected>.panel-heading {
@@ -284,14 +321,15 @@ fieldset[disabled] .btn-red.active {
     padding:3px 3px;
 }
 
+/* icons used in the layer panel */
 .fa-round {
-  padding-top: 6px;
+  padding-top: 3px;
   -webkit-border-radius: 50%;
   border-radius: 50%;
-  width: 35px;
-  height: 35px;
+  width: 20px; 
+  height: 20px;
   text-align: center;
-  font-size: 2em;
+  font-size: 1.5em;
   color: #337ab7;
 }
 
@@ -302,15 +340,19 @@ fieldset[disabled] .btn-red.active {
 .icon-lg-side:hover .fa-round {
   background-color: #d14f30;
   color: white;
-  font-size: 1.8em;
+  font-size: 1.2em /* 1.8em; */
 }
 
 .fa-round-disable {
-  background-color: #808080;
-  color: white;
+  background-color: white;
+  color: #D0D0D0;
   font-size: 1.2em;
   cursor: not-allowed;
-  opacity: .65;
+}
+
+/* layer selection table in the layer panel */
+table.layer-selection {
+    width: 30em;
 }
 
 .layer-selection .layer-selected{
@@ -318,13 +360,12 @@ fieldset[disabled] .btn-red.active {
     
 }
 
-
 .layer-selection .layer-row:hover{
     background-color: #d9e8ef;
 }
 
 
-
+/* progress bar used for adding layers */
 .progress {
   background-color: #838383;
 
@@ -451,4 +492,33 @@ fieldset.show-fieldset-borders{
 	font-weight: normal;
 }
 
+/* Modified version of 'hvr-glow' taken from 'hover-min.css'
+The 'transform' rules in the original 'hvr-glow' create a new stacking context, and because of their stacking order
+the icons will appear in front of dropdown menus, regardless of dropdown menus' z-index setting. Thus the rules must be removed. */
+.hvr-glow-local {
+    display:inline-block;
+    vertical-align:middle;
+    /*-webkit-transform:perspective(1px) translateZ(0);
+    transform:perspective(1px) translateZ(0);*/
+    box-shadow:0 0 1px transparent;
+    -webkit-transition-duration:.3s;
+    transition-duration:.3s;
+    -webkit-transition-property:box-shadow;
+    transition-property:box-shadow;
+}
+.hvr-glow-local:active,.hvr-glow-local:focus,.hvr-glow-local:hover {
+    box-shadow:0 0 8px rgba(0,0,0,.6)
+}
 
+
+/* 'Add' buttons on the info panel within the layer panel */
+.info-panel-add {
+    padding:2px 2px 2px 2px;
+    vertical-align: middle;
+}
+
+/* WFS markers in info panel within the layer panel */
+.info-panel-icon {
+    width: 16px;
+    height: 16px;
+}
