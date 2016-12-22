@@ -32,7 +32,7 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
 
                 // Correct negative longitudes
                 var leftLng = top.lng() < 0?top.lng() + 360:top.lng();
-                var rightLng = bot.lng() < 0?180:bot.lng();
+                var rightLng = bot.lng() < 0?bot.lng() + 360:bot.lng();
                 
                 // Transform [lng, lat] to map projection coordinates [x, y]
                 var bot3857=proj4("EPSG:4326", "EPSG:3857", [rightLng, bot.lat()]);
