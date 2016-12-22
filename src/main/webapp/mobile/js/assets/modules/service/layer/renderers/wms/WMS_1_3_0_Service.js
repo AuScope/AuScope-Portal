@@ -7,9 +7,6 @@
 allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService',
                                  function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService) {
     
-  
-   
-    
     /**
      * Generate wms 1.3 google.maps.ImageMapType layer 
      * @method generateLayer
@@ -28,39 +25,39 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
               
                 var proj = map.getProjection();
                 var zfactor = Math.pow(2, zoom);
-                // get Long Lat coordinates
+                
+                // Get LatLng coordinates
                 var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 256 / zfactor, coord.y * 256 / zfactor));
                 var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
 
-                //corrections for the slight shift of the SLP (mapserver)
-                var deltaX = 0;//0.0013;
-                var deltaY = 0;//0.00058;
+                // Correct negative longitudes
+                var leftLng = top.lng() < 0?top.lng() + 360:top.lng();
+                var rightLng = bot.lng() < 0?180:bot.lng();
                 
-                var leftLng = top.lng() + deltaX;
-                leftLng = leftLng < 0?leftLng + 360:leftLng;
+                // Transform [lng, lat] to map projection coordinates [x, y]
+                var bot3857=proj4("EPSG:4326", "EPSG:3857", [rightLng, bot.lat()]);
+                var top3857=proj4("EPSG:4326", "EPSG:3857", [leftLng, top.lat()]);
                 
-                var rightLng = (bot.lng()+deltaX);
-                rightLng = rightLng < 0?180:rightLng;
-
+                // TODO: Add SRS/CRS parameter "getWMSMapViaProxy.do" to allow use of EPSG:3857
+                // BBOX in EPSG:4326
+                var bbox_4326 = bot.lat() + "," + leftLng + "," + top.lat() + "," + rightLng;
                 
-                var bbox =      (bot.lat() + deltaY) + "," +
-                                leftLng + "," +                                
-                                (top.lat() + deltaY) + "," +
-                                rightLng;
+                // BBOX in EPSG:3857
+                var bbox_3857 = bot3857[1] + "," + top3857[0] + "," + top3857[1] + "," + bot3857[0];
 
                 //VT: if the sld is too long, we will proxy the request via the server using httpPost
-                if(sldUrl){
+                if (sldUrl) {
                     var url="../getWMSMapViaProxy.do?";                   
                     var parameter = {
                             url :  myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":""),
                             layer: myOnlineResource.name,
-                            bbox:bbox,
+                            bbox:bbox_4326,
                             sldUrl : "/" + sldUrl,                         
                             version : "1.3.0",                      
-                    };                                      
-                    return url+=$.param(parameter);                                        
-                }else{
-                  //base WMS URL
+                    };                    
+                    return url+$.param(parameter);                                        
+                } else {
+                    //base WMS URL
                     var url = myOnlineResource.url + (myOnlineResource.url.indexOf("?")==-1?"?":"");
                     url += "&REQUEST=GetMap"; 
                     url += "&SERVICE=WMS";    
@@ -74,8 +71,8 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                     url += "&LAYERS=" + myOnlineResource.name; 
                     url += "&FORMAT=image/png" ;                
                     url += "&TRANSPARENT=TRUE";
-                    url += "&CRS=EPSG:4326";     //might need to set to CRS:84 for 1.3.0
-                    url += "&BBOX=" + bbox;      
+                    url += "&CRS=EPSG:3857";
+                    url += "&BBOX=" + bbox_3857;      
                     url += "&WIDTH=256";        
                     url += "&HEIGHT=256";
                     return url;                 
