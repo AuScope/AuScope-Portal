@@ -14,8 +14,8 @@
 	                <div uib-accordion-group class="panel-info" heading="Color Coding" is-open="true" is-disabled="false">	      
 	                    
 	                    <div class="row">
-	                        <div class="col-sm-3"><label>Group</label></div>
-	                        <div class="col-sm-9">
+	                        <div class="col-sm-4"><label>Group</label></div>
+	                        <div class="col-sm-8">
                                 <div class="btn-group" uib-dropdown>
                                     <button ng-init="setSelectedGoi('-- choose a Group --','');" id="capdf-hydrogeochem-group-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
                                         {{selectedGoi}}
@@ -28,8 +28,8 @@
                             </div>	                    
 	                    </div>  
 	                    <div ng-if="goi" class="row">
-	                        <div class="col-sm-3"><label>Parameter</label></div>
-                            <div class="col-sm-9">
+	                        <div class="col-sm-4"><label>Parameter</label></div>
+                            <div class="col-sm-8">
                                 <div ng-if="pois.length > 0">
                                     <div class="btn-group" uib-dropdown>
                                         <button ng-init="setSelectedPoi('-- choose a Parameter --','');" id="capdf-hydrogeochem-param-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
