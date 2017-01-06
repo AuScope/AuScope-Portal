@@ -101,7 +101,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
      * @param serviceInfo CSW service information object
      * @param style OPTIONAL style to use when making the GetFeatureInfo request
      */
-    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo,style) {
+    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo, style, slot) {
         
         // This latLng needs to be converted into EPSG:3857 rect coords
         proj4.defs("EPSG:4326","+proj=longlat +datum=WGS84 +no_defs");
@@ -168,7 +168,8 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
             method: "POST",
             url: "../wmsMarkerPopup.do",
             data: get_params,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            slot_num: slot
         });
     };
      

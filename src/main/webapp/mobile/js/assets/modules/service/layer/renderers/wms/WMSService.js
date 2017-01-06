@@ -4,8 +4,8 @@
  * @class WMSService
  * 
  */
-allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service','UtilitiesService','GMLParserService',
-                                 function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service,UtilitiesService,GMLParserService) {
+allModules.service('WMSService',['GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','QuerierPanelService','WMS_1_1_0_Service','WMS_1_3_0_Service','UtilitiesService',
+                                 function (GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,QuerierPanelService,WMS_1_1_0_Service,WMS_1_3_0_Service,UtilitiesService) {
     
     var maxSldLength = 1900; 
     
@@ -19,48 +19,8 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
               });
         };
         
-        // Register map click/touch events to allow creation of the query information panel
-        var registerClickEvent = function(map, onlineResource, bbox,style){
-            
-            var mapEventListener = google.maps.event.addListener(map, 'click', function(evt) {
-               
-                // Send a request to the WMS service if the click is within the resource's bounding box
-                if (evt.latLng.lat() < bbox.northBoundLatitude && evt.latLng.lat() > bbox.southBoundLatitude &&
-                    evt.latLng.lng() < bbox.eastBoundLongitude && evt.latLng.lng() > bbox.westBoundLongitude) {
-                        
-                    // Show loading mask 
-                    GoogleMapService.busyStart();
-                    
-                        
-                    // Send request to WMS service
-                    GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, onlineResource,style).then(function(response) 
-                        { 
-                            // Used to check for an empty response, which occurs when user clicks/touches on empty space
-                            var empty_html_body = /<body>\s*<\/body>/g;
-                            var empty_html_body2 = /<body>\s*<script .+<\/script>\s*<\/body>/g;
-                            var empty_gml_body = /<wfs:FeatureCollection .+\/>$/g;
-
-                            // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
-                            if (response.status==200 && empty_gml_body.test(response.data)==false) {
-                                QuerierPanelService.setPanelNode(GMLParserService.getRootNode(response.data));
-                                QuerierPanelService.openPanel(false);
-                            }
-                            // Hide loading mask
-                            GoogleMapService.busyEnd();
-                        },
-                        function(errorResponse) {
-                            console.log("WMS Service Error: ", errorResponse);
-                            // Hide loading mask
-                            GoogleMapService.busyEnd();
-                        }
-                    );
-                }
-            });
-            QuerierPanelService.registerLayer(onlineResource, mapEventListener);
-        };
-        
         /**
-         * Hack to override the gettile to gain access to the underlying img for event handling
+         * Hack to override the getTile function to gain access to the underlying img for event handling
          */
         var overrideToRegisterFailureEvent = function(mapLayer,failureHandlerCB){
             
@@ -92,9 +52,9 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                     var bbox = cswRecords[i].geographicElements[0];
                     // ArcGIS servers do not accept styles
                     if (onlineResources[j].applicationProfile && onlineResources[j].applicationProfile.indexOf("Esri:ArcGIS Server") > -1) {
-                        registerClickEvent(map, onlineResource, bbox,"");
+                        QuerierPanelService.registerLayer(map, onlineResource, bbox, "");
                     } else {
-                        registerClickEvent(map, onlineResource, bbox,style);
+                        QuerierPanelService.registerLayer(map, onlineResource, bbox, style);
                     }
                     done = true;
                     break;

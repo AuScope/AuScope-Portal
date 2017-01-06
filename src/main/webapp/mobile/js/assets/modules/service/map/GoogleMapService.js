@@ -8,8 +8,8 @@
  * @event data.select.end - end of the drawing for the data selection event
  * @event layer.removed - removing of a layer from map event
  */
-allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter','QuerierPanelService',
-                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter,QuerierPanelService) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter',
+                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter) {
    
     this.mainMap;
     this.activeLayers = {};
@@ -149,9 +149,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
            
             this.broadcast('layer.removed',layer);
         };
-        
-        QuerierPanelService.deregisterLayer(layer);
-        
+
         RenderStatusService.clearStatus(layer);
     };
      
@@ -177,7 +175,6 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
              $("#mouse-move-display-lat").text("Lat: " + $filter('number')(evt.latLng.lat(),2));
              $("#mouse-move-display-lng").text("Lng: " + $filter('number')(evt.latLng.lng(),2));
          });
-         
       };
       
       /**

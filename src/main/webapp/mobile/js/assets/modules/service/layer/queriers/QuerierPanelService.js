@@ -5,8 +5,98 @@
  * @class QuerierPanelService
  * 
  */
-allModules.service('QuerierPanelService', ['$compile','LayerManagerService', function ($compile,LayerManagerService) {
+allModules.service('QuerierPanelService', ['LayerManagerService','GoogleMapService', 'GetWMSRelatedService', 'GMLParserService', function (LayerManagerService, GoogleMapService, GetWMSRelatedService, GMLParserService) {
     this.layerList = [];
+    
+    var me = this;
+    
+    /**
+    * @method registerMap
+    * @param map Google map to be registered
+    */
+    this.registerMap = function (map) {
+        //
+        var mapEventListener = google.maps.event.addListener(map, 'click', function(evt) {
+            
+            // Assemble a 'doneList' so that the last async web query to complete will hide the loading mask and open up the panel
+            var doneList = [];
+            var hasData = false;
+            for (var i=0; i<me.layerList.length; i++) doneList.push(false);
+            
+            // When clicked on map, go through the layers and find the ones that have been clicked on
+            for (var j=0; j<me.layerList.length; j++) {
+                var bbox = me.layerList[j].bbox;
+                
+                // Send a request to the WMS service if the click is within the resource's bounding box
+                if (evt.latLng.lat() < bbox.northBoundLatitude && evt.latLng.lat() > bbox.southBoundLatitude &&
+                    evt.latLng.lng() < bbox.eastBoundLongitude && evt.latLng.lng() > bbox.westBoundLongitude) {
+                    
+                    // Show loading mask 
+                    GoogleMapService.busyStart();
+                    
+                    // Send request to WMS service
+                    GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, me.layerList[j].resource, me.layerList[j].style, j).then(function(response) 
+                        {  
+                            // Used to check for an empty response, which occurs when user clicks/touches on empty space
+                            var empty_html_body = /<body>\s*<\/body>/g;
+                            var empty_html_body2 = /<body>\s*<script .+<\/script>\s*<\/body>/g;
+                            var empty_gml_body = /<wfs:FeatureCollection .+\/>$/g;
+
+                            // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
+                            if (response.status==200 && empty_gml_body.test(response.data)==false) {
+                                var displayable = me.setPanelNode(GMLParserService.getRootNode(response.data), me.layerList[response.config.slot_num].resource.name, "WMS");
+                                if (!hasData && displayable) hasData = true;
+                            }
+                            doneList[response.config.slot_num] = true;
+                            if (me.lastOne(doneList)) {
+                                // Hide loading mask
+                                GoogleMapService.busyEnd();
+                                if (hasData) {
+                                    me.openPanel(false);
+                                }
+                            }
+                        },
+                        function(errorResponse) {
+                            doneList[errorResponse.config.slot_num] = true;
+                            if (me.lastOne(doneList)) {
+                                // Hide loading mask
+                                GoogleMapService.busyEnd();
+                                if (hasData) {
+                                    me.openPanel(false);
+                                }
+                            }
+                        }
+                    );
+                    
+                // If click is not within this layer's bounding box
+                } else {
+                    doneList[j] = true;
+                    if (me.lastOne(doneList)) {
+                        // Hide loading mask
+                        GoogleMapService.busyEnd();
+                        if (hasData) {
+                            me.openPanel(false);
+                        }
+                    }
+                }                   
+            }
+        });         
+    };
+    this.registerMap(GoogleMapService.getMap());
+    
+    /**
+    * Returns true iff all elements in array are true else false
+    * @method lastOne
+    * @param doneList boolean array
+    */
+    this.lastOne = function (doneList) {
+        for (var i=0; i< doneList.length; i++) {
+           if (!doneList[i]) {
+               return false;
+           }
+        }
+        return true;
+    };
     
     /**
     * Register the panel by passing in some querier panel controller functions.
@@ -17,8 +107,11 @@ allModules.service('QuerierPanelService', ['$compile','LayerManagerService', fun
     *    'useApply' boolean parameter. Set to true and 'openPanelFn()' will use the '$apply()' method to make the panel open. Set to false and '$apply()' will not be used. 
     *    It is recommended to set to false in places where you would get an '$digest already in progress' error, e.g. calling 'setPanel(true)' from within a 'then()' function
     * @param setXMLFn function used to display XML data in the panel
-    *    function setXMLFn(xmlString) { ... }
+    *    function setXMLFn(xmlString, layerName, prependStr) return boolean
     *    'xmlString' is a string of xml to be displayed
+    *    'layerName' layer display name
+    *    'prependStr' string to prepend to layer display name
+    *    returns true is there is data to display
     */
     this.registerPanel = function (openPanelFn, setXMLFn) {
         // Store the controller functions for future use
@@ -51,13 +144,16 @@ allModules.service('QuerierPanelService', ['$compile','LayerManagerService', fun
     };
         
     /**
-    * Set the HTML string to be displayed on the panel
-    * @method setPanelXml
-    * @param xmlString
+    * Set the XML string to be displayed on the panel
+    * @method setPanelNode
+    * @param xmlString XML string to be displayed
+    * @param displayName name of layer or feature, to be used if no suitable name is found within XML string
+    * @param prependStr string to prepend to display name e.g. 'WMS', 'WFS'. Used for display purposes
+    * @return boolean value, true if the panel should be opened because there is something to display
     */
-    this.setPanelNode = function(node)
+    this.setPanelNode = function(node, displayName, prependStr)
     {       
-        this.setXMLFn(node);
+        return this.setXMLFn(node, displayName, prependStr);
     };
     
     /**
@@ -73,8 +169,6 @@ allModules.service('QuerierPanelService', ['$compile','LayerManagerService', fun
             var onlineResource = onlineResources[i];
             for (var j=0; j<this.layerList.length; j++) {
                 if (this.layerList[j].resource==onlineResource) {
-                    // Remove event listener from map
-                    this.layerList[j].listener.remove();
                     // Delete from list
                     this.layerList.splice(j,1);
                     
@@ -83,19 +177,24 @@ allModules.service('QuerierPanelService', ['$compile','LayerManagerService', fun
         }
     };
     
+    
     /**
     * Registers the mapEventListener object and onlineResource object
     * This should be called after the 'mousedown' event is registered with the google map.
     * @method registerLayer
+    * @param map Google Map that layer is attached to
     * @param onlineResource object representing the WMS resource displayed as a map layer
-    * @param mapEventListener 'MapsEventListener' object created when map listener routine is registered using 'google.maps.event' namespace
+    * @param bbox bounding box that contains this layer
+    * @param style layer's style
     */
-    this.registerLayer = function(onlineResource, mapEventListener)
+    this.registerLayer = function(aMap, onlineResource, bBox, aStyle)
     {
         // Add to list
         this.layerList.push({
+            map: aMap,
             resource: onlineResource,
-            listener: mapEventListener
+            bbox: bBox,
+            style: aStyle
         });
     };
     

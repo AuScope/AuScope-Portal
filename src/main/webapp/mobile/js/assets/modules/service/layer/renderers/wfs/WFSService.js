@@ -24,8 +24,10 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
                 GoogleMapService.busyStart();
                 
                 // Set data for the query panel and display it
-                QuerierPanelService.setPanelNode(point.featureNode);
-                QuerierPanelService.openPanel(true);
+                var displayable = QuerierPanelService.setPanelNode(point.featureNode, "Feature", "WFS");
+                if (displayable) { 
+                    QuerierPanelService.openPanel(true);
+                }
                 
                 // Ask the map to dissolve the loading mask
                 GoogleMapService.busyEnd();
