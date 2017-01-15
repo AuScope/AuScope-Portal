@@ -27,13 +27,24 @@
         </div>
     </form>
  
-    <div ng-if="!layer.filterCollection.optionalFilters" class="alert alert-danger" role="alert">No Filtering option available for this layer.  <br><br>
+    <div ng-if="!layer.filterCollection.optionalFilters" class="alert alert-danger no-filter-subpanel" role="alert">
+        <div class="row">
+            <div class="col-xs-12 no-filter-msg">No Filtering option available for this layer.</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-7">
                 <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(layer)">Add Layer</button>
-     </div> 
+            </div>
+            <div ng-if="isWMSLayer();" class="col-xs-5 opacity-slider">
+                <div>Opacity</div>
+                <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
+            </div>
+        </div>
+    </div> 
  
  
     <fieldset ng-if="layer.filterCollection.optionalFilters" class="show-fieldset-borders">
-         <legend><small>Optional Filters</small></legend>
+         <legend>Optional Filters</legend>
 	    <form>
             <label for="form-filter-selection">Select Filter:</label>        
 		    <div ng-if="layer.filterCollection.optionalFilters" class="btn-group" uib-dropdown>
@@ -113,7 +124,13 @@
     
    
  
-    <div ng-if="layer.filterCollection.optionalFilters">
-        <button type="button" class="filter-form-button btn btn-info btn-sm" ng-click="addLayer(layer)">Add Layer</button>      
+    <div ng-if="layer.filterCollection.optionalFilters" class="filter-subpanel">
+        <div class="col-xs-7">
+            <button type="button" class="btn btn-info add-layer-btn" ng-click="addLayer(layer)">Add Layer</button>
+        </div>
+        <div ng-if="isWMSLayer();" class="col-xs-5 opacity-slider">
+            <div >Opacity</div>
+            <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
+        </div>            
     </div>
  </div>

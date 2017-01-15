@@ -3,8 +3,22 @@
  * @module controllers
  * @class loadFilterCtrl
  */
-allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService','GetFilterParamService',
-                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService,GetFilterParamService) {
+allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService','GetFilterParamService','Constants',
+                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService,GetFilterParamService,Constants) {
+    
+    /* Opacity slider */
+    $scope.slider = {
+        value: 100,
+        options: {
+            id: 'slider-id',
+            floor: 0,
+            ceil: 100,
+            showSelectionBar: true,
+            onEnd: function(sliderId, modelValue) {
+                RenderHandlerService.setLayerOpacity($scope.layer, modelValue/100.0);
+            }
+        }
+    };
     
     /* Optional filters for display in panel */
     $scope.optionalFilters=[];
@@ -20,6 +34,16 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     
     /* Value displayed in the mandatory dropdown selector */ 
     $scope.mandDropdownSelectLabel =  "-- choose an option --";
+    
+    
+    /**
+     * Returns true if and only if the current layer is WMS
+     * @method isWMSLayer
+     */
+    $scope.isWMSLayer = function () {
+        return (Constants.rendererLoader[$scope.layer.id]=='WMSService' || !Constants.rendererLoader[$scope.layer.id] && LayerManagerService.getWMS($scope.layer).length > 0);
+    }
+    
     
     /**
      * Sets the value displayed in the optional dropdown selector
@@ -133,7 +157,5 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      $scope.getKey = function(options) {
          return Object.keys(options)[0];
      };
-
-     
     
 }]);

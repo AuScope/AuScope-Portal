@@ -56,9 +56,9 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
        };   
  
         /**
-         * Method to decide how the wms layer should be rendered and add the wms to the map 
+         * Method to decide how the wfs layer should be rendered and add the wfs to the map 
          * @method renderLayer
-         * @param layer - The layer containing the wms to be rendered
+         * @param layer - The layer containing the wfs to be rendered
          */
         this.renderLayer = function(layer,param){   
             var map =  GoogleMapService.getMap();            
@@ -110,9 +110,9 @@ allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerSe
         };
         
         /**
-         * Method to decide how the wms resource should be rendered and add the wms to the map 
+         * Method to decide how the wfs resource should be rendered and add the wfs to the map 
          * @method renderResource
-         * @param resource - The resource containing the wms to be rendered
+         * @param resource - The resource containing the wfs to be rendered
          */
         this.renderCSWRecord = function(layer,cswRecord){   
             var map =  GoogleMapService.getMap();            

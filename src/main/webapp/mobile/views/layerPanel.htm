@@ -78,7 +78,7 @@
                                 <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]}" ng-click="analyticLayerList[layer.id] && togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
                             </tr>
                             <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
-                                <td colspan="4">
+                                <td colspan="4" style="border-top-style: none;">
                                     <filter-panel  layer="layer"  class='layer-panel-nested'></filter-panel>                                  
                                 </td>
                             </tr>

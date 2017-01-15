@@ -1,7 +1,15 @@
 /* NOTO BENE: The max-width size must be that same as used in the Javascript code (GoogleMapService.js) */
 @media screen and (max-width: 658px) {
-    body, .filter-form  { 
+    body  { 
        font-size: 1.4em; 
+    }
+    
+    .filter-form {
+        font-size: 1em;
+    }
+    
+    legend {
+        font-size: 0.8em;
     }
     
     /* width of layer and query panels */
@@ -23,7 +31,7 @@
     
     /* font sizes of layer panel's filter controls */
     .filter-form-button, .filter-form-select, .filter-form-label, .filter-form-input, .filter-form-select {
-        font-size: 16px !important;
+        font-size: 1.0em !important;
     }
     
     /* Used in the dropdowns in layer panel */
@@ -32,6 +40,10 @@
         margin-bottom: 5px;
         padding-top: 5px;
         padding-bottom: 5px;
+    }
+    
+    .add-layer-btn {
+        font-size: 1.2em;
     }
     
     /* Remove controller with magnifier, envelope & lat/lng coords */
@@ -160,14 +172,36 @@
     .panel-body {
         padding: 0px;
     }
+    
+    /* Slider used to control opacity */
+    .opacity-slider {
+        font-size: 14px;
+    }
+    
+    .opacity-slider-label {
+        font-size: 10px;
+    }
+    
+/*    .rzslider .rz-pointer {
+        width: 32px;
+        height: 32px;
+    }*/
 }
 
 
 @media screen and (max-width: 400px) {
     
     /* Make the font slightly larger, because it is harder to read on a small screen */
-    body, .filter-form { 
+    body { 
        font-size: 1.5em; 
+    }
+    
+    .filter-form { 
+       font-size: 0.9em;
+    }
+    
+    legend {
+        font-size: 0.8em;
     }
     
     /* width of layer and query panels */
@@ -188,7 +222,7 @@
     
     /* font sizes of layer panel's filter controls */ 
     .filter-form-button, .filter-form-select, .filter-form-label, .filter-form-input, .filter-form-select {
-        font-size: 16px !important;
+        font-size: 1.1em !important;
     }
     
     /* Used in the dropdowns in layer panel */
@@ -199,8 +233,12 @@
         padding-bottom: 8px;
     }
     
+    .add-layer-btn {
+        font-size: 1.2em;
+    }
+    
     /* 'logo-menu' is the AuScope logo */
-    #logo-menu{  
+    #logo-menu {  
 	  bottom : 3em;
 	  left : 0.5em;     
 	  width:80px;  
@@ -208,11 +246,11 @@
 	  position: absolute;   
 	  z-index: 50;
 	}
-	#logo-menu  img{  
+	#logo-menu  img {  
 	  width:80px;  
 	}
     
-    #layer-menu {
+    #layer-menu  {
         padding-left:0.2em;
         padding-right:0.2em;
     }
@@ -296,6 +334,20 @@
     .panel-body {
         padding: 0px;
     }
+    
+    /* Slider used to control opacity */
+    .opacity-slider {
+        font-size: 14px;
+    }
+    
+    .opacity-slider-label {
+        font-size: 10px;
+    }
+    
+/*    .rzslider .rz-pointer {
+        width: 32px;
+        height: 32px;
+    }*/
 
 }
 

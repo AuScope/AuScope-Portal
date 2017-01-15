@@ -124,6 +124,22 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         return this.activeLayers;
     };
     
+    /**
+     * Given a layer and an opacity, set the opacity of the layer
+     * @method setLayerOpacity
+     * @param layer - the layer whose opacity will be set
+     * @param opacity - opacity value 
+     */ 
+    this.setLayerOpacity = function(layer, opacity) {
+        if (this.activeLayers[layer.id]) {
+            if (!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)) {
+                for (var i = 0; i < this.activeLayers[layer.id].layers.length; i++) {
+                    this.activeLayers[layer.id].layers[i].setOpacity(opacity);
+                }
+            }
+        }
+    };
+    
    
    /**
     * Remove the layer if it is rendered on the map
@@ -131,20 +147,20 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     * @param layer - the csw layer to remove from map 
     */ 
     this.removeActiveLayer = function(layer){
-        if(this.activeLayers[layer.id]){
-            if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].markers)){
+        if (this.activeLayers[layer.id]) {
+            if (!UtilitiesService.isEmpty(this.activeLayers[layer.id].markers)) {
                 for (var i = 0; i < this.activeLayers[layer.id].markers.length; i++) {
                     this.activeLayers[layer.id].markers[i].setMap(null);                    
-                 };
-                 this.activeLayers[layer.id].markers=[];
+                };
+                this.activeLayers[layer.id].markers=[];
             };
             
-            if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)){
+            if (!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)) {
                 for (var i = 0; i < this.activeLayers[layer.id].layers.length; i++) {
                     var layerIndex = this.mainMap.overlayMapTypes.indexOf(this.activeLayers[layer.id].layers[i]);
                     this.mainMap.overlayMapTypes.removeAt(layerIndex);
-                 };
-                 this.activeLayers[layer.id].layers=[];
+                };
+                this.activeLayers[layer.id].layers=[];
             };
            
             this.broadcast('layer.removed',layer);

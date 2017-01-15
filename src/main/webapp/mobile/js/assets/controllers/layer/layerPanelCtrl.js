@@ -81,6 +81,11 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
             $scope.status[group][cswRecordId].isExpanded = false;
         }
         closeOtherPanels();
+        
+        // RzSliders must be refreshed to initialise properly
+        $timeout(function () {
+            $scope.$broadcast('rzSliderForceRender');
+        });
         return;
         
     };

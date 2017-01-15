@@ -1,4 +1,15 @@
-body, .filter-form { font-size: 1.3em; }
+body  { 
+    font-size: 1.3em;
+}
+
+.filter-form  {
+    font-size: 1em;
+}
+
+legend {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
 
 html,body {
     height: 100%;
@@ -8,8 +19,12 @@ html,body {
 }
 
 .filter-form-button {
-    font-size: 12px !important;
+    font-size: 1.0em !important;
     min-width: 170px;
+}
+
+.add-layer-btn {
+    font-size: 1.1em;
 }
 
 div.row {
@@ -522,3 +537,54 @@ the icons will appear in front of dropdown menus, regardless of dropdown menus' 
     width: 16px;
     height: 16px;
 }
+
+/* Slider used to control opacity */
+.opacity-slider {
+    font-size: 14px;
+}
+    
+.opacity-slider-label {
+    font-size: 10px;
+}
+
+/* Rules for filter panel whne it has no controls */
+.no-filter-msg {
+    top: -0.6em;
+}
+
+.no-filter-subpanel {
+    padding-bottom: 20px;
+    padding-top:20px;
+}
+
+/* Rules to make label for slider sit behind it */ 
+.no-filter-subpanel .opacity-slider > div {
+    position: absolute;
+    top: -0.3em;
+    bottom: 0;
+    left: 1.5em;
+    right: 0;
+    opacity: 0.3;
+}
+
+.no-filter-subpanel .opacity-slider > .rzslider {
+    top: -0.6em;
+    left: 0;
+    opacity: 1.0;
+}
+
+.filter-subpanel .opacity-slider > div {
+    position: absolute;
+    top: -1em;
+    bottom: 0;
+    left: 2.5em;
+    right: 0;
+    opacity: 0.3;
+}
+
+.filter-subpanel  .opacity-slider > .rzslider {
+    top: -1em;
+    left: 0;
+    opacity: 1.0;
+}
+
