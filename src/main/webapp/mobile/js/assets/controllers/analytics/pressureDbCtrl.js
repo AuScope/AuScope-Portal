@@ -42,6 +42,10 @@ allControllers.controller('pressureDbCtrl', ['$scope','GoogleMapService','$http'
         var setVal = val;
         $scope.propertySelectLabel = setVal;
         $scope.param.ccProperty=setVal;
+        // Force slider to update itself
+        $timeout(function () {
+            $scope.$broadcast('rzSliderForceRender');
+        });
     }
     
 }]);
