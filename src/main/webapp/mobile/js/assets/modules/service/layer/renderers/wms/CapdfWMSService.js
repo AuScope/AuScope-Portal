@@ -5,8 +5,8 @@
  * @class CapdfWMSService
  * 
  */
-allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService) {
+allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','Constants',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,Constants) {
     
   
     
@@ -132,6 +132,13 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
         var map =  GoogleMapService.getMap();
         var me = this;
         var maxSldLength = 2000;
+        
+        //VT: on a small screen, broadcast a request to add a layer has been established so that 
+        //VT:action like closing panels can be act on. 
+        var mq = window.matchMedia(Constants.smallScreenTest);
+        if(mq.matches){
+            $rootScope.$broadcast('layer.add', layer);
+        }
         
         var registerTileLoadedEvent = function(mapLayer, layer,onlineResource,status){
             google.maps.event.addListener(mapLayer, 'tilesloaded', function(evt) {

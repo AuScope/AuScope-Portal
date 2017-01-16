@@ -1,4 +1,4 @@
-/* NOTO BENE: The max-width size must be that same as used in the Javascript code (GoogleMapService.js) */
+/* NOTO BENE: The max-width size must be that same as used in the Javascript code (app.js) */
 @media screen and (max-width: 658px) {
     body  { 
        font-size: 1.4em; 
@@ -42,7 +42,7 @@
         padding-bottom: 5px;
     }
     
-    .add-layer-btn {
+    .add-layer-btn, .apply-btn {
         font-size: 1.2em;
     }
     
@@ -182,10 +182,6 @@
         font-size: 10px;
     }
     
-/*    .rzslider .rz-pointer {
-        width: 32px;
-        height: 32px;
-    }*/
 }
 
 
@@ -233,7 +229,7 @@
         padding-bottom: 8px;
     }
     
-    .add-layer-btn {
+    .add-layer-btn, .apply-btn {
         font-size: 1.2em;
     }
     
@@ -344,11 +340,6 @@
         font-size: 10px;
     }
     
-/*    .rzslider .rz-pointer {
-        width: 32px;
-        height: 32px;
-    }*/
-
 }
 
 

@@ -20,7 +20,7 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
 
         //VT: on a small screen, broadcast a request to add a layer has been established so that 
         //VT:action like closing panels can be act on. 
-        var mq = window.matchMedia( "(max-width: 658px)" );
+        var mq = window.matchMedia(Constants.smallScreenTest);
         if(mq.matches){
             $rootScope.$broadcast('layer.add', layer);
         }
@@ -65,7 +65,7 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
          }
          //VT: on a small screen, broadcast a request to add a layer has been established so that 
          //VT:action like closing panels can be act on. 
-         var mq = window.matchMedia( "(max-width: 658px)" );
+         var mq = window.matchMedia(Constants.smallScreenTest);
          if(mq.matches){
              $rootScope.$broadcast('layer.add', layer);
          }

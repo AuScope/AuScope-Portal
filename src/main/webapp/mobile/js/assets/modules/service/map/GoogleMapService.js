@@ -8,8 +8,8 @@
  * @event data.select.end - end of the drawing for the data selection event
  * @event layer.removed - removing of a layer from map event
  */
-allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter',
-                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter','Constants',
+                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter,Constants) {
    
     this.mainMap;
     this.activeLayers = {};
@@ -175,7 +175,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
      * 
      */
      this.initMap = function() {
-         var mq = window.matchMedia( "(max-width: 658px)" );
+         var mq = window.matchMedia(Constants.smallScreenTest);
          this.mainMap = new google.maps.Map(document.getElementById('google-map-main'), {
            center: {lat: -28.397, lng: 132.644},
            minZoom:(mq.matches? 3 : 4),

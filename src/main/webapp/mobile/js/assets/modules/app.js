@@ -43,6 +43,8 @@ app.constant('Constants', {
     XPATH_STRING_TYPE : (window.XPathResult ? XPathResult.STRING_TYPE : 0),
     XPATH_UNORDERED_NODE_ITERATOR_TYPE: (window.XPathResult ? XPathResult.UNORDERED_NODE_ITERATOR_TYPE : 1),
     
+    smallScreenTest: '(max-width: 658px)',
+    
 }); 
 
 

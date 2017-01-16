@@ -3,8 +3,8 @@
  * @module controllers
  * @class googleMapCtrl
  */
-allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapService','RenderStatusService','$timeout', 
-                                            function ($scope,$rootScope,GoogleMapService,RenderStatusService,$timeout) {
+allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapService','RenderStatusService','$timeout','Constants',
+                                            function ($scope,$rootScope,GoogleMapService,RenderStatusService,$timeout,Constants) {
     
     $scope.active = {};
     
@@ -41,7 +41,7 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
     
 
     //VT: on a small screen, close the panel after adding the layer
-    var mq = window.matchMedia( "(max-width: 658px)" );
+    var mq = window.matchMedia(Constants.smallScreenTest);
     if(mq.matches){
         $scope.$on('layer.add', function (evt,layer) {
             $scope.showlayerPanel=false;

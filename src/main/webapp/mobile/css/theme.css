@@ -23,7 +23,7 @@ html,body {
     min-width: 170px;
 }
 
-.add-layer-btn {
+.add-layer-btn, .apply-btn {
     font-size: 1.1em;
 }
 
@@ -355,7 +355,7 @@ fieldset[disabled] .btn-red.active {
 .icon-lg-side:hover .fa-round {
   background-color: #d14f30;
   color: white;
-  font-size: 1.2em /* 1.8em; */
+  font-size: 1.2em;
 }
 
 .fa-round-disable {
@@ -586,5 +586,10 @@ the icons will appear in front of dropdown menus, regardless of dropdown menus' 
     top: -1em;
     left: 0;
     opacity: 1.0;
+}
+
+div[ng-controller="capdfHydrogeochemCtrl"] div.col-md-12 {
+    padding-right: 0px;
+    padding-left: 0px;
 }
 
