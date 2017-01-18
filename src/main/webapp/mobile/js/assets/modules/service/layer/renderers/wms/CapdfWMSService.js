@@ -5,8 +5,8 @@
  * @class CapdfWMSService
  * 
  */
-allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService) {
+allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','Constants',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,Constants) {
     
   
     
@@ -19,51 +19,49 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
      */
     this.generateWMS_1_1_1_Layer = function(layername,onlineResource,style){
         
-       var myOnlineResource =  onlineResource;       
-       var map = GoogleMapService.getMap();
-       var imagelayer = new google.maps.ImageMapType({
-           getTileUrl: function (coord, zoom) {
+        var myOnlineResource =  onlineResource;       
+        var map = GoogleMapService.getMap();
+        var imagelayer = new google.maps.ImageMapType({
+            getTileUrl: function (coord, zoom) {
              
-               var proj = map.getProjection();
-               var zfactor = Math.pow(2, zoom);
-               // get Long Lat coordinates
-               var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 256 / zfactor, coord.y * 256 / zfactor));
-               var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
+                var proj = map.getProjection();
+                var zfactor = Math.pow(2, zoom);
+                
+                // Get LatLng coordinates
+                var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 256 / zfactor, coord.y * 256 / zfactor));
+                var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
 
-               //corrections for the slight shift of the SLP (mapserver)
-               var deltaX = 0;//0.0013;
-               var deltaY = 0;//0.00058;
-
+                // Transform [lng, lat] to map projection coordinates [x, y]
+                var bot3857=proj4("EPSG:4326", "EPSG:3857", [bot.lng(), bot.lat()]);
+                var top3857=proj4("EPSG:4326", "EPSG:3857", [top.lng(), top.lat()]);
                
-               var bbox =      (top.lng() + deltaX) + "," +
-                               (bot.lat() + deltaY) + "," +
-                               (bot.lng() + deltaX) + "," +
-                               (top.lat() + deltaY);
+                // BBOX in EPSG:3857
+                var bbox = top3857[0] + "," + bot3857[1] + "," + bot3857[0] + "," + top3857[1];
+
+                //base WMS URL
+                var url = myOnlineResource.url + "?";
+                url += "&REQUEST=GetMap"; //WMS operation
+                url += "&SERVICE=WMS";    //WMS service
+                url += "&VERSION=1.1.1";  //WMS version  
+                if(style){
+                    url += "&SLD_BODY=" + encodeURIComponent(style);
+                }
+                url += "&STYLES=";  
+                //VT: this is the only difference with the normal wms renderer
+                url += "&LAYERS=" + layername; //WMS layers
+                url += "&FORMAT=image/png" ; //WMS format
+                url += "&BGCOLOR=0xFFFFFF";  
+                url += "&TRANSPARENT=TRUE";
+                url += "&SRS=EPSG:3857";     //set EPSG:3857 map projection coordinates 
+                url += "&BBOX=" + bbox;      // set bounding box
+                url += "&WIDTH=256";         //tile size in google
+                url += "&HEIGHT=256";                
+                return url;                 // return URL for the tile
      
-               //base WMS URL
-               var url = myOnlineResource.url + "?";
-               url += "&REQUEST=GetMap"; //WMS operation
-               url += "&SERVICE=WMS";    //WMS service
-               url += "&VERSION=1.1.1";  //WMS version  
-               if(style){
-                   url += "&SLD_BODY=" + encodeURIComponent(style);
-               }
-               url += "&STYLES=";  
-               //VT: this is the only difference with the normal wms renderer
-               url += "&LAYERS=" + layername; //WMS layers
-               url += "&FORMAT=image/png" ; //WMS format
-               url += "&BGCOLOR=0xFFFFFF";  
-               url += "&TRANSPARENT=TRUE";
-               url += "&SRS=EPSG:4326";     //set WGS84 
-               url += "&BBOX=" + bbox;      // set bounding box
-               url += "&WIDTH=256";         //tile size in google
-               url += "&HEIGHT=256";               
-               return url;                 // return URL for the tile
-     
-           },           
-           tileSize: new google.maps.Size(256, 256),
-           isPng: true
-       });
+            },           
+            tileSize: new google.maps.Size(256, 256),
+            isPng: true
+        });
         return imagelayer;
     };
     
@@ -84,19 +82,17 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
               
                 var proj = map.getProjection();
                 var zfactor = Math.pow(2, zoom);
-                // get Long Lat coordinates
+                
+                // Get LatLng coordinates
                 var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 256 / zfactor, coord.y * 256 / zfactor));
                 var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
-
-                //corrections for the slight shift of the SLP (mapserver)
-                var deltaX = 0;//0.0013;
-                var deltaY = 0;//0.00058;
-
                 
-                var bbox =      (top.lng() + deltaX) + "," +
-                                (bot.lat() + deltaY) + "," +
-                                (bot.lng() + deltaX) + "," +
-                                (top.lat() + deltaY);
+                // Transform [lng, lat] to map projection coordinates [x, y]
+                var bot3857=proj4("EPSG:4326", "EPSG:3857", [bot.lng(), bot.lat()]);
+                var top3857=proj4("EPSG:4326", "EPSG:3857", [top.lng(), top.lat()]);
+
+                // BBOX in EPSG:3857
+                var bbox = bot3857[1] + "," + top3857[0] + "," + top3857[1] + "," + bot3857[0];
       
                 //base WMS URL
                 var url = myOnlineResource.url + "?";;
@@ -112,7 +108,7 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                 url += "&FORMAT=image/png" ; 
                 url += "&BGCOLOR=0xFFFFFF";  
                 url += "&TRANSPARENT=TRUE";
-                url += "&CRS=CRS:84";     //might need to set to CRS:84 for 1.3.0
+                url += "&CRS=EPSG:3857";  //set EPSG:3857 map projection coordinates
                 url += "&BBOX=" + bbox;      
                 url += "&WIDTH=256";        
                 url += "&HEIGHT=256";
@@ -136,6 +132,13 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
         var map =  GoogleMapService.getMap();
         var me = this;
         var maxSldLength = 2000;
+        
+        //VT: on a small screen, broadcast a request to add a layer has been established so that 
+        //VT:action like closing panels can be act on. 
+        var mq = window.matchMedia(Constants.smallScreenTest);
+        if(mq.matches){
+            $rootScope.$broadcast('layer.add', layer);
+        }
         
         var registerTileLoadedEvent = function(mapLayer, layer,onlineResource,status){
             google.maps.event.addListener(mapLayer, 'tilesloaded', function(evt) {

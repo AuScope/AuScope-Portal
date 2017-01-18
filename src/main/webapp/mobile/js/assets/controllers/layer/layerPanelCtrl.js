@@ -4,13 +4,14 @@
  * @class layerPanelCtrl
  * 
  */
-allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService',
-                                             function ($scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService) {
+allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService','Constants',
+                                             function ($scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,Constants) {
     $scope.cswRecords={};
     GetCSWRecordService.getCSWKnownLayers().then(function(data){
         $scope.cswRecords=data;      
     });
 
+    $scope.analyticLayerList = Constants.analyticLoader;
 
     $scope.status = {};  
     
@@ -80,6 +81,11 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
             $scope.status[group][cswRecordId].isExpanded = false;
         }
         closeOtherPanels();
+        
+        // RzSliders must be refreshed to initialise properly
+        $timeout(function () {
+            $scope.$broadcast('rzSliderForceRender');
+        });
         return;
         
     };

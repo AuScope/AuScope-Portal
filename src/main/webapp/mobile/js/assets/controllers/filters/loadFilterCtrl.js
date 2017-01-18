@@ -3,39 +3,102 @@
  * @module controllers
  * @class loadFilterCtrl
  */
-allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService','GetFilterParamService',
-                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService,GetFilterParamService) {
+allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService','GetFilterParamService','Constants',
+                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService,GetFilterParamService,Constants) {
     
-   $scope.optionalFilters=[];
-   $scope.providers=[];
-   $scope.select={
-           filter:{}
-   };
-  
-  
+    /* Opacity slider */
+    $scope.slider = {
+        value: 100,
+        options: {
+            id: 'slider-id',
+            floor: 0,
+            ceil: 100,
+            showSelectionBar: true,
+            onEnd: function(sliderId, modelValue) {
+                RenderHandlerService.setLayerOpacity($scope.layer, modelValue/100.0);
+            }
+        }
+    };
+    
+    /* Optional filters for display in panel */
+    $scope.optionalFilters=[];
+    
+    /* Providers used for display in panel */
+    $scope.providers=[];
+    
+    /* Value displayed in the optional dropdown selector */ 
+    $scope.optDropdownSelectLabel = "-- choose an option --";
+    
+    /* Value displayed in the remote dropdown selector */
+    $scope.dropdownRemoteLabel = "-- choose an option --";
+    
+    /* Value displayed in the mandatory dropdown selector */ 
+    $scope.mandDropdownSelectLabel =  "-- choose an option --";
+    
+    
+    /**
+     * Returns true if and only if the current layer is WMS
+     * @method isWMSLayer
+     */
+    $scope.isWMSLayer = function () {
+        return (Constants.rendererLoader[$scope.layer.id]=='WMSService' || !Constants.rendererLoader[$scope.layer.id] && LayerManagerService.getWMS($scope.layer).length > 0);
+    }
+    
+    
+    /**
+     * Sets the value displayed in the optional dropdown selector
+     * @method setOptSelectList
+     * @param val value to be set in dropdown selector
+     */
+    $scope.setOptSelectList = function(val) {
+        var setVal = val;
+        $scope.optDropdownSelectLabel = setVal;
+    }
+    
+    /**
+     * Sets the value displayed in the mandatory dropdown selector
+     * @method setMandSelectList
+     * @param val value to be set in dropdown selector
+     */
+    $scope.setMandSelectList = function(val) {
+        var setVal = val;
+        $scope.mandDropdownSelectLabel = setVal;
+    }
    
-   var getProvider = function(){
-       var cswRecords = $scope.layer.cswRecords;
+    /**
+     * Sets the value displayed in the remote dropdown selector
+     * @method setDropdownRemote
+     * @param val value to be set in dropdown selector
+     */
+    $scope.setDropdownRemote = function(val) {
+        var setVal = val;
+        $scope.dropdownRemoteLabel = setVal;
+    }
+   
+    /**
+     * Assembles a list of providers, which will be displayed in the panel
+     * @method getProvider
+     */
+    var getProvider = function(){
+        var cswRecords = $scope.layer.cswRecords;
        
-     //Set up a map of admin areas + URL's that belong to each
-       var adminAreasMap = {};
-       for (var i = 0; i < cswRecords.length; i++) {
-           var adminArea = cswRecords[i]['adminArea'];
-           var allOnlineResources = LayerManagerService.getOnlineResourcesFromCSW(cswRecords[i]);        
-           adminAreasMap[adminArea] = UtilitiesService.getUrlDomain(allOnlineResources[0].url);
-               
-           
-       }
+        // Set up a map of admin areas + URL's that belong to each
+        var adminAreasMap = {};
+        for (var i = 0; i < cswRecords.length; i++) {
+            var adminArea = cswRecords[i]['adminArea'];
+            var allOnlineResources = LayerManagerService.getOnlineResourcesFromCSW(cswRecords[i]);        
+            adminAreasMap[adminArea] = UtilitiesService.getUrlDomain(allOnlineResources[0].url);   
+        }
 
-       //Set up a list of each unique admin area      
-       for(key in adminAreasMap){
-           $scope.providers.push({
-               label : key,
-               value : adminAreasMap[key]
-           });
-       }
+        // Set up a list of each unique admin area      
+        for(key in adminAreasMap){
+            $scope.providers.push({
+                label : key,
+                value : adminAreasMap[key]
+            });
+        }
        
-   };
+    };
    
    
    
@@ -58,7 +121,11 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
          RenderHandlerService.renderLayer(layer,param);
      };
      
-
+     /**
+      * Adds a new filter to be displayed in the panel
+      * @method addFilter
+      * @param filter filter object to be added to the panel
+      */
      $scope.addFilter = function(filter){
          if(filter==null){
              return;
@@ -78,15 +145,17 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
          
      };
      
+     /**
+      * Removes all filters displayed in panel
+      * @method clearFilter
+      */
      $scope.clearFilter = function(){
          $scope.optionalFilters=[];
-         $scope.select.filter={};
      };
+     
      
      $scope.getKey = function(options) {
          return Object.keys(options)[0];
      };
-
-     
     
 }]);

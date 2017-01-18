@@ -14,16 +14,13 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
      * @method renderLayer 
      * @param layer - the layer for rendering
      */
-    this.renderLayer = function(layer,param){   
+    this.renderLayer = function(layer,param){
+                
         GoogleMapService.removeActiveLayer(layer);
-        
-        
-       
-        
-        
+
         //VT: on a small screen, broadcast a request to add a layer has been established so that 
         //VT:action like closing panels can be act on. 
-        var mq = window.matchMedia( "(max-width: 658px)" );
+        var mq = window.matchMedia(Constants.smallScreenTest);
         if(mq.matches){
             $rootScope.$broadcast('layer.add', layer);
         }
@@ -36,7 +33,19 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
         }else if(LayerManagerService.getWFS(layer).length > 0){
             WFSService.renderLayer(layer,param);          
         }
+        
      };
+
+
+    /**
+     * Given a layer and an opacity, set the opacity of the layer
+     * @method setLayerOpacity
+     * @param layer - the layer whose opacity will be set
+     * @param opacity - opacity value 
+     */
+    this.setLayerOpacity = function(layer, opacity) {
+        GoogleMapService.setLayerOpacity(layer, opacity);
+    };
      
      
      /**
@@ -56,7 +65,7 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
          }
          //VT: on a small screen, broadcast a request to add a layer has been established so that 
          //VT:action like closing panels can be act on. 
-         var mq = window.matchMedia( "(max-width: 658px)" );
+         var mq = window.matchMedia(Constants.smallScreenTest);
          if(mq.matches){
              $rootScope.$broadcast('layer.add', layer);
          }

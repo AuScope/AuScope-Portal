@@ -5,6 +5,55 @@
  * 
  */
 allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
+    
+        var manageParam = function(layer,onlineResource,param){
+            if(!param){
+                param = {};
+            }
+            //VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
+            if(layer.filterCollection){
+                var hiddenParams = [];
+                if(layer.filterCollection.hiddenParams){
+                    hiddenParams = layer.filterCollection.hiddenParams;   
+                }
+                for(var idx in hiddenParams){
+                    if(hiddenParams[idx].type=="MANDATORY.UIHiddenResourceAttribute"){
+                        param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
+                    }else{
+                        param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
+                    }
+                }
+                
+                //VT: mandatoryFilters
+                var mandatoryFilters = [];
+                if(layer.filterCollection.mandatoryFilters){
+                    mandatoryFilters = layer.filterCollection.mandatoryFilters;   
+                }
+                for(var idx in mandatoryFilters){            
+                    param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
+                }
+            }
+            return param;
+        };
+        
+        /**
+         * Get the wms style url if proxyStyleUrl is valid
+         * @method getWMSStyleUrl
+         * @param layer - the layer we would like to retrieve the sld for if proxyStyleUrl is defined
+         * @param onlineResource - the onlineResource of the layer we are rendering
+         * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.Used in capdf
+         * @return url - getUrl to retrieve sld
+         */
+        this.getWMSStyleUrl = function(layer,onlineResource,param){         
+            
+            param = manageParam(layer,onlineResource,param);
+    
+           if(layer.proxyStyleUrl){
+               return layer.proxyStyleUrl + "?" + $.param(param);
+           }else{               
+               return null;
+           }
+       };
        
     /**
      * Get the wms style if proxyStyleUrl is valid
@@ -15,33 +64,8 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
      * @return promise - a promise containing the sld for the layer
      */
      this.getWMSStyle = function(layer,onlineResource,param){         
-         if(!param){
-             param = {};
-         }
-         //VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
-         if(layer.filterCollection){
-             var hiddenParams = [];
-             if(layer.filterCollection.hiddenParams){
-                 hiddenParams = layer.filterCollection.hiddenParams;   
-             }
-             for(var idx in hiddenParams){
-                 if(hiddenParams[idx].type=="MANDATORY.UIHiddenResourceAttribute"){
-                     param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
-                 }else{
-                     param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
-                 }
-             }
-             
-             //VT: mandatoryFilters
-             var mandatoryFilters = [];
-             if(layer.filterCollection.mandatoryFilters){
-                 mandatoryFilters = layer.filterCollection.mandatoryFilters;   
-             }
-             for(var idx in mandatoryFilters){            
-                 param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
-             }
-         }
          
+         param = manageParam(layer,onlineResource,param);
 
         if(layer.proxyStyleUrl){
              return $http.get('../' + layer.proxyStyleUrl,{
@@ -77,7 +101,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
      * @param serviceInfo CSW service information object
      * @param style OPTIONAL style to use when making the GetFeatureInfo request
      */
-    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo,style) {
+    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo, style, slot) {
         
         // This latLng needs to be converted into EPSG:3857 rect coords
         proj4.defs("EPSG:4326","+proj=longlat +datum=WGS84 +no_defs");
@@ -144,7 +168,8 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
             method: "POST",
             url: "../wmsMarkerPopup.do",
             data: get_params,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            slot_num: slot
         });
     };
      

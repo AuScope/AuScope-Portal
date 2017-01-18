@@ -12,15 +12,35 @@
             <div class="col-md-12">
                 <uib-accordion close-others="true" class="nested-accordion">
 	                <div uib-accordion-group class="panel-info" heading="Color Coding" is-open="true" is-disabled="false">	      
-	                
+	                    
 	                    <div class="row">
-	                       <div class="col-sm-3"><label>Group</label></div>
-	                       <div class="col-sm-9"><select ng-change="getPOIs(goi)" ng-model="goi" ng-options="group[1] as group[0] for group in gois"></select></div>	                    
+	                        <div class="col-sm-4"><label>Group</label></div>
+	                        <div class="col-sm-8">
+                                <div class="btn-group" uib-dropdown>
+                                    <button ng-init="setSelectedGoi('-- choose a Group --','');" id="capdf-hydrogeochem-group-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
+                                        {{selectedGoi}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="capdf-hydrogeochem-group-selec">
+                                        <li ng-repeat="group in gois"><a class="filter-form-select" ng-click="setSelectedGoi(group[0], group[1]); getPOIs(goi);">{{group[0]}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>	                    
 	                    </div>  
 	                    <div ng-if="goi" class="row">
-	                       <div class="col-sm-3"><label>Parameter</label></div>
-                           <div class="col-sm-9">
-                                <div ng-if="pois.length > 0"><select ng-change="renderSlider(paramOfInterest[2],paramOfInterest[3],paramOfInterest)" ng-model="paramOfInterest" ng-options="parameter as augmentLabel(parameter[0],parameter[1]) for parameter in pois"></select></div>
+	                        <div class="col-sm-4"><label>Parameter</label></div>
+                            <div class="col-sm-8">
+                                <div ng-if="pois.length > 0">
+                                    <div class="btn-group" uib-dropdown>
+                                        <button ng-init="setSelectedPoi('-- choose a Parameter --','');" id="capdf-hydrogeochem-param-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
+                                            {{selectedPoi}}
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="capdf-hydrogeochem-param-selec">
+                                            <li ng-repeat="parameter in pois"><a class="filter-form-select" ng-click="setSelectedPoi(augmentLabel(parameter[0],parameter[1]),parameter); renderSlider(paramOfInterest[2],paramOfInterest[3],paramOfInterest)">{{augmentLabel(parameter[0],parameter[1])}}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div ng-if="pois.length == 0" class="text-danger">No corresponding parameter found. Try another group</div>
                             </div>
 	                    </div>
@@ -36,35 +56,71 @@
 	                    
 	                    <div class="row">
 	                       <div class="col-sm-offset-3 col-sm-9">
-                              <button type="submit" class="btn btn-primary btn-sm" ng-click="renderColorCode(goi,paramOfInterest[0],slider.minValue,slider.maxValue)">Apply</button>
+                              <button type="submit" class="btn btn-primary btn-sm apply-btn" ng-click="renderColorCode(goi,paramOfInterest[0],slider.minValue,slider.maxValue)">Apply</button>
                             </div>	                    
 	                    </div>	                                    						
 	                </div>
 	               
 	                <div uib-accordion-group class="panel-info" heading="Graph">
-	                   <div class="row">
-                           <div class="col-sm-3"><label>Group</label></div>
-                           <div class="col-sm-9"><select ng-change="getPOIs(graphGroup)" ng-model="graphGroup" ng-options="group[1] as group[0] for group in gois"></select></div>                        
+	                    <div class="row">
+                            <div class="col-sm-3"><label>Group</label></div>
+                            <div class="col-sm-9">
+                                <div class="btn-group" uib-dropdown>
+                                    <button ng-init="setSelectedGraphGoi('-- choose a Group --','');" id="capdf-hydrogeochem-ggroup-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
+                                        {{selectedGraphGoi}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="capdf-hydrogeochem-ggroup-selec">
+                                        <li ng-repeat="group in gois"><a class="filter-form-select" ng-model="goi" ng-click="setSelectedGraphGoi(group[0], group[1]); getPOIs(graphGroup);">{{group[0]}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>                        
                         </div>  
                         <div ng-if="graphGroup" class="row">
-                           <div class="col-sm-3"><label>x-axis</label></div>
-                           <div class="col-sm-9">
-                                <div ng-if="pois.length > 0"><select  ng-model="axis.x"  ng-options="parameter[0] as augmentLabel(parameter[0],parameter[1]) for parameter in pois"></select></div>
+                            <div class="col-sm-3"><label>x-axis</label></div>
+                            <div class="col-sm-9">
+                                <div ng-if="pois.length > 0">
+                                    <div class="btn-group" uib-dropdown>
+                                        <button ng-init="setSelectedXAxis('-- choose an X-Axis --');" id="capdf-hydrogeochem-xaxis-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
+                                            {{selectedXAxis}}
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="capdf-hydrogeochem-xaxis-selec">
+                                            <li ng-repeat="parameter in pois"><a class="filter-form-select" ng-click="setSelectedXAxis(augmentLabel(parameter[0],parameter[1]),parameter[0]);">{{augmentLabel(parameter[0],parameter[1])}}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div ng-if="pois.length == 0" class="text-danger">No corresponding parameter found. Try another group</div>
                             </div>
                         </div>
                         <div ng-if="graphGroup" class="row">
-                           <div class="col-sm-3"><label>y-axis</label></div>
-                           <div class="col-sm-9">
-                                <div ng-if="pois.length > 0"><select  ng-model="axis.y"  ng-options="parameter[0] as augmentLabel(parameter[0],parameter[1]) for parameter in pois"></select></div>
+                            <div class="col-sm-3"><label>y-axis</label></div>
+                            <div class="col-sm-9">
+                                <div ng-if="pois.length > 0">
+                                    <div class="btn-group" uib-dropdown>
+                                        <button ng-init="setSelectedYAxis('-- choose a Y-Axis --');" id="capdf-hydrogeochem-yaxis-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
+                                            {{selectedYAxis}}
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="capdf-hydrogeochem-yaxis-selec">
+                                            <li ng-repeat="parameter in pois"><a class="filter-form-select" ng-click="setSelectedYAxis(augmentLabel(parameter[0],parameter[1]),parameter[0]);">{{augmentLabel(parameter[0],parameter[1])}}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div ng-if="pois.length == 0" class="text-danger">No corresponding parameter found. Try another group</div>
                             </div>
                         </div>                        
                         <fieldset ng-if="axis.x && axis.y">
                             <hr>
                             <div ng-if="graphGroup">
-                                <button ng-if="!selectingData" type="submit" class="btn btn-warning btn-sm" ng-click="selectBound()"><span class="fa fa-crop"></span> Select bound</button>
-                                <small ng-if="selectingData" class="text-danger">Select bound from map by drawing</small> 
+                                <div class="row">
+                                    <div class="col-xs-offset-1 col-xs-6">
+                                        <button ng-if="!selectingData" type="submit" class="btn btn-warning btn-sm" ng-click="selectBound()"><span class="fa fa-crop"></span> Select bound</button>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <small ng-if="selectingData" class="text-danger">Select bound from map by drawing</small>
+                                    </div>
+                                </div>                                    
                             </div>
                             <div  ng-if="selectedBoundData && !selectingData">
 		                        <div class="row">
@@ -89,14 +145,14 @@
                         </fieldset> 
                         <div ng-if="selectedBoundData && !selectingData" class="row">
                             <hr>
-                           <div class="col-xs-4">
-                              <button type="submit" class="btn btn-primary btn-sm" ng-click="plotBox(graphGroup)">Plot Box</button>
-                           </div>
-                           <div class="col-xs-4">
+                            <div class="col-xs-4">
+                                <button type="submit" class="btn btn-primary btn-sm" ng-click="plotBox(graphGroup)">Plot Box</button>
+                            </div>
+                            <div class="col-xs-3">
                                 <div ng-if="plotting" class="middle-mask"><span class="fa fa-spinner fa-2x fa-fw" ng-class="{'fa-spin':plotting,'':!plotting}"></span></div>
-                           </div>
-                           <div class="col-xs-4">
-                              <button type="submit" class="btn btn-primary btn-sm" ng-click="platScatter(graphGroup)">Plot Scatter</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="submit" class="btn btn-primary btn-sm" ng-click="plotScatter(graphGroup)">Plot Scatter</button>
                             </div>                                             
                         </div>
                         <div ng-if="selectedBoundData && !selectingData">  

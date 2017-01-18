@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +32,7 @@ import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
 import org.auscope.portal.core.util.CSVUtil;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.core.util.SLDLoader;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.web.service.CapdfHydroGeoChemService;
 import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
@@ -536,48 +538,18 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      * @param name
      *            - the name of the layer.
      * @return String the style sld.
+     * @throws IOException
      */
-    public String getStyle(String stylefilterRules, String name, String color) {
+    public String getStyle(String stylefilterRules, String name, String color) throws IOException {
 
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:public=\"http://capdf.csiro.au/\" " +
-                "xmlns:gml=\"http://www.opengis.net/gml\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>default Title</Title>" +
-                "<Abstract>default abstract</Abstract>" +
-                "<FeatureTypeStyle>" +
-                "<Rule>" +
-                "<Name>Hydrogeo Chemistry</Name>" +
-                "<Title>Hydrogeo Chemistry</Title>" +
-                "<Abstract>Light purple square boxes</Abstract>" +
-                stylefilterRules +
-                "<PointSymbolizer>" +
-                "<Graphic>" +
-                "<Mark>" +
-                "<WellKnownName>square</WellKnownName>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
-                "</Fill>" +
-                "</Mark>" +
-                "<Size>6</Size>" +
-                "</Graphic>" +
-                "</PointSymbolizer>" +
-                "</Rule>" +
-                "</FeatureTypeStyle>" +
-                "</UserStyle>" +
-                "</NamedLayer>" +
-                "</StyledLayerDescriptor>";
+        Hashtable<String,String> valueMap = new Hashtable<String,String>();
+        valueMap.put("stylefilterRules", stylefilterRules);
+        valueMap.put("name", name);
+        valueMap.put("color", color);
 
-        return style;
+
+
+        return  SLDLoader.loadSLD("/org/auscope/portal/slds/CapdfHydroGeoChemController_getStyle.sld", valueMap,false);
     }
 
 }

@@ -68,8 +68,9 @@
         <script src="js/assets/controllers/info/collapseInfoPanelCtrl.js"></script>
         <script src="js/assets/controllers/analytics/defaultAnalyticCtrl.js"></script> 
         <script src="js/assets/controllers/analytics/loadAnalyticCtrl.js"></script>
-        <script src="js/assets/controllers/analytics/capdfHydrogeochemCtrl.js"></script>      
-        		
+        <script src="js/assets/controllers/analytics/capdfHydrogeochemCtrl.js"></script>    
+        <script src="js/assets/controllers/analytics/pressureDbCtrl.js "></script>    
+        	
   		
   		
   		<!-- Service -->
@@ -104,7 +105,11 @@
 		
 	</head>
 	<body ng-app="app" ng-controller="googleMapCtrl">
-			
+	    <div class="map-mask" ng-show="mapMaskFlag">
+            <div class="map-mask-img">
+                <img src="img/hourglass.gif"/>
+            </div>
+        </div>
 		<div class="angular-google-map-container" >
 		    <div id="floating-progressbar" class="mobile-only">
 		      <div class="row">		
@@ -122,9 +127,10 @@
 			<layer-panel ng-show="showlayerPanel" class='layer-panel animated fadeInLeft' ng-swipe-left="showlayerPanel = false" ng-swipe-disable-mouse></layer-panel>
 			<querier-panel ng-show="showQuerierPanel" class='layer-panel animated fadeInLeft'  active-view="active" show-querier-panel = "showQuerierPanel" ng-swipe-left="showQuerierPanel = false"></querier-panel>
 			
-			<div class="menu-icon-toggle animated zoomIn" ng-controller="layerSearchCtrl as searchCtrl">                
-                <button ng-click="searchCtrl.toggleMenu()" class="animated zoomIn" style="padding-left: 3px;padding-right: 3px;font-size: 2.2em;">
-                <span class="fa fa-caret-right hasEvent"></span></button>
+			<div class="menu-icon-toggle animated zoomIn" ng-controller="layerSearchCtrl as searchCtrl">             
+                <div ng-click="searchCtrl.toggleMenu()" class="animated zoomIn" >
+                <span class="glyphicon glyphicon-menu-right hasEvent"></span>
+                </div>
             </div>    
 								
 			<div class="map-overlay-panel-toggle animated zoomIn">			   

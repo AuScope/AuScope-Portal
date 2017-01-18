@@ -53,16 +53,7 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             case 'erml-mineraloccurrence':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.MineralOccurrenceFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
-            case 'yilgarn-geochem':
-                baseFilterForm = Ext.create('auscope.layer.filterer.forms.YilgarnGeochemistryFilterForm', baseFilterFormCfg);
-                return this._generateResult(baseFilterForm, true);
             case 'gsml-borehole':
-            case 'mscl-borehole':
-                baseFilterForm = Ext.create('auscope.layer.filterer.forms.BoreholeFilterForm', baseFilterFormCfg);
-                return this._generateResult(baseFilterForm, true);
-            case 'portal-reports':
-                baseFilterForm = Ext.create('auscope.layer.filterer.forms.ReportFilterForm', baseFilterFormCfg);
-                return this._generateResult(baseFilterForm, true);
             case 'sf0-borehole-nvcl' :
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.BoreholeViewFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);

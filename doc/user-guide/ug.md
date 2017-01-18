@@ -115,12 +115,10 @@ Allows the filtering of the displayed layers based on:
 
 #### Layer collections
 
-The tabs at the top of the _Layers_ panel separate the data services into several collections:
+The tabs at the top of the layers panel separate the data services into several collections:
 
-* Featured: These data services are registered with the portal and are displayed together using common themes such as Mining, Boreholes and so on.
-* Registered: These services are similar to those from the _Featured_ category but do not belong to any of the _Featured_ themes.
+* Featured Layers: These data services are registered with the portal and are displayed together using common themes such as Mining, Boreholes and so on.
 * [Custom Layers](#custom-layers): This tab allows you to create your own layers from remote data services (see below).
-* Research data: These layers are from past or present research activities and may contain partial or incomplete information.
 
 #### Custom Layers
 
@@ -166,21 +164,6 @@ Click the **Add layer to map** button to apply any filters to the data and displ
 ![Warning](images/warn.png) A number of data services provide data from external sources and when they are added to the map a copyright notice will be show.
 
 
-
-#### Complex filter example
-
-The following filter is from the _Synthetic Aperture Radar_ data service...
-
-> Raw Synthetic Aperture Radar (SAR) data from ERS-1 and ERS-2 satellites. Data is provided in the standardised CEOS format under licence from the European Space Agency (ESA).
-
-![Synthetic Aperture Radar filter](images/csw-filter.png)
-
-The filter has a complex collection of fields that are used to reduce the amount of data being drawn on the map:
-
-* Text fields that may or may not support [wildcards](#wildcards).
-* Groups of fields: fields grouped together in a common theme.  For example the "Temporal extent" group is a time period between the start and end dates.
-* Date fields with a pop-up calendar.
-* Numeric fields such as the bounding box coordinates (not shown but it asks for minimum & maximum latitudes and longitudes of the bounding box).
 
 #### Wildcards
 

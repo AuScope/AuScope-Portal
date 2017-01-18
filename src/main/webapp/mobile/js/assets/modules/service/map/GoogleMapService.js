@@ -8,14 +8,17 @@
  * @event data.select.end - end of the drawing for the data selection event
  * @event layer.removed - removing of a layer from map event
  */
-allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter','QuerierPanelService',
-                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter,QuerierPanelService) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter','Constants',
+                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter,Constants) {
    
     this.mainMap;
     this.activeLayers = {};
     this.heatmap = null;
     this.drawingManager = null;
     this.dataSelectDrawingManager = null;
+    this.onBusyStartFn = null;
+    this.onBusyEndFn = null;
+    this.isBusy = false;
     
     
     /**
@@ -121,6 +124,22 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         return this.activeLayers;
     };
     
+    /**
+     * Given a layer and an opacity, set the opacity of the layer
+     * @method setLayerOpacity
+     * @param layer - the layer whose opacity will be set
+     * @param opacity - opacity value 
+     */ 
+    this.setLayerOpacity = function(layer, opacity) {
+        if (this.activeLayers[layer.id]) {
+            if (!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)) {
+                for (var i = 0; i < this.activeLayers[layer.id].layers.length; i++) {
+                    this.activeLayers[layer.id].layers[i].setOpacity(opacity);
+                }
+            }
+        }
+    };
+    
    
    /**
     * Remove the layer if it is rendered on the map
@@ -128,27 +147,25 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     * @param layer - the csw layer to remove from map 
     */ 
     this.removeActiveLayer = function(layer){
-        if(this.activeLayers[layer.id]){
-            if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].markers)){
+        if (this.activeLayers[layer.id]) {
+            if (!UtilitiesService.isEmpty(this.activeLayers[layer.id].markers)) {
                 for (var i = 0; i < this.activeLayers[layer.id].markers.length; i++) {
                     this.activeLayers[layer.id].markers[i].setMap(null);                    
-                 };
-                 this.activeLayers[layer.id].markers=[];
+                };
+                this.activeLayers[layer.id].markers=[];
             };
             
-            if(!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)){
+            if (!UtilitiesService.isEmpty(this.activeLayers[layer.id].layers)) {
                 for (var i = 0; i < this.activeLayers[layer.id].layers.length; i++) {
                     var layerIndex = this.mainMap.overlayMapTypes.indexOf(this.activeLayers[layer.id].layers[i]);
                     this.mainMap.overlayMapTypes.removeAt(layerIndex);
-                 };
-                 this.activeLayers[layer.id].layers=[];
+                };
+                this.activeLayers[layer.id].layers=[];
             };
            
             this.broadcast('layer.removed',layer);
         };
-        
-        QuerierPanelService.deregisterLayer(layer);
-        
+
         RenderStatusService.clearStatus(layer);
     };
      
@@ -158,22 +175,22 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
      * 
      */
      this.initMap = function() {
-         var mq = window.matchMedia( "(max-width: 658px)" );
+         var mq = window.matchMedia(Constants.smallScreenTest);
          this.mainMap = new google.maps.Map(document.getElementById('google-map-main'), {
            center: {lat: -28.397, lng: 132.644},
            minZoom:(mq.matches? 3 : 4),
            zoom: (mq.matches? 3 : 5),
            mapTypeControlOptions: {
                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU ,
-               position: google.maps.ControlPosition.RIGHT_BOTTOM
+               // Move the control to the top right corner for small screens so it won't obscure Victoria & Tasmania
+               position: (mq.matches? google.maps.ControlPosition.TOP_RIGHT : google.maps.ControlPosition.RIGHT_BOTTOM)
            },
          });
          
          this.mainMap.addListener('mousemove', function(evt) {
              $("#mouse-move-display-lat").text("Lat: " + $filter('number')(evt.latLng.lat(),2));
              $("#mouse-move-display-lng").text("Lng: " + $filter('number')(evt.latLng.lng(),2));
-          });
-         
+         });
       };
       
       /**
@@ -359,6 +376,45 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
           $rootScope.$broadcast(event,result);
       };
      
-    
+      /**
+      * Register a callback function belonging to the map controller that this service will call when told a busy period has started
+      * @method onBusyStart
+      * @param callback - callback function
+      */
+      this.onBusyStart = function(callback) {
+          this.onBusyStartFn  = callback;
+      };
+      
+      /**
+      * Register a callback function belonging to the map controller that this service will call when told that the busy period is over
+      * @method onBusyEnd
+      * @param callback - callback function
+      */
+      this.onBusyEnd = function(callback) {
+          this.onBusyEndFn = callback;
+      };
+      
+      /**
+      * Function to set the map to busy, i.e. show a loading image
+      * @method busyStart
+      */
+      this.busyStart = function() {
+          
+          if (!this.isBusy && this.onBusyStartFn) {
+              this.onBusyStartFn();
+              this.isBusy = true;
+          }
+      };
+      
+      /**
+      * Function to stop the map being busy, i.e. stop showing a loading image
+      * @method busyEnd
+      */
+      this.busyEnd = function() {
+          if (this.isBusy && this.onBusyEndFn) {
+              this.onBusyEndFn();
+              this.isBusy = false;
+          }
+      };
      
 }]);
