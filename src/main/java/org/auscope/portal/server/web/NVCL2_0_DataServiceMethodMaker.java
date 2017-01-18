@@ -185,7 +185,34 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
         method.setURI(builder.build());
         return method;
     }
+    /**
+     * Generates a method for submitting an NVCL processing Tsgjob for a given (user) email
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase submitProcessingTsgJob(String serviceUrl, String email, String jobName, String[] wfsUrls, String wfsFilter,
+            String tsgAlgName, String tsgWvRange, String tsgScript, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
+        HttpGet method = new HttpGet();
 
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "submitNVCLAnalyticalJob.do"));
+        builder.setParameter("email", email);
+        builder.setParameter("jobname", jobName);
+        builder.setParameter("tsgAlgName", tsgAlgName);
+        builder.setParameter("tsgWvRange", tsgWvRange);
+        builder.setParameter("tsgScript", tsgScript);
+        builder.setParameter("startdepth", Integer.toString(startDepth));
+        builder.setParameter("enddepth", Integer.toString(endDepth));
+        builder.setParameter("logicalop", operator);
+        builder.setParameter("value", value);
+        builder.setParameter("units", units);
+        builder.setParameter("span", Integer.toString(span));
+        builder.setParameter("serviceurls", StringUtils.join(wfsUrls, ','));
+        builder.setParameter("filter", wfsFilter);
+
+        method.setURI(builder.build());
+        return method;
+    }
     /**
      * Generates a method for checking an NVCL processing job for a given (user) email
      *
