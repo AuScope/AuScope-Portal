@@ -64,18 +64,26 @@
                                     <th colspan="4">Layers</th>                          
                                 </tr>
                             </thead>
-                            <tr ng-repeat-start="layer in records" ng-click="togglePanels('filter',group,layer.id)" class="layer-row" ng-class="{'layer-selected':  status[group][layer.id].isExpanded}">
+                            <tr ng-repeat-start="layer in records" ng-click="togglePanels('filter',group,layer)" class="layer-row" ng-class="{'layer-selected':  status[group][layer.id].isExpanded}">
                                 <td class="layer-name"><span ng-if="renderStatus[layer.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(layer);$event.stopPropagation();"></span>{{layer.name}}
-                                    <div ng-if="renderStatus[layer.id].max" ng-click="togglePanels('statusInfo',group,layer.id);$event.stopPropagation();">                                     
+                                    <div ng-if="renderStatus[layer.id].max" ng-click="togglePanels('statusInfo',group,layer);$event.stopPropagation();">                                     
                                         <uib-progressbar  class="progress-striped active hasEvent" style="height:20px;margin-bottom: 0px;margin-top:5px;" type="{{renderStatus[layer.id].errorFound? 'warning':'success'}}" max="renderStatus[layer.id].max +1" value="renderStatus[layer.id].completed +1">
                                             <div ng-if="renderStatus[layer.id].errorFound"><span class="fa fa-exclamation-triangle" style="color:red;"></span> Incomplete report</div>
                                             <div ng-if="!renderStatus[layer.id].errorFound && renderStatus[layer.id].max==renderStatus[layer.id].completed"><span  class="fa fa-check-square" style="color:green;"></span> Success report</div>                                                                          
                                         </uib-progressbar>
                                     </div>
                                 </td>
-                                <td class="icon-box"><i class="fa fa-filter fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter}" ng-click="togglePanels('filter',group,layer.id);$event.stopPropagation();"></i></td>
-                                <td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" ng-click="togglePanels('info',group,layer.id);$event.stopPropagation();"></i></td>
-                                <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]}" ng-click="analyticLayerList[layer.id] && togglePanels('analytic',group,layer.id);$event.stopPropagation();"></i></td>
+
+                                <td class="icon-box"><i class="fa fa-filter fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter,'fa-round-disable':!canDisplay(layer)}" ng-click="togglePanels('filter',group,layer);$event.stopPropagation();"></i></td>
+                                <td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" ng-click="togglePanels('info',group,layer);$event.stopPropagation();"></i></td>
+                                <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]||!canDisplay(layer)}" ng-click="analyticLayerList[layer.id] && togglePanels('analytic',group,layer);$event.stopPropagation();"></i></td>
+                            </tr>
+                            <tr ng-if="!canDisplay(layer)">
+                                <td colspan="2">
+                                    <uib-progressbar  class="progress-striped active" type="warning" max="100" value="100">
+                                        Service not available
+                                    </uib-progressbar>
+                                </td><td></td><td></td>
                             </tr>
                             <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
                                 <td colspan="4" style="border-top-style: none;">

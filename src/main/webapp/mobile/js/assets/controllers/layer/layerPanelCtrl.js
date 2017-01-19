@@ -25,6 +25,17 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
            
        
     });
+    
+    /**
+     * Returns true if this layer has anything to display
+     * @method canDisplay
+     * @param layer layer object
+     */
+    $scope.canDisplay = function(layer) {
+        if (layer && layer.cswRecords) 
+            return (layer.cswRecords.length > 0);
+        return false;
+    };
  
     
     /**
@@ -51,9 +62,17 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
     * @method togglePanels
     * @param panelType type of panel
     * @param group group
-    * @param cswRecordId record identifier
+    * @param layer layer
     */
-    $scope.togglePanels = function(panelType,group,cswRecordId){
+    $scope.togglePanels = function(panelType,group,layer){
+        
+        var cswRecordId = layer.id;
+        
+        // Disable when there is nothing to display except basic info
+        if (panelType!="info" && !($scope.canDisplay(layer))) {            
+            return;
+        }
+        
         //VT: we only want 1 panel open at a time
         var closeOtherPanels = function(){
             for (var showPanelType in $scope.status[group][cswRecordId].panels) {
