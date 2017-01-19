@@ -44,7 +44,6 @@ import org.w3c.dom.NodeList;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
-
 import au.com.bytecode.opencsv.CSVReader;
 
 @Service
@@ -491,6 +490,34 @@ public class NVCL2_0_DataService {
         return response.getString("response").toString().toLowerCase().equals("success");
     }
 
+    
+    /**
+     * Submits a NVCL analytical processing tsgJob. Returns true if the remote service reports success, false if it reports failure
+     * @param serviceUrl Base endpoint for the NVCL Analytical Services
+     * @param email
+     * @param jobName
+     * @param wfsUrls
+     * @param wfsFilter
+     * @param tsgAlgName
+     * @param tsgWvRange
+     * @param tsgAlgorithm
+     * @param startDepth
+     * @param endDepth
+     * @param operator
+     * @param value
+     * @param units
+     * @param span
+     */
+    public boolean submitProcessingTsgJob(String email, String jobName, String[] wfsUrls, String filterString, String tsgAlgName, String tsgWvRange, String tsgAlgorithm,
+            int startDepth, int endDepth, String operator, String value, String units, int span) throws Exception {
+        
+        HttpRequestBase method = nvclMethodMaker.submitProcessingTsgJob(analyticalServicesUrl, email, jobName, wfsUrls, filterString,tsgAlgName, tsgWvRange, tsgAlgorithm, startDepth, endDepth, operator, value, units, span);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        JSONObject response = JSONObject.fromObject(responseText);
+        return response.getString("response").toString().toLowerCase().equals("success");
+        
+    }
+    
     /**
      * Queries for the list of analytical processing jobs submitted for a particular email.
      * @param serviceUrl
@@ -568,4 +595,6 @@ public class NVCL2_0_DataService {
 
         return results;
     }
+
+
 }

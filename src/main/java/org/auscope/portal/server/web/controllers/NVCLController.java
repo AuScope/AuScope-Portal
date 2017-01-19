@@ -81,6 +81,8 @@ public class NVCLController extends BasePortalController {
         this.dataService2_0 = dataService2_0;
         this.sf0BoreholeService = sf0BoreholeService;
     }
+ 
+    
 
     /**
      * Handles the borehole filter queries.
@@ -937,7 +939,54 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
+    /**
+     * Submits an NVCL processing TsgJob to the remote analytical services
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/submitSF0NVCLProcessingTsgJob.do")
+    public ModelAndView submitSF0NVCLProcessingTsgJob(
+            @RequestParam("email") String email,
+            @RequestParam("jobName") String jobName,
 
+            @RequestParam("wfsUrl") String[] wfsUrls,
+
+            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+
+            @RequestParam(required = false, value = "tsgAlgName") String tsgAlgName,
+            @RequestParam(required = false, value = "tsgWvRange") String tsgWvRange,
+            @RequestParam(required = false, value = "tsgAlgorithm") String tsgAlgorithm,  
+
+            @RequestParam("startDepth") int startDepth,
+            @RequestParam("endDepth") int endDepth,
+            @RequestParam("operator") String operator,
+            @RequestParam("value") String value,
+            @RequestParam("units") String units,
+            @RequestParam("span") int span)
+                    throws Exception {
+
+
+        if ((StringUtils.isEmpty(tsgAlgorithm))) {
+            return generateJSONResponseMAV(false, null, "Must define tsgAlgorithm");
+        }
+
+        String filterString = null;
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        filterString = sf0BoreholeService.getFilter(boreholeName, "", dateOfDrillingStart, dateOfDrillingEnd, -1, bbox, null, true,null);
+
+        try {
+            boolean result = this.dataService2_0.submitProcessingTsgJob(email, jobName, wfsUrls, filterString,tsgAlgName,tsgWvRange,tsgAlgorithm,startDepth, endDepth, operator, value, units, span);
+            return generateJSONResponseMAV(result);
+        } catch (Exception ex) {
+            log.error("Unable to submit processing job: " + ex.getMessage());
+            log.debug("Exception: ", ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
     /**
      * Returns an array of JSON AnalyticalJobStatus objects describing job status responses for a given email
      * @param email
