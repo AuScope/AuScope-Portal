@@ -593,3 +593,99 @@ div[ng-controller="capdfHydrogeochemCtrl"] div.col-md-12 {
     padding-left: 0px;
 }
 
+/* Query panel carousel buttons */
+#Carousel > button {
+    background-color: #E1CBBB;
+}
+
+/* Query panel carousel with core tray images */
+#Carousel {
+    padding-left: 19px;
+    padding-right: 19px;
+    background-image: url('../img/coretray_background4.png');
+    border-color: #CDB8A8;
+    border-width: 2px;
+    border-style: solid;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 4px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Query panel carousel buttons */
+.slick-prev, .slick-next
+{
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 20px !important;
+    background-color: #CDB8A8 !important;
+}
+.slick-prev
+{
+    left: -15px !important;
+}
+.slick-next
+{
+    right: -15px !important;
+}
+
+/* Query panel carousel */
+.slick-div {
+    border-color: orange;
+    border-radius: 4px 4px 4px 4px;
+    border-width: 1px;
+    border-style: solid;
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 3px;
+}
+
+/* Make core tray download icon black */
+.slick-div  a, .slick-div a:link, .slick-div a:visited, .slick-div a:hover, .slick-div a:active  {
+    color: black !important;
+}
+
+/* Query panel carousel */
+.slick-slide {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Icons for downloading core tray images in query panel */
+.slide-download {
+    float: right;
+    position: relative;
+    top: 3px;
+    right: 3px;
+}
+
+/* Override slick's positioning to centre the panel */
+.slick-track {
+    left: 5px !important;
+}
+
+/* Label for core tray images in query panel */
+.coretray-label {
+    background-color: #AB8D77;
+}
+
+
+/* Query panel carousel core tray busy icon */
+.coretray-busy-icon {
+    color: #AB8D77;
+}
+
+/* Query panel carousel core tray image tray */
+.coretray-img {
+    width: 290px;
+}
+
+/* Move carousel dots upwards */
+.slick-dots {
+    bottom: 0px !important;
+}
+

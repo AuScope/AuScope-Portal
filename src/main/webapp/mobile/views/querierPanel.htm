@@ -3,7 +3,7 @@
 		<div>				
 			<div class="layer-panel-header">
 				<img src="img/AuScope-logo-220.jpg">
-				<i class="pull-right glyphicon gi-2x hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel; resetTree($parent.showQuerierPanel);" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
+				<i class="pull-right glyphicon gi-2x hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel; resetTree($parent.showQuerierPanel); resetCarousel($parent.showQuerierPanel);" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
 			</div>			
 		</div>
 		
@@ -27,15 +27,31 @@
 	                    </div>
 	                </uib-accordion>
                 </div>
-	        </div>   
+	        </div>
+            <div ng-if="useCarousel">
+                <div class="label coretray-label">Core Tray Images</div>
+                <div id="Carousel" slick-carousel="{lazyLoad: 'ondemand', slidesToShow:1, slidesToScroll:1, rows:4, slidesPerRow:1, variableWidth: true}">
+                    <div ng-repeat="slide in slides" class="slick-div">
+                        <img class="coretray-img" data-lazy="{{slide.thumbURL}}" alt="Core Image" />
+                        <div>
+                            <span>{{slide.depthStr}}</span>
+                            <a href="{{slide.carouselURL}}" target="_blank">
+                                <i class="fa fa-download fa-2x slide-download" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="carouselBusy">
+                <i class="fa fa-cog fa-spin fa-2x coretray-busy-icon" aria-hidden="true"></i>
+            </div>
 			<!-- <hr>
 			<div class="row">
 				<div class="col-xs-3"><i class="fa fa-area-chart fa-2x dark-blue" aria-hidden="true"></i></div>
-				<div class="col-xs-3"><i class="fa fa-download fa-2x dark-blue" aria-hidden="true"></i></div>
 				<div class="col-xs-3"><i class="fa fa-key fa-2x dark-blue" aria-hidden="true"></i></div>
 				<div class="col-xs-3"><i class="fa fa-ellipsis-v fa-2x dark-blue" aria-hidden="true"></i></div>
 			</div> -->	
-	   </div>				
+	    </div>				
 	</div>
 </div>
 

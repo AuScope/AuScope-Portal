@@ -182,6 +182,11 @@
         font-size: 10px;
     }
     
+     /* Query panel carousel core tray image tray */
+    .coretray-img {
+        width: 270px;
+    }
+    
 }
 
 
@@ -338,6 +343,16 @@
     
     .opacity-slider-label {
         font-size: 10px;
+    }
+    
+    /* Query panel carousel core tray image tray */
+    .coretray-img {
+        width: 210px;
+    }
+    
+    /* Query panel carousel core tray image depth text */
+    .slick-div span {
+        font-size: 0.7em;
     }
     
 }

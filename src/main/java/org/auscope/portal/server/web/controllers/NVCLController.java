@@ -32,6 +32,7 @@ import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
+import org.auscope.portal.server.domain.nvcldataservice.ImageTrayDepthResponse;
 import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
 import org.auscope.portal.server.domain.nvcldataservice.PlotScalarResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
@@ -1054,4 +1055,16 @@ public class NVCLController extends BasePortalController {
             zout.close();
         }
     }
+    
+    @RequestMapping("/getNVCLImageTrayDepth.do")
+    public ModelAndView getNVCLImageTrayDepth(@RequestParam("serviceUrl") String serviceUrl, @RequestParam("logid") String logId) throws Exception {
+        try {
+            List<ImageTrayDepthResponse> results = this.dataService2_0.getImageTrayDepths(serviceUrl,logId);
+            return generateJSONResponseMAV(true, results, "");
+        } catch (Exception ex) {
+            log.error("Unable to get image tray depths: " + ex.getMessage());
+            log.debug("Exception: ", ex);
+            return generateJSONResponseMAV(false);
+        }
+    }    
 }

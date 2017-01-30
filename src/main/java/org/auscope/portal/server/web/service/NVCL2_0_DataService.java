@@ -33,6 +33,7 @@ import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse;
 import org.auscope.portal.server.domain.nvcldataservice.BinnedCSVResponse.Bin;
 import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
+import org.auscope.portal.server.domain.nvcldataservice.ImageTrayDepthResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TrayThumbNailResponse;
 import org.auscope.portal.server.web.NVCL2_0_DataServiceMethodMaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -355,6 +356,46 @@ public class NVCL2_0_DataService {
             }
 
             responseObjs.add(new GetLogCollectionResponse(logId, logName, sampleCount));
+        }
+
+        return responseObjs;
+    }
+    
+    
+    
+    /**
+     * Fetches the depths of all the tray images
+     *
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param logId
+     *            The logID (from a getLogCollection request) to query
+     * @return
+     */
+    public List<ImageTrayDepthResponse> getImageTrayDepths(String serviceUrl, String logId) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.getImageTrayDepthMethod(serviceUrl, logId);
+        
+        //Make our request, parse it into a DOM document
+        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
+        Document responseDoc = DOMUtil.buildDomFromStream(responseStream);
+        
+        //Get our dataset nodes
+        XPathExpression expr = DOMUtil.compileXPathExpr("ImageTrayCollection/ImageTray");
+        NodeList nodeList = (NodeList) expr.evaluate(responseDoc, XPathConstants.NODESET);
+        
+        //Parse our response objects
+        List<ImageTrayDepthResponse> responseObjs = new ArrayList<ImageTrayDepthResponse>();
+        XPathExpression exprSampleNo = DOMUtil.compileXPathExpr("SampleNo");
+        XPathExpression exprStartValue = DOMUtil.compileXPathExpr("StartValue");
+        XPathExpression exprEndValue = DOMUtil.compileXPathExpr("EndValue");
+        
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+
+            String sampleNo = (String) exprSampleNo.evaluate(node, XPathConstants.STRING);
+            String startValue = (String) exprStartValue.evaluate(node, XPathConstants.STRING);
+            String endValue = (String) exprEndValue.evaluate(node, XPathConstants.STRING);
+            responseObjs.add(new ImageTrayDepthResponse(sampleNo, startValue, endValue));
         }
 
         return responseObjs;

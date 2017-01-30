@@ -13,6 +13,16 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'GoogleMap
     // Associative array: key is layer name, values are list of feature names for that layer
     // Used to display the layer name as a header in query panel
     $scope.layerIndex = {};
+    
+    
+    // Turn off carousel
+    $scope.useCarousel = false;
+    
+    // Empty carousel slides
+    $scope.slides = [];
+    
+    // Turn off carousel busy icon
+    $scope.carouselBusy = false;
    
 
     /**
@@ -23,7 +33,7 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'GoogleMap
     $scope.init = function(xmlPanelId) { 
         $scope.xmlPanelId = xmlPanelId;
         // This registers this class' functions with the QuerierPanelService
-        QuerierPanelService.registerPanel($scope.openPanel, $scope.addPanelTree);
+        QuerierPanelService.registerPanel($scope.openPanel, $scope.addPanelTree, $scope.setCarouselImages, $scope.setCarouselBusy);
         GoogleMapService.onLayerRemoved($scope, function(evt,layer){ QuerierPanelService.deregisterLayer(layer) });
     };
         
@@ -47,10 +57,18 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'GoogleMap
     * @method addPanelTree
     * @param xmlString string which will be displayed
     * @param displayName name of layer or feature, to be used only if no suitable name is found within XML string
+    * @param appendFlag will append the new tree to the current tree(s) on panel or clear the panel and add a new tree
     * @return boolean value, true if the panel should be opened because there is something to display
     */
-    $scope.addPanelTree = function(node, displayName, prependStr) {
+    $scope.addPanelTree = function(node, displayName, prependStr, appendFlag) {
+        
         var displayable = false;
+        
+        // Clear the panel
+        if (!appendFlag) {
+            $scope.resetTree(false);
+            $scope.resetCarousel(false);
+        }
         if (node) {
             // First try to find any "FeatureCollection" elements 
             // If it not found, and no error report was found, we assume the node to be a feature node.
@@ -205,5 +223,47 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'GoogleMap
         if (useApply)
             $scope.$parent.$apply();
     };
-
+    
+    
+    /**
+    * Sets the images for the carousel
+    * @method setCarouselImages
+    * @param imageList
+    */
+    $scope.setCarouselImages = function(imageList) {
+        // Must do a reset, then set the image list, to force slick to initialise, else AngularJS crashes
+        $timeout(function() {
+            // Do a reset
+            $scope.useCarousel = false;
+            $scope.slides = [];
+            return $timeout(function() {
+                // Set the image list            
+                $scope.slides = imageList;
+                $scope.useCarousel = true;
+            },0);
+        });
+        
+    }
+    
+    /**
+    * Resets the carousel when the panel closes
+    * @method resetCarousel
+    * @param panelStatus open/closed status of the querier panel
+    */
+    $scope.resetCarousel = function(panelStatus) {
+        if (!panelStatus) {
+            $scope.useCarousel = false;
+            $scope.slides = [];
+        }
+    }
+    
+    /**
+    * Controls the display of the spinner to let user know the carousel is loading
+    * @method setCarouselBusy
+    * @param busyFlag set to true to make the spinner display, else false ot make it go away
+    */
+    $scope.setCarouselBusy = function(busyFlag) {
+        $scope.carouselBusy = busyFlag;
+    }
+    
 }]);

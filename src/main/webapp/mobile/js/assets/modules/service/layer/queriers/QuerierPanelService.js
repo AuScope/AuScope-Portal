@@ -44,7 +44,7 @@ allModules.service('QuerierPanelService', ['LayerManagerService','GoogleMapServi
 
                             // Open if panel if there was a valid response (NB: Only status code 200 will return a complete response)
                             if (response.status==200 && empty_gml_body.test(response.data)==false) {
-                                var displayable = me.setPanelNode(GMLParserService.getRootNode(response.data), me.layerList[response.config.slot_num].resource.name, "WMS");
+                                var displayable = me.setPanelNode(GMLParserService.getRootNode(response.data), me.layerList[response.config.slot_num].resource.name, "WMS", true);
                                 if (!hasData && displayable) hasData = true;
                             }
                             doneList[response.config.slot_num] = true;
@@ -113,10 +113,12 @@ allModules.service('QuerierPanelService', ['LayerManagerService','GoogleMapServi
     *    'prependStr' string to prepend to layer display name
     *    returns true is there is data to display
     */
-    this.registerPanel = function (openPanelFn, setXMLFn) {
+    this.registerPanel = function (openPanelFn, setXMLFn, setCarouselImgFn, setCarouselBusyFn) {
         // Store the controller functions for future use
         this.openPanelFn = openPanelFn;
         this.setXMLFn = setXMLFn;
+        this.setCarouselImgFn = setCarouselImgFn;
+        this.setCarouselBusyFn = setCarouselBusyFn;
     };
     
     /**
@@ -142,6 +144,10 @@ allModules.service('QuerierPanelService', ['LayerManagerService','GoogleMapServi
         // Call the corresponding controller function
         this.openPanelFn(false, useApply);
     };
+    
+    this.setCarouselImages = function (imageList) {
+        this.setCarouselImgFn(imageList);
+    };
         
     /**
     * Set the XML string to be displayed on the panel
@@ -149,11 +155,12 @@ allModules.service('QuerierPanelService', ['LayerManagerService','GoogleMapServi
     * @param xmlString XML string to be displayed
     * @param displayName name of layer or feature, to be used if no suitable name is found within XML string
     * @param prependStr string to prepend to display name e.g. 'WMS', 'WFS'. Used for display purposes
+    * @param appendFlag will append the new tree to the current tree(s) on panel or clear the panel and add a new tree 
     * @return boolean value, true if the panel should be opened because there is something to display
     */
-    this.setPanelNode = function(node, displayName, prependStr)
+    this.setPanelNode = function(node, displayName, prependStr, appendFlag)
     {       
-        return this.setXMLFn(node, displayName, prependStr);
+        return this.setXMLFn(node, displayName, prependStr, appendFlag);
     };
     
     /**
@@ -196,6 +203,12 @@ allModules.service('QuerierPanelService', ['LayerManagerService','GoogleMapServi
             bbox: bBox,
             style: aStyle
         });
+    };
+    
+    this.setCarouselBusy = function(busyFlag)
+    {
+        //Call the corresponding controller function
+        this.setCarouselBusyFn(busyFlag);
     };
     
 }]);
