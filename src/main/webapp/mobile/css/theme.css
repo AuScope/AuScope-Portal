@@ -689,3 +689,17 @@ div[ng-controller="capdfHydrogeochemCtrl"] div.col-md-12 {
     bottom: 0px !important;
 }
 
+/* Layer expose button */
+.expose-btn {
+    position: absolute;
+    top: 0.25em;
+    left: 1em;
+}
+
+/* Layer expose button text */
+.expose-btn-txt {
+    font-size: 0.8em;
+    top: -1.0em;
+    left: 2em;
+    position: absolute;
+}

@@ -34,17 +34,6 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
             WFSService.renderLayer(layer,param);          
         }
         
-     };
-
-
-    /**
-     * Given a layer and an opacity, set the opacity of the layer
-     * @method setLayerOpacity
-     * @param layer - the layer whose opacity will be set
-     * @param opacity - opacity value 
-     */
-    this.setLayerOpacity = function(layer, opacity) {
-        GoogleMapService.setLayerOpacity(layer, opacity);
     };
      
      
@@ -79,9 +68,5 @@ allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService
              WFSService.renderCSWRecord(layer,cswRecord);          
          }
       };
-     
-     
-        
-    
      
 }]);

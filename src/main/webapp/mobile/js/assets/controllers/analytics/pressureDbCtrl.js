@@ -4,8 +4,8 @@
  * @module controllers
  * @class pressureDbCtrl
  */
-allControllers.controller('pressureDbCtrl', ['$scope','GoogleMapService','$http','LayerManagerService','UtilitiesService','$timeout','$filter','RenderHandlerService','RenderHandlerService',
-                                                    function ($scope,GoogleMapService,$http,LayerManagerService,UtilitiesService,$timeout,$filter,RenderHandlerService,RenderHandlerService) {
+allControllers.controller('pressureDbCtrl', ['$scope','$timeout','RenderHandlerService',
+                                                    function ($scope,$timeout,RenderHandlerService) {
     
     /* Value displayed in property selector */
     $scope.propertySelectLabel = "-- Select Property --";
