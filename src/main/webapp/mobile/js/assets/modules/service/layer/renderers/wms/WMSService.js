@@ -30,8 +30,8 @@ allModules.service('WMSService',['GoogleMapService','LayerManagerService','Const
                 var node = mapLayer.imagelayerGetTile(tileCoord, zoom, ownerDocument);
                 
                 node.innerHTML = '<img src="'+mapLayer.j(tileCoord,zoom)+'"/>';
-                $("img", node).one("error", function() {               
-                    node.innerHTML = "";
+                $("img", node).one("error", function() {
+                    this.style.display='none';
                     failureHandlerCB();
                 });
                         
