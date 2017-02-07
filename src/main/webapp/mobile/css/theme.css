@@ -73,7 +73,7 @@ div.row {
 }
 
 .cyan {
-	color: #3dd6ad
+	color: #3dd6ad;
 }
 
 .search-icon-border-right{
@@ -422,6 +422,12 @@ table.layer-selection {
 	text-align: center;
 }
 
+.quick-menu div input {
+    color: rgb(100, 100, 100);
+    border-color: #3dd6ad;
+    border-style: solid;
+}
+
 
 .middle-mask{	
   width: 100%;
@@ -702,4 +708,9 @@ div[ng-controller="capdfHydrogeochemCtrl"] div.col-md-12 {
     top: -1.0em;
     left: 2em;
     position: absolute;
+}
+
+/* Layer delete icon positioning */
+.glyphicon.glyphicon-ban-circle {
+    top: -2px;
 }

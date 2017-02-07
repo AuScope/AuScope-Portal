@@ -258,12 +258,10 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         // Update the overlay map data structures
         this.syncOverlayMapDS();
     };
-    
-    
      
     /**
      * Initialize the map
-     * @Method initMap
+     * @method initMap
      * 
      */
     this.initMap = function() {
@@ -278,11 +276,53 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                 position: (mq.matches? google.maps.ControlPosition.TOP_RIGHT : google.maps.ControlPosition.RIGHT_BOTTOM)
             },
         });
+        
+        // If there is a state (permalink) parameter in the URL, then process it
+        var URLparams=UtilitiesService.getUrlParameters(window.location.href);
+        if (URLparams.hasOwnProperty('state')) {
+            var stateStr = UtilitiesService.decode_base64(URLparams.state);
+            // Chop nulls off end of string
+            while (stateStr.charCodeAt(stateStr.length-1)==0) {
+                stateStr = stateStr.substring(0,stateStr.length-1);
+            }
+            var mapState={};
+            try {
+                mapState = JSON.parse(stateStr);
+            } catch(err) {
+                console.error("permalink JSON parse error=", err);
+            }
+            if (mapState!={})
+                this.setMapState(mapState);
+        }
          
         this.mainMap.addListener('mousemove', function(evt) {
             $("#mouse-move-display-lat").text("Lat: " + $filter('number')(evt.latLng.lat(),2));
             $("#mouse-move-display-lng").text("Lng: " + $filter('number')(evt.latLng.lng(),2));
         });
+    };
+    
+    /**
+     * Fetches the state of the map in the form of a JSON string
+     * @method getMapState
+     * @return JSON string of map state
+     */
+    this.getMapState = function() {
+        var retVal = { t: this.mainMap.getCenter().lat(), g: this.mainMap.getCenter().lng(), z: this.mainMap.getZoom() };
+        return retVal;  
+    };
+    
+    /**
+     * Sets the state of the map according to a JSON string
+     * @method setMapState
+     * @param state JSON object of map state
+     */
+    this.setMapState = function(state) {
+        if (state.hasOwnProperty('t') && state.hasOwnProperty('g')) {
+            this.mainMap.setCenter({lat: state.t, lng: state.g});
+        }
+        if (state.hasOwnProperty('z')) {
+            this.mainMap.setZoom(state.z);
+        }
     };
       
     /**
@@ -332,8 +372,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
      * @method zoomDrawCancel
      */
     this.zoomDrawCancel = function(){
-        this.broadcast('draw.zoom.end');              
-        this.drawingManager.setMap(null);
+        this.broadcast('draw.zoom.end');
+        if (this.drawingManager)        
+            this.drawingManager.setMap(null);
     };
    
     
