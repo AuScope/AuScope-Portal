@@ -597,4 +597,12 @@ public class NVCL2_0_DataService {
     }
 
 
+
+    public String getTsgAlgorithms(String tsgAlgName) throws Exception {
+        HttpRequestBase method = nvclMethodMaker.getTsgAlgorithms(analyticalServicesUrl, tsgAlgName);
+        String responseText = httpServiceCaller.getMethodResponseAsString(method);
+        return responseText;
+    }
+
+
 }

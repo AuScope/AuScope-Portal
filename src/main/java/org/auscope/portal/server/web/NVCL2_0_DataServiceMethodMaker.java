@@ -195,7 +195,7 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
             String tsgAlgName, String tsgWvRange, String tsgScript, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
         HttpGet method = new HttpGet();
 
-        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "submitNVCLAnalyticalJob.do"));
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "submitNVCLTSGModJob.do"));
         builder.setParameter("email", email);
         builder.setParameter("jobname", jobName);
         builder.setParameter("tsgAlgName", tsgAlgName);
@@ -244,4 +244,20 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
         method.setURI(builder.build());
         return method;
     }
+    
+    /**
+     * Generates a method for get an NVCL processing job outputs
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getTsgAlgorithms(String serviceUrl,String tsgAlgName) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getTsgAlgorithms.do"));
+        builder.setParameter("tsgAlgName", tsgAlgName);
+
+        method.setURI(builder.build());
+        return method;
+    }   
 }

@@ -847,6 +847,24 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
+     * Proxies a NVCL getTsgAlgorithms request. Returns a JSON response
+     *
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @return
+     */
+    @RequestMapping("getTsgAlgorithms.do")
+    public ModelAndView getTsgAlgorithms(@RequestParam("tsgAlgName") String tsgAlgName) throws Exception {
+        try {
+            String algorithms = dataService2_0.getTsgAlgorithms(tsgAlgName);
+            return generateJSONResponseMAV(true, algorithms, "");
+        } catch (Exception ex) {
+            log.warn("Unable to fetch Tsg algorithms for " + tsgAlgName + ex);
+            return generateJSONResponseMAV(false);
+        }
+    }        
+        
+    /**
      * Proxies a NVCL getAlgorithms request. Returns a JSON response
      *
      * @param serviceUrl
