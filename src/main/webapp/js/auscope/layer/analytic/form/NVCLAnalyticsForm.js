@@ -23,7 +23,21 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             labelWidth: 150,
             padding: 0
         };
-
+        var tsgAlgNameStore = Ext.create('Ext.data.Store', {
+            fields: [{name: 'tsgAlgName', type: 'string'}],
+            data : [
+                    {tsgAlgName: 'Hematite-goethite_distr'},
+                    {tsgAlgName: 'Kaolinite Crystallinity'},
+                    {tsgAlgName: 'None Template Algorithm'}
+                ],
+            autoLoad: true,
+            sorters: ["tsgAlgName"],
+            listeners: {
+                load: function(algorithmOutputStore, records, success) {
+                }
+            }
+        });
+        
         var algorithmOutputStore = Ext.create('Ext.data.Store', {
             fields: [{name: 'algorithmId', type: 'int'},
                      {name: 'algorithmName', type: 'string'},
@@ -142,9 +156,21 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                 },{
                     xtype: 'container',
                     html: '<p class="centeredlabel">Please select a classification algorithm to filter boreholes against.</p>'
+                }, {
+                    xtype: 'checkbox',
+                    itemId: 'existingAlg',
+                    boxLabel: 'Existing Algorithm',
+                    name: 'existingAlg',
+                    checked: true,
+                    inputValue: 'existingAlg',
+                    listeners: {
+                        change: Ext.bind(this._onExistingAlgCbChange, this)
+                    }
+                        
                 },{
                     xtype: 'fieldset',
                     title: 'Algorithm',
+                    itemId: 'algorithmFS',
                     defaults: defaults,
                     items: [{
                         xtype: 'fieldset',
@@ -239,6 +265,59 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                         width: fieldWidth,
                         hidden: true,
                         disabled: true
+                    }]
+                },{
+                    xtype: 'fieldset',
+                    title: 'TSG Algorithm',
+                    itemId: 'tsgAlgorithmFS',
+                    defaults: defaults,
+                    hidden: true,
+                    items: [{
+                        xtype: 'fieldset',
+                        layout: 'vbox',
+                        border: false,
+                        defaults: defaults,
+                        items: [{
+                            xtype: 'combo',
+                            name: 'tsgAlgName',
+                            itemId: 'tsgAlgName',
+                            fieldLabel: 'Name',
+                            store: tsgAlgNameStore,
+                            displayField: 'tsgAlgName',
+                            valueField: 'tsgAlgName',
+                            forceSelection: true,
+                            queryMode: 'local',
+                            typeAhead: true,
+                            allowBlank: false,
+                            width: fieldWidth,
+                            listeners: {
+                                select: Ext.bind(this._onTsgAlgorithmSelect, this)
+                            }
+                        },{ 
+                            xtype: 'combo',
+                            name: 'tsgWvRange',
+                            itemId: 'tsgWvRange',
+                            fieldLabel: 'Wavelength',
+                            store:['Thermal','VisSWIR'],
+                            displayField: 'tsgWvRange',
+                            valueField: 'tsgWvRange',
+                            forceSelection: true,
+                            queryMode: 'local',
+                            typeAhead: true,
+                            allowBlank: false,
+                            width: fieldWidth,                            
+                            
+                        },{
+                            xtype     : 'textareafield',
+                            itemId    : 'tsgAlg',
+                            grow      : true,
+                            width     : 700,
+                            height    : 300,
+                            name      : 'tsgAlgorithm',
+                            fieldLabel: 'Algorithm',
+                            allowBlank: false,
+                            anchor    : '100%'
+                        }]
                     }]
                 },{
                     xtype: 'container',
@@ -352,10 +431,42 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                 }]
             }]
         });
-
+            
         this.callParent(arguments);
     },
+    _onExistingAlgCbChange: function(cb, newValue, oldValue) {
+        var tsgAlgorithmFS = this.down('#tsgAlgorithmFS');
+        var algorithmFS = this.down('#algorithmFS');
+        if (newValue == false) {
+            algorithmFS.setVisible(false);
+            tsgAlgorithmFS.setVisible(true);
 
+            this.down('#logname').setDisabled(true);
+            this.down('#classification-text').setDisabled(true);
+            this.down('#version').setDisabled(true);
+            this.down('#versionlabel').setDisabled(true);
+            this.down('#classification-combo').setDisabled(true);
+            
+            this.down('#tsgAlgName').setDisabled(false);
+            this.down('#tsgWvRange').setDisabled(false);
+            this.down('#tsgAlg').setDisabled(false);
+            
+        } else {
+            algorithmFS.setVisible(true);
+            tsgAlgorithmFS.setVisible(false);            
+            
+            this.down('#logname').setDisabled(false);
+            this.down('#classification-text').setDisabled(false);
+            this.down('#version').setDisabled(false);
+            this.down('#versionlabel').setDisabled(false);
+            this.down('#classification-combo').setDisabled(false);
+            
+            this.down('#tsgAlgName').setDisabled(true);
+            this.down('#tsgWvRange').setDisabled(true);
+            this.down('#tsgAlg').setDisabled(true);            
+            
+        }
+    },
     _setupNonStandardAlgorithm: function(record, disableClassifications) {
         this.down('#logname').setHidden(false).setDisabled(false);
         this.down('#classification-text').setHidden(false).setDisabled(disableClassifications ? true : false);
@@ -426,6 +537,21 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
         }
     },
 
+    _onTsgAlgorithmSelect: function(combo, record) {
+        var tsgAlgName = combo.getValue();
+        Ext.Ajax.request({
+            url: 'getTsgAlgorithms.do',
+            params: {tsgAlgName: tsgAlgName},
+            scope: this,
+            success: function(response) {
+                var obj = JSON.parse(response.responseText);
+                this.down('#tsgAlg').setValue(obj.data);
+             },
+             failure : function(fp,action){
+                 Ext.Msg.alert('Status', 'Unable to get Algorithm.');
+             }
+        });
+    },
     _saveUserEmail: function(email) {
         if (window.localStorage) {
             localStorage.setItem('auscope-nvcl-analytics-email', email);
@@ -542,9 +668,7 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
 
     _onSubmit: function() {
         var formPanel = this.down('form');
-        if (!formPanel.isValid()) {
-            return;
-        }
+        var isExistingAlg = formPanel.down('#existingAlg').getValue();
 
         //Build up our parameters for job submission
         var params = {};
@@ -560,7 +684,10 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             } else {
                 wfsUrls = [params.serviceFilter];
             }
-
+            if (Ext.isEmpty(wfsUrls)) {
+                wfsUrls = 'http://nvclwebservices.vm.csiro.au/geoserverBH/wfs';
+            
+            }
             params.wfsUrl = wfsUrls;
         }
         Ext.apply(params, formPanel.getValues());
@@ -573,8 +700,14 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             target: this
         });
         mask.show();
+        var analyticalJobUrl = '';
+        if (isExistingAlg) {
+            analyticalJobUrl = 'submitSF0NVCLProcessingJob.do';            
+        } else {
+            analyticalJobUrl = 'submitSF0NVCLProcessingTsgJob.do';            
+        }
         portal.util.Ajax.request({
-            url: 'submitSF0NVCLProcessingJob.do',
+            url: analyticalJobUrl,
             params: params,
             scope: this,
             callback: function(success) {
