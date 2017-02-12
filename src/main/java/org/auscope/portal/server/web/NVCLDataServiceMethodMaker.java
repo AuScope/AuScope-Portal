@@ -121,7 +121,7 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
 
         return method;
     }
-
+     
     /**
      * Generates a method for making a request for the Mosaic imagery for a particular logId
      *

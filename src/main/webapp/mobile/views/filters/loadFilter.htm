@@ -32,13 +32,18 @@
             <div class="col-xs-12 no-filter-msg">No Filtering option available for this layer.</div>
         </div>
         <div class="row">
-            <div class="col-xs-7">
+            <div class="col-xs-4">
                 <button type="button" class="btn btn-info btn-sm" ng-click="addLayer(layer)">Add Layer</button>
             </div>
-            <div ng-if="isWMSLayer();" class="col-xs-5 opacity-slider">
+            <div ng-if="!isLayerAtFront(layer);" class="col-xs-3">
+                <span class="expose-btn-txt">Expose</span>
+                <i class="fa fa-clone fa-2x dark-blue expose-btn" ng-click="moveLayerToFront(layer)"></i>
+            </div>
+            <div ng-if="isLayerActive(layer);" ng-class="{'col-xs-offset-3':isLayerAtFront(layer)}" class="col-xs-5 opacity-slider">
                 <div>Opacity</div>
                 <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
             </div>
+            
         </div>
     </div> 
  
@@ -125,10 +130,14 @@
    
  
     <div ng-if="layer.filterCollection.optionalFilters" class="filter-subpanel">
-        <div class="col-xs-7">
+        <div class="col-xs-4">
             <button type="button" class="btn btn-info add-layer-btn" ng-click="addLayer(layer)">Add Layer</button>
         </div>
-        <div ng-if="isWMSLayer();" class="col-xs-5 opacity-slider">
+        <div ng-if="!isLayerAtFront(layer);" class="col-xs-3">
+            <span class="expose-btn-txt">Expose</span>
+            <i class="fa fa-clone fa-2x dark-blue expose-btn" ng-click="moveLayerToFront(layer)"></i>
+        </div>
+        <div ng-if="isLayerActive(layer);" ng-class="{'col-xs-offset-3':isLayerAtFront(layer)}" class="col-xs-5 opacity-slider">
             <div >Opacity</div>
             <rzslider rz-slider-model="slider.value" rz-slider-options="slider.options"></rzslider>
         </div>            

@@ -27,6 +27,7 @@ import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGStatusResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
+import org.auscope.portal.server.domain.nvcldataservice.ImageTrayDepthResponse;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.auscope.portal.server.web.service.BoreholeService;
 import org.auscope.portal.server.web.service.NVCL2_0_DataService;
@@ -374,6 +375,8 @@ public class TestNVCLController extends PortalTestClass {
         this.nvclController.getNVCLMosaic(serviceUrl, logId, width, start, end, mockHttpResponse);
         Assert.assertArrayEquals(data, outputStream.toByteArray());
     }
+    
+
 
     /**
      * Tests getting mosaic fails gracefully when the service fails.
@@ -398,6 +401,54 @@ public class TestNVCLController extends PortalTestClass {
         });
 
         this.nvclController.getNVCLMosaic(serviceUrl, logId, width, start, end, mockHttpResponse);
+    }
+    
+    
+    /**
+     * Tests getting tray depths
+     *
+     * @throws Exception    
+     */
+    @Test
+    public void testGetImageTrayDepths() throws Exception {
+        final String serviceUrl = "http://example/url";
+        final String logId = "log-id";
+        final List<ImageTrayDepthResponse> responseObjs = Arrays.asList(context.mock(ImageTrayDepthResponse.class));
+
+        context.checking(new Expectations() {
+            {
+                oneOf(mock2_0_DataService).getImageTrayDepths(serviceUrl, logId);
+                will(returnValue(responseObjs));
+            }
+        });
+        ModelAndView response = this.nvclController.getNVCLImageTrayDepth(serviceUrl, logId);
+        Assert.assertNotNull(response);
+        Assert.assertTrue((Boolean) response.getModel().get("success"));
+        Assert.assertSame(responseObjs, response.getModel().get("data"));
+    }    
+    
+    
+    
+    /**
+     * Tests tray depths fails if underlying service fails.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetImageTrayDepthsError() throws Exception {
+        final String serviceUrl = "http://example/url";
+        final String logId = "log-id";
+
+        context.checking(new Expectations() {
+            {
+                oneOf(mock2_0_DataService).getImageTrayDepths(serviceUrl, logId);
+                will(throwException(new ConnectException()));
+            }
+        });
+
+        ModelAndView response = this.nvclController.getNVCLImageTrayDepth(serviceUrl, logId);
+        Assert.assertNotNull(response);
+        Assert.assertFalse((Boolean) response.getModel().get("success"));
     }
 
     /**

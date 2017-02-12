@@ -4,28 +4,35 @@
  * @class WFSService
  * 
  */
-allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService','QuerierPanelService','RenderStatusService','UtilitiesService',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService,QuerierPanelService,RenderStatusService,UtilitiesService) {
+allModules.service('WFSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWFSRelatedService','GMLParserService','QuerierPanelService','RenderStatusService','UtilitiesService','NVCLService',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWFSRelatedService,GMLParserService,QuerierPanelService,RenderStatusService,UtilitiesService,NVCLService) {
    
-      /**
+        /**
         * Render a point data to the map 
         * @method renderPoint
         * @param point - the point to render
         * @param map - The map where the point is to be rendered
         */  
-       this.renderPoint = function(point,map){                     
-           var marker = new google.maps.Marker({
-               position:point.coords,
-               map: map,
-               title: point.name
-            });    
+        this.renderPoint = function(point,map){                     
+            var marker = new google.maps.Marker({
+                position:point.coords,
+                map: map,
+                title: point.name
+            });
+            
             marker.addListener('click', function() {
                 // Ask the map to display a loading mask
                 GoogleMapService.busyStart();
                 
+                // Invoke core tray image carousel
+                if (point.featureNode.nodeName=='gsml:Borehole') {
+                    QuerierPanelService.setCarouselBusy(true);
+                    NVCLService.getCoreDisplay(point.description, point.featureNode.nodeName, point.name);
+                }
+                
                 // Set data for the query panel and display it
-                var displayable = QuerierPanelService.setPanelNode(point.featureNode, "Feature", "WFS");
-                if (displayable) { 
+                var displayable = QuerierPanelService.setPanelNode(point.featureNode, "Feature", "WFS", false);
+                if (displayable) {
                     QuerierPanelService.openPanel(true);
                 }
                 

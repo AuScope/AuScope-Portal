@@ -99,6 +99,34 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
 
         return method;
     }
+    
+    
+    /**
+     * Generates a method for making a request for the depth ranges of core sample images for a particular logId
+     *
+     * The response will be JSON
+     *
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param logId
+     *            The logID (from a getLogCollection request) to query
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getImageTrayDepthMethod(String serviceUrl, String logId) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getImageTrayDepth.html"));
+
+        //set 'logid' parameter
+        builder.setParameter("logid", logId);
+        
+        //attach it to the method
+        method.setURI(builder.build());
+
+        return method;
+    }
+    
 
     /**
      * Generates a method for returning all algorithms supported by the NVCL analytical engine

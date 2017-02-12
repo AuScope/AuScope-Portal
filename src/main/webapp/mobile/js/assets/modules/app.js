@@ -103,3 +103,25 @@ app.directive('analyticPanel', function() {
        
     };
 });
+
+// Used to initialise the carousel that displays core tray images
+app.directive('slickCarousel', function($timeout) {
+    return {
+        restrict: 'A',
+        link: function(scope,element,attrs) {
+            scope.$watch('useCarousel', function(newVal, oldVal) {
+                if (newVal===true) {
+                    $timeout(function() {
+                        var evalAttr = scope.$eval(attrs.slickCarousel);
+                        // If not too many slides, add dots to carousel
+                        if (scope.$parent.slides && scope.$parent.slides.length>0 && scope.$parent.slides.length<41) {
+                            evalAttr['dots'] = true;
+                        }
+                        $(element).slick(evalAttr);
+                    });
+                }
+            });
+        }
+    }
+});
+ 

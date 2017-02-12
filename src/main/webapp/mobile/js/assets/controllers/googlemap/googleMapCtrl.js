@@ -3,12 +3,14 @@
  * @module controllers
  * @class googleMapCtrl
  */
-allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapService','RenderStatusService','$timeout','Constants',
-                                            function ($scope,$rootScope,GoogleMapService,RenderStatusService,$timeout,Constants) {
+allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapService','RenderStatusService','$timeout','Constants','UtilitiesService',
+                                            function ($scope,$rootScope,GoogleMapService,RenderStatusService,$timeout,Constants,UtilitiesService) {
     
     $scope.active = {};
     
     $scope.showlayerPanel=false;
+    
+    $scope.showPermalink = false;
     
     $scope.zoomDrawActive = false;
     
@@ -81,12 +83,52 @@ allControllers.controller('googleMapCtrl', ['$scope','$rootScope','GoogleMapServ
     };
     
     $scope.toggleZoomDraw = function(){
+        $scope.showPermalink=false;
         if($scope.zoomDrawActive){
             GoogleMapService.zoomDrawCancel();
         }else{
             GoogleMapService.zoomDraw();
         }        
     };
+
+    /**
+     * Alternately displays or hides the permanent link
+     * If displaying it generates a new permanent link
+     * @method togglePermalink
+     */
+    $scope.togglePermalink = function() {
+        GoogleMapService.zoomDrawCancel();
+        if ($scope.showPermalink) {
+            $scope.showPermalink=false;
+        } else {
+            $scope.showPermalink=true;
+            var currentURL = window.location.href;
+            var qpos = currentURL.indexOf("?");
+            if (qpos!=-1) {
+                $scope.permalink = currentURL.substring(0,qpos);
+            } else {
+                $scope.permalink = currentURL;
+            }
+            var currentState=GoogleMapService.getMapState();
+            var stateStr=UtilitiesService.encode_base64(JSON.stringify(currentState));
+            $scope.permalink+="?state="+stateStr;
+        }
+    };
     
+    /**
+     * Copies the generated URL to the local computer's clipboard for use by a paste operation
+     * @method copyLinkToClipboard
+     */
+    $scope.copyLinkToClipboard = function() {
+        // Internet Explorer
+        if (window.clipboardData && window.clipboardData.setData) {
+            clipboardData.setData("Text", $('#permalinkInp').val());
+        // Other browsers            
+        } else {
+            document.getElementById('permalinkInp').focus();
+            document.getElementById('permalinkInp').select();
+            document.execCommand('copy');
+        }
+    };
 
 }]);

@@ -3,8 +3,8 @@
  * @module controllers
  * @class loadFilterCtrl
  */
-allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService','GetFilterParamService','Constants',
-                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService,GetFilterParamService,Constants) {
+allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','RenderHandlerService','LayerManagerService','UtilitiesService','GetFilterParamService','Constants','GoogleMapService',
+                                             function ($scope,$rootScope,$timeout,RenderHandlerService,LayerManagerService,UtilitiesService,GetFilterParamService,Constants,GoogleMapService) {
     
     /* Opacity slider */
     $scope.slider = {
@@ -15,7 +15,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
             ceil: 100,
             showSelectionBar: true,
             onEnd: function(sliderId, modelValue) {
-                RenderHandlerService.setLayerOpacity($scope.layer, modelValue/100.0);
+                GoogleMapService.setLayerOpacity($scope.layer, modelValue/100.0);
             }
         }
     };
@@ -37,11 +37,38 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     
     
     /**
+     * Moves this layer to the front if obscure
+     * @method moveLayerToFront
+     * @param layer layer object
+     */
+    $scope.moveLayerToFront = function(layer) {
+        GoogleMapService.moveLayerToFront(layer);
+    }
+    
+    /**
+     * Returns true if this layer is in front of all other layers
+     * @method isLayerAtFront
+     * @param layer layer object
+     */
+    $scope.isLayerAtFront = function(layer) {
+        return GoogleMapService.isLayerAtFront(layer);
+    }
+
+    /**
      * Returns true if and only if the current layer is WMS
      * @method isWMSLayer
      */
     $scope.isWMSLayer = function () {
         return (Constants.rendererLoader[$scope.layer.id]=='WMSService' || !Constants.rendererLoader[$scope.layer.id] && LayerManagerService.getWMS($scope.layer).length > 0);
+    }
+    
+    /**
+     * Returns true is the layer is active
+     * @method isLayerActive
+     * @param layer layer object
+     */
+    $scope.isLayerActive = function(layer) {
+        return GoogleMapService.isLayerActive(layer);
     }
     
     
