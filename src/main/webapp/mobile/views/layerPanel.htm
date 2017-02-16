@@ -50,7 +50,7 @@
         <br>         
         <div>
             <uib-accordion close-others="true">    
-                <div ng-repeat="(group,records) in layerPanel.getCswRecords()" uib-accordion-group class="accordion-header-override" ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen">
+                <div ng-repeat="(group,records) in layerPanel.getCswRecords()" uib-accordion-group class="accordion-header-override" ng-class="{'panel-selected': status[group].isOpen, 'panel-primary': !status[group].isOpen}" is-open="status[group].isOpen" ng-init="lastGroupFn($last)">
                     <uib-accordion-heading>
                         <span><i ng-if="renderStatus.group[group].activeLayer.length > 0" class="pull-left margin-right">
                         <round-progress max="renderStatus.group[group].max+1" current="renderStatus.group[group].current+1" radius="9" stroke="4" color="#acea44">
@@ -64,7 +64,7 @@
                                     <th colspan="4">Layers</th>                          
                                 </tr>
                             </thead>
-                            <tr ng-repeat-start="layer in records" ng-click="togglePanels('filter',group,layer)" class="layer-row" ng-class="{'layer-selected':  status[group][layer.id].isExpanded}">
+                            <tr ng-repeat-start="layer in records" ng-click="togglePanels('filter',group,layer)" class="layer-row" ng-class="{'layer-selected':  status[group][layer.id].isExpanded}" ng-init="lastLayerFn($last, layer)">
                                 <td class="layer-name"><span ng-if="renderStatus[layer.id].max" class="glyphicon glyphicon-ban-circle pull-left hasEvent" ng-click="removeLayer(layer);$event.stopPropagation();"></span>{{layer.name}}
                                     <div ng-if="renderStatus[layer.id].max" ng-click="togglePanels('statusInfo',group,layer);$event.stopPropagation();">                                     
                                         <uib-progressbar  class="progress-striped active hasEvent" style="height:20px;margin-bottom: 0px;margin-top:5px;" type="{{renderStatus[layer.id].errorFound? 'warning':'success'}}" max="renderStatus[layer.id].max +1" value="renderStatus[layer.id].completed +1">
@@ -87,12 +87,12 @@
                             </tr>
                             <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
                                 <td colspan="4" style="border-top-style: none;">
-                                    <filter-panel  layer="layer"  class='layer-panel-nested'></filter-panel>                                  
+                                    <filter-panel layer="layer" class='layer-panel-nested'></filter-panel>
                                 </td>
                             </tr>
                             <tr class="layer-selected" ng-if="status[group][layer.id].panels.info"  >
                                 <td colspan="4">
-                                    <info-panel  info-panel-csw="layer" ></info-panel>
+                                    <info-panel info-panel-csw="layer" ></info-panel>
                                 </td>
                             </tr>
                             <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.analytic, 'no-animation': !status[group][layer.id].panels.analytic}" ng-show="status[group][layer.id].panels.analytic">

@@ -58,7 +58,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="form-filter-selection">
-                    <li ng-repeat="filt in layer.filterCollection.optionalFilters"><a class="filter-form-select" ng-click="addFilter(filt)">{{filt.label}}</a></li>
+                    <li ng-repeat="filt in layer.filterCollection.optionalFilters"><a class="filter-form-select" ng-click="addFilter(filt, true)">{{filt.label}}</a></li>
                 </ul>
 		    </div>
 	    </form>

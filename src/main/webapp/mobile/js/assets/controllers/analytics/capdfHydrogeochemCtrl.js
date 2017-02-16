@@ -1,6 +1,6 @@
 /**
- * capdfHydrogeochemCtrl class used for capdf hydrogeochem controller. This controller sits under loadAnalayticCtrl
- * @extends loadAnalayticCtrl
+ * capdfHydrogeochemCtrl class used for capdf hydrogeochem controller. This controller sits under loadAnalyticCtrl
+ * @extends loadAnalyticCtrl
  * @module controllers
  * @class capdfHydrogeochemCtrl
  */

@@ -82,7 +82,9 @@ allModules.service('QuerierPanelService', ['LayerManagerService','GoogleMapServi
             }
         });         
     };
-    this.registerMap(GoogleMapService.getMap());
+    
+    // After Google Map has been initialised, register it 
+    GoogleMapService.getMapWhenReady(function(map) {me.registerMap(map);});
     
     /**
     * Returns true iff all elements in array are true else false

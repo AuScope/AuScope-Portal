@@ -29,7 +29,7 @@
         <link rel="apple-touch-icon-precomposed" sizes="152x152" href="img/ico/152.png" type="image/png"/>
 
         <!-- javascript -->
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.25&key=AIzaSyBArcbrWG8q6cUeP4WrhD3-s1D0aYbkxfA&libraries=visualization,drawing"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.26&key=AIzaSyBArcbrWG8q6cUeP4WrhD3-s1D0aYbkxfA&libraries=visualization,drawing"></script>
         
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js" type="text/javascript" ></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js" type="text/javascript" ></script>    
@@ -51,6 +51,7 @@
         <script src="js/assets/framework/javeline/javeline_xpath.js" type="text/javascript"></script>
         <script src="//wurfl.io/wurfl.js" type="text/javascript" ></script>
         <script src="js/assets/framework/slick/slick.min.js" type="text/javascript" ></script>
+        <script src="js/assets/framework/lzma-js/lzma_worker-min.js" type="text/javascript" ></script>
         
         
 
@@ -87,6 +88,7 @@
         <script src="js/assets/modules/service/layer/LayerManagerService.js"></script>
         <script src="js/assets/modules/service/layer/queriers/QuerierPanelService.js"></script>
         <script src="js/assets/modules/service/layer/queriers/NVCLService.js"></script>
+        <script src="js/assets/modules/service/layer/FilterStateService.js"></script>
         <script src="js/assets/modules/service/http/GetWMSRelatedService.js"></script>
         <script src="js/assets/modules/service/http/GetWFSRelatedService.js"></script>
         <script src="js/assets/modules/service/http/GetFilterParamService.js"></script>
@@ -107,7 +109,7 @@
           
         
     </head>
-    <body ng-app="app" ng-controller="googleMapCtrl">
+    <body ng-app="app" ng-controller="googleMapCtrl" map-div-id="google-map-main">
         <div class="map-mask" ng-show="mapMaskFlag">
             <div class="map-mask-img">
                 <img src="img/hourglass.gif"/>
@@ -162,7 +164,7 @@
                 </div>
                 <div ng-show="showPermalink" class="row quick-menu">
                     <div class="col-xs-2 small">
-                        <i ng-click="copyLinkToClipboard();" class="fa fa-clipboard fa-2x cyan hasEvent"></i>
+                        <i ng-click="copyLinkToClipboard('permalinkInp');" class="fa fa-clipboard fa-2x cyan hasEvent"></i>
                     </div>
                     <div class="col-xs-10 small">
                         <input id="permalinkInp" type="text" value="{{permalink}}" readonly />

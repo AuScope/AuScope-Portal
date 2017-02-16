@@ -1,6 +1,6 @@
 /**
- * pressureDbCtrl class used for pressuredb-borehole controller. This controller sits under loadAnalayticCtrl
- * @extends loadAnalayticCtrl
+ * pressureDbCtrl class used for pressuredb-borehole controller. This controller sits under loadAnalyticCtrl
+ * @extends loadAnalyticCtrl
  * @module controllers
  * @class pressureDbCtrl
  */

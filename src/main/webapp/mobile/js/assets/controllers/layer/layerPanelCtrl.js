@@ -4,8 +4,8 @@
  * @class layerPanelCtrl
  * 
  */
-allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService','Constants',
-                                             function ($scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,Constants) {
+allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService','Constants',
+                                             function ($rootScope,$scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,Constants) {
     $scope.cswRecords={};
     GetCSWRecordService.getCSWKnownLayers().then(function(data){
         $scope.cswRecords=data;      
@@ -13,7 +13,7 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
 
     $scope.analyticLayerList = Constants.analyticLoader;
 
-    $scope.status = {};  
+    $scope.status = {};
     
     $scope.renderStatus = RenderStatusService.getRenderStatus();
     
@@ -45,7 +45,6 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
      */
      $scope.removeLayer = function(layer){
         GoogleMapService.removeActiveLayer(layer);
-        
     };
 
     /**
@@ -111,7 +110,6 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
     
     
     
-    
     /**
     * @method toggleLayers
     * @param group group
@@ -132,7 +130,27 @@ allControllers.controller('layerPanelCtrl', ['$scope','GetCSWRecordService','Ren
         }        
     };
     
+    /**
+     * Used to register the last group in the panel
+     * This helps us know when the panel filter initialisation is complete
+     * @method lastGroupFn
+     * @param last last iteration of loop flag ($last) for all groups
+     */
+    $scope.lastGroupFn = function(last) {
+        $rootScope.lastGroupFlag=last;
+    };
     
-   
-    
+    /**
+     * Used to register the layer id of the last layer in the panel
+     * This enables us to know when panel filter initialisation is complete
+     * @method lastLayerFn
+     * @param last last iteration of loop flag ($last) for layers of a group
+     * @param layer relevant layer
+     */
+    $scope.lastLayerFn = function(last,layer) {
+        if (last && $rootScope.lastGroupFlag) {
+            $rootScope.lastLayerId=layer.id;
+        }
+    };
+
 }]);

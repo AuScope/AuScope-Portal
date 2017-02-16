@@ -8,10 +8,11 @@
  * @event data.select.end - end of the drawing for the data selection event
  * @event layer.removed - removing of a layer from map event
  */
-allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter','Constants',
-                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter,Constants) {
+allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderStatusService','$timeout','$filter','Constants','FilterStateService',
+                                       function ($rootScope,UtilitiesService,RenderStatusService,$timeout,$filter,Constants,FilterStateService) {
    
-    this.mainMap;
+    this.mainMap = null;
+    this.init_cb = [];
     this.activeLayers = {};
     this.layerOrder = {};
     this.useLayerReordering = true;
@@ -27,11 +28,26 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     
     /**
      * Get an instance of the map
-     * @Method getMap
+     * @method getMap
      * @return map - an instance of the map. Make sure this is called after map has been initialized
      */
-    this.getMap = function(){
+    this.getMap = function() {
         return this.mainMap;
+    };
+    
+    /**
+     * Register a function to call once the Google Map has been initialised
+     * If the map has already been initialised, then the function is called 
+     * immediately
+     * @method getMapWhenReady
+     * @param cb_fn callback function to be called
+     */
+    this.getMapWhenReady = function(cb_fn) {
+        if (!this.mainMap) {
+            this.init_cb.push(cb_fn);
+            return;
+        }
+        cb_fn(this.mainMap);
     };
     
     /**
@@ -257,16 +273,20 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         
         // Update the overlay map data structures
         this.syncOverlayMapDS();
+        
+        // Remove this filter from registry
+        FilterStateService.deregisterFilterSettings(layer.id);
     };
      
     /**
      * Initialize the map
      * @method initMap
+     * @param mapDivId HTML id attribute of the <div> element where the map will be placed 
      * 
      */
-    this.initMap = function() {
+    this.initMap = function(mapDivId) {
         var mq = window.matchMedia(Constants.smallScreenTest);
-        this.mainMap = new google.maps.Map(document.getElementById('google-map-main'), {
+        this.mainMap = new google.maps.Map(document.getElementById(mapDivId), {
             center: {lat: -28.397, lng: 132.644},
             minZoom:(mq.matches? 3 : 4),
             zoom: (mq.matches? 3 : 5),
@@ -277,28 +297,18 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
             },
         });
         
-        // If there is a state (permalink) parameter in the URL, then process it
-        var URLparams=UtilitiesService.getUrlParameters(window.location.href);
-        if (URLparams.hasOwnProperty('state')) {
-            var stateStr = UtilitiesService.decode_base64(URLparams.state);
-            // Chop nulls off end of string
-            while (stateStr.charCodeAt(stateStr.length-1)==0) {
-                stateStr = stateStr.substring(0,stateStr.length-1);
+        // Call any functions that have been waiting for this to initialise
+        if (this.init_cb.length>0) {
+            for (i=0; i<this.init_cb.length; i++) {
+                this.init_cb[i](this.mainMap);
             }
-            var mapState={};
-            try {
-                mapState = JSON.parse(stateStr);
-            } catch(err) {
-                console.error("permalink JSON parse error=", err);
-            }
-            if (mapState!={})
-                this.setMapState(mapState);
         }
-         
+        
         this.mainMap.addListener('mousemove', function(evt) {
             $("#mouse-move-display-lat").text("Lat: " + $filter('number')(evt.latLng.lat(),2));
             $("#mouse-move-display-lng").text("Lng: " + $filter('number')(evt.latLng.lng(),2));
         });
+        
     };
     
     /**
@@ -504,7 +514,12 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         }); 
     };
       
-      
+    /**
+     * Broadcasts an event to all listeners via $rootScope
+     * @method broadcast
+     * @param event name of event (string)
+     * @param result arguments to be passed
+     */
     this.broadcast = function (event,result) {
         $rootScope.$broadcast(event,result);
     };
