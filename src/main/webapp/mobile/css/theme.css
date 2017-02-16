@@ -338,11 +338,11 @@ fieldset[disabled] .btn-red.active {
 
 /* icons used in the layer panel */
 .fa-round {
-  padding-top: 3px;
+  padding-top: 4px;
   -webkit-border-radius: 50%;
   border-radius: 50%;
-  width: 20px; 
-  height: 20px;
+  width: 25px; 
+  height: 25px;
   text-align: center;
   font-size: 1.5em;
   color: #337ab7;
@@ -355,13 +355,12 @@ fieldset[disabled] .btn-red.active {
 .icon-lg-side:hover .fa-round {
   background-color: #d14f30;
   color: white;
-  font-size: 1.2em;
+  font-size: 1.5em;
 }
 
 .fa-round-disable {
-  background-color: white;
   color: #D0D0D0;
-  font-size: 1.2em;
+  font-size: 1.5em;
   cursor: not-allowed;
 }
 
