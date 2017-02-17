@@ -28,6 +28,21 @@ Ext.application({
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var isDebugMode = urlParams.debug;
 
+        //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
+        var unmappedCSWRecordStore = Ext.create('Ext.data.Store', {
+            model : 'portal.csw.CSWRecord',
+            groupField: 'contactOrg',
+            proxy : {
+                type : 'ajax',
+                url : 'getUnmappedCSWRecords.do',
+                reader : {
+                    type : 'json',
+                    rootProperty : 'data'
+                }
+            },
+            autoLoad : true
+        });
+
         //Our custom record store holds layers that the user has
         //added to the map using a OWS URL entered through the
         //custom layers panel
@@ -140,6 +155,21 @@ Ext.application({
         });
 
 
+        // Create the ResearchDataLayer store
+        var researchDataLayerStore = Ext.create('Ext.data.Store', {
+            model : 'portal.knownlayer.KnownLayer',
+            groupField: 'group',
+            proxy : {
+                type : 'ajax',
+                url : 'getResearchDataLayers.do',
+                reader : {
+                    type : 'json',
+                    rootProperty : 'data'
+                }
+            },
+            autoLoad : true
+        });
+
         //Create our store for holding the set of
         //layers that have been added to the map
         var layerStore = Ext.create('portal.layer.LayerStore', {});
@@ -176,7 +206,7 @@ Ext.application({
 
 
         var knownLayersPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Featured Layers',
+            title : 'Featured',
             menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
             store : knownLayerStore,
             activelayerstore : layerStore,
@@ -193,14 +223,29 @@ Ext.application({
 
         });
 
+        var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
+            title : 'Registered',
+            store : unmappedCSWRecordStore,
+            activelayerstore : layerStore,
+            tooltip : {
+                title : 'Registered Layers',
+                text : 'The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.',
+                showDelay : 100,
+                dismissDelay : 30000
+            },
+            map : map,
+            layerFactory : layerFactory
+
+        });
+
         customRecordsPanel = Ext.create('auscope.widgets.CustomRecordPanel', {
-            title : 'Custom Layers',
+            title : 'Custom',
             itemId : 'org-auscope-custom-record-panel',
             store : customRecordStore,
             activelayerstore : layerStore,
             enableBrowse : true,//VT: if true browse catalogue option will appear
             tooltip : {
-                title : 'Custom Layers',
+                title : 'Custom Data Layers',
                 text : 'This tab allows you to create your own layers from remote data services.',
                 showDelay : 100,
                 dismissDelay : 30000
@@ -210,9 +255,26 @@ Ext.application({
 
         });
 
+        var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
+            title : 'Research Data',
+            store : researchDataLayerStore,
+            activelayerstore : layerStore,
+            enableBrowse : false,//VT: if true browse catalogue option will appear
+            map : map,
+            layerFactory : layerFactory,
+            tooltip : {
+                title : 'Research Data Layers',
+                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p1>',
+                showDelay : 100,
+                dismissDelay : 30000
+            }
+
+        });
+
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
             id : 'auscope-tabs-panel',
+            title : 'Layers',
             activeTab : 0,
             region : 'center',
             split : true,
@@ -221,7 +283,9 @@ Ext.application({
             enableTabScroll : true,
             items:[
                 knownLayersPanel,
-                customRecordsPanel
+                unmappedRecordsPanel,
+                customRecordsPanel,
+                researchDataPanel
             ]
         });
 
@@ -321,6 +385,7 @@ Ext.application({
 
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
+                cswRecordStore : unmappedCSWRecordStore,
                 layerFactory : layerFactory,
                 layerStore : layerStore,
                 map : map,

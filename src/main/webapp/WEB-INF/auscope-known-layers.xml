@@ -387,6 +387,106 @@
         </property>
     </bean>
 
+  
+    <bean id="knownTypeGeotransects" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="ga-geotransects"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Onshore_Seismic_Surveys"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="id" value="ga-geotransects"/>
+        <property name="name" value="GA Onshore Seismic Surveys"/>
+        <property name="description" value="The Onshore Seismic Data of Australia is a collection of all land seismic traverses cross the Australian continent and its margins. The data includes raw and processed data in SEGY format. The metadata includes acquisition reports, processing reports, processed images, logs, and so on. The data acquisition was carried out in Australia from 1949-2012 by Geoscience Australia and various partners. The set of reflection and refraction data comprises over 12,000 km of coverage, and provides an insight into the variations in crustal architecture in the varied geological domains. The complete processed dataset was first available for public access in Oct 2013 (http://www.ga.gov.au/minerals/projects/current-projects/seismic-acquisition-processing.html ). The location of seismic traverses is shown by the Gallery link on the webpage. The new survey data will be updated on the webpage by the official data release date. The attribute structure of the dataset has also been revised to be more compatible with the GeoSciML data standard, published by the IUGS Commission for Geoscience Information. The onshore seismic data were collected with partner organizations: Australian Geodynamics Cooperative Research Centre, National Research Facility for Earth Sounding, Australian Nuclear Science and Technology Organisation, Cooperative Research Centre for Greenhouse Gas Technologies, Curtin University of Technology, Geological Survey of New South Wales, NSW Department of Mineral Resources, NSW Department of Primary Industries Mineral Resources, An organisation for a National Earth Science Infrastructure Program, Geological Survey Western Australia, Northern Territory Geological Survey, Primary Industries and Resources South Australia, Predictive Mineral Discovery Cooperative Research Centre, Queensland Geological Survey, GeoScience Victoria Department of Primary Industries, Tasmania Development and Resources, University of Western Australia."/>
+        <property name="order" value="400" />
+    </bean>
+    <bean id="knownTypeReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="portal-reports"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="descriptiveKeyword" value="Report"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Reports"/>
+        <property name="description" value="A collection of scientific reports that have been spatially located"/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="410" />
+    </bean>
+    <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="portal-InSar-reports"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWTitleFilterRecordSelector">
+                <property name="title" value="InSAR GeoNetwork"/><!-- This matches the title in auscope-registries.xml -->
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Synthetic Aperture Radar data"/><!-- INSAR -->
+        <property name="description" value="Raw Synthetic Aperture Radar (SAR) data from ERS-1 and ERS-2 satellites. Data is provided in the standardised CEOS format under licence from the European Space Agency (ESA)."/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-stars.png"/>
+        <property name="polygonColor" value="#FE2A00,#FF694C" />
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="420" />
+    </bean>
+    <bean id="knownTypeYilgarnGeochemistry" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="yilgarn-geochem"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="gsml:GeologicUnit"/>
+                <property name="relatedFeatureTypeNames">
+                    <list>
+                        <value>omx:ObservationProcess</value>
+                        <value>gml:TimeInstant</value>
+                        <value>sa:LocatedSpecimen</value>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Yilgarn Laterite Geochemistry"/>
+        <property name="description" value="A collection of detailed information about all analytes that were detected at a specific location"/>
+        <property name="proxyUrl" value="doYilgarnGeochemistry.do"/>
+        <property name="proxyCountUrl" value="doYilgarnGeochemistryCount.do"/>
+        <property name="proxyStyleUrl" value=""/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="430" />
+    </bean>
     <bean id="knownTypeBoreholeNvcl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="nvcl-borehole"/>
         <constructor-arg name="knownLayerSelector">
@@ -659,7 +759,106 @@
             </bean>        
         </property>
     </bean>
-    
+
+    <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">
+        <constructor-arg name="id" value="mscl-borehole"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://sisstest.arrc.csiro.au:8080/agos/wfs</value>
+                        <value>http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs</value>
+                    </list>
+                </constructor-arg>
+                <property name="relatedFeatureTypeNames">
+                    <list>
+                        <value>mscl:scanned_data</value>
+                        <value>sa:SamplingFeatureCollection</value>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="MSCL Data"/>
+        <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
+        <property name="group" value="University of Melbourne"/>
+        <property name="proxyUrl" value="doBoreholeFilter.do"/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="200" />
+    </bean>
+
+    <bean id="knownTypeSurfaceAftershock" class="org.auscope.portal.view.ResearchDataLayer">
+        <constructor-arg name="id" value="surface-aftershock"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="surfaceaftershock:seismometer"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="Surface Aftershock Data"/>
+        <property name="description" value="Surface aftershock seismograph continuous data."/>
+        <property name="group" value="University of Melbourne"/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="201" />
+    </bean>
+
+    <bean id="knownTypeSeismologyInSchool" class="org.auscope.portal.view.ResearchDataLayer">
+        <constructor-arg name="id" value="seismology-in-schools-site"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.view.knownlayer.IRISSelector">
+                <constructor-arg name="serviceEndpoint" value="http://service.iris.edu"/>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="IRIS Feed"/>
+        <property name="description" value="Seismographs in Schools data feed from Incorporated Research Institutions for Seismology (IRIS). S network code."/>
+        <property name="group" value="Seismographs in Schools Network"/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="300" />
+    </bean>
+
     <bean id="knownTypeBoreholePressureDB" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="pressuredb-borehole"/>
         <constructor-arg name="knownLayerSelector">
@@ -1408,7 +1607,226 @@
         </property>
         <property name="order" value="131" />
     </bean>
+
+    <bean id="knownTypeGswaGravMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-gravmerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gravity_merged"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Gravity_Grids/WA_400m_Grav_Merge_v1_2016.nc</value>
+                    </list>
+                </constructor-arg>
+
+            </bean>
+        </constructor-arg>
+        <property name="name" value="400m Gravity Merged Grid (2016 v1)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="230" />
+    </bean>
+
+    <bean id="knownTypeGswa20mMagMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-20mmagmerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="total_magnetic_intensity"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Magnetic_Grids/WA_20m_Mag_Merge_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+
+            </bean>
+        </constructor-arg>
+        <property name="name" value="20m Magnetic Merged Grid (2014 v1)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="231" />
+    </bean>
+
+
+    <bean id="knownTypeGswa40mMagMerge1VD" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-40mmagmerge1vd"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="first_vertical_deriv_tmi"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Magnetic_Grids/WA_40m_Mag_Merge_1VD_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+
+            </bean>
+        </constructor-arg>
+        <property name="name" value="40m Magnetic Merged Grid - 1st Vertical Derivative (2014 v1)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="232" />
+    </bean>
+
+    <bean id="knownTypeGswa40mMagMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-40mmagmerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="total_magnetic_intensity"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Magnetic_Grids/WA_40m_Mag_Merge_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="40m Magnetic Merged Grid (2014 v1)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="233" />
+    </bean>
+
+
+    <bean id="knownTypeGswa80mMagMerge1VD" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-80mmagmerge1vd"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="first_vertical_deriv_tmi"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Magnetic_Grids/WA_80m_Mag_Merge_1VD_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+
+            </bean>
+        </constructor-arg>
+        <property name="name" value="80m Magnetic Merged Grid - 1st Vertical Derivative (2014 v1)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="234" />
+    </bean>
+
+
+    <bean id="knownTypeGswa80mMagMergertp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-80mmagmergertp"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="reduced_to_pole_tmi"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Magnetic_Grids/WA_80m_Mag_Merge_RTP_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+
+            </bean>
+        </constructor-arg>
+        <property name="name" value="80m Magnetic Merged Grid - Reduced to Pole (2014 v1)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="235" />
+    </bean>
+
+
+    <bean id="knownTypeGswa80mMagMerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-80mmagmerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="total_magnetic_intensity"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Magnetic_Grids/WA_80m_Mag_Merge_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="80m Magnetic Merged Grid (2014 v1)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="236" />
+    </bean>
+
+
+    <bean id="knownTypeGswa80mKmerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-80mkmerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="percentage_potassium"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Radiometric_Grids/WA_80m_K_Merge_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="80m Radiometric Merge (K)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="237" />
+    </bean>
     
+    <bean id="knownTypeGswa80mTCmerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-80mtcmerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="dose_rate"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Radiometric_Grids/WA_80m_TC_Merge_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="80m Radiometric Merge (Dose Rate)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="238" />
+    </bean>
+    
+    <bean id="knownTypeGswa80mThmerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-80mthmerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="thorium_ppm"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Radiometric_Grids/WA_80m_Th_Merge_v1_2014.nc</value>
+                    </list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="80m Radiometric Merge (Th)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="239" />
+    </bean>
+    
+    <bean id="knownTypeGswa80mUmerge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gswa-80mumerge"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="uranium_ppm"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <array>
+                        <value>http://dapds00.nci.org.au/thredds/wms/rl1/GSWA_Geophysics/WA_Radiometric_Grids/WA_80m_U_Merge_v1_2014.nc</value>
+                    </array>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <property name="name" value="80m Radiometric Merge (U)"/>
+        <property name="description" value=""/>
+        <property name="group" value="Geological Survey of Western Australia"/>
+        <property name="order" value="240" />
+    </bean>
+
      <bean id="knownTypeGAAemSurvey" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="ga-aem"/>
         <constructor-arg name="knownLayerSelector">

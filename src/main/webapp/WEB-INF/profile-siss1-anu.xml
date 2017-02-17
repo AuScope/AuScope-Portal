@@ -19,8 +19,12 @@
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeGeodesy" />
                 <ref bean="knownTypeGeochron" />
+                <ref bean="knownTypeReports" />
+                <ref bean="knownTypeGeotransects" />
+                <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
+                <ref bean="knownTypeLateriteYilgarnGeoChem"/>
                 <ref bean="knownTypeHighPSiteFeatureType"/>
                 <ref bean="knownTypeHighPFeatureType"/>
                 <ref bean="knownTypeHighPREIronLayer"/>

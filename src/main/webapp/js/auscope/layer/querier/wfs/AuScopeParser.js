@@ -18,6 +18,7 @@ Ext.define('auscope.layer.querier.wfs.AuScopeParser', {
         Ext.apply(config, {
             factoryNames : [
                 'auscope.layer.querier.wfs.factories.GeologicUnitFactory',
+                'auscope.layer.querier.wfs.factories.LocatedSpecimenFactory',
                 'auscope.layer.querier.wfs.factories.SamplingFeatureCollectionFactory',
                 'auscope.layer.querier.wfs.factories.BoreholeFactory',
                 'auscope.layer.querier.wfs.factories.SF0BoreholeFactory',
@@ -29,6 +30,7 @@ Ext.define('auscope.layer.querier.wfs.AuScopeParser', {
                 'auscope.layer.querier.wfs.factories.MinOccurViewFactory',
                 'auscope.layer.querier.wfs.factories.RemanentAnomalyFactory',
                 'auscope.layer.querier.wfs.factories.GnssStationFactory',
+                'auscope.layer.querier.wfs.factories.SurfaceAfterShockFactory',
                 'portal.layer.querier.wfs.factories.SimpleFactory' //The simple factory should always go last
             ]
         });

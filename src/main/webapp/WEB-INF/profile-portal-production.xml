@@ -23,10 +23,15 @@
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
-                <ref bean="knownTypeGSMLBorehole" />
+                <ref bean="knownTypeGSMLBorehole" />                
+                <ref bean="knownTypeReports" />
+                <ref bean="knownTypeInSarReports" />
+                <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeTimaGeoSample" />
+                <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
+                <ref bean="knownTypeLateriteYilgarnGeoChem"/>
                 <ref bean="knownTypeHighPSiteFeatureType"/>
                 <ref bean="knownTypeHighPFeatureType"/>
                 <ref bean="knownTypeHighPREIronLayer"/>
@@ -57,9 +62,22 @@
                 <ref bean="knownTypeAlohGroupContent" />
                 <ref bean="knownTypeGypsumContent" />
                 <ref bean="knownTypeSilicaContent" />
+                <ref bean="knownTypeBoreholeMSCL" />
+                <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />
                 <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeTimaGeoSample" />
+                <ref bean="knownTypeGswaGravMerge" />
+                <ref bean="knownTypeGswa20mMagMerge"/>
+                <ref bean="knownTypeGswa40mMagMerge1VD"/>
+                <ref bean="knownTypeGswa40mMagMerge"/>
+                <ref bean="knownTypeGswa80mMagMerge1VD"/>
+                <ref bean="knownTypeGswa80mMagMergertp"/>
+                <ref bean="knownTypeGswa80mMagMerge"/>
+                <ref bean="knownTypeGswa80mKmerge"/>
+                <ref bean="knownTypeGswa80mTCmerge"/>
+                <ref bean="knownTypeGswa80mThmerge"/>
+                <ref bean="knownTypeGswa80mUmerge"/>
                 
             </list>
         </constructor-arg>
@@ -71,6 +89,7 @@
                 <ref bean="cswAuscopeProduction" />
                 <ref bean="cswMDUProduction" />
                 <ref bean="cswAsterProduction" />
+                <ref bean="cswInSarProduction" />
             </list>
         </constructor-arg>
     </bean>
