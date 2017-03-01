@@ -110,7 +110,6 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         // transforming lat, lng to map projection coordinates
         var pt=proj4("EPSG:4326", "EPSG:3857", [ptLatLng.lng(), ptLatLng.lat()]);
         
-        var TILE_SIZE = 256;
         var zoom = map.getZoom();      // Get zoom level
         var scale = 1 << zoom;         // Calculate map scale
         var proj = map.getProjection();

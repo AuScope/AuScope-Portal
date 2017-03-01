@@ -45,6 +45,8 @@ app.constant('Constants', {
     
     smallScreenTest: '(max-width: 658px)',
     
+    TILE_SIZE: 256
+    
 }); 
 
 

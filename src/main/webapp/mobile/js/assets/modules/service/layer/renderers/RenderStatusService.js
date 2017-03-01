@@ -81,6 +81,29 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
         this.broadcast(this.renderStatus);
         
     };
+
+
+    /**
+     * Returns true if the status of the resource and layer matches the input status
+     * @method checkStatus
+     * @param layer layer whose status will be checked
+     * @param resource resource whose status will be checked
+     * @param status boolean value of status to be checked
+     */
+    this.checkStatus = function(layer,resource, status) {
+        if (UtilitiesService.isEmpty(this.renderStatus[layer.id])){
+            return null;
+        }
+        if (UtilitiesService.isEmpty(this.renderStatus[layer.id].resources)){
+            return null;
+        }
+        if (this.renderStatus[layer.id].resources[resource.url]) {
+            if (this.renderStatus[layer.id].resources[resource.url].status == status) {
+                return true;
+            }
+            return false;
+        }
+    };
     
     
     /**

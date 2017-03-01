@@ -28,8 +28,8 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                 var zfactor = Math.pow(2, zoom);
                 
                 // Get LatLng coordinates
-                var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 256 / zfactor, coord.y * 256 / zfactor));
-                var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
+                var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * Constants.TILE_SIZE / zfactor, coord.y * Constants.TILE_SIZE / zfactor));
+                var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * Constants.TILE_SIZE / zfactor, (coord.y + 1) * Constants.TILE_SIZE / zfactor));
 
                 // Transform [lng, lat] to map projection coordinates [x, y]
                 var bot3857=proj4("EPSG:4326", "EPSG:3857", [bot.lng(), bot.lat()]);
@@ -54,12 +54,12 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                 url += "&TRANSPARENT=TRUE";
                 url += "&SRS=EPSG:3857";     //set EPSG:3857 map projection coordinates 
                 url += "&BBOX=" + bbox;      // set bounding box
-                url += "&WIDTH=256";         //tile size in google
-                url += "&HEIGHT=256";                
+                url += "&WIDTH=" + Constants.TILE_SIZE;         //tile size in google
+                url += "&HEIGHT=" + Constants.TILE_SIZE;                
                 return url;                 // return URL for the tile
      
             },           
-            tileSize: new google.maps.Size(256, 256),
+            tileSize: new google.maps.Size(Constants.TILE_SIZE, Constants.TILE_SIZE),
             isPng: true
         });
         return imagelayer;
@@ -84,8 +84,8 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                 var zfactor = Math.pow(2, zoom);
                 
                 // Get LatLng coordinates
-                var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 256 / zfactor, coord.y * 256 / zfactor));
-                var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 256 / zfactor, (coord.y + 1) * 256 / zfactor));
+                var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * Constants.TILE_SIZE / zfactor, coord.y * Constants.TILE_SIZE / zfactor));
+                var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * Constants.TILE_SIZE / zfactor, (coord.y + 1) * Constants.TILE_SIZE / zfactor));
                 
                 // Transform [lng, lat] to map projection coordinates [x, y]
                 var bot3857=proj4("EPSG:4326", "EPSG:3857", [bot.lng(), bot.lat()]);
@@ -110,12 +110,12 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                 url += "&TRANSPARENT=TRUE";
                 url += "&CRS=EPSG:3857";  //set EPSG:3857 map projection coordinates
                 url += "&BBOX=" + bbox;      
-                url += "&WIDTH=256";        
-                url += "&HEIGHT=256";
+                url += "&WIDTH=" + Constants.TILE_SIZE;        
+                url += "&HEIGHT=" + Constants.TILE_SIZE;
                 return url;                 
       
             },
-            tileSize: new google.maps.Size(256, 256),
+            tileSize: new google.maps.Size(Constants.TILE_SIZE, Constants.TILE_SIZE),
             isPng: true
         });
          return imagelayer;
