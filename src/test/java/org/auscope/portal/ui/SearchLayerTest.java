@@ -52,7 +52,7 @@ public class SearchLayerTest {
      */
     public void testSearchAndEnter() {
         // search box
-        WebElement searchBox = driver.findElement(By.id("hh-searchfield-FeaturedLayers-inputEl"));
+        WebElement searchBox = driver.findElement(By.id("hh-searchfield-Featured-inputEl"));
 
         // type "tenement" in search
         searchBox.sendKeys("tenement");
@@ -100,14 +100,14 @@ public class SearchLayerTest {
      */
     public void testSearchAndClickIcon() {
         // search box
-        WebElement searchBox = driver.findElement(By.id("hh-searchfield-FeaturedLayers-inputEl"));
+        WebElement searchBox = driver.findElement(By.id("hh-searchfield-Featured-inputEl"));
 
         // type "tenement" in search
         searchBox.sendKeys("tenement");
 
         // Find the first (and only) search button on the page and click it
         WebElement searchIcon = new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOf(
-                driver.findElement(By.id("hh-searchfield-FeaturedLayers-trigger-search"))));
+                driver.findElement(By.id("hh-searchfield-Featured-trigger-search"))));
 
         searchIcon.click();
 
