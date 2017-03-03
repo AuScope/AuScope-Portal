@@ -12,7 +12,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory',
     },
 
     supportsNode : function(domNode) {
-        return domNode.namespaceURI === this.XMLNS_ER &&
+        return (domNode.namespaceURI === this.XMLNS_ER || domNode.namespaceURI == this.XMLNS_ER_2) &&
                portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'MiningFeatureOccurrence';
     },
 
@@ -25,8 +25,17 @@ Ext.define('auscope.layer.querier.wfs.factories.MiningFeatureOccurrenceFactory',
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
 
         var gmlNameNodes = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'er:specification/er:Mine/gml:name');
-        var coordinateString = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'er:location/gml:Point/gml:pos');
-        var status = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'er:specification/er:Mine/er:status');
+        var coordinateString;
+        var status;
+        if (domNode.namespaceURI == this.XMLNS_ER_2) {
+            // ERML 2 is mapped a little differently
+            coordinateString = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'er:shape/gml:Point/gml:pos');
+            status = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'er:specification/er:Mine/er:status/@xlink:href');
+        } else {
+            // ERML 1
+            coordinateString = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'er:location/gml:Point/gml:pos');
+            status = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'er:specification/er:Mine/er:status');
+        }
         var mineNameNodes = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'er:specification/er:Mine/er:mineName/er:MineName');
 
         //Our preferred name is based on an encoded boolean

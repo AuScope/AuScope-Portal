@@ -12,7 +12,7 @@ Ext.define('auscope.layer.querier.wfs.factories.MappedFeatureFactory', {
     },
 
     supportsNode : function(domNode) {
-        return domNode.namespaceURI === this.XMLNS_GSML_2 &&
+        return (domNode.namespaceURI === this.XMLNS_GSML_2 || domNode.namespaceURI === this.XMLNS_GSML_32) &&
                portal.util.xml.SimpleDOM.getNodeLocalName(domNode) === 'MappedFeature';
     },
     
@@ -40,11 +40,18 @@ Ext.define('auscope.layer.querier.wfs.factories.MappedFeatureFactory', {
         var gmlId = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, '@gml:id');
         var allNames = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'gsml:specification/er:MineralOccurrence/gml:name');
         var specification = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'gsml:specification/er:MineralOccurrence/er:commodityDescription[1]/er:Commodity/er:source/@xlink:href');
-        var type = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:specification/er:MineralOccurrence/er:type');
-        var minDepositGroup = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:specification/er:MineralOccurrence/er:classification/er:MineralDepositModel/er:mineralDepositGroup');
-
         var allCommodityNames = portal.util.xml.SimpleXPath.evaluateXPathNodeArray(domNode, 'gsml:specification/er:MineralOccurrence/er:commodityDescription/er:Commodity/gml:name');
 
+        var type;
+        var minDepositGroup;
+        if (domNode.namespaceURI == this.XMLNS_GSML_32) {
+            // ERML 2 is mapped a bit differently
+            type = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:specification/er:MineralOccurrence/er:type/@xlink:href');
+            minDepositGroup = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:specification/er:MineralOccurrence/er:classification/er:MineralDepositModel/er:mineralDepositGroup/@xlink:href');
+        } else {
+            type = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:specification/er:MineralOccurrence/er:type');
+            minDepositGroup = portal.util.xml.SimpleXPath.evaluateXPathString(domNode, 'gsml:specification/er:MineralOccurrence/er:classification/er:MineralDepositModel/er:mineralDepositGroup');
+        }
 
         //For IE we can't apply XPath predicates like gml:name[@codeSpace=\'http://www.ietf.org/rfc/rfc2616\']
         //so we do a manual loop instead over gml:name instead

@@ -1,19 +1,26 @@
 package org.auscope.portal.server.web.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.SimpleBBoxFilter;
 import org.auscope.portal.core.services.methodmakers.filter.SimplePropertyFilter;
+import org.auscope.portal.core.services.namespaces.ErmlNamespaceContext;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSTransformedResponse;
+import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.service.WFSService;
+import org.auscope.portal.xslt.GmlToHtml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,12 +39,59 @@ import org.springframework.web.servlet.ModelAndView;
 public class WFSController extends BasePortalController {
 
     private WFSService wfsService;
+    
+    private WFSService wfsGml32Service;
 
     @Autowired
     public WFSController(WFSService wfsService) {
         this.wfsService = wfsService;
+        WFSGetFeatureMethodMaker methodMaker = new WFSGetFeatureMethodMaker();
+        this.wfsGml32Service = new WFSService(
+                new HttpServiceCaller(900000),
+                methodMaker,
+                // can instantiate with a different XSLT for GML 32 mapping?
+                new GmlToHtml()
+                );       
+        // give it a ERML 2.0 namespace context
+        methodMaker.setNamespaces(new ErmlNamespaceContext("2.0"));
+        
     }
 
+    
+    @RequestMapping("/getAllGml32Features.do")
+    public void requestAllGml32Features(HttpServletResponse response,
+            @RequestParam("serviceUrl") final String serviceUrl,
+            @RequestParam("typeName") final String featureType,
+            @RequestParam(required = false, value = "bbox") final String bboxJSONString,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+            throws Exception {
+
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJSONString);
+
+        SimpleBBoxFilter filter = new SimpleBBoxFilter();
+        String filterString = null;
+        // this is what google map uses
+        String srs = null;
+        if (bbox == null) {
+            filterString = filter.getFilterStringAllRecords();
+        } else {
+            filterString = filter.getFilterStringBoundingBox(bbox);
+        }
+
+        WFSResponse wfsResponse = null;
+        try {
+            wfsResponse = wfsGml32Service.getGml32WfsResponse(serviceUrl, featureType, filterString, maxFeatures, srs);
+        } catch (Exception ex) {
+            log.warn(String.format("Exception getting '%2$s' from '%1$s': %3$s", serviceUrl, featureType, ex));
+            log.debug("Exception: ", ex);
+            generateExceptionResponse(ex, serviceUrl);
+        }
+
+        String responseString = wfsResponse.getData();        
+        InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
+        FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), WMSController.BUFFERSIZE, true);
+    }
+    
     /**
      * Given a service Url and a feature type this will query for all of the features, then convert them into KML, to be displayed, assuming that the response
      * will be complex feature GeoSciML

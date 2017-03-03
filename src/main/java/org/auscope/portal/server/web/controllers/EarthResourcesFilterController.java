@@ -6,10 +6,14 @@ import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
+import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.controllers.downloads.EarthResourcesDownloadController;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
@@ -18,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Controller that handles all Earth Resource related requests
@@ -39,12 +45,16 @@ public class EarthResourcesFilterController extends BasePortalController {
     // ----------------------------------------------------- Instance variables
 
     private MineralOccurrenceService mineralOccurrenceService;
+    private HttpServiceCaller httpServiceCaller;
+    private WFSGetFeatureMethodMaker wfsMethodMaker;    
 
     // ----------------------------------------------------------- Constructors
 
     @Autowired
     public EarthResourcesFilterController(MineralOccurrenceService mineralOccurrenceService) {
         this.mineralOccurrenceService = mineralOccurrenceService;
+        httpServiceCaller = new HttpServiceCaller(900000);
+        wfsMethodMaker = new WFSGetFeatureMethodMaker();
     }
 
     // ------------------------------------------- Property Setters and Getters
@@ -353,6 +363,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMiningActivityFilterStyle.do")
     public void doMiningActivityFilterStyle(
             HttpServletResponse response,
+            @RequestParam(required = true, value = "serviceUrl", defaultValue = "") String serviceUrl,
             @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
             @RequestParam(required = false, value = "startDate", defaultValue = "") String startDate,
             @RequestParam(required = false, value = "endDate", defaultValue = "") String endDate,
@@ -371,7 +382,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 mineName, startDate, endDate, oreProcessed, producedMaterial,
                 cutOffGrade, production, maxFeatures, bbox);
 
-        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "#FF9900");
+        String style = this.getStyle(serviceUrl, filter, "er:MiningFeatureOccurrence", "#FF9900");
 
         response.setContentType("text/xml");
 
@@ -398,6 +409,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMineFilterStyle.do")
     public void doMineFilterStyle(
             HttpServletResponse response,
+            @RequestParam(required = true, value = "serviceUrl", defaultValue = "") String serviceUrl,
             @RequestParam(required = false, value = "mineName", defaultValue = "") String mineName,
             @RequestParam(required = false, value = "bbox", defaultValue = "") String bboxJson,
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
@@ -409,7 +421,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMineFilter(mineName,
                 bbox,optionalFilters);
 
-        String style = this.getStyle(filter, "er:MiningFeatureOccurrence", "#AA0078");
+        String style = this.getStyle(serviceUrl, filter, "er:MiningFeatureOccurrence", "#AA0078");
 
         response.setContentType("text/xml");
 
@@ -435,6 +447,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMineralOccurrenceFilterStyle.do")
     public void doMineralOccurrenceFilterStyle(
             HttpServletResponse response,
+            @RequestParam(required = true, value = "serviceUrl", defaultValue = "") String serviceUrl,
             @RequestParam(value = "commodityName", required = false) String commodityName,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, defaultValue="", value = "optionalFilters") String optionalFilters,
@@ -450,7 +463,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMineralOccurrenceFilter(unescapeCommodityName,
                 bbox,optionalFilters);
 
-        String style = this.getStyle(filter, "gsml:MappedFeature", "#8C489F");
+        String style = this.getStyle(serviceUrl, filter, "gsml:MappedFeature", "#8C489F");
 
         response.setContentType("text/xml");
 
@@ -476,6 +489,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     @RequestMapping("/doMinOccurViewFilterStyle.do")
     public void doMinOccurViewFilterStyle(
             HttpServletResponse response,
+            @RequestParam(required = true, value = "serviceUrl", defaultValue = "") String serviceUrl,
             @RequestParam(value = "commodityName", required = false) String commodityName,
             @RequestParam(required = false, value = "size") String size,
             @RequestParam(required = false, value = "minOreAmount") String minOreAmount,
@@ -494,7 +508,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         String filter = this.mineralOccurrenceService.getMinOccurViewFilter(unescapeCommodityName, minOreAmount,
                 minReserves, minResources, bbox);
 
-        String style = this.getStyle(filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "#ed9c38");
+        String style = this.getStyle(serviceUrl, filter, EarthResourcesDownloadController.MIN_OCCUR_VIEW_TYPE, "#ed9c38");
 
         response.setContentType("text/xml");
 
@@ -508,14 +522,16 @@ public class EarthResourcesFilterController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getStyle(String filter, String name, String color) {
+    public String getStyle(String serviceUrl, String filter, String name, String color) {
         //VT : This is a hack to get around using functions in feature chaining
         // https://jira.csiro.au/browse/SISS-1374
         // there are currently no available fix as wms request are made prior to
         // knowing app-schema mapping.
 
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:mo=\"http://xmlns.geoscience.gov.au/minoccml/1.0\" xmlns:er=\"urn:cgi:xmlns:GGIC:EarthResource:1.1\" xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:mo=\"http://xmlns.geoscience.gov.au/minoccml/1.0\" "
+                + getERMLNamespaces(serviceUrl) 
+                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
                 + "<NamedLayer>" + "<Name>"
                 + name + "</Name>"
                 + "<UserStyle>"
@@ -539,5 +555,37 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
         return style;
     }
+    
+    private String getERMLNamespaces(String serviceUrl) {
+        // TODO: should be able to improve this using ServiceConfiguration so we don't need to call GetCaps
+        HttpRequestBase method = null;
+        String erNamespace = "urn:cgi:xmlns:GGIC:EarthResource:1.1";
+        String gmlNamespace = "http://www.opengis.net/gml";
+        String gsmlNamespace = "urn:cgi:xmlns:CGI:GeoSciML:2.0";
+        try {
+            method = wfsMethodMaker.makeGetCapabilitiesMethod(serviceUrl);
+            String responseString = httpServiceCaller.getMethodResponseAsString(method);
+            Document responseDoc = DOMUtil.buildDomFromString(responseString);
+            Element elem = responseDoc.getDocumentElement();
+            erNamespace = elem.getAttribute("xmlns:er");        
+        }catch (Exception ex) {
+            log.warn(String.format("Get ERML namespace for '%s' failed", serviceUrl));         
+        } finally {
+            if (method != null) {
+                method.releaseConnection();
+            }
+        }        
+        if (erNamespace.equals("http://xmlns.earthresourceml.org/EarthResource/2.0")) {
+            gmlNamespace = "http://www.opengis.net/gml/3.2";
+            gsmlNamespace = "http://xmlns.geosciml.org/GeoSciML-Core/3.2";
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append("xmlns:er=\"").append(erNamespace).append("\" ");
+        sb.append("xmlns:gml=\"").append(gmlNamespace).append("\" ");
+        sb.append("xmlns:gsml=\"").append(gsmlNamespace).append("\" ");
+        return sb.toString();
+            
+    }
+    
 
 }

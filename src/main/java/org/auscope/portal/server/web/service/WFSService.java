@@ -117,6 +117,15 @@ public class WFSService extends BaseWFSService {
             Integer maxFeatures, String srs) throws PortalServiceException, URISyntaxException {
         HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeatures, srs,
                 ResultType.Results);
+        
+        return doRequest(method, wfsUrl);
+    }
+    
+    public WFSResponse getGml32WfsResponse(String wfsUrl, String featureType, String filterString,
+            Integer maxFeature, String srs) throws PortalServiceException, URISyntaxException {
+        HttpRequestBase method = generateWFSRequest(wfsUrl, featureType, null, filterString, maxFeature, srs,
+                ResultType.Results, "gml32", null);
+        
         return doRequest(method, wfsUrl);
     }
 

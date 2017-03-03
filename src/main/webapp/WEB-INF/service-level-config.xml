@@ -14,6 +14,7 @@
         Special featuers:
         
         paging: https://jira.csiro.au/browse/SISS-1378 (default it to false if unsure)
+        isGml32: https://jira.csiro.au/browse/AUS-2712
      -->   
 
     <bean id="QueenLandsERML" class="org.auscope.portal.core.configuration.ServiceConfigurationItem">
@@ -22,10 +23,18 @@
         <constructor-arg name="paging" type="boolean" value="true"/>        
     </bean>
     
+    <bean id="NSWERML2Test" class="org.auscope.portal.core.configuration.ServiceConfigurationItem">
+        <constructor-arg name="id" value="NSWERML2Test"/>
+        <constructor-arg name="url" value="http://aus-test-worker2.arrc.csiro.au:8080/gsnsw-earthresource/wms"/>
+        <constructor-arg name="paging" type="boolean" value="false"/>      
+        <constructor-arg name="isGml32" type="boolean" value="true"/>        
+    </bean>
+    
     <bean id="service-configuration" class="org.auscope.portal.core.configuration.ServiceConfiguration">        
         <constructor-arg name="serviceConfigurationItems">
             <list>
-               <ref bean="QueenLandsERML"/>                                  
+               <ref bean="QueenLandsERML"/>    
+               <ref bean="NSWERML2Test"/>                                  
             </list>
         </constructor-arg>
     </bean>
