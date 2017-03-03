@@ -22,10 +22,17 @@
         <constructor-arg name="url" value="http://auscope-services-test.arrc.csiro.au:80/gsq-earthresource/wfs"/>
         <constructor-arg name="paging" type="boolean" value="true"/>        
     </bean>
-    
-    <bean id="NSWERML2Test" class="org.auscope.portal.core.configuration.ServiceConfigurationItem">
+
+    <bean id="NSWERML2_WMSTest" class="org.auscope.portal.core.configuration.ServiceConfigurationItem">
         <constructor-arg name="id" value="NSWERML2Test"/>
         <constructor-arg name="url" value="http://aus-test-worker2.arrc.csiro.au:8080/gsnsw-earthresource/wms"/>
+        <constructor-arg name="paging" type="boolean" value="false"/>      
+        <constructor-arg name="isGml32" type="boolean" value="true"/>        
+    </bean>
+
+    <bean id="NSWERML2_WFSTest" class="org.auscope.portal.core.configuration.ServiceConfigurationItem">
+        <constructor-arg name="id" value="NSWERML2Test"/>
+        <constructor-arg name="url" value="http://aus-test-worker2.arrc.csiro.au:8080/gsnsw-earthresource/wfs"/>
         <constructor-arg name="paging" type="boolean" value="false"/>      
         <constructor-arg name="isGml32" type="boolean" value="true"/>        
     </bean>
@@ -33,8 +40,9 @@
     <bean id="service-configuration" class="org.auscope.portal.core.configuration.ServiceConfiguration">        
         <constructor-arg name="serviceConfigurationItems">
             <list>
-               <ref bean="QueenLandsERML"/>    
-               <ref bean="NSWERML2Test"/>                                  
+               <ref bean="QueenLandsERML"/>
+               <ref bean="NSWERML2_WMSTest"/>   
+               <ref bean="NSWERML2_WFSTest"/>         
             </list>
         </constructor-arg>
     </bean>

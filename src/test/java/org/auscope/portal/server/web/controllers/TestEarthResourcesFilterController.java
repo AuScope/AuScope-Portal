@@ -1,8 +1,11 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.configuration.ServiceConfiguration;
+import org.auscope.portal.core.configuration.ServiceConfigurationItem;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
@@ -28,7 +31,8 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
     @Before
     public void setUp() {
         this.mineralOccurrenceService = context.mock(MineralOccurrenceService.class);
-        this.earthResourcesFilterController = new EarthResourcesFilterController(this.mineralOccurrenceService);
+        this.earthResourcesFilterController = new EarthResourcesFilterController(this.mineralOccurrenceService, 
+                new ServiceConfiguration(new ArrayList<ServiceConfigurationItem>()));
     }
 
     private void testMAVResponse(ModelAndView mav, Boolean success, String gml) {

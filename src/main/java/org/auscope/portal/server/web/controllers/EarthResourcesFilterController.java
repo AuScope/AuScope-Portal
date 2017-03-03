@@ -6,14 +6,12 @@ import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.client.methods.HttpRequestBase;
+import org.auscope.portal.core.configuration.ServiceConfiguration;
+import org.auscope.portal.core.configuration.ServiceConfigurationItem;
 import org.auscope.portal.core.server.controllers.BasePortalController;
-import org.auscope.portal.core.server.http.HttpServiceCaller;
-import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
-import org.auscope.portal.core.util.DOMUtil;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.server.web.controllers.downloads.EarthResourcesDownloadController;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Controller that handles all Earth Resource related requests
@@ -45,16 +41,15 @@ public class EarthResourcesFilterController extends BasePortalController {
     // ----------------------------------------------------- Instance variables
 
     private MineralOccurrenceService mineralOccurrenceService;
-    private HttpServiceCaller httpServiceCaller;
-    private WFSGetFeatureMethodMaker wfsMethodMaker;    
 
+    private ServiceConfiguration serviceConfig;
     // ----------------------------------------------------------- Constructors
 
     @Autowired
-    public EarthResourcesFilterController(MineralOccurrenceService mineralOccurrenceService) {
+    public EarthResourcesFilterController(MineralOccurrenceService mineralOccurrenceService, 
+            ServiceConfiguration serviceConfig) {
         this.mineralOccurrenceService = mineralOccurrenceService;
-        httpServiceCaller = new HttpServiceCaller(900000);
-        wfsMethodMaker = new WFSGetFeatureMethodMaker();
+        this.serviceConfig = serviceConfig;
     }
 
     // ------------------------------------------- Property Setters and Getters
@@ -557,27 +552,21 @@ public class EarthResourcesFilterController extends BasePortalController {
     }
     
     private String getERMLNamespaces(String serviceUrl) {
-        // TODO: should be able to improve this using ServiceConfiguration so we don't need to call GetCaps
-        HttpRequestBase method = null;
-        String erNamespace = "urn:cgi:xmlns:GGIC:EarthResource:1.1";
-        String gmlNamespace = "http://www.opengis.net/gml";
-        String gsmlNamespace = "urn:cgi:xmlns:CGI:GeoSciML:2.0";
-        try {
-            method = wfsMethodMaker.makeGetCapabilitiesMethod(serviceUrl);
-            String responseString = httpServiceCaller.getMethodResponseAsString(method);
-            Document responseDoc = DOMUtil.buildDomFromString(responseString);
-            Element elem = responseDoc.getDocumentElement();
-            erNamespace = elem.getAttribute("xmlns:er");        
-        }catch (Exception ex) {
-            log.warn(String.format("Get ERML namespace for '%s' failed", serviceUrl));         
-        } finally {
-            if (method != null) {
-                method.releaseConnection();
-            }
-        }        
-        if (erNamespace.equals("http://xmlns.earthresourceml.org/EarthResource/2.0")) {
+        String erNamespace;
+        String gmlNamespace;
+        String gsmlNamespace;
+        
+        ServiceConfigurationItem config = serviceConfig.getServiceConfigurationItem(serviceUrl);
+        if (config != null && config.isGml32()) {
+            // use ERML 2.0 namespaces
+            erNamespace = "http://xmlns.earthresourceml.org/EarthResource/2.0";
             gmlNamespace = "http://www.opengis.net/gml/3.2";
             gsmlNamespace = "http://xmlns.geosciml.org/GeoSciML-Core/3.2";
+        } else {
+            // use ERML 1.1 namespaces
+            erNamespace = "urn:cgi:xmlns:GGIC:EarthResource:1.1";
+            gmlNamespace = "http://www.opengis.net/gml";
+            gsmlNamespace = "urn:cgi:xmlns:CGI:GeoSciML:2.0";
         }
         StringBuffer sb = new StringBuffer();
         sb.append("xmlns:er=\"").append(erNamespace).append("\" ");
