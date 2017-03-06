@@ -47,6 +47,8 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONArray;
 import au.com.bytecode.opencsv.CSVReader;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 @Service
 public class NVCL2_0_DataService {
 
@@ -117,39 +119,91 @@ public class NVCL2_0_DataService {
     }
 
     /**
-     * Makes a CSV download request from an NVCL 2.0 service and parses the resulting data into a series of binSizeMetres bins where
-     * each bin represents the average value for that range of the borehole.
+     * Makes a CSV download request from an NVCL 2.0 service and initiates binning
      * @param serviceUrl
      * @param logIds
      * @return
      * @throws Exception
      */
     public BinnedCSVResponse getNVCL2_0_CSVBinned(String serviceUrl, String[] logIds, double binSizeMetres) throws Exception {
-        final String MISSING_DATA_STRING = "null";
-        final int INITIAL_LIST_SIZE = 512;
-        serviceUrl += "downloadscalars.html";
 
+        serviceUrl += "downloadscalars.html";
+        BinnedCSVResponse binnedResponse = new BinnedCSVResponse();
         HttpRequestBase method = nvclMethodMaker.getDownloadCSVMethod(serviceUrl, logIds);
         InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        CSVReader reader = null;
+        Bin[] bins = doBinning(binnedResponse, responseStream, binSizeMetres, '\'', 2, -1, null);
+        binnedResponse.setBinnedValues(bins);
+        binnedResponse.setBinSize(binSizeMetres);
+        return binnedResponse;
+    }
+
+    /**
+     * Makes a request for scalar data from NVCL Analytics job and initiates binning
+     * @param serviceUrl
+     * @param jobId
+     * @param boreholeId
+     * @return
+     * @throws Exception
+     */
+    public BinnedCSVResponse getNVCL2_0_JobsScalarBinned(String[] jobIds, String boreholeId, double binSizeMetres) throws Exception {
         BinnedCSVResponse binnedResponse = new BinnedCSVResponse();
+        Bin[] totalBins = new Bin[0];
+        for (String jobId: jobIds) {
+            HttpRequestBase method = nvclMethodMaker.getNVCLJobsScalarMethod(analyticalServicesUrl, jobId, boreholeId);
+            InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
+            Bin[] bins = doBinning(binnedResponse, responseStream, binSizeMetres, '"', 1, 2, jobId);
+            totalBins = (Bin[])ArrayUtils.addAll(totalBins, bins);
+        }
+        binnedResponse.setBinnedValues(totalBins);
+        binnedResponse.setBinSize(binSizeMetres);
+        return binnedResponse;        
+    }
+        
+        
+    /**
+     * Performs the binning by parsing the resulting data into a series of binSizeMetres bins where
+     * each bin represents the average value for that range of the borehole. Uses CSV header as name for each bin.
+     * @param method
+     * @param binSizeMetres
+     * @param startAtCol column number (1..N) where the data starts. If -1 use then it defaults to 2
+     * @param stopAtCol column number (1..N) where the data stops (non-inclusive) -1 = data goes all the way to the last column
+     * @param altName alternative name for a bin. Use null to force it to use CSV header
+     * @return
+     */     
+    private Bin[] doBinning(BinnedCSVResponse binnedResponse, InputStream responseStream, double binSizeMetres, char quoteChar, int startAtCol, int stopAtCol, String altName) throws Exception {
+        final String MISSING_DATA_STRING = "null";
+        final int INITIAL_LIST_SIZE = 512;
+        
+        CSVReader reader = null;
+        Bin[] bins = null;
+        
         try {
             //Prepare parsing
-            reader = new CSVReader(new InputStreamReader(responseStream), ',', '\'', 0);
+            reader = new CSVReader(new InputStreamReader(responseStream), ',', quoteChar, 0);
             String[] headerLine = reader.readNext();
-            if (headerLine == null || headerLine.length <= 2) {
+            if (headerLine == null || headerLine.length <= startAtCol) {
                 throw new IOException("No or malformed CSV header sent");
             }
-
+            // Set start & stop columns to default
+            if (stopAtCol<0) {
+                stopAtCol=headerLine.length;
+            }
+            if (startAtCol<0) {
+                startAtCol=2;
+            }
             //Prepare our bins
-            Bin[] bins = new Bin[headerLine.length - 2];
+            bins = new Bin[stopAtCol - startAtCol];
             List<HashMap<String, Integer>> valueCounts = new ArrayList<HashMap<String, Integer>>(bins.length);
             double[] numericTotal = new double[bins.length];
             int[] numericCount = new int[bins.length];
             double currentBinStartDepth = -Double.MAX_VALUE;
             int currentBinSize = 0;
             for (int i = 0; i < bins.length; i++) {
-                bins[i] = binnedResponse.new Bin(headerLine[2 + i], new ArrayList<Double>(INITIAL_LIST_SIZE), true, new ArrayList<Map<String, Integer>>(INITIAL_LIST_SIZE), new ArrayList<String>(INITIAL_LIST_SIZE), new ArrayList<Double>(INITIAL_LIST_SIZE));
+                String name = headerLine[startAtCol + i];
+                if (altName!=null) {
+                    name=altName;
+                }
+                bins[i] = binnedResponse.new Bin(name, new ArrayList<Double>(INITIAL_LIST_SIZE), true, new ArrayList<Map<String, Integer>>(INITIAL_LIST_SIZE), new ArrayList<String>(INITIAL_LIST_SIZE), new ArrayList<Double>(INITIAL_LIST_SIZE));
                 bins[i].setNumeric(true);
                 valueCounts.add(new HashMap<String, Integer>());
             }
@@ -199,7 +253,7 @@ public class NVCL2_0_DataService {
                 //Build up our current bin
                 boolean dataAdded = false;
                 for (int i = 0; i < bins.length; i++) {
-                    String rawBinData = dataLine[2 + i];
+                    String rawBinData = dataLine[startAtCol + i];
                     if (rawBinData == null || rawBinData.isEmpty() || rawBinData.equals(MISSING_DATA_STRING)) {
                         continue; //skip missing data
                     } else {
@@ -250,14 +304,13 @@ public class NVCL2_0_DataService {
                 }
             }
 
-            binnedResponse.setBinnedValues(bins);
-            binnedResponse.setBinSize(binSizeMetres);
+
         } finally {
             IOUtils.closeQuietly(reader);
             IOUtils.closeQuietly(responseStream);
         }
 
-        return binnedResponse;
+        return bins;
     }
         
     /**
@@ -643,6 +696,34 @@ public class NVCL2_0_DataService {
         HttpRequestBase method = nvclMethodMaker.getTsgAlgorithms(analyticalServicesUrl, tsgAlgName);
         String responseText = httpServiceCaller.getMethodResponseAsString(method);
         return responseText;
+    }
+    
+    /**
+     * Given boreholeId, gets the TSG job Id and job name
+     *
+     * @param serviceUrl
+     * @param logIds
+     * @return string of colour tables in JSON format
+     * @throws Exception
+     */
+    public JSONArray getNVCL2_0_getTsgJobsByBoreholeId(String boreholeId) throws Exception {
+        JSONArray outArr = new JSONArray();
+        HttpRequestBase method = nvclMethodMaker.getTSGJobsByBoreholeIdMethod(analyticalServicesUrl, boreholeId);
+        String httpResponseStr = httpServiceCaller.getMethodResponseAsString(method);
+        JSONArray inArray = JSONArray.fromObject(httpResponseStr);
+        for (Object i : inArray) {
+            JSONObject inObj = (JSONObject) i;
+            if (inObj.has("jobid") && inObj.has("jobName")) {
+                String jobId = inObj.getString("jobid");
+                String jobName = inObj.getString("jobName");
+                JSONObject outObj = new JSONObject();
+                outObj.element("boreholeId", boreholeId);
+                outObj.element("jobId", jobId);
+                outObj.element("jobName", jobName);
+                outArr.add(outObj);
+            }
+        }
+        return outArr;
     }
 
 

@@ -288,4 +288,35 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
         method.setURI(builder.build());
         return method;
     }   
+    
+    /**
+     * Generates a method to get scalars that result from an NVCL scalar processing job
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public  HttpRequestBase getNVCLJobsScalarMethod(String serviceUrl, String jobId, String boreholeId) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "doDownloadscalar.do"));
+        builder.setParameter("jobid", jobId);
+        builder.setParameter("boreholeid", boreholeId);
+
+        method.setURI(builder.build());
+        return method;
+    }
+    
+    /**
+     * Generates a method to get job data for a TSG job, given borehole id
+     *
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getTSGJobsByBoreholeIdMethod(String serviceUrl, String boreholeId) throws URISyntaxException {
+        HttpGet method = new HttpGet();
+        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getTsgJobsByBoreholeid.do"));
+        builder.setParameter("boreholeid", boreholeId);
+
+        method.setURI(builder.build());
+        return method;
+    }
 }

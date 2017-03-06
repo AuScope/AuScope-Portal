@@ -12,6 +12,8 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -628,6 +630,29 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
+    
+    /**
+     * Fetches NVCL TSG Jobs data
+     * @param jobId
+     *          job id of data to be downloaded
+     * @param boreholeId
+     *          borehole id of data to be downloaded
+     */
+    @RequestMapping("getNVCL2_0_JobsScalarBinned.do")
+    public ModelAndView getNVCL2_0_JobsScalarBinned(@RequestParam("jobIds") String[] jobIds, @RequestParam("boreholeId") String boreholeId) {
+        
+        //Make our request
+        try {
+            BinnedCSVResponse response = dataService2_0.getNVCL2_0_JobsScalarBinned(jobIds, boreholeId, 1.0);
+
+            return generateJSONResponseMAV(true, Arrays.asList(response), "");
+
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting scalar csv download from NVCL job for boreholeId '%1$s': %2$s", boreholeId, ex));
+            log.debug("Exception:", ex);
+            return generateJSONResponseMAV(false);
+        }  
+    }
 
     /**
      * Request for mineral colours for NVCL graphs
@@ -653,6 +678,31 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
+    
+    /**
+     * Request for TSG job id and job name for a borehole id
+     *
+     * @param serviceUrl
+     *          The URL of job id request
+     * @param boreholeId
+                boreholeId of the job
+     *
+     * @return
+     */
+    @RequestMapping("getNVCL2_0_TsgJobsByBoreholeId.do")
+    public ModelAndView getNVCL2_0_TsgJobsByBoreholeId(@RequestParam("boreholeId") String boreholeId) throws Exception {
+        //Make our request
+        try {
+            JSONArray jsonResponse = dataService2_0.getNVCL2_0_getTsgJobsByBoreholeId(boreholeId);
+            return generateJSONResponseMAV(true, jsonResponse, "");
+
+        } catch (Exception ex) {
+            log.warn(String.format("Error requesting TSG job id for borehole id '%1$s': %2$s", boreholeId, ex));
+            log.debug("Exception:", ex);
+            return generateJSONResponseMAV(false);
+        }
+    }
+    
 
     /**
      * Proxies a NVCL TSG download request. Writes directly to the HttpServletResponse

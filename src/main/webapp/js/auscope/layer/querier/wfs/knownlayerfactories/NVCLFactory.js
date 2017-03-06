@@ -147,7 +147,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
 
 
-                //Add our scalars tab (this always exists
+                //Add our scalars tab (this always exists)
                 var scalarGrid = Ext.create('Ext.grid.Panel', {
                     //This store will be loaded when this component renders
                     store : Ext.create('Ext.data.Store', {
@@ -217,6 +217,51 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                        }
                     }]
                 });
+                // End of scalarGrid 
+               
+                
+                // Start of jobsGrid
+                var jobsGrid = Ext.create('Ext.grid.Panel', {
+                    
+                //This store will be loaded when this component renders
+                    store : Ext.create('Ext.data.Store', {
+                        autoLoad : true,
+                        sorters: [{ property:'jobId', direction:'ASC'}],
+                        model : 'auscope.knownlayer.nvcl.JobName',
+                        proxy : {
+                            type : 'ajax',
+                            url : 'getNVCL2_0_TsgJobsByBoreholeId.do',
+                            extraParams : {
+                                boreholeId : datasetName
+                            },
+                            reader : {
+                                type : 'json',
+                                rootProperty : 'data',
+                                successProperty : 'success',
+                                messageProperty : 'msg'
+                            }
+                        }
+                    }),
+                    selModel : Ext.create('Ext.selection.CheckboxModel', { /*mode: 'SINGLE'*/ }),
+                    id : 'nvcl-jobs-grid',
+                    loadMask : true,
+                    plugins : [{
+                        ptype: 'celltips'
+                    }],
+                    columns : [{
+                        id: 'job-id-col',
+                        header: 'Job Id',
+                        flex: 1,
+                        dataIndex: 'jobId',
+                        sortable: true,
+                        hasTip : true,
+                        tipRenderer : function(value, record, column, tip) {
+                            var jobName = record.get('jobName');
+                            return "Job Name: "+jobName;
+                        }
+                    }]
+                });    
+                // End of jobsGrid
 
                 // Scalars Tab
                 tp.add({
@@ -233,7 +278,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
                         // these are applied to columns
                         defaults:{
-                            columnWidth : 0.5,
+                            columnWidth : 0.3, 
                             layout      : 'anchor',
                             hideLabels  : true,
                             border      : false,
@@ -244,7 +289,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         // Columns
                         items:[{ // column 1
                             // these are applied to fieldsets
-
+                            
                             // fieldsets
                             items:[{
                                 xtype       : 'fieldset',
@@ -258,9 +303,32 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
 
                                 // fields
                                 layout      : 'fit',
-                                items       : [scalarGrid]
+                                items       : [scalarGrid],
+                                autoscroll  : true
                             }]
+                            
                         },{ // column 2
+                            // these are applied to fieldsets
+                            columnWidth : 0.4,
+                            
+                            // fieldsets
+                            items:[{
+                                xtype       : 'fieldset',
+                                title       : 'List of Jobs',
+                                anchor      : '100%',
+                                //autoHeight  : true,
+                                height      : 500,
+
+                                // these are applied to fields
+                                defaults    : {anchor:'-5', allowBlank:false},
+
+                                // fields
+                                layout      : 'fit',
+                                items       : [jobsGrid],
+                                autoscroll  : true
+                            }]
+                            
+                        },{ // column 3
                             // these are applied to fieldsets
                             defaults:{
                                 xtype: 'fieldset',
@@ -280,7 +348,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     id     : 'scalarFormHint',
                                     autoEl : {
                                         tag  : 'div',
-                                        html : 'Select a scalar(s) from the "Scalar List" table on the left and then click "Plot" or "Download" button.'
+                                        html : 'Select scalar(s) or job(s) from the "Scalar List" or "Jobs List" table on the left and then click "Plot" or "Download" button.'
                                     }
                                 }]
                             }],
@@ -288,14 +356,17 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                 text : 'Plot',
                                 xtype : 'button',
                                 handler : function () {
+                                    // Count up number of items selected
+                                    var scalarCount = scalarGrid.getSelectionModel().getCount();
+                                    var jobsCount = jobsGrid.getSelectionModel().getCount();
                                     // If nothing was selected
-                                    if (scalarGrid.getSelectionModel().getCount()===0) {
+                                    if (scalarCount===0 && jobsCount===0) {
                                         Ext.Msg.show({
                                             title:'Hint',
-                                            msg: 'You need to select a scalar(s) from the "List of Scalars" table to download the csv.',
+                                            msg: 'You need to select scalar(s) or jobs(s) from the "List of Scalars" or "List of Jobs" tables to plot the data.',
                                             buttons: Ext.Msg.OK
                                         });
-                                    } else {
+                                    } else if (scalarCount>0) {
 
                                         // There are async two ajax events to be fired off, the graph needs both to be completed
                                         // I could make the first one synchronous, but this would be slower and force the GUI to freeze up momentarily
@@ -369,22 +440,55 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                  binned_data_success = success;
                                                  binned_data_loaded = true;
                                              } // callback
-                                          }); // ajax 
-                                    }  // for loop
+                                          }); // ajax
+                                          
+                                    } else if (jobsCount>0) {
+                                        var jobIds = [];
+                                        
+                                        // Collect logids and matching log names
+                                        var jobObjs = jobsGrid.getSelectionModel().getSelection();
+                                        for (var i=0;i<jobObjs.length;i++) {
+                                            jobIds[i] =  jobObjs[i].get('jobId');
+                                        }
+                                        
+                                        // Ajax request: Request plot data from server
+                                        Ext.Ajax.request({
+                                             url: 'getNVCL2_0_JobsScalarBinned.do',
+                                             scope : this,
+                                             timeout : 60000,
+                                             params: {
+                                                 boreholeId: datasetName,
+                                                 jobIds : jobIds
+                                             },
+                                             callback : function(options, success, response) {
+                                                 this_ptr._drawNVCLGraph(response, success, {}, jobIds, jobIds);
+
+                                             } // callback
+                                          }); // ajax
+                                          
+                                    } // if
                                 }
                             },{
                                 text : 'Download',
                                 xtype : 'button',
                                 iconCls : 'download',
                                 handler : function() {
-
-                                    if(scalarGrid.getSelectionModel().getCount()===0){
+                                    // Count up number of items selected
+                                    var scalarCount = scalarGrid.getSelectionModel().getCount();
+                                    var jobsCount = jobsGrid.getSelectionModel().getCount();
+                                    if (jobsCount>0) {
+                                        Ext.Msg.show({
+                                            title:'Hint',
+                                            msg: 'Sorry - downloading jobs data not supported yet!',
+                                            buttons: Ext.Msg.OK
+                                        });
+                                    } else if (scalarCount===0) {
                                         Ext.Msg.show({
                                             title:'Hint',
                                             msg: 'You need to select a scalar(s) from the "List of Scalars" table to download the csv.',
                                             buttons: Ext.Msg.OK
                                         });
-                                    }else{
+                                    } else {
                                         var datasetIds = scalarGrid.getSelectionModel().getSelection();
                                         var logIds = [];
                                         for(var i=0;i<datasetIds.length;i++){
