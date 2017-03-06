@@ -154,6 +154,135 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         Assert.assertEquals(0, response.getBinnedValues()[1].getNumericValues().size());
         Assert.assertEquals(0, response.getBinnedValues()[2].getNumericValues().size());
     }
+    
+    
+    /**
+     * Tests parsing of a download jobs scalars request into a BinnedCSVResponse
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetNVCL2_0_JobsScalarBinned() throws Exception {
+        final String boreholeId = "BOREHOLE_1234";
+        final String[] jobIds = new String[] {"job1","job2","job3"};
+        final double binSizeMetres = 1.0;
+
+        context.checking(new Expectations() {
+            {
+                atLeast(1).of(mockMethodMaker).getNVCLJobsScalarMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)));
+                will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(new HttpClientInputStream(ClassLoader.getSystemResourceAsStream("org/auscope/portal/nvcl/downloadjobscalar.csv"), null)));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(new HttpClientInputStream(ClassLoader.getSystemResourceAsStream("org/auscope/portal/nvcl/downloadjobscalar.csv"), null)));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(new HttpClientInputStream(ClassLoader.getSystemResourceAsStream("org/auscope/portal/nvcl/downloadjobscalar.csv"), null)));
+            }
+        });
+
+        BinnedCSVResponse response = dataService.getNVCL2_0_JobsScalarBinned(jobIds, boreholeId, binSizeMetres);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(3, response.getBinnedValues().length);
+
+        Assert.assertTrue(response.getBinnedValues()[0].isNumeric());
+        Assert.assertTrue(response.getBinnedValues()[1].isNumeric());
+        Assert.assertTrue(response.getBinnedValues()[2].isNumeric());
+
+        Assert.assertEquals("job1", response.getBinnedValues()[0].getName());
+        Assert.assertEquals("job2", response.getBinnedValues()[1].getName());
+        Assert.assertEquals("job3", response.getBinnedValues()[2].getName());
+
+        Assert.assertEquals(2, response.getBinnedValues()[0].getNumericValues().size());
+        Assert.assertEquals(2, response.getBinnedValues()[0].getStartDepths().size());
+        Assert.assertEquals(2, response.getBinnedValues()[1].getNumericValues().size());
+        Assert.assertEquals(2, response.getBinnedValues()[1].getStartDepths().size());
+        Assert.assertEquals(2, response.getBinnedValues()[2].getNumericValues().size());
+        Assert.assertEquals(2, response.getBinnedValues()[2].getStartDepths().size());
+
+        Assert.assertEquals(106.936996459961, (Double)response.getBinnedValues()[0].getStartDepths().get(0), 0.0000001);
+        Assert.assertEquals(108.004341125488, (Double)response.getBinnedValues()[0].getStartDepths().get(1), 0.0000001);
+        Assert.assertEquals(106.936996459961, (Double)response.getBinnedValues()[1].getStartDepths().get(0), 0.0000001);
+        Assert.assertEquals(108.004341125488, (Double)response.getBinnedValues()[1].getStartDepths().get(1), 0.0000001);
+        Assert.assertEquals(106.936996459961, (Double)response.getBinnedValues()[2].getStartDepths().get(0), 0.0000001);
+        Assert.assertEquals(108.004341125488, (Double)response.getBinnedValues()[2].getStartDepths().get(1), 0.0000001);
+        
+        Assert.assertEquals(1.0, (Double)response.getBinnedValues()[0].getNumericValues().get(0), 0.001);
+        Assert.assertEquals(1.7, (Double)response.getBinnedValues()[0].getNumericValues().get(1), 0.001);
+        Assert.assertEquals(1.0, (Double)response.getBinnedValues()[1].getNumericValues().get(0), 0.001);
+        Assert.assertEquals(1.7, (Double)response.getBinnedValues()[1].getNumericValues().get(1), 0.001);
+        Assert.assertEquals(1.0, (Double)response.getBinnedValues()[2].getNumericValues().get(0), 0.001);
+        Assert.assertEquals(1.7, (Double)response.getBinnedValues()[2].getNumericValues().get(1), 0.001);
+    }
+
+    /**
+     * Tests cleanup of a download job scalars request
+     *
+     * @throws Exception
+     */
+    @Test(expected=IOException.class)
+    public void testGetNVCL2_0_JobsScalarBinned_closeStreamOnError() throws Exception {
+        final String boreholeId = "BOREHOLE_1234";
+        final String[] jobIds = new String[] {"job1"};
+        final double binSizeMetres = 1.0;
+        
+        final InputStream responseStream = context.mock(InputStream.class);
+
+        context.checking(new Expectations() {
+            {
+                atLeast(1).of(mockMethodMaker).getNVCLJobsScalarMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)));
+                will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(new HttpClientInputStream(responseStream, null)));
+                allowing(responseStream).read(with(any(byte[].class)), with(any(Integer.class)), with(any(Integer.class)));
+                will(throwException(new IOException()));
+                atLeast(1).of(responseStream).close();
+            }
+        });
+
+        dataService.getNVCL2_0_JobsScalarBinned(jobIds, boreholeId, binSizeMetres);
+    }
+
+    
+    
+    
+    
+    
+    /**
+     * Tests parsing of a download job scalars request into a BinnedCSVResponse
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetNVCL2_0_JobsScalarBinned_EmptyCSV() throws Exception {
+        final String boreholeId = "BOREHOLE_1234";
+        final String[] jobIds = new String[] {"job1","job2","job3"};
+        final double binSizeMetres = 1.0;
+
+        context.checking(new Expectations() {
+            {
+                atLeast(1).of(mockMethodMaker).getNVCLJobsScalarMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)));
+                will(returnValue(mockMethod));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(new HttpClientInputStream(ClassLoader.getSystemResourceAsStream("org/auscope/portal/nvcl/downloadjobscalar-empty.csv"), null)));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(new HttpClientInputStream(ClassLoader.getSystemResourceAsStream("org/auscope/portal/nvcl/downloadjobscalar-empty.csv"), null)));
+                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
+                will(returnValue(new HttpClientInputStream(ClassLoader.getSystemResourceAsStream("org/auscope/portal/nvcl/downloadjobscalar-empty.csv"), null)));
+            }
+        });
+
+        BinnedCSVResponse response = dataService.getNVCL2_0_JobsScalarBinned(jobIds, boreholeId, binSizeMetres);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(3, response.getBinnedValues().length);
+
+        Assert.assertEquals("job1", response.getBinnedValues()[0].getName());
+        Assert.assertEquals("job2", response.getBinnedValues()[1].getName());
+        Assert.assertEquals("job3", response.getBinnedValues()[2].getName());
+
+        Assert.assertEquals(0, response.getBinnedValues()[0].getNumericValues().size());
+        Assert.assertEquals(0, response.getBinnedValues()[1].getNumericValues().size());
+        Assert.assertEquals(0, response.getBinnedValues()[2].getNumericValues().size());
+    }
 
     /**
      * Tests parsing an example getAlgorithms response
