@@ -197,24 +197,29 @@ fieldset[disabled] .btn-red.active {
 
 /* show layer panel toggle */
 .menu-icon-toggle {      
-  top : .1em;
-  left : 0px;      
-  position: absolute;   
-  z-index: 50;
-  background-color: #ffffff;
-  padding: 2px 2px 2px 2px;
-  font-size: 1.6em;
+    top : .1em;
+    left : 0px;      
+    position: absolute;   
+    z-index: 50;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 2px 2px 2px 2px;
+    font-size: 2em;
+}
 
+.menu-icon-toggle > div {
+    background-color: rgba(255, 255, 255, 0.0);
 }
 
 /* show layer panel toggle */
-.glyphicon.glyphicon-menu-right {
-    padding-top: 3px; /* Centre the '>' in the middle of its box */
+.fa.fa-arrow-circle-right {
+    padding-top: 3px; /* Centre in the middle of its box */
+    color: #FF6600;
 }
 
 /* hide layer panel toggle */
-.glyphicon.glyphicon-menu-left {
+.fa.fa-arrow-circle-left {
     font-size: 2em;
+    color: #FF6600;
 }
 
 /* delete layer icon */

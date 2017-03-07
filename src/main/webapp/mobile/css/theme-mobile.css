@@ -105,8 +105,8 @@
     }
     
     /* hide layer panel toggle */
-    .glyphicon.glyphicon-menu-left {
-        font-size: 3em;
+    .fa.fa-arrow-circle-left {
+        font-size: 2.5em;
     }
     
     /* icons next to layer name */
@@ -263,8 +263,8 @@
     }
     
     /* hide layer panel toggle */
-    .glyphicon.glyphicon-menu-left {
-        font-size: 3em;
+    .fa.fa-arrow-circle-left {
+        font-size: 2.5em;
     }
 
     /* icons next to layer name */
