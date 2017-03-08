@@ -1,9 +1,9 @@
-<div class="container-fluid animated fadeInleft" ng-controller="querierPanelCtrl" ng-init="init('xmlPanel')">
+<div class="container-fluid" ng-controller="querierPanelCtrl" ng-init="init('xmlPanel')">
 	<div>
 		<div>				
-			<div class="layer-panel-header">
+			<div class="query-panel-header">
 				<img src="img/AuScope-logo-220.jpg">
-				<i class="pull-right glyphicon gi-2x hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel; resetTree($parent.showQuerierPanel); resetCarousel($parent.showQuerierPanel);" ng-class="{'glyphicon glyphicon-menu-left': true}"></i>
+				<i class="pull-right fa fa-times hasEvent" ng-click="$parent.showQuerierPanel = !$parent.showQuerierPanel; resetTree($parent.showQuerierPanel); resetCarousel($parent.showQuerierPanel);"></i>
 			</div>			
 		</div>
 		

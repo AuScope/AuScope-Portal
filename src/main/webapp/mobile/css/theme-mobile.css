@@ -13,7 +13,7 @@
     }
     
     /* width of layer and query panels */
-    .layer-panel {
+    .layer-panel, .query-panel {
         width: 370px;
     }
     
@@ -104,9 +104,9 @@
         font-size: 2em;
     }
     
-    /* hide layer panel toggle */
-    .fa.fa-arrow-circle-left {
-        font-size: 2.5em;
+    /* hide layer panel toggle  and query panel close */
+    .fa.fa-arrow-circle-left, .fa.fa-times  {
+        font-size: 2.2em;
     }
     
     /* icons next to layer name */
@@ -206,7 +206,7 @@
     }
     
     /* width of layer and query panels */
-    .layer-panel {
+    .layer-panel, .query-panel {
         width: 315px;
     }
     
@@ -262,8 +262,8 @@
         font-size: 2.2em;
     }
     
-    /* hide layer panel toggle */
-    .fa.fa-arrow-circle-left {
+    /* hide layer panel toggle and query panel close */
+    .fa.fa-arrow-circle-left, .fa.fa-times  {
         font-size: 2.5em;
     }
 

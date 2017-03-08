@@ -216,8 +216,9 @@ fieldset[disabled] .btn-red.active {
     color: #FF6600;
 }
 
-/* hide layer panel toggle */
-.fa.fa-arrow-circle-left {
+
+/* hide layer panel toggle and query panel close */
+.fa.fa-arrow-circle-left, .fa.fa-times {
     font-size: 2em;
     color: #FF6600;
 }
@@ -280,7 +281,7 @@ fieldset[disabled] .btn-red.active {
 
 
 /* layer panel*/ 
-.layer-panel{
+.layer-panel, .query-panel {
   background:  #ffffff;  
   display: block;
   width: 30em;
@@ -299,6 +300,10 @@ fieldset[disabled] .btn-red.active {
   animation: fadeOutLeft 1s;
 }
 
+.query-panel.ng-hide {
+  animation: fadeOut 1s;
+}
+
 
 .no-animation {
     -webkit-animation-name: fadeOutLeft;
@@ -309,7 +314,7 @@ fieldset[disabled] .btn-red.active {
 
 
 /* header of the layer panel */
-.layer-panel-header{
+.layer-panel-header, .query-panel-header {
 	margin-top: 10px;
     margin-bottom: 20px;
     margin-right: 5px;
