@@ -538,6 +538,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             var has_data = false;
             var yaxis_labels = new Object;
             var yaxis_keys = [];
+            var re = new RegExp("[^A-Za-z0-9]","g");
             var jsonObj = Ext.JSON.decode(response.responseText);
             if ('success' in jsonObj && jsonObj.success==true && jsonObj.data.length>0 ) {
                 jsonObj.data[0].binnedValues.forEach(function(bv) {
@@ -556,18 +557,20 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                     // Using entries(), make a name,value list, then use that to add to 'data_bin[metric_name]'
                                     d3.entries(val).forEach(function(meas) {                                                                                 
                                         var key=meas.key+"_"+metric_name;
-                                        var logIdIdx=0;
-                                        // First, find the logid for the metric returned from the graph data so that mineral colours can be found for graph data
-                                        for (var j=0; j<logNames.length; j++) {
-                                            // Unfortunately the metric names from the two services do not correspond exactly
-                                            if (metric_name.replace(" ","").replace("_","").toUpperCase()==logNames[j].replace(" ","").replace("_","").toUpperCase()) {
-                                                logIdIdx = j;
-                                                break;
+                                        if (!(key in metric_colours)) {
+                                            var logIdIdx=999999;
+                                            // First, find the logid for the metric returned from the graph data so that mineral colours can be found for graph data
+                                            for (var j=0; j<logNames.length; j++) {
+                                                // Unfortunately the metric names from the two services do not correspond exactly
+                                                if (metric_name.replace(re,"").toUpperCase()==logNames[j].replace(re,"").toUpperCase()) {
+                                                    logIdIdx = j;
+                                                    break;
+                                                }
                                             }
-                                        }
-                                        // If mineral name can be found in 'logid_colour_table' put the appropriate colour in the 'metric_colours' table
-                                        if ((logIds.length>logIdIdx) && (logIds[logIdIdx] in logid_colour_table) && (meas.key in logid_colour_table[logIds[logIdIdx]])) {
-                                            metric_colours[key] = logid_colour_table[logIds[logIdIdx]][meas.key];
+                                            // If mineral name can be found in 'logid_colour_table' put the appropriate colour in the 'metric_colours' table
+                                            if ((logIds.length>logIdIdx)&&(logIds[logIdIdx] in logid_colour_table)&&(meas.key in logid_colour_table[logIds[logIdIdx]])) {
+                                                    metric_colours[key] = logid_colour_table[logIds[logIdIdx]][meas.key];
+                                            }
                                         }
                                         // Start to create graphing data
                                         if (!(key in data_bin[metric_name])) {
@@ -581,7 +584,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         // Depth is 'x' and 'y' is our measured value 
                                         data_bin[metric_name][key].push({"x":parseFloat(bv.startDepths[idx]), "y":parseFloat(meas.value)});
                                         has_data=true;
-                                                                           
+                                 
                                     });
                                 } else if (dataType=="numericValues") {
                                     // Start to create graphing data
