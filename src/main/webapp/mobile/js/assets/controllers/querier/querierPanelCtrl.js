@@ -128,19 +128,20 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'GoogleMap
             for (var i = 0; i < features.length; i++) {
                 // Pull out some general stuff that we expect all features to have
                 var featureNode = features[i];
-                var name = SimpleXMLService.evaluateXPath(rootNode, featureNode, "gml:name", Constants.XPATH_STRING_TYPE).stringValue;
+                var name = featureNode.getAttribute('gml:id');
                 if (UtilitiesService.isEmpty(name)) {
-                    name = featureNode.getAttribute('gml:id');
+                    name = SimpleXMLService.evaluateXPath(rootNode, featureNode, "gml:name", Constants.XPATH_STRING_TYPE).stringValue;
                 }
-                
-                $scope.treeStruct[name] = featureNode;
-                var localName = prependStr+" "+$scope.treeStruct[name].localName;
-                if (localName in $scope.layerIndex) {
-                    if ($scope.layerIndex[localName].indexOf(name)<0) $scope.layerIndex[localName].push(name);
-                } else {
-                    $scope.layerIndex[localName] = [name]; 
+                if (typeof name === 'string' || name.length > 0) {
+                    $scope.treeStruct[name] = featureNode;
+                    var localName = prependStr+" "+$scope.treeStruct[name].localName;
+                    if (localName in $scope.layerIndex) {
+                        if ($scope.layerIndex[localName].indexOf(name)<0) $scope.layerIndex[localName].push(name);
+                    } else {
+                        $scope.layerIndex[localName] = [name]; 
+                    }
+                    displayable = true;
                 }
-                displayable = true;
             }
         }
         return displayable;
