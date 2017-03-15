@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import org.auscope.portal.core.server.controllers.BaseCSWController;
 import org.auscope.portal.core.services.KnownLayerService;
+import org.auscope.portal.core.services.Nagios4CachedService;
 import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.auscope.portal.core.view.knownlayer.KnownLayerGrouping;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Contains methods for requesting the list of known feature types
- * 
+ *
  * @author Josh Vote
  *
  */
@@ -25,32 +26,35 @@ public class KnownLayerController extends BaseCSWController {
     /** Used for converting data to something the view can understand */
     private ViewKnownLayerFactory viewKnownLayerFactory;
 
+    private Nagios4CachedService nagios4CachedService;
+
     @Autowired
     public KnownLayerController(KnownLayerService knownLayerService,
-            ViewKnownLayerFactory viewFactory, ViewCSWRecordFactory viewCSWRecordFactory) {
+            ViewKnownLayerFactory viewFactory, ViewCSWRecordFactory viewCSWRecordFactory, Nagios4CachedService nagios4CachedService) {
         super(viewCSWRecordFactory, viewFactory);
         this.knownLayerService = knownLayerService;
+        this.nagios4CachedService = nagios4CachedService;
     }
 
     /**
      * Gets a JSON response which contains the representations of each and every "KnownFeatureTypeDefinition".
      *
      * Each KnownFeatureTypeDefinition will map [0, N] CSWRecords with display information.
-     * 
+     *
      * @return
      */
     @RequestMapping("getKnownLayers.do")
     public ModelAndView getKnownLayers() {
         KnownLayerGrouping grouping = knownLayerService.groupKnownLayerRecords();
 
-        return generateKnownLayerResponse(grouping.getKnownLayers());
+        return generateKnownLayerResponse(grouping.getKnownLayers(), nagios4CachedService);
     }
 
     /**
      * Gets a JSON response which contains the representations of each and every "KnownFeatureTypeDefinition".
      *
      * Each KnownFeatureTypeDefinition will map [0, N] CSWRecords with display information.
-     * 
+     *
      * @return
      */
     @RequestMapping("getUnmappedCSWRecords.do")
@@ -62,7 +66,7 @@ public class KnownLayerController extends BaseCSWController {
 
     /**
      * Gets a JSON response which contains the representations of all the research data layers.
-     * 
+     *
      * @return The ModelAndView object containing any known layers of type ResearchDataLayer.
      */
     @RequestMapping("getResearchDataLayers.do")
