@@ -38,10 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/capdfHydrogeochemCtrl.html">capdfHydrogeochemCtrl</a></li>
+                                <li><a href="../classes/CapdfWMSService.html">CapdfWMSService</a></li>
                                 <li><a href="../classes/collapseInfoPanelCtrl.html">collapseInfoPanelCtrl</a></li>
-                                <li><a href="../classes/defaultFilterCtrl.html">defaultFilterCtrl</a></li>
+                                <li><a href="../classes/D3PlotService.html">D3PlotService</a></li>
+                                <li><a href="../classes/defaultAnalyticCtrl.html">defaultAnalyticCtrl</a></li>
+                                <li><a href="../classes/FilterStateService.html">FilterStateService</a></li>
                                 <li><a href="../classes/GetCSWRecordService.html">GetCSWRecordService</a></li>
-                                <li><a href="../classes/GetMinOccurViewFilterStyle.html">GetMinOccurViewFilterStyle</a></li>
+                                <li><a href="../classes/GetFilterParamService.html">GetFilterParamService</a></li>
                                 <li><a href="../classes/GetWFSRelatedService.html">GetWFSRelatedService</a></li>
                                 <li><a href="../classes/GetWMSRelatedService.html">GetWMSRelatedService</a></li>
                                 <li><a href="../classes/GMLParserService.html">GMLParserService</a></li>
@@ -50,16 +54,26 @@
                                 <li><a href="../classes/infoPanelCtrl.html">infoPanelCtrl</a></li>
                                 <li><a href="../classes/LayerManagerService.html">LayerManagerService</a></li>
                                 <li><a href="../classes/layerPanelCtrl.html">layerPanelCtrl</a></li>
+                                <li><a href="../classes/layerSearchCtrl.html">layerSearchCtrl</a></li>
+                                <li><a href="../classes/loadAnalyticCtrl.html">loadAnalyticCtrl</a></li>
                                 <li><a href="../classes/loadFilterCtrl.html">loadFilterCtrl</a></li>
+                                <li><a href="../classes/NVCLService.html">NVCLService</a></li>
+                                <li><a href="../classes/pressureDbCtrl.html">pressureDbCtrl</a></li>
                                 <li><a href="../classes/PreviewMapService.html">PreviewMapService</a></li>
+                                <li><a href="../classes/QuerierPanelService.html">QuerierPanelService</a></li>
                                 <li><a href="../classes/RenderHandlerService.html">RenderHandlerService</a></li>
+                                <li><a href="../classes/RenderStatusService.html">RenderStatusService</a></li>
                                 <li><a href="../classes/SimpleXPathService.html">SimpleXPathService</a></li>
+                                <li><a href="../classes/StyleService.html">StyleService</a></li>
                                 <li><a href="../classes/WFSService.html">WFSService</a></li>
+                                <li><a href="../classes/WMS_1_1_0_Service.html">WMS_1_1_0_Service</a></li>
+                                <li><a href="../classes/WMS_1_3_0_Service.html">WMS_1_3_0_Service</a></li>
                                 <li><a href="../classes/WMSService.html">WMSService</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/analytic.html">analytic</a></li>
                                 <li><a href="../modules/controllers.html">controllers</a></li>
                                 <li><a href="../modules/http.html">http</a></li>
                                 <li><a href="../modules/layer.html">layer</a></li>
@@ -103,7 +117,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/js_assets_modules_service_map_WMSService.js.html#l1"><code>js\assets\modules\service\map\WMSService.js:1</code></a>
+            Defined in: <a href="../files/.._js_assets_modules_service_layer_renderers_wms_WMSService.js.html#l1"><code>..\js\assets\modules\service\layer\renderers\wms\WMSService.js:1</code></a>
         </div>
 
             Module: <a href="../modules/map.html">map</a>
@@ -133,11 +147,15 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
-                                <a href="#method_generateWMS_1_1_1_Layer">generateWMS_1_1_1_Layer</a>
+                                <a href="#method_addLayerToGoogleMap">addLayerToGoogleMap</a>
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_generateWMS_1_3_0_Layer">generateWMS_1_3_0_Layer</a>
+                                <a href="#method_evaluateTiles">evaluateTiles</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_renderCSWRecord">renderCSWRecord</a>
 
                             </li>
                             <li class="index-item method">
@@ -154,16 +172,115 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_generateWMS_1_1_1_Layer" class="method item">
-    <h3 class="name"><code>generateWMS_1_1_1_Layer</code></h3>
+<div id="method_addLayerToGoogleMap" class="method item">
+    <h3 class="name"><code>addLayerToGoogleMap</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>mapLayer</code>
+                </li>
+                <li class="arg">
+                        <code>layer</code>
+                </li>
                 <li class="arg">
                         <code>onlineResource</code>
                 </li>
                 <li class="arg">
                         <code>style</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_modules_service_layer_renderers_wms_WMSService.js.html#l73"><code>..\js\assets\modules\service\layer\renderers\wms\WMSService.js:73</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Add layer to Google Map</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">mapLayer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>Google mapLayer object</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>layer object</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">onlineResource</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>online resource object</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">style</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>map style</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_evaluateTiles" class="method item">
+    <h3 class="name"><code>evaluateTiles</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+                <li class="arg">
+                        <code>onlineResource</code>
+                </li>
+                <li class="arg">
+                        <code>tilesLoaded</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -181,7 +298,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/js_assets_modules_service_map_WMSService.js.html#l10"><code>js\assets\modules\service\map\WMSService.js:10</code></a>
+        <a href="../files/.._js_assets_modules_service_layer_renderers_wms_WMSService.js.html#l21"><code>..\js\assets\modules\service\layer\renderers\wms\WMSService.js:21</code></a>
         </p>
 
 
@@ -189,7 +306,7 @@
     </div>
 
     <div class="description">
-        <p>Generate wms 1.1.1 google.maps.ImageMapType layer</p>
+        <p>Look for img elements and add event handlers to them or timeout</p>
 
     </div>
 
@@ -198,27 +315,34 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">onlineResource</code>
+                        <code class="param-name">layer</code>
                         <span class="type">Object</span>
 
 
                     <div class="param-description">
-                        <ul>
-<li>WMS online resource</li>
-</ul>
+                        <p>layer object</p>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">style</code>
+                        <code class="param-name">onlineResource</code>
                         <span class="type">Object</span>
 
 
                     <div class="param-description">
-                        <ul>
-<li>sld if defined else default server sld will be used</li>
-</ul>
+                        <p>online resource object</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">tilesLoaded</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>is this being called after a 'tilesloaded' event?</p>
 
                     </div>
 
@@ -230,30 +354,27 @@
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                    <p>ImageMapType - google.maps.ImageMapType</p>
+                    <p>true if the timer should be cancelled</p>
 
             </div>
         </div>
 
 
 </div>
-<div id="method_generateWMS_1_3_0_Layer" class="method item">
-    <h3 class="name"><code>generateWMS_1_3_0_Layer</code></h3>
+<div id="method_renderCSWRecord" class="method item">
+    <h3 class="name"><code>renderCSWRecord</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>onlineResource</code>
+                        <code>layer</code>
                 </li>
                 <li class="arg">
-                        <code>style</code>
+                        <code>cswRecord</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
 
-        <span class="returns-inline">
-            <span class="type"></span>
-        </span>
 
 
 
@@ -264,7 +385,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/js_assets_modules_service_map_WMSService.js.html#l67"><code>js\assets\modules\service\map\WMSService.js:67</code></a>
+        <a href="../files/.._js_assets_modules_service_layer_renderers_wms_WMSService.js.html#l236"><code>..\js\assets\modules\service\layer\renderers\wms\WMSService.js:236</code></a>
         </p>
 
 
@@ -272,7 +393,7 @@
     </div>
 
     <div class="description">
-        <p>Generate wms 1.3 google.maps.ImageMapType layer</p>
+        <p>Method to decide how the wms csw record should be rendered and add the wms to the map</p>
 
     </div>
 
@@ -281,26 +402,26 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">onlineResource</code>
+                        <code class="param-name">layer</code>
                         <span class="type">Object</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>WMS online resource</li>
+<li>The layer containing the wms to be rendered</li>
 </ul>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">style</code>
+                        <code class="param-name">cswRecord</code>
                         <span class="type">Object</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>sld if defined else default server sld will be used</li>
+<li>The cswRecord containing the wms to be rendered</li>
 </ul>
 
                     </div>
@@ -309,14 +430,6 @@
             </ul>
         </div>
 
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                    <p>ImageMapType - google.maps.ImageMapType</p>
-
-            </div>
-        </div>
 
 
 </div>
@@ -328,6 +441,9 @@
                 <li class="arg">
                         <code>layer</code>
                 </li>
+                <li class="arg">
+                        <code>param</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -341,7 +457,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/js_assets_modules_service_map_WMSService.js.html#l124"><code>js\assets\modules\service\map\WMSService.js:124</code></a>
+        <a href="../files/.._js_assets_modules_service_layer_renderers_wms_WMSService.js.html#l185"><code>..\js\assets\modules\service\layer\renderers\wms\WMSService.js:185</code></a>
         </p>
 
 
@@ -365,6 +481,19 @@
                     <div class="param-description">
                         <ul>
 <li>The layer containing the wms to be rendered</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">param</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>OPTIONAL - parameter to be passed into retrieving the SLD.</li>
 </ul>
 
                     </div>

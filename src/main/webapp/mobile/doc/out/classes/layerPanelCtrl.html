@@ -38,10 +38,14 @@
                 
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/capdfHydrogeochemCtrl.html">capdfHydrogeochemCtrl</a></li>
+                                <li><a href="../classes/CapdfWMSService.html">CapdfWMSService</a></li>
                                 <li><a href="../classes/collapseInfoPanelCtrl.html">collapseInfoPanelCtrl</a></li>
-                                <li><a href="../classes/defaultFilterCtrl.html">defaultFilterCtrl</a></li>
+                                <li><a href="../classes/D3PlotService.html">D3PlotService</a></li>
+                                <li><a href="../classes/defaultAnalyticCtrl.html">defaultAnalyticCtrl</a></li>
+                                <li><a href="../classes/FilterStateService.html">FilterStateService</a></li>
                                 <li><a href="../classes/GetCSWRecordService.html">GetCSWRecordService</a></li>
-                                <li><a href="../classes/GetMinOccurViewFilterStyle.html">GetMinOccurViewFilterStyle</a></li>
+                                <li><a href="../classes/GetFilterParamService.html">GetFilterParamService</a></li>
                                 <li><a href="../classes/GetWFSRelatedService.html">GetWFSRelatedService</a></li>
                                 <li><a href="../classes/GetWMSRelatedService.html">GetWMSRelatedService</a></li>
                                 <li><a href="../classes/GMLParserService.html">GMLParserService</a></li>
@@ -50,16 +54,26 @@
                                 <li><a href="../classes/infoPanelCtrl.html">infoPanelCtrl</a></li>
                                 <li><a href="../classes/LayerManagerService.html">LayerManagerService</a></li>
                                 <li><a href="../classes/layerPanelCtrl.html">layerPanelCtrl</a></li>
+                                <li><a href="../classes/layerSearchCtrl.html">layerSearchCtrl</a></li>
+                                <li><a href="../classes/loadAnalyticCtrl.html">loadAnalyticCtrl</a></li>
                                 <li><a href="../classes/loadFilterCtrl.html">loadFilterCtrl</a></li>
+                                <li><a href="../classes/NVCLService.html">NVCLService</a></li>
+                                <li><a href="../classes/pressureDbCtrl.html">pressureDbCtrl</a></li>
                                 <li><a href="../classes/PreviewMapService.html">PreviewMapService</a></li>
+                                <li><a href="../classes/QuerierPanelService.html">QuerierPanelService</a></li>
                                 <li><a href="../classes/RenderHandlerService.html">RenderHandlerService</a></li>
+                                <li><a href="../classes/RenderStatusService.html">RenderStatusService</a></li>
                                 <li><a href="../classes/SimpleXPathService.html">SimpleXPathService</a></li>
+                                <li><a href="../classes/StyleService.html">StyleService</a></li>
                                 <li><a href="../classes/WFSService.html">WFSService</a></li>
+                                <li><a href="../classes/WMS_1_1_0_Service.html">WMS_1_1_0_Service</a></li>
+                                <li><a href="../classes/WMS_1_3_0_Service.html">WMS_1_3_0_Service</a></li>
                                 <li><a href="../classes/WMSService.html">WMSService</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/analytic.html">analytic</a></li>
                                 <li><a href="../modules/controllers.html">controllers</a></li>
                                 <li><a href="../modules/http.html">http</a></li>
                                 <li><a href="../modules/layer.html">layer</a></li>
@@ -103,7 +117,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/js_assets_controllers_layer_layerPanelCtrl.js.html#l1"><code>js\assets\controllers\layer\layerPanelCtrl.js:1</code></a>
+            Defined in: <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l1"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:1</code></a>
         </div>
 
             Module: <a href="../modules/controllers.html">controllers</a>
@@ -133,6 +147,34 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
+                                <a href="#method_canDisplay">canDisplay</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getCswRecords">getCswRecords</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_getDisruptedProviders">getDisruptedProviders</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_hasWarningMessage">hasWarningMessage</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_lastGroupFn">lastGroupFn</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_lastLayerFn">lastLayerFn</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_removeLayer">removeLayer</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_toggleLayers">toggleLayers</a>
 
                             </li>
@@ -150,6 +192,411 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_canDisplay" class="method item">
+    <h3 class="name"><code>canDisplay</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l29"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:29</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns true if this layer has anything to display</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>layer object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_getCswRecords" class="method item">
+    <h3 class="name"><code>getCswRecords</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l94"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:94</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                    <p>cswRecords - csw records that match the search, or all known layer csw records if search is empty</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_getDisruptedProviders" class="method item">
+    <h3 class="name"><code>getDisruptedProviders</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l50"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:50</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns the list of providers whose service has been disrupted</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>layer object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                    <p>string, comma separated list of providers whose service has been disrupted</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_hasWarningMessage" class="method item">
+    <h3 class="name"><code>hasWarningMessage</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l40"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:40</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns true if there have been recent service disruptions in this layer</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>layer object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                    <p>true if there have been recent service disruptions</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_lastGroupFn" class="method item">
+    <h3 class="name"><code>lastGroupFn</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>last</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l177"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:177</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Used to register the last group in the panel
+This helps us know when the panel filter initialisation is complete</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">last</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>last iteration of loop flag ($last) for all groups</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_lastLayerFn" class="method item">
+    <h3 class="name"><code>lastLayerFn</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>last</code>
+                </li>
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l187"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:187</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Used to register the layer id of the last layer in the panel
+This enables us to know when panel filter initialisation is complete</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">last</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>last iteration of loop flag ($last) for layers of a group</p>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>relevant layer</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_removeLayer" class="method item">
+    <h3 class="name"><code>removeLayer</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l85"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:85</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>remove the cswLayer</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>the layer to remove</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_toggleLayers" class="method item">
     <h3 class="name"><code>toggleLayers</code></h3>
 
@@ -174,7 +621,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/js_assets_controllers_layer_layerPanelCtrl.js.html#l57"><code>js\assets\controllers\layer\layerPanelCtrl.js:57</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l157"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:157</code></a>
         </p>
 
 
@@ -229,7 +676,7 @@
                         <code>group</code>
                 </li>
                 <li class="arg">
-                        <code>cswRecordId</code>
+                        <code>layer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -244,7 +691,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/js_assets_controllers_layer_layerPanelCtrl.js.html#l16"><code>js\assets\controllers\layer\layerPanelCtrl.js:16</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l104"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:104</code></a>
         </p>
 
 
@@ -282,12 +729,12 @@
 
                 </li>
                 <li class="param">
-                        <code class="param-name">cswRecordId</code>
+                        <code class="param-name">layer</code>
                         <span class="type">Object</span>
 
 
                     <div class="param-description">
-                        <p>record identifier</p>
+                        <p>layer</p>
 
                     </div>
 

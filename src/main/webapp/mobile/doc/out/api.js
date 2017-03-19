@@ -1,26 +1,40 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
+        "CapdfWMSService",
+        "D3PlotService",
+        "FilterStateService",
         "GMLParserService",
         "GetCSWRecordService",
-        "GetMinOccurViewFilterStyle",
+        "GetFilterParamService",
         "GetWFSRelatedService",
         "GetWMSRelatedService",
         "GoogleMapService",
         "LayerManagerService",
+        "NVCLService",
         "PreviewMapService",
+        "QuerierPanelService",
         "RenderHandlerService",
+        "RenderStatusService",
         "SimpleXPathService",
+        "StyleService",
         "WFSService",
         "WMSService",
+        "WMS_1_1_0_Service",
+        "WMS_1_3_0_Service",
+        "capdfHydrogeochemCtrl",
         "collapseInfoPanelCtrl",
-        "defaultFilterCtrl",
+        "defaultAnalyticCtrl",
         "googleMapCtrl",
         "infoPanelCtrl",
         "layerPanelCtrl",
-        "loadFilterCtrl"
+        "layerSearchCtrl",
+        "loadAnalyticCtrl",
+        "loadFilterCtrl",
+        "pressureDbCtrl"
     ],
     "modules": [
+        "analytic",
         "controllers",
         "http",
         "layer",
@@ -29,9 +43,14 @@ YUI.add("yuidoc-meta", function(Y) {
     ],
     "allModules": [
         {
+            "displayName": "analytic",
+            "name": "analytic",
+            "description": "Service class related to handling all things related to making http cswrecords"
+        },
+        {
             "displayName": "controllers",
             "name": "controllers",
-            "description": "defaultFilterCtrl class used to add layers to the main map"
+            "description": "capdfHydrogeochemCtrl class used for capdf hydrogeochem controller. This controller sits under loadAnalyticCtrl"
         },
         {
             "displayName": "http",
@@ -41,7 +60,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "layer",
             "name": "layer",
-            "description": "LayerManagerService handles layer manipulation and extraction of information from the layer/csw records"
+            "description": "FilterStateService user to store and extract the state of the filters and change the state of the filters"
         },
         {
             "displayName": "map",
