@@ -36,6 +36,50 @@ allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','GetCSWRecord
             return (layer.cswRecords.length > 0);
         return false;
     };
+    
+    /**
+     * Returns true if there have been recent service disruptions in this layer
+     * @method hasWarningMessage
+     * @param layer layer object
+     * @return true if there have been recent service disruptions
+     */
+    $scope.hasWarningMessage = function(layer) {
+        return layer.hasOwnProperty("nagiosFailingHosts");
+    }
+    
+    /**
+     * Returns the list of providers whose service has been disrupted
+     * @method getDisruptedProviders
+     * @param layer layer object
+     * @return string, comma separated list of providers whose service has been disrupted
+     */
+    $scope.getDisruptedProviders = function(layer) {       
+        var adminArea_list = [];
+        var msg = "";
+        if (layer.hasOwnProperty("nagiosFailingHosts")) {
+            for (var i=0; i<layer.nagiosFailingHosts.length; i++) {
+                // loop over services
+                for (var j=0; j<layer.cswRecords.length; j++) {
+                    // loop over service types (WFS, WMS etc.)
+                    for (var k=0; k<layer.cswRecords[j].onlineResources.length; k++) {
+                        if (layer.cswRecords[j].onlineResources[k].url.indexOf(layer.nagiosFailingHosts[i])>=0 && adminArea_list.indexOf(layer.cswRecords[j].adminArea)<0) {
+                            adminArea_list.push(layer.cswRecords[j].adminArea);
+                            break;
+                        }
+                    }
+
+                }
+            }
+            for (var i=0; i<adminArea_list.length; i++) {
+                msg += adminArea_list[i]+", ";
+            }
+            // remove trailing comma+space
+            if (msg.length>0) {
+                msg = msg.substr(0, msg.length-2);
+            }
+        }
+        return msg; 
+    }
  
     
     /**

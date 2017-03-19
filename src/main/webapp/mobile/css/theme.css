@@ -723,3 +723,17 @@ div[ng-controller="capdfHydrogeochemCtrl"] div.col-md-12 {
 .glyphicon.glyphicon-ban-circle {
     top: -2px;
 }
+
+/* Layer warning alert boxes */
+.layer-warning-banner {
+    border-radius: 6px;
+    border-color: #e6ff99;
+    background-color: #e6ff99;
+    color: #8c8c8c;
+    margin-bottom: 0px;
+    padding: 5px;
+}
+
+.no-top-border {
+    border-top: none !important;
+}

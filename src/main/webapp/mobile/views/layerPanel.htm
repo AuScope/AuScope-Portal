@@ -79,11 +79,18 @@
                                 <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]||!canDisplay(layer)}" ng-click="analyticLayerList[layer.id] && togglePanels('analytic',group,layer);$event.stopPropagation();"></i></td>
                             </tr>
                             <tr ng-if="!canDisplay(layer)">
-                                <td colspan="2">
-                                    <uib-progressbar  class="progress-striped active" type="warning" max="100" value="100">
-                                        Service not available
-                                    </uib-progressbar>
-                                </td><td></td><td></td>
+                                <td colspan="2" class="no-top-border">
+                                    <div class="layer-warning-banner">
+                                        WARNING! Service not available
+                                    </div>
+                                </td>
+                                <td class="no-top-border"></td>
+                                <td class="no-top-border"></td>
+                            </tr>
+                            <tr ng-if="canDisplay(layer) && hasWarningMessage(layer)">
+                                <td colspan="4" class="no-top-border">
+                                    <div class="layer-warning-banner">WARNING! Provider service disruptions: {{getDisruptedProviders(layer)}}</div>
+                                </td>
                             </tr>
                             <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
                                 <td colspan="4" style="border-top-style: none;">
