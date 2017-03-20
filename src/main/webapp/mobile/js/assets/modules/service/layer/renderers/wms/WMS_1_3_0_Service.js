@@ -40,7 +40,7 @@ allModules.service('WMS_1_3_0_Service',['$rootScope','GoogleMapService','LayerMa
                 
                 // TODO: Add SRS/CRS parameter "getWMSMapViaProxy.do" to allow use of EPSG:3857
                 // BBOX in EPSG:4326
-                var bbox_4326 = leftLng + "," + bot.lat() + "," + rightLng + "," + top.lat();
+                var bbox_4326 = bot.lat() + "," + leftLng + "," + top.lat() + "," + rightLng;
                 
                 // BBOX in EPSG:3857
                 var bbox_3857 = top3857[0] + "," + bot3857[1] + "," + bot3857[0] + "," + top3857[1];
