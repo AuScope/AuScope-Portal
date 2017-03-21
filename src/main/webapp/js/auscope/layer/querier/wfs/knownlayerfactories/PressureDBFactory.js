@@ -226,13 +226,25 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
                                     params : params,
                                     scope : this,
                                     success : function(data) {
+                                        var jsonData = {rows:[], wellid:"", feature:"" };
+                                        try {
+                                            jsonData = JSON.parse(data);
+                                        } catch (err) {
+                                            Ext.Msg.show({
+                                                title:'Data Error',
+                                                msg: 'Error in Pressure DB data returned from server.',
+                                                icon: Ext.MessageBox.ERROR
+                                            });
+                                            console.error("Cannot parse data ", err);
+                                            return;
+                                        }
                                         var data_bin = {};
                                         var xaxis_name;
                                         var yaxis_names = {};
                                         var yaxis_keys = [];
-                                        var rows = data.rows;
-                                        var wellid = data.wellid;
-                                        var feature = data.feature;
+                                        var rows = jsonData.rows;
+                                        var wellid = jsonData.wellid;
+                                        var feature = jsonData.feature;
                                         var x = "depth";
                                         var y = feature;
                                         var dataType = "metric";
