@@ -29,8 +29,8 @@ div, span, p, td {
 	display: inline-block;
 }
 [id^=smoother_] {
-	margin: 0 0 10px 16px;
-	width: 100px;
+	margin: 20px 0 0 10px;
+	width: 90%;
 }
 .rickshaw_graph .detail {
 	left: -1000;
@@ -93,10 +93,6 @@ section {
 	border: none;
 	border-top: 1px solid #eaeaea;
 	padding: 15px 0;
-}
-[id^=smoother_] {
-	margin: 5px 0 0 10px;
-	width: 90%;
 }
 label.disabled span {
 	opacity: 0.4;

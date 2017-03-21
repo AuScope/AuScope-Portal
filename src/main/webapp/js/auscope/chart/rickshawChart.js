@@ -56,6 +56,7 @@ Ext.define('auscope.chart.rickshawChart', {
 
             // Add legend on left hand side and a graph with axes
             graph_html += '<div id="content_'+idx.toString()+'">' +
+                          '  <h1>'+yaxis_key+'</h1>'+
                           '  <div id="left_side_panel_'+idx.toString()+'">'+
                           '    <section><div id="legend_'+idx.toString()+'"></div></section>'+
                           '    <section></section>'+
@@ -75,9 +76,9 @@ Ext.define('auscope.chart.rickshawChart', {
             // Place controls on right hand side of each graph
             graph_html += '    <section>'+
                           '      <div id="renderer_form_'+idx.toString()+'" class="toggler">'+
-                          '        <input type="radio" name="renderer" id="area_'+idx.toString()+'" value="area" checked>'+
+                          '        <input type="radio" name="renderer" id="area_'+idx.toString()+'" value="area">'+
                           '        <label for="area_'+idx.toString()+'">area</label>'+
-                          '        <input type="radio" name="renderer" id="bar_'+idx.toString()+'" value="bar">'+
+                          '        <input type="radio" name="renderer" id="bar_'+idx.toString()+'" value="bar" checked>'+
                           '        <label for="bar_'+idx.toString()+'">bar</label>'+
                           '        <input type="radio" name="renderer" id="line_'+idx.toString()+'" value="line">'+
                           '        <label for="line_'+idx.toString()+'">line</label>'+
@@ -91,10 +92,6 @@ Ext.define('auscope.chart.rickshawChart', {
                           '          <input type="radio" name="offset" id="stack_'+idx.toString()+'" value="zero" checked>'+
                           '          <span>stack</span>'+
                           '        </label>'+
-                          '        <label for="stream_'+idx.toString()+'">'+
-                          '          <input type="radio" name="offset" id="stream_'+idx.toString()+'" value="wiggle">'+
-                          '          <span>stream</span>'+
-                          '        </label>'+
                           '        <label for="pct_'+idx.toString()+'">'+
                           '          <input type="radio" name="offset" id="pct_'+idx.toString()+'" value="expand">'+
                           '          <span>pct</span>'+
@@ -104,18 +101,10 @@ Ext.define('auscope.chart.rickshawChart', {
                           '          <span>value</span>'+
                           '        </label>'+
                           '      </div>'+
-                          '      <div id="interpolation_form_'+idx.toString()+'" class="toggler">'+
+                          '      <div id="interpolation_form_'+idx.toString()+'" class="toggler" style="display: none;">'+
                           '        <label for="cardinal_'+idx.toString()+'">'+
                           '          <input type="radio" name="interpolation" id="cardinal_'+idx.toString()+'" value="cardinal" checked>'+
                           '          <span>cardinal</span>'+
-                          '        </label>'+
-                          '        <label for="linear_'+idx.toString()+'">'+
-                          '          <input type="radio" name="interpolation" id="linear_'+idx.toString()+'" value="linear">'+
-                          '          <span>linear</span>'+
-                          '        </label>'+
-                          '        <label for="step_'+idx.toString()+'">'+
-                          '          <input type="radio" name="interpolation" id="step_'+idx.toString()+'" value="step-after">'+
-                          '          <span>step</span>'+
                           '        </label>'+
                           '      </div>'+
                           '    </section>'+
@@ -316,7 +305,7 @@ Ext.define('auscope.chart.rickshawChart', {
             }; // end of callback function
         
             // Configure graph. Input the starting values. These must match the HTML radio buttons etc. above.
-            graph.configure({"renderer":"area","interpolation":"linear","unstack":false,"offset":"zero"});
+            graph.configure({"renderer":"bar","interpolation":"cardinal","unstack":false,"offset":"zero"});
         
             // Register routine to redraw labels upon graph update
             graph.onUpdate(render_labels);
@@ -345,7 +334,7 @@ Ext.define('auscope.chart.rickshawChart', {
             });
             
             // A slider which can be used to smooth out the peaks in the graph
-            var smoother = new Rickshaw.Graph.Smoother({
+            var smoother = new Rickshaw.Graph.SmootherPlus({
                 graph: graph,
                 element: local_div.select("[id=smoother_"+idx.toString()+"]").node()
             });

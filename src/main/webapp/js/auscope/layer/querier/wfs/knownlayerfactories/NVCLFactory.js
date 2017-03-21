@@ -556,7 +556,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                                      
                                     // Using entries(), make a name,value list, then use that to add to 'data_bin[metric_name]'
                                     d3.entries(val).forEach(function(meas) {                                                                                 
-                                        var key=meas.key+"_"+metric_name;
+                                        var key=meas.key;
                                         if (!(key in metric_colours)) {
                                             var logIdIdx=999999;
                                             // First, find the logid for the metric returned from the graph data so that mineral colours can be found for graph data
