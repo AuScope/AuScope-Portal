@@ -4,8 +4,8 @@
  * @class layerPanelCtrl
  * 
  */
-allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService','Constants',
-                                             function ($rootScope,$scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,Constants) {
+allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','RenderHandlerService','GetCSWRecordService','RenderStatusService','$timeout','GoogleMapService','Constants',
+                                             function ($rootScope,$scope,RenderHandlerService,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,Constants) {
     $scope.cswRecords={};
     GetCSWRecordService.getCSWKnownLayers().then(function(data){
         $scope.cswRecords=data;      
@@ -27,14 +27,31 @@ allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','GetCSWRecord
     });
     
     /**
-     * Returns true if this layer has anything to display
-     * @method canDisplay
+     * Returns true if this layer is available to be displayed on the map
+     * i.e. it has CSW records and is the correct type of layer
+     * @method isLayerAvailable
      * @param layer layer object
      */
-    $scope.canDisplay = function(layer) {
-        if (layer && layer.cswRecords) 
-            return (layer.cswRecords.length > 0);
-        return false;
+    $scope.isLayerAvailable = function(layer) {
+        return layer && layer.cswRecords && (layer.cswRecords.length > 0) && RenderHandlerService.isSupportedLayer(layer);
+    };
+    
+    /**
+     * Returns true if this layer is of a type that can be displayed
+     * @method isLayerSupported
+     * @param layer layer object
+     */
+    $scope.isLayerSupported = function(layer) {
+        return RenderHandlerService.isSupportedLayer(layer)
+    };
+    
+    /**
+     * Returns true if this layer has CSW records
+     * @method layerHasData
+     * @param layer layer object
+     */
+    $scope.layerHasData = function(layer) {
+        return layer && layer.cswRecords && (layer.cswRecords.length > 0);
     };
     
     /**
@@ -45,7 +62,7 @@ allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','GetCSWRecord
      */
     $scope.hasWarningMessage = function(layer) {
         return layer.hasOwnProperty("nagiosFailingHosts");
-    }
+    };
     
     /**
      * Returns the list of providers whose service has been disrupted
@@ -79,7 +96,7 @@ allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','GetCSWRecord
             }
         }
         return msg; 
-    }
+    };
  
     
     /**
@@ -112,7 +129,7 @@ allControllers.controller('layerPanelCtrl', ['$rootScope','$scope','GetCSWRecord
         var cswRecordId = layer.id;
         
         // Disable when there is nothing to display except basic info
-        if (panelType!="info" && !($scope.canDisplay(layer))) {            
+        if (panelType!="info" && !($scope.isLayerAvailable(layer))) {            
             return;
         }
         

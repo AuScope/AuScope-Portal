@@ -3,10 +3,16 @@
  * @class RenderHandlerService
  * 
  */
-allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService','GoogleMapService','RenderStatusService','LayerManagerService','Constants','$injector',
-                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService,RenderStatusService,LayerManagerService,Constants,$injector) {
+allModules.service('RenderHandlerService',['$rootScope','WMSService','WFSService','LayerManagerService','GoogleMapService','RenderStatusService','Constants','$injector',
+                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService,RenderStatusService,Constants,$injector) {
     
-  
+    /**
+     * @method isSupportedLayer
+     * @param layer - layer that is being assessed for supportability
+    */
+    this.isSupportedLayer = function(layer) {
+        return LayerManagerService.getWMS(layer).length > 0 || LayerManagerService.getWFS(layer).length > 0;
+    };
      
     /**
      * Decides how to renders a layer automatically

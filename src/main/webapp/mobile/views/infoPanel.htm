@@ -23,7 +23,7 @@
                                     ng-mouseleave="lowlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)">
                                     
                                     <uib-accordion-heading ng-class="info-details-header">{{ cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information' }}
-                                       <span ng-click="addCSWRecord(infoPanelCsw,cswRecord);$event.stopPropagation();$event.preventDefault();" class="pull-right label label-primary info-panel-add"><i class="fa fa-map-marker"></i> Add</span>                                                              
+                                       <span ng-if="isSupportedLayer(infoPanelCsw)" ng-click="addCSWRecord(infoPanelCsw,cswRecord);$event.stopPropagation();$event.preventDefault();" class="pull-right label label-primary info-panel-add"><i class="fa fa-map-marker"></i> Add</span>
                                     </uib-accordion-heading>
                                     
                                     <div class="row info-panel-text"><strong>Contact Org:</strong> {{cswRecord.contactOrg}}</div>

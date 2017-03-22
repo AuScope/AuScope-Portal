@@ -14,9 +14,25 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
     $scope.wmsUrls = {};
     $scope.wmsLegends = {};
     
+    /**
+     * Used to draw a layer/feature etc. on map using a csw record 
+     * @method addCSWRecord
+     * @param layer to be displayed
+     * @param cswRecord of layer to be displayed
+     */
     $scope.addCSWRecord = function(layer,cswRecord){
         RenderHandlerService.renderCSWRecord(layer,cswRecord);
     };
+    
+    /**
+     * Used to check if layer can be drawn on map (is supported)
+     * @method isSupportedLayer
+     * @param layer
+     * @return returns true if the layer can be displayed on map
+     */
+    $scope.isSupportedLayer = function(layer) {
+        return RenderHandlerService.isSupportedLayer(layer);
+    }
     
     // Get the legend style, if there is one
     if ($scope.$parent.infoPanelCsw.proxyStyleUrl != undefined && $scope.$parent.infoPanelCsw.proxyStyleUrl.length>0) {

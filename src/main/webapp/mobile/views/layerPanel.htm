@@ -74,22 +74,31 @@
                                     </div>
                                 </td>
 
-                                <td class="icon-box"><i class="fa fa-filter fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter,'fa-round-disable':!canDisplay(layer)}" ng-click="togglePanels('filter',group,layer);$event.stopPropagation();"></i></td>
+                                <td class="icon-box"><i class="fa fa-filter fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.filter,'fa-round-disable':!isLayerAvailable(layer)}" ng-click="togglePanels('filter',group,layer);$event.stopPropagation();"></i></td>
                                 <td class="icon-box"><i class="fa fa-info-circle fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.info}" ng-click="togglePanels('info',group,layer);$event.stopPropagation();"></i></td>
-                                <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]||!canDisplay(layer)}" ng-click="analyticLayerList[layer.id] && togglePanels('analytic',group,layer);$event.stopPropagation();"></i></td>
+                                <td class="icon-box"><i class="fa fa-line-chart fa-round hasEvent hvr-glow-local" ng-class="{'fa-round-inverse': status[group][layer.id].panels.analytic,'fa-round-disable':!analyticLayerList[layer.id]||!isLayerAvailable(layer)}" ng-click="analyticLayerList[layer.id] && togglePanels('analytic',group,layer);$event.stopPropagation();"></i></td>
                             </tr>
-                            <tr ng-if="!canDisplay(layer)">
+                            <tr ng-if="!layerHasData(layer)">
                                 <td colspan="2" class="no-top-border">
                                     <div class="layer-warning-banner">
-                                        WARNING! Service not available
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Service not available
                                     </div>
                                 </td>
                                 <td class="no-top-border"></td>
                                 <td class="no-top-border"></td>
                             </tr>
-                            <tr ng-if="canDisplay(layer) && hasWarningMessage(layer)">
+                            <tr ng-if="layerHasData(layer) && !isLayerSupported(layer)">
+                                <td colspan="2" class="no-top-border">
+                                    <div class="layer-warning-banner">
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Service not supported
+                                    </div>
+                                </td>
+                                <td class="no-top-border"></td>
+                                <td class="no-top-border"></td>
+                            </tr>
+                            <tr ng-if="isLayerAvailable(layer) && hasWarningMessage(layer)">
                                 <td colspan="4" class="no-top-border">
-                                    <div class="layer-warning-banner">WARNING! Provider service disruptions: {{getDisruptedProviders(layer)}}</div>
+                                    <div class="layer-warning-banner"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Provider service disruptions: {{getDisruptedProviders(layer)}}</div>
                                 </td>
                             </tr>
                             <tr class="animated layer-selected" ng-class="{'fadeInDown': status[group][layer.id].panels.filter, 'no-animation': !status[group][layer.id].panels.filter}" ng-show="status[group][layer.id].panels.filter">
