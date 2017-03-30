@@ -931,8 +931,9 @@
     <bean id="knownTypeGSMLBorehole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="gsml-borehole"/>
         <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSWFSSelector">
                 <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
+                <constructor-arg name="layerName" value="Boreholes"/>
             </bean>
         </constructor-arg>
 
