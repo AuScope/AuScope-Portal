@@ -1135,7 +1135,7 @@
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 49,
-            "description": "Returns true if this layer is in front of all other layers",
+            "description": "Checks if this layer is in front of all other layers",
             "itemtype": "method",
             "name": "isLayerAtFront",
             "params": [
@@ -1144,22 +1144,28 @@
                     "description": "layer object"
                 }
             ],
+            "return": {
+                "description": "true if layer is in front of all other layers"
+            },
             "class": "loadFilterCtrl",
             "module": "controllers"
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 58,
-            "description": "Returns true if and only if the current layer is WMS",
+            "line": 59,
+            "description": "Checks if the current layer is WMS",
             "itemtype": "method",
             "name": "isWMSLayer",
+            "return": {
+                "description": "true if and only if the current layer is WMS"
+            },
             "class": "loadFilterCtrl",
             "module": "controllers"
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 66,
-            "description": "Returns true is the layer is active",
+            "line": 68,
+            "description": "Checks for active layer",
             "itemtype": "method",
             "name": "isLayerActive",
             "params": [
@@ -1168,12 +1174,15 @@
                     "description": "layer object"
                 }
             ],
+            "return": {
+                "description": "true is the layer is active"
+            },
             "class": "loadFilterCtrl",
             "module": "controllers"
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 76,
+            "line": 79,
             "description": "Sets the value displayed in the optional dropdown selector",
             "itemtype": "method",
             "name": "setOptSelectList",
@@ -1188,7 +1197,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 86,
+            "line": 89,
             "description": "Sets the value displayed in the current mandatory dropdown selector",
             "itemtype": "method",
             "name": "setMandSelectList",
@@ -1203,7 +1212,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 96,
+            "line": 99,
             "description": "Forces a select operation on any one of the mandatory dropdown selectors",
             "itemtype": "method",
             "name": "selectMandDropdownOpt",
@@ -1222,7 +1231,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 129,
+            "line": 132,
             "description": "Forces a select operation on any one of the optional dropdown selectors",
             "itemtype": "method",
             "name": "selectOptDropdownOpt",
@@ -1241,7 +1250,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 163,
+            "line": 166,
             "description": "Sets the value displayed in the remote dropdown selector",
             "itemtype": "method",
             "name": "setDropdownRemote",
@@ -1256,7 +1265,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 173,
+            "line": 176,
             "description": "Assembles a list of providers, which will be displayed in the panel",
             "itemtype": "method",
             "name": "getProvider",
@@ -1265,7 +1274,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 200,
+            "line": 203,
             "description": "A function used to add a layer to the main map",
             "itemtype": "method",
             "name": "addLayer",
@@ -1280,7 +1289,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 223,
+            "line": 226,
             "description": "Adds a new filter to be displayed in the panel",
             "itemtype": "method",
             "name": "addFilter",
@@ -1295,7 +1304,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 248,
+            "line": 252,
             "description": "Removes all filters displayed in panel",
             "itemtype": "method",
             "name": "clearFilter",
@@ -1304,7 +1313,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 256,
+            "line": 260,
             "description": "Returns the first key in options object",
             "itemtype": "method",
             "name": "getKey",
@@ -1314,12 +1323,15 @@
                     "description": "options object"
                 }
             ],
+            "return": {
+                "description": "key"
+            },
             "class": "loadFilterCtrl",
             "module": "controllers"
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 266,
+            "line": 271,
             "description": "Uses the input filter object to set the filter values",
             "itemtype": "method",
             "name": "updateFilter",
