@@ -47,7 +47,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     };
     
     /**
-     * Returns true if this layer is in front of all other layers
+     * Checks if this layer is in front of all other layers
      * @method isLayerAtFront
      * @param layer layer object
      * @return true if layer is in front of all other layers
@@ -57,7 +57,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     };
 
     /**
-     * Returns Checks if the current layer is WMS
+     * Checks if the current layer is WMS
      * @method isWMSLayer
      * @return true if and only if the current layer is WMS
      */
@@ -66,7 +66,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     };
     
     /**
-     * Returns Checks for active layer
+     * Checks for active layer
      * @method isLayerActive
      * @param layer layer object
      * @return true is the layer is active
