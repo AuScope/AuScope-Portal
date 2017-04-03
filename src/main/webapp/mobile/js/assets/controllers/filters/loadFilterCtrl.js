@@ -44,33 +44,36 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      */
     $scope.moveLayerToFront = function(layer) {
         GoogleMapService.moveLayerToFront(layer);
-    }
+    };
     
     /**
      * Returns true if this layer is in front of all other layers
      * @method isLayerAtFront
      * @param layer layer object
+     * @return true if layer is in front of all other layers
      */
     $scope.isLayerAtFront = function(layer) {
         return GoogleMapService.isLayerAtFront(layer);
-    }
+    };
 
     /**
-     * Returns true if and only if the current layer is WMS
+     * Returns Checks if the current layer is WMS
      * @method isWMSLayer
+     * @return true if and only if the current layer is WMS
      */
     $scope.isWMSLayer = function () {
         return (Constants.rendererLoader[$scope.layer.id]=='WMSService' || !Constants.rendererLoader[$scope.layer.id] && LayerManagerService.getWMS($scope.layer).length > 0);
-    }
+    };
     
     /**
-     * Returns true is the layer is active
+     * Returns Checks for active layer
      * @method isLayerActive
      * @param layer layer object
+     * @return true is the layer is active
      */
     $scope.isLayerActive = function(layer) {
         return GoogleMapService.isLayerActive(layer);
-    }
+    };
     
     
     /**
@@ -81,7 +84,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     $scope.setOptSelectList = function(val) {
         var setVal = val;
         $scope.optDropdownSelectLabel = setVal;
-    }
+    };
     
     /**
      * Sets the value displayed in the current mandatory dropdown selector
@@ -91,7 +94,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     $scope.setMandSelectList = function(val) {
         var setVal = val;
         $scope.mandDropdownSelectLabel = setVal;
-    }
+    };
     
     /**
      * Forces a select operation on any one of the mandatory dropdown selectors
@@ -123,7 +126,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
                 }
             }
         }
-    }
+    };
     
     
     /**
@@ -157,7 +160,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
                 }
             }
         }
-    }
+    };
     
    
     /**
@@ -168,7 +171,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
     $scope.setDropdownRemote = function(val) {
         var setVal = val;
         $scope.dropdownRemoteLabel = setVal;
-    }
+    };
    
     /**
      * Assembles a list of providers, which will be displayed in the panel
@@ -180,7 +183,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
         // Set up a map of admin areas + URL's that belong to each
         var adminAreasMap = {};
         for (var i = 0; i < cswRecords.length; i++) {
-            var adminArea = cswRecords[i]['adminArea'];
+            var adminArea = cswRecords[i].adminArea;
             var allOnlineResources = LayerManagerService.getOnlineResourcesFromCSW(cswRecords[i]);        
             adminAreasMap[adminArea] = UtilitiesService.getUrlDomain(allOnlineResources[0].url);   
         }
@@ -231,8 +234,9 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
         }
         if(UtilitiesService.isEmpty($scope.providers) && filter.type=="OPTIONAL.PROVIDER"){
             getProvider();
-            if (addEmpty)
+            if (addEmpty) {
                 filter.value={};
+            }
         }
         if(UtilitiesService.isEmpty(filter.options) && filter.type=="OPTIONAL.DROPDOWNREMOTE"){
             GetFilterParamService.getParam(filter.url).then(function(response){
@@ -257,6 +261,7 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      * Returns the first key in options object
      * @method getKey
      * @param options options object
+     * @return key 
      */
     $scope.getKey = function(options) {
         return Object.keys(options)[0];
@@ -270,8 +275,9 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
      */
     $scope.updateFilter = function(filterObj) {        
         // Optional Filters
-        for (var i=0;i<filterObj.optionalFilters.length;i++) {
-            for (var j=0;j<$scope.layer.filterCollection.optionalFilters.length;j++) {
+	var i,j;
+        for (i=0;i<filterObj.optionalFilters.length;i++) {
+            for (j=0;j<$scope.layer.filterCollection.optionalFilters.length;j++) {
                 var optionalFilter = $scope.layer.filterCollection.optionalFilters[j];
                 if (optionalFilter.label===filterObj.optionalFilters[i].label) {
                     if (optionalFilter.type=="OPTIONAL.DATE") {
@@ -288,8 +294,8 @@ allControllers.controller('loadFilterCtrl', ['$scope','$rootScope','$timeout','R
             }
         }
         // Mandatory filters
-        for (var i=0;i<filterObj.mandatoryFilters.length;i++) {
-            for (var j=0;j<$scope.layer.filterCollection.mandatoryFilters.length;j++) {
+        for (i=0;i<filterObj.mandatoryFilters.length;i++) {
+            for (j=0;j<$scope.layer.filterCollection.mandatoryFilters.length;j++) {
                 var mandatoryFilter = $scope.layer.filterCollection.mandatoryFilters[j];
                 if (filterObj.mandatoryFilters[i].label===mandatoryFilter.label) {
                     mandatoryFilter.value = filterObj.mandatoryFilters[i].value;
