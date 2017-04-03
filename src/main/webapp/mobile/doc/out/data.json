@@ -1,8 +1,8 @@
 {
     "project": {},
     "files": {
-        "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+        "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js": {
+            "name": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "modules": {
                 "controllers": 1
             },
@@ -12,8 +12,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\analytics\\defaultAnalyticCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\analytics\\defaultAnalyticCtrl.js",
+        "../js/assets/controllers/analytics/defaultAnalyticCtrl.js": {
+            "name": "../js/assets/controllers/analytics/defaultAnalyticCtrl.js",
             "modules": {},
             "classes": {
                 "defaultAnalyticCtrl": 1
@@ -21,8 +21,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\analytics\\loadAnalyticCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\analytics\\loadAnalyticCtrl.js",
+        "../js/assets/controllers/analytics/loadAnalyticCtrl.js": {
+            "name": "../js/assets/controllers/analytics/loadAnalyticCtrl.js",
             "modules": {},
             "classes": {
                 "loadAnalyticCtrl": 1
@@ -30,8 +30,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\analytics\\pressureDbCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\analytics\\pressureDbCtrl.js",
+        "../js/assets/controllers/analytics/pressureDbCtrl.js": {
+            "name": "../js/assets/controllers/analytics/pressureDbCtrl.js",
             "modules": {},
             "classes": {
                 "pressureDbCtrl": 1
@@ -39,8 +39,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+        "../js/assets/controllers/filters/loadFilterCtrl.js": {
+            "name": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "modules": {},
             "classes": {
                 "loadFilterCtrl": 1
@@ -48,8 +48,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\googlemap\\googleMapCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+        "../js/assets/controllers/googlemap/googleMapCtrl.js": {
+            "name": "../js/assets/controllers/googlemap/googleMapCtrl.js",
             "modules": {},
             "classes": {
                 "googleMapCtrl": 1
@@ -57,8 +57,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+        "../js/assets/controllers/info/collapseInfoPanelCtrl.js": {
+            "name": "../js/assets/controllers/info/collapseInfoPanelCtrl.js",
             "modules": {},
             "classes": {
                 "collapseInfoPanelCtrl": 1
@@ -66,8 +66,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\info\\infoPanelCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\info\\infoPanelCtrl.js",
+        "../js/assets/controllers/info/infoPanelCtrl.js": {
+            "name": "../js/assets/controllers/info/infoPanelCtrl.js",
             "modules": {},
             "classes": {
                 "infoPanelCtrl": 1
@@ -75,8 +75,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
+        "../js/assets/controllers/layer/layerPanelCtrl.js": {
+            "name": "../js/assets/controllers/layer/layerPanelCtrl.js",
             "modules": {},
             "classes": {
                 "layerPanelCtrl": 1
@@ -84,8 +84,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+        "../js/assets/controllers/layer/layerSearchCtrl.js": {
+            "name": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "modules": {},
             "classes": {
                 "layerSearchCtrl": 1
@@ -93,36 +93,36 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js": {
-            "name": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+        "../js/assets/controllers/querier/querierPanelCtrl.js": {
+            "name": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\framework\\angular\\angular-simple-logger.js": {
-            "name": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+        "../js/assets/framework/angular/angular-simple-logger.js": {
+            "name": "../js/assets/framework/angular/angular-simple-logger.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\framework\\javeline\\javeline_xpath.js": {
-            "name": "..\\js\\assets\\framework\\javeline\\javeline_xpath.js",
+        "../js/assets/framework/javeline/javeline_xpath.js": {
+            "name": "../js/assets/framework/javeline/javeline_xpath.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\framework\\slick\\slick.js": {
-            "name": "..\\js\\assets\\framework\\slick\\slick.js",
+        "../js/assets/framework/slick/slick.js": {
+            "name": "../js/assets/framework/slick/slick.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js": {
-            "name": "..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js",
+        "../js/assets/modules/service/analytic/D3PlotService.js": {
+            "name": "../js/assets/modules/service/analytic/D3PlotService.js",
             "modules": {
                 "analytic": 1
             },
@@ -132,8 +132,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js": {
-            "name": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+        "../js/assets/modules/service/http/GetCSWRecordService.js": {
+            "name": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "modules": {
                 "http": 1
             },
@@ -143,8 +143,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\http\\GetFilterParamService.js": {
-            "name": "..\\js\\assets\\modules\\service\\http\\GetFilterParamService.js",
+        "../js/assets/modules/service/http/GetFilterParamService.js": {
+            "name": "../js/assets/modules/service/http/GetFilterParamService.js",
             "modules": {},
             "classes": {
                 "GetFilterParamService": 1
@@ -152,8 +152,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js": {
-            "name": "..\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+        "../js/assets/modules/service/http/GetWFSRelatedService.js": {
+            "name": "../js/assets/modules/service/http/GetWFSRelatedService.js",
             "modules": {},
             "classes": {
                 "GetWFSRelatedService": 1
@@ -161,8 +161,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js": {
-            "name": "..\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+        "../js/assets/modules/service/http/GetWMSRelatedService.js": {
+            "name": "../js/assets/modules/service/http/GetWMSRelatedService.js",
             "modules": {},
             "classes": {
                 "GetWMSRelatedService": 1
@@ -170,8 +170,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\http\\StyleService.js": {
-            "name": "..\\js\\assets\\modules\\service\\http\\StyleService.js",
+        "../js/assets/modules/service/http/StyleService.js": {
+            "name": "../js/assets/modules/service/http/StyleService.js",
             "modules": {},
             "classes": {
                 "StyleService": 1
@@ -179,8 +179,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+        "../js/assets/modules/service/layer/queriers/NVCLService.js": {
+            "name": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "modules": {},
             "classes": {
                 "NVCLService": 1
@@ -188,8 +188,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+        "../js/assets/modules/service/layer/queriers/QuerierPanelService.js": {
+            "name": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "modules": {},
             "classes": {
                 "QuerierPanelService": 1
@@ -197,8 +197,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js",
+        "../js/assets/modules/service/layer/renderers/wfs/WFSService.js": {
+            "name": "../js/assets/modules/service/layer/renderers/wfs/WFSService.js",
             "modules": {},
             "classes": {
                 "WFSService": 1
@@ -206,8 +206,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\CapdfWMSService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\CapdfWMSService.js",
+        "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js": {
+            "name": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
             "modules": {},
             "classes": {
                 "CapdfWMSService": 1
@@ -215,8 +215,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js",
+        "../js/assets/modules/service/layer/renderers/wms/WMSService.js": {
+            "name": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
             "modules": {},
             "classes": {
                 "WMSService": 1
@@ -224,8 +224,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_1_0_Service.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_1_0_Service.js",
+        "../js/assets/modules/service/layer/renderers/wms/WMS_1_1_0_Service.js": {
+            "name": "../js/assets/modules/service/layer/renderers/wms/WMS_1_1_0_Service.js",
             "modules": {},
             "classes": {
                 "WMS_1_1_0_Service": 1
@@ -233,8 +233,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_3_0_Service.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_3_0_Service.js",
+        "../js/assets/modules/service/layer/renderers/wms/WMS_1_3_0_Service.js": {
+            "name": "../js/assets/modules/service/layer/renderers/wms/WMS_1_3_0_Service.js",
             "modules": {},
             "classes": {
                 "WMS_1_3_0_Service": 1
@@ -242,8 +242,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderHandlerService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderHandlerService.js",
+        "../js/assets/modules/service/layer/renderers/RenderHandlerService.js": {
+            "name": "../js/assets/modules/service/layer/renderers/RenderHandlerService.js",
             "modules": {},
             "classes": {
                 "RenderHandlerService": 1
@@ -251,8 +251,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+        "../js/assets/modules/service/layer/renderers/RenderStatusService.js": {
+            "name": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "modules": {},
             "classes": {
                 "RenderStatusService": 1
@@ -260,8 +260,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+        "../js/assets/modules/service/layer/FilterStateService.js": {
+            "name": "../js/assets/modules/service/layer/FilterStateService.js",
             "modules": {
                 "layer": 1
             },
@@ -271,8 +271,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js": {
-            "name": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+        "../js/assets/modules/service/layer/LayerManagerService.js": {
+            "name": "../js/assets/modules/service/layer/LayerManagerService.js",
             "modules": {},
             "classes": {
                 "LayerManagerService": 1
@@ -280,8 +280,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js": {
-            "name": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+        "../js/assets/modules/service/map/GoogleMapService.js": {
+            "name": "../js/assets/modules/service/map/GoogleMapService.js",
             "modules": {
                 "map": 1
             },
@@ -291,8 +291,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js": {
-            "name": "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js",
+        "../js/assets/modules/service/map/PreviewMapService.js": {
+            "name": "../js/assets/modules/service/map/PreviewMapService.js",
             "modules": {},
             "classes": {
                 "PreviewMapService": 1
@@ -300,8 +300,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js": {
-            "name": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+        "../js/assets/modules/service/utility/GMLParserService.js": {
+            "name": "../js/assets/modules/service/utility/GMLParserService.js",
             "modules": {
                 "utility": 1
             },
@@ -311,15 +311,15 @@
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js": {
-            "name": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+        "../js/assets/modules/service/utility/SimpleXMLService.js": {
+            "name": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js": {
-            "name": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+        "../js/assets/modules/service/utility/UtilitiesService.js": {
+            "name": "../js/assets/modules/service/utility/UtilitiesService.js",
             "modules": {},
             "classes": {
                 "SimpleXPathService": 1
@@ -348,7 +348,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 1,
             "description": "capdfHydrogeochemCtrl class used for capdf hydrogeochem controller. This controller sits under loadAnalyticCtrl",
             "extends": "loadAnalyticCtrl",
@@ -369,7 +369,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js",
+            "file": "../js/assets/modules/service/analytic/D3PlotService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
         },
@@ -387,7 +387,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "..\\js\\assets\\modules\\service\\http\\StyleService.js",
+            "file": "../js/assets/modules/service/http/StyleService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
         },
@@ -404,7 +404,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 1,
             "description": "FilterStateService user to store and extract the state of the filters and change the state of the filters"
         },
@@ -426,7 +426,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "file": "../js/assets/modules/service/map/PreviewMapService.js",
             "line": 1,
             "description": "Service class related to handling all things related to google map.",
             "itemtype": "event"
@@ -442,7 +442,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 3,
             "description": "GMLParserService handles the parsing of GML documents"
         }
@@ -458,7 +458,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 1,
             "description": "capdfHydrogeochemCtrl class used for capdf hydrogeochem controller. This controller sits under loadAnalyticCtrl",
             "extends": "loadAnalyticCtrl"
@@ -473,7 +473,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\analytics\\defaultAnalyticCtrl.js",
+            "file": "../js/assets/controllers/analytics/defaultAnalyticCtrl.js",
             "line": 1,
             "description": "defaultAnalyticCtrl class used to add analytic to the main map"
         },
@@ -487,7 +487,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\analytics\\loadAnalyticCtrl.js",
+            "file": "../js/assets/controllers/analytics/loadAnalyticCtrl.js",
             "line": 1,
             "description": "loadAnalyticCtrl class used to draw the analytic panel for the layer"
         },
@@ -501,7 +501,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\analytics\\pressureDbCtrl.js",
+            "file": "../js/assets/controllers/analytics/pressureDbCtrl.js",
             "line": 1,
             "description": "pressureDbCtrl class used for pressuredb-borehole controller. This controller sits under loadAnalyticCtrl",
             "extends": "loadAnalyticCtrl"
@@ -516,7 +516,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 1,
             "description": "loadFilterCtrl class used to draw the filter panel for the layer reports"
         },
@@ -530,7 +530,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+            "file": "../js/assets/controllers/googlemap/googleMapCtrl.js",
             "line": 1,
             "description": "googleMapCtrl class initialises the Google map used to display the main map"
         },
@@ -544,7 +544,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+            "file": "../js/assets/controllers/info/collapseInfoPanelCtrl.js",
             "line": 1,
             "description": "collapseInfoPanelCtrl class holds state and manipulates the preview map of the collapsible information panels"
         },
@@ -558,7 +558,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\info\\infoPanelCtrl.js",
+            "file": "../js/assets/controllers/info/infoPanelCtrl.js",
             "line": 1,
             "description": "infoPanelCtrl class handles rendering of left hand side information panels"
         },
@@ -572,7 +572,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
             "line": 1,
             "description": "layerPanelCtrl class handles rendering of left hand side layer reports"
         },
@@ -586,7 +586,7 @@
             "extension_for": [],
             "module": "controllers",
             "namespace": "",
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 1,
             "description": "layerSearchCtrl class handles searching layers based on user keywords"
         },
@@ -600,7 +600,7 @@
             "extension_for": [],
             "module": "analytic",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js",
+            "file": "../js/assets/modules/service/analytic/D3PlotService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
         },
@@ -614,7 +614,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http cswrecords"
         },
@@ -628,7 +628,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\http\\GetFilterParamService.js",
+            "file": "../js/assets/modules/service/http/GetFilterParamService.js",
             "line": 1,
             "description": "Service class related to handling all things related to making http filter parameter option"
         },
@@ -642,7 +642,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+            "file": "../js/assets/modules/service/http/GetWFSRelatedService.js",
             "line": 1,
             "description": "All things related to making http wfs request such as get feature"
         },
@@ -656,7 +656,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+            "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
             "line": 1,
             "description": "All things related to making http wms request such as get style, get legend etc"
         },
@@ -670,7 +670,7 @@
             "extension_for": [],
             "module": "http",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\http\\StyleService.js",
+            "file": "../js/assets/modules/service/http/StyleService.js",
             "line": 1,
             "description": "Service class used to fetch style information for layer (and legend) styling"
         },
@@ -684,7 +684,7 @@
             "extension_for": [],
             "module": "layer",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 1,
             "description": "NVCLService handles extraction of information from NVCL service."
         },
@@ -698,7 +698,7 @@
             "extension_for": [],
             "module": "layer",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 1,
             "description": "QuerierPanelService handles layer manipulation and extraction of information from the layer/csw records.\nTo use this class you must first call 'registerPanel'."
         },
@@ -712,7 +712,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wfs/WFSService.js",
             "line": 1,
             "description": "WFSService handles rendering of all wfs layers onto the map"
         },
@@ -726,7 +726,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\CapdfWMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
             "line": 1,
             "description": "CapdfWMSService handles rendering of all capdf layers onto the map. A custom wms renderer is require because capdf\ngets it layer name from user input parameter and not based on the default csw selection"
         },
@@ -740,7 +740,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
             "line": 1,
             "description": "WMSService handles rendering of all wms layers onto the map"
         },
@@ -754,7 +754,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_1_0_Service.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMS_1_1_0_Service.js",
             "line": 1,
             "description": "WMSService handles rendering of all wms layers onto the map"
         },
@@ -768,7 +768,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_3_0_Service.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMS_1_3_0_Service.js",
             "line": 1,
             "description": "WMSService handles rendering of all wms layers onto the map"
         },
@@ -782,7 +782,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderHandlerService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderHandlerService.js",
             "line": 1,
             "description": "Service class used for handling all layer rendering related methods"
         },
@@ -796,7 +796,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 1,
             "description": "Service class used for managing and tracking the status of the layer rendering"
         },
@@ -810,7 +810,7 @@
             "extension_for": [],
             "module": "layer",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 1,
             "description": "FilterStateService user to store and extract the state of the filters and change the state of the filters"
         },
@@ -824,7 +824,7 @@
             "extension_for": [],
             "module": "layer",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 1,
             "description": "LayerManagerService handles layer manipulation and extraction of information from the layer/csw records"
         },
@@ -838,7 +838,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 1,
             "description": "Service class related to handling all things related to google map."
         },
@@ -852,7 +852,7 @@
             "extension_for": [],
             "module": "map",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "file": "../js/assets/modules/service/map/PreviewMapService.js",
             "line": 1,
             "description": "Service class for creating and manipulating the layer report preview map"
         },
@@ -866,7 +866,7 @@
             "extension_for": [],
             "module": "utility",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 1,
             "description": "GMLParserService handles the parsing of GML documents"
         },
@@ -880,7 +880,7 @@
             "extension_for": [],
             "module": "utility",
             "namespace": "",
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 3,
             "description": "SimpleXPathService handles xml file manipulation."
         }
@@ -888,7 +888,7 @@
     "elements": {},
     "classitems": [
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 25,
             "description": "Sets the value displayed in the parameter dropdown selector",
             "itemtype": "method",
@@ -907,7 +907,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 38,
             "description": "Sets the value displayed in the group dropdown selector for map filter",
             "itemtype": "method",
@@ -926,7 +926,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 51,
             "description": "Sets the value displayed in the group dropdown selector for graph",
             "itemtype": "method",
@@ -945,7 +945,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 64,
             "description": "Sets the value displayed in the x-axis dropdown selector",
             "itemtype": "method",
@@ -964,7 +964,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 77,
             "description": "Sets the value displayed in the y-axis dropdown selector",
             "itemtype": "method",
@@ -983,7 +983,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 104,
             "description": "Adds layer to the map",
             "itemtype": "method",
@@ -992,7 +992,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 113,
             "description": "register event when user start to select data on map",
             "itemtype": "method",
@@ -1001,7 +1001,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 121,
             "description": "register event when user selection ends",
             "itemtype": "method",
@@ -1010,7 +1010,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 130,
             "description": "retrieve grouping for dropdown",
             "itemtype": "method",
@@ -1019,7 +1019,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 146,
             "description": "get parameter based on group",
             "itemtype": "method",
@@ -1028,7 +1028,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 163,
             "description": "Cosmetically change the label display on the drop down",
             "itemtype": "method",
@@ -1037,7 +1037,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 177,
             "description": "Render the slider widget",
             "itemtype": "method",
@@ -1046,7 +1046,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 210,
             "description": "Run the color code request",
             "itemtype": "method",
@@ -1055,7 +1055,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 224,
             "description": "Request to start the drawing process for bounding box selection",
             "itemtype": "method",
@@ -1064,7 +1064,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 232,
             "description": "Performs a box plot in the panel",
             "itemtype": "method",
@@ -1079,7 +1079,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\capdfHydrogeochemCtrl.js",
+            "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
             "line": 267,
             "description": "Performs a scatter plot in the panel",
             "itemtype": "method",
@@ -1094,7 +1094,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\loadAnalyticCtrl.js",
+            "file": "../js/assets/controllers/analytics/loadAnalyticCtrl.js",
             "line": 9,
             "description": "A function which returns the URL used to load the analytic panel",
             "itemtype": "method",
@@ -1103,7 +1103,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\analytics\\pressureDbCtrl.js",
+            "file": "../js/assets/controllers/analytics/pressureDbCtrl.js",
             "line": 35,
             "description": "Sets the value displayed in the property dropdown selector and updates '$scope.param'\nto trigger the slider below",
             "itemtype": "method",
@@ -1118,7 +1118,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 40,
             "description": "Moves this layer to the front if obscure",
             "itemtype": "method",
@@ -1133,7 +1133,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 49,
             "description": "Returns true if this layer is in front of all other layers",
             "itemtype": "method",
@@ -1148,7 +1148,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 58,
             "description": "Returns true if and only if the current layer is WMS",
             "itemtype": "method",
@@ -1157,7 +1157,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 66,
             "description": "Returns true is the layer is active",
             "itemtype": "method",
@@ -1172,7 +1172,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 76,
             "description": "Sets the value displayed in the optional dropdown selector",
             "itemtype": "method",
@@ -1187,7 +1187,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 86,
             "description": "Sets the value displayed in the current mandatory dropdown selector",
             "itemtype": "method",
@@ -1202,7 +1202,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 96,
             "description": "Forces a select operation on any one of the mandatory dropdown selectors",
             "itemtype": "method",
@@ -1221,7 +1221,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 129,
             "description": "Forces a select operation on any one of the optional dropdown selectors",
             "itemtype": "method",
@@ -1240,7 +1240,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 163,
             "description": "Sets the value displayed in the remote dropdown selector",
             "itemtype": "method",
@@ -1255,7 +1255,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 173,
             "description": "Assembles a list of providers, which will be displayed in the panel",
             "itemtype": "method",
@@ -1264,7 +1264,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 200,
             "description": "A function used to add a layer to the main map",
             "itemtype": "method",
@@ -1279,7 +1279,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 223,
             "description": "Adds a new filter to be displayed in the panel",
             "itemtype": "method",
@@ -1294,7 +1294,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 248,
             "description": "Removes all filters displayed in panel",
             "itemtype": "method",
@@ -1303,7 +1303,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 256,
             "description": "Returns the first key in options object",
             "itemtype": "method",
@@ -1318,7 +1318,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\filters\\loadFilterCtrl.js",
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
             "line": 266,
             "description": "Uses the input filter object to set the filter values",
             "itemtype": "method",
@@ -1334,7 +1334,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+            "file": "../js/assets/controllers/googlemap/googleMapCtrl.js",
             "line": 89,
             "description": "Turn on/off drawing of box on map for zooming/panning to an area",
             "itemtype": "method",
@@ -1343,7 +1343,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+            "file": "../js/assets/controllers/googlemap/googleMapCtrl.js",
             "line": 102,
             "description": "Alternately displays or hides the permanent link\nIf displaying it generates a new permanent link",
             "itemtype": "method",
@@ -1352,7 +1352,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+            "file": "../js/assets/controllers/googlemap/googleMapCtrl.js",
             "line": 141,
             "description": "Copies the generated URL to the local computer's clipboard for use by a paste operation",
             "itemtype": "method",
@@ -1361,7 +1361,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\googlemap\\googleMapCtrl.js",
+            "file": "../js/assets/controllers/googlemap/googleMapCtrl.js",
             "line": 159,
             "description": "Process the state parameter to the website's URL, panning,zooming and adding layers and markers as required etc.",
             "itemtype": "method",
@@ -1370,7 +1370,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+            "file": "../js/assets/controllers/info/collapseInfoPanelCtrl.js",
             "line": 11,
             "description": "Changes a rectangle in the preview map to a special highlighted colour",
             "itemtype": "method",
@@ -1389,7 +1389,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\info\\collapseInfoPanelCtrl.js",
+            "file": "../js/assets/controllers/info/collapseInfoPanelCtrl.js",
             "line": 22,
             "description": "Returns a rectangle on the preview map to the default non-highlighted colour",
             "itemtype": "method",
@@ -1408,11 +1408,48 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 29,
-            "description": "Returns true if this layer has anything to display",
+            "file": "../js/assets/controllers/info/infoPanelCtrl.js",
+            "line": 17,
+            "description": "Used to draw a layer/feature etc. on map using a csw record",
             "itemtype": "method",
-            "name": "canDisplay",
+            "name": "addCSWRecord",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "to be displayed"
+                },
+                {
+                    "name": "cswRecord",
+                    "description": "of layer to be displayed"
+                }
+            ],
+            "class": "infoPanelCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "../js/assets/controllers/info/infoPanelCtrl.js",
+            "line": 27,
+            "description": "Used to check if layer can be drawn on map (is supported)",
+            "itemtype": "method",
+            "name": "isSupportedLayer",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "returns true if the layer can be displayed on map"
+            },
+            "class": "infoPanelCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 29,
+            "description": "Returns true if this layer is available to be displayed on the map\ni.e. it has CSW records and is the correct type of layer",
+            "itemtype": "method",
+            "name": "isLayerAvailable",
             "params": [
                 {
                     "name": "layer",
@@ -1423,8 +1460,38 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 40,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 39,
+            "description": "Returns true if this layer is of a type that can be displayed",
+            "itemtype": "method",
+            "name": "isLayerSupported",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "layer object"
+                }
+            ],
+            "class": "layerPanelCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 48,
+            "description": "Returns true if this layer has CSW records",
+            "itemtype": "method",
+            "name": "layerHasData",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "layer object"
+                }
+            ],
+            "class": "layerPanelCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 57,
             "description": "Returns true if there have been recent service disruptions in this layer",
             "itemtype": "method",
             "name": "hasWarningMessage",
@@ -1441,8 +1508,8 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 50,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 67,
             "description": "Returns the list of providers whose service has been disrupted",
             "itemtype": "method",
             "name": "getDisruptedProviders",
@@ -1459,8 +1526,8 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 85,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 102,
             "description": "remove the cswLayer",
             "itemtype": "method",
             "name": "removeLayer",
@@ -1474,8 +1541,8 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 94,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 111,
             "itemtype": "method",
             "name": "getCswRecords",
             "return": {
@@ -1485,8 +1552,8 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 104,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 121,
             "itemtype": "method",
             "name": "togglePanels",
             "params": [
@@ -1507,8 +1574,8 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 157,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 174,
             "itemtype": "method",
             "name": "toggleLayers",
             "params": [
@@ -1525,8 +1592,8 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 177,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 194,
             "description": "Used to register the last group in the panel\nThis helps us know when the panel filter initialisation is complete",
             "itemtype": "method",
             "name": "lastGroupFn",
@@ -1540,8 +1607,8 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerPanelCtrl.js",
-            "line": 187,
+            "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
+            "line": 204,
             "description": "Used to register the layer id of the last layer in the panel\nThis enables us to know when panel filter initialisation is complete",
             "itemtype": "method",
             "name": "lastLayerFn",
@@ -1559,7 +1626,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 10,
             "description": "This is triggered after the user types inside the search text field and press enter.\nIt will search through all known layers CSW records name and description that matches the keywords.\nIt will then show the layer panel with search results or all layers if no keyword is entered.",
             "itemtype": "method",
@@ -1568,7 +1635,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 22,
             "description": "This will clear all search selection",
             "itemtype": "method",
@@ -1577,7 +1644,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 34,
             "description": "This will filter data record",
             "itemtype": "method",
@@ -1586,7 +1653,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 44,
             "description": "This will filter image record",
             "itemtype": "method",
@@ -1595,7 +1662,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 54,
             "description": "This will filter active record",
             "itemtype": "method",
@@ -1604,7 +1671,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\layer\\layerSearchCtrl.js",
+            "file": "../js/assets/controllers/layer/layerSearchCtrl.js",
             "line": 64,
             "description": "This will filter active record",
             "itemtype": "method",
@@ -1613,7 +1680,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 28,
             "description": "Used to initialise the controller.",
             "itemtype": "method",
@@ -1628,7 +1695,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 40,
             "itemtype": "method",
             "name": "resetTree",
@@ -1642,7 +1709,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 52,
             "description": "Used to display XML in tree form in the panel, calls parse() function\nPassed to 'QuerierPanelService' as a parameter, then called by 'QuerierPanelService'\nIt is possible for node to be passed in as a feature node or the whole collection. We attempt to be smart\nby assuming it is a feature collection and if it fails, we assume it to be a feature node.",
             "itemtype": "method",
@@ -1668,7 +1735,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 150,
             "description": "This is called from the Angular HTML template. It parses the XML tree,\ncreating a JSON representation which is passed in to create a tree view\nvia the \"$scope.JSONTreeStruct[]\" array",
             "itemtype": "method",
@@ -1683,7 +1750,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 215,
             "description": "Used to open and close the panel. \nPassed to 'QuerierPanelService' as a parameter, then called by 'QuerierPanelService'",
             "itemtype": "method",
@@ -1702,7 +1769,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 229,
             "description": "Sets the images for the carousel",
             "itemtype": "method",
@@ -1717,7 +1784,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 249,
             "description": "Resets the carousel when the panel closes",
             "itemtype": "method",
@@ -1732,7 +1799,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\controllers\\querier\\querierPanelCtrl.js",
+            "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
             "line": 261,
             "description": "Controls the display of the spinner to let user know the carousel is loading",
             "itemtype": "method",
@@ -1747,35 +1814,35 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 141,
             "description": "This is the web browser implementation of `debug()`.\n\nExpose `debug()` as the module.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 158,
             "description": "Colors.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 171,
             "description": "Currently only WebKit-based Web Inspectors, Firefox >= v31,\nand the Firebug extension (any Firefox version) are known\nto support \"%c\" CSS customizations.\n\nTODO: add a `localStorage` variable to explicitly enable/disable colors",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 189,
             "description": "Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 198,
             "description": "Colorize log arguments if enabled.",
             "api": "public",
@@ -1783,7 +1850,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 239,
             "description": "Invokes `console.log()` when available.\nNo-op when `console.log` is not a \"function\".",
             "api": "public",
@@ -1791,7 +1858,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 254,
             "description": "Save `namespaces`.",
             "params": [
@@ -1806,7 +1873,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 271,
             "description": "Load `namespaces`.",
             "return": {
@@ -1818,14 +1885,14 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 286,
             "description": "Enable namespaces listed in `localStorage.debug` initially.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 292,
             "description": "Localstorage attempts to return the localstorage.\n\nThis is necessary because safari throws\nwhen a user disables cookies/localstorage\nand you attempt to access it.",
             "return": {
@@ -1837,42 +1904,42 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 311,
             "description": "This is the common logic for both the Node.js and web browser\nimplementations of `debug()`.\n\nExpose `debug()` as the module.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 325,
             "description": "The currently active debug mode names, and names to skip.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 332,
             "description": "Map of special \"%n\" handling functions, for the debug \"format\" argument.\n\nValid key names are a single, lowercased letter, i.e. \"n\".",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 340,
             "description": "Previously assigned color.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 346,
             "description": "Previous log timestamp.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 352,
             "description": "Select a color.",
             "return": {
@@ -1884,7 +1951,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 363,
             "description": "Create a debugger with the given `namespace`.",
             "params": [
@@ -1903,7 +1970,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 437,
             "description": "Enables a debug mode by namespaces. This can include modes\nseparated by a colon and wildcards.",
             "params": [
@@ -1918,7 +1985,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 462,
             "description": "Disable debug output.",
             "api": "public",
@@ -1926,7 +1993,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 472,
             "description": "Returns true if the given mode name is enabled, false otherwise.",
             "params": [
@@ -1945,7 +2012,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 495,
             "description": "Coerce `val`.",
             "params": [
@@ -1964,14 +2031,14 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 509,
             "description": "Helpers.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 519,
             "description": "Parse or format the given `val`.\n\nOptions:\n\n - `long` verbose formatting [false]",
             "params": [
@@ -1995,7 +2062,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 540,
             "description": "Parse the given `str` and return milliseconds.",
             "params": [
@@ -2014,7 +2081,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 593,
             "description": "Short format for `ms`.",
             "params": [
@@ -2033,7 +2100,7 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 609,
             "description": "Long format for `ms`.",
             "params": [
@@ -2052,35 +2119,35 @@
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\angular\\angular-simple-logger.js",
+            "file": "../js/assets/framework/angular/angular-simple-logger.js",
             "line": 625,
             "description": "Pluralization helper.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\javeline\\javeline_xpath.js",
+            "file": "../js/assets/framework/javeline/javeline_xpath.js",
             "line": 1,
             "description": "Workaround for the lack of having an XPath parser on safari\nIt works on Safari's document and XMLDocument object.\n\nIt doesn't support the full XPath spec, but just enought for\nthe skinning engine which needs XPath on the HTML document.\n\nSupports:\n- Compilation of xpath statements\n- Caching of XPath statements",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\slick\\slick.js",
+            "file": "../js/assets/framework/slick/slick.js",
             "line": 1672,
             "description": "try to load the image 3 times,\nleave a slight delay so we don't get\nservers blocking the request.",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\framework\\slick\\slick.js",
+            "file": "../js/assets/framework/slick/slick.js",
             "line": 1999,
             "description": "accepts arguments in format of:\n\n - for changing a single option's value:\n    .slick(\"setOption\", option, value, refresh )\n\n - for changing a set of responsive options:\n    .slick(\"setOption\", 'responsive', [{}, ...], refresh )\n\n - for updating multiple values at once (not responsive)\n    .slick(\"setOption\", { 'option': value, ... }, refresh )",
             "class": "D3PlotService",
             "module": "controllers"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js",
+            "file": "../js/assets/modules/service/analytic/D3PlotService.js",
             "line": 9,
             "description": "Plot a scatter plot graph into the divId selected",
             "itemtype": "method",
@@ -2111,7 +2178,7 @@
             "module": "analytic"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js",
+            "file": "../js/assets/modules/service/analytic/D3PlotService.js",
             "line": 150,
             "description": "Plot a boxPlot graph into the divId selected",
             "itemtype": "method",
@@ -2142,7 +2209,7 @@
             "module": "analytic"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js",
+            "file": "../js/assets/modules/service/analytic/D3PlotService.js",
             "line": 358,
             "description": "Clear the div of any graph plotting",
             "params": [
@@ -2155,7 +2222,7 @@
             "module": "analytic"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 13,
             "description": "Retrieve knownlayer csw records async",
             "itemtype": "method",
@@ -2167,7 +2234,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 40,
             "description": "Search knownlayer csw records name and description with supplied keywords",
             "itemtype": "method",
@@ -2176,7 +2243,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 76,
             "description": "Filter out all WMS layer",
             "itemtype": "method",
@@ -2185,7 +2252,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 112,
             "description": "Filter out all WMS layer",
             "itemtype": "method",
@@ -2194,7 +2261,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 150,
             "description": "Filter out all Active layer",
             "itemtype": "method",
@@ -2203,7 +2270,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 172,
             "description": "Filter out all analytic layer",
             "itemtype": "method",
@@ -2212,7 +2279,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetCSWRecordService.js",
+            "file": "../js/assets/modules/service/http/GetCSWRecordService.js",
             "line": 195,
             "description": "Return csw records to be displayed in the layer panel.",
             "itemtype": "method",
@@ -2224,7 +2291,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetFilterParamService.js",
+            "file": "../js/assets/modules/service/http/GetFilterParamService.js",
             "line": 26,
             "description": "Retrieve knownlayer csw records async",
             "itemtype": "method",
@@ -2236,7 +2303,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetWFSRelatedService.js",
+            "file": "../js/assets/modules/service/http/GetWFSRelatedService.js",
             "line": 9,
             "description": "Make a get wfs request",
             "itemtype": "method",
@@ -2262,7 +2329,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+            "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
             "line": 39,
             "description": "Get the wms style url if proxyStyleUrl is valid",
             "itemtype": "method",
@@ -2288,7 +2355,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+            "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
             "line": 58,
             "description": "Get the wms style if proxyStyleUrl is valid",
             "itemtype": "method",
@@ -2314,7 +2381,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\GetWMSRelatedService.js",
+            "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
             "line": 96,
             "itemtype": "method",
             "name": "getWMSMarkerInfo",
@@ -2340,7 +2407,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\http\\StyleService.js",
+            "file": "../js/assets/modules/service/http/StyleService.js",
             "line": 9,
             "itemtype": "method",
             "name": "getLegendStyle",
@@ -2351,7 +2418,7 @@
             "module": "http"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 11,
             "description": "Decomposes a 'normal' URL in the form http://url.com/long/path/name to just its prefix + hostname http://url.com",
             "itemtype": "method",
@@ -2366,7 +2433,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 22,
             "description": "Given a online reseource URL it returns its NVCL URL",
             "itemtype": "method",
@@ -2384,7 +2451,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 39,
             "description": "Returns a list of logids, used when referring to the core sample for various services",
             "itemtype": "method",
@@ -2403,7 +2470,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 56,
             "description": "Returns URL of image carousel",
             "itemtype": "method",
@@ -2429,7 +2496,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 68,
             "description": "Returns URL of image thumbnail",
             "itemtype": "method",
@@ -2451,7 +2518,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 81,
             "description": "Calls up NVCL services to get the depths for each core tray image",
             "itemtype": "method",
@@ -2470,7 +2537,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js",
+            "file": "../js/assets/modules/service/layer/queriers/NVCLService.js",
             "line": 96,
             "description": "Return some HTML which displays a carousel of core images",
             "itemtype": "method",
@@ -2493,7 +2560,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 13,
             "itemtype": "method",
             "name": "registerMap",
@@ -2507,7 +2574,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 89,
             "description": "Returns true iff all elements in array are true else false",
             "itemtype": "method",
@@ -2522,7 +2589,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 103,
             "description": "Register the panel by passing in some querier panel controller functions.",
             "itemtype": "method",
@@ -2541,7 +2608,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 126,
             "description": "Opens the query panel",
             "itemtype": "method",
@@ -2556,7 +2623,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 138,
             "description": "Closes the query panel",
             "itemtype": "method",
@@ -2571,7 +2638,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 154,
             "description": "Set the XML string to be displayed on the panel",
             "itemtype": "method",
@@ -2601,7 +2668,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 168,
             "description": "Disable click events on the map layer to prevent opening up of the query panel\nThis should be called after the layer has been deleted from the map",
             "itemtype": "method",
@@ -2616,7 +2683,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\queriers\\QuerierPanelService.js",
+            "file": "../js/assets/modules/service/layer/queriers/QuerierPanelService.js",
             "line": 190,
             "description": "Registers the mapEventListener object and onlineResource object\nThis should be called after the 'mousedown' event is registered with the google map.",
             "itemtype": "method",
@@ -2643,7 +2710,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wfs/WFSService.js",
             "line": 10,
             "description": "Render a point data to the map",
             "itemtype": "method",
@@ -2662,7 +2729,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wfs/WFSService.js",
             "line": 45,
             "description": "Render a LINESTRING data to the map",
             "itemtype": "method",
@@ -2681,7 +2748,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wfs/WFSService.js",
             "line": 55,
             "description": "Render a POLYGON data to the map",
             "itemtype": "method",
@@ -2700,7 +2767,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wfs/WFSService.js",
             "line": 65,
             "description": "Method to decide how the wfs layer should be rendered and add the wfs to the map",
             "itemtype": "method",
@@ -2715,7 +2782,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wfs\\WFSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wfs/WFSService.js",
             "line": 119,
             "description": "Method to decide how the wfs resource should be rendered and add the wfs to the map",
             "itemtype": "method",
@@ -2730,7 +2797,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\CapdfWMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
             "line": 13,
             "description": "Generate wms 1.1.1 google.maps.ImageMapType layer",
             "itemtype": "method",
@@ -2752,7 +2819,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\CapdfWMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
             "line": 68,
             "description": "Generate wms 1.3 google.maps.ImageMapType layer",
             "itemtype": "method",
@@ -2774,7 +2841,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\CapdfWMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
             "line": 124,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
@@ -2797,7 +2864,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\CapdfWMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
             "line": 174,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
@@ -2816,7 +2883,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
             "line": 21,
             "description": "Look for img elements and add event handlers to them or timeout",
             "itemtype": "method",
@@ -2842,7 +2909,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
             "line": 73,
             "description": "Add layer to Google Map",
             "itemtype": "method",
@@ -2869,14 +2936,14 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
             "line": 129,
             "description": "Hack to override the getTile function to gain access to the underlying tile <div>s to monitor progress of layer loading\nNote that 'getTile' is also called every time the map pans, resizes etc.",
             "class": "WMSService",
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
             "line": 185,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
@@ -2895,7 +2962,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
             "line": 236,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
@@ -2914,7 +2981,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_1_0_Service.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMS_1_1_0_Service.js",
             "line": 13,
             "description": "Generate wms 1.1.1 google.maps.ImageMapType layer",
             "itemtype": "method",
@@ -2940,7 +3007,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMS_1_3_0_Service.js",
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMS_1_3_0_Service.js",
             "line": 10,
             "description": "Generate wms 1.3 google.maps.ImageMapType layer",
             "itemtype": "method",
@@ -2966,8 +3033,22 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderHandlerService.js",
-            "line": 11,
+            "file": "../js/assets/modules/service/layer/renderers/RenderHandlerService.js",
+            "line": 9,
+            "itemtype": "method",
+            "name": "isSupportedLayer",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "- layer that is being assessed for supportability"
+                }
+            ],
+            "class": "RenderHandlerService",
+            "module": "map"
+        },
+        {
+            "file": "../js/assets/modules/service/layer/renderers/RenderHandlerService.js",
+            "line": 17,
             "description": "Decides how to renders a layer automatically",
             "itemtype": "method",
             "name": "renderLayer",
@@ -2981,8 +3062,8 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderHandlerService.js",
-            "line": 40,
+            "file": "../js/assets/modules/service/layer/renderers/RenderHandlerService.js",
+            "line": 46,
             "description": "Decides how to renders a layer automatically",
             "itemtype": "method",
             "name": "renderCSWRecord",
@@ -3000,7 +3081,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 10,
             "itemtype": "method",
             "name": "getRenderStatus",
@@ -3011,7 +3092,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 18,
             "description": "Set the total number of request, used in progress bar",
             "itemtype": "method",
@@ -3030,7 +3111,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 33,
             "description": "capture and action on the status.update event.",
             "itemtype": "method",
@@ -3049,7 +3130,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 49,
             "description": "update the status of the rendering request",
             "itemtype": "method",
@@ -3072,7 +3153,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 86,
             "description": "Returns true if the status of the resource and layer matches the input status",
             "itemtype": "method",
@@ -3095,7 +3176,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 109,
             "description": "Clear the status when there is not use for it anymore or removed of layer.",
             "itemtype": "method",
@@ -3110,7 +3191,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\renderers\\RenderStatusService.js",
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 119,
             "description": "Check if the layer is still active",
             "itemtype": "method",
@@ -3125,7 +3206,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 25,
             "description": "Registers filter settings for a layer/markers that has just been added to map",
             "itemtype": "method",
@@ -3144,7 +3225,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 35,
             "description": "Deregisters filter (and opacity) settings for a layer/markers that has been deleted from map",
             "itemtype": "method",
@@ -3159,7 +3240,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 45,
             "description": "Returns an object that contains the current states of all the filters",
             "itemtype": "method",
@@ -3172,7 +3253,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 68,
             "description": "Registers the opacity value for a layer\nThis is called from the filter controller",
             "itemtype": "method",
@@ -3191,14 +3272,14 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 79,
             "description": "FIXME: ??is this used??",
             "class": "FilterStateService",
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 86,
             "description": "This function is used to register a function that will update the filter",
             "itemtype": "method",
@@ -3221,7 +3302,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 103,
             "description": "Used by a controller to register a callback function that will be called when the last filter has been registered",
             "itemtype": "method",
@@ -3236,7 +3317,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\FilterStateService.js",
+            "file": "../js/assets/modules/service/layer/FilterStateService.js",
             "line": 116,
             "description": "This calls the update function for a layer to update the visible part of the filter\nThis is called from the map service to setup the filters",
             "itemtype": "method",
@@ -3251,7 +3332,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 10,
             "description": "Retrieve WMS resource if available",
             "itemtype": "method",
@@ -3269,7 +3350,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 20,
             "description": "Retrieve WFS resource if available",
             "itemtype": "method",
@@ -3287,7 +3368,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 30,
             "description": "Retrieve WFS resource if available",
             "itemtype": "method",
@@ -3305,7 +3386,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 40,
             "description": "Retrieve WFS resource if available",
             "itemtype": "method",
@@ -3323,7 +3404,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 51,
             "description": "Retrieve the arrays of csw records from the layer",
             "itemtype": "method",
@@ -3341,7 +3422,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 61,
             "description": "Extract resources based on the type. If type is not defined, return all the resource",
             "itemtype": "method",
@@ -3363,7 +3444,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 92,
             "description": "Extract resources based on the type. If type is not defined, return all the resource",
             "itemtype": "method",
@@ -3385,7 +3466,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\layer\\LayerManagerService.js",
+            "file": "../js/assets/modules/service/layer/LayerManagerService.js",
             "line": 117,
             "description": "Check if resource exist in the cswRecord",
             "itemtype": "method",
@@ -3407,7 +3488,7 @@
             "module": "layer"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 29,
             "description": "Get an instance of the map",
             "itemtype": "method",
@@ -3419,7 +3500,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 38,
             "description": "Register a function to call once the Google Map has been initialised\nIf the map has already been initialised, then the function is called \nimmediately",
             "itemtype": "method",
@@ -3434,7 +3515,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 53,
             "description": "Return the current bounds of the map",
             "itemtype": "method",
@@ -3446,7 +3527,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 62,
             "description": "Holds a array reference to the active markers on the map referenced by the layerId",
             "itemtype": "method",
@@ -3465,7 +3546,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 77,
             "description": "Check if the layer is still active. This reuses RenderStatusService.isLayerActive. Alternatively you can check\nthis.activeLayers[layerId]",
             "itemtype": "method",
@@ -3480,7 +3561,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 87,
             "description": "Overlay a heat map to the data set",
             "itemtype": "method",
@@ -3489,7 +3570,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 109,
             "description": "remove the heatmap overlay",
             "itemtype": "method",
@@ -3498,7 +3579,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 121,
             "description": "Holds a array reference to the active layers on the map referenced by the layerId",
             "itemtype": "method",
@@ -3517,7 +3598,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 140,
             "description": "Synchronises data structures used to keep track of Google 'overlayMapType' layers",
             "itemtype": "method",
@@ -3529,7 +3610,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 183,
             "description": "Searches for an 'overlayMap' within the current main map",
             "itemtype": "method",
@@ -3547,7 +3628,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 199,
             "description": "Searches for a Google 'overlayMap' within the active layers returning its layer id",
             "itemtype": "method",
@@ -3565,7 +3646,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 216,
             "description": "Return the list of active layers",
             "itemtype": "method",
@@ -3577,7 +3658,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 225,
             "description": "Given a layer and an opacity, set the opacity of the layer",
             "itemtype": "method",
@@ -3596,7 +3677,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 242,
             "description": "Remove the layer if it is rendered on the map",
             "itemtype": "method",
@@ -3611,7 +3692,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 281,
             "description": "Initialize the map",
             "itemtype": "method",
@@ -3626,7 +3707,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 314,
             "description": "Fetches the state of the map in the form of a JSON string",
             "itemtype": "method",
@@ -3638,7 +3719,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 324,
             "description": "Sets the state of the map according to a JSON string",
             "itemtype": "method",
@@ -3653,7 +3734,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 338,
             "description": "Enable the drawing of rectangle and zooming to the area drawn",
             "itemtype": "method",
@@ -3662,7 +3743,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 380,
             "description": "event for cancellation of the drawing of rectangle and zooming to the area drawn",
             "itemtype": "method",
@@ -3671,7 +3752,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 392,
             "description": "event to capture the start of the draw zoom event",
             "itemtype": "method",
@@ -3690,7 +3771,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 404,
             "description": "event to capture the end of the draw zoom event",
             "itemtype": "method",
@@ -3709,7 +3790,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 417,
             "description": "Enable the drawing of bounding box for selecting data",
             "itemtype": "method",
@@ -3718,7 +3799,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 457,
             "description": "cancel the drawing of rectangle and data selection",
             "itemtype": "method",
@@ -3727,7 +3808,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 468,
             "description": "event to capture the start of the data selection event",
             "itemtype": "method",
@@ -3746,7 +3827,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 480,
             "description": "event to capture the end of the data selection event",
             "itemtype": "method",
@@ -3765,7 +3846,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 493,
             "description": "event to capture the removal of a layer",
             "itemtype": "method",
@@ -3784,7 +3865,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 505,
             "description": "event to capture the adding of a layer",
             "itemtype": "method",
@@ -3803,7 +3884,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 517,
             "description": "Broadcasts an event to all listeners via $rootScope",
             "itemtype": "method",
@@ -3822,7 +3903,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 527,
             "description": "Register a callback function belonging to the map controller that this service will call when told a busy period has started",
             "itemtype": "method",
@@ -3837,7 +3918,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 536,
             "description": "Register a callback function belonging to the map controller that this service will call when told that the busy period is over",
             "itemtype": "method",
@@ -3852,7 +3933,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 545,
             "description": "Function to set the map to busy, i.e. show a loading image",
             "itemtype": "method",
@@ -3861,7 +3942,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 556,
             "description": "Function to stop the map being busy, i.e. stop showing a loading image",
             "itemtype": "method",
@@ -3870,7 +3951,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 568,
             "description": "Moves layer to the front of the map layers",
             "itemtype": "method",
@@ -3885,7 +3966,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\GoogleMapService.js",
+            "file": "../js/assets/modules/service/map/GoogleMapService.js",
             "line": 591,
             "description": "Returns true if a layer is at the front of the map layers",
             "itemtype": "method",
@@ -3903,7 +3984,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "file": "../js/assets/modules/service/map/PreviewMapService.js",
             "line": 13,
             "description": "Retrieve knownlayer csw records async",
             "itemtype": "method",
@@ -3927,7 +4008,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "file": "../js/assets/modules/service/map/PreviewMapService.js",
             "line": 48,
             "description": "tile loaded event, adds the grey bounding boxes to show the effective range of the layers",
             "itemtype": "event",
@@ -3942,7 +4023,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "file": "../js/assets/modules/service/map/PreviewMapService.js",
             "line": 76,
             "description": "If the user clicks on a bounding box in the preview map then the main map will zoom and pan to the box",
             "itemtype": "event",
@@ -3951,7 +4032,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\map\\PreviewMapService.js",
+            "file": "../js/assets/modules/service/map/PreviewMapService.js",
             "line": 93,
             "itemtype": "method",
             "name": "setBBoxOptions",
@@ -3974,7 +4055,7 @@
             "module": "map"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 9,
             "description": "Get rootnode from a gml string",
             "itemtype": "method",
@@ -3992,7 +4073,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 20,
             "description": "create a point object",
             "itemtype": "method",
@@ -4014,7 +4095,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 36,
             "description": "Create line string objects in a array",
             "itemtype": "method",
@@ -4036,7 +4117,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 56,
             "description": "Get the srs name",
             "itemtype": "method",
@@ -4054,7 +4135,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 76,
             "description": "Forces lon/lat coords into coords (an array). Swaps coords[offset] and coords[offset + 1] if srsName requires it",
             "itemtype": "method",
@@ -4077,7 +4158,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 103,
             "description": "Create line string objects in a array",
             "itemtype": "method",
@@ -4103,7 +4184,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 137,
             "description": "Given a root placemark node attempt to parse it as a single point and return it. Returns a single portal.map.primitives.Polygon",
             "itemtype": "method",
@@ -4129,7 +4210,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 173,
             "description": "Given a root placemark node attempt to parse it as a single point and return it.Returns a single portal.map.primitives.Marker",
             "itemtype": "method",
@@ -4159,7 +4240,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 209,
             "description": "Returns the feature count as reported by the WFS response. Returns null if the count cannot be parsed.",
             "itemtype": "method",
@@ -4177,7 +4258,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\GMLParserService.js",
+            "file": "../js/assets/modules/service/utility/GMLParserService.js",
             "line": 229,
             "description": "Top level function  that organize how the gml should be parsed",
             "itemtype": "method",
@@ -4196,7 +4277,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 9,
             "description": "A wrapper around the DOM defined Document.evaluate function\nBecause not every browser supports document.evaluate we need to have a pure javascript\nbackup in place",
             "itemtype": "method",
@@ -4226,7 +4307,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 85,
             "description": "Evaluates an XPath which will return an array of W3C DOM nodes",
             "itemtype": "method",
@@ -4248,7 +4329,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 128,
             "description": "Utility for retrieving a W3C DOM Node 'localName' attribute across browsers.\nThe localName is the node name without any namespace prefixes",
             "itemtype": "method",
@@ -4266,7 +4347,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 141,
             "description": "Returns the set of classes this node belongs to as an array of strings",
             "itemtype": "method",
@@ -4284,7 +4365,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 158,
             "description": "Figure out if domNode is a leaf or not\n(Leaves have no nodes from XML_NODE_ELEMENT)",
             "itemtype": "method",
@@ -4302,7 +4383,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 175,
             "description": "Filters an array of DOM Nodes according to the specified parameters",
             "itemtype": "method",
@@ -4332,7 +4413,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 207,
             "description": "Gets all children of domNode as an Array that match the specified filter parameters",
             "itemtype": "method",
@@ -4354,7 +4435,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 218,
             "description": "Gets all Attributes of domNode as an Array that match the specified filter parameters",
             "itemtype": "method",
@@ -4376,7 +4457,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 234,
             "description": "Given a DOM node, return its text content (however the browser defines it)",
             "itemtype": "method",
@@ -4394,7 +4475,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\SimpleXMLService.js",
+            "file": "../js/assets/modules/service/utility/SimpleXMLService.js",
             "line": 246,
             "description": "Parse string to DOM",
             "itemtype": "method",
@@ -4412,7 +4493,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 11,
             "description": "Test if string s contains c",
             "itemtype": "method",
@@ -4431,7 +4512,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 21,
             "description": "Returns the parameter in a get url request",
             "itemtype": "method",
@@ -4451,7 +4532,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 84,
             "description": "Test if the object is empty",
             "itemtype": "method",
@@ -4469,7 +4550,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 104,
             "description": "Test if the object is a number",
             "itemtype": "method",
@@ -4485,7 +4566,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 114,
             "description": "Extract the domain from any url",
             "itemtype": "method",
@@ -4500,7 +4581,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 125,
             "description": "Based on the filter parameter, this is a utility to decide if we should skip this provider",
             "itemtype": "method",
@@ -4519,7 +4600,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 154,
             "description": "count the number of unique urls in onlineResources",
             "itemtype": "method",
@@ -4537,7 +4618,7 @@
             "module": "utility"
         },
         {
-            "file": "..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js",
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 172,
             "description": "Base64 encode / decode\n  http://www.webtoolkit.info/",
             "class": "SimpleXPathService",
@@ -4547,215 +4628,215 @@
     "warnings": [
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:198"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:198"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:239"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:239"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:254"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:254"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:271"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:271"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:292"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:292"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:352"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:352"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:363"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:363"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:437"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:437"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:462"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:462"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:472"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:472"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:495"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:495"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:519"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:519"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:540"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:540"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:593"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:593"
         },
         {
             "message": "unknown tag: api",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:609"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:609"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " ..\\js\\assets\\modules\\service\\http\\StyleService.js:9"
+            "line": " ../js/assets/modules/service/http/StyleService.js:9"
         },
         {
             "message": "unknown tag: datasetid",
-            "line": " ..\\js\\assets\\modules\\service\\layer\\queriers\\NVCLService.js:39"
+            "line": " ../js/assets/modules/service/layer/queriers/NVCLService.js:39"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " ..\\js\\assets\\modules\\service\\map\\GoogleMapService.js:199"
+            "line": " ../js/assets/modules/service/map/GoogleMapService.js:199"
         },
         {
             "message": "unknown tag: retun",
-            "line": " ..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js:104"
+            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:104"
         },
         {
             "message": "Missing item type\nThis is the web browser implementation of `debug()`.\n\nExpose `debug()` as the module.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:141"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:141"
         },
         {
             "message": "Missing item type\nColors.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:158"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:158"
         },
         {
             "message": "Missing item type\nCurrently only WebKit-based Web Inspectors, Firefox >= v31,\nand the Firebug extension (any Firefox version) are known\nto support \"%c\" CSS customizations.\n\nTODO: add a `localStorage` variable to explicitly enable/disable colors",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:171"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:171"
         },
         {
             "message": "Missing item type\nMap %j to `JSON.stringify()`, since no Web Inspectors do that by default.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:189"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:189"
         },
         {
             "message": "Missing item type\nColorize log arguments if enabled.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:198"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:198"
         },
         {
             "message": "Missing item type\nInvokes `console.log()` when available.\nNo-op when `console.log` is not a \"function\".",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:239"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:239"
         },
         {
             "message": "Missing item type\nSave `namespaces`.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:254"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:254"
         },
         {
             "message": "Missing item type\nLoad `namespaces`.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:271"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:271"
         },
         {
             "message": "Missing item type\nEnable namespaces listed in `localStorage.debug` initially.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:286"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:286"
         },
         {
             "message": "Missing item type\nLocalstorage attempts to return the localstorage.\n\nThis is necessary because safari throws\nwhen a user disables cookies/localstorage\nand you attempt to access it.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:292"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:292"
         },
         {
             "message": "Missing item type\nThis is the common logic for both the Node.js and web browser\nimplementations of `debug()`.\n\nExpose `debug()` as the module.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:311"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:311"
         },
         {
             "message": "Missing item type\nThe currently active debug mode names, and names to skip.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:325"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:325"
         },
         {
             "message": "Missing item type\nMap of special \"%n\" handling functions, for the debug \"format\" argument.\n\nValid key names are a single, lowercased letter, i.e. \"n\".",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:332"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:332"
         },
         {
             "message": "Missing item type\nPreviously assigned color.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:340"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:340"
         },
         {
             "message": "Missing item type\nPrevious log timestamp.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:346"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:346"
         },
         {
             "message": "Missing item type\nSelect a color.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:352"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:352"
         },
         {
             "message": "Missing item type\nCreate a debugger with the given `namespace`.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:363"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:363"
         },
         {
             "message": "Missing item type\nEnables a debug mode by namespaces. This can include modes\nseparated by a colon and wildcards.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:437"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:437"
         },
         {
             "message": "Missing item type\nDisable debug output.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:462"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:462"
         },
         {
             "message": "Missing item type\nReturns true if the given mode name is enabled, false otherwise.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:472"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:472"
         },
         {
             "message": "Missing item type\nCoerce `val`.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:495"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:495"
         },
         {
             "message": "Missing item type\nHelpers.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:509"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:509"
         },
         {
             "message": "Missing item type\nParse or format the given `val`.\n\nOptions:\n\n - `long` verbose formatting [false]",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:519"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:519"
         },
         {
             "message": "Missing item type\nParse the given `str` and return milliseconds.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:540"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:540"
         },
         {
             "message": "Missing item type\nShort format for `ms`.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:593"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:593"
         },
         {
             "message": "Missing item type\nLong format for `ms`.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:609"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:609"
         },
         {
             "message": "Missing item type\nPluralization helper.",
-            "line": " ..\\js\\assets\\framework\\angular\\angular-simple-logger.js:625"
+            "line": " ../js/assets/framework/angular/angular-simple-logger.js:625"
         },
         {
             "message": "Missing item type\nWorkaround for the lack of having an XPath parser on safari\nIt works on Safari's document and XMLDocument object.\n\nIt doesn't support the full XPath spec, but just enought for\nthe skinning engine which needs XPath on the HTML document.\n\nSupports:\n- Compilation of xpath statements\n- Caching of XPath statements",
-            "line": " ..\\js\\assets\\framework\\javeline\\javeline_xpath.js:1"
+            "line": " ../js/assets/framework/javeline/javeline_xpath.js:1"
         },
         {
             "message": "Missing item type\ntry to load the image 3 times,\nleave a slight delay so we don't get\nservers blocking the request.",
-            "line": " ..\\js\\assets\\framework\\slick\\slick.js:1672"
+            "line": " ../js/assets/framework/slick/slick.js:1672"
         },
         {
             "message": "Missing item type\naccepts arguments in format of:\n\n - for changing a single option's value:\n    .slick(\"setOption\", option, value, refresh )\n\n - for changing a set of responsive options:\n    .slick(\"setOption\", 'responsive', [{}, ...], refresh )\n\n - for updating multiple values at once (not responsive)\n    .slick(\"setOption\", { 'option': value, ... }, refresh )",
-            "line": " ..\\js\\assets\\framework\\slick\\slick.js:1999"
+            "line": " ../js/assets/framework/slick/slick.js:1999"
         },
         {
             "message": "Missing item type\nClear the div of any graph plotting",
-            "line": " ..\\js\\assets\\modules\\service\\analytic\\D3PlotService.js:358"
+            "line": " ../js/assets/modules/service/analytic/D3PlotService.js:358"
         },
         {
             "message": "Missing item type\nHack to override the getTile function to gain access to the underlying tile <div>s to monitor progress of layer loading\nNote that 'getTile' is also called every time the map pans, resizes etc.",
-            "line": " ..\\js\\assets\\modules\\service\\layer\\renderers\\wms\\WMSService.js:129"
+            "line": " ../js/assets/modules/service/layer/renderers/wms/WMSService.js:129"
         },
         {
             "message": "Missing item type\nFIXME: ??is this used??",
-            "line": " ..\\js\\assets\\modules\\service\\layer\\FilterStateService.js:79"
+            "line": " ../js/assets/modules/service/layer/FilterStateService.js:79"
         },
         {
             "message": "Missing item type\nBase64 encode / decode\n  http://www.webtoolkit.info/",
-            "line": " ..\\js\\assets\\modules\\service\\utility\\UtilitiesService.js:172"
+            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:172"
         }
     ]
 }

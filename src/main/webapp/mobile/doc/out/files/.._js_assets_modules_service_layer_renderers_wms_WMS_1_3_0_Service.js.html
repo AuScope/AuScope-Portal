@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>..\js\assets\modules\service\layer\renderers\wms\WMS_1_3_0_Service.js</title>
+    <title>../js/assets/modules/service/layer/renderers/wms/WMS_1_3_0_Service.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -112,7 +112,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: ..\js\assets\modules\service\layer\renderers\wms\WMS_1_3_0_Service.js</h1>
+<h1 class="file-heading">File: ../js/assets/modules/service/layer/renderers/wms/WMS_1_3_0_Service.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -161,7 +161,7 @@ allModules.service(&#x27;WMS_1_3_0_Service&#x27;,[&#x27;$rootScope&#x27;,&#x27;G
                 var bbox_4326 = bot.lat() + &quot;,&quot; + leftLng + &quot;,&quot; + top.lat() + &quot;,&quot; + rightLng;
                 
                 // BBOX in EPSG:3857
-                var bbox_3857 = bot3857[1] + &quot;,&quot; + top3857[0] + &quot;,&quot; + top3857[1] + &quot;,&quot; + bot3857[0];
+                var bbox_3857 = top3857[0] + &quot;,&quot; + bot3857[1] + &quot;,&quot; + bot3857[0] + &quot;,&quot; + top3857[1];
 
                 //VT: if the sld is too long, we will proxy the request via the server using httpPost
                 if (sldUrl) {

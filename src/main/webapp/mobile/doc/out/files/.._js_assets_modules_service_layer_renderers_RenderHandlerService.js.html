@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>..\js\assets\modules\service\layer\renderers\RenderHandlerService.js</title>
+    <title>../js/assets/modules/service/layer/renderers/RenderHandlerService.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -112,7 +112,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: ..\js\assets\modules\service\layer\renderers\RenderHandlerService.js</h1>
+<h1 class="file-heading">File: ../js/assets/modules/service/layer/renderers/RenderHandlerService.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -121,10 +121,16 @@
  * @class RenderHandlerService
  * 
  */
-allModules.service(&#x27;RenderHandlerService&#x27;,[&#x27;$rootScope&#x27;,&#x27;WMSService&#x27;,&#x27;WFSService&#x27;,&#x27;LayerManagerService&#x27;,&#x27;GoogleMapService&#x27;,&#x27;RenderStatusService&#x27;,&#x27;LayerManagerService&#x27;,&#x27;Constants&#x27;,&#x27;$injector&#x27;,
-                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService,RenderStatusService,LayerManagerService,Constants,$injector) {
+allModules.service(&#x27;RenderHandlerService&#x27;,[&#x27;$rootScope&#x27;,&#x27;WMSService&#x27;,&#x27;WFSService&#x27;,&#x27;LayerManagerService&#x27;,&#x27;GoogleMapService&#x27;,&#x27;RenderStatusService&#x27;,&#x27;Constants&#x27;,&#x27;$injector&#x27;,
+                                           function ($rootScope,WMSService,WFSService,LayerManagerService,GoogleMapService,RenderStatusService,Constants,$injector) {
     
-  
+    /**
+     * @method isSupportedLayer
+     * @param layer - layer that is being assessed for supportability
+    */
+    this.isSupportedLayer = function(layer) {
+        return LayerManagerService.getWMS(layer).length &gt; 0 || LayerManagerService.getWFS(layer).length &gt; 0;
+    };
      
     /**
      * Decides how to renders a layer automatically

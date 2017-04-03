@@ -117,7 +117,7 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l1"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:1</code></a>
+            Defined in: <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l1"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:1</code></a>
         </div>
 
             Module: <a href="../modules/controllers.html">controllers</a>
@@ -147,10 +147,6 @@
 
                     <ul class="index-list methods">
                             <li class="index-item method">
-                                <a href="#method_canDisplay">canDisplay</a>
-
-                            </li>
-                            <li class="index-item method">
                                 <a href="#method_getCswRecords">getCswRecords</a>
 
                             </li>
@@ -163,11 +159,23 @@
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_isLayerAvailable">isLayerAvailable</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_isLayerSupported">isLayerSupported</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_lastGroupFn">lastGroupFn</a>
 
                             </li>
                             <li class="index-item method">
                                 <a href="#method_lastLayerFn">lastLayerFn</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_layerHasData">layerHasData</a>
 
                             </li>
                             <li class="index-item method">
@@ -192,60 +200,6 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_canDisplay" class="method item">
-    <h3 class="name"><code>canDisplay</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>layer</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l29"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:29</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Returns true if this layer has anything to display</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">layer</code>
-                        <span class="type">Object</span>
-
-
-                    <div class="param-description">
-                        <p>layer object</p>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
 <div id="method_getCswRecords" class="method item">
     <h3 class="name"><code>getCswRecords</code></h3>
 
@@ -264,7 +218,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l94"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:94</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l111"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:111</code></a>
         </p>
 
 
@@ -311,7 +265,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l50"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:50</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l67"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:67</code></a>
         </p>
 
 
@@ -376,7 +330,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l40"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:40</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l57"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:57</code></a>
         </p>
 
 
@@ -417,6 +371,115 @@
 
 
 </div>
+<div id="method_isLayerAvailable" class="method item">
+    <h3 class="name"><code>isLayerAvailable</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l29"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:29</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns true if this layer is available to be displayed on the map
+i.e. it has CSW records and is the correct type of layer</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>layer object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_isLayerSupported" class="method item">
+    <h3 class="name"><code>isLayerSupported</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l39"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:39</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns true if this layer is of a type that can be displayed</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>layer object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_lastGroupFn" class="method item">
     <h3 class="name"><code>lastGroupFn</code></h3>
 
@@ -438,7 +501,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l177"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:177</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l194"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:194</code></a>
         </p>
 
 
@@ -496,7 +559,7 @@ This helps us know when the panel filter initialisation is complete</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l187"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:187</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l204"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:204</code></a>
         </p>
 
 
@@ -541,6 +604,60 @@ This enables us to know when panel filter initialisation is complete</p>
 
 
 </div>
+<div id="method_layerHasData" class="method item">
+    <h3 class="name"><code>layerHasData</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>layer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l48"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:48</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns true if this layer has CSW records</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">layer</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <p>layer object</p>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_removeLayer" class="method item">
     <h3 class="name"><code>removeLayer</code></h3>
 
@@ -562,7 +679,7 @@ This enables us to know when panel filter initialisation is complete</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l85"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:85</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l102"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:102</code></a>
         </p>
 
 
@@ -621,7 +738,7 @@ This enables us to know when panel filter initialisation is complete</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l157"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:157</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l174"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:174</code></a>
         </p>
 
 
@@ -691,7 +808,7 @@ This enables us to know when panel filter initialisation is complete</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l104"><code>..\js\assets\controllers\layer\layerPanelCtrl.js:104</code></a>
+        <a href="../files/.._js_assets_controllers_layer_layerPanelCtrl.js.html#l121"><code>..&#x2F;js&#x2F;assets&#x2F;controllers&#x2F;layer&#x2F;layerPanelCtrl.js:121</code></a>
         </p>
 
 
