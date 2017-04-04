@@ -79,6 +79,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
      * this.activeLayers[layerId]
      * @method isLayerActive
      * @param layer - layer
+     * @return true is the layer is active
      */
     this.isLayerActive = function(layer){
        return RenderStatusService.isLayerActive(layer);
@@ -87,6 +88,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     /**
      * Overlay a heat map to the data set
      * @method addHeatMapOverlay
+     * @return true if adding heat map was successful
      */
     this.addHeatMapOverlay = function(){
         var heatmapData = [];        
@@ -177,7 +179,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
             }
         }
         return true;
-    }
+    };
     
     
     /**
@@ -206,7 +208,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         for (var layerId in this.activeLayers) {
             if (this.activeLayers[layerId].hasOwnProperty('layers')) {
                 for (var i=0; i<this.activeLayers[layerId].layers.length; i++) {
-                    if (this.activeLayers[layerId].layers[i] === activeMap) return layerId;
+                    if (this.activeLayers[layerId].layers[i] === activeMap) {
+		        return layerId;
+                    }
                 }
             }
         }
@@ -249,9 +253,9 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
             if (this.activeLayers[layer.id].hasOwnProperty('markers')) {
                 for (var i = 0; i < this.activeLayers[layer.id].markers.length; i++) {
                     this.activeLayers[layer.id].markers[i].setMap(null);                    
-                };
+                }
                 this.activeLayers[layer.id].markers=[];
-            };
+            }
             
             if (this.activeLayers[layer.id].hasOwnProperty('layers')) {
                 for (var i = 0; i < this.activeLayers[layer.id].layers.length; i++) {
@@ -259,15 +263,15 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                     this.mainMap.overlayMapTypes.removeAt(layerIndex);
                 };
                 this.activeLayers[layer.id].layers=[];
-            };
+            }
             
             // Remove indexes from overlayMap
             if (this.activeLayers[layer.id].hasOwnProperty('overlayMapIdx')) {
                 this.activeLayers[layer.id].overlayMapIdx=[];
-            };
+            }
            
             this.broadcast('layer.removed',layer);
-        };
+        }
 
         RenderStatusService.clearStatus(layer);
         
@@ -279,7 +283,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
     };
      
     /**
-     * Initialize the map
+     * Initialise the map
      * @method initMap
      * @param mapDivId HTML id attribute of the <div> element where the map will be placed 
      * 
@@ -294,7 +298,7 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
                 style: google.maps.MapTypeControlStyle.DROPDOWN_MENU ,
                 // Move the control to the top right corner for small screens so it won't obscure Victoria & Tasmania
                 position: (mq.matches? google.maps.ControlPosition.TOP_RIGHT : google.maps.ControlPosition.RIGHT_BOTTOM)
-            },
+            }
         });
         
         // Call any functions that have been waiting for this to initialise
