@@ -1020,7 +1020,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 146,
+            "line": 148,
             "description": "get parameter based on group",
             "itemtype": "method",
             "name": "getPOIs",
@@ -1029,34 +1029,72 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 163,
+            "line": 165,
             "description": "Cosmetically change the label display on the drop down",
             "itemtype": "method",
             "name": "augmentLabel",
+            "params": [
+                {
+                    "name": "param1",
+                    "description": "first part of label"
+                },
+                {
+                    "name": "param2",
+                    "description": "second part of label, to be bracketed"
+                }
+            ],
             "class": "capdfHydrogeochemCtrl",
             "module": "controllers"
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 177,
+            "line": 181,
             "description": "Render the slider widget",
             "itemtype": "method",
             "name": "renderSlider",
+            "params": [
+                {
+                    "name": "min",
+                    "description": "float minimum value"
+                },
+                {
+                    "name": "max",
+                    "description": "float maximum value"
+                }
+            ],
             "class": "capdfHydrogeochemCtrl",
             "module": "controllers"
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 210,
+            "line": 216,
             "description": "Run the color code request",
             "itemtype": "method",
             "name": "renderColorCode",
+            "params": [
+                {
+                    "name": "goi",
+                    "description": "group of interest"
+                },
+                {
+                    "name": "parameter",
+                    "description": "of interest"
+                },
+                {
+                    "name": "minValue",
+                    "description": "minimum value"
+                },
+                {
+                    "name": "maxValue",
+                    "description": "maximum value"
+                }
+            ],
             "class": "capdfHydrogeochemCtrl",
             "module": "controllers"
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 224,
+            "line": 234,
             "description": "Request to start the drawing process for bounding box selection",
             "itemtype": "method",
             "name": "selectBound",
@@ -1065,7 +1103,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 232,
+            "line": 242,
             "description": "Performs a box plot in the panel",
             "itemtype": "method",
             "name": "plotBox",
@@ -1080,7 +1118,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 267,
+            "line": 277,
             "description": "Performs a scatter plot in the panel",
             "itemtype": "method",
             "name": "plotScatter",
