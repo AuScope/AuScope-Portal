@@ -33,7 +33,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         var setVal = value;
         $scope.selectedPoi = setLab;
         $scope.paramOfInterest = setVal;
-    }
+    };
     
     /**
      * Sets the value displayed in the group dropdown selector for map filter
@@ -46,7 +46,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         var setVal = value;
         $scope.selectedGoi = setLab;
         $scope.goi = setVal;
-    }
+    };
     
     /**
      * Sets the value displayed in the group dropdown selector for graph
@@ -59,7 +59,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         var setVal = value;
         $scope.selectedGraphGoi = setLab;
         $scope.graphGroup = setVal;
-    }
+    };
     
     /**
      * Sets the value displayed in the x-axis dropdown selector
@@ -72,7 +72,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         var setLab = label;
         $scope.selectedXAxis = setLab;
         $scope.axis.x = setVal;
-    }
+    };
     
     /**
      * Sets the value displayed in the y-axis dropdown selector
@@ -85,7 +85,7 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         var setLab = label;
         $scope.selectedYAxis = setLab;
         $scope.axis.y = setVal;
-    }
+    };
     
     /* Register a function to be called when a layer is added */
     GoogleMapService.onLayerAdded($scope, function(evt,layer){
@@ -141,7 +141,9 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         });
     };
      
-    if (wfsResource != undefined && wfsResource.url != undefined) getGOIs();
+    if (wfsResource != undefined && wfsResource.url != undefined) {
+        getGOIs();
+    }
    
     /**
      * get parameter based on group
@@ -163,6 +165,8 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
     /**
      * Cosmetically change the label display on the drop down
      * @method augmentLabel
+     * @param param1 first part of label
+     * @param param2 second part of label, to be bracketed
      */
     $scope.augmentLabel = function(param1, param2){
         if(UtilitiesService.isEmpty(param2)){
@@ -177,6 +181,8 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
     /**
      * Render the slider widget
      * @method renderSlider
+     * @param min float minimum value 
+     * @param max float maximum value
      */
     $scope.renderSlider=function(min,max,paramOfInterest){
          
@@ -210,6 +216,10 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
     /**
      * Run the color code request
      * @method renderColorCode
+     * @param goi group of interest
+     * @param parameter of interest
+     * @param minValue minimum value
+     * @param maxValue maximum value
      */
     $scope.renderColorCode = function(goi,poi,minValue, maxValue){
          

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>..\js\assets\controllers\layer\layerPanelCtrl.js</title>
+    <title>../js/assets/controllers/layer/layerPanelCtrl.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -112,7 +112,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: ..\js\assets\controllers\layer\layerPanelCtrl.js</h1>
+<h1 class="file-heading">File: ../js/assets/controllers/layer/layerPanelCtrl.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -122,8 +122,8 @@
  * @class layerPanelCtrl
  * 
  */
-allControllers.controller(&#x27;layerPanelCtrl&#x27;, [&#x27;$rootScope&#x27;,&#x27;$scope&#x27;,&#x27;GetCSWRecordService&#x27;,&#x27;RenderStatusService&#x27;,&#x27;$timeout&#x27;,&#x27;GoogleMapService&#x27;,&#x27;Constants&#x27;,
-                                             function ($rootScope,$scope,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,Constants) {
+allControllers.controller(&#x27;layerPanelCtrl&#x27;, [&#x27;$rootScope&#x27;,&#x27;$scope&#x27;,&#x27;RenderHandlerService&#x27;,&#x27;GetCSWRecordService&#x27;,&#x27;RenderStatusService&#x27;,&#x27;$timeout&#x27;,&#x27;GoogleMapService&#x27;,&#x27;Constants&#x27;,
+                                             function ($rootScope,$scope,RenderHandlerService,GetCSWRecordService,RenderStatusService,$timeout,GoogleMapService,Constants) {
     $scope.cswRecords={};
     GetCSWRecordService.getCSWKnownLayers().then(function(data){
         $scope.cswRecords=data;      
@@ -145,14 +145,31 @@ allControllers.controller(&#x27;layerPanelCtrl&#x27;, [&#x27;$rootScope&#x27;,&#
     });
     
     /**
-     * Returns true if this layer has anything to display
-     * @method canDisplay
+     * Returns true if this layer is available to be displayed on the map
+     * i.e. it has CSW records and is the correct type of layer
+     * @method isLayerAvailable
      * @param layer layer object
      */
-    $scope.canDisplay = function(layer) {
-        if (layer &amp;&amp; layer.cswRecords) 
-            return (layer.cswRecords.length &gt; 0);
-        return false;
+    $scope.isLayerAvailable = function(layer) {
+        return layer &amp;&amp; layer.cswRecords &amp;&amp; (layer.cswRecords.length &gt; 0) &amp;&amp; RenderHandlerService.isSupportedLayer(layer);
+    };
+    
+    /**
+     * Returns true if this layer is of a type that can be displayed
+     * @method isLayerSupported
+     * @param layer layer object
+     */
+    $scope.isLayerSupported = function(layer) {
+        return RenderHandlerService.isSupportedLayer(layer)
+    };
+    
+    /**
+     * Returns true if this layer has CSW records
+     * @method layerHasData
+     * @param layer layer object
+     */
+    $scope.layerHasData = function(layer) {
+        return layer &amp;&amp; layer.cswRecords &amp;&amp; (layer.cswRecords.length &gt; 0);
     };
     
     /**
@@ -163,7 +180,7 @@ allControllers.controller(&#x27;layerPanelCtrl&#x27;, [&#x27;$rootScope&#x27;,&#
      */
     $scope.hasWarningMessage = function(layer) {
         return layer.hasOwnProperty(&quot;nagiosFailingHosts&quot;);
-    }
+    };
     
     /**
      * Returns the list of providers whose service has been disrupted
@@ -197,7 +214,7 @@ allControllers.controller(&#x27;layerPanelCtrl&#x27;, [&#x27;$rootScope&#x27;,&#
             }
         }
         return msg; 
-    }
+    };
  
     
     /**
@@ -230,7 +247,7 @@ allControllers.controller(&#x27;layerPanelCtrl&#x27;, [&#x27;$rootScope&#x27;,&#
         var cswRecordId = layer.id;
         
         // Disable when there is nothing to display except basic info
-        if (panelType!=&quot;info&quot; &amp;&amp; !($scope.canDisplay(layer))) {            
+        if (panelType!=&quot;info&quot; &amp;&amp; !($scope.isLayerAvailable(layer))) {            
             return;
         }
         
