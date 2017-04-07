@@ -293,25 +293,11 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
                             listeners: {
                                 select: Ext.bind(this._onTsgAlgorithmSelect, this)
                             }
-                        },{ 
-                            xtype: 'combo',
-                            name: 'tsgWvRange',
-                            itemId: 'tsgWvRange',
-                            fieldLabel: 'Wavelength',
-                            store:['Thermal','VisSWIR'],
-                            displayField: 'tsgWvRange',
-                            valueField: 'tsgWvRange',
-                            forceSelection: true,
-                            queryMode: 'local',
-                            typeAhead: true,
-                            allowBlank: false,
-                            width: fieldWidth,                            
-                            
                         },{
                             xtype     : 'textareafield',
                             itemId    : 'tsgAlg',
                             grow      : true,
-                            width     : 700,
+                            width     : 630,
                             height    : 300,
                             name      : 'tsgAlgorithm',
                             fieldLabel: 'Algorithm',
@@ -448,7 +434,6 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             this.down('#classification-combo').setDisabled(true);
             
             this.down('#tsgAlgName').setDisabled(false);
-            this.down('#tsgWvRange').setDisabled(false);
             this.down('#tsgAlg').setDisabled(false);
             
         } else {
@@ -462,7 +447,6 @@ Ext.define('auscope.layer.analytic.form.NVCLAnalyticsForm', {
             this.down('#classification-combo').setDisabled(false);
             
             this.down('#tsgAlgName').setDisabled(true);
-            this.down('#tsgWvRange').setDisabled(true);
             this.down('#tsgAlg').setDisabled(true);            
             
         }

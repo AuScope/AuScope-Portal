@@ -593,7 +593,6 @@ public class NVCL2_0_DataService {
      * @param wfsUrls
      * @param wfsFilter
      * @param tsgAlgName
-     * @param tsgWvRange
      * @param tsgAlgorithm
      * @param startDepth
      * @param endDepth
@@ -602,10 +601,10 @@ public class NVCL2_0_DataService {
      * @param units
      * @param span
      */
-    public boolean submitProcessingTsgJob(String email, String jobName, String[] wfsUrls, String filterString, String tsgAlgName, String tsgWvRange, String tsgAlgorithm,
+    public boolean submitProcessingTsgJob(String email, String jobName, String[] wfsUrls, String filterString, String tsgAlgName, String tsgAlgorithm,
             int startDepth, int endDepth, String operator, String value, String units, int span) throws Exception {
         
-        HttpRequestBase method = nvclMethodMaker.submitProcessingTsgJob(analyticalServicesUrl, email, jobName, wfsUrls, filterString,tsgAlgName, tsgWvRange, tsgAlgorithm, startDepth, endDepth, operator, value, units, span);
+        HttpRequestBase method = nvclMethodMaker.submitProcessingTsgJob(analyticalServicesUrl, email, jobName, wfsUrls, filterString,tsgAlgName, tsgAlgorithm, startDepth, endDepth, operator, value, units, span);
         String responseText = httpServiceCaller.getMethodResponseAsString(method);
         JSONObject response = JSONObject.fromObject(responseText);
         return response.getString("response").toString().toLowerCase().equals("success");

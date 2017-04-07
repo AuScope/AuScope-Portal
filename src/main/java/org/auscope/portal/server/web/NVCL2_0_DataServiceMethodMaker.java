@@ -220,14 +220,13 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
      * @throws URISyntaxException
      */
     public HttpRequestBase submitProcessingTsgJob(String serviceUrl, String email, String jobName, String[] wfsUrls, String wfsFilter,
-            String tsgAlgName, String tsgWvRange, String tsgScript, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
+            String tsgAlgName, String tsgScript, int startDepth, int endDepth, String operator, String value, String units, int span) throws URISyntaxException {
         HttpGet method = new HttpGet();
 
         URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "submitNVCLTSGModJob.do"));
         builder.setParameter("email", email);
         builder.setParameter("jobname", jobName);
         builder.setParameter("tsgAlgName", tsgAlgName);
-        builder.setParameter("tsgWvRange", tsgWvRange);
         builder.setParameter("tsgScript", tsgScript);
         builder.setParameter("startdepth", Integer.toString(startDepth));
         builder.setParameter("enddepth", Integer.toString(endDepth));

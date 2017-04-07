@@ -1027,7 +1027,6 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "bbox") String bboxJson,
 
             @RequestParam(required = false, value = "tsgAlgName") String tsgAlgName,
-            @RequestParam(required = false, value = "tsgWvRange") String tsgWvRange,
             @RequestParam(required = false, value = "tsgAlgorithm") String tsgAlgorithm,  
 
             @RequestParam("startDepth") int startDepth,
@@ -1048,7 +1047,7 @@ public class NVCLController extends BasePortalController {
         filterString = sf0BoreholeService.getFilter(boreholeName, "", dateOfDrillingStart, dateOfDrillingEnd, -1, bbox, null, true,null);
 
         try {
-            boolean result = this.dataService2_0.submitProcessingTsgJob(email, jobName, wfsUrls, filterString,tsgAlgName,tsgWvRange,tsgAlgorithm,startDepth, endDepth, operator, value, units, span);
+            boolean result = this.dataService2_0.submitProcessingTsgJob(email, jobName, wfsUrls, filterString,tsgAlgName,tsgAlgorithm,startDepth, endDepth, operator, value, units, span);
             return generateJSONResponseMAV(result);
         } catch (Exception ex) {
             log.error("Unable to submit processing job: " + ex.getMessage());
