@@ -1,0 +1,138 @@
+\documentclass[a4paper]{article}
+\usepackage[x11names]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shadows}
+\usepackage{pgf-umlsd}
+\usepackage{fixltx2e}
+
+% links
+\usepackage{hyperref}
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=DodgerBlue1,
+  urlcolor=DodgerBlue1,
+  pdfauthor={$author-meta$},
+  pdftitle={$title-meta$}
+}
+
+% http://tex.stackexchange.com/questions/46953/unix-command-highlighting-latex
+\usepackage{listings}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  basicstyle=\sffamily,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!5},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  morekeywords={checkout,clone,fetch,flow,merge,pull,push,rebase,remote}
+}
+
+\usepackage[top=1cm, bottom=1cm, left=2cm, right=2cm]{geometry}
+
+% http://www.apreche.net/github-suggested-workflow/
+
+\begin{document}
+\renewcommand{\thesection}{\alph{section}.}
+
+% A footnote-like superscript (comments at end of lines to trim whitespace)
+\newcounter{MyCount}
+\newcommand\step{%
+	\stepcounter{MyCount}%
+	\textsuperscript{\arabic{MyCount}}%
+}
+
+\begin{sequencediagram}
+
+\tikzstyle{inststyle}+=[ top color = LightBlue1, bottom color = LightBlue2, font = \footnotesize ] % custom the style
+\newthread[white]{p}{AuScope/AuScope-Portal}
+\newinst[2]{f}{\textit{USER}/AuScope-Portal}
+\tikzstyle{inststyle}+=[ top color = Honeydew1, bottom color = Honeydew2] % custom the style
+\newinst[2]{c}{Clone}
+\newinst[2]{b}{\textit{working}}
+
+\begin{call}{p}{github::fork\step}{f}{github::pull\step}
+
+  \begin{call}{f}{clone\step}{c}{push\step}
+
+	\mess{p}{upstream\step}{c}
+
+  	\begin{call}{c}{branch\step}{b}{merge\step}
+	  	    \begin{callself}{b}{Do stuff}{commit}
+	  	    \end{callself}
+
+	  	    \mess{p}{pull\step}{c}
+	  	    \mess{c}{rebase\step}{b}
+  	\end{call}
+
+  \end{call}
+\end{call}
+
+\end{sequencediagram}
+
+\section{Fork in Github}
+
+See Github help for \href{https://help.github.com/articles/fork-a-repo}{Fork A Repo}.
+
+\section{Clone and initialise your fork}
+
+% Prevent formatting of minus signs into math symbols
+\lstset{language=bash,literate={-}{{-}}1}
+
+\begin{lstlisting}[style=BashInputStyle]
+	# (2) Clone the project fork
+	git clone git@github.com:USER/AuScope-Portal.git
+	cd AuScope-Portal
+	# (3) Add the original project as the ``upstream'' source for changes and updates.
+	git remote add upstream git@github.com:AuScope/AuScope-Portal.git
+\end{lstlisting}
+
+
+\section{Create a branch for your work}
+
+\begin{lstlisting}[style=BashInputStyle]
+	# (4) Create a branch for your work.
+	git checkout -b working
+\end{lstlisting}
+
+\begin{center}
+\fbox{\parbox{0.65\textwidth}{\emph{Make whatever changes you want, committing them to the ``working'' branch. When you are finished, merge upstream $\ldots$}}}
+\end{center}
+
+\section{Update and merge your code into the upstream project}
+
+\begin{lstlisting}[style=BashInputStyle]
+	# (5) Pull the latest Portal updates into the master branch of your project fork
+	git checkout master
+	git pull upstream master
+
+	# (6) Rebase these changes into your working copy
+	git checkout working
+	git rebase master
+
+	# (7) Merge the working updates and your changes into the master branch and
+	# (8) Send them to Github
+	git checkout master
+	git merge working
+	git push
+	# optional (delete working branch): git branch -d working
+\end{lstlisting}
+
+\section{Create Github pull request}
+
+See Github help for \href{https://help.github.com/articles/creating-a-pull-request}{Creating a pull request}.
+
+\section*{Keeping up to date}
+
+To keep your project fork up to date with the latest changes from upstream \texttt{AuScope/AuScope-Portal} do the following:
+
+\begin{lstlisting}[style=BashInputStyle]
+	git fetch upstream
+	git checkout master
+	git merge upstream/master
+	git push origin master
+\end{lstlisting}
+
+
+\end{document}
