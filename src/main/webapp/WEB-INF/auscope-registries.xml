@@ -96,4 +96,11 @@
         <constructor-arg name="serviceUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/csw" />
         <constructor-arg name="recordInformationUrl" value="http://vgl-reg.auscope.org/geonetwork/srv/eng/main.home?uuid=%1$s" />     
     </bean>    
+    <bean id="cswGAPMDCRC" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswGAPMDCRC" />
+        <constructor-arg name="title" value="Geoscience Australia PMD*CRC Publications" />
+        <constructor-arg name="serviceUrl" value="http://www.ga.gov.au/geonetwork/srv/en/csw" />
+        <constructor-arg name="cqlText" value="csw:AnyText Like '%PMD*CRC Publication%' AND BBOX(ows:BoundingBox, 110,-9,160,-55)" /> <!-- The BBOX excludes CSW records which cannot be placed on map -->
+        <constructor-arg name="recordInformationUrl" value="http://www.ga.gov.au/geonetwork/srv/en/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s" />
+    </bean>        
 </beans>
