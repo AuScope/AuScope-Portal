@@ -53,9 +53,9 @@
         <constructor-arg name="id" value="cswInSarTest"/>
         <constructor-arg name="title" value="InSAR GeoNetwork"/>
 
-        <!-- This will only work if your machine's IP has been granted access to eos -->
-        <constructor-arg name="serviceUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw"/>
-        <constructor-arg name="recordInformationUrl" value="http://eos-test.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
+        <!-- This will only work if your machine's IP has been granted access to ecat>
+        <constructor-arg name="serviceUrl" value="http://ecat-test.ga.gov.au/geonetwork/srv/eng/csw"/>
+        <constructor-arg name="recordInformationUrl" value="http://ecat-test.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
         <property name="defaultAnyTextFilter" value="SAR"/>
         <property name="noCache" value="true"/>
         <property name="defaultConstraints">
@@ -67,8 +67,8 @@
     <bean id="cswInSarProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswInSarProduction"/>
         <constructor-arg name="title" value="InSAR GeoNetwork"/>
-        <constructor-arg name="serviceUrl" value="http://eos.ga.gov.au/geonetwork/srv/eng/csw"/> <!-- Fix CSWMetadataPanel.js "source.indexOf('eos.ga.gov.au')" if you change this. -->
-        <constructor-arg name="recordInformationUrl" value="http://eos.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
+        <constructor-arg name="serviceUrl" value="http://ecat.ga.gov.au/geonetwork/srv/eng/csw"/> <!-- Fix CSWMetadataPanel.js "source.indexOf('ecat.ga.gov.au')" if you change this. -->
+        <constructor-arg name="recordInformationUrl" value="http://ecat.ga.gov.au/geonetwork/srv/eng/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"/>
         <property name="defaultAnyTextFilter" value="SAR"/>
         <property name="noCache" value="true"/>
         <property name="hideFromCatalogue" value="true"/>
