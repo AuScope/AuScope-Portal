@@ -1495,6 +1495,24 @@
             "module": "controllers"
         },
         {
+            "file": "../js/assets/controllers/info/infoPanelCtrl.js",
+            "line": 37,
+            "itemtype": "method",
+            "name": "hasDisruptedProvider",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "layer"
+                },
+                {
+                    "name": "cswRecord",
+                    "description": "CSW records"
+                }
+            ],
+            "class": "infoPanelCtrl",
+            "module": "controllers"
+        },
+        {
             "file": "../js/assets/controllers/layer/layerPanelCtrl.js",
             "line": 29,
             "description": "Returns true if this layer is available to be displayed on the map\ni.e. it has CSW records and is the correct type of layer",
