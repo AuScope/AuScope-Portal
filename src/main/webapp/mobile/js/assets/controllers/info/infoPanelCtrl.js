@@ -32,7 +32,28 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
      */
     $scope.isSupportedLayer = function(layer) {
         return RenderHandlerService.isSupportedLayer(layer);
-    }
+    };
+    
+    /**
+     * 
+     * @method hasDisruptedProvider
+     * @param layer layer
+     * @param cswRecord CSW records
+     */
+    $scope.hasDisruptedProvider = function(layer, cswRecord) {
+        if (layer.hasOwnProperty("nagiosFailingHosts")) {
+            for (var i=0; i<layer.nagiosFailingHosts.length; i++) {
+                // loop over services
+                for (var k=0; k<cswRecord.onlineResources.length; k++) {
+                    if (cswRecord.onlineResources[k].url.indexOf(layer.nagiosFailingHosts[i])>=0) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
+    };
     
     // Get the legend style, if there is one
     if ($scope.$parent.infoPanelCsw.proxyStyleUrl != undefined && $scope.$parent.infoPanelCsw.proxyStyleUrl.length>0) {

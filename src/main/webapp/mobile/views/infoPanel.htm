@@ -21,9 +21,11 @@
                                 <div ng-repeat="cswRecord in infoPanelCsw.cswRecords.slice(0,10)" uib-accordion-group class="panel-info" is-open="false" 
                                     ng-mouseenter="highlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)" 
                                     ng-mouseleave="lowlightOnPreviewMap(infoPanelCsw.name, cswRecord.adminArea)">
-                                    
-                                    <uib-accordion-heading ng-class="info-details-header">{{ cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information' }}
-                                       <span ng-if="isSupportedLayer(infoPanelCsw)" ng-click="addCSWRecord(infoPanelCsw,cswRecord);$event.stopPropagation();$event.preventDefault();" class="pull-right label label-primary info-panel-add"><i class="fa fa-map-marker"></i> Add</span>
+                                   
+                                    <uib-accordion-heading ng-class="info-details-header">
+										<i ng-if="hasDisruptedProvider(infoPanelCsw, cswRecord)" popover-placement="top-left" uib-popover="The portal is currently experiencing difficulties communicating with the {{cswRecord.adminArea}} provider." popover-trigger="'mouseenter click'" popover-popup-close-delay="1" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+									    {{ cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information' }}                                    
+									    <span ng-if="isSupportedLayer(infoPanelCsw)" ng-click="addCSWRecord(infoPanelCsw,cswRecord);$event.stopPropagation();$event.preventDefault();" class="pull-right label label-primary info-panel-add"><i class="fa fa-map-marker"></i> Add</span>
                                     </uib-accordion-heading>
                                     
                                     <div class="row info-panel-text"><strong>Contact Org:</strong> {{cswRecord.contactOrg}}</div>
