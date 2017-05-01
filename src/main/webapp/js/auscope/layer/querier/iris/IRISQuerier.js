@@ -39,7 +39,7 @@ Ext.define('auscope.layer.querier.iris.IRISQuerier', {
         // http://www.iris.edu/ws/station/query?net=S&station=AUDAR&level=chan
         var onlineResource = queryTarget.get('onlineResource');
         var irisUrl = onlineResource.get('url');
-        var network = onlineResource.get('name'); // TODO: I'm using 'name' to store the network code... is that bad?
+        var network = 'S';
         var station = queryTarget.get('id');
 
         var me = this;
