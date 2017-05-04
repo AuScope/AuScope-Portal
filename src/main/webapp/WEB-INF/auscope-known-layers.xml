@@ -38,6 +38,7 @@
             </bean>
         </property>
         <property name="order" value="10" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -94,6 +95,7 @@
             </bean>
         </property>
         <property name="order" value="11" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -151,6 +153,7 @@
             </bean>
         </property>
         <property name="order" value="12" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
          <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -184,6 +187,7 @@
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>       
         <property name="order" value="150" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -373,6 +377,7 @@
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
         <property name="order" value="13" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
          <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -565,6 +570,7 @@
             </bean>
         </property>
         <property name="order" value="50" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -715,6 +721,7 @@
             </bean>
         </property>
         <property name="order" value="51" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
                 <property name ="mandatoryFilters">
