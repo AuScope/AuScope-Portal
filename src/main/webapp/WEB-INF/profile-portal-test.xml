@@ -28,7 +28,6 @@
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypePMDCRCReports" />
-                <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeTimaGeoSample" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
@@ -92,7 +91,6 @@
         <constructor-arg>
             <list>
                 <ref bean="cswAuscopeTest" />
-                <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswGAPMDCRC" />
                 <!-- LJ:aster was down, remove it. ref bean="cswAsterProduction" /-->

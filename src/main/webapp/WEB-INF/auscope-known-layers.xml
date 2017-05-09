@@ -458,32 +458,6 @@
         </property>
         <property name="order" value="410" />
     </bean>
-    <bean id="knownTypeInSarReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="portal-InSar-reports"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWTitleFilterRecordSelector">
-                <property name="title" value="InSAR GeoNetwork"/><!-- This matches the title in auscope-registries.xml -->
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="Synthetic Aperture Radar data"/><!-- INSAR -->
-        <property name="description" value="Raw Synthetic Aperture Radar (SAR) data from ERS-1 and ERS-2 satellites. Data is provided in the standardised CEOS format under licence from the European Space Agency (ESA)."/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/red-stars.png"/>
-        <property name="polygonColor" value="#FE2A00,#FF694C" />
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="420" />
-    </bean>
     <bean id="knownTypeYilgarnGeochemistry" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="yilgarn-geochem"/>
         <constructor-arg name="knownLayerSelector">
