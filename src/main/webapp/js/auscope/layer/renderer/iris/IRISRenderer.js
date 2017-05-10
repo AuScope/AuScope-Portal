@@ -13,7 +13,7 @@ Ext.define('portal.layer.renderer.iris.IRISRenderer', {
     },
 
     constructor: function(config) {
-        this.legend = Ext.create('portal.layer.legend.wfs.WFSLegend', {
+        this.legend = Ext.create('auscope.layer.legend.iris.IRISLegend', {
             iconUrl : config.icon ? config.icon.getUrl() : ''
         });
 
