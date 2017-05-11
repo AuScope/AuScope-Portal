@@ -71,9 +71,13 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     },
 
     layerRemoveHandler : function(layer){
-        this.fireEvent('removelayer', layer);
+        this.fireEvent('removeLayer', layer);
     },
-
+         
+    layerAddHandler : function(layer){
+        this.fireEvent('addLayer', layer);
+    },
+    
     _getDownloadAction : function(layer){
         var me = this;
         var downloadLayerAction = new Ext.Action({
@@ -141,23 +145,50 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
 
     },
 
+    _enableButton : function(layer){
 
+    },
     _getlayerAnalytics : function(layer){
         var me = this;
         if( auscope.layer.analytic.AnalyticFormFactory.supportLayer(layer)){
 
-            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active') && layer.get('filterer').parameters.featureType){
+            if(layer.get('sourceType')=='KnownLayer' && layer.id == 'capdf-hydrogeochem') {
+                //&& layer.get('source').get('active') && layer.get('filterer').parameters.featureType){
                 return new Ext.Action({
-                    text : 'Graph',
+                    text : '<span data-qtip="Add layer to map and select \'Group of Interest\' to enable this function">' + 'Graph',
                     iconCls : 'graph',
-                    handler : function(){
-                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
-                        win.show();
-                        me.on('removelayer',function(closeLayer){
+                    disabled : true,
+                    myWin : null,
+                    selfme : null,
+                    initComponent: function () {
+                        myWin = null;
+                        selfme = null;
+                        me.on('removeLayer',function(closeLayer){
                             if(closeLayer.get('id')==layer.get('id')){
-                                win.close();
+                                if ( myWin !== null) {
+                                    myWin.close();
+                                }
+                                if ( selfme !== null) {
+                                    selfme.setDisabled(true);
+                                }
+                            }
+                        });        
+                        me.on('addLayer',function(closeLayer){
+                            if(closeLayer.get('id')==layer.get('id') && layer.get('source').get('active') && layer.get('filterer').parameters.featureType) {
+                                if ( selfme !== null) {
+                                    selfme.setDisabled(false);
+                                }
                             }
                         });
+                        this.callParent();
+                        selfme = this;
+                    },                    
+                    handler : function(){
+                        if ( myWin == null && layer.get('source').get('active') && layer.get('filterer').parameters.featureType) {
+                            var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map);
+                            myWin = win;
+                            win.show();
+                        }
                     }
                 });
             } else if (layer.id == 'sf0-borehole-nvcl') {
@@ -172,15 +203,6 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                                 win.close();
                             }
                         });
-                    }
-                });
-            }else{
-                return new Ext.Action({
-                    text : '<span data-qtip="Add layer to map and select \'Group of Interest\' to enable this function">' + 'Graph',
-                    disabled : true,
-                    iconCls : 'graph',
-                    handler : function(){
-                        Ext.Msg.alert('Alert', 'Add layer to map first.');
                     }
                 });
             }
