@@ -55,7 +55,7 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     appendAdditionalActions : function(menuItems,layer,group) {
         //VT:Should have a download action except for reports and Insar data.
         if ((layer.get('cswRecords').length > 0 && layer.get('cswRecords')[0].get('noCache')==false) && 
-            layer.id != 'portal-reports' && layer.id != 'portal-pmd-crc-reports') {
+            layer.id != 'portal-reports' && layer.id != 'portal-pmd-crc-reports' && layer.id != 'seismology-in-schools-site') {
                  menuItems.push(this._getDownloadAction(layer));
         }
 
