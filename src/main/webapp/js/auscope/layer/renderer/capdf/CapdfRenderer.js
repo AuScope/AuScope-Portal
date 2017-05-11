@@ -31,6 +31,7 @@ Ext.define('portal.layer.renderer.capdf.CapdfRenderer', {
         //start by removing any existing data
         this.abortDisplay();
         this.removeData();
+        this.aborted = false;
 
         var me = this;
         var wfsResources = portal.csw.OnlineResource.getFilteredFromArray(resources, portal.csw.OnlineResource.WFS);
