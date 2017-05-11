@@ -28,7 +28,6 @@
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypePMDCRCReports" />
-                <ref bean="knownTypeInSarReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeTimaGeoSample" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
@@ -84,17 +83,6 @@
                 <ref bean="knownTypeWesternAreaAem" />
                 <ref bean="knownTypeAshburtonAem" /-->
                 <!-- End Analytics -->
-                <ref bean="knownTypeGswaGravMerge" />
-                <ref bean="knownTypeGswa20mMagMerge"/>
-                <ref bean="knownTypeGswa40mMagMerge1VD"/>
-                <ref bean="knownTypeGswa40mMagMerge"/>
-                <ref bean="knownTypeGswa80mMagMerge1VD"/>
-                <ref bean="knownTypeGswa80mMagMergertp"/>
-                <ref bean="knownTypeGswa80mMagMerge"/>
-                <ref bean="knownTypeGswa80mKmerge"/>
-                <ref bean="knownTypeGswa80mTCmerge"/>
-                <ref bean="knownTypeGswa80mThmerge"/>
-                <ref bean="knownTypeGswa80mUmerge"/>
             </list>
         </constructor-arg>
     </bean>
@@ -103,7 +91,6 @@
         <constructor-arg>
             <list>
                 <ref bean="cswAuscopeTest" />
-                <ref bean="cswInSarProduction" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswGAPMDCRC" />
                 <!-- LJ:aster was down, remove it. ref bean="cswAsterProduction" /-->

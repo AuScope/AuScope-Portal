@@ -257,6 +257,7 @@ Ext.application({
 
         var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
             title : 'Research Data',
+            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
             store : researchDataLayerStore,
             activelayerstore : layerStore,
             enableBrowse : false,//VT: if true browse catalogue option will appear
