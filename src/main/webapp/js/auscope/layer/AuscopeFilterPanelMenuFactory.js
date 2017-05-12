@@ -167,6 +167,7 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                             if(closeLayer.get('id')==layer.get('id')){
                                 if ( myWin !== null) {
                                     myWin.close();
+                                    myWin = null;
                                 }
                                 if ( selfme !== null) {
                                     selfme.setDisabled(true);
@@ -175,6 +176,10 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                         });        
                         me.on('addLayer',function(closeLayer){
                             if(closeLayer.get('id')==layer.get('id') && layer.get('source').get('active') && layer.get('filterer').parameters.featureType) {
+                                if ( myWin !== null) {
+                                    myWin.close();
+                                    myWin = null;
+                                }
                                 if ( selfme !== null) {
                                     selfme.setDisabled(false);
                                 }
