@@ -1007,67 +1007,6 @@
         <property name="order" value="62" />
     </bean>
 
-    <bean id="knownTypeAsterChileSandToClay" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-SandToClay"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="abf6110f-36b0-4c78-b124-39743392e556"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Unweathered Sand to Clay Index (USCI)"/>
-        <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="210" />
-    </bean>
-
-    <bean id="knownTypeAsterChileWaterIndex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-waterindex"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="c289970f-1cb3-464d-ba79-0b8f5faac163"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Surface Water "/>
-        <property name="description" value="Water content of the surface after removing atmospheric path-length (topography) dependent water vapour using the ASTER GDEM-2 digital elevation model.    Higher levels of surface water (warmer tones) can be related to: (i) wet soil after snow melt; (ii) green vegetation; (iii) hydroscopic minerals like illite and montmorillonite; (iii) and/or groundwater seepage."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="211" />
-    </bean>
-
-
-    <bean id="knownTypeAsterChileAlOHComp" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-alohcomp"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="19aa8073-8af1-4dc8-9567-4b809e1052c5"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="AlOH Group Composition "/>
-        <property name="description" value="Useful for mapping the Al-clay mineral composition of the surface soils and exposed geology.   Kaolin (cooler tones) can be an indicator for lower pH whereas illite-montmorillonite (warmer tones) can be an indicator for higher pH."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="212" />
-    </bean>
-
-
-    <bean id="knownTypeAsterChileFalseColour" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="aster-chile-falsecolour"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="4f3e3a20-8051-4b85-b135-6e8400ed133d"/>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="False Colour Composite "/>
-        <property name="description" value="Equivalent to false colour infrared photography and Landsat band colour composite  R:4; G:3; B:2. Green vegetation produces red colour."/>
-        <property name="group" value="Chile Region IV ASTER Map "/>
-        <property name="feature_count" value="1" />
-        <property name="order" value="213" />
-    </bean>
-
-
-
-
     <bean id="knownTypeAsterOpaque" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="aster-opaque"/>
         <constructor-arg name="knownLayerSelector">
