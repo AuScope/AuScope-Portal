@@ -9,7 +9,7 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
     
     var maxSldLength = 1900;
     var LAYERCHK_INT = 1000; // Check layer loading progress this often (millisecond)
-    var LAYERCHK_NUM = 45; // Check layer loading progress this many times
+    var LAYERCHK_NUM = 180; // Check layer loading progress this many times
     
     this.tiles = {};
     this.timers = {};
