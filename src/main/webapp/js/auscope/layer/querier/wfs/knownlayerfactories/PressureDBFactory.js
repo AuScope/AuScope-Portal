@@ -52,24 +52,22 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PressureDBFactory', {
     genericPlot : function(series, xaxis_name, yaxis_names, yaxis_keys) {
        var splot = Ext.create('auscope.chart.rickshawChart',{
            graphWidth : 600, // These values are used to set the size of the graph
-           graphHeight : 400
+           graphHeight : 400,
+           width: 1200,
+           height: 600
        });
 
        // Create an Ext window to house the chart (panel)
        var win = Ext.create('Ext.window.Window', {
-           defaults    : { autoScroll:true }, // Enable scrollbars for underlying panel, if it is bigger than the window
            border      : true,
            items       : splot,
            id          : 'rkswWindowPressureDB',
-           layout      : 'fit',
-           maximizable : true,
            modal       : true,
+           maxWidth    : Math.min(window.innerWidth - 10, 1250),
+           maxHeight   : Math.min(window.innerHeight - 10, 650),
+           autoScroll  : true,
            title       : 'Interactive Plot: ',
-           resizable   : true,
-           height  : 600, // Height and width of window the houses the graph
-           width   : 1100,
-           x           : 10,
-           y           : 10
+           resizable   : true
        });
        win.show();
 
