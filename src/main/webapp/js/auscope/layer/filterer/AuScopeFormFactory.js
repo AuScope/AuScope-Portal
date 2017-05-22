@@ -38,6 +38,9 @@ Ext.define('auscope.layer.filterer.AuScopeFormFactory', {
             case 'nvcl-borehole':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.NvclFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);
+            case 'nvcl-v2-borehole':
+                baseFilterForm = Ext.create('auscope.layer.filterer.forms.NvclFilterFormV2', baseFilterFormCfg);
+                return this._generateResult(baseFilterForm, true);                
             case 'mineral-tenements':
                 baseFilterForm = Ext.create('auscope.layer.filterer.forms.MineralTenementFilterForm', baseFilterFormCfg);
                 return this._generateResult(baseFilterForm, true);

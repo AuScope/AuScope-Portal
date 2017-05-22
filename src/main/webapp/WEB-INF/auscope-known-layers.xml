@@ -591,6 +591,131 @@
         </property>
     </bean>
     
+    <bean id="knownTypeBoreholeNvclV2" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nvcl-v2-borehole"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="gsmlp:BoreholeView"/>
+                <constructor-arg name="includeEndpoints" value="true"/>
+                <constructor-arg name="serviceEndpoints">
+                    <list>
+                        <value>http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs</value>
+                        <value>http://www.mrt.tas.gov.au:80/web-services/wfs</value>
+                        <value>http://geossdi.dmp.wa.gov.au:80/services/wfs</value>
+                        <value>http://geossdi.dmp.wa.gov.au/services/wfs</value>
+                        <value>http://geology.data.nt.gov.au:80/geoserver/wfs</value>
+                        <value>http://auscope.dpi.nsw.gov.au:80/geoserver/wfs</value>
+                        <value>https://sarigdata.pir.sa.gov.au/nvcl/geoserver/wfs</value>
+                        <value>http://geology-uat.information.qld.gov.au/geoserver/wfs</value>
+                        <value>http://geology.information.qld.gov.au/geoserver/wfs</value>
+                        <value>http://geology.data.vic.gov.au/nvcl/wfs</value>
+                    </list>
+                </constructor-arg>
+                <property name="relatedFeatureTypeNames">
+                    <list>
+                        <!--<value>gsml:Borehole</value>-->
+                        <value>sa:SamplingFeatureCollection</value>
+                        <value>om:GETPUBLISHEDSYSTEMTSA</value>
+                        <value>nvcl:scannedBorehole</value>
+                        <value>nvcl:ScannedBoreholeCollection</value>
+                    </list>
+                </property>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="National Virtual Core Library V-2.0"/>
+        <property name="group" value="Boreholes"/>
+        <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
+        <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="doNvclV2FilterStyle.do"/>
+        <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/> -->
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="51" />
+        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
+                <property name ="mandatoryFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UICheckbox">
+                            <constructor-arg name="label" type="java.lang.String" value="Show Hylogged boreholes"></constructor-arg>
+                            <constructor-arg name="parameter" type="java.lang.String" value="showNoneHylogged"></constructor-arg>                         
+                            <constructor-arg name="value" type="java.lang.String" value="false"></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>
+                <property name ="hiddenParams">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UIHiddenResourceAttribute">
+                            <constructor-arg name="parameter" type="java.lang.String" value="serviceUrl"></constructor-arg>
+                            <constructor-arg name="attribute" type="java.lang.String" value="url"></constructor-arg>                         
+                            <constructor-arg name="value" type="java.lang.String" value="true"></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling Start From"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillStartDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling Start To"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillStartDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling End From"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillEndDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
+                            <constructor-arg name="label" value="Drilling End To"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:drillEndDate"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>                
+            </bean>        
+        </property>
+    </bean>
+    
      <bean id="knownTypeTimaGeoSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="tima-geosample"/>
         <constructor-arg name="knownLayerSelector">
@@ -642,7 +767,7 @@
             </bean>        
         </property>
     </bean>
-
+        
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="sf0-borehole-nvcl"/>
         <constructor-arg name="knownLayerSelector">
@@ -694,7 +819,7 @@
                 <constructor-arg index="1" value="32"/>
             </bean>
         </property>
-        <property name="order" value="51" />
+        <property name="order" value="52" />
         <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
