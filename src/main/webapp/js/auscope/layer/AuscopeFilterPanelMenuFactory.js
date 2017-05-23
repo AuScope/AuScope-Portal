@@ -196,7 +196,8 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                         }
                     }
                 });
-            } else if (layer.id == 'sf0-borehole-nvcl') {
+            } else if (layer.id == 'nvcl-v2-borehole') {
+                //'sf0-borehole-nvcl') {
                 return new Ext.Action({
                     iconCls : 'analytics-button',
                     text: 'Analytical Jobs',

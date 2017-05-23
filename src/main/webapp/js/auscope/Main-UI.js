@@ -399,7 +399,7 @@ Ext.application({
         if (urlParams && (urlParams.nvclanemail)) {
             knownLayerStore.on('load', function() {
                 //Expand the known layer then trigger the popup for the layer that gets generated on expand
-                var knownLayer = knownLayerStore.getById('sf0-borehole-nvcl');
+                var knownLayer = knownLayerStore.getById('nvcl-v2-borehole');
                 knownLayersPanel.expandRecordById(knownLayer.get('id'));
 
                 var layer = knownLayer.get('layer');
