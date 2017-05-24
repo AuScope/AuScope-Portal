@@ -326,6 +326,11 @@ Ext.application({
             items:[westPanel, centerPanel]
         });
 
+        var notificationHandler = Ext.create('auscope.widgets.NotificationWidget', {
+            maxAgeInDays: 2,
+            divId: 'notifications-button'
+        });
+
         if(urlParams.kml){
             portal.util.Ajax.request({
                 url: 'addKMLUrl.do',
