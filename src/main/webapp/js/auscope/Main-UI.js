@@ -327,7 +327,7 @@ Ext.application({
         });
 
         var notificationHandler = Ext.create('auscope.widgets.NotificationWidget', {
-            maxAgeInDays: 2,
+            maxAgeInDays: 7,
             divId: 'notifications-button'
         });
 
