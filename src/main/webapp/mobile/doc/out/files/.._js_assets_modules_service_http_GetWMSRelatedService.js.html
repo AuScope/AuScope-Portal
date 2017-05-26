@@ -260,7 +260,13 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
         
         var bbWidth = Math.floor(Math.abs(gglPixelCoordsNE.x-gglPixelCoordsSW.x));
         var bbHeight = Math.floor(Math.abs(gglPixelCoordsNE.y-gglPixelCoordsSW.y));
-         
+        
+        // ArcGIS server requires a different format to Geoserver
+        var infoFormat = &quot;application/vnd.ogc.gml/3.1.1&quot;;
+        if (serviceInfo.applicationProfile &amp;&amp; serviceInfo.applicationProfile.indexOf(&quot;Esri:ArcGIS Server&quot;) &gt; -1) {
+            infoFormat = &quot;text/xml&quot;;
+        }
+        
         // NB: If SLD_BODY is used in future, look out for ArcGIS which does not like SLD_BODY (see Querier.js)
         var get_params= &quot;WMS_URL=&quot;+encodeURIComponent(serviceInfo.url)+
             &quot;&amp;lat=&quot;+pt[1]+ // NB: &#x27;lat&#x27; and &#x27;lng&#x27; are projection map coords, not latitude, longitude angles
@@ -272,7 +278,7 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
             &quot;&amp;WIDTH=&quot;+bbWidth+ // Map panel width, in pixels (not Google Map pixel coords)
             &quot;&amp;HEIGHT=&quot;+bbHeight+ // Map panel height, in pixels (not Google Map pixel coords)
             //Invalid format &#x27;application/xml&#x27;, supported formats are [text/plain, application/vnd.ogc.gml, application/vnd.ogc.gml/3.1.1, text/html, application/json] 
-            &quot;&amp;INFO_FORMAT=&quot;+encodeURIComponent(&quot;application/vnd.ogc.gml/3.1.1&quot;)+ //+encodeURIComponent(&quot;text/html&quot;)+ // Simple HTML for the moment // application/vnd.ogc.gml                    
+            &quot;&amp;INFO_FORMAT=&quot;+encodeURIComponent(infoFormat)+                    
             &quot;&amp;version=&quot;+encodeURIComponent(serviceInfo.version);
         
         if(style){
@@ -292,6 +298,7 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
      
      
 }]);
+
     </pre>
 </div>
                     </div>
