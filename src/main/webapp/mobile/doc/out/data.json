@@ -2933,7 +2933,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
-            "line": 174,
+            "line": 175,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",
@@ -3012,7 +3012,25 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 185,
+            "line": 167,
+            "itemtype": "method",
+            "name": "registerQuerier",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "The layer containing the wms to registered with the querier"
+                },
+                {
+                    "name": "onlineResource",
+                    "description": "Online resource object"
+                }
+            ],
+            "class": "WMSService",
+            "module": "map"
+        },
+        {
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
+            "line": 195,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderLayer",
@@ -3031,7 +3049,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 236,
+            "line": 246,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",
