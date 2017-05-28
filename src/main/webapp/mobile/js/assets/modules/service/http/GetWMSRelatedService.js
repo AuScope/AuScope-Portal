@@ -142,7 +142,13 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         
         var bbWidth = Math.floor(Math.abs(gglPixelCoordsNE.x-gglPixelCoordsSW.x));
         var bbHeight = Math.floor(Math.abs(gglPixelCoordsNE.y-gglPixelCoordsSW.y));
-         
+        
+        // ArcGIS server requires a different format to Geoserver
+        var infoFormat = "application/vnd.ogc.gml/3.1.1";
+        if (serviceInfo.applicationProfile && serviceInfo.applicationProfile.indexOf("Esri:ArcGIS Server") > -1) {
+            infoFormat = "text/xml";
+        }
+        
         // NB: If SLD_BODY is used in future, look out for ArcGIS which does not like SLD_BODY (see Querier.js)
         var get_params= "WMS_URL="+encodeURIComponent(serviceInfo.url)+
             "&lat="+pt[1]+ // NB: 'lat' and 'lng' are projection map coords, not latitude, longitude angles
@@ -154,7 +160,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
             "&WIDTH="+bbWidth+ // Map panel width, in pixels (not Google Map pixel coords)
             "&HEIGHT="+bbHeight+ // Map panel height, in pixels (not Google Map pixel coords)
             //Invalid format 'application/xml', supported formats are [text/plain, application/vnd.ogc.gml, application/vnd.ogc.gml/3.1.1, text/html, application/json] 
-            "&INFO_FORMAT="+encodeURIComponent("application/vnd.ogc.gml/3.1.1")+ //+encodeURIComponent("text/html")+ // Simple HTML for the moment // application/vnd.ogc.gml                    
+            "&INFO_FORMAT="+encodeURIComponent(infoFormat)+                    
             "&version="+encodeURIComponent(serviceInfo.version);
         
         if(style){

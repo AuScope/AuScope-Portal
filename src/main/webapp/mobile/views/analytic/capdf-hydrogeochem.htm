@@ -22,7 +22,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="capdf-hydrogeochem-group-selec">
-                                        <li ng-repeat="group in gois"><a class="filter-form-select" ng-click="setSelectedGoi(group[0], group[1]); getPOIs(goi);">{{group[0]}}</a></li>
+                                        <li ng-repeat="group in gois"><a class="filter-form-select" ng-click="setSelectedGoi(group[0], group[1]); getPOIs(goi); setSelectedPoi('-- choose a Parameter --','');">{{group[0]}}</a></li>
                                     </ul>
                                 </div>
                             </div>	                    
@@ -50,7 +50,6 @@
 	                           <rzslider ng-hide="noRangeFound" rz-slider-model="slider.minValue"
 						          rz-slider-high="slider.maxValue"
 						          rz-slider-options="slider.options"></rzslider>
-						        <div ng-show="noRangeFound" class="text-danger">No range found. Try another parameter</div>  
 	                        </div>					          	                    
 	                    </div>
 	                    

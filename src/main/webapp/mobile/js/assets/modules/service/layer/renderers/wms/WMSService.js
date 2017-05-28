@@ -150,6 +150,26 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
         // Setup interval timer to monitor layer loading process
         registerTileLoadedEvent(mapLayer,layer,onlineResource);
         
+        // Register the onlineResource for the layer so that users can click on a point on map and display a popup window
+        me.registerQuerier(layer, onlineResource, map, style);
+        
+        // Overrides Google Map API to register event handler
+        mapLayer = overrideToRegisterFailureEvent(mapLayer, layer.id);
+
+        // This adds the layer to Google Map
+        map.overlayMapTypes.push(mapLayer);
+        
+        // This keeps track of our layers
+        GoogleMapService.addLayerToActive(layer,mapLayer);       
+       
+    };
+    
+    /**
+     * @method registerQuerier
+     * @param layer The layer containing the wms to registered with the querier 
+     * @param onlineResource Online resource object
+     */
+    this.registerQuerier = function(layer, onlineResource, map, style) {
         // Get the bounding box for the 'onlineResource', then register for click events within that bounding box
         var cswRecords = LayerManagerService.getCSWRecords(layer);
         var done = false;
@@ -169,16 +189,6 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
                 }
             }
         }
-        
-        // Overrides Google Map API to register event handler
-        mapLayer = overrideToRegisterFailureEvent(mapLayer, layer.id);
-
-        // This adds the layer to Google Map
-        map.overlayMapTypes.push(mapLayer);
-        
-        // This keeps track of our layers
-        GoogleMapService.addLayerToActive(layer,mapLayer);       
-       
     };
    
  

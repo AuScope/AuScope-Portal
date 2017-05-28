@@ -5,8 +5,8 @@
  * @class CapdfWMSService
  * 
  */
-allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','Constants',
-                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,Constants) {
+allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerManagerService','Constants','GetWMSRelatedService','RenderStatusService','WMSService',
+                                 function ($rootScope,GoogleMapService,LayerManagerService,Constants,GetWMSRelatedService,RenderStatusService,WMSService) {
     
   
     
@@ -157,13 +157,14 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                     var mapLayer = me.generateWMS_1_1_1_Layer(layername,onlineResources[index],(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
-                    GoogleMapService.addLayerToActive(layer,mapLayer);                   
+                    GoogleMapService.addLayerToActive(layer,mapLayer);
+                    WMSService.registerQuerier(layer, onlineResources[index], map, null);                    
                 }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
                     var mapLayer = me.generateWMS_1_3_0_Layer(layername,onlineResources[index],(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
                     map.overlayMapTypes.push(mapLayer);
                     GoogleMapService.addLayerToActive(layer,mapLayer);
-                    
+                    WMSService.registerQuerier(layer, onlineResources[index], map, null);
                 }        
             }
         });

@@ -1067,7 +1067,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 216,
+            "line": 223,
             "description": "Run the color code request",
             "itemtype": "method",
             "name": "renderColorCode",
@@ -1094,7 +1094,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 234,
+            "line": 241,
             "description": "Request to start the drawing process for bounding box selection",
             "itemtype": "method",
             "name": "selectBound",
@@ -1103,7 +1103,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 242,
+            "line": 249,
             "description": "Performs a box plot in the panel",
             "itemtype": "method",
             "name": "plotBox",
@@ -1118,7 +1118,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 277,
+            "line": 284,
             "description": "Performs a scatter plot in the panel",
             "itemtype": "method",
             "name": "plotScatter",
@@ -2933,7 +2933,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
-            "line": 174,
+            "line": 175,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",
@@ -3012,7 +3012,25 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 185,
+            "line": 167,
+            "itemtype": "method",
+            "name": "registerQuerier",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "The layer containing the wms to registered with the querier"
+                },
+                {
+                    "name": "onlineResource",
+                    "description": "Online resource object"
+                }
+            ],
+            "class": "WMSService",
+            "module": "map"
+        },
+        {
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
+            "line": 195,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderLayer",
@@ -3031,7 +3049,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 236,
+            "line": 246,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",
