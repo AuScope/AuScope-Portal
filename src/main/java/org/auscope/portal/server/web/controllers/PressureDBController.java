@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.mineraloccurrence.MineralTenementFilter;
 import org.auscope.portal.pressuredb.AvailableOMResponse;
+import org.auscope.portal.pressuredb.PressureDBFilter;
 import org.auscope.portal.server.web.service.PressureDBService;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,31 +203,16 @@ public class PressureDBController extends BasePortalController {
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
             @RequestParam(required = false, value = "color", defaultValue = "") String color,
             @RequestParam(required = false, value = "ccProperty", defaultValue = "") String ccProperty ,
-            @RequestParam(required = false, value = "ccLevels", defaultValue = "9") int ccLevels,
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters)
                     throws Exception {
-
+        
         String style = "";
-        int propertyMode = 0;
-        switch (ccProperty) {
-        case "Length":
-            propertyMode = 1;
-            style = getColorCodedStyle("gsmlp:BoreholeView",
-                    "gsmlp:boreholeLength_m", ccLevels, propertyMode);
-            break;
-        case "Elevation":
-            propertyMode = 2;
-            style = getColorCodedStyle("gsmlp:BoreholeView",
-                    "gsmlp:elevation_m", ccLevels, propertyMode);
-            break;
-        default:
-            propertyMode = 0;
+        if (ccProperty.contains("Length") || 
+            ccProperty.contains("Elevation" )) {
+            style = getColorCodedStyle("gsmlp:BoreholeView", boreholeName,custodian, dateOfDrillingStart, dateOfDrillingEnd, ccProperty);
+        } else {
             style = getStyle("gsmlp:BoreholeView", "gsmlp:shape", "#2242c7");
-            break;
         }
-
-        //String style = getColorCodedStyle("gsmlp:BoreholeView" , "gsmlp:elevation_m",ccLevels);
-
         response.setContentType("text/xml");
         ByteArrayInputStream styleStream = new ByteArrayInputStream(
                 style.getBytes());
@@ -284,8 +271,18 @@ public class PressureDBController extends BasePortalController {
      *            - the name of the layer.
      * @return
      */
-    public String getColorCodedStyle(String layerName,String propertyName,int ccLevels,int propertyMode) {
-        String styleRules = getStyleRules(propertyName,ccLevels, propertyMode);
+    public String getColorCodedStyle(String layerName,String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,String ccProperty) {
+            String styleRules = "";
+            styleRules += getStyleRuleByIndex(0,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(1,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(2,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(3,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(4,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(5,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(6,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(7,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(8,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
@@ -307,125 +304,89 @@ public class PressureDBController extends BasePortalController {
         return style;
     }
 
-    public String getStyleRules(String propertyName, int numRules,
-            int propertyMode) {
-        String styleRules = "";
-        String header = "";
-        String middle = "";
-        String tail = "";
-        if (numRules > 9)
-            numRules = 9;
-        int i = 0;
-        header = "<Rule>" + "<Name>Boreholes</Name>"
-                + "<Title>Boreholes less than "
-                + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                        .get(i) : PRESSURE_DB_ELEVATION_MAP.get(i))
-                        + "</Title>"
-                        + "<Abstract>Light purple square boxes</Abstract>"
-                        + "<ogc:Filter>"
-                        + "	<ogc:PropertyIsLessThan matchCase=\"false\" >"
-                        + "<ogc:PropertyName>"
-                        + propertyName
-                        + "</ogc:PropertyName>"
-                        + "<ogc:Literal>"
-                        + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                                .get(i) : PRESSURE_DB_ELEVATION_MAP.get(i))
-                                + "</ogc:Literal>"
-                                + "</ogc:PropertyIsLessThan>"
-                                + "</ogc:Filter>"
-                                + "<PointSymbolizer>"
-                                + "<Graphic>"
-                                + "<Mark>"
-                                + "<WellKnownName>square</WellKnownName>"
-                                + "<Fill>"
-                                + "<CssParameter name=\"fill\">"
-                                + PRESSURE_DB_COLOUR_MAP.get(i)
-                                + "</CssParameter>"
-                                + "</Fill>"
-                                + "</Mark>"
-                                + "<Size>8</Size>"
-                                + "</Graphic>"
-                                + "</PointSymbolizer>" + "</Rule>";
-
-        for (i = 1; i < (numRules - 1); i++) {
-            int low = (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i - 1)
-                    : PRESSURE_DB_ELEVATION_MAP.get(i - 1);
-            int high = (propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP.get(i)
-                    : PRESSURE_DB_ELEVATION_MAP.get(i);
-            middle += "<Rule>" + "<Name>Boreholes</Name>"
-                    + "<Title>Boreholes from "
-                    + Integer.toString(low)
-                    + "m to "
-                    + Integer.toString(high)
-                    + "m"
-                    + "</Title>"
-                    + "<Abstract>Light purple square boxes</Abstract>"
-                    + "<ogc:Filter>"
-                    + "<ogc:And>"
-                    + "<ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"
-                    + "<ogc:PropertyName>"
-                    + propertyName
-                    + "</ogc:PropertyName>"
-                    + "<ogc:Literal>"
-                    + Integer.toString(low)
-                    + "</ogc:Literal>"
-                    + "</ogc:PropertyIsGreaterThanOrEqualTo>"
-                    + "<ogc:PropertyIsLessThan matchCase=\"false\" >"
-                    + "<ogc:PropertyName>"
-                    + propertyName
-                    + "</ogc:PropertyName>"
-                    + "<ogc:Literal>"
-                    + Integer.toString(high)
-                    + "</ogc:Literal>"
-                    + "</ogc:PropertyIsLessThan>"
-                    + "</ogc:And>"
-                    + "</ogc:Filter>"
+    public String getStyleRuleByIndex(int index, String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,String ccProperty ) {    
+        String rule;
+        String filter;
+        int ccStart;
+        int ccEnd;           
+        if (index == 0) {            
+            ccStart = PressureDBFilter.CC_START;
+            if (ccProperty.contains("Elevation")) {
+                ccEnd = PRESSURE_DB_ELEVATION_MAP.get(0);
+            } else {
+                ccEnd = PRESSURE_DB_LENGTH_MAP.get(0);        
+            }
+            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd);
+            filter = pressureDBFilter.getFilterString(null);
+            
+            rule = "<Rule>" + "<Name>Boreholes</Name>"
+                    + "<Title>Boreholes less than " + ccEnd + "</Title>"
+                    + "<Abstract>PressureDB</Abstract>"
+                    + filter
                     + "<PointSymbolizer>"
                     + "<Graphic>"
                     + "<Mark>"
                     + "<WellKnownName>square</WellKnownName>"
                     + "<Fill>"
-                    + "<CssParameter name=\"fill\">"
-                    + PRESSURE_DB_COLOUR_MAP.get(i)
-                    + "</CssParameter>"
+                    + "<CssParameter name=\"fill\">"+ PRESSURE_DB_COLOUR_MAP.get(index) + "</CssParameter>"
                     + "</Fill>"
                     + "</Mark>"
                     + "<Size>8</Size>"
                     + "</Graphic>"
                     + "</PointSymbolizer>" + "</Rule>";
-        }
-        tail = "<Rule>" + "<Name>Boreholes</Name>"
-                + "<Title>Boreholes greater than "
-                + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                        .get(i - 1) : PRESSURE_DB_ELEVATION_MAP.get(i - 1))
-                        + "</Title>"
-                        + "<Abstract>Light purple square boxes</Abstract>"
-                        + "<ogc:Filter>"
-                        + "	<ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"
-                        + "<ogc:PropertyName>"
-                        + propertyName
-                        + "</ogc:PropertyName>"
-                        + "<ogc:Literal>"
-                        + Integer.toString((propertyMode == 1) ? PRESSURE_DB_LENGTH_MAP
-                                .get(i - 1) : PRESSURE_DB_ELEVATION_MAP.get(i - 1))
-                                + "</ogc:Literal>"
-                                + "</ogc:PropertyIsGreaterThanOrEqualTo>"
-                                + "</ogc:Filter>"
-                                + "<PointSymbolizer>"
-                                + "<Graphic>"
-                                + "<Mark>"
-                                + "<WellKnownName>square</WellKnownName>"
-                                + "<Fill>"
-                                + "<CssParameter name=\"fill\">"
-                                + PRESSURE_DB_COLOUR_MAP.get(i)
-                                + "</CssParameter>"
-                                + "</Fill>"
-                                + "</Mark>"
-                                + "<Size>8</Size>"
-                                + "</Graphic>"
-                                + "</PointSymbolizer>" + "</Rule>";
-        styleRules = header + middle + tail;
-        return styleRules;
-    }
+        } else if (index == 8) {
+            if (ccProperty.contains("Elevation")) {
+                ccStart = PRESSURE_DB_ELEVATION_MAP.get(index);
+            } else {
+                ccStart = PRESSURE_DB_LENGTH_MAP.get(index);        
+            }    
+            ccEnd = PressureDBFilter.CC_END;
+            PressureDBFilter pressureDBFilter3 = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd);
+            filter = pressureDBFilter3.getFilterString(null);    
+            rule = "<Rule>" + "<Name>Boreholes</Name>"
+                    + "<Title>Boreholes greater than" + Integer.toString(ccEnd) + "</Title>"
+                    + "<Abstract>PressureDB</Abstract>"
+                    + filter
+                    + "<PointSymbolizer>"
+                    + "<Graphic>"
+                    + "<Mark>"
+                    + "<WellKnownName>square</WellKnownName>"
+                    + "<Fill>"
+                    + "<CssParameter name=\"fill\">"+ PRESSURE_DB_COLOUR_MAP.get(index) + "</CssParameter>"
+                    + "</Fill>"
+                    + "</Mark>"
+                    + "<Size>8</Size>"
+                    + "</Graphic>"
+                    + "</PointSymbolizer>" + "</Rule>";
+        } else { //index = 1,2,3,4,5,6,7
+            
+            if (ccProperty.contains("Elevation")) {
+                ccStart = PRESSURE_DB_ELEVATION_MAP.get(index);
+                ccEnd = PRESSURE_DB_ELEVATION_MAP.get(index+1);
+            } else {
+                ccStart = PRESSURE_DB_LENGTH_MAP.get(index);
+                ccEnd = PRESSURE_DB_LENGTH_MAP.get(index+1);           
+            }
+            
+            PressureDBFilter pressureDBFilter2 = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd);
+            filter = pressureDBFilter2.getFilterString(null);
 
+            rule = "<Rule>" + "<Name>Boreholes</Name>"
+                    + "<Title>Boreholes from "+ ccStart + "m to " + ccEnd+ "m" + "</Title>"
+                    + "<Abstract>PressureDB</Abstract>"
+                    + filter
+                    + "<PointSymbolizer>"
+                    + "<Graphic>"
+                    + "<Mark>"
+                    + "<WellKnownName>square</WellKnownName>"
+                    + "<Fill>"
+                    + "<CssParameter name=\"fill\">"+ PRESSURE_DB_COLOUR_MAP.get(index) + "</CssParameter>"
+                    + "</Fill>"
+                    + "</Mark>"
+                    + "<Size>8</Size>"
+                    + "</Graphic>"
+                    + "</PointSymbolizer>" + "</Rule>";        
+        }
+        return rule;    
+    }
 }

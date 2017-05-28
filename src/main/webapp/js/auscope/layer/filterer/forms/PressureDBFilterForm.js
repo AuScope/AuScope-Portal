@@ -28,21 +28,6 @@ Ext.define('auscope.layer.filterer.forms.PressureDBFilterForm', {
             autoLoad : true
         });       
         
-        ccLevelsSlider = Ext.create('Ext.slider.Single', {           
-            anchor: '100%',
-            itemId: 'ccLevelsSlider',
-            disabled :  false,
-            fieldLabel: '<span data-qtip="Select the levels value for color coding">' + 'Color Code Levels' + '</span>',
-            labelAlign: 'left',
-            name: 'ccLevels',
-            increment: 1,
-            minValue:3,
-            maxValue:9,   
-            value:9,
-            tipText: function(thumb){
-                return Ext.String.format('<b>Total {0} color code</b>', thumb.value);
-            }                            
-        });
         fieldSet.remove('serviceFilter-field');
         
         fieldSet.add({
@@ -59,7 +44,7 @@ Ext.define('auscope.layer.filterer.forms.PressureDBFilterForm', {
             valueField: 'ccProperty',
             displayField: 'ccProperty',
             hiddenName: 'ccProperty'
-        }, ccLevelsSlider);      
+        });      
                
         this.doLayout();
     }
