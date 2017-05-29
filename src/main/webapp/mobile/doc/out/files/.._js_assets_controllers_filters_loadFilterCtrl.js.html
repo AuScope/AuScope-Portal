@@ -333,12 +333,51 @@ allControllers.controller(&#x27;loadFilterCtrl&#x27;, [&#x27;$scope&#x27;,&#x27;
                 param.optionalFilters[idx].options = [];
             }
         }
-        RenderHandlerService.renderLayer(layer,param);
-        if (layer.hasOwnProperty(&#x27;filterCollection&#x27;)) {
-            FilterStateService.registerFilterSettings({m: layer.filterCollection.mandatoryFilters, o: layer.filterCollection.optionalFilters},layer.id);
-        } else {
-            FilterStateService.registerFilterSettings({m: {}, o: {}},layer.id);
+        // Only render layer if the filter has been initialised
+        if ($scope.checkFilterInitialised($scope.optionalFilters)) {
+            RenderHandlerService.renderLayer(layer,param);
+            if (layer.hasOwnProperty(&#x27;filterCollection&#x27;)) {
+                FilterStateService.registerFilterSettings({m: layer.filterCollection.mandatoryFilters, o: layer.filterCollection.optionalFilters},layer.id);
+            } else {
+                FilterStateService.registerFilterSettings({m: {}, o: {}},layer.id);
+            }
         }
+    };
+    
+    
+    
+    /**
+     * @method checkValidFilterValues
+     * @param optionalFilters list of filters for current layer
+     * @return true if there are no filters in use or if there are filters and they are initialised with values
+     *
+     * Confirms that the filters are initialised
+     */
+    $scope.checkFilterInitialised = function(optionalFilters) {
+        for (var i=0; i&lt;optionalFilters.length; i++) {
+            // When no providers are selected, this is not valid
+            if (optionalFilters[i].type==&#x27;OPTIONAL.PROVIDER&#x27;) {
+                var p_result = false;
+                for (var providr in optionalFilters[i].value) {
+                    if (optionalFilters[i].value[providr]) p_result = true;
+                }
+                if (p_result==false) {
+                    return false;
+                }
+            // An empty date field is not valid
+            } else if (optionalFilters[i].type==&#x27;OPTIONAL.DATE&#x27; &amp;&amp; !optionalFilters[i].value) {
+                return false;
+                
+            // An unselected dropdown is not valid
+            } else if ((optionalFilters[i].type==&#x27;OPTIONAL.DROPDOWNSELECTLIST&#x27; || optionalFilters[i].type==&#x27;OPTIONAL.DROPDOWNREMOTE&#x27;) &amp;&amp; !optionalFilters[i].value) {
+                return false;
+                
+            // An empty text box is not valid
+            } else if (optionalFilters[i].type==&#x27;OPTIONAL.TEXT&#x27; &amp;&amp; !optionalFilters[i].value) {
+                return false;
+            }
+        }
+        return true;
     };
      
     /**
