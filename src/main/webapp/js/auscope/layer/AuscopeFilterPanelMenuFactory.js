@@ -31,11 +31,8 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         if (layer.id === "pressuredb-borehole") {
             // LJ: AUS-2619 Additional params for pressureDB legend.
             ccProperty = filter.getParameter('ccProperty') || '';
-            var ccLevels = filter.getParameter('ccLevels') || 9;
-            sldUrl = portal.util.URL.base + styleUrl
-                    + "?ccProperty=" + ccProperty
-                    + "&ccLevels=" + ccLevels;
-            isSld_body = false;
+            sldUrl = "getPressureDBLegendStyle.do?ccProperty=" + ccProperty;
+            isSld_body = true;
         } else if (layer.id === "mineral-tenements") {
             ccProperty = filter.getParameter('ccProperty');
             sldUrl = "getMineralTenementLegendStyle.do?ccProperty=" + ccProperty;
