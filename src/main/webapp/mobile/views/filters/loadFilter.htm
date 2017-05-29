@@ -131,7 +131,7 @@
  
     <div ng-if="layer.filterCollection.optionalFilters" class="filter-subpanel">
         <div class="col-xs-4">
-            <button type="button" class="btn btn-info add-layer-btn" ng-click="addLayer(layer)">Add Layer</button>
+            <button type="button" class="btn btn-info add-layer-btn" ng-class="{disabled: !checkFilterInitialised(optionalFilters)}" ng-click="addLayer(layer)">Add Layer</button>
         </div>
         <div ng-if="!isLayerAtFront(layer);" class="col-xs-3">
             <span class="expose-btn-txt">Expose</span>

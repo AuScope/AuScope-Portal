@@ -1327,7 +1327,24 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 226,
+            "line": 231,
+            "itemtype": "method",
+            "name": "checkValidFilterValues",
+            "params": [
+                {
+                    "name": "optionalFilters",
+                    "description": "list of filters for current layer"
+                }
+            ],
+            "return": {
+                "description": "true if there are no filters in use or if there are filters and they are initialised with values\n\nConfirms that the filters are initialised"
+            },
+            "class": "loadFilterCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
+            "line": 265,
             "description": "Adds a new filter to be displayed in the panel",
             "itemtype": "method",
             "name": "addFilter",
@@ -1342,7 +1359,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 252,
+            "line": 291,
             "description": "Removes all filters displayed in panel",
             "itemtype": "method",
             "name": "clearFilter",
@@ -1351,7 +1368,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 260,
+            "line": 299,
             "description": "Returns the first key in options object",
             "itemtype": "method",
             "name": "getKey",
@@ -1369,7 +1386,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 271,
+            "line": 310,
             "description": "Uses the input filter object to set the filter values",
             "itemtype": "method",
             "name": "updateFilter",
