@@ -287,10 +287,6 @@ public class PressureDBController extends BasePortalController {
             styleRules += getStyleRuleByIndex(isLegend,2,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
             styleRules += getStyleRuleByIndex(isLegend,3,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
             styleRules += getStyleRuleByIndex(isLegend,4,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-//            styleRules += getStyleRuleByIndex(isLegend,5,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-//            styleRules += getStyleRuleByIndex(isLegend,6,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-//            styleRules += getStyleRuleByIndex(isLegend,7,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-//            styleRules += getStyleRuleByIndex(isLegend,8,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
@@ -332,7 +328,6 @@ public class PressureDBController extends BasePortalController {
             
             rule = "<Rule>" + "<Name>Boreholes</Name>"
                     + "<Title>less than " + ccEnd + "m" + "</Title>"
-                   // + "<Abstract>PressureDB</Abstract>"
                     + filter
                     + "<PointSymbolizer>"
                     + "<Graphic>"
@@ -360,7 +355,6 @@ public class PressureDBController extends BasePortalController {
             }
             rule = "<Rule>" + "<Name>Boreholes</Name>"
                     + "<Title>greater than" + ccStart + "m" + "</Title>"
-                   // + "<Abstract>PressureDB</Abstract>"
                     + filter
                     + "<PointSymbolizer>"
                     + "<Graphic>"
@@ -392,7 +386,6 @@ public class PressureDBController extends BasePortalController {
 
             rule = "<Rule>" + "<Name>Boreholes</Name>"
                     + "<Title>from "+ ccStart + "m to " + ccEnd+ "m" + "</Title>"
-                    //+ "<Abstract>PressureDB</Abstract>"
                     + filter
                     + "<PointSymbolizer>"
                     + "<Graphic>"
