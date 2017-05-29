@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,13 +41,27 @@ public class MineralTenementController extends BasePortalController {
 
     private static final String ENCODING = "ISO-8859-1";
     private static final int BUFFERSIZE = 1024 * 1024;
+    private HashMap<String, String> MINERAL_TENEMENT_COLOUR_MAP = new HashMap<String, String>();    
 
     @Autowired
     public MineralTenementController(MineralTenementService mineralTenementService, WMSService wmsService, ArcGISToMineralTenement arcGISToMineralTenement) {
         this.mineralTenementService = mineralTenementService;
         this.mineralTenementWMSService = wmsService;
         this.arcGISToMineralTenementTransformer = arcGISToMineralTenement;
-    }
+        
+        MINERAL_TENEMENT_COLOUR_MAP.put("exploration", "#0000FF");
+        MINERAL_TENEMENT_COLOUR_MAP.put("prospecting", "#00FFFF");
+        MINERAL_TENEMENT_COLOUR_MAP.put("miscellaneous", "#00FF00");
+        MINERAL_TENEMENT_COLOUR_MAP.put("mining", "#FFFF00");
+        MINERAL_TENEMENT_COLOUR_MAP.put("licence", "#FF0000");
+        
+        MINERAL_TENEMENT_COLOUR_MAP.put("LIVE", "#0000FF");
+        MINERAL_TENEMENT_COLOUR_MAP.put("CURRENT", "#00FF00");
+        MINERAL_TENEMENT_COLOUR_MAP.put("PENDING", "#FF0000");
+        
+        MINERAL_TENEMENT_COLOUR_MAP.put("MineralTenement", "#0000FF");
+        
+        }
 
     @RequestMapping("/getAllMineralTenementFeatures.do")
     public ModelAndView getAllMineralTenementFeatures(
@@ -176,16 +191,17 @@ public class MineralTenementController extends BasePortalController {
             @RequestParam(required = false, value = "ccProperty") String ccProperty,
             HttpServletResponse response) throws Exception {
         String style = "";
-        MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
         switch (ccProperty) {
         case "TenementType" :
-            style = this.getColorCodeLegendStyleForType(mineralTenementServiceProviderType.featureType());
+            style = this.getStyle(true,ccProperty,"mt:MineralTenement",null,null,null,null,null);
             break;
         case "TenementStatus":
-            style = this.getColorCodeLegendStyleForStatus(mineralTenementServiceProviderType.featureType());
+            style = this.getStyle(true,ccProperty,"mt:MineralTenement",null,null,null,null,null);
             break;
         default:
-            style = this.getPolygonLegendStyle(mineralTenementServiceProviderType.featureType());
+            MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
+            style = this.getPolygonStyle("", mineralTenementServiceProviderType.featureType(), mineralTenementServiceProviderType.fillColour(), mineralTenementServiceProviderType.borderColour(),
+                    mineralTenementServiceProviderType.styleName());
             break;
         }
 
@@ -226,10 +242,10 @@ public class MineralTenementController extends BasePortalController {
         String style = "";
         switch (ccProperty) {
         case "TenementType" :
-            style = this.getColorCodeStyleForType(name, tenementType, owner, size, endDate);
+            style = this.getStyle(false,ccProperty,"mt:MineralTenement",name, tenementType, owner, size, endDate);
             break;
         case "TenementStatus":
-            style = this.getColorCodeStyleForStatus(name, tenementType, owner, size, endDate);
+            style = this.getStyle(false,ccProperty,"mt:MineralTenement",name, tenementType, owner, size, endDate);
             break;
         default:
             MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
@@ -265,393 +281,81 @@ public class MineralTenementController extends BasePortalController {
         return  SLDLoader.loadSLD("/org/auscope/portal/slds/MineralTenement_getPolygonStyle.sld", valueMap,false);
 
     }
-
-    public String getColorCodeStyleForType(String name, String tenementType,String owner, String size, String endDate) {
-
-        String filterExploration = "";
-        String filterProspecting = "";
-        String filterMiscellaneous = "";
-        String filterMiningLease = "";
-        String filterLicence = "";
-        try {
-
-            filterExploration = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "exploration*");
-            filterProspecting = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "prospecting*");
-            filterMiscellaneous = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "miscellaneous*");
-            filterMiningLease = this.mineralTenementService.getMineralTenementFilterCCType(name ,tenementType, owner, size, endDate, null, "mining*");
-            filterLicence = this.mineralTenementService.getMineralTenementFilterCCType(name,tenementType, owner, size, endDate, null, "licence*");
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public String getStyle(boolean isLegend,String ccProperty,String layerName,String name, String tenementType, String owner, String size, String endDate) {
+        String rules = getRules(isLegend,ccProperty,name,  tenementType, owner,  size,  endDate) ;
+        String header="";
+        if (isLegend) {
+            header = "<StyledLayerDescriptor version=\"1.0.0\" " +
+                    "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> ";
+        } else {
+            header = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
+                    "<StyledLayerDescriptor version=\"1.0.0\" " +
+                    "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
+                    "xmlns=\"http://www.opengis.net/sld\" " +
+                    "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
+                    "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
+                    "xmlns:ows=\"http://www.opengis.net/ows\" " +
+                    "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> ";
         }
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>Type ColorCode Style</Title>" +
-                "<Abstract>A green default style</Abstract>" +
-                "<FeatureTypeStyle>" +
-
-                   "<Rule>" +
-                   "<Name>r1</Name>" +
-                   "<Title>Exploration</Title>" +
-                   "<Abstract></Abstract>" +
-                   filterExploration +
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#0000FF" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "<Stroke>" +
-                   "<CssParameter name=\"stroke\">" + "#0000FF" + "</CssParameter>" +
-                   "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                   "</Stroke>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-
-
-                   "<Rule>" +
-                   "<Name>r2</Name>" +
-                   "<Title>Prospecting</Title>" +
-                   "<Abstract></Abstract>" +
-                   filterProspecting +
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#00FFFF" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "<Stroke>" +
-                   "<CssParameter name=\"stroke\">" + "#00FFFF" + "</CssParameter>" +
-                   "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                   "</Stroke>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-
-                   "<Rule>" +
-                   "<Name>r3</Name>" +
-                   "<Title>Miscellaneous</Title>" +
-                   "<Abstract></Abstract>" +
-                   filterMiscellaneous +
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#00FF00" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "<Stroke>" +
-                   "<CssParameter name=\"stroke\">" + "#00FF00" + "</CssParameter>" +
-                   "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                   "</Stroke>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-
-                   "<Rule>" +
-                   "<Name>r4</Name>" +
-                   "<Title>Mining Lease</Title>" +
-                   "<Abstract></Abstract>" +
-                   filterMiningLease+
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#FFFF00" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "<Stroke>" +
-                   "<CssParameter name=\"stroke\">" + "#FFFF00" + "</CssParameter>" +
-                   "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                   "</Stroke>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-
-                   "<Rule>" +
-                   "<Name>r5</Name>" +
-                   "<Title>Licence</Title>" +
-                   "<Abstract></Abstract>" +
-                   filterLicence +
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#FF0000" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "<Stroke>" +
-                   "<CssParameter name=\"stroke\">" + "#FF0000" + "</CssParameter>" +
-                   "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                   "</Stroke>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-                   "</FeatureTypeStyle>" +
-                   "</UserStyle>" +
-                   "</NamedLayer>" +
-                   "</StyledLayerDescriptor>";
-        return style;
-    }
-
-    public String getColorCodeStyleForStatus(String name, String tenementType, String owner, String size, String endDate) {
-
-        String filterLive = "";
-        String filterCurrent = "";
-        String filterPending = "";
-
-        try {
-            filterLive = this.mineralTenementService.getMineralTenementFilterCCStatus(name, tenementType, owner, size, endDate, null ,"LIVE*");
-            filterCurrent = this.mineralTenementService.getMineralTenementFilterCCStatus(name, tenementType, owner, size, endDate, null ,"CURRENT*");
-            filterPending = this.mineralTenementService.getMineralTenementFilterCCStatus(name, tenementType, owner, size, endDate, null ,"PENDING*");
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>Default style</Title>" +
-                "<Abstract>A green default style</Abstract>" +
-                "<FeatureTypeStyle>" +
-
-                    "<Rule>" +
-                    "<Name>r</Name>" +
-                    "<Title>Live</Title>" +
-                    "<Abstract>Tenement Status Blue</Abstract>" +
-                    filterLive +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#0000FF" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#0000FF" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-
-
-                    "<Rule>" +
-                    "<Name>r</Name>" +
-                    "<Title>Current</Title>" +
-                    "<Abstract>Tenement Status Green</Abstract>" +
-                    filterCurrent+
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#00FF00" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#00FF00" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-
-
-                    "<Rule>" +
-                    "<Name>r</Name>" +
-                    "<Title>Pending</Title>" +
-                    "<Abstract>Tenement Status Red</Abstract>" +
-                    filterPending +
-                    "<PolygonSymbolizer>" +
-                    "<Fill>" +
-                    "<CssParameter name=\"fill\">" + "#FF0000" + "</CssParameter>" +
-                    "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                    "</Fill>" +
-                    "<Stroke>" +
-                    "<CssParameter name=\"stroke\">" + "#FF0000" + "</CssParameter>" +
-                    "<CssParameter name=\"stroke-width\">1</CssParameter>" +
-                    "</Stroke>" +
-                    "</PolygonSymbolizer>" +
-                    "</Rule>" +
-                    "</FeatureTypeStyle>" +
+        String style =  header +
+                    "<NamedLayer>" +
+                    "<Name>" + layerName + "</Name>" +
+                    "<UserStyle>" +
+                    "<FeatureTypeStyle>" + rules + "</FeatureTypeStyle>" +
                     "</UserStyle>" +
                     "</NamedLayer>" +
                     "</StyledLayerDescriptor>";
         return style;
+    }   
+    
+    private String getRules(boolean isLegend,String ccProperty,String name, String tenementType,String owner, String size, String endDate) {
+
+        String rules = "";
+        if (ccProperty.contains("TenementType")){
+            rules += getRuleByName(isLegend,ccProperty,"exploration",name,tenementType, owner, size, endDate);
+            rules += getRuleByName(isLegend,ccProperty,"prospecting",name,tenementType, owner, size, endDate);
+            rules += getRuleByName(isLegend,ccProperty,"miscellaneous",name,tenementType, owner, size, endDate);
+            rules += getRuleByName(isLegend,ccProperty,"mining",name,tenementType, owner, size, endDate);
+            rules += getRuleByName(isLegend,ccProperty,"licence",name,tenementType, owner, size, endDate);
+        } else if (ccProperty.contains("TenementStatus")){
+            rules += getRuleByName(isLegend,ccProperty,"LIVE",name,tenementType, owner, size, endDate);
+            rules += getRuleByName(isLegend,ccProperty,"CURRENT",name,tenementType, owner, size, endDate);
+            rules += getRuleByName(isLegend,ccProperty,"PENDING",name,tenementType, owner, size, endDate);            
+        } else {
+            rules = getRuleByName(isLegend,ccProperty,"Tenement",name,tenementType, owner, size, endDate);
+        }
+        return rules;
     }
-    String getColorCodeLegendStyleForType(String name) {
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>Type ColorCode Style</Title>" +
-                "<FeatureTypeStyle>" +
+    
+    private String getRuleByName(boolean isLegend,String ccProperty,String ruleName,String name, String tenementType,String owner, String size, String endDate) {
+        String filter = "";        
+        if (isLegend) { 
+            filter = "";
+        } else {
+            try {
+                filter = this.mineralTenementService.getMineralTenementFilterCCProperty(name,tenementType, owner, size, endDate, null, ccProperty,ruleName + "*");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }            
+        }
+        String color = MINERAL_TENEMENT_COLOUR_MAP.get(ruleName);
+        String rule = "<Rule>" +
+        "<Name>T</Name>" +
+        "<Title>" + ruleName + "</Title>" +
+        filter +
+        "<PolygonSymbolizer>" +
+        "<Fill>" +
+        "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
+        "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
+        "</Fill>" +
+        "<Stroke>" +
+        "<CssParameter name=\"stroke\">" + color + "</CssParameter>" +
+        "<CssParameter name=\"stroke-width\">1</CssParameter>" +
+        "</Stroke>" +
+        "</PolygonSymbolizer>" +
+        "</Rule>";
+        return rule;
 
-                "<Rule>" +
-                "<Name>r1</Name>" +
-                "<Title>Exploration</Title>" +
-                "<PolygonSymbolizer>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">" + "#0000FF" + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                "</Fill>" +
-                "</PolygonSymbolizer>" +
-                "</Rule>" +
-
-                "<Rule>" +
-                "<Name>r2</Name>" +
-                "<Title>Prospecting</Title>" +
-                "<PolygonSymbolizer>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">" + "#00FFFF" + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                "</Fill>" +
-                "</PolygonSymbolizer>" +
-                "</Rule>" +
-
-                "<Rule>" +
-                "<Name>r3</Name>" +
-                "<Title>Miscellaneous</Title>" +
-                "<PolygonSymbolizer>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">" + "#00FF00" + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                "</Fill>" +
-                "</PolygonSymbolizer>" +
-                "</Rule>" +
-
-                "<Rule>" +
-                "<Name>r4</Name>" +
-                "<Title>Mining Lease</Title>" +
-                "<PolygonSymbolizer>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">" + "#FFFF00" + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                "</Fill>" +
-                "</PolygonSymbolizer>" +
-                "</Rule>" +
-
-                "<Rule>" +
-                "<Name>r5</Name>" +
-                "<Title>Licence</Title>" +
-                "<Abstract></Abstract>" +
-                "<PolygonSymbolizer>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">" + "#FF0000" + "</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                "</Fill>" +
-                "</PolygonSymbolizer>" +
-                "</Rule>" +
-                "</FeatureTypeStyle>" +
-                "</UserStyle>" +
-                "</NamedLayer>" +
-                "</StyledLayerDescriptor>";
-        return style;
-    }
-
-    public String getColorCodeLegendStyleForStatus(String name) {
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>Default style</Title>" +
-                "<Abstract>A green default style</Abstract>" +
-                "<FeatureTypeStyle>" +
-
-                   "<Rule>" +
-                   "<Name>r1</Name>" +
-                   "<Title>Live</Title>" +
-                   "<Abstract>Tenement Status Blue</Abstract>" +
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#0000FF" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-
-                   "<Rule>" +
-                   "<Name>r2</Name>" +
-                   "<Title>Current</Title>" +
-                   "<Abstract>Tenement Status Green</Abstract>" +
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#00FF00" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-
-
-                   "<Rule>" +
-                   "<Name>r3</Name>" +
-                   "<Title>Pending</Title>" +
-                   "<Abstract>Tenement Status Red</Abstract>" +
-                   "<PolygonSymbolizer>" +
-                   "<Fill>" +
-                   "<CssParameter name=\"fill\">" + "#FF0000" + "</CssParameter>" +
-                   "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                   "</Fill>" +
-                   "</PolygonSymbolizer>" +
-                   "</Rule>" +
-                   "</FeatureTypeStyle>" +
-                   "</UserStyle>" +
-                   "</NamedLayer>" +
-                   "</StyledLayerDescriptor>";
-        return style;
-    }
-    public String getPolygonLegendStyle(String name) {
-
-        String style = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" +
-                "<StyledLayerDescriptor version=\"1.0.0\" " +
-                "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" " +
-                "xmlns=\"http://www.opengis.net/sld\" " +
-                "xmlns:mt=\"http://xmlns.geoscience.gov.au/mineraltenementml/1.0\" " +
-                "xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-                "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xmlns:ows=\"http://www.opengis.net/ows\" " +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> " +
-                "<NamedLayer>" +
-                "<Name>" + name + "</Name>" +
-                "<UserStyle>" +
-                "<Title>Default style</Title>" +
-                "<Abstract>A green default style</Abstract>" +
-                "<FeatureTypeStyle>" +
-
-                "<Rule>" +
-                "<Name>Polygon for mineral tenement</Name>" +
-                "<Title>Mineral Tenement</Title>" +
-                "<Abstract>50 percent transparent green fill with a red outline 1 pixel in width</Abstract>" +
-                "<PolygonSymbolizer>" +
-                "<Fill>" +
-                "<CssParameter name=\"fill\">#00FF00</CssParameter>" +
-                "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
-                "</Fill>" +
-                "</PolygonSymbolizer>" +
-                "</Rule>" +
-                "</FeatureTypeStyle>" +
-                "</UserStyle>" +
-                "</NamedLayer>" +
-                "</StyledLayerDescriptor>";
-        return style;
     }
 
     private Document getDocumentFromString(String responseString)
