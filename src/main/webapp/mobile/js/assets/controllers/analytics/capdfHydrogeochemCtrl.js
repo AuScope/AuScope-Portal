@@ -230,12 +230,14 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
      */
     $scope.renderColorCode = function(goi,poi,minValue, maxValue){
          
-        GoogleMapService.removeActiveLayer($scope.layer);
-        CapdfWMSService.renderLayer(goi,$scope.layer,{
-            featureType:goi,
-            poi : poi,
-            minMax:[minValue,maxValue]
-        }); 
+        if (goi && poi) {
+            GoogleMapService.removeActiveLayer($scope.layer);
+            CapdfWMSService.renderLayer(goi,$scope.layer,{
+                featureType:goi,
+                poi : poi,
+                minMax:[minValue,maxValue]
+            });
+        }            
     };
      
     /**
