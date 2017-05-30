@@ -180,10 +180,19 @@
                         <code>pixel</code>
                 </li>
                 <li class="arg">
+                        <code>map</code>
+                </li>
+                <li class="arg">
+                        <code>layerName</code>
+                </li>
+                <li class="arg">
                         <code>serviceInfo</code>
                 </li>
                 <li class="arg">
                         <code>style</code>
+                </li>
+                <li class="arg">
+                        <code>slot</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -219,7 +228,9 @@
 
 
                     <div class="param-description">
-                        <p>Lat Lng object of the clicked/touched on point on map</p>
+                        <ul>
+<li>Lat Lng object of the clicked/touched on point on map</li>
+</ul>
 
                     </div>
 
@@ -230,7 +241,35 @@
 
 
                     <div class="param-description">
-                        <p>These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.</p>
+                        <ul>
+<li>These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">map</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Google map object</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">layerName</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Name of layer to use in WMS map query request</li>
+</ul>
 
                     </div>
 
@@ -241,7 +280,9 @@
 
 
                     <div class="param-description">
-                        <p>CSW service information object</p>
+                        <ul>
+<li>CSW service information object</li>
+</ul>
 
                     </div>
 
@@ -252,7 +293,22 @@
 
 
                     <div class="param-description">
-                        <p>OPTIONAL style to use when making the GetFeatureInfo request</p>
+                        <ul>
+<li>OPTIONAL style to use when making the GetFeatureInfo request</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">slot</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>an index to the layer number, used by the code which evaluates the response</li>
+</ul>
 
                     </div>
 

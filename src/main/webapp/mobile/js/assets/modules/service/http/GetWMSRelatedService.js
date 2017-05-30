@@ -96,12 +96,15 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
     /**
      * 
      * @method getWMSMarkerInfo
-     * @param ptLatLng Lat Lng object of the clicked/touched on point on map
-     * @param pixel These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.
-     * @param serviceInfo CSW service information object
-     * @param style OPTIONAL style to use when making the GetFeatureInfo request
+     * @param ptLatLng - Lat Lng object of the clicked/touched on point on map
+     * @param pixel - These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.
+     * @param map - Google map object
+     * @param layerName - Name of layer to use in WMS map query request  
+     * @param serviceInfo - CSW service information object
+     * @param style - OPTIONAL style to use when making the GetFeatureInfo request 
+     * @param slot - an index to the layer number, used by the code which evaluates the response
      */
-    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo, style, slot) {
+    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, layerName, serviceInfo, style, slot) {
         
         // This latLng needs to be converted into EPSG:3857 rect coords
         proj4.defs("EPSG:4326","+proj=longlat +datum=WGS84 +no_defs");
@@ -153,7 +156,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         var get_params= "WMS_URL="+encodeURIComponent(serviceInfo.url)+
             "&lat="+pt[1]+ // NB: 'lat' and 'lng' are projection map coords, not latitude, longitude angles
             "&lng="+pt[0]+
-            "&QUERY_LAYERS="+encodeURIComponent(serviceInfo.name)+
+            "&QUERY_LAYERS="+encodeURIComponent(layerName)+
             "&x="+pixel.x+ // x,y are pixel coords within the map panel (not Google Map pixel coords)
             "&y="+pixel.y+
             "&BBOX="+encodeURIComponent(bbox3)+ // The relevant Google Map tile's bounds, converted to projection map coords
@@ -174,7 +177,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
             url: "../wmsMarkerPopup.do",
             data: get_params,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            slot_num: slot
+            slot_num: slot /* index to layer number, used by response evaluation code */
         });
     };
      

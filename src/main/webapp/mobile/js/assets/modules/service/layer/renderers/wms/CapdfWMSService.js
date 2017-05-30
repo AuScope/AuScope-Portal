@@ -156,15 +156,21 @@ allModules.service('CapdfWMSService',['$rootScope','GoogleMapService','LayerMana
                 if(onlineResources[index].version === Constants.WMSVersion['1.1.1'] || onlineResources[index].version === Constants.WMSVersion['1.1.0']){
                     var mapLayer = me.generateWMS_1_1_1_Layer(layername,onlineResources[index],(response.style!=null && response.style.length<maxSldLength?response.style:null));                        
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
+                    // Google Maps API: Add map layer to overlay map types
                     map.overlayMapTypes.push(mapLayer);
+                    // Register layer with our GoogleMapService
                     GoogleMapService.addLayerToActive(layer,mapLayer);
-                    WMSService.registerQuerier(layer, onlineResources[index], map, null);                    
+                    // Register a map querier to display info when user clicks on map
+                    WMSService.registerQuerier(layer, layername, onlineResources[index], map, response.style);                    
                 }else if(onlineResources[index].version === Constants.WMSVersion['1.3.0']){
                     var mapLayer = me.generateWMS_1_3_0_Layer(layername,onlineResources[index],(response.style!=null && response.style.length<maxSldLength?response.style:null)); 
                     registerTileLoadedEvent(mapLayer,layer,onlineResources[index],Constants.statusProgress.COMPLETED);
+                    // Google Maps API: Add map layer to overlay map types
                     map.overlayMapTypes.push(mapLayer);
+                    // Register layer with our GoogleMapService
                     GoogleMapService.addLayerToActive(layer,mapLayer);
-                    WMSService.registerQuerier(layer, onlineResources[index], map, null);
+                    // Register a map querier to display info when user clicks on map
+                    WMSService.registerQuerier(layer, layername, onlineResources[index], map, response.style);
                 }        
             }
         });
