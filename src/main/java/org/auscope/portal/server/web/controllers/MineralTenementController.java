@@ -333,7 +333,7 @@ public class MineralTenementController extends BasePortalController {
             filter = "";
         } else {
             try {
-                filter = this.mineralTenementService.getMineralTenementFilterCCProperty(name,tenementType, owner, size, endDate, null, ccProperty,ruleName + "*");
+                filter = this.mineralTenementService.getMineralTenementFilterCCProperty(name,tenementType, owner, size, endDate, null, ccProperty,ruleName);
             } catch (Exception e) {
                 e.printStackTrace();
             }            
