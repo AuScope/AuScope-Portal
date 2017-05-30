@@ -77,13 +77,35 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
                    height : 140,
                    width : 580,
                    items : [{
-                       xtype : 'box',
-                       autoEl : {
-                           tag:'div',
-                           children:[{
-                               tag : 'img',
-                               src : imgUrl
-                           }]
+                       xtype: 'image',
+                       src: imgUrl,
+                       listeners: {
+                           render: function() {
+                               var img = this;
+                               var panel = img.ownerCt;
+
+                               setTimeout(function() {
+                                   var panelSize = panel.getSize(true);
+                                   var imageSize = img.getSize();
+                                   var ratio = 0;
+
+                                   // resize the image to fit in the panel with the correct ratio
+                                   if (imageSize.width > panelSize.width) {
+                                       ratio = panelSize.width / imageSize.width;
+                                       imageSize.width = panelSize.width;
+                                       imageSize.height = imageSize.height * ratio;
+                                   }
+
+                                   if (imageSize.height > panelSize.height) {
+                                       ratio = panelSize.height / imageSize.height;
+                                       imageSize.height = panelSize.height;
+                                       imageSize.width = imageSize.width * ratio;
+                                   }
+
+                                   img.setSize(imageSize);
+                               },
+                               500);
+                           }
                        }
                    }]
                 }]
