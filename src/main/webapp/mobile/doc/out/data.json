@@ -2473,19 +2473,31 @@
             "params": [
                 {
                     "name": "ptLatLng",
-                    "description": "Lat Lng object of the clicked/touched on point on map"
+                    "description": "- Lat Lng object of the clicked/touched on point on map"
                 },
                 {
                     "name": "pixel",
-                    "description": "These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords."
+                    "description": "- These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords."
+                },
+                {
+                    "name": "map",
+                    "description": "- Google map object"
+                },
+                {
+                    "name": "layerName",
+                    "description": "- Name of layer to use in WMS map query request"
                 },
                 {
                     "name": "serviceInfo",
-                    "description": "CSW service information object"
+                    "description": "- CSW service information object"
                 },
                 {
                     "name": "style",
-                    "description": "OPTIONAL style to use when making the GetFeatureInfo request"
+                    "description": "- OPTIONAL style to use when making the GetFeatureInfo request"
+                },
+                {
+                    "name": "slot",
+                    "description": "- an index to the layer number, used by the code which evaluates the response"
                 }
             ],
             "class": "GetWMSRelatedService",
@@ -2779,6 +2791,10 @@
                     "description": "Google Map that layer is attached to"
                 },
                 {
+                    "name": "layerName",
+                    "description": "Name of layer to be used in WMS request"
+                },
+                {
                     "name": "onlineResource",
                     "description": "object representing the WMS resource displayed as a map layer"
                 },
@@ -2950,7 +2966,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
-            "line": 175,
+            "line": 181,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",
@@ -3038,6 +3054,10 @@
                     "description": "The layer containing the wms to registered with the querier"
                 },
                 {
+                    "name": "layerName",
+                    "description": "Name of layer to use in WMS map query"
+                },
+                {
                     "name": "onlineResource",
                     "description": "Online resource object"
                 }
@@ -3047,7 +3067,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 195,
+            "line": 196,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderLayer",
@@ -3066,7 +3086,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 246,
+            "line": 247,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",

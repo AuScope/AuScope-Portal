@@ -214,12 +214,15 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
     /**
      * 
      * @method getWMSMarkerInfo
-     * @param ptLatLng Lat Lng object of the clicked/touched on point on map
-     * @param pixel These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.
-     * @param serviceInfo CSW service information object
-     * @param style OPTIONAL style to use when making the GetFeatureInfo request
+     * @param ptLatLng - Lat Lng object of the clicked/touched on point on map
+     * @param pixel - These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.
+     * @param map - Google map object
+     * @param layerName - Name of layer to use in WMS map query request  
+     * @param serviceInfo - CSW service information object
+     * @param style - OPTIONAL style to use when making the GetFeatureInfo request 
+     * @param slot - an index to the layer number, used by the code which evaluates the response
      */
-    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, serviceInfo, style, slot) {
+    this.getWMSMarkerInfo = function(ptLatLng, pixel, map, layerName, serviceInfo, style, slot) {
         
         // This latLng needs to be converted into EPSG:3857 rect coords
         proj4.defs(&quot;EPSG:4326&quot;,&quot;+proj=longlat +datum=WGS84 +no_defs&quot;);
@@ -271,7 +274,7 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
         var get_params= &quot;WMS_URL=&quot;+encodeURIComponent(serviceInfo.url)+
             &quot;&amp;lat=&quot;+pt[1]+ // NB: &#x27;lat&#x27; and &#x27;lng&#x27; are projection map coords, not latitude, longitude angles
             &quot;&amp;lng=&quot;+pt[0]+
-            &quot;&amp;QUERY_LAYERS=&quot;+encodeURIComponent(serviceInfo.name)+
+            &quot;&amp;QUERY_LAYERS=&quot;+encodeURIComponent(layerName)+
             &quot;&amp;x=&quot;+pixel.x+ // x,y are pixel coords within the map panel (not Google Map pixel coords)
             &quot;&amp;y=&quot;+pixel.y+
             &quot;&amp;BBOX=&quot;+encodeURIComponent(bbox3)+ // The relevant Google Map tile&#x27;s bounds, converted to projection map coords
@@ -292,7 +295,7 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
             url: &quot;../wmsMarkerPopup.do&quot;,
             data: get_params,
             headers: {&#x27;Content-Type&#x27;: &#x27;application/x-www-form-urlencoded&#x27;},
-            slot_num: slot
+            slot_num: slot /* index to layer number, used by response evaluation code */
         });
     };
      
