@@ -151,12 +151,12 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
         registerTileLoadedEvent(mapLayer,layer,onlineResource);
         
         // Register the onlineResource for the layer so that users can click on a point on map and display a popup window
-        me.registerQuerier(layer, onlineResource, map, style);
+        me.registerQuerier(layer, onlineResource.name, onlineResource, map, style);
         
         // Overrides Google Map API to register event handler
         mapLayer = overrideToRegisterFailureEvent(mapLayer, layer.id);
 
-        // This adds the layer to Google Map
+        // Google Map API: This adds the layer to Google Map
         map.overlayMapTypes.push(mapLayer);
         
         // This keeps track of our layers
@@ -167,9 +167,10 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
     /**
      * @method registerQuerier
      * @param layer The layer containing the wms to registered with the querier 
+     * @param layerName Name of layer to use in WMS map query
      * @param onlineResource Online resource object
      */
-    this.registerQuerier = function(layer, onlineResource, map, style) {
+    this.registerQuerier = function(layer, layerName, onlineResource, map, style) {
         // Get the bounding box for the 'onlineResource', then register for click events within that bounding box
         var cswRecords = LayerManagerService.getCSWRecords(layer);
         var done = false;
@@ -180,9 +181,9 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
                     var bbox = cswRecords[i].geographicElements[0];
                     // ArcGIS servers do not accept styles
                     if (onlineResources[j].applicationProfile && onlineResources[j].applicationProfile.indexOf("Esri:ArcGIS Server") > -1) {
-                        QuerierPanelService.registerLayer(map, onlineResource, bbox, "");
+                        QuerierPanelService.registerLayer(map, layerName, onlineResource, bbox, "");
                     } else {
-                        QuerierPanelService.registerLayer(map, onlineResource, bbox, style);
+                        QuerierPanelService.registerLayer(map, layerName, onlineResource, bbox, style);
                     }
                     done = true;
                     break;
