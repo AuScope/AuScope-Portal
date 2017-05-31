@@ -1392,7 +1392,7 @@
         <constructor-arg name="id" value="remanent-anomaliesTMI"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="mag:AUS5 - Total Magnetic Intensity"/>
+                <constructor-arg name="layerName" value="mag:australia_tmihires2a"/>
             </bean>
         </constructor-arg>
         <property name="name" value="AUS5 - Total Magnetic Intensity"/>
