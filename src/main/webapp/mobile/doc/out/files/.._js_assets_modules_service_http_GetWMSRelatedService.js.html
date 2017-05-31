@@ -285,7 +285,12 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
             &quot;&amp;version=&quot;+encodeURIComponent(serviceInfo.version);
         
         if(style){
-            get_params += &quot;&amp;SLD_BODY=&quot; + encodeURIComponent(style);
+            var encodedStyle = encodeURIComponent(style);
+            get_params += &quot;&amp;SLD_BODY=&quot; + encodedStyle;
+            // If style is too long for a GET force the proxy to use POST
+            if (encodedStyle.length &gt; 1200) {
+                get_params += &quot;&amp;postMethod=true&quot;;
+            }
         }else{
             get_params += &quot;&amp;SLD_BODY=&quot;;
         }   
