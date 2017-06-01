@@ -4663,6 +4663,25 @@
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 84,
+            "description": "Simply append some parameters to a URL, taking care of the characters of the end of the URL",
+            "itemtype": "method",
+            "name": "addUrlParameters",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "- the url string"
+                },
+                {
+                    "name": "paramStr",
+                    "description": "- parameter string of the form \"param1=val1&param2=val2\" ..."
+                }
+            ],
+            "class": "SimpleXPathService",
+            "module": "utility"
+        },
+        {
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
+            "line": 98,
             "description": "Test if the object is empty",
             "itemtype": "method",
             "name": "isEmpty",
@@ -4680,7 +4699,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 104,
+            "line": 118,
             "description": "Test if the object is a number",
             "itemtype": "method",
             "name": "isNumber",
@@ -4696,7 +4715,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 114,
+            "line": 128,
             "description": "Extract the domain from any url",
             "itemtype": "method",
             "name": "getUrlDomain",
@@ -4711,7 +4730,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 125,
+            "line": 139,
             "description": "Based on the filter parameter, this is a utility to decide if we should skip this provider",
             "itemtype": "method",
             "name": "filterProviderSkip",
@@ -4730,7 +4749,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 154,
+            "line": 168,
             "description": "count the number of unique urls in onlineResources",
             "itemtype": "method",
             "name": "uniqueCountOfResourceByUrl",
@@ -4748,7 +4767,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 172,
+            "line": 186,
             "description": "Base64 encode / decode\n  http://www.webtoolkit.info/",
             "class": "SimpleXPathService",
             "module": "utility"
@@ -4829,7 +4848,7 @@
         },
         {
             "message": "unknown tag: retun",
-            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:104"
+            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:118"
         },
         {
             "message": "Missing item type\nThis is the web browser implementation of `debug()`.\n\nExpose `debug()` as the module.",
@@ -4965,7 +4984,7 @@
         },
         {
             "message": "Missing item type\nBase64 encode / decode\n  http://www.webtoolkit.info/",
-            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:172"
+            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:186"
         }
     ]
 }
