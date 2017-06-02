@@ -25,7 +25,7 @@ allModules.service('SimpleXMLService',['$rootScope','Constants',function ($rootS
                 result = document.evaluate(xPath, domNode, document.createNSResolver(domNode), resultType, null);
                 return result;
             } catch(e) {
-                console.error("SimpleXMLService.evaluateXPath() Exception", e);
+                //console.error("SimpleXMLService.evaluateXPath() Exception", e);
                 // Return empty result
                 switch(resultType) {
                     case Constants.XPATH_STRING_TYPE:
