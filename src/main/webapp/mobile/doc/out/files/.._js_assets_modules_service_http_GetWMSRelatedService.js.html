@@ -124,54 +124,56 @@
  */
 allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&#x27;,function ($http,$q) {
     
-        var manageParam = function(layer,onlineResource,param){
-            if(!param){
-                param = {};
-            }
-            //VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
-            if(layer.filterCollection){
-                var hiddenParams = [];
-                if(layer.filterCollection.hiddenParams){
-                    hiddenParams = layer.filterCollection.hiddenParams;   
-                }
-                for(var idx in hiddenParams){
-                    if(hiddenParams[idx].type==&quot;MANDATORY.UIHiddenResourceAttribute&quot;){
-                        param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
-                    }else{
-                        param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
-                    }
-                }
-                
-                //VT: mandatoryFilters
-                var mandatoryFilters = [];
-                if(layer.filterCollection.mandatoryFilters){
-                    mandatoryFilters = layer.filterCollection.mandatoryFilters;   
-                }
-                for(var idx in mandatoryFilters){            
-                    param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
-                }
-            }
-            return param;
-        };
-        
-        /**
-         * Get the wms style url if proxyStyleUrl is valid
-         * @method getWMSStyleUrl
-         * @param layer - the layer we would like to retrieve the sld for if proxyStyleUrl is defined
-         * @param onlineResource - the onlineResource of the layer we are rendering
-         * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.Used in capdf
-         * @return url - getUrl to retrieve sld
-         */
-        this.getWMSStyleUrl = function(layer,onlineResource,param){         
-            
-            param = manageParam(layer,onlineResource,param);
+    var me = this;
     
-           if(layer.proxyStyleUrl){
-               return layer.proxyStyleUrl + &quot;?&quot; + $.param(param);
-           }else{               
-               return null;
-           }
-       };
+    var manageParam = function(layer,onlineResource,param){
+        if(!param){
+            param = {};
+        }
+        //VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true 
+        if(layer.filterCollection){
+            var hiddenParams = [];
+            if(layer.filterCollection.hiddenParams){
+                hiddenParams = layer.filterCollection.hiddenParams;   
+            }
+            for(var idx in hiddenParams){
+                if(hiddenParams[idx].type==&quot;MANDATORY.UIHiddenResourceAttribute&quot;){
+                    param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
+                }else{
+                    param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
+                }
+            }
+                
+            //VT: mandatoryFilters
+            var mandatoryFilters = [];
+            if(layer.filterCollection.mandatoryFilters){
+                mandatoryFilters = layer.filterCollection.mandatoryFilters;   
+            }
+            for(var idx in mandatoryFilters){            
+                param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;             
+            }
+        }
+        return param;
+    };
+        
+    /**
+     * Get the wms style url if proxyStyleUrl is valid
+     * @method getWMSStyleUrl
+     * @param layer - the layer we would like to retrieve the sld for if proxyStyleUrl is defined
+     * @param onlineResource - the onlineResource of the layer we are rendering
+     * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.Used in capdf
+     * @return url - getUrl to retrieve sld
+     */
+    this.getWMSStyleUrl = function(layer,onlineResource,param){         
+            
+        param = manageParam(layer,onlineResource,param);
+    
+        if(layer.proxyStyleUrl){
+            return layer.proxyStyleUrl + &quot;?&quot; + $.param(param);
+        }else{               
+            return null;
+        }
+    };
        
     /**
      * Get the wms style if proxyStyleUrl is valid
@@ -210,6 +212,23 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
             return deferred.promise;
         }
     };
+    
+    /**
+     * Sends a request to server for marker popup data
+     * @method sendMarkerPopupRequest
+     * @param params - a string of parameters &#x27;param1=val1&amp;param2=val2&#x27; ...
+     * @param slot - an index to the layer number, used by the code which evaluates the response
+     */
+    this.sendMarkerPopupRequest = function(params, slot) {
+        return $http({
+                        method: &quot;POST&quot;,
+                        url: &quot;../wmsMarkerPopup.do&quot;,
+                        data: params,
+                        headers: {&#x27;Content-Type&#x27;: &#x27;application/x-www-form-urlencoded&#x27;},
+                        slot_num: slot /* index to layer number, used by response evaluation code */
+                    });
+    };
+    
      
     /**
      * 
@@ -264,12 +283,6 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
         var bbWidth = Math.floor(Math.abs(gglPixelCoordsNE.x-gglPixelCoordsSW.x));
         var bbHeight = Math.floor(Math.abs(gglPixelCoordsNE.y-gglPixelCoordsSW.y));
         
-        // ArcGIS server requires a different format to Geoserver
-        var infoFormat = &quot;application/vnd.ogc.gml/3.1.1&quot;;
-        if (serviceInfo.applicationProfile &amp;&amp; serviceInfo.applicationProfile.indexOf(&quot;Esri:ArcGIS Server&quot;) &gt; -1) {
-            infoFormat = &quot;text/xml&quot;;
-        }
-        
         // NB: If SLD_BODY is used in future, look out for ArcGIS which does not like SLD_BODY (see Querier.js)
         var get_params= &quot;WMS_URL=&quot;+encodeURIComponent(serviceInfo.url)+
             &quot;&amp;lat=&quot;+pt[1]+ // NB: &#x27;lat&#x27; and &#x27;lng&#x27; are projection map coords, not latitude, longitude angles
@@ -280,8 +293,6 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
             &quot;&amp;BBOX=&quot;+encodeURIComponent(bbox3)+ // The relevant Google Map tile&#x27;s bounds, converted to projection map coords
             &quot;&amp;WIDTH=&quot;+bbWidth+ // Map panel width, in pixels (not Google Map pixel coords)
             &quot;&amp;HEIGHT=&quot;+bbHeight+ // Map panel height, in pixels (not Google Map pixel coords)
-            //Invalid format &#x27;application/xml&#x27;, supported formats are [text/plain, application/vnd.ogc.gml, application/vnd.ogc.gml/3.1.1, text/html, application/json] 
-            &quot;&amp;INFO_FORMAT=&quot;+encodeURIComponent(infoFormat)+                    
             &quot;&amp;version=&quot;+encodeURIComponent(serviceInfo.version);
         
         if(style){
@@ -293,17 +304,54 @@ allModules.service(&#x27;GetWMSRelatedService&#x27;,[&#x27;$http&#x27;,&#x27;$q&
             }
         }else{
             get_params += &quot;&amp;SLD_BODY=&quot;;
-        }   
-
-        return $http({
-            method: &quot;POST&quot;,
-            url: &quot;../wmsMarkerPopup.do&quot;,
-            data: get_params,
-            headers: {&#x27;Content-Type&#x27;: &#x27;application/x-www-form-urlencoded&#x27;},
-            slot_num: slot /* index to layer number, used by response evaluation code */
-        });
+        }
+        
+        var results = $q.defer();
+        
+        // ArcGIS server requires a different format to Geoserver
+        var infoFormat = &quot;application/vnd.ogc.gml/3.1.1&quot;;
+        if (serviceInfo.applicationProfile &amp;&amp; serviceInfo.applicationProfile.indexOf(&quot;Esri:ArcGIS Server&quot;) &gt; -1) {
+            infoFormat = &quot;text/xml&quot;;
+        }
+        
+        // Send a request for feature info.
+        // If it fails with INFO_FORMAT=&quot;application/vnd.ogc.gml/3.1.1&quot;, try again with INFO_FORMAT=&quot;text/xml&quot;. 
+        // Most WMS services do support &quot;application/vnd.ogc.gml/3.1.1&quot;, and we support only two types of INFO_FORMAT.
+        // So it&#x27;s not worth calling &#x27;GetCapabilities&#x27; for each layer.
+        // But in future, perhaps could cache names of layers that fail with &quot;application/vnd.ogc.gml/3.1.1&quot; to avoid retries.
+        //
+        this.sendMarkerPopupRequest(get_params+&quot;&amp;INFO_FORMAT=&quot;+encodeURIComponent(infoFormat), slot).then(
+            // If no HTTP Error
+            function(response) {
+                if (response.data.indexOf(&#x27;&lt;ServiceException code=&quot;InvalidFormat&quot;&gt;&#x27;)&lt;0) {
+                    results.resolve(response);
+                } else {
+                    // Try &#x27;text/xml&#x27; if &#x27;application/vnd.ogc.gml/3.1.1&#x27; did not work
+                    me.sendMarkerPopupRequest(get_params+&quot;&amp;INFO_FORMAT=&quot;+encodeURIComponent(&quot;text/xml&quot;), slot).then(
+                        function(response) {
+                            results.resolve(response);
+                        }
+                    );
+                }
+            },
+            // If caused an HTTP Error
+            function(response) {
+                if (infoFormat == &quot;application/vnd.ogc.gml/3.1.1&quot;) {
+                    // Try &#x27;text/xml&#x27; if &#x27;application/vnd.ogc.gml/3.1.1&#x27; did not work
+                    me.sendMarkerPopupRequest(get_params+&quot;&amp;INFO_FORMAT=&quot;+encodeURIComponent(&quot;text/xml&quot;), slot).then(
+                        function(response) {
+                            results.resolve(response);
+                        }
+                    );
+                } else {
+                    results.reject(response.data);
+                }
+            }
+        );        
+        return results.promise;
     };
-     
+    
+
      
 }]);
 
