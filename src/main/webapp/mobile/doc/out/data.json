@@ -1821,7 +1821,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 150,
+            "line": 160,
             "description": "This is called from the Angular HTML template. It parses the XML tree,\ncreating a JSON representation which is passed in to create a tree view\nvia the \"$scope.JSONTreeStruct[]\" array",
             "itemtype": "method",
             "name": "parseTree",
@@ -1836,7 +1836,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 215,
+            "line": 225,
             "description": "Used to open and close the panel. \nPassed to 'QuerierPanelService' as a parameter, then called by 'QuerierPanelService'",
             "itemtype": "method",
             "name": "openPanel",
@@ -1855,7 +1855,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 229,
+            "line": 239,
             "description": "Sets the images for the carousel",
             "itemtype": "method",
             "name": "setCarouselImages",
@@ -1870,7 +1870,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 249,
+            "line": 259,
             "description": "Resets the carousel when the panel closes",
             "itemtype": "method",
             "name": "resetCarousel",
@@ -1885,7 +1885,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 261,
+            "line": 271,
             "description": "Controls the display of the spinner to let user know the carousel is loading",
             "itemtype": "method",
             "name": "setCarouselBusy",
@@ -2415,7 +2415,7 @@
         },
         {
             "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
-            "line": 39,
+            "line": 41,
             "description": "Get the wms style url if proxyStyleUrl is valid",
             "itemtype": "method",
             "name": "getWMSStyleUrl",
@@ -2441,7 +2441,7 @@
         },
         {
             "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
-            "line": 58,
+            "line": 60,
             "description": "Get the wms style if proxyStyleUrl is valid",
             "itemtype": "method",
             "name": "getWMSStyle",
@@ -2467,7 +2467,26 @@
         },
         {
             "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
-            "line": 96,
+            "line": 98,
+            "description": "Sends a request to server for marker popup data",
+            "itemtype": "method",
+            "name": "sendMarkerPopupRequest",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "- a string of parameters 'param1=val1&param2=val2' ..."
+                },
+                {
+                    "name": "slot",
+                    "description": "- an index to the layer number, used by the code which evaluates the response"
+                }
+            ],
+            "class": "GetWMSRelatedService",
+            "module": "http"
+        },
+        {
+            "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
+            "line": 115,
             "itemtype": "method",
             "name": "getWMSMarkerInfo",
             "params": [
