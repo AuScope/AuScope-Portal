@@ -47,9 +47,9 @@ public class RemanentAnomaliesService extends BaseWFSService {
         return filterString;
     }
 
-    public String getRemanentAnomaliesFilter(String name, Float ARRAMin, Float ARRAMax, Float decMin, Float decMax, Float incMin, Float incMax, Integer modelCountMin, Integer modelCountMax,String optionalFilters, FilterBoundingBox bbox)
+    public String getRemanentAnomaliesFilter(String name, Float ARRAMin, Float ARRAMax, Float decMin, Float decMax, Float incMin, Float incMax, Integer modelCountMin, Integer modelCountMax, Boolean modelsfilter, String optionalFilters, FilterBoundingBox bbox)
             throws Exception {
-        RemanentAnomaliesFilter filter = new RemanentAnomaliesFilter(name, ARRAMin, ARRAMax, decMin, decMax, incMin, incMax, modelCountMin, modelCountMax, optionalFilters);
+        RemanentAnomaliesFilter filter = new RemanentAnomaliesFilter(name, ARRAMin, ARRAMax, decMin, decMax, incMin, incMax, modelCountMin, modelCountMax,modelsfilter, optionalFilters);
         return generateFilterString(filter, bbox);
     }
 
