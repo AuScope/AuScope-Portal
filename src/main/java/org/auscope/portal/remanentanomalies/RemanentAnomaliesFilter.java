@@ -90,14 +90,14 @@ public class RemanentAnomaliesFilter extends GenericFilter {
 		if (modelCountMin != null) {
 			fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(
 					this.generateFunctionAttributeCount(
-							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member[1]/RemAnom:Model"),
+							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model"),
 					modelCountMin.toString()));
 		}
 
 		if (modelCountMax != null) {
 			fragments.add(this.generatePropertyIsLessThanOrEqualTo(
 					this.generateFunctionAttributeCount(
-							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member[1]/RemAnom:Model"),
+							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model"),
 					modelCountMax.toString()));
 		}
         
