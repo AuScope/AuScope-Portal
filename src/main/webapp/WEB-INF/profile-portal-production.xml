@@ -73,7 +73,6 @@
             <list>
                 <ref bean="cswAuscopeProduction" />
                 <ref bean="cswMDUProduction" />
-                <ref bean="cswAsterProduction" />
             </list>
         </constructor-arg>
     </bean>
