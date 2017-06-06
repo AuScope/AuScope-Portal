@@ -44,7 +44,7 @@ public class RemanentAnomaliesFilter extends GenericFilter {
             fragments = this.generateParameterFragments();
         }
         
-        if (modelsfilter==true) fragments.add(this.generateOrComparisonFragment(this.generateNotComparisonFragment(this.generatePropertyIsNull("RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model/RemAnom:DataType")),this.generatePropertyIsNull("RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model/RemAnom:DataType")));
+        if (modelsfilter==true || modelCountMin!=null || modelCountMax !=null) fragments.add(this.generateOrComparisonFragment(this.generateNotComparisonFragment(this.generatePropertyIsNull("RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model/RemAnom:DataType")),this.generatePropertyIsNull("RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model/RemAnom:DataType")));
         
         if (name != null && !name.isEmpty()) {
             fragments.add(this.generateOrComparisonFragment(this.generatePropertyIsLikeFragment("RemAnom:AnomalyName", name),this.generateFeatureIdFragment("anomaly."+name)));
@@ -88,17 +88,17 @@ public class RemanentAnomaliesFilter extends GenericFilter {
 		}
         
 		if (modelCountMin != null) {
-			fragments.add(this.generatePropertyIsGreaterThanOrEqualTo(
+			fragments.add("<ogc:PropertyIsLessThanOrEqualTo matchCase=\"false\" >"+
 					this.generateFunctionAttributeCount(
-							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model"),
-					modelCountMin.toString()));
+							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model")+"<ogc:Literal>"+modelCountMin.toString()+"</ogc:Literal></ogc:PropertyIsLessThanOrEqualTo>"
+					);
 		}
 
 		if (modelCountMax != null) {
-			fragments.add(this.generatePropertyIsLessThanOrEqualTo(
+			fragments.add("<ogc:PropertyIsGreaterThanOrEqualTo matchCase=\"false\" >"+
 					this.generateFunctionAttributeCount(
-							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model"),
-					modelCountMax.toString()));
+							"RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model")+"<ogc:Literal>"+modelCountMax.toString()+"</ogc:Literal></ogc:PropertyIsGreaterThanOrEqualTo>"
+					);
 		}
         
     }
