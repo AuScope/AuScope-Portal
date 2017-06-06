@@ -98,21 +98,28 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'GoogleMap
                     // Assume the node to be a feature node. 
                     features = [node];
                 } else {
-                    // ArcGIS special format - not standard XML. Must use the passed-in display name.
+                    // 'text/xml'
                     var fieldNodes = SimpleXMLService.getMatchingChildNodes(featureInfoNode[0], null, "FIELDS");
-                    features = fieldNodes;
-                    for (var i = 0; i < features.length; i++) {
-                        var name = features[i].getAttribute('identifier');
-                        $scope.treeStruct[name] = features[i];
-                        var displayStr = prependStr+" "+displayName;
-                        if (displayName in $scope.layerIndex) {
-                            if ($scope.layerIndex[displayStr].indexOf(name)<0) $scope.layerIndex[displayStr].push(name);
-                        } else {                            
-                            $scope.layerIndex[displayStr] = [name]; 
+                    if (UtilitiesService.isEmpty(fieldNodes)) {
+                        features = featureInfoNode;
+                    } else {
+                        features = fieldNodes;
+                        for (var i = 0; i < features.length; i++) {
+                            var name = features[i].getAttribute('identifier');
+                            if (!name) {
+                                name = displayName;
+                            }
+                            $scope.treeStruct[name] = features[i];
+                            var displayStr = prependStr+" "+displayName;
+                            if (displayName in $scope.layerIndex) {
+                                if ($scope.layerIndex[displayStr].indexOf(name)<0) $scope.layerIndex[displayStr].push(name);
+                            } else {                            
+                                $scope.layerIndex[displayStr] = [name]; 
+                            }
+                            displayable=true;
                         }
-                        displayable=true;
+                        return displayable;
                     }
-                    return displayable;
                 }
 
             } else {
@@ -131,6 +138,9 @@ allControllers.controller('querierPanelCtrl',  ['$compile', '$scope', 'GoogleMap
                 var name = featureNode.getAttribute('gml:id');
                 if (UtilitiesService.isEmpty(name)) {
                     name = SimpleXMLService.evaluateXPath(rootNode, featureNode, "gml:name", Constants.XPATH_STRING_TYPE).stringValue;
+                    if (UtilitiesService.isEmpty(name)) {
+                        name = displayName;
+                    }
                 }
                 if (typeof name === 'string' || name.length > 0) {
                     $scope.treeStruct[name] = featureNode;

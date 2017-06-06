@@ -143,7 +143,7 @@ allModules.service(&#x27;SimpleXMLService&#x27;,[&#x27;$rootScope&#x27;,&#x27;Co
                 result = document.evaluate(xPath, domNode, document.createNSResolver(domNode), resultType, null);
                 return result;
             } catch(e) {
-                console.error(&quot;SimpleXMLService.evaluateXPath() Exception&quot;, e);
+                //console.error(&quot;SimpleXMLService.evaluateXPath() Exception&quot;, e);
                 // Return empty result
                 switch(resultType) {
                     case Constants.XPATH_STRING_TYPE:
@@ -388,6 +388,7 @@ allModules.service(&#x27;SimpleXMLService&#x27;,[&#x27;$rootScope&#x27;,&#x27;Co
     
      
 }]);
+
     </pre>
 </div>
                     </div>

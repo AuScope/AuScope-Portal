@@ -216,21 +216,28 @@ allControllers.controller(&#x27;querierPanelCtrl&#x27;,  [&#x27;$compile&#x27;, 
                     // Assume the node to be a feature node. 
                     features = [node];
                 } else {
-                    // ArcGIS special format - not standard XML. Must use the passed-in display name.
+                    // &#x27;text/xml&#x27;
                     var fieldNodes = SimpleXMLService.getMatchingChildNodes(featureInfoNode[0], null, &quot;FIELDS&quot;);
-                    features = fieldNodes;
-                    for (var i = 0; i &lt; features.length; i++) {
-                        var name = features[i].getAttribute(&#x27;identifier&#x27;);
-                        $scope.treeStruct[name] = features[i];
-                        var displayStr = prependStr+&quot; &quot;+displayName;
-                        if (displayName in $scope.layerIndex) {
-                            if ($scope.layerIndex[displayStr].indexOf(name)&lt;0) $scope.layerIndex[displayStr].push(name);
-                        } else {                            
-                            $scope.layerIndex[displayStr] = [name]; 
+                    if (UtilitiesService.isEmpty(fieldNodes)) {
+                        features = featureInfoNode;
+                    } else {
+                        features = fieldNodes;
+                        for (var i = 0; i &lt; features.length; i++) {
+                            var name = features[i].getAttribute(&#x27;identifier&#x27;);
+                            if (!name) {
+                                name = displayName;
+                            }
+                            $scope.treeStruct[name] = features[i];
+                            var displayStr = prependStr+&quot; &quot;+displayName;
+                            if (displayName in $scope.layerIndex) {
+                                if ($scope.layerIndex[displayStr].indexOf(name)&lt;0) $scope.layerIndex[displayStr].push(name);
+                            } else {                            
+                                $scope.layerIndex[displayStr] = [name]; 
+                            }
+                            displayable=true;
                         }
-                        displayable=true;
+                        return displayable;
                     }
-                    return displayable;
                 }
 
             } else {
@@ -249,6 +256,9 @@ allControllers.controller(&#x27;querierPanelCtrl&#x27;,  [&#x27;$compile&#x27;, 
                 var name = featureNode.getAttribute(&#x27;gml:id&#x27;);
                 if (UtilitiesService.isEmpty(name)) {
                     name = SimpleXMLService.evaluateXPath(rootNode, featureNode, &quot;gml:name&quot;, Constants.XPATH_STRING_TYPE).stringValue;
+                    if (UtilitiesService.isEmpty(name)) {
+                        name = displayName;
+                    }
                 }
                 if (typeof name === &#x27;string&#x27; || name.length &gt; 0) {
                     $scope.treeStruct[name] = featureNode;
@@ -386,6 +396,7 @@ allControllers.controller(&#x27;querierPanelCtrl&#x27;,  [&#x27;$compile&#x27;, 
     }
     
 }]);
+
     </pre>
 </div>
                     </div>
