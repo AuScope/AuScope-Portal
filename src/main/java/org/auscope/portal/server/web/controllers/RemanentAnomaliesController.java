@@ -31,11 +31,19 @@ public class RemanentAnomaliesController extends BasePortalController {
     public void doRemanentAnomaliesDownload(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "name") String name,
+            @RequestParam(required = false, value = "ARRAMin") Float ARRAMin,
+            @RequestParam(required = false, value = "ARRAMax") Float ARRAMax,
+            @RequestParam(required = false, value = "decMin") Float decMin,
+            @RequestParam(required = false, value = "decMax") Float decMax,
+            @RequestParam(required = false, value = "incMin") Float incMin,
+            @RequestParam(required = false, value = "incMax") Float incMax,
+            @RequestParam(required = false, value = "modelCountMin") Integer modelCountMin,
+            @RequestParam(required = false, value = "modelCountMax") Integer modelCountMax,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             HttpServletResponse response) throws Exception {
 
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name,null, bbox);
+        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name, ARRAMin, ARRAMax, decMin, decMax, incMin, incMax, modelCountMin, modelCountMax,false,null, bbox);
 
         response.setContentType("text/xml");
         OutputStream outputStream = response.getOutputStream();
@@ -59,16 +67,25 @@ public class RemanentAnomaliesController extends BasePortalController {
     public void doRemanentAnomaliesStyle(
             @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "name") String name,
+            @RequestParam(required = false, value = "ARRAMin") Float ARRAMin,
+            @RequestParam(required = false, value = "ARRAMax") Float ARRAMax,
+            @RequestParam(required = false, value = "decMin") Float decMin,
+            @RequestParam(required = false, value = "decMax") Float decMax,
+            @RequestParam(required = false, value = "incMin") Float incMin,
+            @RequestParam(required = false, value = "incMax") Float incMax,
+            @RequestParam(required = false, value = "modelCountMin") Integer modelCountMin,
+            @RequestParam(required = false, value = "modelCountMax") Integer modelCountMax,
+            @RequestParam(required = false, value = "styleSwitch", defaultValue="default") String styleSwitch,
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             HttpServletResponse response) throws Exception {
 
         //Vt: wms shouldn't need the bbox because it is tiled.
         FilterBoundingBox bbox = null;
         //String stylefilter=this.remanentAnomaliesService.getRemanentAnomaliesWithStyling(name); //VT:get filter from service
+        Boolean modelsfilter = "models".equals(styleSwitch);
+        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name, ARRAMin, ARRAMax, decMin, decMax, incMin, incMax, modelCountMin, modelCountMax,modelsfilter,optionalFilters, bbox); //VT:get filter from service
 
-        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name,optionalFilters, bbox); //VT:get filter from service
-
-        String style = this.getStyle(filter, "#0000FF");
+        String style = this.getStyle(filter, "#0000FF",styleSwitch);
 
         response.setContentType("text/xml");
 
@@ -82,18 +99,188 @@ public class RemanentAnomaliesController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getStyle(String filter, String color) {
+    public String getStyle(String filter, String color, String styleSwitch) {
 
-        String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    	String style;
+    	switch (styleSwitch) {
+        case "ARRA":  style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd http://remanentanomalies.csiro.au/schemas/anomaly.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns=\"http://www.opengis.net/sld\" xmlns:RemAnom=\"http://remanentanomalies.csiro.au\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
                 + "<NamedLayer>" + "<Name>"
                 + REMANENT_ANOMALIES_TYPE
                 + "</Name>"
                 + "<UserStyle>"
-                + "<Name>portal-style</Name>"
-                + "<Title>portal-style</Title>"
-                + "<Abstract>portal-style</Abstract>"
+                + "<Name>ARRARemAnomStyle</Name>"
+                + "<Title>ARRARemAnomStyle</Title>"
+                + "<Abstract>ARRARemAnomStyle</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>Anomaly</Name>"
+                + filter
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">"
+                + "<Function name=\"Categorize\">"
+                + "<PropertyName>RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member[1]/RemAnom:Model/RemAnom:Apparent_resultant_rotation_angle</PropertyName>"
+                + "<Literal>#0000ff</Literal>"
+                + "<Literal>45</Literal>"
+                + "<Literal>#00ff00</Literal>"
+                + "<Literal>90</Literal>"
+                + "<Literal>#ffff00</Literal>"
+                + "<Literal>135</Literal>"
+                + "<Literal>#ff0000</Literal>"
+                + "</Function>"
+                + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>8</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+                 break;
+        case "inc":  style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" "
+                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd http://remanentanomalies.csiro.au/schemas/anomaly.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns=\"http://www.opengis.net/sld\" xmlns:RemAnom=\"http://remanentanomalies.csiro.au\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>"
+                + REMANENT_ANOMALIES_TYPE
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>incRemAnomStyle</Name>"
+                + "<Title>incRemAnomStyle</Title>"
+                + "<Abstract>incRemAnomStyle</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>Anomaly</Name>"
+                + filter
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">"
+                + "<Function name=\"Categorize\">"
+                + "<PropertyName>RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member[1]/RemAnom:Model/RemAnom:resultant_inclination</PropertyName>"
+                + "<Literal>#0000ff</Literal>"
+                + "<Literal>-45</Literal>"
+                + "<Literal>#00ff00</Literal>"
+                + "<Literal>0</Literal>"
+                + "<Literal>#ffff00</Literal>"
+                + "<Literal>45</Literal>"
+                + "<Literal>#ff0000</Literal>"
+                + "</Function>"
+                + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>8</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+                 break;
+        case "dec":  style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" "
+                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd http://remanentanomalies.csiro.au/schemas/anomaly.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns=\"http://www.opengis.net/sld\" xmlns:RemAnom=\"http://remanentanomalies.csiro.au\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>"
+                + REMANENT_ANOMALIES_TYPE
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>decRemAnomStyle</Name>"
+                + "<Title>decRemAnomStyle</Title>"
+                + "<Abstract>decRemAnomStyle</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>Anomaly</Name>"
+                + filter
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">"
+                + "<Function name=\"Categorize\">"
+                + "<PropertyName>RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member[1]/RemAnom:Model/RemAnom:resultant_declination</PropertyName>"
+                + "<Literal>#0000ff</Literal>"
+                + "<Literal>90</Literal>"
+                + "<Literal>#00ff00</Literal>"
+                + "<Literal>180</Literal>"
+                + "<Literal>#ffff00</Literal>"
+                + "<Literal>270</Literal>"
+                + "<Literal>#ff0000</Literal>"
+                + "</Function>"
+                + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>8</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+                 break;
+        case "models":  style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" "
+                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd http://remanentanomalies.csiro.au/schemas/anomaly.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns=\"http://www.opengis.net/sld\" xmlns:RemAnom=\"http://remanentanomalies.csiro.au\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>"
+                + REMANENT_ANOMALIES_TYPE
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>modelsRemAnomStyle</Name>"
+                + "<Title>modelsRemAnomStyle</Title>"
+                + "<Abstract>modelsRemAnomStyle</Abstract>"
+                + "<IsDefault>1</IsDefault>"
+                + "<FeatureTypeStyle>"
+                + "<Rule>"
+                + "<Name>Anomaly</Name>"
+                + filter
+                + "<PointSymbolizer>"
+                + "<Graphic>"
+                + "<Mark>"
+                + "<WellKnownName>square</WellKnownName>"
+                + "<Fill>"
+                + "<CssParameter name=\"fill\">"
+                + "<Function name=\"Categorize\">"
+                + "<Function name=\"attributeCount\">"
+                + "<PropertyName>RemAnom:modelCollection/RemAnom:ModelCollection/RemAnom:member/RemAnom:Model</PropertyName>"
+                + "</Function>"
+                + "<Literal>#000000</Literal>"
+                + "<Literal>1</Literal>"
+                + "<Literal>#0000ff</Literal>"
+                + "<Literal>2</Literal>"
+                + "<Literal>#00ff00</Literal>"
+                + "<Literal>3</Literal>"
+                + "<Literal>#ffff00</Literal>"
+                + "<Literal>4</Literal>"
+                + "<Literal>#ff0000</Literal>"
+                + "</Function>"
+                + "</CssParameter>"
+                + "</Fill>"
+                + "</Mark>"
+                + "<Size>8</Size>"
+                + "</Graphic>"
+                + "</PointSymbolizer>"
+                + "</Rule>"
+                + "</FeatureTypeStyle>"
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+                 break;
+        default: style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                + "<StyledLayerDescriptor version=\"1.0.0\" "
+                + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd http://remanentanomalies.csiro.au/schemas/anomaly.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns=\"http://www.opengis.net/sld\" xmlns:RemAnom=\"http://remanentanomalies.csiro.au\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<NamedLayer>" + "<Name>"
+                + REMANENT_ANOMALIES_TYPE
+                + "</Name>"
+                + "<UserStyle>"
+                + "<Name>defaultRemAnomStyle</Name>"
+                + "<Title>defaultRemAnomStyle</Title>"
+                + "<Abstract>defaultRemAnomStyle</Abstract>"
                 + "<IsDefault>1</IsDefault>"
                 + "<FeatureTypeStyle>"
                 + "<Rule>"
@@ -115,6 +302,9 @@ public class RemanentAnomaliesController extends BasePortalController {
                 + "</Rule>"
                 + "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
+                 break;
+    	}
+    	
 
         return style;
     }
