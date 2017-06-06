@@ -215,7 +215,7 @@ Ext.define('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', {
                     xtype: 'combo',
                     anchor: '100%',
                     fieldLabel: 'Style',
-                    name: 'style',
+                    name: 'styleSwitch',
                     typeAhead: true,
                     triggerAction: 'all',
                     lazyRender:true,
@@ -223,7 +223,7 @@ Ext.define('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', {
                     store: styleStore,
                     valueField: 'valueText',
                     displayField: 'displayText',
-                    hiddenName: 'style'
+                    hiddenName: 'styleSwitch'
                 },{
                     xtype: 'hidden',
                     name: 'cswBbox',
