@@ -34,7 +34,10 @@ public class NotificationService {
     private long cacheMaxAge = 15 * 60 * 1000; // 15 minutes
     private int maxTweetAgeDays = 14; //How many days in the past to look back for notifications
 
-    public NotificationService(String notificationAccount, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret) {
+    public NotificationService(boolean enableTwitter, String notificationAccount, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret) {
+        if (!enableTwitter) {
+            return;
+        }
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
             .setOAuthConsumerKey(consumerKey)
