@@ -74,39 +74,14 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
                    title : 'Image',
                    xtype : 'container',
                    autoScroll : true,
-                   height : 140,
+                   height : 260,
                    width : 580,
                    items : [{
-                       xtype: 'image',
-                       src: imgUrl,
-                       listeners: {
-                           render: function() {
-                               var img = this;
-                               var panel = img.ownerCt;
-
-                               setTimeout(function() {
-                                   var panelSize = panel.getSize(true);
-                                   var imageSize = img.getSize();
-                                   var ratio = 0;
-
-                                   // resize the image to fit in the panel with the correct ratio
-                                   if (imageSize.width > panelSize.width) {
-                                       ratio = panelSize.width / imageSize.width;
-                                       imageSize.width = panelSize.width;
-                                       imageSize.height = imageSize.height * ratio;
-                                   }
-
-                                   if (imageSize.height > panelSize.height) {
-                                       ratio = panelSize.height / imageSize.height;
-                                       imageSize.height = panelSize.height;
-                                       imageSize.width = imageSize.width * ratio;
-                                   }
-
-                                   img.setSize(imageSize);
-                               },
-                               500);
-                           }
-                       }
+                       xtype: 'panel',
+                       width: '100%',
+                       height: 265 ,
+                       autoScroll : true,
+                       html:'<a target="_blank" href="'+imgUrl+'"><img src="' + imgUrl+ '" style="max-height:100%; max-width:100%;" /a>'
                    }]
                 }]
             }],
