@@ -186,7 +186,7 @@ public class PressureDBController extends BasePortalController {
             ccProperty.contains("Elevation" )) {
             style = getColorCodedStyle(true,"gsmlp:BoreholeView", null,null, null, null, ccProperty);
         } else {
-            style = getStyle("gsmlp:BoreholeView", "gsmlp:shape", "#2242c7");
+            style = getStyle(true,"gsmlp:BoreholeView", "gsmlp:shape", "#2242c7",null,null, null, null);
         }
         response.setContentType("text/xml");
         ByteArrayInputStream styleStream = new ByteArrayInputStream(
@@ -220,7 +220,7 @@ public class PressureDBController extends BasePortalController {
             ccProperty.contains("Elevation" )) {
             style = getColorCodedStyle(false,"gsmlp:BoreholeView", boreholeName,custodian, dateOfDrillingStart, dateOfDrillingEnd, ccProperty);
         } else {
-            style = getStyle("gsmlp:BoreholeView", "gsmlp:shape", "#2242c7");
+            style = getStyle(false,"gsmlp:BoreholeView", "gsmlp:shape", "#2242c7",boreholeName,custodian, dateOfDrillingStart, dateOfDrillingEnd);
         }
         response.setContentType("text/xml");
         ByteArrayInputStream styleStream = new ByteArrayInputStream(
@@ -233,8 +233,12 @@ public class PressureDBController extends BasePortalController {
         outputStream.close();
     }
 
-    String getStyle(String layerName, String geometryName, String color) {
-
+    String getStyle(boolean isLegend,String layerName, String geometryName, String color,String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd) {
+        String filter ="";
+        if (!isLegend) {
+            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,null,0,0);
+            filter = pressureDBFilter.getFilterString(null);
+        }
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/2.0\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
@@ -249,6 +253,7 @@ public class PressureDBController extends BasePortalController {
                 + "<FeatureTypeStyle>"
                 + "<Rule>"
                 + "<Name>Boreholes</Name>"
+                + filter
                 + "<PointSymbolizer>"
                 + "<Geometry><ogc:PropertyName>" + geometryName + "</ogc:PropertyName></Geometry>"
                 + "<Graphic>"
