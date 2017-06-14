@@ -135,6 +135,8 @@ allModules.service('GoogleMapService',['$rootScope','UtilitiesService','RenderSt
         this.activeLayers[layerId].layers.push(mapLayer);
         this.broadcast('layer.added',layer);
         
+        RenderStatusService.initStatus(layer);
+        
         // Update the overlay map data structures
         this.syncOverlayMapDS();
     };

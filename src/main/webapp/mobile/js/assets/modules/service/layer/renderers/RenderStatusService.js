@@ -54,9 +54,9 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      * @param status - Constants.statusProgress
      */
     this.updateCompleteStatus = function(layer,resource,status){  
-        if(UtilitiesService.isEmpty(this.renderStatus[layer.id])){
-            this.renderStatus[layer.id]={};
-        }
+        // If layer not initialised then exit
+        if (!this.renderStatus.hasOwnProperty(layer.id)) return;
+        
         if(UtilitiesService.isEmpty(this.renderStatus[layer.id].resources)){
             this.renderStatus[layer.id].resources = {};
         }
@@ -112,9 +112,20 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      * @param layerId - layerId
      */
     this.clearStatus = function(layer){
-        this.renderStatus[layer.id] = {};  
+        delete this.renderStatus[layer.id];
         this.broadcast(this.renderStatus);
     };
+    
+    /**
+     * Initialise the status for use with a certain layer
+     * @method initStatus
+     * @param layer layer object
+     */
+    this.initStatus = function(layer) {
+        if (!this.renderStatus.hasOwnProperty(layer.id)) {
+            this.renderStatus[layer.id] = {};
+        }
+    }
      
     /**
      * Check if the layer is still active
@@ -122,7 +133,7 @@ allModules.service('RenderStatusService',['$rootScope','Constants','UtilitiesSer
      * @param layerId - layerId
      */
     this.isLayerActive = function(layer){
-       return !(UtilitiesService.isEmpty(this.renderStatus[layer.id]));
+        return !(UtilitiesService.isEmpty(this.renderStatus[layer.id]));
        
     };
      
