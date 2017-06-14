@@ -7,6 +7,7 @@
       <div id="menu">
          <ul >
             <li><a id="help-button">Help</a></li>
+            <li><a id="notifications-button">Notifications</a></li>
             <li><a href="http://www.auscope.org">AuScope.org</a></li>
             <li><a href="mailto:cg-portal@csiro.au">Contact Us</a></li>
             <li><a href="gmap.html">AuScope Discovery Portal</a></li>

@@ -31,11 +31,8 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         if (layer.id === "pressuredb-borehole") {
             // LJ: AUS-2619 Additional params for pressureDB legend.
             ccProperty = filter.getParameter('ccProperty') || '';
-            var ccLevels = filter.getParameter('ccLevels') || 9;
-            sldUrl = portal.util.URL.base + styleUrl
-                    + "?ccProperty=" + ccProperty
-                    + "&ccLevels=" + ccLevels;
-            isSld_body = false;
+            sldUrl = "getPressureDBLegendStyle.do?ccProperty=" + ccProperty;
+            isSld_body = true;
         } else if (layer.id === "mineral-tenements") {
             ccProperty = filter.getParameter('ccProperty');
             sldUrl = "getMineralTenementLegendStyle.do?ccProperty=" + ccProperty;
@@ -167,6 +164,7 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                             if(closeLayer.get('id')==layer.get('id')){
                                 if ( myWin !== null) {
                                     myWin.close();
+                                    myWin = null;
                                 }
                                 if ( selfme !== null) {
                                     selfme.setDisabled(true);
@@ -175,6 +173,10 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                         });        
                         me.on('addLayer',function(closeLayer){
                             if(closeLayer.get('id')==layer.get('id') && layer.get('source').get('active') && layer.get('filterer').parameters.featureType) {
+                                if ( myWin !== null) {
+                                    myWin.close();
+                                    myWin = null;
+                                }
                                 if ( selfme !== null) {
                                     selfme.setDisabled(false);
                                 }
@@ -191,7 +193,8 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                         }
                     }
                 });
-            } else if (layer.id == 'sf0-borehole-nvcl') {
+            } else if (layer.id == 'nvcl-v2-borehole') {
+                //'sf0-borehole-nvcl') {
                 return new Ext.Action({
                     iconCls : 'analytics-button',
                     text: 'Analytical Jobs',

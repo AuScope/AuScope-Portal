@@ -189,5 +189,14 @@
         <!-- one of the properties available; the maximum file size in bytes -->
         <property name="maxUploadSize" value="10000000"/>
     </bean>
+    
+    <bean name="notificationService" class="org.auscope.portal.server.web.service.NotificationService" autowire="constructor">
+        <constructor-arg name="enableTwitter" value="${env.twitter.enable}"/>        
+        <constructor-arg name="notificationAccount" value="${HOST.notification.twitter.user}"/>
+        <constructor-arg name="consumerKey" value="${env.twitter.consumerKey}"/>
+        <constructor-arg name="consumerSecret" value="${env.twitter.consumerSecret}"/>
+        <constructor-arg name="accessToken" value="${env.twitter.accessToken}"/>
+        <constructor-arg name="accessTokenSecret" value="${env.twitter.accessTokenSecret}"/>
+    </bean>
 
 </beans>

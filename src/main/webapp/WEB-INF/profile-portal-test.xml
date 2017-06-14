@@ -24,6 +24,7 @@
                 <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
+                <ref bean="knownTypeBoreholeNvclV2" />                
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
@@ -49,10 +50,6 @@
                 <ref bean="knownTypeAsterFerricOxideContent" />
                 <ref bean="knownTypeAsterFeoh" />
                 <ref bean="knownTypeFerricOxideComp" />
-                <ref bean="knownTypeAsterChileSandToClay" />
-                <ref bean="knownTypeAsterChileWaterIndex" />
-                <ref bean="knownTypeAsterChileAlOHComp" />
-                <ref bean="knownTypeAsterChileFalseColour" />
                 <ref bean="knownTypeGroupIndex" />
                 <ref bean="knownTypeQuartzIndex" />
                 <ref bean="knownTypeMgohContent" />
@@ -93,7 +90,6 @@
                 <ref bean="cswAuscopeTest" />
                 <ref bean="cswMDUTest" />
                 <ref bean="cswGAPMDCRC" />
-                <!-- LJ:aster was down, remove it. ref bean="cswAsterProduction" /-->
             </list>
         </constructor-arg>
     </bean>

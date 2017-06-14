@@ -197,6 +197,20 @@ allModules.service(&#x27;UtilitiesService&#x27;,[&#x27;$rootScope&#x27;,function
         return parameters;
     };
     
+    
+    
+    /**
+     * Simply append some parameters to a URL, taking care of the characters of the end of the URL
+     * @method addUrlParameters
+     * @param url - the url string 
+     * @param paramStr - parameter string of the form &quot;param1=val1&amp;param2=val2&quot; ...
+     */
+    this.addUrlParameters = function(url, paramStr) {
+        var endChar = url.charAt(url.length-1);
+        if (endChar!=&#x27;?&#x27; &amp;&amp; endChar!= &#x27;&amp;&#x27;) return url+&#x27;?&#x27;+paramStr;
+        return url+paramStr;
+    };
+    
    
    
     /**
@@ -428,6 +442,7 @@ allModules.service(&#x27;UtilitiesService&#x27;,[&#x27;$rootScope&#x27;,function
     };
     
 }]);    
+
     </pre>
 </div>
                     </div>

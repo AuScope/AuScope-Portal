@@ -178,7 +178,12 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
             "&version="+encodeURIComponent(serviceInfo.version);
         
         if(style){
-            get_params += "&SLD_BODY=" + encodeURIComponent(style);
+            var encodedStyle = encodeURIComponent(style);
+            get_params += "&SLD_BODY=" + encodedStyle;
+            // If style is too long for a GET force the proxy to use POST
+            if (encodedStyle.length > 1200) {
+                get_params += "&postMethod=true";
+            }
         }else{
             get_params += "&SLD_BODY=";
         }

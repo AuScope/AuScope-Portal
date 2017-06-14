@@ -71,21 +71,12 @@ Ext.define('auscope.layer.querier.wfs.factories.RemanentAnomalyFactory', {
                     rootVisible : true,
                     root : rootNode
                 },{
-                   title : 'Image',
-                   xtype : 'container',
-                   autoScroll : true,
-                   height : 140,
-                   width : 580,
-                   items : [{
-                       xtype : 'box',
-                       autoEl : {
-                           tag:'div',
-                           children:[{
-                               tag : 'img',
-                               src : imgUrl
-                           }]
-                       }
-                   }]
+                    title : 'Image',
+                    xtype : 'container',
+                    layout: 'fit',
+                    height : 265,
+                    width : 580,
+                    html:'<a target="_blank" href="'+imgUrl+'"><img src="' + imgUrl+ '" style="max-width:100%;max-height:100%;" /> </a>'
                 }]
             }],
             buttonAlign : 'right',

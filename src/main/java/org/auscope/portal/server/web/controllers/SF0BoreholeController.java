@@ -73,7 +73,90 @@ public class SF0BoreholeController extends BasePortalController {
             return this.generateExceptionResponse(e, serviceUrl);
         }
     }
+    /**
+     * Handles getting the style of the SF0 borehole filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
+     * implicitly)
+     *
+     * @param mineName
+     *            the name of the mine to query for
+     * @param bbox
+     * @param maxFeatures
+     * @throws Exception
+     */
+    @RequestMapping("/doNvclV2FilterStyle.do")
+    public void doNvclV2FilterStyle(
+            HttpServletResponse response,
+            @RequestParam(required = false, value = "serviceUrl", defaultValue = "") String serviceUrl,
+            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,
+            @RequestParam(required = false, value = "color", defaultValue = "") String color,
+            @RequestParam(required = false, value = "analyticsJobId") String analyticsJobId,
+            @RequestParam(required = false, value = "failIds") String failIds,
+            @RequestParam(required = false, value = "errorIds") String errorIds,
+            @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters)
 
+                    throws Exception {
+
+        FilterBoundingBox bbox = null;
+        List<String> hyloggerBoreholeIDs = null;
+
+        List<String> filterNames = new ArrayList<String>();
+        List<String> filterColors = new ArrayList<String>();
+        List<String> filters = new ArrayList<String>();
+        List<Mark> filterMarks = new ArrayList<Mark>();
+        String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
+        if (StringUtils.isNotEmpty(analyticsJobId)) {
+            //Generate a style for displaying pass/fail/error holes
+            AnalyticalJobResults analyticsResults = nvclDataService.getProcessingResults(analyticsJobId);
+
+            if (!analyticsResults.getErrorBoreholes().isEmpty()) {
+                filterNames.add("Error Boreholes");
+                filterColors.add("#ff0000");
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true,optionalFilters));
+                filterMarks.add(Mark.X);
+            }
+
+            if (!analyticsResults.getFailBoreholes().isEmpty()) {
+                filterNames.add("Fail Boreholes");
+                filterColors.add("#8390C6");
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true,optionalFilters));
+                filterMarks.add(Mark.SQUARE);
+            }
+
+            if (!analyticsResults.getPassBoreholes().isEmpty()) {
+                filterNames.add("Pass Boreholes");
+                filterColors.add(color.isEmpty() ? "#2242c7" : color);
+                filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true,optionalFilters));
+                filterMarks.add(Mark.SQUARE);
+            }
+        } else {
+            if (this.boreholeService.namespaceSupportsHyloggerFilter(gsmlpNameSpace)) {
+                filters.add(this.boreholeService.getFilter(boreholeName,
+                        custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
+                        hyloggerBoreholeIDs, true,optionalFilters));
+                filterColors.add("#FF0000");
+                filterNames.add("Hylogged");
+                filterMarks.add(Mark.SQUARE);
+            }
+        }
+
+        response.setContentType("text/xml");
+
+        String style = this.boreholeService.getStyle(filterNames, filters, filterColors, filterMarks, gsmlpNameSpace);
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
+
+        styleStream.close();
+        outputStream.close();
+    }
     /**
      * Handles getting the style of the SF0 borehole filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
      * implicitly)
