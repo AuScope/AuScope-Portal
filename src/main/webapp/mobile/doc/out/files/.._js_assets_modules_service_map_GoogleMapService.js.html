@@ -253,6 +253,8 @@ allModules.service(&#x27;GoogleMapService&#x27;,[&#x27;$rootScope&#x27;,&#x27;Ut
         this.activeLayers[layerId].layers.push(mapLayer);
         this.broadcast(&#x27;layer.added&#x27;,layer);
         
+        RenderStatusService.initStatus(layer);
+        
         // Update the overlay map data structures
         this.syncOverlayMapDS();
     };
