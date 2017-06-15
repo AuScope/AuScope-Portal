@@ -3335,6 +3335,21 @@
         {
             "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 119,
+            "description": "Initialise the status for use with a certain layer",
+            "itemtype": "method",
+            "name": "initStatus",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "layer object"
+                }
+            ],
+            "class": "RenderStatusService",
+            "module": "map"
+        },
+        {
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
+            "line": 130,
             "description": "Check if the layer is still active",
             "itemtype": "method",
             "name": "isLayerActive",
@@ -3747,7 +3762,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 142,
+            "line": 144,
             "description": "Synchronises data structures used to keep track of Google 'overlayMapType' layers",
             "itemtype": "method",
             "name": "syncOverlayMapDS",
@@ -3759,7 +3774,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 185,
+            "line": 187,
             "description": "Searches for an 'overlayMap' within the current main map",
             "itemtype": "method",
             "name": "findOverlayMap",
@@ -3777,7 +3792,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 201,
+            "line": 203,
             "description": "Searches for a Google 'overlayMap' within the active layers returning its layer id",
             "itemtype": "method",
             "name": "findLayerId",
@@ -3795,7 +3810,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 220,
+            "line": 222,
             "description": "Return the list of active layers",
             "itemtype": "method",
             "name": "getMapActiveLayer",
@@ -3807,7 +3822,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 229,
+            "line": 231,
             "description": "Given a layer and an opacity, set the opacity of the layer",
             "itemtype": "method",
             "name": "setLayerOpacity",
@@ -3826,7 +3841,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 246,
+            "line": 248,
             "description": "Remove the layer if it is rendered on the map",
             "itemtype": "method",
             "name": "removeActiveLayer",
@@ -3841,7 +3856,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 285,
+            "line": 287,
             "description": "Initialise the map",
             "itemtype": "method",
             "name": "initMap",
@@ -3856,7 +3871,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 318,
+            "line": 320,
             "description": "Fetches the state of the map in the form of a JSON string",
             "itemtype": "method",
             "name": "getMapState",
@@ -3868,7 +3883,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 328,
+            "line": 330,
             "description": "Sets the state of the map according to a JSON string",
             "itemtype": "method",
             "name": "setMapState",
@@ -3883,7 +3898,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 342,
+            "line": 344,
             "description": "Enable the drawing of rectangle and zooming to the area drawn",
             "itemtype": "method",
             "name": "zoomDraw",
@@ -3892,7 +3907,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 384,
+            "line": 386,
             "description": "event for cancellation of the drawing of rectangle and zooming to the area drawn",
             "itemtype": "method",
             "name": "zoomDrawCancel",
@@ -3901,7 +3916,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 396,
+            "line": 398,
             "description": "event to capture the start of the draw zoom event",
             "itemtype": "method",
             "name": "onDrawZoomStart",
@@ -3920,7 +3935,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 408,
+            "line": 410,
             "description": "event to capture the end of the draw zoom event",
             "itemtype": "method",
             "name": "onDrawZoomEnd",
@@ -3939,7 +3954,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 421,
+            "line": 423,
             "description": "Enable the drawing of bounding box for selecting data",
             "itemtype": "method",
             "name": "selectMapData",
@@ -3948,7 +3963,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 461,
+            "line": 463,
             "description": "cancel the drawing of rectangle and data selection",
             "itemtype": "method",
             "name": "selectDataDrawCancel",
@@ -3957,7 +3972,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 472,
+            "line": 474,
             "description": "event to capture the start of the data selection event",
             "itemtype": "method",
             "name": "onSelectDataStart",
@@ -3976,7 +3991,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 484,
+            "line": 486,
             "description": "event to capture the end of the data selection event",
             "itemtype": "method",
             "name": "onSelectDataEnd",
@@ -3995,7 +4010,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 497,
+            "line": 499,
             "description": "event to capture the removal of a layer",
             "itemtype": "method",
             "name": "onLayerRemoved",
@@ -4014,7 +4029,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 509,
+            "line": 511,
             "description": "event to capture the adding of a layer",
             "itemtype": "method",
             "name": "onLayerAdded",
@@ -4033,7 +4048,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 521,
+            "line": 523,
             "description": "Broadcasts an event to all listeners via $rootScope",
             "itemtype": "method",
             "name": "broadcast",
@@ -4052,7 +4067,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 531,
+            "line": 533,
             "description": "Register a callback function belonging to the map controller that this service will call when told a busy period has started",
             "itemtype": "method",
             "name": "onBusyStart",
@@ -4067,7 +4082,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 540,
+            "line": 542,
             "description": "Register a callback function belonging to the map controller that this service will call when told that the busy period is over",
             "itemtype": "method",
             "name": "onBusyEnd",
@@ -4082,7 +4097,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 549,
+            "line": 551,
             "description": "Function to set the map to busy, i.e. show a loading image",
             "itemtype": "method",
             "name": "busyStart",
@@ -4091,7 +4106,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 560,
+            "line": 562,
             "description": "Function to stop the map being busy, i.e. stop showing a loading image",
             "itemtype": "method",
             "name": "busyEnd",
@@ -4100,7 +4115,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 572,
+            "line": 574,
             "description": "Moves layer to the front of the map layers",
             "itemtype": "method",
             "name": "moveLayerToFront",
@@ -4115,7 +4130,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 595,
+            "line": 597,
             "description": "Returns true if a layer is at the front of the map layers",
             "itemtype": "method",
             "name": "isLayerAtFront",
@@ -4863,7 +4878,7 @@
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " ../js/assets/modules/service/map/GoogleMapService.js:201"
+            "line": " ../js/assets/modules/service/map/GoogleMapService.js:203"
         },
         {
             "message": "unknown tag: retun",
