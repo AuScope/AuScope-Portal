@@ -892,12 +892,12 @@
             </bean>        
         </property>
     </bean>
-
-    <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.view.ResearchDataLayer">
+        
+    <bean id="knownTypeBoreholeMSCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="mscl-borehole"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
+                <constructor-arg name="featureTypeName" value="gsmlp:BoreholeView"/>
                 <constructor-arg name="includeEndpoints" value="true"/>
                 <constructor-arg name="serviceEndpoints">
                     <list>
@@ -916,9 +916,11 @@
         <property name="name" value="MSCL Data"/>
         <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
         <property name="group" value="University of Melbourne"/>
-        <property name="proxyUrl" value="doBoreholeFilter.do"/>
+        <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
+        <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
+                
         <property name="proxyCountUrl" value=""/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
+        <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/> -->
         <property name="iconAnchor">
             <bean class="java.awt.Point">
                 <constructor-arg index="0" value="16"/>
@@ -934,7 +936,7 @@
         <property name="order" value="200" />
     </bean>
 
-    <bean id="knownTypeSurfaceAftershock" class="org.auscope.portal.view.ResearchDataLayer">
+    <bean id="knownTypeSurfaceAftershock" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="surface-aftershock"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
@@ -966,7 +968,7 @@
         <property name="order" value="201" />
     </bean>
 
-    <bean id="knownTypeSeismologyInSchool" class="org.auscope.portal.view.ResearchDataLayer">
+    <bean id="knownTypeSeismologyInSchool" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="seismology-in-schools-site"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.view.knownlayer.IRISSelector">
