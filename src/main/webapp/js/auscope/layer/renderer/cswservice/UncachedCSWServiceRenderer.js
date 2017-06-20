@@ -83,6 +83,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
     _callBackDisplayInfo : function(record){
         Ext.create('Ext.window.Window', {
             title : 'CSW Record Information',
+            modal : true,
             items : [{
                 xtype : 'cswmetadatapanel',
                 width : 500,
@@ -208,6 +209,7 @@ Ext.define('portal.layer.renderer.cswservice.UncachedCSWServiceRenderer', {
             height: 500,
             width: 650,
             layout: 'fit',
+            modal: true,
             items: [{  // Let's put an empty grid in just to illustrate fit layout
                 id : 'pagingPanel',
                 xtype: 'cswpagingpanel',
