@@ -26,7 +26,6 @@
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholeNvclV2" />                
                 <ref bean="knownTypeBoreholePressureDB" />
-                <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypePMDCRCReports" />
                 <ref bean="knownTypeGeotransects" />
