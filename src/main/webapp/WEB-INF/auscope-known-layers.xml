@@ -668,21 +668,6 @@
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
                 <constructor-arg name="featureTypeName" value="gsmlp:BoreholeView"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs</value>
-                        <value>http://www.mrt.tas.gov.au:80/web-services/wfs</value>
-                        <value>http://geossdi.dmp.wa.gov.au:80/services/wfs</value>
-                        <value>http://geossdi.dmp.wa.gov.au/services/wfs</value>
-                        <value>http://geology.data.nt.gov.au:80/geoserver/wfs</value>
-                        <value>http://auscope.dpi.nsw.gov.au:80/geoserver/wfs</value>
-                        <value>https://sarigdata.pir.sa.gov.au/nvcl/geoserver/wfs</value>
-                        <value>http://geology-uat.information.qld.gov.au/geoserver/wfs</value>
-                        <value>http://geology.information.qld.gov.au/geoserver/wfs</value>
-                        <value>http://geology.data.vic.gov.au/nvcl/wfs</value>
-                    </list>
-                </constructor-arg>
                 <property name="relatedFeatureTypeNames">
                     <list>
                         <!--<value>gsml:Borehole</value>-->
@@ -695,7 +680,7 @@
             </bean>
         </constructor-arg>
 
-        <property name="name" value="Borehole View"/>
+        <property name="name" value="All Boreholes"/>
         <property name="group" value="Boreholes"/>
         <property name="description" value="A collection of services implementing the GeoSciML Portrayal Borehole View (gsmlp:BoreholeView)"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
@@ -954,36 +939,6 @@
                 </property>               
             </bean>        
         </property>
-    </bean>
-    <bean id="knownTypeGSMLBorehole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="gsml-borehole"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSWFSSelector">
-                <constructor-arg name="featureTypeName" value="gsml:Borehole"/>
-                <constructor-arg name="layerName" value="Boreholes"/>
-            </bean>
-        </constructor-arg>
-
-        <property name="name" value="All Boreholes"/>
-        <property name="description" value="A collection of services that support the GeoSciML Borehole feature type."/>
-        <property name="group" value="Boreholes"/>
-        <property name="proxyUrl" value="doBoreholeFilter.do"/>
-        <property name="proxyCountUrl" value="doBoreholeFilterCount.do"/>
-        <property name="proxyStyleUrl" value="doFilterStyle.do"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="53" />
     </bean>
 
     <bean id="knownTypeAster" class="org.auscope.portal.core.view.knownlayer.KnownLayer">

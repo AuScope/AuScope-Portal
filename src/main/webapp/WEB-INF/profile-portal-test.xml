@@ -25,7 +25,6 @@
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholePressureDB" />
-                <ref bean="knownTypeGSMLBorehole" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypePMDCRCReports" />
                 <ref bean="knownTypeInSarReports" />
