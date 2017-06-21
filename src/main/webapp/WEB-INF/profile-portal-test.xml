@@ -64,7 +64,6 @@
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />             
-                <ref bean="knownTypeSurfaceAftershock" />
                 <!-- Analytics -->
                 <!-- ref bean="knownTypeBouguerGeodetic" />
                 <ref bean="knownTypeGravAnomalyGeodetic" />

@@ -936,38 +936,6 @@
         <property name="order" value="200" />
     </bean>
 
-    <bean id="knownTypeSurfaceAftershock" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="surface-aftershock"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="surfaceaftershock:seismometer"/>
-                <constructor-arg name="includeEndpoints" value="true"/>
-                <constructor-arg name="serviceEndpoints">
-                    <list>
-                        <value>http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs</value>
-                    </list>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
-        <property name="name" value="Surface Aftershock Data"/>
-        <property name="description" value="Surface aftershock seismograph continuous data."/>
-        <property name="group" value="University of Melbourne"/>
-        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
-        <property name="iconAnchor">
-            <bean class="java.awt.Point">
-                <constructor-arg index="0" value="16"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="iconSize">
-            <bean class="java.awt.Dimension">
-                <constructor-arg index="0" value="32"/>
-                <constructor-arg index="1" value="32"/>
-            </bean>
-        </property>
-        <property name="order" value="201" />
-    </bean>
-
     <bean id="knownTypeSeismologyInSchool" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="seismology-in-schools-site"/>
         <constructor-arg name="knownLayerSelector">
