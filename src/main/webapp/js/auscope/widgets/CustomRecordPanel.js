@@ -262,7 +262,8 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
             width: 400,
             frameHeader : false,
             layout: 'fit',
-            items: tabpanel
+            items: tabpanel,
+            modal : true
         })
     }
 

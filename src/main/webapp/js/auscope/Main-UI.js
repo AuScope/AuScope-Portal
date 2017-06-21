@@ -154,22 +154,6 @@ Ext.application({
             autoLoad : true
         });
 
-
-        // Create the ResearchDataLayer store
-        var researchDataLayerStore = Ext.create('Ext.data.Store', {
-            model : 'portal.knownlayer.KnownLayer',
-            groupField: 'group',
-            proxy : {
-                type : 'ajax',
-                url : 'getResearchDataLayers.do',
-                reader : {
-                    type : 'json',
-                    rootProperty : 'data'
-                }
-            },
-            autoLoad : true
-        });
-
         //Create our store for holding the set of
         //layers that have been added to the map
         var layerStore = Ext.create('portal.layer.LayerStore', {});
@@ -255,23 +239,6 @@ Ext.application({
 
         });
 
-        var researchDataPanel = Ext.create('portal.widgets.panel.KnownLayerPanel', {
-            title : 'Research Data',
-            menuFactory : Ext.create('auscope.layer.AuscopeFilterPanelMenuFactory',{map : map}),
-            store : researchDataLayerStore,
-            activelayerstore : layerStore,
-            enableBrowse : false,//VT: if true browse catalogue option will appear
-            map : map,
-            layerFactory : layerFactory,
-            tooltip : {
-                title : 'Research Data Layers',
-                text : '<p1>The layers in this tab represent past/present research activities and may contain partial or incomplete information.</p1>',
-                showDelay : 100,
-                dismissDelay : 30000
-            }
-
-        });
-
         // basic tabs 1, built from existing content
         var tabsPanel = Ext.create('Ext.TabPanel', {
             id : 'auscope-tabs-panel',
@@ -285,8 +252,7 @@ Ext.application({
             items:[
                 knownLayersPanel,
                 unmappedRecordsPanel,
-                customRecordsPanel,
-                researchDataPanel
+                customRecordsPanel
             ]
         });
 

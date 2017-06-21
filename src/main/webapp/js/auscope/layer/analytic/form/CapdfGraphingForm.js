@@ -109,6 +109,8 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             width: 400,
             collapsible : true,
             layout: 'fit',
+            modal: false,
+            resizable: false,
             listeners : {
                 close : function(panel,opts){
                     var myMap = me.map.map;
@@ -331,7 +333,8 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
            height: 500,
            width: 700,
            layout: 'fit',
-           items: splot
+           items: splot,
+           modal : true
        }).show();
 
        splot.mask("Rendering...");
@@ -357,7 +360,8 @@ Ext.define('auscope.layer.analytic.form.CapdfGraphingForm', {
             height: 500,
             width: 700,
             layout: 'fit',
-            items: splot
+            items: splot,
+            modal: true
         }).show();
 
         splot.mask("Rendering...");
