@@ -195,11 +195,12 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                 });
 
                 // Create the array of charts
-                charts[i] = Ext.create('Ext.chart.Chart', {
+                charts[i] = Ext.create('Ext.chart.CartesianChart', {
                     height : initialChartHeight,
                     width : first ? firstInitialChartWidth : initialChartWidth, // The first chart is slightly wider to accommodate its y-axis label.
                     shadow : false,
                     store : store,
+                    flipXY : true,
                     axes : [ {
                         title : first ? 'Depth (m)' : false, // Only the first chart will have a depth label.
                         type : 'numeric',
@@ -224,8 +225,9 @@ function drawGraph(serviceUrl, boreholeHeaderId, startDepth, endDepth, observati
                     } ],
                     series : [ {
                         type : 'line',
-                        xField : observationsToReturn[i],
-                        yField : 'depth',
+                        axis : 'top',
+                        yField : observationsToReturn[i],
+                        xField : 'depth',
                         showMarkers : false,
                         style : {
                             'stroke-width' : 1
