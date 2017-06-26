@@ -28,21 +28,6 @@ Ext.application({
         var urlParams = Ext.Object.fromQueryString(window.location.search.substring(1));
         var isDebugMode = urlParams.debug;
 
-        //Create our CSWRecord store (holds all CSWRecords not mapped by known layers)
-        var unmappedCSWRecordStore = Ext.create('Ext.data.Store', {
-            model : 'portal.csw.CSWRecord',
-            groupField: 'contactOrg',
-            proxy : {
-                type : 'ajax',
-                url : 'getUnmappedCSWRecords.do',
-                reader : {
-                    type : 'json',
-                    rootProperty : 'data'
-                }
-            },
-            autoLoad : true
-        });
-
         //Our custom record store holds layers that the user has
         //added to the map using a OWS URL entered through the
         //custom layers panel
@@ -207,21 +192,6 @@ Ext.application({
 
         });
 
-        var unmappedRecordsPanel = Ext.create('portal.widgets.panel.CSWRecordPanel', {
-            title : 'Registered',
-            store : unmappedCSWRecordStore,
-            activelayerstore : layerStore,
-            tooltip : {
-                title : 'Registered Layers',
-                text : 'The layers that appear here are the data services that were discovered in a remote registry but do not belong to any of the Featured Layers groupings.',
-                showDelay : 100,
-                dismissDelay : 30000
-            },
-            map : map,
-            layerFactory : layerFactory
-
-        });
-
         customRecordsPanel = Ext.create('auscope.widgets.CustomRecordPanel', {
             title : 'Custom',
             itemId : 'org-auscope-custom-record-panel',
@@ -251,7 +221,6 @@ Ext.application({
             enableTabScroll : true,
             items:[
                 knownLayersPanel,
-                unmappedRecordsPanel,
                 customRecordsPanel
             ]
         });

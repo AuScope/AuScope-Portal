@@ -1698,4 +1698,1649 @@
     </bean>
     <!-- End of Analytic layer -->
 
+    <!-- Generated from registered layers START -->
+    <bean id="knownTypeGsvGeologicalUnit250K" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-250k-"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNIT"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-250k-"/>
+        <property name="name" value="Gsv Geological Unit 250K "/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
+        <property name="order" value="Registered_1"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvGeologicalUnitContact250K" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-contact-250k-"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNITCONTACT"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-contact-250k-"/>
+        <property name="name" value="Gsv Geological Unit Contact 250K "/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological boundaries represented as two dimensional lines, designed for portray"/>
+        <property name="order" value="Registered_2"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvGeologicalUnitContact50K" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-contact-50k-"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNITCONTACT"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-contact-50k-"/>
+        <property name="name" value="Gsv Geological Unit Contact 50K "/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological boundaries represented as two dimensional lines, designed for portray"/>
+        <property name="order" value="Registered_3"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvGeologicalUnit250KAge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-250k-age"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNIT_AGE"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-250k-age"/>
+        <property name="name" value="Gsv Geological Unit 250K Age"/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
+        <property name="order" value="Registered_4"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvShearDisplacementStructure250K" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-shear-displacement-structure-250k-"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_250K_SHEARDISPSTRUCTURE"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-shear-displacement-structure-250k-"/>
+        <property name="name" value="Gsv Shear Displacement Structure 250K "/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Shear displacement structures (faults) represented as two dimensional lines, des"/>
+        <property name="order" value="Registered_5"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvGeologicalUnit250KLithology" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-250k-lithology"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNIT_LITHOLOGY"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-250k-lithology"/>
+        <property name="name" value="Gsv Geological Unit 250K Lithology"/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
+        <property name="order" value="Registered_6"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvGeologicalUnit50KLithology" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-50k-lithology"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNIT_LITHOLOGY"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-50k-lithology"/>
+        <property name="name" value="Gsv Geological Unit 50K Lithology"/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
+        <property name="order" value="Registered_7"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvGeologicalUnit50K" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-50k-"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNIT"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-50k-"/>
+        <property name="name" value="Gsv Geological Unit 50K "/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
+        <property name="order" value="Registered_8"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvShearDisplacementStructure50K" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-shear-displacement-structure-50k-"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_50K_SHEARDISPSTRUCTURE"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-shear-displacement-structure-50k-"/>
+        <property name="name" value="Gsv Shear Displacement Structure 50K "/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Shear displacement structures (faults) represented as two dimensional lines, des"/>
+        <property name="order" value="Registered_9"/>
+    </bean>
+
+
+    <bean id="knownTypeGsvGeologicalUnit50KAge" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="gsv-geological-unit-50k-age"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNIT_AGE"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="gsv-geological-unit-50k-age"/>
+        <property name="name" value="Gsv Geological Unit 50K Age"/>
+        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
+        <property name="order" value="Registered_10"/>
+    </bean>
+
+
+    <bean id="knownTypeModel" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="model"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="RemAnom:Model"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="model"/>
+        <property name="name" value="Model"/>
+        <property name="group" value="CSIRO-Magnetics"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_11"/>
+    </bean>
+
+
+    <bean id="knownTypeAnalysis" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="analysis"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="RemAnom:Analysis"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="analysis"/>
+        <property name="name" value="Analysis"/>
+        <property name="group" value="CSIRO-Magnetics"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_12"/>
+    </bean>
+
+
+    <bean id="knownTypeTest" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="test"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="auscope:test"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="test"/>
+        <property name="name" value="Test"/>
+        <property name="group" value="Geoscience Australia"/>
+        <property name="description" value="For Rob"/>
+        <property name="order" value="Registered_13"/>
+    </bean>
+
+
+    <bean id="knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06Ga" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="l180-mt-isa-deep-crus-seis-surv-qld-2006-stac-and-migr-data-and-imag-for-line-06ga-to-06ga"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="a05f7892-ee53-7506-e044-00144fdd4fa6"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="l180-mt-isa-deep-crus-seis-surv-qld-2006-stac-and-migr-data-and-imag-for-line-06ga-to-06ga"/>
+        <property name="name" value="L180 Mt Isa Deep Crustal Seismic Survey Qld 2006 Stacked And Migrated Data And Images For Lines 06Ga M1 To 06Ga M6"/>
+        <property name="group" value="Geoscience Australia"/>
+        <property name="description" value="Processed seismic data (SEG-Y format) and TIFF images for the 2006 Mt Isa Deep C"/>
+        <property name="order" value="Registered_14"/>
+    </bean>
+
+
+    <bean id="knownTypeAreTherAnySandUranSystInTheEromBasi" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="are-ther-any-sand-uran-syst-in-the-erom-basi"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="a05f7892-f9c4-7506-e044-00144fdd4fa6"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="are-ther-any-sand-uran-syst-in-the-erom-basi"/>
+        <property name="name" value="Are There Any Sandstone Hosted Uranium Systems In The Eromanga Basin "/>
+        <property name="group" value="Geoscience Australia"/>
+        <property name="description" value="As part of Geoscience Australia's Onshore Energy Security Program the authors ha"/>
+        <property name="order" value="Registered_15"/>
+    </bean>
+
+
+    <bean id="knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03Ga" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="l164-curn-seis-surv-sa-2003-2004-stac-and-migr-seis-data-and-imag-for-line-03ga"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="cd697530-5b75-3811-e044-00144fdd4fa6"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="l164-curn-seis-surv-sa-2003-2004-stac-and-migr-seis-data-and-imag-for-line-03ga"/>
+        <property name="name" value="L164 Curnamona Seismic Survey Sa 2003 2004 Stacked And Migrated Seismic Data And Images For Lines 03Ga Cu1"/>
+        <property name="group" value="Geoscience Australia"/>
+        <property name="description" value="A seismic survey using the Australian National Seismic Imaging Resource (ANSIR) "/>
+        <property name="order" value="Registered_16"/>
+    </bean>
+
+
+    <bean id="knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGis" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="lawn-hill-plat-and-leic-rive-faul-trou-meas-stra-sect-onli-gis"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="a05f7892-b7a0-7506-e044-00144fdd4fa6"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="lawn-hill-plat-and-leic-rive-faul-trou-meas-stra-sect-onli-gis"/>
+        <property name="name" value="Lawn Hill Platform And Leichhardt River Fault Trough Measured Stratigraphic Section Online Gis"/>
+        <property name="group" value="Geoscience Australia"/>
+        <property name="description" value="This GIS web browser contains stratigraphic information from the southern flank "/>
+        <property name="order" value="Registered_17"/>
+    </bean>
+
+
+    <bean id="knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSyst" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="pred-mine-disc-in-the-east-yilg-crat-an-exam-of-dist-targ-of-an-orog-gold-mine-syst"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="a05f7892-eafd-7506-e044-00144fdd4fa6"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="pred-mine-disc-in-the-east-yilg-crat-an-exam-of-dist-targ-of-an-orog-gold-mine-syst"/>
+        <property name="name" value="Predictive Mineral Discovery In The Eastern Yilgarn Craton An Example Of District Scale Targeting Of An Orogenic Gold Mineral System"/>
+        <property name="group" value="Geoscience Australia"/>
+        <property name="description" value="Predictive mineral discovery is concerned with the application of a whole of sys"/>
+        <property name="order" value="Registered_18"/>
+    </bean>
+
+
+    <bean id="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="fina-repo-3d-geol-mode-of-the-east-yilg-crat-proj-pmd-y2-sept-2001-dece-2004"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="a05f7892-ccc9-7506-e044-00144fdd4fa6"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="fina-repo-3d-geol-mode-of-the-east-yilg-crat-proj-pmd-y2-sept-2001-dece-2004"/>
+        <property name="name" value="Final Report 3D Geological Models Of The Eastern Yilgarn Craton Project Pmd Crc Y2 September 2001 December 2004"/>
+        <property name="group" value="Geoscience Australia"/>
+        <property name="description" value="The pmd*CRC Y2 project operated for a little over three years, and in this time "/>
+        <property name="order" value="Registered_19"/>
+    </bean>
+
+
+    <bean id="knownTypeMvPwTemperature" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mv-pw-temperature"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="pdb:MV_PW_TEMPERATURE"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mv-pw-temperature"/>
+        <property name="name" value="Mv Pw Temperature"/>
+        <property name="group" value="CSIRO Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_20"/>
+    </bean>
+
+
+    <bean id="knownTypeMvBoreholeHeader" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mv-borehole-header"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="pdb:MV_BOREHOLE_HEADER"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mv-borehole-header"/>
+        <property name="name" value="Mv Borehole Header"/>
+        <property name="group" value="CSIRO Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_21"/>
+    </bean>
+
+
+    <bean id="knownTypeMineralFields" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mineral-fields"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Mineral_Fields"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mineral-fields"/>
+        <property name="name" value="Mineral Fields"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_22"/>
+    </bean>
+
+
+    <bean id="knownTypeHistoricalExplorationActivityPoints" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="historical-exploration-activity-points"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Historical_Exploration_Activity_-_points"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="historical-exploration-activity-points"/>
+        <property name="name" value="Historical Exploration Activity Points"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_23"/>
+    </bean>
+
+
+    <bean id="knownTypeReleases" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="releases"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Releases"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="releases"/>
+        <property name="name" value="Releases"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_24"/>
+    </bean>
+
+
+    <bean id="knownTypeSection574" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="section-57-4"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Section_57-4"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="section-57-4"/>
+        <property name="name" value="Section 57 4"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_25"/>
+    </bean>
+
+
+    <bean id="knownTypeSection19" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="section-19"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Section_19"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="section-19"/>
+        <property name="name" value="Section 19"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_26"/>
+    </bean>
+
+
+    <bean id="knownTypeMinesAndMineralDepositsMinedex" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mines-and-mineral-deposits-minedex"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Mines_and_Mineral_Deposits_-_MINEDEX"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mines-and-mineral-deposits-minedex"/>
+        <property name="name" value="Mines And Mineral Deposits Minedex"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value="Mines and Mineral Deposits of Western Australia (MINEDEX)"/>
+        <property name="order" value="Registered_27"/>
+    </bean>
+
+
+    <bean id="knownTypeMineralisationZonesNonS572Aa" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mineralisation-zones-non-s57-2aa"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Mineralisation_Zones_Non_S57-2AA"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mineralisation-zones-non-s57-2aa"/>
+        <property name="name" value="Mineralisation Zones Non S57 2Aa"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_28"/>
+    </bean>
+
+
+    <bean id="knownTypeAmalgamations" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="amalgamations"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Amalgamations"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="amalgamations"/>
+        <property name="name" value="Amalgamations"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_29"/>
+    </bean>
+
+
+    <bean id="knownTypeTenementsCurrent" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="tenements-current"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Tenements_Current"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="tenements-current"/>
+        <property name="name" value="Tenements Current"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value="Current Mining Tenements of Western Australia"/>
+        <property name="order" value="Registered_30"/>
+    </bean>
+
+
+    <bean id="knownTypeHistoricalExplorationActivityLines" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="historical-exploration-activity-lines"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Historical_Exploration_Activity_-_lines"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="historical-exploration-activity-lines"/>
+        <property name="name" value="Historical Exploration Activity Lines"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_31"/>
+    </bean>
+
+
+    <bean id="knownTypeRestorations" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="restorations"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Restorations"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="restorations"/>
+        <property name="name" value="Restorations"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_32"/>
+    </bean>
+
+
+    <bean id="knownTypeHist" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="hist"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Historical_Exploration_Activity_-_polygons"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="hist"/>
+        <property name="name" value="Historical Exploration Activity Polygons"/>
+        <property name="group" value="WA Department of Mines and Petroleum"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_33"/>
+    </bean>
+
+
+    <bean id="knownTypeRsSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="rs-sample"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="test:rs_sample"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="rs-sample"/>
+        <property name="name" value="Rs Sample"/>
+        <property name="group" value="Geological Survey of New South Wales"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_34"/>
+    </bean>
+
+
+    <bean id="knownTypeBorehole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="borehole"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="gsmlbh:Borehole"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="borehole"/>
+        <property name="name" value="Borehole"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value="Boreholes submitted to CSIRO by industry and government organisations for analys"/>
+        <property name="order" value="Registered_35"/>
+    </bean>
+
+
+    <bean id="knownTypeHighpSiteIronlayer" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="highp-site-ironlayer"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="HighP-Site-IronLayer"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="highp-site-ironlayer"/>
+        <property name="name" value="Highp Site Ironlayer"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value="Layer-Group type layer: HighP-Site-IronLayer"/>
+        <property name="order" value="Registered_36"/>
+    </bean>
+
+
+    <bean id="knownTypeHighpfeaturetype" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="highpfeaturetype"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="highp:HighPFeatureType"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="highpfeaturetype"/>
+        <property name="name" value="Highpfeaturetype"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_37"/>
+    </bean>
+
+
+    <bean id="knownTypeHighpSiteFeatureType" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="highp-site-feature-type"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="highp:HighPSiteFeatureType"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="highp-site-feature-type"/>
+        <property name="name" value="Highp Site Feature Type"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value="Generated from highp"/>
+        <property name="order" value="Registered_38"/>
+    </bean>
+
+
+    <bean id="knownTypeHighpSitePhoslayer" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="highp-site-phoslayer"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="HighP-Site-PhosLayer"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="highp-site-phoslayer"/>
+        <property name="name" value="Highp Site Phoslayer"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value="Layer-Group type layer: HighP-Site-PhosLayer"/>
+        <property name="order" value="Registered_39"/>
+    </bean>
+
+
+    <bean id="knownTypeLateriteWesternYilgarnGeochem" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="laterite-western-yilgarn-geochem"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="Geochem:LateriteYilgarnGeoChem"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="laterite-western-yilgarn-geochem"/>
+        <property name="name" value="Laterite Western Yilgarn Geochem"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value="This Record is the ?nal release of a 53-element dataset for approximately 3150 l"/>
+        <property name="order" value="Registered_40"/>
+    </bean>
+
+
+    <bean id="knownTypeHighpRePhoslayer" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="highp-re-phoslayer"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="HighP-RE-PhosLayer"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="highp-re-phoslayer"/>
+        <property name="name" value="Highp Re Phoslayer"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value="Layer-Group type layer: HighP-RE-PhosLayer"/>
+        <property name="order" value="Registered_41"/>
+    </bean>
+
+
+    <bean id="knownTypeHighpReIronlayer" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="highp-re-ironlayer"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="HighP-RE-IronLayer"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="highp-re-ironlayer"/>
+        <property name="name" value="Highp Re Ironlayer"/>
+        <property name="group" value="CSIRO"/>
+        <property name="description" value="Layer-Group type layer: HighP-RE-IronLayer"/>
+        <property name="order" value="Registered_42"/>
+    </bean>
+
+
+    <bean id="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="cate-3-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LicenceCategory3"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="cate-3-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Category 3 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Category 3 Exploration Licence polygons and Exploration Release Areas across Tas"/>
+        <property name="order" value="Registered_43"/>
+    </bean>
+
+
+    <bean id="knownTypeCate1ExplLicePolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="cate-1-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LicenceCategory1"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="cate-1-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Category 1 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Category 1 Exploration Licence polygons and Exploration Release Areas across Tas"/>
+        <property name="order" value="Registered_44"/>
+    </bean>
+
+
+    <bean id="knownTypeProcLandAreaOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="proc-land-area-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:ProclaimedAreasPoly"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="proc-land-area-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Proclaimed Landslip Areas Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Proclaimed Landslip Areas (A and B) of Tasmania, which are defined under the Min"/>
+        <property name="order" value="Registered_45"/>
+    </bean>
+
+
+    <bean id="knownTypeAirbGeopSurvOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="airb-geop-surv-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:AirborneSurveys"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="airb-geop-surv-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Airborne Geophysical Surveys Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Spatial index of open file airborne geophysical surveys for which digital data i"/>
+        <property name="order" value="Registered_46"/>
+    </bean>
+
+
+    <bean id="knownTypeLandPoinOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="land-poin-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LandSlidePoint"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="land-poin-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Landslide Points Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Landslide features across Tasmania as representative points, with summary landsl"/>
+        <property name="order" value="Registered_47"/>
+    </bean>
+
+
+    <bean id="knownTypeMineOccuPoinOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mine-occu-poin-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:MineralOccurences"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mine-occu-poin-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Mineral Occurrence Points Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Mineral occurrences, including operating and abandoned mines, located in Tasmani"/>
+        <property name="order" value="Registered_48"/>
+    </bean>
+
+
+    <bean id="knownTypeLandLineOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="land-line-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LandSlideLine"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="land-line-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Landslide Lines Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Linear landslide components of landslide features mapped across Tasmania, with s"/>
+        <property name="order" value="Registered_49"/>
+    </bean>
+
+
+    <bean id="knownTypeLandDamaPolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="land-dama-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:DamagePoly"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="land-dama-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Landslide Damage Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Polygons of structures or property known to be damaged by a landslide in Tasmani"/>
+        <property name="order" value="Registered_50"/>
+    </bean>
+
+
+    <bean id="knownTypeCate4ExplLicePolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="cate-4-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LicenceCategory4"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="cate-4-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Category 4 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Category 4 Exploration Licence polygons and Exploration Release Areas across Tas"/>
+        <property name="order" value="Registered_51"/>
+    </bean>
+
+
+    <bean id="knownTypeCate6ExplLicePolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="cate-6-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LicenceCategory6"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="cate-6-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Category 6 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Category 6 Exploration Licence polygons and Exploration Release Areas across Tas"/>
+        <property name="order" value="Registered_52"/>
+    </bean>
+
+
+    <bean id="knownTypeMiniLeasPolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mini-leas-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:Leases"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mini-leas-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Mining Lease Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Mining Lease polygons and production licence polygons for all mineral categories"/>
+        <property name="order" value="Registered_53"/>
+    </bean>
+
+
+    <bean id="knownTypeCate2ExplLicePolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="cate-2-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LicenceCategory2"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="cate-2-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Category 2 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Category 2 Exploration Licence polygons and Exploration Release Areas across Tas"/>
+        <property name="order" value="Registered_54"/>
+    </bean>
+
+
+    <bean id="knownTypeGravMeasOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="grav-meas-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:GravityMeasurements"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="grav-meas-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Gravity Measurements Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Primary and derived (i.e. Bouguer anomaly) gravity observation points (stations)"/>
+        <property name="order" value="Registered_55"/>
+    </bean>
+
+
+    <bean id="knownTypeCate5ExplLicePolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="cate-5-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LicenceCategory5"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="cate-5-expl-lice-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Category 5 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania"/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Category 5 Exploration Licence polygons and Exploration Release Areas across Tas"/>
+        <property name="order" value="Registered_56"/>
+    </bean>
+
+
+    <bean id="knownTypeLandDamaPoinOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="land-dama-poin-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:DamagePoint"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="land-dama-poin-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Landslide Damage Points Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Point locations of known damage to structures or property caused by a landslide "/>
+        <property name="order" value="Registered_57"/>
+    </bean>
+
+
+    <bean id="knownTypeGravBaseStatOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="grav-base-stat-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:GravityBaseStations"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="grav-base-stat-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Gravity Base Stations Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Precise locations where the absolute value of gravity is known."/>
+        <property name="order" value="Registered_58"/>
+    </bean>
+
+
+    <bean id="knownTypeBorePoinOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="bore-poin-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:Boreholes"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="bore-poin-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Borehole Points Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Borehole features across Tasmania derived from the Borehole Database, administer"/>
+        <property name="order" value="Registered_59"/>
+    </bean>
+
+
+    <bean id="knownTypeStrategicProspectivityZones" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="strategic-prospectivity-zones"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:StrategicProspectivityZones"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="strategic-prospectivity-zones"/>
+        <property name="name" value="Strategic Prospectivity Zones"/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_60"/>
+    </bean>
+
+
+    <bean id="knownTypeLandPolyOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="land-poly-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:LandSlidePoly"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="land-poly-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Landslide Polygons Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value="Landslide component polygons of landslide features mapped across Tasmania, with "/>
+        <property name="order" value="Registered_61"/>
+    </bean>
+
+
+    <bean id="knownTypeBoreTracOfTasmMinResoTasm" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="bore-trac-of-tasm-min-reso-tasm"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="mrtwfs:BoreholeTrace"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="bore-trac-of-tasm-min-reso-tasm"/>
+        <property name="name" value="Borehole Traces Of Tasmania Mineral Resources Tasmania "/>
+        <property name="group" value="Mineral Resources Tasmania"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_62"/>
+    </bean>
+
+
+    <bean id="knownTypeAnomalyview" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="anomalyview"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="RemAnom:AnomalyView"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="anomalyview"/>
+        <property name="name" value="Anomalyview"/>
+        <property name="group" value="CSIRO -Mineral Resources"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_63"/>
+    </bean>
+
+
+    <bean id="knownTypeModel_1" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="model"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="RemAnom:Model"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="model"/>
+        <property name="name" value="Model"/>
+        <property name="group" value="CSIRO -Mineral Resources"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_64"/>
+    </bean>
+
+
+    <bean id="knownTypeAnalysis_1" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="analysis"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="RemAnom:Analysis"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="analysis"/>
+        <property name="name" value="Analysis"/>
+        <property name="group" value="CSIRO -Mineral Resources"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_65"/>
+    </bean>
+
+
+    <bean id="knownTypeRadnlOperR25PcprrL3Knmi" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="radnl-oper-r-25pcprr-l3-knmi"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="RADNL_OPER_R___25PCPRR_L3_KNMI"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="radnl-oper-r-25pcprr-l3-knmi"/>
+        <property name="name" value="Radnl Oper R 25Pcprr L3 Knmi"/>
+        <property name="group" value="Unknown"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_66"/>
+    </bean>
+
+
+    <bean id="knownTypeRadnlOperR25PcprrL3Color" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="radnl-oper-r-25pcprr-l3-color"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="RADNL_OPER_R___25PCPRR_L3_COLOR"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="radnl-oper-r-25pcprr-l3-color"/>
+        <property name="name" value="Radnl Oper R 25Pcprr L3 Color"/>
+        <property name="group" value="Unknown"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_67"/>
+    </bean>
+
+
+    <bean id="knownTypeNswDrillhole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-drillhole"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_drillhole"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-drillhole"/>
+        <property name="name" value="Nsw Drillhole"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This is the full NSW drilling dataset available from Geoscientific Data Warehous"/>
+        <property name="order" value="Registered_68"/>
+    </bean>
+
+
+    <bean id="knownTypeNswAssaySurface" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-assay-surface"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_surfassay"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-assay-surface"/>
+        <property name="name" value="Nsw Assay Surface"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This dataset contains geochemical assay data collected by companies exploring in"/>
+        <property name="order" value="Registered_69"/>
+    </bean>
+
+
+    <bean id="knownTypeNswFieldObservations" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-field-observations"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_fieldobs_full"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-field-observations"/>
+        <property name="name" value="Nsw Field Observations"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_70"/>
+    </bean>
+
+
+    <bean id="knownTypeNswDownholeAssaySamples" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-downhole-assay-samples"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_assayhole"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-downhole-assay-samples"/>
+        <property name="name" value="Nsw Downhole Assay Samples"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_71"/>
+    </bean>
+
+
+    <bean id="knownTypeNswDrillholeAll" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-drillhole-all"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_drillhole_full"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-drillhole-all"/>
+        <property name="name" value="Nsw Drillhole All"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_72"/>
+    </bean>
+
+
+    <bean id="knownTypeNswDrillholesCoal" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-drillholes-coal"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_coal"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-drillholes-coal"/>
+        <property name="name" value="Nsw Drillholes Coal"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This is the coal subset of the NSW drilling dataset available from Geoscientific"/>
+        <property name="order" value="Registered_73"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeologicalFieldObservations" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geological-field-observations"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_fieldobs"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geological-field-observations"/>
+        <property name="name" value="Nsw Geological Field Observations"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="The Field Observations (FieldObs) database stores observations and measurements "/>
+        <property name="order" value="Registered_74"/>
+    </bean>
+
+
+    <bean id="knownTypeNswDrillholesMinerals" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-drillholes-minerals"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_min"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-drillholes-minerals"/>
+        <property name="name" value="Nsw Drillholes Minerals"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This is the mineral subset of the NSW drilling dataset available from Geoscienti"/>
+        <property name="order" value="Registered_75"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeologySimplified" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geology-simplified"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:ge_geology15m"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geology-simplified"/>
+        <property name="name" value="Nsw Geology Simplified"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_76"/>
+    </bean>
+
+
+    <bean id="knownTypeNswDrillholesPetroleum" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-drillholes-petroleum"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_pet"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-drillholes-petroleum"/>
+        <property name="name" value="Nsw Drillholes Petroleum"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="The petroleum drillholes dataset stores information about conventional petroleum"/>
+        <property name="order" value="Registered_77"/>
+    </bean>
+
+
+    <bean id="knownTypeMineralOccurenceIndustryFull" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="mineral-occurence-industry-full"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_mineraloccurrence_full"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="mineral-occurence-industry-full"/>
+        <property name="name" value="Mineral Occurence Industry Full"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_78"/>
+    </bean>
+
+
+    <bean id="knownTypeNswHistoricExplorationTitles" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-historic-exploration-titles"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_histels"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-historic-exploration-titles"/>
+        <property name="name" value="Nsw Historic Exploration Titles"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_79"/>
+    </bean>
+
+
+    <bean id="knownTypeNswMapBlockGraticule" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-map-block-graticule"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_mapblock"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-map-block-graticule"/>
+        <property name="name" value="Nsw Map Block Graticule"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_80"/>
+    </bean>
+
+
+    <bean id="knownTypeBlLocalaboriginallandcouncil" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="bl-localaboriginallandcouncil"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_localaboriginallandcouncil"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="bl-localaboriginallandcouncil"/>
+        <property name="name" value="Bl Localaboriginallandcouncil"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_81"/>
+    </bean>
+
+
+    <bean id="knownTypeNswMineralOccurrenceIndustry" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-mineral-occurrence-industry"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_metindustry"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-mineral-occurrence-industry"/>
+        <property name="name" value="Nsw Mineral Occurrence Industry"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_82"/>
+    </bean>
+
+
+    <bean id="knownTypeNsw100KMapSheetExtents" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-100k-map-sheet-extents"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_mapsheet100k"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-100k-map-sheet-extents"/>
+        <property name="name" value="Nsw 100K Map Sheet Extents"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_83"/>
+    </bean>
+
+
+    <bean id="knownTypeNswFossickingDistricts" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-fossicking-districts"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_fossicking"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-fossicking-districts"/>
+        <property name="name" value="Nsw Fossicking Districts"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="Fossicking is the small scale search for and collection of minerals, gemstones o"/>
+        <property name="order" value="Registered_84"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeologicalFieldObservationsPhoto" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geological-field-observations-photo"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_photo"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geological-field-observations-photo"/>
+        <property name="name" value="Nsw Geological Field Observations Photo"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_85"/>
+    </bean>
+
+
+    <bean id="knownTypeGeopTotaMagnInteRtpTmiRtpTiltFilt" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geop-tota-magn-inte-rtp-tmi-rtp-tilt-filt"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="geophys:MagRTPtilt"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="geop-tota-magn-inte-rtp-tmi-rtp-tilt-filt"/>
+        <property name="name" value="Geophysics Total Magnetic Intensity Rtp Tmi Rtp Tilt Filter"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.
+
+To"/>
+        <property name="order" value="Registered_86"/>
+    </bean>
+
+
+    <bean id="knownTypeNswSeismic" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-seismic"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_seismic"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-seismic"/>
+        <property name="name" value="Nsw Seismic"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_87"/>
+    </bean>
+
+
+    <bean id="knownTypeNswCurrMiniAndExplTitl" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-curr-mini-and-expl-titl"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_title"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-curr-mini-and-expl-titl"/>
+        <property name="name" value="Nsw Current Mining And Exploration Titles"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_88"/>
+    </bean>
+
+
+    <bean id="knownTypeGeopTotaMagnInte1StDeriReduToPole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geop-tota-magn-inte-1st-deri-redu-to-pole"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="geophys:TMI_RTP_1st"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="geop-tota-magn-inte-1st-deri-redu-to-pole"/>
+        <property name="name" value="Geophysics Total Magnetic Intensity 1St Derivative Reduced To Pole"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_89"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeologicalSpectralSamples" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geological-spectral-samples"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_spectral"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geological-spectral-samples"/>
+        <property name="name" value="Nsw Geological Spectral Samples"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_90"/>
+    </bean>
+
+
+    <bean id="knownTypeGeopTernRadiPota" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geop-tern-radi-pota"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="geophys:Radio"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="geop-tern-radi-pota"/>
+        <property name="name" value="Geophysics Ternary Radioelement Potassium K Thorium Th Uranium U "/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.
+
+Te"/>
+        <property name="order" value="Registered_91"/>
+    </bean>
+
+
+    <bean id="knownTypeNswDrillholesCsg" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-drillholes-csg"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_csg"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-drillholes-csg"/>
+        <property name="name" value="Nsw Drillholes Csg"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="The coal seam gas drillholes dataset stores information about CSG sites within N"/>
+        <property name="order" value="Registered_92"/>
+    </bean>
+
+
+    <bean id="knownTypeNswCurrentMiningApplications" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-current-mining-applications"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_titleappl"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-current-mining-applications"/>
+        <property name="name" value="Nsw Current Mining Applications"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_93"/>
+    </bean>
+
+
+    <bean id="knownTypeNswOperatingMineralMines" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-operating-mineral-mines"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_opmines"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-operating-mineral-mines"/>
+        <property name="name" value="Nsw Operating Mineral Mines"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_94"/>
+    </bean>
+
+
+    <bean id="knownTypeGeophysicsElevation" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geophysics-elevation"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="geophys:DEM"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="geophysics-elevation"/>
+        <property name="name" value="Geophysics Elevation"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="Elevation is a pseudocolour layer with a histogram-equalised colour-stretch. Coo"/>
+        <property name="order" value="Registered_95"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeolSimpRockUnitBoun" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geol-simp-rock-unit-boun"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:ge_geology15m_bdy"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geol-simp-rock-unit-boun"/>
+        <property name="name" value="Nsw Geology Simplified Rock Unit Boundary"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_96"/>
+    </bean>
+
+
+    <bean id="knownTypeBlocksAndUnitsGraticule" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="blocks-and-units-graticule"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:Map Blocks and Units"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="blocks-and-units-graticule"/>
+        <property name="name" value="Blocks And Units Graticule"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="Layer-Group type layer: gsnsw:Map Blocks and Units"/>
+        <property name="order" value="Registered_97"/>
+    </bean>
+
+
+    <bean id="knownTypeNswMapUnitGraticule" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-map-unit-graticule"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:bl_mapunit"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-map-unit-graticule"/>
+        <property name="name" value="Nsw Map Unit Graticule"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_98"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeochronology" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geochronology"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_geochron"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geochronology"/>
+        <property name="name" value="Nsw Geochronology"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="The radiogenic isotope database contains geochronological data managed by the Ge"/>
+        <property name="order" value="Registered_99"/>
+    </bean>
+
+
+    <bean id="knownTypeGeophysicsIsostaticBougerGravity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geophysics-isostatic-bouger-gravity"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="geophys:IsoGrav"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="geophysics-isostatic-bouger-gravity"/>
+        <property name="name" value="Geophysics Isostatic Bouger Gravity"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.
+
+Is"/>
+        <property name="order" value="Registered_100"/>
+    </bean>
+
+
+    <bean id="knownTypeGeopTotaMagnInteReduToPole" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geop-tota-magn-inte-redu-to-pole"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="geophys:MagRTP"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="geop-tota-magn-inte-redu-to-pole"/>
+        <property name="name" value="Geophysics Total Magnetic Intensity Reduced To Pole"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.
+
+To"/>
+        <property name="order" value="Registered_101"/>
+    </bean>
+
+
+    <bean id="knownTypeNswCoreLibrarySamples" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-core-library-samples"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_corelibhole"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-core-library-samples"/>
+        <property name="name" value="Nsw Core Library Samples"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_102"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeochemistrySamples" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geochemistry-samples"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_geochemistry"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geochemistry-samples"/>
+        <property name="name" value="Nsw Geochemistry Samples"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="The Geochemistry (Whole Rock) dataset contains information about the chemistry o"/>
+        <property name="order" value="Registered_103"/>
+    </bean>
+
+
+    <bean id="knownTypeNswTitles" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-titles"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:Titles"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-titles"/>
+        <property name="name" value="Nsw Titles"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="Layer-Group type layer: gsnsw:Titles"/>
+        <property name="order" value="Registered_104"/>
+    </bean>
+
+
+    <bean id="knownTypeNswGeology" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-geology"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:NSW_Geology"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-geology"/>
+        <property name="name" value="Nsw Geology"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="Layer-Group type layer: gsnsw:NSW_Geology"/>
+        <property name="order" value="Registered_105"/>
+    </bean>
+
+
+    <bean id="knownTypeGeopIsosGravOverTmiRtpTilt" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="geop-isos-grav-over-tmi-rtp-tilt"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="geophys:IsoGravTilt"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="geop-isos-grav-over-tmi-rtp-tilt"/>
+        <property name="name" value="Geophysics Isostatic Gravity Over Tmi Rtp Tilt"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.
+
+Bo"/>
+        <property name="order" value="Registered_106"/>
+    </bean>
+
+
+    <bean id="knownTypeNswLithologySamples" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-lithology-samples"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_lithhole"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-lithology-samples"/>
+        <property name="name" value="Nsw Lithology Samples"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value=""/>
+        <property name="order" value="Registered_107"/>
+    </bean>
+
+
+    <bean id="knownTypeNswBase" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-base"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:NSW_Base"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-base"/>
+        <property name="name" value="Nsw Base"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="Layer-Group type layer: gsnsw:NSW_Base"/>
+        <property name="order" value="Registered_108"/>
+    </bean>
+
+
+    <bean id="knownTypeNswMineralOccurrenceCommodity" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="nsw-mineral-occurrence-commodity"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
+                <constructor-arg name="layerName" value="gsnsw:dw_metelement"/>
+            </bean>
+        </constructor-arg>
+        <property name="id" value="nsw-mineral-occurrence-commodity"/>
+        <property name="name" value="Nsw Mineral Occurrence Commodity"/>
+        <property name="group" value="Geological Survey NSW"/>
+        <property name="description" value="This spatial dataset is a derivative product of the New South Wales Mineral Occu"/>
+        <property name="order" value="Registered_109"/>
+    </bean>
+    <!-- Generated from registered layers END -->
 </beans>
