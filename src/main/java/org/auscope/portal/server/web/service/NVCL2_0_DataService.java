@@ -107,37 +107,6 @@ public class NVCL2_0_DataService {
     }
 
     /**
-     * Makes a CSV download request from an NVCL 2.0 service and parses the resulting data into a series of 1 metre bins where
-     * each bin represents the average value for that range of the borehole.
-     * @param serviceUrl
-     * @param logIds
-     * @return
-     * @throws Exception
-     */
-    public BinnedCSVResponse getNVCL2_0_CSVBinned(String serviceUrl, String[] logIds) throws Exception {
-       return  getNVCL2_0_CSVBinned(serviceUrl, logIds, 1.0);
-    }
-
-    /**
-     * Makes a CSV download request from an NVCL 2.0 service and initiates binning
-     * @param serviceUrl
-     * @param logIds
-     * @return
-     * @throws Exception
-     */
-    public BinnedCSVResponse getNVCL2_0_CSVBinned(String serviceUrl, String[] logIds, double binSizeMetres) throws Exception {
-
-        serviceUrl += "downloadscalars.html";
-        BinnedCSVResponse binnedResponse = new BinnedCSVResponse();
-        HttpRequestBase method = nvclMethodMaker.getDownloadCSVMethod(serviceUrl, logIds);
-        InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-        Bin[] bins = doBinning(binnedResponse, responseStream, binSizeMetres, '\'', 2, -1, null);
-        binnedResponse.setBinnedValues(bins);
-        binnedResponse.setBinSize(binSizeMetres);
-        return binnedResponse;
-    }
-
-    /**
      * Makes a request for scalar data from NVCL Analytics job and initiates binning
      * @param serviceUrl
      * @param jobId
@@ -343,6 +312,39 @@ public class NVCL2_0_DataService {
             }
         }
         return outObj.toString();
+    }
+    
+    
+    /**
+     * Makes JSON download requests from an NVCL 2.0 service and parses the resulting data
+     * @param serviceUrl
+     * @param logIds
+     * @return
+     * @throws Exception
+     */
+    public String getNVCL2_0_JSONDownsampledData(String serviceUrl, String[] logIds) throws Exception {
+        serviceUrl += "getDownsampledData.html";
+        JSONArray outArr = new JSONArray();
+        for (String logId: logIds) {
+            HttpRequestBase method = nvclMethodMaker.getDownloadJSONMethod(serviceUrl, logId);
+            String httpResponseStr = httpServiceCaller.getMethodResponseAsString(method);
+            JSONArray inArr = JSONArray.fromObject(httpResponseStr);
+            if (inArr.size()>0) {
+                JSONObject firstObj = inArr.getJSONObject(0);
+                if (firstObj.has("classCount")) {
+                    JSONObject baseObj = new JSONObject();
+                    baseObj.element("logId", logId);
+                    baseObj.element("stringValues", inArr);
+                    outArr.element(baseObj);
+                } else if (firstObj.has("averageValue")) {
+                    JSONObject baseObj = new JSONObject();
+                    baseObj.element("logId", logId);
+                    baseObj.element("numericValues", inArr);
+                    outArr.element(baseObj);
+                }                    
+            }
+        }
+        return outArr.toString();
     }
     
     

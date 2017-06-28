@@ -20,6 +20,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import net.sf.json.JSONObject;
+import net.sf.json.JSONArray;
+
 /**
  * Unit tests for NVCLDataService
  *
@@ -47,112 +50,101 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
     }
 
     /**
-     * Tests parsing of a downloadscalars request into a BinnedCSVResponse
+     * Tests parsing of a JSON downloadscalars average meter values request
      *
      * @throws Exception
      */
     @Test
-    public void testGetNVCL2_0_CSVBinned() throws Exception {
+    public void testGetNVCL2_0_JSONDataBinned_Av() throws Exception {
         final String serviceUrl = "http://example/url/wfs";
-        final String[] logIds = new String[] {"id1", "id2", "id3"};
+        final String[] logIds = new String[] {"id1", "id2", "id3", "id4"};
 
-        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/nvcl/downloadscalar.csv");
-
+        final String responseStr = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/downloadscalar-average.json");
+        
         context.checking(new Expectations() {
             {
-                oneOf(mockMethodMaker).getDownloadCSVMethod(with(any(String.class)), with(any(String[].class)));will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(new HttpClientInputStream(responseStream, null)));
+                atLeast(1).of(mockMethodMaker).getDownloadJSONMethod(with(any(String.class)), with(any(String.class)));will(returnValue(mockMethod));
+                atLeast(1).of(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(new String(responseStr)));
             }
         });
 
-        BinnedCSVResponse response = dataService.getNVCL2_0_CSVBinned(serviceUrl, logIds);
+        String response = dataService.getNVCL2_0_JSONDownsampledData(serviceUrl, logIds);
         Assert.assertNotNull(response);
-        Assert.assertEquals(3, response.getBinnedValues().length);
-
-        Assert.assertFalse(response.getBinnedValues()[0].isNumeric());
-        Assert.assertFalse(response.getBinnedValues()[1].isNumeric());
-        Assert.assertTrue(response.getBinnedValues()[2].isNumeric());
-
-        Assert.assertEquals("Grp1_uTSAV", response.getBinnedValues()[0].getName());
-        Assert.assertEquals("Min1_sTSAV", response.getBinnedValues()[1].getName());
-        Assert.assertEquals("Number", response.getBinnedValues()[2].getName());
-
-        Assert.assertEquals(3, response.getBinnedValues()[0].getStringValues().size());
-        Assert.assertEquals(2, response.getBinnedValues()[1].getStringValues().size()); //The final bin will be all nulls and skipped
-        Assert.assertEquals(2, response.getBinnedValues()[2].getNumericValues().size()); //The final bin will be all nulls and skipped
-
-        Assert.assertEquals(3, response.getBinnedValues()[0].getStartDepths().size());
-        Assert.assertEquals(2, response.getBinnedValues()[1].getStartDepths().size()); //The final bin will be all nulls and skipped
-        Assert.assertEquals(2, response.getBinnedValues()[2].getStartDepths().size()); //The final bin will be all nulls and skipped
-
-        Assert.assertEquals(106.936996459961, (Double)response.getBinnedValues()[0].getStartDepths().get(0), 0.0000001);
-        Assert.assertEquals(108.004341125488, (Double)response.getBinnedValues()[0].getStartDepths().get(1), 0.0000001);
-        Assert.assertEquals(110.090049743652, (Double)response.getBinnedValues()[0].getStartDepths().get(2), 0.0000001);
-        Assert.assertEquals(106.936996459961, (Double)response.getBinnedValues()[1].getStartDepths().get(0), 0.0000001);
-        Assert.assertEquals(108.004341125488, (Double)response.getBinnedValues()[1].getStartDepths().get(1), 0.0000001);
-
-        Assert.assertEquals("SULPHATE", response.getBinnedValues()[0].getHighStringValues().get(0));
-        Assert.assertEquals(3, (int) response.getBinnedValues()[0].getStringValues().get(0).get("SULPHATE"));
-        Assert.assertEquals(1, (int) response.getBinnedValues()[0].getStringValues().get(0).get("INVALID"));
-        Assert.assertEquals(2.0, (Double)response.getBinnedValues()[2].getNumericValues().get(0), 0.001);
+        JSONArray dataArr = JSONArray.fromObject(response);
+        JSONObject firstObj = dataArr.getJSONObject(0);
+        Assert.assertEquals(true, firstObj.containsKey("numericValues"));
+        Assert.assertEquals("id1", firstObj.get("logId"));
+        JSONArray firstArr = firstObj.getJSONArray("numericValues");
+        JSONObject firstValObj = firstArr.getJSONObject(0);
+        Assert.assertEquals(22.5, firstValObj.getDouble("roundedDepth"), 0.01);
+        Assert.assertEquals(0.49833333, firstValObj.getDouble("averageValue"), 0.000000001);
+        JSONObject secondValObj = firstArr.getJSONObject(1);
+        Assert.assertEquals(23.5, secondValObj.getDouble("roundedDepth"), 0.01);
+        Assert.assertEquals(0.5093243, secondValObj.getDouble("averageValue"), 0.00000001);
     }
 
     /**
-     * Tests cleanup of a downloadscalars request
-     *
-     * @throws Exception
-     */
-    @Test(expected=IOException.class)
-    public void testGetNVCL2_0_CSVBinned_closeStreamOnError() throws Exception {
-        final String serviceUrl = "http://example/url/wfs";
-        final String[] logIds = new String[] {"id1", "id2", "id3"};
-
-        final InputStream responseStream = context.mock(InputStream.class);
-
-        context.checking(new Expectations() {
-            {
-                oneOf(mockMethodMaker).getDownloadCSVMethod(with(any(String.class)), with(any(String[].class)));will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(new HttpClientInputStream(responseStream, null)));
-
-                allowing(responseStream).read(with(any(byte[].class)), with(any(Integer.class)), with(any(Integer.class)));will(throwException(new IOException()));
-
-                atLeast(1).of(responseStream).close();
-            }
-        });
-
-        dataService.getNVCL2_0_CSVBinned(serviceUrl, logIds);
-    }
-
-    /**
-     * Tests parsing of a downloadscalars request into a BinnedCSVResponse
+     * Tests parsing of a JSON downloadscalars average meter values request
      *
      * @throws Exception
      */
     @Test
-    public void testGetNVCL2_0_CSVBinned_EmptyCSV() throws Exception {
+    public void testGetNVCL2_0_JSONDataBinned_Cnt() throws Exception {
         final String serviceUrl = "http://example/url/wfs";
-        final String[] logIds = new String[] {"id1", "id2", "id3"};
+        final String[] logIds = new String[] {"id1", "id2", "id3", "id4"};
 
-        final InputStream responseStream = ResourceUtil.loadResourceAsStream("org/auscope/portal/nvcl/downloadscalar-empty.csv");
-
+        final String responseStr = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/downloadscalar-count.json");
+        
         context.checking(new Expectations() {
             {
-                oneOf(mockMethodMaker).getDownloadCSVMethod(with(any(String.class)), with(any(String[].class)));will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);will(returnValue(new HttpClientInputStream(responseStream, null)));
+                atLeast(1).of(mockMethodMaker).getDownloadJSONMethod(with(any(String.class)), with(any(String.class)));will(returnValue(mockMethod));
+                atLeast(1).of(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(new String(responseStr)));
             }
         });
 
-        BinnedCSVResponse response = dataService.getNVCL2_0_CSVBinned(serviceUrl, logIds);
+        String response = dataService.getNVCL2_0_JSONDownsampledData(serviceUrl, logIds);
         Assert.assertNotNull(response);
-        Assert.assertEquals(3, response.getBinnedValues().length);
+        JSONArray dataArr = JSONArray.fromObject(response);
+        JSONObject firstObj = dataArr.getJSONObject(0);
+        Assert.assertEquals(true, firstObj.containsKey("stringValues"));
+        Assert.assertEquals("id1", firstObj.get("logId"));
+        JSONArray firstArr = firstObj.getJSONArray("stringValues");
+        JSONObject firstValObj = firstArr.getJSONObject(0);
+        Assert.assertEquals(170.5, firstValObj.getDouble("roundedDepth"), 0.01);
+        Assert.assertEquals(1, firstValObj.getInt("classCount"));
+        Assert.assertEquals("Alunite-K", firstValObj.getString("classText"));
+        Assert.assertEquals(4351080, firstValObj.getInt("colour"));
+        JSONObject secondValObj = firstArr.getJSONObject(1);
+        Assert.assertEquals(196.5, secondValObj.getDouble("roundedDepth"), 0.01);
+        Assert.assertEquals(5, secondValObj.getInt("classCount"));
+        Assert.assertEquals("Ankerite", secondValObj.getString("classText"));
+        Assert.assertEquals(16744319, secondValObj.getInt("colour"));
+    }
 
-        Assert.assertEquals("Grp1_uTSAV", response.getBinnedValues()[0].getName());
-        Assert.assertEquals("Min1_sTSAV", response.getBinnedValues()[1].getName());
-        Assert.assertEquals("Number", response.getBinnedValues()[2].getName());
 
-        Assert.assertEquals(0, response.getBinnedValues()[0].getNumericValues().size());
-        Assert.assertEquals(0, response.getBinnedValues()[1].getNumericValues().size());
-        Assert.assertEquals(0, response.getBinnedValues()[2].getNumericValues().size());
+    /**
+     * Tests parsing of an empty downloadscalars JSON request
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetNVCL2_0_JSONDataBinned_Empty() throws Exception {
+        final String serviceUrl = "http://example/url/wfs";
+        final String[] logIds = new String[] {"id1", "id2", "id3"};
+
+        final String responseStr = ResourceUtil.loadResourceAsString("org/auscope/portal/nvcl/downloadscalar-empty.json");
+
+        context.checking(new Expectations() {
+            {
+                atLeast(1).of(mockMethodMaker).getDownloadJSONMethod(with(any(String.class)), with(any(String.class)));will(returnValue(mockMethod));
+                atLeast(1).of(mockServiceCaller).getMethodResponseAsString(mockMethod);will(returnValue(new String(responseStr)));
+            }
+        });
+
+        String response = dataService.getNVCL2_0_JSONDownsampledData(serviceUrl, logIds);
+        Assert.assertNotNull(response);
+        JSONArray dataArr = JSONArray.fromObject(response);
+        Assert.assertEquals(0,dataArr.size());
     }
     
     

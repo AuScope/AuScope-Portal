@@ -614,18 +614,17 @@ public class NVCLController extends BasePortalController {
      *            The dataset to download
      * @return
      */
-    @RequestMapping("getNVCL2_0_CSVDataBinned.do")
-    public ModelAndView getNVCL2_0_CSVDataBinned(@RequestParam("serviceUrl") String serviceUrl,
+    @RequestMapping("getNVCL2_0_JSONDataBinned.do")
+    public ModelAndView getNVCL2_0_JSONDataBinned(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("logIds") String[] logIds) throws Exception {
 
         //Make our request
         try {
-            BinnedCSVResponse response = dataService2_0.getNVCL2_0_CSVBinned(serviceUrl, logIds);
-
-            return generateJSONResponseMAV(true, Arrays.asList(response), "");
+            String responseStr = dataService2_0.getNVCL2_0_JSONDownsampledData(serviceUrl, logIds);
+            return generateJSONResponseMAV(true, responseStr, "");
 
         } catch (Exception ex) {
-            log.warn(String.format("Error requesting csv download for logId '%1$s' from %2$s: %3$s", logIds,serviceUrl, ex));
+            log.warn(String.format("Error requesting json download for logId '%1$s' from %2$s: %3$s", logIds,serviceUrl, ex));
             log.debug("Exception:", ex);
             return generateJSONResponseMAV(false);
         }
