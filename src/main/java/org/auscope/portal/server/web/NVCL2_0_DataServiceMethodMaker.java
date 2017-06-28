@@ -24,6 +24,28 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
         method.setURI(builder.build());
         return method;
     }
+    
+    /**
+     * Generates a method for making a request to NVCL 2.0 for downloading data for plotting
+     *
+     * The response will be 'json'
+     *
+     * 
+     * @param serviceUrl
+     *            The URL of the NVCLDataService
+     * @param logId
+     *            The logID (from a getLogCollection request) to query
+     * @return
+     * @throws URISyntaxException
+     */
+    public HttpRequestBase getDownloadJSONMethod(String serviceUrl, String logId) throws Exception {
+        HttpGet method = new HttpGet(serviceUrl);
+        URIBuilder builder = new URIBuilder(serviceUrl);
+        builder.addParameter("logid", logId);
+        builder.addParameter("outputformat","json");
+        method.setURI(builder.build());
+        return method;
+    }
 
     /**
      * Generates a method for making a request to NVCL 2.0 for the Mosaic imagery for a particular logId
@@ -32,7 +54,7 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
      *
      * @param serviceUrl
      *            The URL of the NVCLDataService
-     * @param logId
+     * @param dataSetId
      *            The dataSetId (from a getLogCollection request) to query
      * @param logId
      *            The logID (from a getLogCollection request) to query
