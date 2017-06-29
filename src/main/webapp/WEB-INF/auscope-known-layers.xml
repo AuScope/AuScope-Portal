@@ -19,7 +19,7 @@
 
         <property name="name" value="Earth Resource Mine"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
-        <property name="group" value="AuScope Earth Resource Services"/>
+        <property name="group" value="Earth Resources"/>
         <property name="proxyUrl" value="doMineFilter.do"/>
         <property name="proxyCountUrl" value="doMineFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
@@ -76,7 +76,7 @@
 
         <property name="name" value="Earth Resource Mineral Occurrence"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MineralOccurence"/>
-        <property name="group" value="AuScope Earth Resource Services"/>
+        <property name="group" value="Earth Resources"/>
         <property name="proxyUrl" value="doMineralOccurrenceFilter.do"/>
         <property name="proxyCountUrl" value="doMineralOccurrenceFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do"/>
@@ -134,7 +134,7 @@
 
         <property name="name" value="Earth Resource Mining Activity"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
-        <property name="group" value="AuScope Earth Resource Services"/>
+        <property name="group" value="Earth Resources"/>
         <property name="proxyUrl" value="doMiningActivityFilter.do"/>
         <property name="proxyCountUrl" value="doMiningActivityFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
@@ -370,7 +370,7 @@
 
         <property name="name" value="Mineral Occurrence View"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mo:MinOccView"/>
-        <property name="group" value="AuScope Earth Resource Services"/>
+        <property name="group" value="Earth Resources"/>
         <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
@@ -900,7 +900,7 @@
         </constructor-arg>
         <property name="name" value="MSCL Data"/>
         <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
-        <property name="group" value="University of Melbourne"/>
+        <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
                 
@@ -1708,7 +1708,7 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-250k-"/>
         <property name="name" value="Gsv Geological Unit 250K "/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
         <property name="order" value="Registered_1"/>
     </bean>
@@ -1723,7 +1723,7 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-contact-250k-"/>
         <property name="name" value="Gsv Geological Unit Contact 250K "/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological boundaries represented as two dimensional lines, designed for portray"/>
         <property name="order" value="Registered_2"/>
     </bean>
@@ -1738,7 +1738,7 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-contact-50k-"/>
         <property name="name" value="Gsv Geological Unit Contact 50K "/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological boundaries represented as two dimensional lines, designed for portray"/>
         <property name="order" value="Registered_3"/>
     </bean>
@@ -1753,7 +1753,7 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-250k-age"/>
         <property name="name" value="Gsv Geological Unit 250K Age"/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
         <property name="order" value="Registered_4"/>
     </bean>
@@ -1768,7 +1768,7 @@
         </constructor-arg>
         <property name="id" value="gsv-shear-displacement-structure-250k-"/>
         <property name="name" value="Gsv Shear Displacement Structure 250K "/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Shear displacement structures (faults) represented as two dimensional lines, des"/>
         <property name="order" value="Registered_5"/>
     </bean>
@@ -1783,7 +1783,7 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-250k-lithology"/>
         <property name="name" value="Gsv Geological Unit 250K Lithology"/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
         <property name="order" value="Registered_6"/>
     </bean>
@@ -1798,7 +1798,7 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-50k-lithology"/>
         <property name="name" value="Gsv Geological Unit 50K Lithology"/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
         <property name="order" value="Registered_7"/>
     </bean>
@@ -1813,7 +1813,7 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-50k-"/>
         <property name="name" value="Gsv Geological Unit 50K "/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
         <property name="order" value="Registered_8"/>
     </bean>
@@ -1828,7 +1828,7 @@
         </constructor-arg>
         <property name="id" value="gsv-shear-displacement-structure-50k-"/>
         <property name="name" value="Gsv Shear Displacement Structure 50K "/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Shear displacement structures (faults) represented as two dimensional lines, des"/>
         <property name="order" value="Registered_9"/>
     </bean>
@@ -1843,39 +1843,9 @@
         </constructor-arg>
         <property name="id" value="gsv-geological-unit-50k-age"/>
         <property name="name" value="Gsv Geological Unit 50K Age"/>
-        <property name="group" value="Geological Survey of Victoria - Earth Resource Development Division"/>
+        <property name="group" value="Geological Survey of Victoria"/>
         <property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal"/>
         <property name="order" value="Registered_10"/>
-    </bean>
-
-
-    <bean id="knownTypeModel" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="model"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="RemAnom:Model"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="model"/>
-        <property name="name" value="Model"/>
-        <property name="group" value="CSIRO-Magnetics"/>
-        <property name="description" value=""/>
-        <property name="order" value="Registered_11"/>
-    </bean>
-
-
-    <bean id="knownTypeAnalysis" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="analysis"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="RemAnom:Analysis"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="analysis"/>
-        <property name="name" value="Analysis"/>
-        <property name="group" value="CSIRO-Magnetics"/>
-        <property name="description" value=""/>
-        <property name="order" value="Registered_12"/>
     </bean>
 
 
@@ -1981,36 +1951,6 @@
         <property name="group" value="Geoscience Australia"/>
         <property name="description" value="The pmd*CRC Y2 project operated for a little over three years, and in this time "/>
         <property name="order" value="Registered_19"/>
-    </bean>
-
-
-    <bean id="knownTypeMvPwTemperature" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="mv-pw-temperature"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="pdb:MV_PW_TEMPERATURE"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="mv-pw-temperature"/>
-        <property name="name" value="Mv Pw Temperature"/>
-        <property name="group" value="CSIRO Petroleum"/>
-        <property name="description" value=""/>
-        <property name="order" value="Registered_20"/>
-    </bean>
-
-
-    <bean id="knownTypeMvBoreholeHeader" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="mv-borehole-header"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="pdb:MV_BOREHOLE_HEADER"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="mv-borehole-header"/>
-        <property name="name" value="Mv Borehole Header"/>
-        <property name="group" value="CSIRO Petroleum"/>
-        <property name="description" value=""/>
-        <property name="order" value="Registered_21"/>
     </bean>
 
 
@@ -2626,51 +2566,6 @@
         <property name="group" value="Mineral Resources Tasmania"/>
         <property name="description" value=""/>
         <property name="order" value="Registered_62"/>
-    </bean>
-
-
-    <bean id="knownTypeAnomalyview" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="anomalyview"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <constructor-arg name="layerName" value="RemAnom:AnomalyView"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="anomalyview"/>
-        <property name="name" value="Anomalyview"/>
-        <property name="group" value="CSIRO -Mineral Resources"/>
-        <property name="description" value=""/>
-        <property name="order" value="Registered_63"/>
-    </bean>
-
-
-    <bean id="knownTypeModel_1" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="model"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="RemAnom:Model"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="model"/>
-        <property name="name" value="Model"/>
-        <property name="group" value="CSIRO -Mineral Resources"/>
-        <property name="description" value=""/>
-        <property name="order" value="Registered_64"/>
-    </bean>
-
-
-    <bean id="knownTypeAnalysis_1" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="analysis"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="RemAnom:Analysis"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="analysis"/>
-        <property name="name" value="Analysis"/>
-        <property name="group" value="CSIRO -Mineral Resources"/>
-        <property name="description" value=""/>
-        <property name="order" value="Registered_65"/>
     </bean>
 
 
