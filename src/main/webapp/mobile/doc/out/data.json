@@ -1067,7 +1067,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 216,
+            "line": 223,
             "description": "Run the color code request",
             "itemtype": "method",
             "name": "renderColorCode",
@@ -1094,7 +1094,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 234,
+            "line": 243,
             "description": "Request to start the drawing process for bounding box selection",
             "itemtype": "method",
             "name": "selectBound",
@@ -1103,7 +1103,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 242,
+            "line": 251,
             "description": "Performs a box plot in the panel",
             "itemtype": "method",
             "name": "plotBox",
@@ -1118,7 +1118,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 277,
+            "line": 286,
             "description": "Performs a scatter plot in the panel",
             "itemtype": "method",
             "name": "plotScatter",
@@ -1327,7 +1327,24 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 226,
+            "line": 231,
+            "itemtype": "method",
+            "name": "checkValidFilterValues",
+            "params": [
+                {
+                    "name": "optionalFilters",
+                    "description": "list of filters for current layer"
+                }
+            ],
+            "return": {
+                "description": "true if there are no filters in use or if there are filters and they are initialised with values\n\nConfirms that the filters are initialised"
+            },
+            "class": "loadFilterCtrl",
+            "module": "controllers"
+        },
+        {
+            "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
+            "line": 265,
             "description": "Adds a new filter to be displayed in the panel",
             "itemtype": "method",
             "name": "addFilter",
@@ -1342,7 +1359,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 252,
+            "line": 291,
             "description": "Removes all filters displayed in panel",
             "itemtype": "method",
             "name": "clearFilter",
@@ -1351,7 +1368,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 260,
+            "line": 299,
             "description": "Returns the first key in options object",
             "itemtype": "method",
             "name": "getKey",
@@ -1369,7 +1386,7 @@
         },
         {
             "file": "../js/assets/controllers/filters/loadFilterCtrl.js",
-            "line": 271,
+            "line": 310,
             "description": "Uses the input filter object to set the filter values",
             "itemtype": "method",
             "name": "updateFilter",
@@ -1804,7 +1821,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 150,
+            "line": 160,
             "description": "This is called from the Angular HTML template. It parses the XML tree,\ncreating a JSON representation which is passed in to create a tree view\nvia the \"$scope.JSONTreeStruct[]\" array",
             "itemtype": "method",
             "name": "parseTree",
@@ -1819,7 +1836,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 215,
+            "line": 225,
             "description": "Used to open and close the panel. \nPassed to 'QuerierPanelService' as a parameter, then called by 'QuerierPanelService'",
             "itemtype": "method",
             "name": "openPanel",
@@ -1838,7 +1855,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 229,
+            "line": 239,
             "description": "Sets the images for the carousel",
             "itemtype": "method",
             "name": "setCarouselImages",
@@ -1853,7 +1870,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 249,
+            "line": 259,
             "description": "Resets the carousel when the panel closes",
             "itemtype": "method",
             "name": "resetCarousel",
@@ -1868,7 +1885,7 @@
         },
         {
             "file": "../js/assets/controllers/querier/querierPanelCtrl.js",
-            "line": 261,
+            "line": 271,
             "description": "Controls the display of the spinner to let user know the carousel is loading",
             "itemtype": "method",
             "name": "setCarouselBusy",
@@ -2398,7 +2415,7 @@
         },
         {
             "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
-            "line": 39,
+            "line": 41,
             "description": "Get the wms style url if proxyStyleUrl is valid",
             "itemtype": "method",
             "name": "getWMSStyleUrl",
@@ -2424,7 +2441,7 @@
         },
         {
             "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
-            "line": 58,
+            "line": 60,
             "description": "Get the wms style if proxyStyleUrl is valid",
             "itemtype": "method",
             "name": "getWMSStyle",
@@ -2450,25 +2467,56 @@
         },
         {
             "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
-            "line": 96,
+            "line": 98,
+            "description": "Sends a request to server for marker popup data",
+            "itemtype": "method",
+            "name": "sendMarkerPopupRequest",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "- a string of parameters 'param1=val1&param2=val2' ..."
+                },
+                {
+                    "name": "slot",
+                    "description": "- an index to the layer number, used by the code which evaluates the response"
+                }
+            ],
+            "class": "GetWMSRelatedService",
+            "module": "http"
+        },
+        {
+            "file": "../js/assets/modules/service/http/GetWMSRelatedService.js",
+            "line": 115,
             "itemtype": "method",
             "name": "getWMSMarkerInfo",
             "params": [
                 {
                     "name": "ptLatLng",
-                    "description": "Lat Lng object of the clicked/touched on point on map"
+                    "description": "- Lat Lng object of the clicked/touched on point on map"
                 },
                 {
                     "name": "pixel",
-                    "description": "These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords."
+                    "description": "- These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords."
+                },
+                {
+                    "name": "map",
+                    "description": "- Google map object"
+                },
+                {
+                    "name": "layerName",
+                    "description": "- Name of layer to use in WMS map query request"
                 },
                 {
                     "name": "serviceInfo",
-                    "description": "CSW service information object"
+                    "description": "- CSW service information object"
                 },
                 {
                     "name": "style",
-                    "description": "OPTIONAL style to use when making the GetFeatureInfo request"
+                    "description": "- OPTIONAL style to use when making the GetFeatureInfo request"
+                },
+                {
+                    "name": "slot",
+                    "description": "- an index to the layer number, used by the code which evaluates the response"
                 }
             ],
             "class": "GetWMSRelatedService",
@@ -2762,6 +2810,10 @@
                     "description": "Google Map that layer is attached to"
                 },
                 {
+                    "name": "layerName",
+                    "description": "Name of layer to be used in WMS request"
+                },
+                {
                     "name": "onlineResource",
                     "description": "object representing the WMS resource displayed as a map layer"
                 },
@@ -2933,7 +2985,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/CapdfWMSService.js",
-            "line": 174,
+            "line": 181,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",
@@ -3012,7 +3064,29 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 185,
+            "line": 167,
+            "itemtype": "method",
+            "name": "registerQuerier",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "The layer containing the wms to registered with the querier"
+                },
+                {
+                    "name": "layerName",
+                    "description": "Name of layer to use in WMS map query"
+                },
+                {
+                    "name": "onlineResource",
+                    "description": "Online resource object"
+                }
+            ],
+            "class": "WMSService",
+            "module": "map"
+        },
+        {
+            "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
+            "line": 196,
             "description": "Method to decide how the wms should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderLayer",
@@ -3031,7 +3105,7 @@
         },
         {
             "file": "../js/assets/modules/service/layer/renderers/wms/WMSService.js",
-            "line": 236,
+            "line": 247,
             "description": "Method to decide how the wms csw record should be rendered and add the wms to the map",
             "itemtype": "method",
             "name": "renderCSWRecord",
@@ -3261,6 +3335,21 @@
         {
             "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
             "line": 119,
+            "description": "Initialise the status for use with a certain layer",
+            "itemtype": "method",
+            "name": "initStatus",
+            "params": [
+                {
+                    "name": "layer",
+                    "description": "layer object"
+                }
+            ],
+            "class": "RenderStatusService",
+            "module": "map"
+        },
+        {
+            "file": "../js/assets/modules/service/layer/renderers/RenderStatusService.js",
+            "line": 130,
             "description": "Check if the layer is still active",
             "itemtype": "method",
             "name": "isLayerActive",
@@ -3673,7 +3762,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 142,
+            "line": 144,
             "description": "Synchronises data structures used to keep track of Google 'overlayMapType' layers",
             "itemtype": "method",
             "name": "syncOverlayMapDS",
@@ -3685,7 +3774,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 185,
+            "line": 187,
             "description": "Searches for an 'overlayMap' within the current main map",
             "itemtype": "method",
             "name": "findOverlayMap",
@@ -3703,7 +3792,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 201,
+            "line": 203,
             "description": "Searches for a Google 'overlayMap' within the active layers returning its layer id",
             "itemtype": "method",
             "name": "findLayerId",
@@ -3721,7 +3810,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 220,
+            "line": 222,
             "description": "Return the list of active layers",
             "itemtype": "method",
             "name": "getMapActiveLayer",
@@ -3733,7 +3822,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 229,
+            "line": 231,
             "description": "Given a layer and an opacity, set the opacity of the layer",
             "itemtype": "method",
             "name": "setLayerOpacity",
@@ -3752,7 +3841,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 246,
+            "line": 248,
             "description": "Remove the layer if it is rendered on the map",
             "itemtype": "method",
             "name": "removeActiveLayer",
@@ -3767,7 +3856,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 285,
+            "line": 287,
             "description": "Initialise the map",
             "itemtype": "method",
             "name": "initMap",
@@ -3782,7 +3871,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 318,
+            "line": 320,
             "description": "Fetches the state of the map in the form of a JSON string",
             "itemtype": "method",
             "name": "getMapState",
@@ -3794,7 +3883,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 328,
+            "line": 330,
             "description": "Sets the state of the map according to a JSON string",
             "itemtype": "method",
             "name": "setMapState",
@@ -3809,7 +3898,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 342,
+            "line": 344,
             "description": "Enable the drawing of rectangle and zooming to the area drawn",
             "itemtype": "method",
             "name": "zoomDraw",
@@ -3818,7 +3907,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 384,
+            "line": 386,
             "description": "event for cancellation of the drawing of rectangle and zooming to the area drawn",
             "itemtype": "method",
             "name": "zoomDrawCancel",
@@ -3827,7 +3916,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 396,
+            "line": 398,
             "description": "event to capture the start of the draw zoom event",
             "itemtype": "method",
             "name": "onDrawZoomStart",
@@ -3846,7 +3935,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 408,
+            "line": 410,
             "description": "event to capture the end of the draw zoom event",
             "itemtype": "method",
             "name": "onDrawZoomEnd",
@@ -3865,7 +3954,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 421,
+            "line": 423,
             "description": "Enable the drawing of bounding box for selecting data",
             "itemtype": "method",
             "name": "selectMapData",
@@ -3874,7 +3963,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 461,
+            "line": 463,
             "description": "cancel the drawing of rectangle and data selection",
             "itemtype": "method",
             "name": "selectDataDrawCancel",
@@ -3883,7 +3972,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 472,
+            "line": 474,
             "description": "event to capture the start of the data selection event",
             "itemtype": "method",
             "name": "onSelectDataStart",
@@ -3902,7 +3991,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 484,
+            "line": 486,
             "description": "event to capture the end of the data selection event",
             "itemtype": "method",
             "name": "onSelectDataEnd",
@@ -3921,7 +4010,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 497,
+            "line": 499,
             "description": "event to capture the removal of a layer",
             "itemtype": "method",
             "name": "onLayerRemoved",
@@ -3940,7 +4029,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 509,
+            "line": 511,
             "description": "event to capture the adding of a layer",
             "itemtype": "method",
             "name": "onLayerAdded",
@@ -3959,7 +4048,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 521,
+            "line": 523,
             "description": "Broadcasts an event to all listeners via $rootScope",
             "itemtype": "method",
             "name": "broadcast",
@@ -3978,7 +4067,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 531,
+            "line": 533,
             "description": "Register a callback function belonging to the map controller that this service will call when told a busy period has started",
             "itemtype": "method",
             "name": "onBusyStart",
@@ -3993,7 +4082,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 540,
+            "line": 542,
             "description": "Register a callback function belonging to the map controller that this service will call when told that the busy period is over",
             "itemtype": "method",
             "name": "onBusyEnd",
@@ -4008,7 +4097,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 549,
+            "line": 551,
             "description": "Function to set the map to busy, i.e. show a loading image",
             "itemtype": "method",
             "name": "busyStart",
@@ -4017,7 +4106,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 560,
+            "line": 562,
             "description": "Function to stop the map being busy, i.e. stop showing a loading image",
             "itemtype": "method",
             "name": "busyEnd",
@@ -4026,7 +4115,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 572,
+            "line": 574,
             "description": "Moves layer to the front of the map layers",
             "itemtype": "method",
             "name": "moveLayerToFront",
@@ -4041,7 +4130,7 @@
         },
         {
             "file": "../js/assets/modules/service/map/GoogleMapService.js",
-            "line": 595,
+            "line": 597,
             "description": "Returns true if a layer is at the front of the map layers",
             "itemtype": "method",
             "name": "isLayerAtFront",
@@ -4608,6 +4697,25 @@
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
             "line": 84,
+            "description": "Simply append some parameters to a URL, taking care of the characters of the end of the URL",
+            "itemtype": "method",
+            "name": "addUrlParameters",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "- the url string"
+                },
+                {
+                    "name": "paramStr",
+                    "description": "- parameter string of the form \"param1=val1&param2=val2\" ..."
+                }
+            ],
+            "class": "SimpleXPathService",
+            "module": "utility"
+        },
+        {
+            "file": "../js/assets/modules/service/utility/UtilitiesService.js",
+            "line": 98,
             "description": "Test if the object is empty",
             "itemtype": "method",
             "name": "isEmpty",
@@ -4625,7 +4733,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 104,
+            "line": 118,
             "description": "Test if the object is a number",
             "itemtype": "method",
             "name": "isNumber",
@@ -4641,7 +4749,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 114,
+            "line": 128,
             "description": "Extract the domain from any url",
             "itemtype": "method",
             "name": "getUrlDomain",
@@ -4656,7 +4764,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 125,
+            "line": 139,
             "description": "Based on the filter parameter, this is a utility to decide if we should skip this provider",
             "itemtype": "method",
             "name": "filterProviderSkip",
@@ -4675,7 +4783,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 154,
+            "line": 168,
             "description": "count the number of unique urls in onlineResources",
             "itemtype": "method",
             "name": "uniqueCountOfResourceByUrl",
@@ -4693,7 +4801,7 @@
         },
         {
             "file": "../js/assets/modules/service/utility/UtilitiesService.js",
-            "line": 172,
+            "line": 186,
             "description": "Base64 encode / decode\n  http://www.webtoolkit.info/",
             "class": "SimpleXPathService",
             "module": "utility"
@@ -4770,11 +4878,11 @@
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " ../js/assets/modules/service/map/GoogleMapService.js:201"
+            "line": " ../js/assets/modules/service/map/GoogleMapService.js:203"
         },
         {
             "message": "unknown tag: retun",
-            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:104"
+            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:118"
         },
         {
             "message": "Missing item type\nThis is the web browser implementation of `debug()`.\n\nExpose `debug()` as the module.",
@@ -4910,7 +5018,7 @@
         },
         {
             "message": "Missing item type\nBase64 encode / decode\n  http://www.webtoolkit.info/",
-            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:172"
+            "line": " ../js/assets/modules/service/utility/UtilitiesService.js:186"
         }
     ]
 }

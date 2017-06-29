@@ -103,6 +103,7 @@ Ext.define('auscope.layer.querier.wfs.factories.GeologicUnitFactory', {
                                 layout : 'fit',
                                 width : 1000,
                                 height : 500,
+                                modal : true,
                                 items : [rootCmp]
                             });
                             popup.show();

@@ -14,25 +14,19 @@ public class MineralTenementCCFilter extends  MineralTenementFilter {
     }
     /**
      * Given a status name, this method will add mt:status into the filter list.
-     * @param CCStatus
-     *            the mt:status name
+     * @param ccPropertyValue
+     *            the mt:status or  mt:tenementType 
      * @return 
      */
-    public void addCCStatusInFilter(String CCStatus) {
-        if (CCStatus != null && !CCStatus.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:status", CCStatus));
+    public void addCCPropertyInFilter(String ccProperty,String ccPropertyValue) {
+        if (ccPropertyValue != null && !ccPropertyValue.isEmpty()) {
+    
+            if(ccProperty.contains("TenementType")){
+                fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", ccPropertyValue));
+            } else if (ccProperty.contains("TenementStatus")){
+                fragments.add(this.generatePropertyIsLikeFragment("mt:status", ccPropertyValue));
+            }
         }
 
-    }  
-    /**
-     * Given a type name,  this method will add mt:tenementType into the filter list.
-     * @param CCType
-     *            the mt:tenementType name
-     * @return 
-     */
-    public void addCCTypeInFilter(String CCType) {
-        if (CCType != null && !CCType.isEmpty()) {
-            fragments.add(this.generatePropertyIsLikeFragment("mt:tenementType", CCType));
-        }
-    }        
+    }
 }

@@ -158,6 +158,10 @@
                                 <a href="#method_getWMSStyleUrl">getWMSStyleUrl</a>
 
                             </li>
+                            <li class="index-item method">
+                                <a href="#method_sendMarkerPopupRequest">sendMarkerPopupRequest</a>
+
+                            </li>
                     </ul>
                 </div>
 
@@ -180,10 +184,19 @@
                         <code>pixel</code>
                 </li>
                 <li class="arg">
+                        <code>map</code>
+                </li>
+                <li class="arg">
+                        <code>layerName</code>
+                </li>
+                <li class="arg">
                         <code>serviceInfo</code>
                 </li>
                 <li class="arg">
                         <code>style</code>
+                </li>
+                <li class="arg">
+                        <code>slot</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -198,7 +211,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_modules_service_http_GetWMSRelatedService.js.html#l96"><code>..&#x2F;js&#x2F;assets&#x2F;modules&#x2F;service&#x2F;http&#x2F;GetWMSRelatedService.js:96</code></a>
+        <a href="../files/.._js_assets_modules_service_http_GetWMSRelatedService.js.html#l115"><code>..&#x2F;js&#x2F;assets&#x2F;modules&#x2F;service&#x2F;http&#x2F;GetWMSRelatedService.js:115</code></a>
         </p>
 
 
@@ -219,7 +232,9 @@
 
 
                     <div class="param-description">
-                        <p>Lat Lng object of the clicked/touched on point on map</p>
+                        <ul>
+<li>Lat Lng object of the clicked/touched on point on map</li>
+</ul>
 
                     </div>
 
@@ -230,7 +245,35 @@
 
 
                     <div class="param-description">
-                        <p>These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.</p>
+                        <ul>
+<li>These are window pixel coords of the clicked/touched point on the map. (0,0) is top LH corner. Not Google Map pixel coords.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">map</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Google map object</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">layerName</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Name of layer to use in WMS map query request</li>
+</ul>
 
                     </div>
 
@@ -241,7 +284,9 @@
 
 
                     <div class="param-description">
-                        <p>CSW service information object</p>
+                        <ul>
+<li>CSW service information object</li>
+</ul>
 
                     </div>
 
@@ -252,7 +297,22 @@
 
 
                     <div class="param-description">
-                        <p>OPTIONAL style to use when making the GetFeatureInfo request</p>
+                        <ul>
+<li>OPTIONAL style to use when making the GetFeatureInfo request</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">slot</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>an index to the layer number, used by the code which evaluates the response</li>
+</ul>
 
                     </div>
 
@@ -293,7 +353,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_modules_service_http_GetWMSRelatedService.js.html#l58"><code>..&#x2F;js&#x2F;assets&#x2F;modules&#x2F;service&#x2F;http&#x2F;GetWMSRelatedService.js:58</code></a>
+        <a href="../files/.._js_assets_modules_service_http_GetWMSRelatedService.js.html#l60"><code>..&#x2F;js&#x2F;assets&#x2F;modules&#x2F;service&#x2F;http&#x2F;GetWMSRelatedService.js:60</code></a>
         </p>
 
 
@@ -392,7 +452,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/.._js_assets_modules_service_http_GetWMSRelatedService.js.html#l39"><code>..&#x2F;js&#x2F;assets&#x2F;modules&#x2F;service&#x2F;http&#x2F;GetWMSRelatedService.js:39</code></a>
+        <a href="../files/.._js_assets_modules_service_http_GetWMSRelatedService.js.html#l41"><code>..&#x2F;js&#x2F;assets&#x2F;modules&#x2F;service&#x2F;http&#x2F;GetWMSRelatedService.js:41</code></a>
         </p>
 
 
@@ -458,6 +518,78 @@
 
             </div>
         </div>
+
+
+</div>
+<div id="method_sendMarkerPopupRequest" class="method item">
+    <h3 class="name"><code>sendMarkerPopupRequest</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>params</code>
+                </li>
+                <li class="arg">
+                        <code>slot</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/.._js_assets_modules_service_http_GetWMSRelatedService.js.html#l98"><code>..&#x2F;js&#x2F;assets&#x2F;modules&#x2F;service&#x2F;http&#x2F;GetWMSRelatedService.js:98</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Sends a request to server for marker popup data</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">params</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>a string of parameters 'param1=val1&amp;param2=val2' ...</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">slot</code>
+                        <span class="type">Object</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>an index to the layer number, used by the code which evaluates the response</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
 
 
 </div>

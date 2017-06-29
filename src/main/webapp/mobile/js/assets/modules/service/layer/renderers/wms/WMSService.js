@@ -9,7 +9,7 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
     
     var maxSldLength = 1900;
     var LAYERCHK_INT = 1000; // Check layer loading progress this often (millisecond)
-    var LAYERCHK_NUM = 45; // Check layer loading progress this many times
+    var LAYERCHK_NUM = 180; // Check layer loading progress this many times
     
     this.tiles = {};
     this.timers = {};
@@ -150,6 +150,27 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
         // Setup interval timer to monitor layer loading process
         registerTileLoadedEvent(mapLayer,layer,onlineResource);
         
+        // Register the onlineResource for the layer so that users can click on a point on map and display a popup window
+        me.registerQuerier(layer, onlineResource.name, onlineResource, map, style);
+        
+        // Overrides Google Map API to register event handler
+        mapLayer = overrideToRegisterFailureEvent(mapLayer, layer.id);
+
+        // Google Map API: This adds the layer to Google Map
+        map.overlayMapTypes.push(mapLayer);
+        
+        // This keeps track of our layers
+        GoogleMapService.addLayerToActive(layer,mapLayer);       
+       
+    };
+    
+    /**
+     * @method registerQuerier
+     * @param layer The layer containing the wms to registered with the querier 
+     * @param layerName Name of layer to use in WMS map query
+     * @param onlineResource Online resource object
+     */
+    this.registerQuerier = function(layer, layerName, onlineResource, map, style) {
         // Get the bounding box for the 'onlineResource', then register for click events within that bounding box
         var cswRecords = LayerManagerService.getCSWRecords(layer);
         var done = false;
@@ -160,25 +181,15 @@ allModules.service('WMSService',['$interval','GoogleMapService','LayerManagerSer
                     var bbox = cswRecords[i].geographicElements[0];
                     // ArcGIS servers do not accept styles
                     if (onlineResources[j].applicationProfile && onlineResources[j].applicationProfile.indexOf("Esri:ArcGIS Server") > -1) {
-                        QuerierPanelService.registerLayer(map, onlineResource, bbox, "");
+                        QuerierPanelService.registerLayer(map, layerName, onlineResource, bbox, "");
                     } else {
-                        QuerierPanelService.registerLayer(map, onlineResource, bbox, style);
+                        QuerierPanelService.registerLayer(map, layerName, onlineResource, bbox, style);
                     }
                     done = true;
                     break;
                 }
             }
         }
-        
-        // Overrides Google Map API to register event handler
-        mapLayer = overrideToRegisterFailureEvent(mapLayer, layer.id);
-
-        // This adds the layer to Google Map
-        map.overlayMapTypes.push(mapLayer);
-        
-        // This keeps track of our layers
-        GoogleMapService.addLayerToActive(layer,mapLayer);       
-       
     };
    
  

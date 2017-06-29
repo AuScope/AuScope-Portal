@@ -79,6 +79,20 @@ allModules.service('UtilitiesService',['$rootScope',function ($rootScope) {
         return parameters;
     };
     
+    
+    
+    /**
+     * Simply append some parameters to a URL, taking care of the characters of the end of the URL
+     * @method addUrlParameters
+     * @param url - the url string 
+     * @param paramStr - parameter string of the form "param1=val1&param2=val2" ...
+     */
+    this.addUrlParameters = function(url, paramStr) {
+        var endChar = url.charAt(url.length-1);
+        if (endChar!='?' && endChar!= '&') return url+'?'+paramStr;
+        return url+paramStr;
+    };
+    
    
    
     /**

@@ -59,21 +59,15 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
     public static final String CAPDF_HYDROGEOCHEMTYPE = "public:hydrogeochem";
     public static final String CAPDF_MEASUREMENTLIMIT = "public:measurement_limit";
+    public static final String CAPDF_MEASUREMENTGROUPTYPENAME = "public:measurement_grouptypename";
+    
+    /* This is a map between the group name in the group selector and the WFS 'typeName' parameter */
     public final HashMap<String, String> AOI_TITLE_TO_LAYER_MAP;
 
     @Autowired
     public CapdfHydroGeoChemController(CapdfHydroGeoChemService capdfHydroGeoChemService) {
         this.capdfHydroGeoChemService = capdfHydroGeoChemService;
         AOI_TITLE_TO_LAYER_MAP = new HashMap<String, String>();
-        AOI_TITLE_TO_LAYER_MAP.put("Chemical compound", "public:measurement_chemicalcompound");
-        AOI_TITLE_TO_LAYER_MAP.put("Chemical element", "public:measurement_chemicalelement");
-        AOI_TITLE_TO_LAYER_MAP.put("Chemistry", "public:measurement_chemistry");
-        AOI_TITLE_TO_LAYER_MAP.put("General", "public:measurement_general");
-        AOI_TITLE_TO_LAYER_MAP.put("Index", "public:measurement_index");
-        AOI_TITLE_TO_LAYER_MAP.put("Ion ratio", "public:measurement_ionratio");
-        AOI_TITLE_TO_LAYER_MAP.put("Mineral saturation index", "public:measurement_mineralsaturationindex");
-        AOI_TITLE_TO_LAYER_MAP.put("Water sampling", "public:measurement_watersampling");
-
     }
 
     /**
@@ -162,25 +156,35 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
     /**
-     * Handler to retrieve grouping of the dataset. This is currently hardcoded as the service itself does not provide this information. This will hopefully
-     * change in the future.
+     * Handler to retrieve grouping of the dataset from the WFS service. 
      *
      * @param serviceUrl
      *            the url of the service to query
      *
+     * @throws IOException, PortalServiceException
+     *
+     * NB: This fills the 'AOI_TITLE_TO_LAYER_MAP' HashMap
      */
     @RequestMapping("/doGetGroupOfInterest")
-    public ModelAndView doGetGroupOfInterest(@RequestParam("serviceUrl") String serviceUrl) {
+    public ModelAndView doGetGroupOfInterest(@RequestParam("serviceUrl") String serviceUrl) throws IOException, PortalServiceException {
+        
+        final CSVParser parser = new CSVParser(this.newReader(this.capdfHydroGeoChemService.downloadCSV(serviceUrl,
+                CAPDF_MEASUREMENTGROUPTYPENAME, null, null)), CSVFormat.EXCEL.withHeader());
+        
+        AOI_TITLE_TO_LAYER_MAP.clear();
         JSONArray dataItems = new JSONArray();
-
+        
         //Turn our map of urns -> labels into an array of arrays for the view
-        for (String group : this.AOI_TITLE_TO_LAYER_MAP.keySet()) {
+        for (final CSVRecord record : parser) {
             JSONArray tableRow = new JSONArray();
-            tableRow.add(group);//VT:display
-            tableRow.add(this.AOI_TITLE_TO_LAYER_MAP.get(group));//VT:value
+            String groupName = record.get("groupname");
+            String wfsTypeName = record.get("wfstypename");
+            tableRow.add(groupName);//VT:display
+            tableRow.add(wfsTypeName);//VT:value
+            AOI_TITLE_TO_LAYER_MAP.put(groupName, wfsTypeName);
             dataItems.add(tableRow);
         }
-
+        parser.close();
         return generateJSONResponseMAV(true, dataItems, "");
     }
 
@@ -198,6 +202,9 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      * @return ModelAndView
      * @throws IOException
      *             ,PortalServiceException
+     *
+     * NB: Assumes that 'AOI_TITLE_TO_LAYER_MAP' was filled by a prior call to 'doGetGroupOfInterest()' above.
+     *     The website should enforce this.
      */
     @RequestMapping("/doGetAOIParam")
     public ModelAndView doGetAOIParam(

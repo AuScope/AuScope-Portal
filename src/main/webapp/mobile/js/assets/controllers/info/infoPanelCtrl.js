@@ -4,8 +4,8 @@
  * @class infoPanelCtrl
  *
  */
-allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', 'StyleService', 'PreviewMapService','RenderHandlerService', 
-                                            function ($scope,$rootScope, $element, StyleService, PreviewMapService,RenderHandlerService) {
+allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', 'StyleService', 'PreviewMapService','RenderHandlerService', 'UtilitiesService',
+                                            function ($scope,$rootScope, $element, StyleService, PreviewMapService,RenderHandlerService, UtilitiesService) {
 
     var cswRecords = $scope.$parent.infoPanelCsw.cswRecords;
     var featureArr = [];
@@ -68,14 +68,13 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
                     var onlineResources=cswRecords[i].onlineResources;
                     for (j=0; j<onlineResources.length; j++) {
                         if (onlineResources[j].type=='WMS') {
-                            var url = onlineResources[j].url + 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
-                                        +'&LAYER='+onlineResources[j].name+'&LAYERS='+onlineResources[j].name;
-                            
+                            var params = 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
+                                + '&LAYER='+onlineResources[j].name+'&LAYERS='+onlineResources[j].name;  
                             // If there is a style, then use it
                             if (sld_body.length>0) {
-                                url += '&SLD_BODY='+sld_body+'&LEGEND_OPTIONS=forceLabels:on;minSymbolSize:16';
+                                params += '&SLD_BODY='+sld_body+'&LEGEND_OPTIONS=forceLabels:on;minSymbolSize:16';
                             }
-                            $scope.wmsLegends[cswRecords[i].adminArea]=url;
+                            $scope.wmsLegends[cswRecords[i].adminArea]=UtilitiesService.addUrlParameters(onlineResources[j].url, params);
                         }
                     }
                 }     
@@ -87,10 +86,9 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
             var onlineResources=cswRecords[i].onlineResources;
             for (j=0; j<onlineResources.length; j++) {
                 if (onlineResources[j].type=='WMS') {
-                    //http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc?REQUEST=GetLegendGraphic&SERVICE=WMS&VERSION=1.3.0&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF&LAYER=z&LAYERS=z&WIDTH=188
-                    var url = onlineResources[j].url + 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
-                                        +'&LAYER='+onlineResources[j].name+'&LAYERS='+onlineResources[j].name+'&WIDTH=188';
-                    $scope.wmsLegends[cswRecords[i].adminArea]=url;
+                    var params = 'REQUEST=GetLegendGraphic&VERSION=1.1.1&FORMAT=image/png&HEIGHT=25&BGCOLOR=0xFFFFFF'
+                        + '&LAYER='+onlineResources[j].name+'&LAYERS='+onlineResources[j].name+'&WIDTH=188';   
+                    $scope.wmsLegends[cswRecords[i].adminArea]=UtilitiesService.addUrlParameters(onlineResources[j].url, params);
                 }
             }
         }
@@ -111,10 +109,10 @@ allControllers.controller('infoPanelCtrl', ['$scope','$rootScope', '$element', '
         var onlineResources=cswRecords[i].onlineResources;
         for (j=0; j<onlineResources.length; j++) {
             if (onlineResources[j].type=='WMS') {
-                var url = onlineResources[j].url + "?" + "SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&LAYERS="
+                var params = "SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&STYLES=&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=TRUE&LAYERS="
                         + escape(onlineResources[j].name) + "&SRS=EPSG:4326&BBOX="+bbox.westBoundLongitude+","+bbox.southBoundLatitude+","+bbox.eastBoundLongitude+","+bbox.northBoundLatitude
                         + "&WIDTH=400&HEIGHT=400";
-                $scope.wmsUrls[cswRecords[i].adminArea]=url;
+                $scope.wmsUrls[cswRecords[i].adminArea]=UtilitiesService.addUrlParameters(onlineResources[j].url, params);
             }
         }
     }

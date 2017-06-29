@@ -11,7 +11,6 @@ Ext.define('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', {
 
         var cswRecords = config.layer.get('cswRecords');
 
-
         //Set up a map of admin areas + URL's that belong to each
         var adminAreasMap = {};
         var bbox = null;
@@ -37,7 +36,20 @@ Ext.define('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', {
                 }
             }
         }
-
+        var fieldWidth = 80;
+        var defaults = {
+            labelWidth: 80,
+            padding: 0
+        };
+        var styleStore = Ext.create('Ext.data.Store', {
+            fields: ['displayText', 'valueText'],
+            data : [
+                {displayText: 'ARRA', valueText: 'ARRA'},
+                {displayText: 'Dec', valueText: 'dec'},
+                {displayText: 'Inc', valueText: 'inc'},
+                {displayText: 'Models', valueText: 'models'}
+            ]
+        });
         Ext.apply(config, {
             delayedFormLoading: false,
             border: false,
@@ -60,9 +72,158 @@ Ext.define('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', {
                     anchor: '100%',
                     xtype: 'textfield',
                     fieldLabel: '<span data-qtip="Wildcards: \'!\' escape character; \'*\' zero or more, \'#\' just one character.">' +
-                                    'Remanent Anomaly Name' +
+                                    'Name or ID' +
                                 '</span>',
                     name: 'name'
+                },{
+                    xtype: 'fieldset',
+                    layout: 'hbox',
+                    border: false,
+                    anchor: '100%',
+                    defaults: defaults,
+                    items: [{
+                        xtype: 'label',
+                        text: ' ARRA: ',
+                        margin: '3 5 0 5',
+                        width: '30%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'ARRAMin',
+                        decimalPrecision: 1,
+                        allowBlank: true,
+                        minValue: 0,
+                        maxValue: 180,                         
+                        width: '30%'
+                    },{
+                        xtype: 'label',
+                        text: ' to ',
+                        margin: '3 5 0 5',
+                        width: '10%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'ARRAMax',
+                        decimalPrecision: 01,
+                        allowBlank: true,
+                        minValue: 0,
+                        maxValue: 180, 
+                        width: '30%'
+                    
+                    }]
+                },{
+                    xtype: 'fieldset',
+                    layout: 'hbox',
+                    border: false,
+                    anchor: '100%',
+                    defaults: defaults,
+                    items: [{
+                        xtype: 'label',
+                        text: ' Declination: ',
+                        margin: '3 5 0 5',
+                        width: '30%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'decMin',
+                        decimalPrecision: 1,
+                        allowBlank: true,
+                        minValue: 0,
+                        maxValue: 360,                         
+                        width: '30%'
+                    },{
+                        xtype: 'label',
+                        text: ' to ',
+                        margin: '3 5 0 5',
+                        width: '10%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'decMax',
+                        decimalPrecision: 1,
+                        allowBlank: true,
+                        minValue: 0,
+                        maxValue: 360,                         
+                        width: '30%'
+                    
+                    }]
+                },{
+                    xtype: 'fieldset',
+                    layout: 'hbox',
+                    border: false,
+                    anchor: '100%',
+                    defaults: defaults,
+                    items: [{
+                        xtype: 'label',
+                        text: ' Inclination: ',
+                        margin: '3 5 0 5',
+                        width: '30%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'incMin',
+                        decimalPrecision: 1,
+                        allowBlank: true,
+                        minValue: -90,
+                        maxValue: 90,                         
+                        width: '30%'
+                    },{
+                        xtype: 'label',
+                        text: ' to ',
+                        margin: '3 5 0 5',
+                        width: '10%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'incMax',
+                        decimalPrecision: 1,
+                        allowBlank: true,
+                        minValue: -90,
+                        maxValue: 90,                         
+                        width: '30%'
+                    
+                    }]
+                },{
+                    xtype: 'fieldset',
+                    layout: 'hbox',
+                    border: false,
+                    anchor: '100%',
+                    defaults: defaults,
+                    items: [{
+                        xtype: 'label',
+                        text: ' Models: ',
+                        margin: '3 5 0 5',
+                        width: '30%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'modelCountMin',
+                        decimalPrecision: 0,
+                        allowBlank: true,
+                        minValue: 0,
+                        maxValue: 10000,                         
+                        width: '30%'
+                    },{
+                        xtype: 'label',
+                        text: ' to ',
+                        margin: '3 5 0 5',
+                        width: '10%'
+                    },{
+                        xtype: 'numberfield',
+                        name: 'modelCountMax',
+                        decimalPrecision: 0,
+                        allowBlank: true,
+                        minValue: 0,
+                        maxValue: 10000,                         
+                        width: '30%'
+                    
+                    }]
+                },{
+                    xtype: 'combo',
+                    anchor: '100%',
+                    fieldLabel: 'Style',
+                    name: 'styleSwitch',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    lazyRender:true,
+                    mode: 'local',
+                    store: styleStore,
+                    valueField: 'valueText',
+                    displayField: 'displayText',
+                    hiddenName: 'styleSwitch'
                 },{
                     xtype: 'hidden',
                     name: 'cswBbox',

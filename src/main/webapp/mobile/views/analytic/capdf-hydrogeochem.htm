@@ -22,7 +22,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="capdf-hydrogeochem-group-selec">
-                                        <li ng-repeat="group in gois"><a class="filter-form-select" ng-click="setSelectedGoi(group[0], group[1]); getPOIs(goi);">{{group[0]}}</a></li>
+                                        <li ng-repeat="group in gois"><a class="filter-form-select" ng-click="setSelectedGoi(group[0], group[1]); getPOIs(goi); setSelectedPoi('-- choose a Parameter --',[]);">{{group[0]}}</a></li>
                                     </ul>
                                 </div>
                             </div>	                    
@@ -32,7 +32,7 @@
                             <div class="col-sm-8">
                                 <div ng-if="pois.length > 0">
                                     <div class="btn-group" uib-dropdown>
-                                        <button ng-init="setSelectedPoi('-- choose a Parameter --','');" id="capdf-hydrogeochem-param-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
+                                        <button ng-init="setSelectedPoi('-- choose a Parameter --',[]);" id="capdf-hydrogeochem-param-selec" type="button" class="btn btn-default btn-sm filter-form-button" uib-dropdown-toggle>
                                             {{selectedPoi}}
                                             <span class="caret"></span>
                                         </button>
@@ -50,13 +50,12 @@
 	                           <rzslider ng-hide="noRangeFound" rz-slider-model="slider.minValue"
 						          rz-slider-high="slider.maxValue"
 						          rz-slider-options="slider.options"></rzslider>
-						        <div ng-show="noRangeFound" class="text-danger">No range found. Try another parameter</div>  
 	                        </div>					          	                    
 	                    </div>
 	                    
 	                    <div class="row">
 	                       <div class="col-sm-offset-3 col-sm-9">
-                              <button type="submit" class="btn btn-primary btn-sm apply-btn" ng-click="renderColorCode(goi,paramOfInterest[0],slider.minValue,slider.maxValue)">Apply</button>
+                              <button type="submit" class="btn btn-primary btn-sm apply-btn" ng-class="{disabled: (paramOfInterest.length==0 || !goi)}" ng-click="renderColorCode(goi,paramOfInterest[0],slider.minValue,slider.maxValue)">Apply</button>
                             </div>	                    
 	                    </div>	                                    						
 	                </div>

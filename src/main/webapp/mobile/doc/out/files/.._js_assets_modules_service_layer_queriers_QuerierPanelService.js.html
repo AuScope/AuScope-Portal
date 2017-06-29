@@ -153,7 +153,7 @@ allModules.service(&#x27;QuerierPanelService&#x27;, [&#x27;LayerManagerService&#
                     GoogleMapService.busyStart();
                     
                     // Send request to WMS service
-                    GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, me.layerList[j].resource, me.layerList[j].style, j).then(function(response) 
+                    GetWMSRelatedService.getWMSMarkerInfo(evt.latLng, evt.pixel, map, me.layerList[j].layerName, me.layerList[j].resource, me.layerList[j].style, j).then(function(response) 
                         {  
                             // Used to check for an empty response, which occurs when user clicks/touches on empty space
                             var empty_html_body = /&lt;body&gt;\s*&lt;\/body&gt;/g;
@@ -310,18 +310,20 @@ allModules.service(&#x27;QuerierPanelService&#x27;, [&#x27;LayerManagerService&#
     * This should be called after the &#x27;mousedown&#x27; event is registered with the google map.
     * @method registerLayer
     * @param map Google Map that layer is attached to
+    * @param layerName Name of layer to be used in WMS request
     * @param onlineResource object representing the WMS resource displayed as a map layer
     * @param bbox bounding box that contains this layer
     * @param style layer&#x27;s style
     */
-    this.registerLayer = function(aMap, onlineResource, bBox, aStyle)
+    this.registerLayer = function(aMap, layerName, onlineResource, bBox, aStyle)
     {
         // Add to list
         this.layerList.push({
             map: aMap,
             resource: onlineResource,
             bbox: bBox,
-            style: aStyle
+            style: aStyle,
+            layerName: layerName
         });
     };
     
@@ -332,6 +334,7 @@ allModules.service(&#x27;QuerierPanelService&#x27;, [&#x27;LayerManagerService&#
     };
     
 }]);
+
     </pre>
 </div>
                     </div>

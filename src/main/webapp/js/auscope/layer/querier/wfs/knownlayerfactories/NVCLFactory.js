@@ -368,18 +368,6 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                         });
                                     } else if (scalarCount>0) {
 
-                                        // There are async two ajax events to be fired off, the graph needs both to be completed
-                                        // I could make the first one synchronous, but this would be slower and force the GUI to freeze up momentarily
-                                        // while waiting for the second to complete.
-                                        // Instead I have both event handlers check to see if the other has completed, then draw the graph 
-                                        // i.e. the last ajax response handler to complete is the one that draws the graph
-                                        
-                                        // Variables shared by two ajax event handlers
-                                        var logid_colour_table = new Object;
-                                        var logid_colour_table_loaded = false;
-                                        var binned_data_response = new Object;
-                                        var binned_data_loaded = false;
-                                        var binned_data_success = false;
                                         var logIds = [];
                                         var logNames = [];
                                         
@@ -390,57 +378,20 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                             logNames[i] = datasetIds[i].get('logName');
                                         }
                                         
-                                        // Ajax request 1: Request colour data from server
+                                        // Ajax request: Request plot data from server
                                         Ext.Ajax.request({
-                                             url: 'getNVCL2_0_MineralColourTable.do',
-                                             //async: false,
-                                             scope : this,
-                                             timeout : 60000,
-                                             params: {
-                                                 serviceUrl: nvclDataServiceUrl, // for testing use "http://nvclwebservices.vm.csiro.au/NVCLDataServices",
-                                                 logIds : logIds
-                                             },
-                                             callback : function(options, success, response) {
-                                                 if (success) {
-                                                     // Assemble colour table indexed on logid
-                                                     var jsonObj = Ext.JSON.decode(response.responseText);
-                                                     if (jsonObj.data) {
-                                                         var jsonObj2 = Ext.JSON.decode(jsonObj.data);
-                                                         if (jsonObj2) {
-                                                             for (classElem in jsonObj2) {
-                                                                 logid_colour_table[classElem] = jsonObj2[classElem];
-                                                             }
-                                                         }
-                                                     }
-                                                 } 
-                                                 // If binned data was loaded first (improbable, but not impossible) then do graph
-                                                 if (binned_data_loaded) {
-                                                     this_ptr._drawNVCLGraph(binned_data_response, binned_data_success, logid_colour_table, logIds, logNames);
-                                                 }
-                                                 logid_colour_table_loaded = true;
-                                             }
-                                        });
-
-
-                                        // Ajax request 2: Request plot data from server
-                                        Ext.Ajax.request({
-                                             url: 'getNVCL2_0_CSVDataBinned.do',
-                                             scope : this,
-                                             timeout : 60000,
-                                             params: {
-                                                 serviceUrl: nvclDataServiceUrl,
-                                                 logIds : logIds
-                                             },
-                                             callback : function(options, success, response) {
-                                                 // If the colour table was loaded first (most likely scenario) then do graph
-                                                 if (logid_colour_table_loaded) {
-                                                     this_ptr._drawNVCLGraph(response, success, logid_colour_table, logIds, logNames);
-                                                 }
-                                                 binned_data_response = response;
-                                                 binned_data_success = success;
-                                                 binned_data_loaded = true;
-                                             } // callback
-                                          }); // ajax
+                                            url: 'getNVCL2_0_JSONDataBinned.do',
+                                            scope : this,
+                                            timeout : 60000,
+                                            params: {
+                                                serviceUrl: nvclDataServiceUrl,
+                                                logIds : logIds
+                                            },
+                                            callback : function(options, success, response) {
+                                                // Do graph
+                                                this_ptr._drawNVCLDataGraph(response, success, logIds, logNames);
+                                            } // callback
+                                        }); // ajax
                                           
                                     } else if (jobsCount>0) {
                                         var jobIds = [];
@@ -461,7 +412,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                                                  jobIds : jobIds
                                              },
                                              callback : function(options, success, response) {
-                                                 this_ptr._drawNVCLGraph(response, success, {}, jobIds, jobIds);
+                                                 this_ptr._drawNVCLJobsGraph(response, success, {}, jobIds, jobIds);
 
                                              } // callback
                                           }); // ajax
@@ -528,9 +479,9 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             }
         });
     },
-
-
-    _drawNVCLGraph : function (response, success, logid_colour_table, logIds, logNames) {
+    
+    
+    _drawNVCLJobsGraph : function (response, success, logid_colour_table, logIds, logNames) {
         if (success) {             
             // Once we have received the plot data, reformat it into (x,y) values and create colour table
             var metric_colours = new Object;
@@ -607,6 +558,111 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
             
             // Call 'genericPlot()'
             if (has_data) {
+                this.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys, metric_colours);
+            } else {
+                Ext.Msg.show({
+                    title:'No data',
+                    msg:'Sorry, the selected dataset has no data. Please select a different dataset',
+                    buttons: Ext.Msg.OK 
+                });
+            }
+
+        } else {
+            Ext.Msg.show({
+                title:'Error',
+                msg:'Failed to load resources',
+                buttons: Ext.Msg.OK
+            });                                 
+        } // if success
+    },
+
+    /* Converts BGR colour integer into hex RGB string for Javascript */ 
+    _colourConvert : function (BGRColorNumber) {
+        // String.format("#%1$02x%2$02x%3$02x", (BGRColorNumber & 255), (BGRColorNumber & 65280) >> 8, (BGRColorNumber >> 16));
+        return "#"+Ext.String.leftPad((BGRColorNumber & 255).toString(16), 2, '0')+
+                   Ext.String.leftPad(((BGRColorNumber & 65280) >> 8).toString(16), 2, '0')+
+                   Ext.String.leftPad((BGRColorNumber >> 16).toString(16), 2, '0');
+    },
+
+    /* Given a log id ('bvLogId'), and 'logIds' and 'logNames' arrays, return logName for the log id */ 
+    _findLogName(bvLogId, logIds, logNames) {
+        var logIdx=0;
+        while (logIdx<logIds.length) {
+            if (logIds[logIdx]===bvLogId) return logNames[logIdx];
+            logIdx++;
+        }
+        return "";
+    },        
+
+    _drawNVCLDataGraph : function (response, success, logIds, logNames) {
+        var this_ptr = this;
+        if (success) {             
+            // Once we have received the plot data, reformat it into (x,y) values and create colour table
+            var metric_colours = new Object;
+            var data_bin = new Object;
+            var has_data = false;
+            var yaxis_labels = new Object;
+            var yaxis_keys = [];
+            var jsonObj = Ext.JSON.decode(response.responseText);
+            // {"success":true, "data":[{ "logId":"logid_1", "stringValues":[{"roundedDepth":170.5,"classCount":1,"classText":"Alunite-K","colour":4351080},
+            if ('success' in jsonObj && jsonObj.success==true) {
+                var dataObj = Ext.JSON.decode(jsonObj.data);
+                for (var i = 0; i < dataObj.length; i++){
+                    var bv = dataObj[i];
+                    ["stringValues","numericValues"].forEach(function(dataType) {
+                        if (bv.hasOwnProperty(dataType) && bv[dataType].length>0) {
+                            // Find the log name for our log id, this will be our 'metric_name'
+                            var metric_name = this_ptr._findLogName(bv.logId, logIds, logNames);
+                            if (metric_name.length > 0) {
+                                if (!(metric_name in data_bin)) {
+                                    data_bin[metric_name] = new Object;
+                                }                      
+                                bv[dataType].forEach(function(val) {
+                                                                         
+                                    // "stringValues" ==> units are called "Sample Count" and "numericValues" ==> "Meter Average"
+                                    if (dataType=="stringValues") {
+                                        var key=val.classText;
+                                        // Use the supplied colour for each metric
+                                        if (!(key in metric_colours)) {
+                                            metric_colours[key] = this_ptr._colourConvert(val.colour);
+                                        }                                            
+                                        
+                                        // Start to create graphing data
+                                        if (!(key in data_bin[metric_name])) {
+                                            data_bin[metric_name][key] = [];
+                                            if (!(metric_name in yaxis_labels)) {
+                                                yaxis_labels[metric_name] = "Sample Count";
+                                                yaxis_keys.push(metric_name);
+                                            }
+                                        }
+                                                                                 
+                                        // Depth is 'x' and 'y' is our measured value 
+                                        data_bin[metric_name][key].push({"x":parseFloat(val.roundedDepth), "y":parseFloat(val.classCount)});
+                                        has_data=true;
+                                 
+                                    } else if (dataType=="numericValues") {
+                                        // Start to create graphing data
+                                        if (!(metric_name in data_bin[metric_name])) {
+                                            data_bin[metric_name][metric_name] = [];
+                                            if (!(metric_name in yaxis_labels)) {
+                                                yaxis_labels[metric_name] = "Meter Average";
+                                                yaxis_keys.push(metric_name);
+                                            }
+                                        }
+                                        // Depth is 'x' and 'y' is our measured value 
+                                        data_bin[metric_name][metric_name].push({"x":parseFloat(val.roundedDepth), "y":parseFloat(val.averageValue)});
+                                        has_data=true;
+                                    } // if
+                                }); // for each
+                            } // if 
+                        } // if
+                    }); // for each
+                } // for
+            } // if
+            
+            // Call 'genericPlot()'
+            if (has_data) {
+                console.log("plotting(data_bin, yaxis_labels, yaxis_keys, metric_colours =", data_bin, yaxis_labels, yaxis_keys, metric_colours);
                 this.genericPlot(data_bin, "Depth", yaxis_labels, yaxis_keys, metric_colours);
             } else {
                 Ext.Msg.show({

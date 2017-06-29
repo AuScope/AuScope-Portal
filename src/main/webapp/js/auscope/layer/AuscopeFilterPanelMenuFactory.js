@@ -31,11 +31,8 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
         if (layer.id === "pressuredb-borehole") {
             // LJ: AUS-2619 Additional params for pressureDB legend.
             ccProperty = filter.getParameter('ccProperty') || '';
-            var ccLevels = filter.getParameter('ccLevels') || 9;
-            sldUrl = portal.util.URL.base + styleUrl
-                    + "?ccProperty=" + ccProperty
-                    + "&ccLevels=" + ccLevels;
-            isSld_body = false;
+            sldUrl = "getPressureDBLegendStyle.do?ccProperty=" + ccProperty;
+            isSld_body = true;
         } else if (layer.id === "mineral-tenements") {
             ccProperty = filter.getParameter('ccProperty');
             sldUrl = "getMineralTenementLegendStyle.do?ccProperty=" + ccProperty;
@@ -53,9 +50,9 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
      *
      */
     appendAdditionalActions : function(menuItems,layer,group) {
-        //VT:Should have a download action except for Insar data.
-        if((layer.get('cswRecords').length > 0 &&
-                layer.get('cswRecords')[0].get('noCache')==false) && layer.id != 'portal-reports' ){
+        //VT:Should have a download action except for reports and Insar data.
+        if ((layer.get('cswRecords').length > 0 && layer.get('cswRecords')[0].get('noCache')==false) && 
+            layer.id != 'portal-reports' && layer.id != 'portal-pmd-crc-reports' && layer.id != 'seismology-in-schools-site') {
                  menuItems.push(this._getDownloadAction(layer));
         }
 
@@ -71,9 +68,13 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
     },
 
     layerRemoveHandler : function(layer){
-        this.fireEvent('removelayer', layer);
+        this.fireEvent('removeLayer', layer);
     },
-
+         
+    layerAddHandler : function(layer){
+        this.fireEvent('addLayer', layer);
+    },
+    
     _getDownloadAction : function(layer){
         var me = this;
         var downloadLayerAction = new Ext.Action({
@@ -141,26 +142,59 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
 
     },
 
+    _enableButton : function(layer){
 
+    },
     _getlayerAnalytics : function(layer){
         var me = this;
         if( auscope.layer.analytic.AnalyticFormFactory.supportLayer(layer)){
 
-            if(layer.get('sourceType')=='KnownLayer' && layer.get('source').get('active') && layer.get('filterer').parameters.featureType){
+            if(layer.get('sourceType')=='KnownLayer' && layer.id == 'capdf-hydrogeochem') {
+                //&& layer.get('source').get('active') && layer.get('filterer').parameters.featureType){
                 return new Ext.Action({
-                    text : 'Graph',
+                    text : '<span data-qtip="Add layer to map and select \'Group of Interest\' to enable this function">' + 'Graph',
                     iconCls : 'graph',
-                    handler : function(){
-                        var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map)
-                        win.show();
-                        me.on('removelayer',function(closeLayer){
+                    disabled : true,
+                    myWin : null,
+                    selfme : null,
+                    initComponent: function () {
+                        myWin = null;
+                        selfme = null;
+                        me.on('removeLayer',function(closeLayer){
                             if(closeLayer.get('id')==layer.get('id')){
-                                win.close();
+                                if ( myWin !== null) {
+                                    myWin.close();
+                                    myWin = null;
+                                }
+                                if ( selfme !== null) {
+                                    selfme.setDisabled(true);
+                                }
+                            }
+                        });        
+                        me.on('addLayer',function(closeLayer){
+                            if(closeLayer.get('id')==layer.get('id') && layer.get('source').get('active') && layer.get('filterer').parameters.featureType) {
+                                if ( myWin !== null) {
+                                    myWin.close();
+                                    myWin = null;
+                                }
+                                if ( selfme !== null) {
+                                    selfme.setDisabled(false);
+                                }
                             }
                         });
+                        this.callParent();
+                        selfme = this;
+                    },                    
+                    handler : function(){
+                        if ( myWin == null && layer.get('source').get('active') && layer.get('filterer').parameters.featureType) {
+                            var win = auscope.layer.analytic.AnalyticFormFactory.getAnalyticForm(layer,me.map);
+                            myWin = win;
+                            win.show();
+                        }
                     }
                 });
-            } else if (layer.id == 'sf0-borehole-nvcl') {
+            } else if (layer.id == 'nvcl-v2-borehole') {
+                //'sf0-borehole-nvcl') {
                 return new Ext.Action({
                     iconCls : 'analytics-button',
                     text: 'Analytical Jobs',
@@ -172,15 +206,6 @@ Ext.define('auscope.layer.AuscopeFilterPanelMenuFactory', {
                                 win.close();
                             }
                         });
-                    }
-                });
-            }else{
-                return new Ext.Action({
-                    text : '<span data-qtip="Add layer to map and select \'Group of Interest\' to enable this function">' + 'Graph',
-                    disabled : true,
-                    iconCls : 'graph',
-                    handler : function(){
-                        Ext.Msg.alert('Alert', 'Add layer to map first.');
                     }
                 });
             }

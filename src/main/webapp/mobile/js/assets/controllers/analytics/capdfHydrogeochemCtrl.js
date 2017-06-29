@@ -193,19 +193,26 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
         $scope.paramOfInterest=paramOfInterest;
         var minNumber=Math.round(Number(min) * Math.pow(10,2))/Math.pow(10,2);
         var maxNumber=Math.round(Number(max) * Math.pow(10,2))/Math.pow(10,2);
+        var precisionNumber = 2;
+        var stepNumber = 0.01;
         if(min == max){
             $scope.noRangeFound = true;
         }else{
             $scope.noRangeFound=false;
-        }                       
-         
+            if (maxNumber - minNumber < 0.1) {
+                precisionNumber = 3;
+                stepNumber = 0.001;
+            }
+        }
+        
         $scope.slider = {                 
                 minValue: minNumber,
                 maxValue: maxNumber,
                 options: {
                     floor: minNumber,
                     ceil:  maxNumber,
-                    step: 0.1                     
+                    step: stepNumber,
+                    precision: precisionNumber                    
                 }
             };
         $timeout(function () {
@@ -223,12 +230,14 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
      */
     $scope.renderColorCode = function(goi,poi,minValue, maxValue){
          
-        GoogleMapService.removeActiveLayer($scope.layer);
-        CapdfWMSService.renderLayer(goi,$scope.layer,{
-            featureType:goi,
-            poi : poi,
-            minMax:[minValue,maxValue]
-        }); 
+        if (goi && poi) {
+            GoogleMapService.removeActiveLayer($scope.layer);
+            CapdfWMSService.renderLayer(goi,$scope.layer,{
+                featureType:goi,
+                poi : poi,
+                minMax:[minValue,maxValue]
+            });
+        }            
     };
      
     /**

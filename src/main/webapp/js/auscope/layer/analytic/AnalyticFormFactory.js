@@ -12,7 +12,7 @@ Ext.define('auscope.layer.analytic.AnalyticFormFactory', {
            });
        }
 
-       if(layer.get('id')==='sf0-borehole-nvcl'){
+       if(layer.get('id')==='nvcl-v2-borehole'){
            return Ext.create('auscope.layer.analytic.form.NVCLAnalyticsForm',{
                layer:layer,
                map : map
@@ -26,7 +26,7 @@ Ext.define('auscope.layer.analytic.AnalyticFormFactory', {
    supportLayer : function(layer){
        switch(layer.get('id')){
            case 'capdf-hydrogeochem':
-           case 'sf0-borehole-nvcl':
+           case 'nvcl-v2-borehole':
                return true;
 
            default:

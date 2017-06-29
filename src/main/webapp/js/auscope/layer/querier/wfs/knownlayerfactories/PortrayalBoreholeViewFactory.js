@@ -12,7 +12,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.PortrayalBoreholeViewF
      * Overrides abstract supportsKnownLayer. Supports only the Portrayal Borehole View known layer
      */
     supportsKnownLayer : function(knownLayer) {
-        return knownLayer.getId() === 'sf0-borehole-nvcl';
+        return (knownLayer.getId() === 'sf0-borehole-nvcl' || knownLayer.getId() === 'nvcl-v2-borehole');
     }
 
 });
