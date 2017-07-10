@@ -585,7 +585,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
     },
 
     /* Given a log id ('bvLogId'), and 'logIds' and 'logNames' arrays, return logName for the log id */ 
-    _findLogName(bvLogId, logIds, logNames) {
+    _findLogName : function (bvLogId, logIds, logNames) {
         var logIdx=0;
         while (logIdx<logIds.length) {
             if (logIds[logIdx]===bvLogId) return logNames[logIdx];
