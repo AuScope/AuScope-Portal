@@ -110,7 +110,7 @@
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
     </bean>
 
-    <bean id="wmsService" class="org.auscope.portal.core.services.WMSService">
+    <bean id="wmsService" class="org.auscope.portal.server.web.service.AuScopeWMSService">
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
         <constructor-arg name="methodMaker">
             <list>
