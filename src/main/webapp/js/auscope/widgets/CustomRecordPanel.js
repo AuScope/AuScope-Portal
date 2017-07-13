@@ -170,9 +170,10 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                 xtype: 'filefield',
                 name: 'file',
                 fieldLabel: 'KML',
+                itemId: 'kmlFileField',
                 labelWidth: 50,
                 msgTarget: 'side',
-                allowBlank: false,
+                allowBlank: true, // Setting to 'false' causes a bug - preventing file browser window appearing on second click
                 anchor: '100%',
                 buttonText: 'Select KML...'
             }],
@@ -180,6 +181,12 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
             buttons: [{
                 text: 'Add KML',
                 handler: function() {
+                    // Do not allow empty file
+                    var kmlFile = this.up('form').down('#kmlFileField').getValue();
+                    if (kmlFile.length==0) {
+                        Ext.Msg.alert('File missing', 'Unable to find file. Make sure the file is a valid KML file.');
+                        return;
+                    }
                     var form = this.up('form').getForm();
                     if(form.isValid()){
                         form.submit({
@@ -211,7 +218,7 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
             frame: true,
             items: [{
                 xtype: 'textfield',
-                value : 'https://capdf-dev.csiro.au/gs-hydrogeochem/public/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=public:hydrogeochem&maxFeatures=50&outputFormat=application/vnd.google-earth.kml+xml',
+                value : '',
                 name: 'file',
                 fieldLabel: 'URL',
                 labelWidth: 50,
