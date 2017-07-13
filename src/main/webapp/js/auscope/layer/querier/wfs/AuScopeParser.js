@@ -27,6 +27,7 @@ Ext.define('auscope.layer.querier.wfs.AuScopeParser', {
                 'auscope.layer.querier.wfs.factories.MineralTenementFactory',
                 'auscope.layer.querier.wfs.factories.CapdfHydroGeoChemFactory',
                 'auscope.layer.querier.wfs.factories.TIMAGeoSampleFactory',
+                'auscope.layer.querier.wfs.factories.SHRIMPGeoSampleFactory',
                 'auscope.layer.querier.wfs.factories.MinOccurViewFactory',
                 'auscope.layer.querier.wfs.factories.RemanentAnomalyFactory',
                 'auscope.layer.querier.wfs.factories.GnssStationFactory',

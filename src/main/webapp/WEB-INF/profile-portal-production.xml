@@ -63,6 +63,8 @@
                 <ref bean="knownTypeSF0BoreholeNVCL" />
                 <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeTimaGeoSample" />
+                <ref bean="knownTypeSHRIMPGeoSample" />
+                
 
                 <!-- Generated from former prod "Registered" tab START -->
                 <ref bean="knownTypeHighpSiteIronlayer" />

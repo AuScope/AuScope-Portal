@@ -767,6 +767,57 @@
             </bean>        
         </property>
     </bean>
+     <bean id="knownTypeSHRIMPGeoSample" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="tima-shrimp-geosample"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="tima:view_shrimp_geochronology_result"/>                           
+            </bean>
+        </constructor-arg>
+        <property name="name" value="SHRIMP Geochronology"/>
+        <property name="group" value="JdLC Mineralogy Library"/>
+        <property name="description" value="A collection of the results published from SHRIMP U-Pb mass spectrometer"/>
+        <property name="proxyUrl" value="doSHRIMPGeoSample.do"/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="180" />
+         <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean> 
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="IGSN"></constructor-arg>
+                            <constructor-arg name="xpath" value="igsn"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>                                                                       
+                    </list>
+                </property>                       
+            </bean>        
+        </property>
+    </bean>
         
     <bean id="knownTypeSF0BoreholeNVCL" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="sf0-borehole-nvcl"/>

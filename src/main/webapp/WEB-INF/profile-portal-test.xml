@@ -30,6 +30,7 @@
                 <ref bean="knownTypePMDCRCReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeTimaGeoSample" />
+                <ref bean="knownTypeSHRIMPGeoSample" />                
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>

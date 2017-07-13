@@ -62,6 +62,49 @@ public class TIMAController extends BasePortalController {
 
         return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
     }
+    
+    
+    
+    /**
+     * Handles the borehole filter queries.
+     *
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param sampleName
+     *            The name of the sample
+     * @param igsn
+     * @return a WFS response converted into KML
+     * @throws Exception
+     */
+    @RequestMapping("/doSHRIMPGeoSample.do")
+    public ModelAndView doSHRIMPGeoSample(@RequestParam(required = false, value = "serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "sampleName") String sampleName,
+            @RequestParam(required = false, value = "igsn") String igsn,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
+            @RequestParam(required = false, value = "outputFormat") String outputFormat)
+                    throws Exception {
+
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+
+        //Build our filter details
+        String filterString = generateGeoSampleFilter(sampleName, igsn, bboxJson,optionalFilters);
+
+        //Make our request and get it transformed
+        WFSResponse response = null;
+        try {
+            response = wfsService.getWfsResponse(serviceUrl, "tima:view_shrimp_geochronology_result", filterString,
+                    maxFeatures, null);
+        } catch (Exception ex) {
+            log.warn(String.format("Unable to request/transform WFS response for '%1$s' from '%2$s': %3$s", sampleName,
+                    serviceUrl, ex));
+            log.debug("Exception: ", ex);
+            return generateExceptionResponse(ex, serviceUrl);
+        }
+
+        return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
+    }
 
     /**
      * Utility function for generating an OGC filter for a TIMA simple feature
