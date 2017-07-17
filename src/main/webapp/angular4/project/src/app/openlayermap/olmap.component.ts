@@ -1,27 +1,27 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
 // This is necessary to access ol3!
 declare var ol: any;
 
 @Component({
-    selector: 'olmap',
-    template: `    
-    <div #mapElement id="map" class="height-full width-full"> </div> 
+    selector: 'app-ol-map',
+    template: `
+    <div #mapElement id="map" class="height-full width-full"> </div>
     `
     // The "#" (template reference variable) matters to access the map element with the ViewChild decorator!
 })
 
 export class AppComponent implements AfterViewInit {
     // This is necessary to access the html element to set the map target (after view init)!
-    @ViewChild("mapElement") mapElement: ElementRef;
+    @ViewChild('mapElement') mapElement: ElementRef;
 
     public map: any;
 
-    constructor(){
-        var osm_layer: any = new ol.layer.Tile({
+    constructor() {
+        const osm_layer: any = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
-        
+
         // note that the target cannot be set here!
         this.map = new ol.Map({
             layers: [osm_layer],
