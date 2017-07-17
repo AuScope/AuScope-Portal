@@ -5,9 +5,8 @@ declare var ol: any;
 
 @Component({
     selector: 'olmap',
-    template: `
-    <h3> The map </h3>
-    <div #mapElement id="map" class="map"> </div> 
+    template: `    
+    <div #mapElement id="map" class="height-full width-full"> </div> 
     `
     // The "#" (template reference variable) matters to access the map element with the ViewChild decorator!
 })
