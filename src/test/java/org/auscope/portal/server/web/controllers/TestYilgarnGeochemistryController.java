@@ -13,7 +13,7 @@ import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
-import org.auscope.portal.server.web.service.WFSService;
+import org.auscope.portal.core.services.WFSService;
 import org.auscope.portal.server.web.service.YilgarnGeochemistryService;
 import org.jmock.Expectations;
 import org.junit.Assert;
