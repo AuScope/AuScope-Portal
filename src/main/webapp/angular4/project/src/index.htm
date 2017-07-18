@@ -14,7 +14,7 @@
 	<link href="assets/plugins/icon/themify-icons/themify-icons.css" rel="stylesheet" />
 	<link href="assets/css/animate.min.css" rel="stylesheet" />
 	<link href="assets/css/style.css" rel="stylesheet" />
-	<link href="assets/css/auscope-style.css" rel="stylesheet" />
+
 	<!-- ================== END BASE CSS STYLE ================== -->
 	
 	<!-- ================== BEGIN BASE JS ================== -->
@@ -553,7 +553,7 @@
 			
 			<!-- BEGIN content-cover -->
             <div class="content-cover">
-				 <olmap></olmap>
+				 <app-ol-map></app-ol-map>
             </div>
 			<!-- END content-cover -->
 		</div>
@@ -725,6 +725,14 @@
 	<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 	<script src="assets/plugins/scrollbar/slimscroll/jquery.slimscroll.min.js"></script>
 	<!-- ================== END BASE JS ================== -->
+    
+    <!-- ================Template js============================= -->
+    <script src="assets/js/apps.js"></script>
+    <script>
+		$(document).ready(function() {
+			App.init();			
+		});
+	</script>
     
     
   </body>

@@ -1,1 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
+/*
+Contain Auscope specific modification to the original template.
+
+*/
+.layer-panel{
+	left:-100px;
+	width:319px;
+}
+
+.float-sub-menu .layer-panel{
+		left:-53px;
+		width:315px;
+}
+
+.sub-menu .panel .panel-heading{
+	height:43px;
+}
+
+
+
+/*
+max-width: 768px(small screen)
+*/
+@media (max-width: 768px) {
+	.layer-panel{
+		left:-60px;
+		width:100%;
+	}
+	
+	.layer-panel > .panel-heading li > a{
+		height:30px;
+	}
+	
+	.desktop-only{
+		display: none!important
+	}
+	
+	.mobile-only{
+		display:block;
+	}
+	
+}
+
+@media (min-width: 768px) {
+		
+	.mobile-only{
+		display: none!important
+	}
+	
+	.desktop-only{
+		display:block;
+	}
+	
+}
