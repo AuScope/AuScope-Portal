@@ -8,11 +8,11 @@
       "root": "src",
       "outDir": "../../angular",
       "assets": [
-        "assets",
+        "template",
         "favicon.ico"
       ],
       "index": "index.htm",
-      "main": "main.ts",
+      "main": "angular-config/main.ts",
       "polyfills": "polyfills.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.app.json",
