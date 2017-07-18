@@ -1,16 +1,23 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import {HttpClientModule} from '@angular/common/http';
 
-import { AppComponent } from './openlayermap/olmap.component';
+
+import { OlMapComponent } from './openlayermap/olmap.component';
+import { LayerPanelComponent } from './layerpanel/layer-panel.component';
+
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    OlMapComponent,
+    LayerPanelComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [OlMapComponent, LayerPanelComponent]
 })
 export class AppModule { }

@@ -11,7 +11,7 @@ declare var ol: any;
     // The "#" (template reference variable) matters to access the map element with the ViewChild decorator!
 })
 
-export class AppComponent implements AfterViewInit {
+export class OlMapComponent implements AfterViewInit {
     // This is necessary to access the html element to set the map target (after view init)!
     @ViewChild('mapElement') mapElement: ElementRef;
 
