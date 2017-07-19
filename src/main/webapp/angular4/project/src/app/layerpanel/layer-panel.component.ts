@@ -7,17 +7,16 @@ declare var ol: any;
 
 @Component({
     selector: '[appLayerPanel]',
-    templateUrl: './layer-panel.component.html',
-    providers: [LayerHandlerService]
+    templateUrl: './layer-panel.component.html'
 })
 
 export class LayerPanelComponent implements OnInit {
 
-    results: {};
+    layerGroups: {};
 
     constructor(public layerHandlerService: LayerHandlerService) {}
 
    ngOnInit(): void {
-    this.layerHandlerService.getLayerRecord().subscribe(response => this.results = response);
+    this.layerHandlerService.getLayerRecord().subscribe(response => this.layerGroups = response);
   }
 }

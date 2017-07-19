@@ -1,5 +1,5 @@
 
-	<li class="has-sub">
+	<!-- li class="has-sub">
 		<a href="javascript:;">
             <b class="caret caret-right pull-right"></b>
             Northern Yilgarn Hydrogeochemistry
@@ -19,7 +19,7 @@
 				<div class="sub-menu">
 					
 					 <div class="panel panel-inverse panel-info panel-with-tabs layer-panel animated  slideInRight">
-						<!-- BEGIN panel-heading -->
+						
 						<div class="panel-heading">
 							<ul id="panel-tab" class="nav nav-tabs pull-right">
 								<li class="active"><a href="#panel-tab-home" data-toggle="tab"><i class="fa fa-filter"></i> <span class="hidden-xs">Filter</span></a></li>
@@ -28,10 +28,9 @@
 							</ul>
 							
 						</div>
-						<!-- END panel-heading -->
-						<!-- BEGIN tab-content -->
+						
 						<div id="panel-tab-content" class="tab-content">
-							<!-- BEGIN tab-pane -->
+							
 							<div class="tab-pane fade in active" id="panel-tab-home">
 								
 								<form>
@@ -86,8 +85,7 @@
 									
 								</form>
 							</div>
-							<!-- END tab-pane -->
-							<!-- BEGIN tab-pane -->
+							
 							<div class="tab-pane fade" id="panel-tab-profile">
 								<div><img src="template/img/demo/minimap.png" style="width: 98%;"></div>
 								<h4><span class="text-primary">Abstract</span></h4>
@@ -97,14 +95,13 @@
 								<h4><span class="text-primary">Details</span></h4>
 								<div class="panel panel-inverse">
 									
-									<!-- END panel-heading -->
-									<!-- BEGIN panel-body -->
+									
 									<div class="panel-body" style="padding-left: 0px;padding-right: 0px;">																	
-										<!-- BEGIN panel-group -->
+										
 										<div class="panel-group" id="accordion">
-											<!-- BEGIN panel -->
+											
 											<div class="panel panel-inverse panel-bordered">
-												<!-- BEGIN panel-heading -->
+												
 												<div class="panel-heading" id="headingOne">
 													<h4 class="panel-title">
 														<a href="#collapseOne" class="accordion-link" data-toggle="collapse" data-parent="#accordion">
@@ -112,8 +109,7 @@
 														</a>
 													</h4>
 												</div>
-												<!-- END panel-heading -->
-												<!-- BEGIN panel-collapse -->
+												
 												<div id="collapseOne" class="panel-collapse collapse in">
 													<div class="panel-body">
 														<p><b>Contact org:</b>Geological Survey of New South Whales</p>
@@ -125,12 +121,11 @@
 														<p><img src="template/img/demo/wmspreview.png" style="width: 96%;"/></p>
 													</div>
 												</div>
-												<!-- END panel-collapse -->
+												
 											</div>
-											<!-- END panel -->
-											<!-- BEGIN panel -->
+										
 											<div class="panel panel-inverse panel-bordered">
-												<!-- BEGIN panel-heading -->
+												
 												<div class="panel-heading" id="headingTwo">
 													<h4 class="panel-title">
 														<a href="#collapseTwo" class="accordion-link collapsed" data-toggle="collapse" data-parent="#accordion">
@@ -138,8 +133,7 @@
 														</a>
 													</h4>
 												</div>
-												<!-- END panel-heading -->
-												<!-- BEGIN panel-collapse -->
+												
 												<div id="collapseTwo" class="panel-collapse collapse">
 													<ul class="list-group">
 														<li class="list-group-item">Bootply</li>
@@ -148,12 +142,11 @@
 													</ul>
 													<div class="panel-footer">Footer</div>
 												</div>
-												<!-- END panel-collapse -->
+											
 											</div>
-											<!-- END panel -->
-											<!-- BEGIN panel -->
+											
 											<div class="panel panel-inverse panel-bordered">
-												<!-- BEGIN panel-heading -->
+												
 												<div class="panel-heading" id="headingThree">
 													<h4 class="panel-title">
 														<a href="#collapseThree" class="accordion-link collapsed" data-toggle="collapse" data-parent="#accordion">
@@ -161,20 +154,19 @@
 														</a>
 													</h4>
 												</div>
-												<!-- END panel-heading -->
-												<!-- BEGIN panel-collapse -->
+											
 												<div id="collapseThree" class="panel-collapse collapse">
 													<div class="panel-body">
 														Victor rocks
 													</div>
 												</div>
-												<!-- END panel-collapse -->
+											
 											</div>
-											<!-- END panel -->
+										
 										</div>
-										<!-- END panel-group -->
+										
 									</div>
-									<!-- END panel-body -->
+									
 								</div>
 							</div>
 							<div class="tab-pane fade" id="panel-tab-download">
@@ -190,9 +182,9 @@
 									</div>															
 								</form>
 							</div>
-							<!-- END tab-pane -->
+							
 						</div>
-						<!-- END tab-content -->
+					
 					</div>
 				</div>
 			</li>
@@ -200,43 +192,21 @@
 			<li><a href="javascript:;">Earth Resource Mining Activity</a></li>
 			<li><a href="javascript:;">Mineral Occurence View</a></li>
 		</ul>
-	</li>
-	<li class="has-sub">
-		<a href="javascript:;">
+	</li-->
+	
+	
+	
+	
+	<li class="has-sub" *ngFor="let layerGroup of layerGroups | getKey; index as i; first as isFirst">
+   		<a href="javascript:;">
             <b class="caret caret-right pull-right"></b>
-              Tenements
+              {{layerGroup.key}}
         </a>
 		<ul class="sub-menu">									
 			<li><a href="javascript:;">Mineral Tenements</a></li>									
 		</ul>
 	</li>
-	<li class="has-sub">
-		<a href="javascript:;">
-            <b class="caret caret-right pull-right"></b>
-            Northern Yilgarn Hydrogeochemistry
-        </a>
-		<ul class="sub-menu">									
-			<li><a href="javascript:;">Hydrogeochemistry</a></li>									
-		</ul>
-	</li>
-	<li class="has-sub">
-		<a href="javascript:;">
-            <b class="caret caret-right pull-right"></b>
-            Earth Resources
-        </a>
-		<ul class="sub-menu">									
-			<li><a href="javascript:;">Earth Resource Mine</a></li>
-			<li><a href="javascript:;">Earth Resource Mineral Occurrence</a></li>
-			<li><a href="javascript:;">Earth Resource Mining Activity</a></li>
-			<li><a href="javascript:;">Mineral Occurence View</a></li>
-		</ul>
-	</li>
-	<li class="has-sub">
-		<a href="javascript:;">
-            <b class="caret caret-right pull-right"></b>
-              Tenements
-        </a>
-		<ul class="sub-menu">									
-			<li><a href="javascript:;">Mineral Tenements</a></li>									
-		</ul>
-	</li>
+	
+	
+	
+	
