@@ -197,13 +197,13 @@
 	
 	
 	
-	<li class="has-sub" *ngFor="let layerGroup of layerGroups | getKey; index as i; first as isFirst">
+	<li class="has-sub" *ngFor="let layerGroup of layerGroups | getKey">
    		<a href="javascript:;">
             <b class="caret caret-right pull-right"></b>
               {{layerGroup.key}}
         </a>
-		<ul class="sub-menu">									
-			<li><a href="javascript:;">Mineral Tenements</a></li>									
+		<ul class="sub-menu" *ngFor="let layer of layerGroup.value ">									
+			<li><a href="javascript:;">{{layer.name}}</a></li>									
 		</ul>
 	</li>
 	

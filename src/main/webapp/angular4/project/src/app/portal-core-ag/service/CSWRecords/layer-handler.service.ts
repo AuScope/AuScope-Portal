@@ -3,6 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
+import {LayerModel} from '../../modal/layer.model'
 
 @Injectable()
 export class LayerHandlerService {
@@ -16,7 +17,7 @@ export class LayerHandlerService {
   }
 
 
-  public getLayerRecord(): any {
+  public getLayerRecord(): Observable<any> {
     const me = this;
     if (this.layerRecord.length > 0) {
         return Observable.of(this.layerRecord);
@@ -28,6 +29,8 @@ export class LayerHandlerService {
               if (me.layerRecord[item.group] === undefined) {
                 me.layerRecord[item.group] = [];
               }
+              // VT: attempted to cast the object into a typescript class however it doesn't seem like its possible
+              // all examples points to casting from json to interface but not object to interface.
               me.layerRecord[item.group].push(item);
             });
             return me.layerRecord;
