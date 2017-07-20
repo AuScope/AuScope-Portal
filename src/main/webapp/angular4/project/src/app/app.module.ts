@@ -10,11 +10,21 @@ import { AuscopeConfiguration } from './appconfig/app.config';
 import {KeysPipe} from './portal-core-ag/service/UIUtilities/pipes'
 
 
+import {UtilitiesService } from './core/utility/utilities.service';
+import {GMLParserService } from './core/utility/gmlparser.service';
+import {SimpleXMLService } from './core/utility/simplexml.service';
+
+
+
 @NgModule({
   declarations: [
     OlMapComponent,
     LayerPanelComponent,
-    KeysPipe
+    KeysPipe,
+    // AppComponent,
+    UtilitiesService,
+    SimpleXMLService,
+    GMLParserService
   ],
   imports: [
     BrowserModule,
