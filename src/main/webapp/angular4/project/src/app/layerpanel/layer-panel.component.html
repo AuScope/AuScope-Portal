@@ -203,7 +203,179 @@
               {{layerGroup.key}}
         </a>
 		<ul class="sub-menu">									
-			<li *ngFor="let layer of layerGroup.value"><a href="javascript:;">{{layer.name}}</a></li>									
+			<li *ngFor="let layer of layerGroup.value"  [ngClass]="{'active': layer.expanded}"><a (click)="expandLayer(layer)">{{layer.name}} <span *ngIf="layer.expanded" class="fa fa-arrow-circle-down"></span></a>
+				<div *ngIf="layer.expanded" class="sidebar-panel-menu-show">
+					
+					 <div class="panel panel-inverse panel-info panel-with-tabs layer-panel animated  slideInRight">
+						
+						<div class="panel-heading">
+							<ul id="panel-tab" class="nav nav-tabs pull-right">
+								<li (click)="selectTabPanel(layer.id,0)" [ngClass]="{'active': uiTabPanels[layer.id].panelstatus[0]}"><a data-toggle="tab"><i class="fa fa-filter"></i> <span class="hidden-xs">Filter</span></a></li>
+								<li (click)="selectTabPanel(layer.id,1)" [ngClass]="{'active': uiTabPanels[layer.id].panelstatus[1]}"><a data-toggle="tab"><i class="fa fa-info-circle"></i> <span class="hidden-xs">Info</span></a></li>
+								<li (click)="selectTabPanel(layer.id,2)" [ngClass]="{'active': uiTabPanels[layer.id].panelstatus[2]}" class="desktop-only"><a data-toggle="tab"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a></li>
+							</ul>
+							
+						</div>
+						
+						<div id="panel-tab-content" class="tab-content">
+							
+							<div class="tab-pane fade" [ngClass]="{'active in': uiTabPanels[layer.id].panelstatus[0]}">
+								
+								<form>
+									<div class="form-group">
+										<label class="control-label">Default <span class="text-danger">*</span></label>
+										<select class="selectpicker form-control">
+											<option>Mustard</option>
+											<option>Ketchup</option>
+											<option>Relish</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label class="control-label">Multiple SelectBox <span class="text-danger">*</span></label>
+										<select class="selectpicker form-control" multiple data-max-options="3">
+											<optgroup label="Picnic">
+												<option>Mustard</option>
+												<option>Ketchup</option>
+												<option>Relish</option>
+											</optgroup>
+											<optgroup label="Camping">
+												<option>Tent</option>
+												<option>Flashlight</option>
+												<option>Toilet Paper</option>
+											</optgroup>
+										</select>
+									</div>
+									<div class="form-group">
+										<label class="control-label">Live Search <span class="text-danger">*</span></label>
+										<select class="selectpicker form-control" data-live-search="true">
+											<option>Mustard</option>
+											<option>Ketchup</option>
+											<option>Relish</option>
+											<option>Tent</option>
+											<option>Flashlight</option>
+											<option>Toilet Paper</option>
+										</select>
+									</div>
+									<div class="form-group m-b-10">
+										<label class="control-label">With Button Class <span class="text-danger">*</span></label>
+										<select class="selectpicker form-control" data-style="btn-purple">
+											<option>Mustard</option>
+											<option>Ketchup</option>
+											<option>Relish</option>
+											<option>Tent</option>
+											<option>Flashlight</option>
+											<option>Toilet Paper</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<button type="button" class="btn btn-primary">Add Layer</button>
+									</div>
+									
+								</form>
+							</div>
+							
+							<div class="tab-pane fade" [ngClass]="{'active in': uiTabPanels[layer.id].panelstatus[1]}">
+								<div><img src="template/img/demo/minimap.png" style="width: 98%;"></div>
+								<h4><span class="text-primary">Abstract</span></h4>
+								<p>ASTER Map AlOH group composition</p>
+								<h4><span class="text-primary">Summary</span></h4>
+								<p>1. Band ratio: B5/B7Blue is well ordered kaolinite, Al-rich muscovite/illite, paragonite, pyrophyllite Red is Al-poor (Si-rich) muscovite (phengite)/p>
+								<h4><span class="text-primary">Details</span></h4>
+								<div class="panel panel-inverse">
+									
+									
+									<div class="panel-body" style="padding-left: 0px;padding-right: 0px;">																	
+										
+										<div class="panel-group" id="accordion">
+											
+											<div class="panel panel-inverse panel-bordered">
+												
+												<div class="panel-heading" id="headingOne">
+													<h4 class="panel-title">
+														<a href="#collapseOne" class="accordion-link" data-toggle="collapse" data-parent="#accordion">
+															ERML- GSWA
+														</a>
+													</h4>
+												</div>
+												
+												<div id="collapseOne" class="panel-collapse collapse in">
+													<div class="panel-body">
+														<p><b>Contact org:</b>Geological Survey of New South Whales</p>
+														<p><b>Description:</b>The locations of Mines and Mining Activities of NSW provided by Geological Survey of NSW from the MINEDEX database. Data presented using the EarthResourceML (version 2.0) data model.</p>
+														<p><b>Name:</b>Geological Survey of EarthResourceML (2.0) Mining Feature Occurrences</p>
+														<p><b>Info Url:</b>Link to catalogue</p>
+														<p>WMS Endpoint</p>
+														<p>WFS Endpoint</p>
+														<p><img src="template/img/demo/wmspreview.png" style="width: 96%;"/></p>
+													</div>
+												</div>
+												
+											</div>
+										
+											<div class="panel panel-inverse panel-bordered">
+												
+												<div class="panel-heading" id="headingTwo">
+													<h4 class="panel-title">
+														<a href="#collapseTwo" class="accordion-link collapsed" data-toggle="collapse" data-parent="#accordion">
+															ERML- NSW
+														</a>
+													</h4>
+												</div>
+												
+												<div id="collapseTwo" class="panel-collapse collapse">
+													<ul class="list-group">
+														<li class="list-group-item">Bootply</li>
+														<li class="list-group-item">One itmus ac facilin</li>
+														<li class="list-group-item">Second eros</li>
+													</ul>
+													<div class="panel-footer">Footer</div>
+												</div>
+											
+											</div>
+											
+											<div class="panel panel-inverse panel-bordered">
+												
+												<div class="panel-heading" id="headingThree">
+													<h4 class="panel-title">
+														<a href="#collapseThree" class="accordion-link collapsed" data-toggle="collapse" data-parent="#accordion">
+															ERML- Victoria
+														</a>
+													</h4>
+												</div>
+											
+												<div id="collapseThree" class="panel-collapse collapse">
+													<div class="panel-body">
+														Victor rocks
+													</div>
+												</div>
+											
+											</div>
+										
+										</div>
+										
+									</div>
+									
+								</div>
+							</div>
+							<div class="tab-pane fade" [ngClass]="{'active in': uiTabPanels[layer.id].panelstatus[2]}">
+								
+								<form>
+									<div class="form-group">
+										<label class="control-label">Download form <span class="text-danger">*</span></label>
+										<select class="selectpicker form-control">
+											<option>download 1</option>
+											<option>download 2</option>
+											<option>download 3</option>																	
+										</select>
+									</div>															
+								</form>
+							</div>
+							
+						</div>
+					
+					</div>
+				</div>
+			</li>									
 		</ul>
 	</li>
 	

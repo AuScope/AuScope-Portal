@@ -956,6 +956,20 @@ h1 small,h2 small,h3 small,h4 small,h5 small,h6 small,
 	margin-left: 41px;
 	font-size: 12px;
 }
+
+.sidebar-panel-menu-hide{		
+	display:none;
+}
+
+.sidebar-panel-menu-show{	
+	list-style-type: none;
+	margin: 0;
+	padding: 5px 0;
+	margin-left: 31px;
+	font-size: 12px;
+	display:block;
+}
+
 .sidebar li.has-sub .sub-menu > li > a {
 	color: #999;
 	display: block;

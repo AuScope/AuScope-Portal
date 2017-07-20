@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
-import {LayerModel} from '../../modal/layer.model'
+import {LayerModel} from '../../modal/data/layer.model'
 
 @Injectable()
 export class LayerHandlerService {
@@ -31,6 +31,7 @@ export class LayerHandlerService {
               }
               // VT: attempted to cast the object into a typescript class however it doesn't seem like its possible
               // all examples points to casting from json to interface but not object to interface.
+              item.expanded = false;
               me.layerRecord[item.group].push(item);
             });
             return me.layerRecord;

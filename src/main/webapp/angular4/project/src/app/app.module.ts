@@ -7,7 +7,8 @@ import { LayerHandlerService } from './portal-core-ag/service/CSWRecords/layer-h
 import { AppConfig } from './portal-core-ag/appconfig/app.config';
 import { APP_CONFIG } from './portal-core-ag/appconfig/app.config';
 import { AuscopeConfiguration } from './appconfig/app.config';
-import {KeysPipe} from './portal-core-ag/service/UIUtilities/pipes'
+import {KeysPipe} from './portal-core-ag/service/UIUtilities/pipes';
+import { NgClass } from '@angular/common';
 
 
 @NgModule({

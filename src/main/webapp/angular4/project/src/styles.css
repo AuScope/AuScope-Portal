@@ -17,7 +17,13 @@ Contain Auscope specific modification to the original template.
 	height:43px;
 }
 
+.display-none{
+	display: none!;
+}
 
+.display-block{
+	display: block!;
+}
 
 /*
 max-width: 768px(small screen)
