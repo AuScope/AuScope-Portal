@@ -202,8 +202,8 @@
             <b class="caret caret-right pull-right"></b>
               {{layerGroup.key}}
         </a>
-		<ul class="sub-menu" *ngFor="let layer of layerGroup.value ">									
-			<li><a href="javascript:;">{{layer.name}}</a></li>									
+		<ul class="sub-menu">									
+			<li *ngFor="let layer of layerGroup.value"><a href="javascript:;">{{layer.name}}</a></li>									
 		</ul>
 	</li>
 	

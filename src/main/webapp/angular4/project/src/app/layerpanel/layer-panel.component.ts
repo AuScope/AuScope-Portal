@@ -20,12 +20,17 @@ export class LayerPanelComponent implements OnInit, AfterViewInit {
     constructor(public layerHandlerService: LayerHandlerService) {}
 
    ngOnInit(): void {
-    this.layerHandlerService.getLayerRecord().subscribe(response => this.layerGroups = response);
+    this.layerHandlerService.getLayerRecord().subscribe(
+      response => {this.layerGroups = response;
+        $(document).ready(function() {
+          App.init();
+        });
+      });
   }
 
   ngAfterViewInit(): void {
-    $(document).ready(function() {
-      App.init();
-    });
+//    $(document).ready(function() {
+//      App.init();
+//    });
   }
 }
