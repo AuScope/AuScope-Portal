@@ -204,7 +204,7 @@
         </a>
 		<ul class="sub-menu">									
 			<li *ngFor="let layer of layerGroup.value"  [ngClass]="{'active': layer.expanded}"><a (click)="layer.expanded = !layer.expanded">{{layer.name}} <span *ngIf="layer.expanded" class="fa fa-arrow-circle-down"></span></a>
-				<div *ngIf="layer.expanded" class="sidebar-panel-menu-show">
+				<div [hidden]="!layer.expanded" class="sidebar-panel-menu-show">
 					
 					 <div class="panel panel-inverse panel-info panel-with-tabs layer-panel animated  slideInRight">
 						

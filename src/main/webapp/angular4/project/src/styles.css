@@ -25,6 +25,15 @@ Contain Auscope specific modification to the original template.
 	display: block!;
 }
 
+
+.sidebar-panel-menu-show{	
+	list-style-type: none;
+	margin: 0;
+	padding: 5px 0;
+	margin-left: 31px;
+	font-size: 12px;
+}
+
 /*
 max-width: 768px(small screen)
 */
