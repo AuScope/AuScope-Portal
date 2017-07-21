@@ -2,17 +2,17 @@ import { Component, OnInit} from '@angular/core';
 import { LayerHandlerService } from '../portal-core-ag/service/CSWRecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
-import { UILayerModel } from '../model/ui/ui.layer.model';
-import { UITabPanel } from '../model/ui/ui.tabpanel.model'
+import { UILayerModel } from '../model/ui/uilayer.model';
+import { UITabPanel } from '../model/ui/uitabpanel.model';
 
 
-// This is necessary to access ol3!
-declare var ol: any;
+
+
 declare var App: any;
 
 @Component({
     selector: '[appLayerPanel]',
-    templateUrl: './layer-panel.component.html'
+    templateUrl: './layerpanel.component.html'
 })
 
 

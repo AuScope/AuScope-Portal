@@ -1,4 +1,4 @@
-import { UITabPanel } from './ui.tabpanel.model';
+import { UITabPanel } from './uitabpanel.model';
 
 export enum LoadingStatus {
     loading = 0 ,
