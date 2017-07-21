@@ -7,13 +7,10 @@ import { LayerHandlerService } from './portal-core-ag/service/CSWRecords/layer-h
 import { AppConfig } from './portal-core-ag/appconfig/app.config';
 import { APP_CONFIG } from './portal-core-ag/appconfig/app.config';
 import { AuscopeConfiguration } from './appconfig/app.config';
-import {KeysPipe} from './portal-core-ag/service/UIUtilities/pipes';
+import {KeysPipe} from './portal-core-ag/UIUtilities/pipes';
 import { NgClass } from '@angular/common';
 
 
-import {UtilitiesService } from './core/utility/utilities.service';
-import {GMLParserService } from './core/utility/gmlparser.service';
-import {SimpleXMLService } from './core/utility/simplexml.service';
 
 
 
@@ -22,10 +19,6 @@ import {SimpleXMLService } from './core/utility/simplexml.service';
     OlMapComponent,
     LayerPanelComponent,
     KeysPipe,
-    // AppComponent,
-    UtilitiesService,
-    SimpleXMLService,
-    GMLParserService
   ],
   imports: [
     BrowserModule,
