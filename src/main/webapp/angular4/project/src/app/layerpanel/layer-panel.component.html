@@ -203,23 +203,23 @@
               {{layerGroup.key}}
         </a>
 		<ul class="sub-menu">									
-			<li *ngFor="let layer of layerGroup.value"  [ngClass]="{'active': layer.expanded}"><a (click)="expandLayer(layer)">{{layer.name}} <span *ngIf="layer.expanded" class="fa fa-arrow-circle-down"></span></a>
+			<li *ngFor="let layer of layerGroup.value"  [ngClass]="{'active': layer.expanded}"><a (click)="layer.expanded = !layer.expanded">{{layer.name}} <span *ngIf="layer.expanded" class="fa fa-arrow-circle-down"></span></a>
 				<div *ngIf="layer.expanded" class="sidebar-panel-menu-show">
 					
 					 <div class="panel panel-inverse panel-info panel-with-tabs layer-panel animated  slideInRight">
 						
 						<div class="panel-heading">
 							<ul id="panel-tab" class="nav nav-tabs pull-right">
-								<li (click)="selectTabPanel(layer.id,0)" [ngClass]="{'active': uiTabPanels[layer.id].panelstatus[0]}"><a data-toggle="tab"><i class="fa fa-filter"></i> <span class="hidden-xs">Filter</span></a></li>
-								<li (click)="selectTabPanel(layer.id,1)" [ngClass]="{'active': uiTabPanels[layer.id].panelstatus[1]}"><a data-toggle="tab"><i class="fa fa-info-circle"></i> <span class="hidden-xs">Info</span></a></li>
-								<li (click)="selectTabPanel(layer.id,2)" [ngClass]="{'active': uiTabPanels[layer.id].panelstatus[2]}" class="desktop-only"><a data-toggle="tab"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a></li>
+								<li (click)="selectTabPanel(layer.id,'filterpanel')" [ngClass]="{'active': uiLayerModels[layer.id].tabpanel.filterpanel.expanded}"><a data-toggle="tab"><i class="fa fa-filter"></i> <span class="hidden-xs">Filter</span></a></li>
+								<li (click)="selectTabPanel(layer.id,'infopanel')" [ngClass]="{'active': uiLayerModels[layer.id].tabpanel.infopanel.expanded}"><a data-toggle="tab"><i class="fa fa-info-circle"></i> <span class="hidden-xs">Info</span></a></li>
+								<li (click)="selectTabPanel(layer.id,'downloadpanel')" [ngClass]="{'active': uiLayerModels[layer.id].tabpanel.downloadpanel.expanded}" class="desktop-only"><a data-toggle="tab"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a></li>
 							</ul>
 							
 						</div>
 						
 						<div id="panel-tab-content" class="tab-content">
 							
-							<div class="tab-pane fade" [ngClass]="{'active in': uiTabPanels[layer.id].panelstatus[0]}">
+							<div class="tab-pane fade" [ngClass]="{'active in':uiLayerModels[layer.id].tabpanel.filterpanel.expanded}">
 								
 								<form>
 									<div class="form-group">
@@ -274,7 +274,7 @@
 								</form>
 							</div>
 							
-							<div class="tab-pane fade" [ngClass]="{'active in': uiTabPanels[layer.id].panelstatus[1]}">
+							<div class="tab-pane fade" [ngClass]="{'active in': uiLayerModels[layer.id].tabpanel.infopanel.expanded}">
 								<div><img src="template/img/demo/minimap.png" style="width: 98%;"></div>
 								<h4><span class="text-primary">Abstract</span></h4>
 								<p>ASTER Map AlOH group composition</p>
@@ -357,7 +357,7 @@
 									
 								</div>
 							</div>
-							<div class="tab-pane fade" [ngClass]="{'active in': uiTabPanels[layer.id].panelstatus[2]}">
+							<div class="tab-pane fade" [ngClass]="{'active in': uiLayerModels[layer.id].tabpanel.downloadpanel.expanded}">
 								
 								<form>
 									<div class="form-group">
