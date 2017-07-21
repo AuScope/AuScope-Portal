@@ -1,9 +1,9 @@
 import { Component, OnInit} from '@angular/core';
-import { LayerHandlerService } from '../portal-core-ag/service/CSWRecords/layer-handler.service';
+import { LayerHandlerService } from '../portal-core-ag/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
-import { UILayerModel } from '../model/ui/uilayer.model';
-import { UITabPanel } from '../model/ui/uitabpanel.model';
+import { UILayerModel } from './model/ui/uilayer.model';
+import { UITabPanel } from './model/ui/uitabpanel.model';
 
 
 

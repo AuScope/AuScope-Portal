@@ -3,12 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
 import { OlMapComponent } from './openlayermap/olmap.component';
 import { LayerPanelComponent } from './layerpanel/layerpanel.component';
-import { LayerHandlerService } from './portal-core-ag/service/CSWRecords/layer-handler.service';
+import { LayerHandlerService } from './portal-core-ag/service/cswrecords/layer-handler.service';
 import { AppConfig } from './portal-core-ag/appconfig/app.config';
 import { APP_CONFIG } from './portal-core-ag/appconfig/app.config';
 import { AuscopeConfiguration } from './appconfig/app.config';
-import {KeysPipe} from './portal-core-ag/UIUtilities/pipes';
-import { OlMapService } from './portal-core-ag/service/OpenlayerMap/ol-map.service';
+import {KeysPipe} from './portal-core-ag/uiutilities/pipes';
+import { OlMapService } from './portal-core-ag/service/openlayermap/ol-map.service';
 import { NgClass } from '@angular/common';
 
 
