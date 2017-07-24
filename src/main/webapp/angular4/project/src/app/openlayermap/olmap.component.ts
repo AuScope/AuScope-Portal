@@ -1,4 +1,4 @@
-import { OlMapService } from '../portal-core-ag/service/openlayermap/ol-map.service';
+import { OlMapObject } from '../portal-core-ag/service/openlayermap/ol-map-object';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import * as ol from 'openlayers';
 
@@ -16,12 +16,11 @@ export class OlMapComponent implements AfterViewInit {
     // This is necessary to access the html element to set the map target (after view init)!
     @ViewChild('mapElement') mapElement: ElementRef;
 
-    public map: any;
 
-    constructor(public olMapService: OlMapService) { }
+    constructor(public olMapObject: OlMapObject) { }
 
     // After view init the map target can be set!
     ngAfterViewInit() {
-        this.olMapService.getMap().setTarget(this.mapElement.nativeElement.id);
+        this.olMapObject.getMap().setTarget(this.mapElement.nativeElement.id);
     }
 }

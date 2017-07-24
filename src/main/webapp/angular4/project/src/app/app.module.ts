@@ -19,7 +19,9 @@ import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.compo
 
 // Services
 import { LayerHandlerService } from './portal-core-ag/service/cswrecords/layer-handler.service';
+import { OlMapObject } from './portal-core-ag/service/openlayermap/ol-map-object';
 import { OlMapService } from './portal-core-ag/service/openlayermap/ol-map.service';
+import { OlWMSService } from './portal-core-ag/service/openlayermap/ol-wms.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { OlMapService } from './portal-core-ag/service/openlayermap/ol-map.servi
   ],
   providers: [LayerHandlerService,
               OlMapService,
+              OlWMSService,
+              OlMapObject,
               {
                 provide: APP_CONFIG,
                 useValue: AuscopeConfiguration

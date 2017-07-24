@@ -1,9 +1,11 @@
 import { AppConfig, APP_CONFIG } from '../../appconfig/app.config';
+import { CSWRecordModel } from '../../modal/data/cswrecord.model';
 import { Injectable, Inject } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {LayerModel} from '../../modal/data/layer.model'
+import { OnlineResourceModel } from '../../modal/data/onlineresource.model';
 
 @Injectable()
 export class LayerHandlerService {
@@ -38,6 +40,56 @@ export class LayerHandlerService {
         });
     }
   }
+
+  public containsWMS(layer: LayerModel): boolean {
+     const cswRecords: CSWRecordModel[] = layer.cswRecords;
+      for (const cswRecord of cswRecords) {
+         for (const onlineResource of cswRecord.onlineResources){
+           if (onlineResource.type === 'WMS') {
+             return true;
+           }
+         }
+      }
+      return false;
+  }
+
+  public getWMSResource (layer: LayerModel): OnlineResourceModel[] {
+      const cswRecords: CSWRecordModel[] = layer.cswRecords;
+      const wmsOnlineResource = [];
+      for (const cswRecord of cswRecords) {
+         for (const onlineResource of cswRecord.onlineResources){
+           if (onlineResource.type === 'WMS') {
+             wmsOnlineResource.push(onlineResource);
+           }
+         }
+      }
+      return wmsOnlineResource;
+  }
+
+//  public containsWFS(layer: LayerModel): boolean {
+//     const cswRecords: CSWRecordModel[] = layer.cswRecords;
+//      for (const cswRecord of cswRecords) {
+//         for (const onlineResource of cswRecord.onlineResources){
+//           if ((<OnlineResourceModel>onlineResource).type === 'WFS') {
+//             return true;
+//           }
+//         }
+//      }
+//      return false;
+//  }
+//
+//  public getWFSResource (layer: LayerModel): OnlineResourceModel[] {
+//      const cswRecords: CSWRecordModel[] = layer.cswRecords;
+//      const wfsOnlineResource = [];
+//      for (const cswRecord of cswRecords) {
+//         for (const onlineResource of cswRecord.onlineResources){
+//           if ((<OnlineResourceModel>onlineResource).type === 'WFS') {
+//             wfsOnlineResource.push(onlineResource);
+//           }
+//         }
+//      }
+//      return wfsOnlineResource;
+//  }
 
 
 

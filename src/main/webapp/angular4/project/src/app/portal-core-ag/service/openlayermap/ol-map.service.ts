@@ -1,36 +1,19 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx';
 import {LayerModel} from '../../modal/data/layer.model'
+import { LayerHandlerService } from '../cswrecords/layer-handler.service';
+import { OlMapObject } from './ol-map-object';
+import { OlWMSService } from './ol-wms.service';
 import * as ol from 'openlayers';
 
 @Injectable()
 export class OlMapService {
 
-  map: any;
-
-  constructor() {
-    const osm_layer: any = new ol.layer.Tile({
-        source: new ol.source.OSM()
-    });
-
-    this.map = new ol.Map({
-        layers: [osm_layer],
-        view: new ol.View({
-            center: [14793316.706200, -2974317.644633],
-            zoom: 4
-        })
-    });
-
-  }
-
-
-  public getMap(): any {
-    return this.map;
-  }
+  constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService) {}
 
   public addLayer(layer: LayerModel): void {
-    console.log(layer.name)
+    if (this.layerHandlerService.containsWMS(layer)) {
+      this.olWMSService.addLayer(layer);
+    }
   }
 
 
