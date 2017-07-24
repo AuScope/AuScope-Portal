@@ -102,7 +102,7 @@ Ext.define('auscope.layer.filterer.forms.RemanentAnomaliesFilterForm', {
                     },{
                         xtype: 'numberfield',
                         name: 'ARRAMax',
-                        decimalPrecision: 01,
+                        decimalPrecision: 1,
                         allowBlank: true,
                         minValue: 0,
                         maxValue: 180, 
