@@ -1,0 +1,51 @@
+<form>
+	<div class="form-group">
+		<label class="control-label">Default <span class="text-danger">*</span></label>
+		<select class="selectpicker form-control">
+			<option>Mustard</option>
+			<option>Ketchup</option>
+			<option>Relish</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label class="control-label">Multiple SelectBox <span class="text-danger">*</span></label>
+		<select class="selectpicker form-control" multiple data-max-options="3">
+			<optgroup label="Picnic">
+				<option>Mustard</option>
+				<option>Ketchup</option>
+				<option>Relish</option>
+			</optgroup>
+			<optgroup label="Camping">
+				<option>Tent</option>
+				<option>Flashlight</option>
+				<option>Toilet Paper</option>
+			</optgroup>
+		</select>
+	</div>
+	<div class="form-group">
+		<label class="control-label">Live Search <span class="text-danger">*</span></label>
+		<select class="selectpicker form-control" data-live-search="true">
+			<option>Mustard</option>
+			<option>Ketchup</option>
+			<option>Relish</option>
+			<option>Tent</option>
+			<option>Flashlight</option>
+			<option>Toilet Paper</option>
+		</select>
+	</div>
+	<div class="form-group m-b-10">
+		<label class="control-label">With Button Class <span class="text-danger">*</span></label>
+		<select class="selectpicker form-control" data-style="btn-purple">
+			<option>Mustard</option>
+			<option>Ketchup</option>
+			<option>Relish</option>
+			<option>Tent</option>
+			<option>Flashlight</option>
+			<option>Toilet Paper</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<button type="button" class="btn btn-primary" (click)='addLayer(layer)'>Add Layer</button>
+	</div>
+	
+</form>

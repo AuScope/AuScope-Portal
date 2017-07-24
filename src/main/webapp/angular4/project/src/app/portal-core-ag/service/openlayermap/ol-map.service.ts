@@ -29,6 +29,9 @@ export class OlMapService {
     return this.map;
   }
 
+  public addLayer(layer: LayerModel): void {
+    console.log(layer.name)
+  }
 
 
 }

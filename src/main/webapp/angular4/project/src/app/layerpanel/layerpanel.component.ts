@@ -7,7 +7,6 @@ import { UITabPanel } from './model/ui/uitabpanel.model';
 
 
 
-
 declare var App: any;
 
 @Component({
@@ -29,13 +28,6 @@ export class LayerPanelComponent implements OnInit {
 
 
     public selectTabPanel(layerId, panelType) {
-//       for (const key in this.uiLayerModels[layerId].tabpanel) {
-//         if (key === panelType) {
-//          (<UILayerModel>this.uiLayerModels[layerId]).tabpanel[panelType].expanded = true;
-//         }else {
-//           (<UILayerModel>this.uiLayerModels[layerId]).tabpanel[panelType].expanded = false;
-//         }
-//       }
       (<UILayerModel>this.uiLayerModels[layerId]).tabpanel.setPanelOpen(panelType);
      }
 
