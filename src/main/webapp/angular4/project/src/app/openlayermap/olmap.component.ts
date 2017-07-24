@@ -1,7 +1,8 @@
+import { OlMapService } from '../portal-core-ag/service/openlayermap/ol-map.service';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import * as ol from 'openlayers';
 
-// This is necessary to access ol3!
-declare var ol: any;
+
 
 @Component({
     selector: 'app-ol-map',
@@ -17,23 +18,10 @@ export class OlMapComponent implements AfterViewInit {
 
     public map: any;
 
-    constructor() {
-        const osm_layer: any = new ol.layer.Tile({
-            source: new ol.source.OSM()
-        });
-
-        // note that the target cannot be set here!
-        this.map = new ol.Map({
-            layers: [osm_layer],
-            view: new ol.View({
-                center: [14793316.706200,	-2974317.644633],
-                zoom: 4
-            })
-        });
-    }
+    constructor(public olMapService: OlMapService) { }
 
     // After view init the map target can be set!
     ngAfterViewInit() {
-        this.map.setTarget(this.mapElement.nativeElement.id);
+        this.olMapService.getMap().setTarget(this.mapElement.nativeElement.id);
     }
 }
