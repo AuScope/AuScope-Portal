@@ -8,6 +8,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
 import * as ol from 'openlayers';
 import { Observable } from 'rxjs/Rx';
+import { Constants } from '../../utility/constants.service';
 
 @Injectable()
 export class OlWMSService {
@@ -31,8 +32,8 @@ export class OlWMSService {
        'FORMAT': 'image/png',
        'TRANSPARENT': true,
        'VERSION': '1.3.0',
-       'WIDTH' : this.config.TILE_SIZE,
-       'HEIGHT' : this.config.TILE_SIZE
+       'WIDTH' : Constants.TILE_SIZE,
+       'HEIGHT' : Constants.TILE_SIZE
      }
 
     if (sld_body) {
@@ -50,8 +51,8 @@ export class OlWMSService {
        'FORMAT': 'image/png',
        'TRANSPARENT': true,
        'VERSION': '1.1.1',
-       'WIDTH' : this.config.TILE_SIZE,
-       'HEIGHT' : this.config.TILE_SIZE
+       'WIDTH' : Constants.TILE_SIZE,
+       'HEIGHT' : Constants.TILE_SIZE
      }
     if (sld_body) {
       params['sld_body'] = sld_body;

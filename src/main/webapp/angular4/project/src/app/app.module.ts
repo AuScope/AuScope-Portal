@@ -22,6 +22,8 @@ import { LayerHandlerService } from './portal-core-ag/service/cswrecords/layer-h
 import { OlMapObject } from './portal-core-ag/service/openlayermap/ol-map-object';
 import { OlMapService } from './portal-core-ag/service/openlayermap/ol-map.service';
 import { OlWMSService } from './portal-core-ag/service/wms/ol-wms.service';
+import { OlWFSService } from './portal-core-ag/service/wfs/ol-wfs.service';
+import { GMLParserService } from './portal-core-ag/utility/gmlparser.service';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { OlWMSService } from './portal-core-ag/service/wms/ol-wms.service';
               OlMapService,
               OlWMSService,
               OlMapObject,
+              OlWFSService,
+              GMLParserService,
               {
                 provide: APP_CONFIG,
                 useValue: AuscopeConfiguration

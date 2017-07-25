@@ -66,30 +66,30 @@ export class LayerHandlerService {
       return wmsOnlineResource;
   }
 
-//  public containsWFS(layer: LayerModel): boolean {
-//     const cswRecords: CSWRecordModel[] = layer.cswRecords;
-//      for (const cswRecord of cswRecords) {
-//         for (const onlineResource of cswRecord.onlineResources){
-//           if ((<OnlineResourceModel>onlineResource).type === 'WFS') {
-//             return true;
-//           }
-//         }
-//      }
-//      return false;
-//  }
-//
-//  public getWFSResource (layer: LayerModel): OnlineResourceModel[] {
-//      const cswRecords: CSWRecordModel[] = layer.cswRecords;
-//      const wfsOnlineResource = [];
-//      for (const cswRecord of cswRecords) {
-//         for (const onlineResource of cswRecord.onlineResources){
-//           if ((<OnlineResourceModel>onlineResource).type === 'WFS') {
-//             wfsOnlineResource.push(onlineResource);
-//           }
-//         }
-//      }
-//      return wfsOnlineResource;
-//  }
+  public containsWFS(layer: LayerModel): boolean {
+     const cswRecords: CSWRecordModel[] = layer.cswRecords;
+      for (const cswRecord of cswRecords) {
+         for (const onlineResource of cswRecord.onlineResources){
+           if (onlineResource.type === 'WFS') {
+             return true;
+           }
+         }
+      }
+      return false;
+  }
+
+  public getWFSResource (layer: LayerModel): OnlineResourceModel[] {
+      const cswRecords: CSWRecordModel[] = layer.cswRecords;
+      const wfsOnlineResource = [];
+      for (const cswRecord of cswRecords) {
+         for (const onlineResource of cswRecord.onlineResources){
+           if (onlineResource.type === 'WFS') {
+             wfsOnlineResource.push(onlineResource);
+           }
+         }
+      }
+      return wfsOnlineResource;
+  }
 
 
 
