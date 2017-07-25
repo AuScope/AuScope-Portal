@@ -4,7 +4,7 @@ import { Injectable, Inject, SkipSelf } from '@angular/core';
 import {LayerModel} from '../../modal/data/layer.model'
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from './ol-map-object';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
 import * as ol from 'openlayers';
 import { Observable } from 'rxjs/Rx';
@@ -27,7 +27,6 @@ export class OlWMSService {
      const params = {
        'LAYERS': layers,
        'TILED': true,
-       // 'sld_body': sld_body,
        'DISPLAYOUTSIDEMAXEXTENT': true,
        'FORMAT': 'image/png',
        'TRANSPARENT': true,
@@ -47,7 +46,6 @@ export class OlWMSService {
      const params = {
        'LAYERS': layers,
        'TILED': true,
-       // 'sld_body': sld_body,
        'DISPLAYOUTSIDEMAXEXTENT': true,
        'FORMAT': 'image/png',
        'TRANSPARENT': true,
@@ -62,44 +60,39 @@ export class OlWMSService {
 
   }
 
-  public getSldBody(sldUrl: string): void {
+  public getSldBody(sldUrl: string): Observable<any> {
     if (!sldUrl) {
       return Observable.create(function () {
             return undefined;
         });
     }
 
-
-const headers = new Headers({ 'Content-Type': 'application/xml' });
-
-
-    this.http.get('../' + sldUrl, headers).subscribe(response => {
-      return '1234';
+    return this.http.get(sldUrl, {responseType: 'text'}).map(response => {
+      return response;
     });
   }
 
 
   public addLayer(layer: LayerModel): void {
     const wmsOnlineResources = this.layerHandlerService.getWMSResource(layer);
-     this.getSldBody(layer.proxyStyleUrl);
-//     this.getSldBody(layer.proxyStyleUrl).subscribe(response => {
-//        for (const wmsOnlineResource of wmsOnlineResources){
-//          const params = wmsOnlineResource.version.startsWith('1.3') ?
-//            this.getWMS1_3_0param(wmsOnlineResource.name, response) :
-//            this.getWMS1_1param(wmsOnlineResource.name, response);
-//
-//          const wmsTile =  new ol.layer.Tile({
-//              // extent: this.map.getView().calculateExtent(this.map.getSize()),
-//              source: new ol.source.TileWMS({
-//                url: wmsOnlineResource.url,
-//                params: params,
-//                serverType: 'geoserver',
-//                projection: 'EPSG:4326'
-//              })
-//            })
-//          this.map.addLayer(wmsTile);
-//        }
-//     })
+     this.getSldBody(layer.proxyStyleUrl).subscribe(response => {
+        for (const wmsOnlineResource of wmsOnlineResources){
+          const params = wmsOnlineResource.version.startsWith('1.3') ?
+            this.getWMS1_3_0param(wmsOnlineResource.name, response) :
+            this.getWMS1_1param(wmsOnlineResource.name, response);
+
+          const wmsTile =  new ol.layer.Tile({
+              extent: this.map.getView().calculateExtent(this.map.getSize()),
+              source: new ol.source.TileWMS({
+                url: wmsOnlineResource.url,
+                params: params,
+                serverType: 'geoserver',
+                projection: 'EPSG:4326'
+              })
+            })
+          this.map.addLayer(wmsTile);
+        }
+     })
 
   }
 
