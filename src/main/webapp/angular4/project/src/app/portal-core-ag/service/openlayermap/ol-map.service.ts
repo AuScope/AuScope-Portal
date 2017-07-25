@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import {LayerModel} from '../../modal/data/layer.model'
+import {LayerModel} from '../../modal/data/layer.model';
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from './ol-map-object';
-import { OlWMSService } from './ol-wms.service';
+import { OlWMSService } from '../wms/ol-wms.service';
 import * as ol from 'openlayers';
 
 @Injectable()
@@ -18,3 +18,4 @@ export class OlMapService {
 
 
 }
+

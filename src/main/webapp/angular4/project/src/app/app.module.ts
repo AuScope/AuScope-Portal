@@ -21,7 +21,7 @@ import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.compo
 import { LayerHandlerService } from './portal-core-ag/service/cswrecords/layer-handler.service';
 import { OlMapObject } from './portal-core-ag/service/openlayermap/ol-map-object';
 import { OlMapService } from './portal-core-ag/service/openlayermap/ol-map.service';
-import { OlWMSService } from './portal-core-ag/service/openlayermap/ol-wms.service';
+import { OlWMSService } from './portal-core-ag/service/wms/ol-wms.service';
 
 @NgModule({
   declarations: [

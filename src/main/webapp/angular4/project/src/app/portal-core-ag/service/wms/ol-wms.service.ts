@@ -3,7 +3,7 @@ import { CSWRecordModel } from '../../modal/data/cswrecord.model';
 import { Injectable, Inject, SkipSelf } from '@angular/core';
 import {LayerModel} from '../../modal/data/layer.model'
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
-import { OlMapObject } from './ol-map-object';
+import { OlMapObject } from '../openlayermap/ol-map-object';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
 import * as ol from 'openlayers';
