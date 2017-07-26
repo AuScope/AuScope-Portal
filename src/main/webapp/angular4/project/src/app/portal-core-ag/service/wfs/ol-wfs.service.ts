@@ -51,9 +51,9 @@ export class OlWFSService {
        feature.setStyle([
           new ol.style.Style({
              image: new ol.style.Icon(({
-                     anchor: [16, 32],
-                     anchorXUnits: 'pixels',
-                     anchorYUnits: 'pixels',
+                     anchor: [0.5, 1],
+                     anchorXUnits: 'fraction',
+                     anchorYUnits: 'fraction',
                      // size: [32, 32],
                      scale: 0.5,
                      opacity: 1,
