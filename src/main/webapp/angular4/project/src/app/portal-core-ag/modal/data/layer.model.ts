@@ -17,6 +17,6 @@ export class LayerModel {
   proxyUrl: string;
   relatedRecords: any;
   singleTile: boolean;
-  staticLegendUrl: boolean
-
+  staticLegendUrl: boolean;
+  iconUrl: string;
 }

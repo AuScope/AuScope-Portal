@@ -63,9 +63,10 @@ export class OlWMSService {
 
   public getSldBody(sldUrl: string): Observable<any> {
     if (!sldUrl) {
-      return Observable.create(function () {
-            return undefined;
-        });
+       return Observable.create(observer => {
+         observer.next(null);
+         observer.complete();
+       })
     }
 
     return this.http.get(sldUrl, {responseType: 'text'}).map(response => {
@@ -91,7 +92,7 @@ export class OlWMSService {
                 projection: 'EPSG:4326'
               })
             })
-          this.map.addLayer(wmsTile);
+          this.olMapObject.addLayerByName(wmsTile, layer.id);
         }
      })
 

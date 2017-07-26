@@ -5,12 +5,13 @@ import * as ol from 'openlayers';
 export class OlMapObject {
 
   private map: ol.Map;
+  private activeLayer: {};
 
   constructor() {
     const osm_layer: any = new ol.layer.Tile({
         source: new ol.source.OSM()
     });
-
+    this.activeLayer = {};
     this.map = new ol.Map({
         layers: [osm_layer],
         view: new ol.View({
@@ -26,7 +27,15 @@ export class OlMapObject {
     return this.map;
   }
 
+  public addLayerByName(layer: ol.layer.Layer, name: string): void {
+    this.activeLayer[name] = layer
+    this.map.addLayer(layer);
+  }
 
+
+  public getLayerByName(name: string): ol.layer.Layer {
+    return this.activeLayer[name];
+  }
 
 
 }
