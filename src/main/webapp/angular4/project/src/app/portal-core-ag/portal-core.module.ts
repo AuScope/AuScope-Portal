@@ -1,5 +1,5 @@
-import { NgModule, InjectionToken, Optional, SkipSelf, ModuleWithProviders } from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 // Configs
 import { AppConfig, APP_CONFIG } from './appconfig/app.config';
