@@ -1,5 +1,3 @@
-import { AppConfig } from '../portal-core-ag/appconfig/app.config';
-
-export const AuscopeConfiguration: AppConfig = {
+export const AuscopeConfiguration = {
   getCSWRecordUrl: '../getKnownLayers.do'
 };
