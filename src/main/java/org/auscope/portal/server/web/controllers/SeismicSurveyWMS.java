@@ -45,7 +45,7 @@ public class SeismicSurveyWMS extends BaseCSWController {
     }
 
     @RequestMapping(value = "/getSeismicCSWRecord.do", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView getSeismicCSWRecord(@RequestParam("service_URL") String serviceUrl,
+    public ModelAndView getSeismicCSWRecord(@RequestParam("serviceUrl") String serviceUrl,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
 

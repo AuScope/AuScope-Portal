@@ -28,7 +28,7 @@ Ext.define('auscope.layer.querier.wms.GeotransectQuerier', {
                 type: 'ajax',
                 url: 'getSeismicCSWRecord.do',
                 extraParams: {
-                    service_URL : cswrecordurl
+                    serviceUrl : cswrecordurl
                 },
                 reader: {
                     type: 'json',

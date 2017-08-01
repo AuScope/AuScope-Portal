@@ -92,7 +92,7 @@ public class MineralTenementController extends BasePortalController {
 
     @RequestMapping("/getMineralTenementFeatureInfo.do")
     public void getMineralTenementFeatureInfo(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("WMS_URL") String wmsUrl, @RequestParam("lat") String latitude,
+            @RequestParam("serviceUrl") String serviceUrl, @RequestParam("lat") String latitude,
             @RequestParam("lng") String longitude, @RequestParam("QUERY_LAYERS") String queryLayers,
             @RequestParam("x") String x, @RequestParam("y") String y, @RequestParam("BBOX") String bbox,
             @RequestParam("WIDTH") String width, @RequestParam("HEIGHT") String height,
@@ -106,7 +106,7 @@ public class MineralTenementController extends BasePortalController {
         double lng2 = Double.parseDouble(bboxParts[2]);
         double lat1 = Double.parseDouble(bboxParts[1]);
         double lat2 = Double.parseDouble(bboxParts[3]);
-        String featureInfoString = this.mineralTenementWMSService.getFeatureInfo(wmsUrl, infoFormat, queryLayers, "EPSG:3857",
+        String featureInfoString = this.mineralTenementWMSService.getFeatureInfo(serviceUrl, infoFormat, queryLayers, "EPSG:3857",
                 Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
                 Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude),
                 Double.parseDouble(latitude), (int) (Double.parseDouble(x)), (int) (Double.parseDouble(y)), "", sldBody,
@@ -116,7 +116,7 @@ public class MineralTenementController extends BasePortalController {
 
         String responseString = "";
         if (xmlDocument.getDocumentElement().getLocalName().equals("FeatureInfoResponse")) {
-            responseString = this.arcGISToMineralTenementTransformer.convert(featureInfoString, wmsUrl);
+            responseString = this.arcGISToMineralTenementTransformer.convert(featureInfoString, serviceUrl);
         } else {
             responseString = featureInfoString;
         };

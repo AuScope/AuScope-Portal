@@ -53,7 +53,7 @@ public class ArcGISToMineralTenement extends PortalXSLTTransformer {
      */
     public String convert(StreamSource wms, String serviceUrl) {
         Properties stylesheetParams = new Properties();
-        stylesheetParams.setProperty("serviceURL", serviceUrl);
+        stylesheetParams.setProperty("serviceUrl", serviceUrl);
         return convert(wms, stylesheetParams);
     }
 }

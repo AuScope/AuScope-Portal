@@ -86,7 +86,7 @@ public class BoreholeService extends BaseWFSService {
     /**
      * Get all boreholes from a given service url and return the response
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param bbox
      *            Set to the bounding box in which to fetch results, otherwise set it to null
      * @param restrictToIDList
@@ -94,7 +94,7 @@ public class BoreholeService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+    public WFSResponse getAllBoreholes(String serviceUrl, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList, String outputFormat,String optionalFilters)
                     throws Exception {
         String filterString;
@@ -122,7 +122,7 @@ public class BoreholeService extends BaseWFSService {
         HttpRequestBase method = null;
         try {
             // Create a GetFeature request with an empty filter - get all
-            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
+            method = this.generateWFSRequest(serviceUrl, getTypeName(), null, filterString, maxFeatures, null,
                     ResultType.Results, outputFormat);
             String responseData = this.httpServiceCaller.getMethodResponseAsString(method);
 
@@ -135,7 +135,7 @@ public class BoreholeService extends BaseWFSService {
     /**
      * Counts all boreholes from a given service url and return the response
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param bbox
      *            Set to the bounding box in which to fetch results, otherwise set it to null
      * @param restrictToIDList
@@ -143,7 +143,7 @@ public class BoreholeService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public int countAllBoreholes(String serviceURL, String boreholeName, String custodian,
+    public int countAllBoreholes(String serviceUrl, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, List<String> restrictToIDList)
                     throws Exception {
         String filterString;
@@ -157,7 +157,7 @@ public class BoreholeService extends BaseWFSService {
         HttpRequestBase method = null;
         try {
             // Create a GetFeature request with an empty filter - get all
-            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
+            method = this.generateWFSRequest(serviceUrl, getTypeName(), null, filterString, maxFeatures, null,
                     ResultType.Hits, null);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
 

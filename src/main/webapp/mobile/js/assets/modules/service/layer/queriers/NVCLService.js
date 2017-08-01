@@ -39,14 +39,14 @@ allModules.service('NVCLService', ['$http', '$q', 'QuerierPanelService', functio
     /**
     * Returns a list of logids, used when referring to the core sample for various services
     * @method getNVCLLogs
-    * @param serviceURL online resource URL
+    * @param serviceUrl online resource URL
     * @dataSetID dataset id for core sample
     * @return list of logids
     */    
-    this.getNVCLLogs = function(serviceURL, dataSetID) {
+    this.getNVCLLogs = function(serviceUrl, dataSetID) {
         return $http.get('../getNVCL2_0_Logs.do', {
                         params: {
-                            serviceUrl: serviceURL,
+                            serviceUrl: serviceUrl,
                             datasetId: dataSetID,
                             mosaicService: true
                         }
@@ -100,8 +100,8 @@ allModules.service('NVCLService', ['$http', '$q', 'QuerierPanelService', functio
     * @param typeName data type name
     * @param featureId id for requested feature
     */
-    this.getCoreDisplay = function(serviceURL, typeName, featureId) {
-        var dataServiceUrl = this.getNVCLDataServiceUrl(serviceURL);
+    this.getCoreDisplay = function(serviceUrl, typeName, featureId) {
+        var dataServiceUrl = this.getNVCLDataServiceUrl(serviceUrl);
         
         var dotPos = featureId.lastIndexOf('.');
         if (dotPos>0) {

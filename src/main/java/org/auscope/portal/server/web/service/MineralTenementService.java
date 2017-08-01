@@ -70,7 +70,7 @@ public class MineralTenementService extends BaseWFSService {
         return generateFilterString(filter, bbox);
     }
 
-    public WFSResponse getAllTenements(String serviceURL, String tenementName, String owner, int maxFeatures,
+    public WFSResponse getAllTenements(String serviceUrl, String tenementName, String owner, int maxFeatures,
             FilterBoundingBox bbox, String outputFormat, MineralTenementServiceProviderType mineralTenementServiceProviderType) throws Exception {
         String filterString;
         MineralTenementFilter mineralTenementFilter = new MineralTenementFilter(tenementName, null, owner, null, null, null, null, mineralTenementServiceProviderType);
@@ -83,7 +83,7 @@ public class MineralTenementService extends BaseWFSService {
         HttpRequestBase method = null;
 
         try {
-            method = this.generateWFSRequest(serviceURL, "mt:MineralTenement", null, filterString, maxFeatures, null,
+            method = this.generateWFSRequest(serviceUrl, "mt:MineralTenement", null, filterString, maxFeatures, null,
                     ResultType.Results,outputFormat);
             String responseGML = this.httpServiceCaller.getMethodResponseAsString(method);
             return new WFSResponse(responseGML, method);
@@ -93,7 +93,7 @@ public class MineralTenementService extends BaseWFSService {
 
     }
     
-    public WFSCountResponse getTenementCount(String serviceURL, String tenementName, String owner, int maxFeatures,
+    public WFSCountResponse getTenementCount(String serviceUrl, String tenementName, String owner, int maxFeatures,
             FilterBoundingBox bbox, MineralTenementServiceProviderType mineralTenementServiceProviderType) throws PortalServiceException, URISyntaxException {
         // TODO Auto-generated method stub
         String filterString;
@@ -106,7 +106,7 @@ public class MineralTenementService extends BaseWFSService {
 
         HttpRequestBase method = null;
 
-        method = generateWFSRequest(serviceURL, "mt:MineralTenement", null, filterString, maxFeatures, null,
+        method = generateWFSRequest(serviceUrl, "mt:MineralTenement", null, filterString, maxFeatures, null,
                 ResultType.Hits);
         return getWfsFeatureCount(method);
 

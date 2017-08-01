@@ -50,7 +50,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
     @Test
     public void testMineDownload() throws Exception {
         final String mineName = "testMine";
-        final String serviceURL = "http://testblah.com";
+        final String serviceUrl = "http://testblah.com";
         final String resultXML = "<result>this is a test</result>";
         final String outputFormat = "gml";
         final ByteArrayInputStream ins = new ByteArrayInputStream(resultXML.getBytes());
@@ -61,12 +61,12 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();
                 will(returnValue(out));
-                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0, null, outputFormat);
+                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceUrl, mineName, null, 0, null, outputFormat);
                 will(returnValue(ins));
             }
         });
 
-        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0, null, outputFormat, this.response);
+        this.earthResourcesDownloadController.doMineFilterDownload(serviceUrl, mineName, null, 0, null, outputFormat, this.response);
         Assert.assertTrue(out.getInputString().equals(resultXML));
 
     }
@@ -79,7 +79,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
     @Test
     public void testMineDownloadException() throws Exception {
         final String mineName = "testMine";
-        final String serviceURL = "http://testblah.com";
+        final String serviceUrl = "http://testblah.com";
         final String resultXML = "<result>this is a test</result>";
         final String outputFormat = null;
         final MyServletOutputStream out = new MyServletOutputStream(resultXML.length());
@@ -90,12 +90,12 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 allowing(response).setContentType(with(any(String.class)));
                 oneOf(response).getOutputStream();
                 will(returnValue(out));
-                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceURL, mineName, null, 0, null, outputFormat);
+                oneOf(mineralOccurrenceDownloadService).downloadMinesGml(serviceUrl, mineName, null, 0, null, outputFormat);
                 will(throwException(new PortalServiceException(mockMethod)));
             }
         });
 
-        this.earthResourcesDownloadController.doMineFilterDownload(serviceURL, mineName, null, 0, null, outputFormat, this.response);
+        this.earthResourcesDownloadController.doMineFilterDownload(serviceUrl, mineName, null, 0, null, outputFormat, this.response);
         Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));
     }
 
@@ -190,7 +190,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
      */
     @Test
     public void testMineActivityDownload() throws Exception {
-        final String serviceURL = "http://testblah.com";
+        final String serviceUrl = "http://testblah.com";
         final int maxFeatures = 21341;
         final String mineName = "mineName"; // to get all mines
         final String startDate = "2010-01-01";
@@ -209,7 +209,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 oneOf(response).getOutputStream();
                 will(returnValue(out));
                 oneOf(mineralOccurrenceDownloadService)
-                        .downloadMiningActivityGml(serviceURL, mineName,
+                        .downloadMiningActivityGml(serviceUrl, mineName,
                                 startDate, endDate, oreProcessed,
                                 producedMaterial, cutOffGrade, production,
                                 maxFeatures, null, null);
@@ -218,7 +218,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         });
 
         this.earthResourcesDownloadController.doMiningActivityFilterDownload(
-                serviceURL, mineName, startDate, endDate, oreProcessed,
+                serviceUrl, mineName, startDate, endDate, oreProcessed,
                 producedMaterial, cutOffGrade, production, null, maxFeatures, null,
                 this.response);
         Assert.assertTrue(out.getInputString().equals(resultXML));
@@ -231,7 +231,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
      */
     @Test
     public void testMineActivityDownloadException() throws Exception {
-        final String serviceURL = "http://testblah.com";
+        final String serviceUrl = "http://testblah.com";
         final int maxFeatures = 21341;
         final String mineName = "mineName"; // to get all mines
         final String startDate = "2010-01-01";
@@ -250,7 +250,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
                 oneOf(response).getOutputStream();
                 will(returnValue(out));
                 oneOf(mineralOccurrenceDownloadService)
-                        .downloadMiningActivityGml(serviceURL, mineName,
+                        .downloadMiningActivityGml(serviceUrl, mineName,
                                 startDate, endDate, oreProcessed,
                                 producedMaterial, cutOffGrade, production,
                                 maxFeatures, null, null);
@@ -259,7 +259,7 @@ public class TestEarthResourcesDownloadController extends PortalTestClass {
         });
 
         this.earthResourcesDownloadController.doMiningActivityFilterDownload(
-                serviceURL, mineName, startDate, endDate, oreProcessed,
+                serviceUrl, mineName, startDate, endDate, oreProcessed,
                 producedMaterial, cutOffGrade, production, null, maxFeatures,
                 null, this.response);
         Assert.assertTrue(out.getInputString().startsWith("<StackTrace>http://testblah.com"));

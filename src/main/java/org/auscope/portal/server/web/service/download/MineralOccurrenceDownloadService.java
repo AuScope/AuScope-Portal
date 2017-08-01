@@ -97,7 +97,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param commodityName
      * @param measureType
      * @param minOreAmount
@@ -111,7 +111,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
      * @return
      * @throws URISyntaxException
      */
-    public InputStream downloadMineralOccurrenceGml(String serviceURL,
+    public InputStream downloadMineralOccurrenceGml(String serviceUrl,
             String commodityName,
             String measureType,
             String minOreAmount,
@@ -131,7 +131,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
 
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
                 maxFeatures, null, ResultType.Results, null, startIndex);
         try {
             return httpServiceCaller.getMethodResponseAsStream(method);
@@ -144,7 +144,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
     /**
      * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param mineName
      * @param startDate
      * @param endDate
@@ -158,7 +158,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public InputStream downloadMiningActivityGml(String serviceURL,
+    public InputStream downloadMiningActivityGml(String serviceUrl,
             String mineName,
             String startDate,
             String endDate,
@@ -176,7 +176,7 @@ public class MineralOccurrenceDownloadService extends BaseWFSService {
                 producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
                 maxFeatures, null, ResultType.Results, null, startIndex);
         try {
             return httpServiceCaller.getMethodResponseAsStream(method);

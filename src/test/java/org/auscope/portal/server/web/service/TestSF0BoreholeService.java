@@ -69,7 +69,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
     @Test
     public void testGetAllBoreholesNoBbox() throws Exception {
         final FilterBoundingBox bbox = null;
-        final String serviceURL = "http://example.com";
+        final String serviceUrl = "http://example.com";
         final int maxFeatures = 45;
         final String boreholeName = "borehole-name";
         final String custodian = "custodian";
@@ -80,7 +80,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         context.checking(new Expectations() {
             {
 
-                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")),
+                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceUrl)), with(equal("gsmlp:BoreholeView")),
                         with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)),
                         with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));
                 will(returnValue(mockMethod));
@@ -90,7 +90,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
             }
         });
 
-        WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+        WFSResponse result = service.getAllBoreholes(serviceUrl, boreholeName, custodian,
                 dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getData());
@@ -127,7 +127,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
     @Test
     public void testGetAllBoreholesBbox() throws Exception {
         final FilterBoundingBox bbox = new FilterBoundingBox("mySrs", new double[] {0, 1}, new double[] {2, 3});
-        final String serviceURL = "http://example.com";
+        final String serviceUrl = "http://example.com";
         final int maxFeatures = 45;
         final String boreholeName = "borehole-name";
         final String custodian = "custodian";
@@ -138,7 +138,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
         context.checking(new Expectations() {
             {
 
-                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")),
+                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceUrl)), with(equal("gsmlp:BoreholeView")),
                         with(any(String.class)), with(equal(maxFeatures)), with(any(String.class)),
                         with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));
                 will(returnValue(mockMethod));
@@ -147,7 +147,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
             }
         });
 
-        WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+        WFSResponse result = service.getAllBoreholes(serviceUrl, boreholeName, custodian,
                 dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getData());
@@ -162,7 +162,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
      */
     @Test
     public void testGetRestrictedBoreholesBbox() throws Exception {
-        final String serviceURL = "http://example.com";
+        final String serviceUrl = "http://example.com";
         final int maxFeatures = 45;
         final String boreholeName = "asda";
         final String custodian = "shaksdhska";
@@ -174,7 +174,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceURL)), with(equal("gsmlp:BoreholeView")),
+                oneOf(mockMethodMaker).makePostMethod(with(equal(serviceUrl)), with(equal("gsmlp:BoreholeView")),
                         with(equal(filterString)), with(equal(maxFeatures)), with(any(String.class)),
                         with(equal(ResultType.Results)), with(equal((String) null)), with(equal((String) null)));
                 will(returnValue(mockMethod));
@@ -184,7 +184,7 @@ public class TestSF0BoreholeService extends PortalTestClass {
             }
         });
 
-        WFSResponse result = service.getAllBoreholes(serviceURL, boreholeName, custodian,
+        WFSResponse result = service.getAllBoreholes(serviceUrl, boreholeName, custodian,
                 dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, null);
         Assert.assertNotNull(result);
         Assert.assertEquals(gmlString, result.getData());

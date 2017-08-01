@@ -163,7 +163,7 @@ public class MineralOccurrenceService extends BaseWFSService {
     /**
      * Given a list of parameters, call a service and get the Mineral Occurrence GML
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param commodityName
      * @param measureType
      * @param minOreAmount
@@ -177,7 +177,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @return
      * @throws URISyntaxException
      */
-    public WFSResponse getMineralOccurrenceGml(String serviceURL,
+    public WFSResponse getMineralOccurrenceGml(String serviceUrl,
             String commodityName,
             String measureType,
             String minOreAmount,
@@ -196,7 +196,7 @@ public class MineralOccurrenceService extends BaseWFSService {
 
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
                 maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
@@ -209,7 +209,7 @@ public class MineralOccurrenceService extends BaseWFSService {
     /**
      * Given a list of parameters, call a service and get the count of Mineral Occurrence GML
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param commodityName
      * @param measureType
      * @param minOreAmount
@@ -223,7 +223,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @return
      * @throws URISyntaxException
      */
-    public WFSCountResponse getMineralOccurrenceCount(String serviceURL,
+    public WFSCountResponse getMineralOccurrenceCount(String serviceUrl,
             String commodityName,
             String measureType,
             String minOreAmount,
@@ -241,7 +241,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                 minCommodityAmountUOM,"");
 
         String filterString = generateFilterString(filter, bbox);
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINERAL_OCCURRENCE_FEATURE_TYPE, null, filterString,
                 maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }
@@ -249,7 +249,7 @@ public class MineralOccurrenceService extends BaseWFSService {
     /**
      * Given a list of parameters, call a service and get the Mineral Activity features as GML/KML
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param mineName
      * @param startDate
      * @param endDate
@@ -263,7 +263,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSResponse getMiningActivityGml(String serviceURL,
+    public WFSResponse getMiningActivityGml(String serviceUrl,
             String mineName,
             String startDate,
             String endDate,
@@ -280,7 +280,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                 producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
                 maxFeatures, null, ResultType.Results);
         try {
             String response = httpServiceCaller.getMethodResponseAsString(method);
@@ -293,7 +293,7 @@ public class MineralOccurrenceService extends BaseWFSService {
     /**
      * Given a list of parameters, call a service and get the count of Mineral Activity features
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param mineName
      * @param startDate
      * @param endDate
@@ -307,7 +307,7 @@ public class MineralOccurrenceService extends BaseWFSService {
      * @return
      * @throws Exception
      */
-    public WFSCountResponse getMiningActivityCount(String serviceURL,
+    public WFSCountResponse getMiningActivityCount(String serviceUrl,
             String mineName,
             String startDate,
             String endDate,
@@ -324,7 +324,7 @@ public class MineralOccurrenceService extends BaseWFSService {
                 producedMaterial, cutOffGrade, production);
         String filterString = generateFilterString(filter, bbox);
 
-        HttpRequestBase method = generateWFSRequest(serviceURL, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
+        HttpRequestBase method = generateWFSRequest(serviceUrl, MINING_ACTIVITY_FEATURE_TYPE, null, filterString,
                 maxFeatures, null, ResultType.Hits);
         return getWfsFeatureCount(method);
     }

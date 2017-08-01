@@ -35,7 +35,7 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                     store : this.getStore(),
                     width : 190,
                     name : 'STTField',
-                    paramName: 'service_URL',
+                    paramName: 'serviceUrl',
                     emptyText : 'http://'
                 },{
                     xtype:'tbseparator'
@@ -59,7 +59,7 @@ Ext.define('auscope.widgets.CustomRecordPanel', {
                     store : this.getStore(),
                     width : 243,
                     name : 'STTField',
-                    paramName: 'service_URL',
+                    paramName: 'serviceUrl',
                     emptyText : 'http://'
                 }]
             });
