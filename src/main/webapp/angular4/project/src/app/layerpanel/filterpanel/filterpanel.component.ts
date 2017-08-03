@@ -1,5 +1,5 @@
-import { LayerModel } from '../../portal-core-ag/modal/data/layer.model';
-import { OlMapService } from '../../portal-core-ag/service/openlayermap/ol-map.service';
+import { LayerModel } from '../../portal-core-ui/modal/data/layer.model';
+import { OlMapService } from '../../portal-core-ui/service/openlayermap/ol-map.service';
 import { Component, Input} from '@angular/core';
 
 
