@@ -69,7 +69,7 @@ export class OlWMSService {
        })
     }
 
-    return this.http.get(sldUrl, {responseType: 'text'}).map(response => {
+    return this.http.get('../' + sldUrl, {responseType: 'text'}).map(response => {
       return response;
     });
   }

@@ -32,7 +32,7 @@ export class OlWFSService {
     httpParams.append('typeName', onlineResource.name);
 
     if (layer.proxyUrl) {
-      return this.http.get(layer.proxyUrl, {
+      return this.http.get('../' + layer.proxyUrl, {
         params: httpParams
       }).map(response => {
         return response['data'];

@@ -699,7 +699,7 @@ var OlWFSService = (function () {
         var httpParams = new __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["b" /* HttpParams */]().set('serviceUrl', onlineResource.url);
         httpParams.append('typeName', onlineResource.name);
         if (layer.proxyUrl) {
-            return this.http.get(layer.proxyUrl, {
+            return this.http.get('../' + layer.proxyUrl, {
                 params: httpParams
             }).map(function (response) {
                 return response['data'];
@@ -864,7 +864,7 @@ var OlWMSService = (function () {
                 observer.complete();
             });
         }
-        return this.http.get(sldUrl, { responseType: 'text' }).map(function (response) {
+        return this.http.get('../' + sldUrl, { responseType: 'text' }).map(function (response) {
             return response;
         });
     };
