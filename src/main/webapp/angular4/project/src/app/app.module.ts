@@ -13,7 +13,7 @@ import { LayerPanelComponent } from './layerpanel/layerpanel.component';
 import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.component'
 
 
-import { PortalCoreModule } from './portal-core-ag/portal-core.module'
+import { PortalCoreModule } from './portal-core-ui/portal-core.module'
 
 @NgModule({
   declarations: [

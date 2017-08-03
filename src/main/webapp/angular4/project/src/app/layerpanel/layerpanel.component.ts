@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { LayerHandlerService } from '../portal-core-ag/service/cswrecords/layer-handler.service';
+import { LayerHandlerService } from '../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
 import { UILayerModel } from './model/ui/uilayer.model';

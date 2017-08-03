@@ -1,4 +1,4 @@
-import { OlMapObject } from '../portal-core-ag/service/openlayermap/ol-map-object';
+import { OlMapObject } from '../portal-core-ui/service/openlayermap/ol-map-object';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import * as ol from 'openlayers';
 
