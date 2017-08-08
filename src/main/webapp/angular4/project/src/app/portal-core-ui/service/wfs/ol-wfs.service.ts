@@ -12,6 +12,7 @@ import * as ol from 'openlayers';
 import { Observable } from 'rxjs/Rx';
 import { GMLParserService } from '../../utility/gmlparser.service';
 import { Constants } from '../../utility/constants.service';
+import { RenderStatusService } from '../openlayermap/renderstatus/render-status.service';
 
 @Injectable()
 export class OlWFSService {
@@ -21,7 +22,8 @@ export class OlWFSService {
   constructor(private layerHandlerService: LayerHandlerService,
                   private olMapObject: OlMapObject,
                   private http: HttpClient,
-                  private gmlParserService: GMLParserService) {
+                  private gmlParserService: GMLParserService,
+                  private renderStatusService: RenderStatusService) {
     this.map = this.olMapObject.getMap();
   }
 
@@ -89,7 +91,9 @@ export class OlWFSService {
 
 
     for (const onlineResource of wfsOnlineResources){
+      this.renderStatusService.addResource(layer, onlineResource);
       this.getFeature(layer, onlineResource).subscribe(response => {
+        this.renderStatusService.updateComplete(layer, onlineResource);
         const rootNode = this.gmlParserService.getRootNode(response.gml);
         const primitives = this.gmlParserService.makePrimitives(rootNode);
         for (const primitive of primitives){
@@ -106,6 +110,9 @@ export class OlWFSService {
           }
         }
 
+      },
+      err =>  {
+        this.renderStatusService.updateComplete(layer, onlineResource, true);
       })
     }
   }

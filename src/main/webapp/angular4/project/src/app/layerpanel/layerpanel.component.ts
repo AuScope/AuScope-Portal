@@ -4,7 +4,7 @@ import * as $ from 'jquery'
 import '../../template/js/apps.js'
 import { UILayerModel } from './model/ui/uilayer.model';
 import { UITabPanel } from './model/ui/uitabpanel.model';
-
+import { RenderStatusService } from '../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
 
 
 declare var App: any;
@@ -18,10 +18,11 @@ declare var App: any;
 export class LayerPanelComponent implements OnInit {
 
     layerGroups: {};
-    uiLayerModels: {}
+    uiLayerModels: {};
 
-    constructor(public layerHandlerService: LayerHandlerService) {
+    constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService) {
       this.uiLayerModels = {};
+
     }
 
 
@@ -36,7 +37,7 @@ export class LayerPanelComponent implements OnInit {
         response => {this.layerGroups = response;
           for (const key in this.layerGroups) {
              for (let i = 0; i < this.layerGroups[key].length; i++) {
-               const uiLayerModel = new UILayerModel(this.layerGroups[key][i].id);
+               const uiLayerModel = new UILayerModel(this.layerGroups[key][i].id, this.renderStatusService.getStatusBSubject(this.layerGroups[key][i]));
                this.uiLayerModels[this.layerGroups[key][i].id] = uiLayerModel;
              }
           }

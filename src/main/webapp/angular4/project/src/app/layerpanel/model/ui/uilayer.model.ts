@@ -1,22 +1,22 @@
+import { StatusMapModel } from '../../../portal-core-ui/modal/data/statusmap.model';
 import { UITabPanel } from './uitabpanel.model';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
-export enum LoadingStatus {
-    loading = 0 ,
-    complete = 1,
-    error = 2,
-    none = 3
-}
 
 export class UILayerModel {
     expanded: boolean;
-    loadingStatus: LoadingStatus;
     tabpanel: UITabPanel;
+    statusMap: StatusMapModel;
 
-   constructor(public id: string) {
+   constructor(public id: string, public loadingSubject: BehaviorSubject<StatusMapModel>) {
     this.tabpanel = new UITabPanel();
     this.expanded = false;
-    this.loadingStatus = LoadingStatus.none;
+    loadingSubject.subscribe((value) => {
+      this.statusMap = value;
+    });
+
    }
+
 
 
 }

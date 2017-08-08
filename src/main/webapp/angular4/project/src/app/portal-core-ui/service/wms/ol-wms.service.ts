@@ -9,6 +9,7 @@ import { Headers, RequestOptions } from '@angular/http';
 import * as ol from 'openlayers';
 import { Observable } from 'rxjs/Rx';
 import { Constants } from '../../utility/constants.service';
+import { RenderStatusService } from '../openlayermap/renderstatus/render-status.service';
 
 @Injectable()
 export class OlWMSService {
@@ -18,7 +19,8 @@ export class OlWMSService {
   constructor( @Inject(APP_CONFIG) private config: AppConfig,
                                       private layerHandlerService: LayerHandlerService,
                                       private olMapObject: OlMapObject,
-                                      private http: HttpClient) {
+                                      private http: HttpClient,
+                                      private renderStatusService: RenderStatusService) {
     this.map = this.olMapObject.getMap();
   }
 
@@ -83,15 +85,29 @@ export class OlWMSService {
             this.getWMS1_3_0param(wmsOnlineResource.name, response) :
             this.getWMS1_1param(wmsOnlineResource.name, response);
 
-          const wmsTile =  new ol.layer.Tile({
-              extent: this.map.getView().calculateExtent(this.map.getSize()),
-              source: new ol.source.TileWMS({
-                url: wmsOnlineResource.url,
-                params: params,
-                serverType: 'geoserver',
-                projection: 'EPSG:4326'
-              })
+          const wmsTile = new ol.layer.Tile({
+            extent: this.map.getView().calculateExtent(this.map.getSize()),
+            source: new ol.source.TileWMS({
+              url: wmsOnlineResource.url,
+              params: params,
+              serverType: 'geoserver',
+              projection: 'EPSG:4326'
             })
+          })
+
+          const me = this;
+          wmsTile.getSource().on('tileloadstart', function(event) {
+            me.renderStatusService.addResource(layer, wmsOnlineResource);
+          });
+
+          wmsTile.getSource().on('tileloadend', function(event) {
+            me.renderStatusService.updateComplete(layer, wmsOnlineResource);
+          });
+
+          wmsTile.getSource().on('tileloaderror', function(event) {
+            me.renderStatusService.updateComplete(layer, wmsOnlineResource, true);
+          })
+
           this.olMapObject.addLayerByName(wmsTile, layer.id);
         }
      })
