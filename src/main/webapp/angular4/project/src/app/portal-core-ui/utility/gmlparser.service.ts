@@ -6,7 +6,9 @@ import { Constants } from './constants.service';
 import { UtilitiesService } from './utilities.service';
 
 // import { UtilitiesService } from '';
-
+/**
+ * Port over from old portal-core extjs for dealing with xml in wfs
+ */
 @Injectable()
 export class GMLParserService {
 

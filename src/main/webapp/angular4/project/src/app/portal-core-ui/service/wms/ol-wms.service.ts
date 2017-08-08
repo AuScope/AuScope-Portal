@@ -11,6 +11,9 @@ import { Observable } from 'rxjs/Rx';
 import { Constants } from '../../utility/constants.service';
 import { RenderStatusService } from '../openlayermap/renderstatus/render-status.service';
 
+/**
+ * Use OlMapService to add layer to map. This service class adds wms layer to the map
+ */
 @Injectable()
 export class OlWMSService {
 
@@ -25,7 +28,11 @@ export class OlWMSService {
   }
 
 
-
+  /**
+   * get wms 1.3.0 related parameter
+   * @param layers the wms layer
+   * @param sld_body associated sld_body
+   */
   public getWMS1_3_0param(layers: string, sld_body?: string): any {
      const params = {
        'LAYERS': layers,
@@ -45,6 +52,11 @@ export class OlWMSService {
 
   }
 
+  /**
+   * get wms 1.1.0 related parameter
+   * @param layers the wms layer
+   * @param sld_body associated sld_body
+   */
   public getWMS1_1param(layers: string, sld_body?: string): any {
      const params = {
        'LAYERS': layers,
@@ -63,6 +75,11 @@ export class OlWMSService {
 
   }
 
+  /**
+   * get the sld from the url
+   * @param sldUrl the url containing the sld
+   * @return a observable of the http request
+   */
   public getSldBody(sldUrl: string): Observable<any> {
     if (!sldUrl) {
        return Observable.create(observer => {
@@ -76,7 +93,10 @@ export class OlWMSService {
     });
   }
 
-
+  /**
+   * Add a wms layer to the map
+   * @param layer the wms layer to add to the map.
+   */
   public addLayer(layer: LayerModel): void {
     const wmsOnlineResources = this.layerHandlerService.getWMSResource(layer);
      this.getSldBody(layer.proxyStyleUrl).subscribe(response => {

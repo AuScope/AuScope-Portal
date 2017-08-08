@@ -6,7 +6,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {LayerModel} from '../../modal/data/layer.model'
 import { OnlineResourceModel } from '../../modal/data/onlineresource.model';
-
+/**
+ * Service class to handle jobs relating to getting csw records from the server
+ *
+ */
 @Injectable()
 export class LayerHandlerService {
 
@@ -18,7 +21,9 @@ export class LayerHandlerService {
 
   }
 
-
+  /**
+   * Retrive csw records from the service and organize them by group
+   */
   public getLayerRecord(): Observable<any> {
     const me = this;
     if (this.layerRecord.length > 0) {
@@ -41,6 +46,11 @@ export class LayerHandlerService {
     }
   }
 
+  /**
+   * Check if layer contains wms records
+   * @param layer the layer to query for wms records
+   * @return true if wms resource exists
+   */
   public containsWMS(layer: LayerModel): boolean {
      const cswRecords: CSWRecordModel[] = layer.cswRecords;
       for (const cswRecord of cswRecords) {
@@ -53,6 +63,10 @@ export class LayerHandlerService {
       return false;
   }
 
+  /**
+   * Search and retrieve only wms records
+   * @param layer the layer to query for wms records
+   */
   public getWMSResource (layer: LayerModel): OnlineResourceModel[] {
       const cswRecords: CSWRecordModel[] = layer.cswRecords;
       const wmsOnlineResource = [];
@@ -66,6 +80,11 @@ export class LayerHandlerService {
       return wmsOnlineResource;
   }
 
+  /**
+   * Check if layer contains wfs records
+   * @param layer the layer to query for wfs records
+   * @return true if wfs resource exists
+   */
   public containsWFS(layer: LayerModel): boolean {
      const cswRecords: CSWRecordModel[] = layer.cswRecords;
       for (const cswRecord of cswRecords) {
@@ -78,6 +97,10 @@ export class LayerHandlerService {
       return false;
   }
 
+  /**
+   * Search and retrieve only wfs records
+   * @param layer the layer to query for wfs records
+   */
   public getWFSResource (layer: LayerModel): OnlineResourceModel[] {
       const cswRecords: CSWRecordModel[] = layer.cswRecords;
       const wfsOnlineResource = [];

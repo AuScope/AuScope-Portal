@@ -8,8 +8,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
-  },
+    "e2e": "ng e2e",
+    "docs": "npm run typedoc -- --options typedoc.json --out ./src/app/portal-core-ui/docs --exclude '**/*.spec.ts' ./app/portal-core-ui",
+    "typedoc": "typedoc"
+   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^4.0.0",
@@ -50,6 +52,7 @@
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
+    "typedoc": "^0.8.0",
     "typescript": "~2.3.3"
   }
 }

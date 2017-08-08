@@ -1,5 +1,8 @@
 import { OnlineResourceModel } from './onlineresource.model';
 
+/**
+ * A representation of a csw record
+ */
 export class CSWRecordModel {
   adminArea: string;
   childRecords: any;

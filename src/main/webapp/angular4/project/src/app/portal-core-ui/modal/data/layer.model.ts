@@ -1,5 +1,8 @@
 import { CSWRecordModel } from './cswrecord.model';
 
+/**
+ * A representation of a layer
+ */
 export class LayerModel {
   cswRecords: CSWRecordModel[];
   description: string;

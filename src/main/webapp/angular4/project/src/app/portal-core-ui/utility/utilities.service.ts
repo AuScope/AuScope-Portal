@@ -4,7 +4,9 @@ import { Injectable } from '@angular/core';
 declare var jQuery: any;
 declare function unescape(s: string): string;
 
-
+/**
+ * Port over from old portal-core extjs for dealing with xml in wfs
+ */
 @Injectable()
 export class UtilitiesService {
 

@@ -14,6 +14,9 @@ import { GMLParserService } from '../../utility/gmlparser.service';
 import { Constants } from '../../utility/constants.service';
 import { RenderStatusService } from '../openlayermap/renderstatus/render-status.service';
 
+/**
+ * Use OlMapService to add layer to map. This service class adds wfs layer to the map
+ */
 @Injectable()
 export class OlWFSService {
 
@@ -27,7 +30,12 @@ export class OlWFSService {
     this.map = this.olMapObject.getMap();
   }
 
-
+  /**
+   * A get feature request
+   * @param layer the wfs layer for the getfeature request to be made
+   * @param onlineresource the wfs online resource
+   * @return Observable the observable from the http request
+   */
   public getFeature(layer: LayerModel, onlineResource: OnlineResourceModel): Observable<any> {
 
     const httpParams = new HttpParams().set('serviceUrl', onlineResource.url);
@@ -46,6 +54,11 @@ export class OlWFSService {
     }
   }
 
+  /**
+   * Add geometry type point to the map
+   * @param layer the layer where this point derived from
+   * @param primitive the point primitive
+   */
   public addPoint(layer: LayerModel, primitive: PrimitiveModel): void {
      const geom = new ol.geom.Point(ol.proj.transform([primitive.coords.lng, primitive.coords.lat], 'EPSG:4326', 'EPSG:3857'));
        const feature = new ol.Feature(geom);
@@ -77,6 +90,10 @@ export class OlWFSService {
 
   }
 
+  /**
+   * Add the wfs layer
+   * @param the wfs layer to be added to the map
+   */
   public addLayer(layer: LayerModel): void {
     const wfsOnlineResources = this.layerHandlerService.getWFSResource(layer);
 

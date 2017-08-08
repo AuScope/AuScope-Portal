@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 declare var window: any;
 declare var XPathResult: any;
-
+/**
+ * Constances
+ */
 @Injectable()
 export class Constants {
 

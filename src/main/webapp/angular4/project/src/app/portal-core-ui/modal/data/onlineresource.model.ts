@@ -1,3 +1,6 @@
+/**
+ * A representation of a online resource
+ */
 export class OnlineResourceModel {
   applicationProfile: string;
   description: string;

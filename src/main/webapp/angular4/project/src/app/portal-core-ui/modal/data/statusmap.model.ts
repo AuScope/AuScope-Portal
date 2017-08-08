@@ -1,6 +1,10 @@
 import { OnlineResourceModel } from './onlineresource.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
+/**
+ * A representation of the current rendering status of a layer. User should not be directly accessing these under
+ * normal circumstances. Use RenderStatusService instead which provides a wrapper to get these updates
+ */
 export class StatusMapModel {
   private layerid: string;
   private total: number;
@@ -20,6 +24,10 @@ export class StatusMapModel {
     this.renderStarted = false;
   }
 
+  /**
+   * Add resource to the counter and update its status
+   * @param onlineresource  online resource that is being loaded now
+   */
   public addResource(onlineresource: OnlineResourceModel) {
     this.resourceMap[onlineresource.url] = 'Loading...';
     this.total += 1;
@@ -27,6 +35,11 @@ export class StatusMapModel {
     this._statusMap.next(this);
   }
 
+  /**
+   * update the counter for each completed job
+   * @param onlineresource  online resource that is being updated
+   * @param error? a optional parameter to flag there was an error in the download of the resource.
+   */
   public updateComplete(onlineresource: OnlineResourceModel, error?: boolean) {
     this.completed += 1;
     this.completePercentage = Math.floor(this.completed / this.total * 100) + '%';
