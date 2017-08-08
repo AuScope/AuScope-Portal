@@ -25,6 +25,9 @@ Contain Auscope specific modification to the original template.
 	display: block!;
 }
 
+.width-80{
+	width: 80%;
+}
 
 .sidebar-panel-menu-show{	
 	list-style-type: none;

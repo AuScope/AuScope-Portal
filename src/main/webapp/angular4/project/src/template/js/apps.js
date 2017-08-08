@@ -735,7 +735,7 @@ var handleScrollToTopButton = function() {
 ------------------------------------------------ */
 var App = function () {
 	"use strict";
-	
+
 	return {
 		//main function
 		init: function () {

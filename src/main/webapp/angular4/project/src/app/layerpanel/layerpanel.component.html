@@ -5,7 +5,17 @@
               {{layerGroup.key}}
         </a>
 		<ul class="sub-menu">									
-			<li *ngFor="let layer of layerGroup.value" [ngClass]="{'active': layer.expanded}"><a (click)="layer.expanded = !layer.expanded">{{layer.name}} <span *ngIf="layer.expanded" class="fa fa-arrow-circle-down"></span></a>
+			<li *ngFor="let layer of layerGroup.value" [ngClass]="{'active': layer.expanded}" class="width-80">
+				<a (click)="layer.expanded = !layer.expanded">					
+					<div class="project-info">
+						<!-- span class="pull-right project-percentage">70%</span-->
+						<div class="project-title"><!-- i class="ti-mobile"></i--> {{layer.name}} <span *ngIf="layer.expanded" class="fa fa-arrow-circle-down"></span></div>
+						<!-- div class="progress progress-xs">
+							<div class="progress-bar bg-gradient-blue-purple" style="width: 70%;" role="progressbar"></div>
+						</div-->
+					</div>					 
+					
+				</a>
 				<div [hidden]="!layer.expanded" class="sidebar-panel-menu-show">
 					
 					 <div class="panel panel-inverse panel-info panel-with-tabs layer-panel animated  slideInRight">
