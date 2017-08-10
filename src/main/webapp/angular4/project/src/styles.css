@@ -37,6 +37,16 @@ Contain Auscope specific modification to the original template.
 	font-size: 12px;
 }
 
+.hasEvent {
+	pointer-events: auto; 
+	cursor: pointer;	
+}
+
+.light-blue{
+	color: #7a7ae6;
+}
+
+
 /*
 max-width: 768px(small screen)
 */

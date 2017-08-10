@@ -1,9 +1,9 @@
 
-import { CSWRecordModel } from '../../modal/data/cswrecord.model';
+import { CSWRecordModel } from '../../model/data/cswrecord.model';
 import { Injectable, Inject, SkipSelf } from '@angular/core';
-import {LayerModel} from '../../modal/data/layer.model'
-import { OnlineResourceModel } from '../../modal/data/onlineresource.model';
-import { PrimitiveModel } from '../../modal/data/primitive.model';
+import {LayerModel} from '../../model/data/layer.model'
+import { OnlineResourceModel } from '../../model/data/onlineresource.model';
+import { PrimitiveModel } from '../../model/data/primitive.model';
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from '../openlayermap/ol-map-object';
 import {HttpClient, HttpParams} from '@angular/common/http';

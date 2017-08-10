@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import {LayerModel} from '../../modal/data/layer.model';
+import {LayerModel} from '../../model/data/layer.model';
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlWFSService } from '../wfs/ol-wfs.service';
 import { OlMapObject } from './ol-map-object';

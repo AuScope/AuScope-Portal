@@ -2,9 +2,11 @@ import { Component, OnInit} from '@angular/core';
 import { LayerHandlerService } from '../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
+import { NgbdModalStatusReportComponent } from '../modalwindow/renderstatus/renderstatus.component';
 import { UILayerModel } from './model/ui/uilayer.model';
 import { UITabPanel } from './model/ui/uitabpanel.model';
 import { RenderStatusService } from '../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
+
 
 
 declare var App: any;
@@ -46,6 +48,10 @@ export class LayerPanelComponent implements OnInit {
           });
         });
      }
+
+    public openStatusReport(uiLayerModels: UILayerModel) {
+
+    }
 
 
 

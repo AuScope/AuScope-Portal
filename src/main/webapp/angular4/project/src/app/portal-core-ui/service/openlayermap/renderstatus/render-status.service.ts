@@ -1,6 +1,6 @@
-import {LayerModel} from '../../../modal/data/layer.model';
-import {OnlineResourceModel} from '../../../modal/data/onlineresource.model';
-import {StatusMapModel} from '../../../modal/data/statusmap.model';
+import {LayerModel} from '../../../model/data/layer.model';
+import {OnlineResourceModel} from '../../../model/data/onlineresource.model';
+import {StatusMapModel} from '../../../model/data/statusmap.model';
 import {Injectable, Inject} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
@@ -27,7 +27,7 @@ export class RenderStatusService {
     if (!this.statusmaps[layer.id]) {
       this.statusmaps[layer.id] = new StatusMapModel(layer.id);
     }
-    (<StatusMapModel>this.statusmaps[layer.id]).addResource(resource);
+    (<StatusMapModel>this.statusmaps[layer.id]).updateTotal(resource);
   }
 
   /**

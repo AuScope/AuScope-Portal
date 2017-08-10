@@ -1,4 +1,4 @@
-import { OnlineResourceModel } from '../../modal/data/onlineresource.model';
+import { OnlineResourceModel } from '../../model/data/onlineresource.model';
 import { Injectable, Inject } from '@angular/core';
 import * as ol from 'openlayers';
 

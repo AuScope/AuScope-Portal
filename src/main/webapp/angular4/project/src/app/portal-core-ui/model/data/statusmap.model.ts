@@ -10,9 +10,10 @@ export class StatusMapModel {
   private total: number;
   private completed: number;
   private completePercentage: string;
-  private resourceMap: Object;
+  public resourceMap: Object;
   private renderComplete: boolean;
   private renderStarted: boolean;
+  private containsError: boolean;
   private _statusMap = new BehaviorSubject<StatusMapModel>(this);
 
   constructor(layerid: string) {
@@ -22,13 +23,14 @@ export class StatusMapModel {
     this.resourceMap = {};
     this.renderComplete = false;
     this.renderStarted = false;
+    this.containsError = false;
   }
 
   /**
    * Add resource to the counter and update its status
    * @param onlineresource  online resource that is being loaded now
    */
-  public addResource(onlineresource: OnlineResourceModel) {
+  public updateTotal(onlineresource: OnlineResourceModel) {
     this.resourceMap[onlineresource.url] = 'Loading...';
     this.total += 1;
     this.renderStarted = true;
@@ -45,6 +47,7 @@ export class StatusMapModel {
     this.completePercentage = Math.floor(this.completed / this.total * 100) + '%';
     if (error) {
       this.resourceMap[onlineresource.url] = 'Error';
+      this.containsError = true;
     }else {
       this.resourceMap[onlineresource.url] = 'Complete';
     }

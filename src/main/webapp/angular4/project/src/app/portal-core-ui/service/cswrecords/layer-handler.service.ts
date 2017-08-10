@@ -1,11 +1,11 @@
 import { AppConfig, APP_CONFIG } from '../../appconfig/app.config';
-import { CSWRecordModel } from '../../modal/data/cswrecord.model';
+import { CSWRecordModel } from '../../model/data/cswrecord.model';
 import { Injectable, Inject } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
-import {LayerModel} from '../../modal/data/layer.model'
-import { OnlineResourceModel } from '../../modal/data/onlineresource.model';
+import {LayerModel} from '../../model/data/layer.model'
+import { OnlineResourceModel } from '../../model/data/onlineresource.model';
 /**
  * Service class to handle jobs relating to getting csw records from the server
  *
