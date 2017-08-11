@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
 import { NgClass } from '@angular/common';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 // Configs
 import { AuscopeConfiguration } from './appconfig/app.config';
@@ -28,7 +28,8 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module'
     BrowserModule,
     HttpClientModule,
     PortalCoreModule,
-    PortalCoreModule.forRoot(AuscopeConfiguration)
+    PortalCoreModule.forRoot(AuscopeConfiguration),
+    ModalModule.forRoot()
   ],
   entryComponents: [NgbdModalStatusReportComponent],
   bootstrap: [OlMapComponent, LayerPanelComponent]

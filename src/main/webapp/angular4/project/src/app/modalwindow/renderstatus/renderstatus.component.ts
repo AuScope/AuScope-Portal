@@ -1,25 +1,21 @@
 import {UILayerModel} from '../../layerpanel/model/ui/uilayer.model';
-import {Component, OnInit, Input} from '@angular/core';
-
+import {Component, Input} from '@angular/core';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 
 @Component({
   selector: 'ngbd-modal-status-report',
   templateUrl: './renderstatus.component.html'
+
 })
 
 
-export class NgbdModalStatusReportComponent implements OnInit {
+export class NgbdModalStatusReportComponent {
 
-  @Input() uiLayerModel: UILayerModel;
-  private resourceMap: Object;
 
-  constructor() {}
+  public resourceMap: Object;
 
-  ngOnInit(): void {
-    this.uiLayerModel.statusMap.getStatusBSubject().subscribe((value) => {
-      this.resourceMap = value.resourceMap;
-    });
-  }
+
+  constructor(public bsModalRef: BsModalRef) {}
 
 
 }

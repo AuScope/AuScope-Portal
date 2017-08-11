@@ -46,6 +46,12 @@ Contain Auscope specific modification to the original template.
 	color: #7a7ae6;
 }
 
+.content-break-word{
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	word-break: break-all;
+	white-space: normal;
+}
+
 
 /*
 max-width: 768px(small screen)

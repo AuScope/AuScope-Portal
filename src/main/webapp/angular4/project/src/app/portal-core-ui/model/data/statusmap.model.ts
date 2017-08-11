@@ -31,7 +31,14 @@ export class StatusMapModel {
    * @param onlineresource  online resource that is being loaded now
    */
   public updateTotal(onlineresource: OnlineResourceModel) {
-    this.resourceMap[onlineresource.url] = 'Loading...';
+    if (!this.resourceMap[onlineresource.url]) {
+      this.resourceMap[onlineresource.url] = {};
+    }
+    this.resourceMap[onlineresource.url].status = 'Loading...';
+    if (!this.resourceMap[onlineresource.url].total) {
+      this.resourceMap[onlineresource.url].total = 0;
+    }
+    this.resourceMap[onlineresource.url].total += 1;
     this.total += 1;
     this.renderStarted = true;
     this._statusMap.next(this);
@@ -44,12 +51,20 @@ export class StatusMapModel {
    */
   public updateComplete(onlineresource: OnlineResourceModel, error?: boolean) {
     this.completed += 1;
+    if (!this.resourceMap[onlineresource.url].completed) {
+      this.resourceMap[onlineresource.url].completed = 0;
+    }
+    this.resourceMap[onlineresource.url].completed += 1;
+
     this.completePercentage = Math.floor(this.completed / this.total * 100) + '%';
     if (error) {
-      this.resourceMap[onlineresource.url] = 'Error';
+      this.resourceMap[onlineresource.url].status = 'Error';
       this.containsError = true;
-    }else {
-      this.resourceMap[onlineresource.url] = 'Complete';
+    }
+    if (this.resourceMap[onlineresource.url].total ===  this.resourceMap[onlineresource.url].completed) {
+      if (this.resourceMap[onlineresource.url].status !== 'Error') {
+        this.resourceMap[onlineresource.url].status = 'Complete';
+      }
     }
     if (this.completed === this.total) {
       this.renderComplete = true;
