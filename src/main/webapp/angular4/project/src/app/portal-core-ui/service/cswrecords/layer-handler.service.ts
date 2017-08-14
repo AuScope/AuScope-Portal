@@ -63,17 +63,21 @@ export class LayerHandlerService {
       return false;
   }
 
-  /**
+ /**
    * Search and retrieve only wms records
    * @param layer the layer to query for wms records
    */
   public getWMSResource (layer: LayerModel): OnlineResourceModel[] {
       const cswRecords: CSWRecordModel[] = layer.cswRecords;
       const wmsOnlineResource = [];
+      const uniqueURLSet = new Set<string>();
       for (const cswRecord of cswRecords) {
          for (const onlineResource of cswRecord.onlineResources){
            if (onlineResource.type === 'WMS') {
-             wmsOnlineResource.push(onlineResource);
+             if (!uniqueURLSet.has(onlineResource.url)) {
+               wmsOnlineResource.push(onlineResource);
+               uniqueURLSet.add(onlineResource.url);
+             }
            }
          }
       }
@@ -102,12 +106,16 @@ export class LayerHandlerService {
    * @param layer the layer to query for wfs records
    */
   public getWFSResource (layer: LayerModel): OnlineResourceModel[] {
-      const cswRecords: CSWRecordModel[] = layer.cswRecords;
+     const cswRecords: CSWRecordModel[] = layer.cswRecords;
       const wfsOnlineResource = [];
+      const uniqueURLSet = new Set<string>();
       for (const cswRecord of cswRecords) {
          for (const onlineResource of cswRecord.onlineResources){
            if (onlineResource.type === 'WFS') {
-             wfsOnlineResource.push(onlineResource);
+             if (!uniqueURLSet.has(onlineResource.url)) {
+               wfsOnlineResource.push(onlineResource);
+               uniqueURLSet.add(onlineResource.url);
+             }
            }
          }
       }
