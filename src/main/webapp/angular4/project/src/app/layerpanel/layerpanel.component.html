@@ -10,7 +10,7 @@
 					<div class="project-info">
 						<span *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="pull-right project-percentage hasEvent light-blue"><u (click)="openStatusReport(uiLayerModels[layer.id]); $event.stopPropagation();">{{uiLayerModels[layer.id].statusMap.completePercentage}}<i *ngIf="!uiLayerModels[layer.id].statusMap.containsError" class="fa fa-warning text-warning"></i></u></span>
 						<div class="project-title">
-							<i *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-ban text-danger"></i>							
+							<i *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-ban text-danger" (click) = "removeLayer(layer);$event.stopPropagation();"></i>							
 								{{layer.name}} 
 								<span *ngIf="layer.expanded && !uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-arrow-circle-down"></span>
 						</div>

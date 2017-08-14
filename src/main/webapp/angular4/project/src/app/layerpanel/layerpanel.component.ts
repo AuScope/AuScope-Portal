@@ -3,6 +3,8 @@ import { LayerHandlerService } from '../portal-core-ui/service/cswrecords/layer-
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
 import { NgbdModalStatusReportComponent } from '../modalwindow/renderstatus/renderstatus.component';
+import { LayerModel } from '../portal-core-ui/model/data/layer.model';
+import { OlMapService } from '../portal-core-ui/service/openlayermap/ol-map.service';
 import { UILayerModel } from './model/ui/uilayer.model';
 import { UITabPanel } from './model/ui/uitabpanel.model';
 import { RenderStatusService } from '../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
@@ -24,7 +26,8 @@ export class LayerPanelComponent implements OnInit {
     uiLayerModels: {};
     bsModalRef: BsModalRef;
 
-    constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService, private modalService: BsModalService) {
+    constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
+      private modalService: BsModalService, private olMapService: OlMapService) {
       this.uiLayerModels = {};
 
     }
@@ -56,6 +59,10 @@ export class LayerPanelComponent implements OnInit {
       uiLayerModel.statusMap.getStatusBSubject().subscribe((value) => {
         this.bsModalRef.content.resourceMap = value.resourceMap;
       });
+    }
+
+    public removeLayer(layer: LayerModel) {
+      this.olMapService.removeLayer(layer);
     }
 
 

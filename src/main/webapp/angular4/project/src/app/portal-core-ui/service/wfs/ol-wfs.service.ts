@@ -8,7 +8,14 @@ import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from '../openlayermap/ol-map-object';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
-import * as ol from 'openlayers';
+import olMap from 'ol/map';
+import olPoint from 'ol/geom/point';
+import olProj from 'ol/proj';
+import olFeature from 'ol/feature';
+import olStyle from 'ol/style/style';
+import olIcon from 'ol/style/icon';
+import olLayerVector from 'ol/layer/vector';
+import olSourceVector from 'ol/source/vector';
 import { Observable } from 'rxjs/Rx';
 import { GMLParserService } from '../../utility/gmlparser.service';
 import { Constants } from '../../utility/constants.service';
@@ -20,7 +27,7 @@ import { RenderStatusService } from '../openlayermap/renderstatus/render-status.
 @Injectable()
 export class OlWFSService {
 
-  private map: ol.Map;
+  private map: olMap;
 
   constructor(private layerHandlerService: LayerHandlerService,
                   private olMapObject: OlMapObject,
@@ -60,11 +67,11 @@ export class OlWFSService {
    * @param primitive the point primitive
    */
   public addPoint(layer: LayerModel, primitive: PrimitiveModel): void {
-     const geom = new ol.geom.Point(ol.proj.transform([primitive.coords.lng, primitive.coords.lat], 'EPSG:4326', 'EPSG:3857'));
-       const feature = new ol.Feature(geom);
+     const geom = new olPoint(olProj.transform([primitive.coords.lng, primitive.coords.lat], 'EPSG:4326', 'EPSG:3857'));
+       const feature = new olFeature(geom);
        feature.setStyle([
-          new ol.style.Style({
-             image: new ol.style.Icon(({
+          new olStyle({
+             image: new olIcon(({
                      anchor: [0.5, 1],
                      anchorXUnits: 'fraction',
                      anchorYUnits: 'fraction',
@@ -79,7 +86,7 @@ export class OlWFSService {
        if (primitive.name) {
          feature.setId(primitive.name);
        }
-    (<ol.layer.Vector>this.olMapObject.getLayerByName(layer.id)).getSource().addFeature(feature);
+    (<olLayerVector>this.olMapObject.getLayerById(layer.id)).getSource().addFeature(feature);
   }
 
   public addLine(primitive: PrimitiveModel): void {
@@ -98,12 +105,12 @@ export class OlWFSService {
     const wfsOnlineResources = this.layerHandlerService.getWFSResource(layer);
 
     // VT: create the vector on the map if it does not exist.
-    if (!this.olMapObject.getLayerByName(layer.id)) {
-        const markerLayer = new ol.layer.Vector({
-                    source: new ol.source.Vector({ features: []})
+    if (!this.olMapObject.getLayerById(layer.id)) {
+        const markerLayer = new olLayerVector({
+                    source: new olSourceVector({ features: []})
                 });
 
-        this.olMapObject.addLayerByName(markerLayer, layer.id);
+        this.olMapObject.addLayerById(markerLayer, layer.id);
     }
 
 

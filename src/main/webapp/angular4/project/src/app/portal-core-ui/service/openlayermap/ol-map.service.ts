@@ -4,7 +4,7 @@ import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlWFSService } from '../wfs/ol-wfs.service';
 import { OlMapObject } from './ol-map-object';
 import { OlWMSService } from '../wms/ol-wms.service';
-import * as ol from 'openlayers';
+
 
 /**
  * Wrapper class to provide all things related to the ol map such as adding layer or removing layer.
@@ -12,7 +12,8 @@ import * as ol from 'openlayers';
 @Injectable()
 export class OlMapService {
 
-  constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService, private olWFSService: OlWFSService) {}
+  constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService,
+    private olWFSService: OlWFSService, private olMapObject: OlMapObject) {}
 
   /**
    * Add layer to the wms
@@ -24,6 +25,10 @@ export class OlMapService {
     }else if (this.layerHandlerService.containsWFS(layer)) {
       this.olWFSService.addLayer(layer);
     }
+  }
+
+  public removeLayer(layer: LayerModel): void {
+    this.olMapObject.removeLayerById(layer.id);
   }
 
 

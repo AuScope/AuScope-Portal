@@ -6,7 +6,9 @@ import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from '../openlayermap/ol-map-object';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
-import * as ol from 'openlayers';
+import olMap from 'ol/map';
+import olTile from 'ol/layer/tile';
+import olTileWMS from 'ol/source/tilewms';
 import { Observable } from 'rxjs/Rx';
 import { Constants } from '../../utility/constants.service';
 import { RenderStatusService } from '../openlayermap/renderstatus/render-status.service';
@@ -17,7 +19,7 @@ import { RenderStatusService } from '../openlayermap/renderstatus/render-status.
 @Injectable()
 export class OlWMSService {
 
-  private map: ol.Map;
+  private map: olMap;
 
   constructor( @Inject(APP_CONFIG) private config: AppConfig,
                                       private layerHandlerService: LayerHandlerService,
@@ -105,9 +107,9 @@ export class OlWMSService {
             this.getWMS1_3_0param(wmsOnlineResource.name, response) :
             this.getWMS1_1param(wmsOnlineResource.name, response);
 
-          const wmsTile = new ol.layer.Tile({
+          const wmsTile = new olTile({
             extent: this.map.getView().calculateExtent(this.map.getSize()),
-            source: new ol.source.TileWMS({
+            source: new olTileWMS({
               url: wmsOnlineResource.url,
               params: params,
               serverType: 'geoserver',
@@ -128,7 +130,7 @@ export class OlWMSService {
             me.renderStatusService.updateComplete(layer, wmsOnlineResource, true);
           })
 
-          this.olMapObject.addLayerByName(wmsTile, layer.id);
+          this.olMapObject.addLayerById(wmsTile, layer.id);
         }
      })
 
