@@ -44,7 +44,11 @@ export class OlMapObject {
    * @param id the layer id is used
    */
   public addLayerById(layer: olLayer, id: string): void {
-    this.activeLayer[id] = layer
+    if (!this.activeLayer[id]) {
+      this.activeLayer[id] = [];
+    }
+    this.activeLayer[id].push(layer);
+
     this.map.addLayer(layer);
   }
 
@@ -54,18 +58,15 @@ export class OlMapObject {
    * @param id the layer id is used
    * @return the ol layer
    */
-  public getLayerById(id: string): olLayer {
+  public getLayerById(id: string): [olLayer] {
     return this.activeLayer[id];
   }
 
   public removeLayerById(id: string) {
-    const activelayer  = this.getLayerById(id);
-    this.map.getLayers().forEach(layer =>  {
-      if (activelayer === layer) {
-        const returnLayer = this.map.removeLayer(layer);
-        console.log(returnLayer);
-      }
-    });
+    const activelayers  = this.getLayerById(id);
+    activelayers.forEach(layer => {
+      this.map.removeLayer(layer);
+    })
 
   }
 
