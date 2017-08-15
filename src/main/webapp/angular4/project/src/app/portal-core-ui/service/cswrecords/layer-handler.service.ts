@@ -68,20 +68,7 @@ export class LayerHandlerService {
    * @param layer the layer to query for wms records
    */
   public getWMSResource (layer: LayerModel): OnlineResourceModel[] {
-      const cswRecords: CSWRecordModel[] = layer.cswRecords;
-      const wmsOnlineResource = [];
-      const uniqueURLSet = new Set<string>();
-      for (const cswRecord of cswRecords) {
-         for (const onlineResource of cswRecord.onlineResources){
-           if (onlineResource.type === 'WMS') {
-             if (!uniqueURLSet.has(onlineResource.url)) {
-               wmsOnlineResource.push(onlineResource);
-               uniqueURLSet.add(onlineResource.url);
-             }
-           }
-         }
-      }
-      return wmsOnlineResource;
+       return this.getOnlineResources(layer, 'WMS')
   }
 
   /**
@@ -106,20 +93,65 @@ export class LayerHandlerService {
    * @param layer the layer to query for wfs records
    */
   public getWFSResource (layer: LayerModel): OnlineResourceModel[] {
-     const cswRecords: CSWRecordModel[] = layer.cswRecords;
-      const wfsOnlineResource = [];
-      const uniqueURLSet = new Set<string>();
-      for (const cswRecord of cswRecords) {
-         for (const onlineResource of cswRecord.onlineResources){
-           if (onlineResource.type === 'WFS') {
-             if (!uniqueURLSet.has(onlineResource.url)) {
-               wfsOnlineResource.push(onlineResource);
-               uniqueURLSet.add(onlineResource.url);
-             }
-           }
-         }
+    return this.getOnlineResources(layer, 'WFS')
+  }
+
+  /**
+    * Extract resources based on the type. If type is not defined, return all the resource
+    * @method getOnlineResources
+    * @param layer - the layer we would like to extract onlineResource from
+    * @param resourceType - OPTIONAL a enum of the resource type. The ENUM constant is defined on app.js
+    * @return resources - an array of the resource. empty array if none is found
+    */
+  public getOnlineResources(layer: LayerModel, resourceType?: string): OnlineResourceModel[] {
+    const cswRecords: CSWRecordModel[] = layer.cswRecords;
+    const onlineResourceResult = [];
+    const uniqueURLSet = new Set<string>();
+    for (const cswRecord of cswRecords) {
+      for (const onlineResource of cswRecord.onlineResources) {
+        if (resourceType && onlineResource.type === resourceType) {
+          if (!uniqueURLSet.has(onlineResource.url)) {
+            onlineResourceResult.push(onlineResource);
+            uniqueURLSet.add(onlineResource.url);
+          }
+        }else if (!resourceType) {
+          if (!uniqueURLSet.has(onlineResource.url)) {
+            onlineResourceResult.push(onlineResource);
+            uniqueURLSet.add(onlineResource.url);
+          }
+        }
       }
-      return wfsOnlineResource;
+    }
+    return onlineResourceResult;
+  }
+
+  /**
+    * Extract resources based on the type. If type is not defined, return all the resource
+    * @method getOnlineResources
+    * @param layer - the layer we would like to extract onlineResource from
+    * @param resourceType - OPTIONAL a enum of the resource type. The ENUM constant is defined on app.js
+    * @return resources - an array of the resource. empty array if none is found
+    */
+  public getOnlineResourcesFromCSW(cswRecord: CSWRecordModel, resourceType?: string): OnlineResourceModel[] {
+
+    const onlineResourceResult = [];
+    const uniqueURLSet = new Set<string>();
+
+      for (const onlineResource of cswRecord.onlineResources) {
+        if (resourceType && onlineResource.type === resourceType) {
+          if (!uniqueURLSet.has(onlineResource.url)) {
+            onlineResourceResult.push(onlineResource);
+            uniqueURLSet.add(onlineResource.url);
+          }
+        }else if (!resourceType) {
+          if (!uniqueURLSet.has(onlineResource.url)) {
+            onlineResourceResult.push(onlineResource);
+            uniqueURLSet.add(onlineResource.url);
+          }
+        }
+      }
+
+    return onlineResourceResult;
   }
 
 

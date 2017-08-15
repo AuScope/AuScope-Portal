@@ -60,6 +60,19 @@ Contain Auscope specific modification to the original template.
 	color: #5ac7f9;
 }
 
+fieldset.show-fieldset-borders{
+	border: 1px solid #c4c4c4;
+    padding: 0 1.4em 1.4em 1.4em;
+    margin: 0 0 1.5em 0;
+}
+
+fieldset legend{
+	border-bottom:	0px;
+	color: #fff;
+	width: 70%;
+	padding-left:10px;
+}
+
 /*
 max-width: 768px(small screen)
 */

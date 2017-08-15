@@ -5,8 +5,8 @@
 	            <div *ngIf="mandatoryFilter.type == 'MANDATORY.CHECKBOX'">
 	                <div class="form-group  form-group-sm">
 	                	<div class="checkbox">
-							<input type="checkbox" id="normal-checkbox-1" [(ngModel)]="mandatoryFilter.value"/>
-							<label for="normal-checkbox-1">
+							<input type="checkbox" [(ngModel)]="mandatoryFilter.value"/>
+							<label>
 								{{mandatoryFilter.label}}
 							</label>
 						</div>
@@ -23,7 +23,7 @@
 	                </div>
 	            </div>                        
 	        </div>
-	        <button type="button" class="btn btn-info btn-sm" (click)="addLayer(layer)">Add Layer</button>
+	        
         </div>
         
         <div *ngIf="!layer.filterCollection">
@@ -32,7 +32,18 @@
                 <i class="ti-bell f-s-20 pull-left m-r-10"></i>
                 <p>There are no filters associated with this layer</p>
             </div>
-            <button type="button" class="btn btn-inverse btn-sm" (click)="addLayer(layer)">Add Layer</button>
+           
     	</div>
-    
+    	
+    	<fieldset *ngIf="layer.filterCollection && layer.filterCollection.optionalFilters" class="show-fieldset-borders">
+        	<legend><h5>Optional Filters</h5></legend>
+        	<div class="form-group  form-group-sm">
+	            <label>Select Filter:</label>        			  
+                <select class="form-control">
+					<option value="" selected="selected">-- choose a filter--</option>
+					<option *ngFor="let filt of layer.filterCollection.optionalFilters">{{filt.label}}</option>
+				</select>			   
+		    </div>
+	    </fieldset>
+    	<button type="button" class="btn btn-info btn-sm" (click)="addLayer(layer)">Add Layer</button>
 </div>
