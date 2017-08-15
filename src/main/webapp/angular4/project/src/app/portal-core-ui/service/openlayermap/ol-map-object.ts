@@ -1,4 +1,5 @@
 import { OnlineResourceModel } from '../../model/data/onlineresource.model';
+import { RenderStatusService } from './renderstatus/render-status.service';
 import { Injectable, Inject } from '@angular/core';
 import olMap from 'ol/map';
 import olTile from 'ol/layer/tile';
@@ -16,7 +17,7 @@ export class OlMapObject {
   private map: olMap;
   private activeLayer: {};
 
-  constructor() {
+  constructor(private renderStatusService: RenderStatusService) {
     const osm_layer: any = new olTile({
         source: new olOSM()
     });
@@ -67,6 +68,8 @@ export class OlMapObject {
     activelayers.forEach(layer => {
       this.map.removeLayer(layer);
     })
+
+    this.renderStatusService.resetLayer(id);
 
   }
 

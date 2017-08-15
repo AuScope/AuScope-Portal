@@ -14,14 +14,13 @@ import { RenderStatusService } from './renderstatus/render-status.service';
 export class OlMapService {
 
   constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService,
-    private olWFSService: OlWFSService, private olMapObject: OlMapObject, private renderStatusService: RenderStatusService) {}
+    private olWFSService: OlWFSService, private olMapObject: OlMapObject) {}
 
   /**
    * Add layer to the wms
    * @param layer the layer to add to the map
    */
   public addLayer(layer: LayerModel): void {
-    this.renderStatusService.resetLayer(layer);
     if (this.layerHandlerService.containsWMS(layer)) {
       this.olWMSService.addLayer(layer);
     }else if (this.layerHandlerService.containsWFS(layer)) {
@@ -30,7 +29,6 @@ export class OlMapService {
   }
 
   public removeLayer(layer: LayerModel): void {
-    this.renderStatusService.resetLayer(layer);
     this.olMapObject.removeLayerById(layer.id);
   }
 

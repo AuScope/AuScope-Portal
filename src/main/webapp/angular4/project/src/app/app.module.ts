@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
 import { NgClass } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { FormsModule } from '@angular/forms';
 
 // Configs
 import { AuscopeConfiguration } from './appconfig/app.config';
@@ -26,6 +27,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module'
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpClientModule,
     PortalCoreModule,
     PortalCoreModule.forRoot(AuscopeConfiguration),

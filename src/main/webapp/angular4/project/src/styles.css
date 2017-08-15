@@ -52,6 +52,13 @@ Contain Auscope specific modification to the original template.
 	white-space: normal;
 }
 
+.cyan-bg{
+	background: #5ac7f9;
+}
+
+.cyan-color{
+	color: #5ac7f9;
+}
 
 /*
 max-width: 768px(small screen)

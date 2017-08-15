@@ -55,12 +55,11 @@ export class RenderStatusService {
   }
 
   /**
-   * This is the only function required to get updates on the status. simply subscribe to this and any changes will trigger an event.
-   * @param layer the layer that is being render
-   * @return BehaviorSubject this can then be subscribed to and any updates will trigger a notification.
+   * Reset the rendering status of the layer
+   * @param layer the layer that is being reset
    */
-  public resetLayer(layer: LayerModel) {
-     this.statusmaps[layer.id] = new StatusMapModel(layer.id);
+  public resetLayer(layerId: string) {
+     this.statusmaps[layerId].resetStatus();
   }
 
 

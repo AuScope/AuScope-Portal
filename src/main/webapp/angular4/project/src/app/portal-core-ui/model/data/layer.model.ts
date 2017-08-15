@@ -22,4 +22,5 @@ export class LayerModel {
   singleTile: boolean;
   staticLegendUrl: boolean;
   iconUrl: string;
+  filterCollection: any;
 }

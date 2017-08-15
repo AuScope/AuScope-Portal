@@ -1,3 +1,4 @@
+import { LayerModel } from './layer.model';
 import { OnlineResourceModel } from './onlineresource.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
@@ -15,6 +16,7 @@ export class StatusMapModel {
   private renderStarted: boolean;
   private containsError: boolean;
   private _statusMap = new BehaviorSubject<StatusMapModel>(this);
+
 
   constructor(layerid: string) {
     this.layerid = layerid;
@@ -75,4 +77,15 @@ export class StatusMapModel {
   public getStatusBSubject() {
     return this._statusMap;
   }
+
+  public resetStatus() {
+    this.completed = 0;
+    this.total = 0;
+    this.resourceMap = {};
+    this.renderComplete = false;
+    this.renderStarted = false;
+    this.containsError = false;
+    this._statusMap.next(this);
+  }
+
 }
