@@ -26,7 +26,16 @@ export class FilterPanelComponent {
   }
 
   public addLayer(layer): void {
-    this.olMapService.addLayer(layer);
+    const param = {
+      optionalFilters: {...this.optionalFilters}
+    };
+
+    for (const optFilter of param.optionalFilters) {
+      if (optFilter['options']) {
+        optFilter['options'] = [];
+      }
+    }
+    this.olMapService.addLayer(layer, param);
   }
 
   public getKey(options: Object): string {
@@ -39,15 +48,17 @@ export class FilterPanelComponent {
      * @param filter filter object to be added to the panel
      * @param addEmpty if true, set filter value to be empty.
      */
-    public addFilter(filter, addEmpty): void {
+    public addFilter(filter, addEmpty?: boolean): void {
         if (filter == null) {
             return;
         }
         if (UtilitiesService.isEmpty(this.providers) && filter.type === 'OPTIONAL.PROVIDER') {
             this.getProvider();
-            if (addEmpty) {
-                filter.value =  {};
+            filter.value = {};
+            for (const provider of this.providers) {
+              filter.value[provider['value']] = true;
             }
+
         }
         if (UtilitiesService.isEmpty(filter.options) && filter.type === 'OPTIONAL.DROPDOWNREMOTE') {
             this.filterPanelService.getFilterRemoteParam(filter.url).subscribe(response => {

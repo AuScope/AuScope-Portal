@@ -86,7 +86,9 @@ export class OlWFSService {
        if (primitive.name) {
          feature.setId(primitive.name);
        }
-    (<olLayerVector>this.olMapObject.getLayerById(layer.id)).getSource().addFeature(feature);
+    // VT: we chose the first layer in the array based on the assumption that we only create a single vector
+    // layer for each wfs layer. WMS may potentially contain more than 1 layer in the array. note the difference
+    (<olLayerVector>this.olMapObject.getLayerById(layer.id)[0]).getSource().addFeature(feature);
   }
 
   public addLine(primitive: PrimitiveModel): void {
@@ -101,7 +103,7 @@ export class OlWFSService {
    * Add the wfs layer
    * @param the wfs layer to be added to the map
    */
-  public addLayer(layer: LayerModel): void {
+  public addLayer(layer: LayerModel, param?: any): void {
     const wfsOnlineResources = this.layerHandlerService.getWFSResource(layer);
 
     // VT: create the vector on the map if it does not exist.

@@ -39,11 +39,52 @@
         	<legend><h5>Optional Filters</h5></legend>
         	<div class="form-group  form-group-sm">
 	            <label>Select Filter:</label>        			  
-                <select class="form-control">
-					<option value="" selected="selected">-- choose a filter--</option>
-					<option *ngFor="let filt of layer.filterCollection.optionalFilters">{{filt.label}}</option>
+                <select class="form-control" [ngModel]="selectedFilter" (ngModelChange)="addFilter($event)">				
+					<option [ngValue]="filt" *ngFor="let filt of layer.filterCollection.optionalFilters">{{filt.label}}</option>
 				</select>			   
 		    </div>
+		    <hr class="nav-divider">
+		    
+		    <div *ngFor="let optionalFilter of optionalFilters">
+	            <div *ngIf="optionalFilter.type=='OPTIONAL.TEXT'">
+	                <div class="form-group  form-group-sm">
+					    <label>{{optionalFilter.label}}:</label>
+					    <input type="text" class="form-control"  [(ngModel)]="optionalFilter.value">				   
+					</div>
+	            </div> 
+	            <div *ngIf="optionalFilter.type=='OPTIONAL.DATE'">
+	                <p>dates</p>
+	            </div> 
+	            <div *ngIf="optionalFilter.type=='OPTIONAL.DROPDOWNSELECTLIST'">	                
+                    <div class="form-group  form-group-sm">
+	                    <label>{{optionalFilter.label}}</label>	                    
+						<select class="form-control" [(ngModel)]="optionalFilter.value">
+							<option value="" selected="selected">-- choose a {{optionalFilter.label}} --</option>
+							<option *ngFor="let option of optionalFilter.options">{{getKey(option)}}</option>
+						</select>
+	                </div>
+	            </div>
+	            <div *ngIf="optionalFilter.type=='OPTIONAL.DROPDOWNREMOTE'">	                
+	                <div class="form-group  form-group-sm">
+	                    <label>{{optionalFilter.label}}</label>	                    
+						<select class="form-control" [(ngModel)]="optionalFilter.value">
+							<option value="" selected="selected">-- choose a {{optionalFilter.label}} --</option>
+							<option *ngFor="let option of optionalFilter.options">{{option.key}}</option>
+						</select>
+	                </div>
+	            </div>
+	            <div *ngIf="optionalFilter.type=='OPTIONAL.PROVIDER'">	               
+	                <div class="form-group">						
+						<div class="checkbox" *ngFor="let provider of providers;let idx = index">
+							<input id="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}" type="checkbox" [ngModel]="optionalFilter.value[provider.value]"/>
+							<label for="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}">
+								{{provider.label}}
+							</label>
+						</div>						
+					</div>
+	            </div>	            
+	        </div>
+		   
 	    </fieldset>
     	<button type="button" class="btn btn-info btn-sm" (click)="addLayer(layer)">Add Layer</button>
 </div>

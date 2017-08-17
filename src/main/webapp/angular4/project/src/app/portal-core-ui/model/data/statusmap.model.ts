@@ -46,6 +46,18 @@ export class StatusMapModel {
     this._statusMap.next(this);
   }
 
+   /**
+   * Add resource to the counter and update its status
+   * @param onlineresource  online resource that is being loaded now
+   */
+  public skip(onlineresource: OnlineResourceModel) {
+    if (!this.resourceMap[onlineresource.url]) {
+      this.resourceMap[onlineresource.url] = {};
+    }
+    this.resourceMap[onlineresource.url].status = 'Skipped';
+    this._statusMap.next(this);
+  }
+
   /**
    * update the counter for each completed job
    * @param onlineresource  online resource that is being updated
