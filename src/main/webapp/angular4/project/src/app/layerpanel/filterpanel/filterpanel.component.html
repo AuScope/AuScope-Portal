@@ -38,7 +38,7 @@
     	<fieldset *ngIf="layer.filterCollection && layer.filterCollection.optionalFilters" class="show-fieldset-borders">
         	<legend><h5>Optional Filters</h5></legend>
         	<div class="form-group  form-group-sm">
-	            <label>Select Filter:</label>        			  
+	            <label><i class="fa fa-refresh hasEvent light-blue" (click)="refreshFilter()"></i> Select Filter:</label>        			  
                 <select class="form-control" [ngModel]="selectedFilter" (ngModelChange)="addFilter($event)">				
 					<option [ngValue]="filt" *ngFor="let filt of layer.filterCollection.optionalFilters">{{filt.label}}</option>
 				</select>			   
@@ -76,7 +76,7 @@
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.PROVIDER'">	               
 	                <div class="form-group">						
 						<div class="checkbox" *ngFor="let provider of providers;let idx = index">
-							<input id="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}" type="checkbox" [ngModel]="optionalFilter.value[provider.value]"/>
+							<input id="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}" type="checkbox" [(ngModel)]="optionalFilter.value[provider.value]"/>
 							<label for="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}">
 								{{provider.label}}
 							</label>

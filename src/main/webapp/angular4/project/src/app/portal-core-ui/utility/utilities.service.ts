@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {HttpParams} from '@angular/common/http';
 
 
 declare var jQuery: any;
@@ -371,6 +372,18 @@ export class UtilitiesService {
       }
       return param;
     };
+
+    public static convertObjectToHttpParam(httpParam: HttpParams, myObject: object, mykey?: string): HttpParams {
+      for (const key in myObject) {
+        if (myObject[key] instanceof Array) {
+          httpParam = this.convertObjectToHttpParam(httpParam, myObject[key], key);
+        } else {
+          httpParam = httpParam.append((mykey ? mykey : key), JSON.stringify(myObject[key]));
+        }
+
+      }
+      return httpParam;
+    }
 
 
 }

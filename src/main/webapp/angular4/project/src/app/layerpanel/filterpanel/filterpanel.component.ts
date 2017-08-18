@@ -18,6 +18,7 @@ export class FilterPanelComponent {
   @Input() layer: LayerModel;
   private providers: Array<Object>;
   public optionalFilters: Array<Object>;
+  private selectedFilter;
 
   constructor(private olMapService: OlMapService, private layerHandlerService: LayerHandlerService,
     private filterPanelService: FilterPanelService) {
@@ -27,7 +28,7 @@ export class FilterPanelComponent {
 
   public addLayer(layer): void {
     const param = {
-      optionalFilters: {...this.optionalFilters}
+      optionalFilters: this.optionalFilters
     };
 
     for (const optFilter of param.optionalFilters) {
@@ -52,12 +53,18 @@ export class FilterPanelComponent {
         if (filter == null) {
             return;
         }
+        for (const filterobject of this.optionalFilters) {
+          if (filterobject['label'] === filter['label']) {
+            return;
+          }
+        }
         if (UtilitiesService.isEmpty(this.providers) && filter.type === 'OPTIONAL.PROVIDER') {
             this.getProvider();
             filter.value = {};
             for (const provider of this.providers) {
               filter.value[provider['value']] = true;
             }
+            filter.value['uat-gisservices.information.qld.gov.au'] = false;
 
         }
         if (UtilitiesService.isEmpty(filter.options) && filter.type === 'OPTIONAL.DROPDOWNREMOTE') {
@@ -95,4 +102,12 @@ export class FilterPanelComponent {
         }
 
     };
+
+    /**
+     * refresh and clear the filters;
+     */
+    public refreshFilter(): void {
+      this.optionalFilters = [];
+      this.selectedFilter = {};
+    }
 }

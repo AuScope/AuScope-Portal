@@ -19,7 +19,9 @@ import olSourceVector from 'ol/source/vector';
 import { Observable } from 'rxjs/Rx';
 import { GMLParserService } from '../../utility/gmlparser.service';
 import { Constants } from '../../utility/constants.service';
+import { UtilitiesService } from '../../utility/utilities.service';
 import { RenderStatusService } from '../openlayermap/renderstatus/render-status.service';
+
 
 /**
  * Use OlMapService to add layer to map. This service class adds wfs layer to the map
@@ -43,10 +45,14 @@ export class OlWFSService {
    * @param onlineresource the wfs online resource
    * @return Observable the observable from the http request
    */
-  public getFeature(layer: LayerModel, onlineResource: OnlineResourceModel): Observable<any> {
+  public getFeature(layer: LayerModel, onlineResource: OnlineResourceModel, param: any): Observable<any> {
 
-    const httpParams = new HttpParams().set('serviceUrl', onlineResource.url);
-    httpParams.append('typeName', onlineResource.name);
+
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('serviceUrl', onlineResource.url);
+    httpParams = httpParams.append('typeName', onlineResource.name);
+
+    httpParams = UtilitiesService.convertObjectToHttpParam(httpParams, param);
 
     if (layer.proxyUrl) {
       return this.http.get('../' + layer.proxyUrl, {
@@ -115,10 +121,10 @@ export class OlWFSService {
         this.olMapObject.addLayerById(markerLayer, layer.id);
     }
 
-
     for (const onlineResource of wfsOnlineResources){
       this.renderStatusService.addResource(layer, onlineResource);
-      this.getFeature(layer, onlineResource).subscribe(response => {
+      const collatedParam = UtilitiesService.collateParam(layer, onlineResource, param);
+      this.getFeature(layer, onlineResource, collatedParam).subscribe(response => {
         this.renderStatusService.updateComplete(layer, onlineResource);
         const rootNode = this.gmlParserService.getRootNode(response.gml);
         const primitives = this.gmlParserService.makePrimitives(rootNode);
