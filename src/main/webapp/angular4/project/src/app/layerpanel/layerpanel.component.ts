@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LayerHandlerService } from '../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
@@ -10,6 +10,8 @@ import { UITabPanel } from './model/ui/uitabpanel.model';
 import { RenderStatusService } from '../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { InfoPanelComponent } from '../layerpanel/infopanel/infopanel.component';
+
 
 
 declare var App: any;
@@ -25,6 +27,7 @@ export class LayerPanelComponent implements OnInit {
     layerGroups: {};
     uiLayerModels: {};
     bsModalRef: BsModalRef;
+    @ViewChild(InfoPanelComponent) private infoPanel: InfoPanelComponent;
 
     constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
       private modalService: BsModalService, private olMapService: OlMapService) {
@@ -32,15 +35,12 @@ export class LayerPanelComponent implements OnInit {
 
     }
 
-
-
-
     public selectTabPanel(layerId, panelType) {
       (<UILayerModel>this.uiLayerModels[layerId]).tabpanel.setPanelOpen(panelType);
-     }
+    }
 
-     ngOnInit(): void {
-      this.layerHandlerService.getLayerRecord().subscribe(
+     public ngOnInit() {
+       this.layerHandlerService.getLayerRecord().subscribe(
         response => {this.layerGroups = response;
           for (const key in this.layerGroups) {
              for (let i = 0; i < this.layerGroups[key].length; i++) {

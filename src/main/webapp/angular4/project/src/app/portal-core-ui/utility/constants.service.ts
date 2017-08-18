@@ -61,4 +61,7 @@ export class Constants {
 
     public static TILE_SIZE = 256;
 
+    // Centre of Australia in EPSG:3857
+    public static CENTRE_COORD: [number, number] = [14793316.706200, -2974317.644633];
+
 }

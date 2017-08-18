@@ -86,7 +86,7 @@ export class OlWFSService {
        if (primitive.name) {
          feature.setId(primitive.name);
        }
-    (<olLayerVector>this.olMapObject.getLayerById(layer.id)).getSource().addFeature(feature);
+    (<olSourceVector>this.olMapObject.getLayerById(layer.id)[0].getSource()).addFeature(feature);
   }
 
   public addLine(primitive: PrimitiveModel): void {
