@@ -4,7 +4,7 @@ import { Injectable, Inject, SkipSelf } from '@angular/core';
 import {LayerModel} from '../../model/data/layer.model'
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from '../openlayermap/ol-map-object';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Headers, RequestOptions } from '@angular/http';
 import olMap from 'ol/map';
 import olTile from 'ol/layer/tile';
@@ -93,9 +93,12 @@ export class OlWMSService {
        })
     }
 
+    let httpParams = new HttpParams();
+    httpParams = UtilitiesService.convertObjectToHttpParam(httpParams, param);
+
     return this.http.get('../' + sldUrl, {
       responseType: 'text',
-      params: param
+      params: httpParams
     }).map(response => {
       return response;
     });
