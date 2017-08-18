@@ -11,6 +11,7 @@ import olTile from 'ol/layer/tile';
 import olTileWMS from 'ol/source/tilewms';
 import { Observable } from 'rxjs/Rx';
 import { Constants } from '../../utility/constants.service';
+import { UtilitiesService } from '../../utility/utilities.service';
 import { RenderStatusService } from '../openlayermap/renderstatus/render-status.service';
 
 /**
@@ -77,12 +78,14 @@ export class OlWMSService {
 
   }
 
+
+
   /**
    * get the sld from the url
    * @param sldUrl the url containing the sld
    * @return a observable of the http request
    */
-  public getSldBody(sldUrl: string): Observable<any> {
+  public getSldBody(sldUrl: string, param?: any): Observable<any> {
     if (!sldUrl) {
        return Observable.create(observer => {
          observer.next(null);
@@ -90,7 +93,10 @@ export class OlWMSService {
        })
     }
 
-    return this.http.get('../' + sldUrl, {responseType: 'text'}).map(response => {
+    return this.http.get('../' + sldUrl, {
+      responseType: 'text',
+      params: param
+    }).map(response => {
       return response;
     });
   }
@@ -99,41 +105,53 @@ export class OlWMSService {
    * Add a wms layer to the map
    * @param layer the wms layer to add to the map.
    */
-  public addLayer(layer: LayerModel): void {
+  public addLayer(layer: LayerModel, param?: any): void {
+    if (!param) {
+      param = {};
+    }
+
+
+
     const wmsOnlineResources = this.layerHandlerService.getWMSResource(layer);
-     this.getSldBody(layer.proxyStyleUrl).subscribe(response => {
-        for (const wmsOnlineResource of wmsOnlineResources){
-          const params = wmsOnlineResource.version.startsWith('1.3') ?
-            this.getWMS1_3_0param(wmsOnlineResource.name, response) :
-            this.getWMS1_1param(wmsOnlineResource.name, response);
 
-          const wmsTile = new olTile({
-            extent: this.map.getView().calculateExtent(this.map.getSize()),
-            source: new olTileWMS({
-              url: wmsOnlineResource.url,
-              params: params,
-              serverType: 'geoserver',
-              projection: 'EPSG:4326'
-            })
+    for (const wmsOnlineResource of wmsOnlineResources) {
+      if (UtilitiesService.filterProviderSkip(param.optionalFilters, wmsOnlineResource.url)) {
+        this.renderStatusService.skip(layer, wmsOnlineResource);
+        continue;
+      }
+
+      this.getSldBody(layer.proxyStyleUrl, param).subscribe(response => {
+        const collatedParam = UtilitiesService.collateParam(layer, wmsOnlineResource, param);
+        const params = wmsOnlineResource.version.startsWith('1.3') ?
+          this.getWMS1_3_0param(wmsOnlineResource.name, response) :
+          this.getWMS1_1param(wmsOnlineResource.name, response);
+
+        const wmsTile = new olTile({
+          extent: this.map.getView().calculateExtent(this.map.getSize()),
+          source: new olTileWMS({
+            url: wmsOnlineResource.url,
+            params: params,
+            serverType: 'geoserver',
+            projection: 'EPSG:4326'
           })
+        })
 
-          const me = this;
-          wmsTile.getSource().on('tileloadstart', function(event) {
-            me.renderStatusService.addResource(layer, wmsOnlineResource);
-          });
+        const me = this;
+        wmsTile.getSource().on('tileloadstart', function(event) {
+          me.renderStatusService.addResource(layer, wmsOnlineResource);
+        });
 
-          wmsTile.getSource().on('tileloadend', function(event) {
-            me.renderStatusService.updateComplete(layer, wmsOnlineResource);
-          });
+        wmsTile.getSource().on('tileloadend', function(event) {
+          me.renderStatusService.updateComplete(layer, wmsOnlineResource);
+        });
 
-          wmsTile.getSource().on('tileloaderror', function(event) {
-            me.renderStatusService.updateComplete(layer, wmsOnlineResource, true);
-          })
+        wmsTile.getSource().on('tileloaderror', function(event) {
+          me.renderStatusService.updateComplete(layer, wmsOnlineResource, true);
+        })
 
-          this.olMapObject.addLayerById(wmsTile, layer.id);
-        }
-     })
-
+        this.olMapObject.addLayerById(wmsTile, layer.id);
+      })
+    }
   }
 
   public addCSWRecord(cswRecord: CSWRecordModel) {

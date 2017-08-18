@@ -31,6 +31,18 @@ export class RenderStatusService {
   }
 
   /**
+   * Mark the resource to as skip
+   * @param layer the layer that to be skipped
+   * @param resource the resource from the layer to be skipped
+   */
+  public skip(layer: LayerModel, resource: OnlineResourceModel) {
+    if (!this.statusmaps[layer.id]) {
+      this.statusmaps[layer.id] = new StatusMapModel(layer.id);
+    }
+    (<StatusMapModel>this.statusmaps[layer.id]).skip(resource);
+  }
+
+  /**
    * update the counter when a resource is complete. This will also add meta information about the resource to the
    * status map. This should automatically be called from the wfs and wms render service and there should be no reason for user
    * to call this function directly under normal circumstances

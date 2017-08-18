@@ -339,5 +339,38 @@ export class UtilitiesService {
         return string;
     }
 
+    /**
+     * This utility will collate the different type of filter into a single parameter object
+     */
+    public static collateParam(layer, onlineResource, param) {
+      if (!param) {
+        param = {};
+      }
+      // VT: hiddenParams- this is to append any fix parameter mainly for legacy reason in NVCL layer to set onlyHylogger to true
+      if (layer.filterCollection) {
+        let hiddenParams = [];
+        if (layer.filterCollection.hiddenParams) {
+          hiddenParams = layer.filterCollection.hiddenParams;
+        }
+        for (const idx in hiddenParams) {
+          if (hiddenParams[idx].type === 'MANDATORY.UIHiddenResourceAttribute') {
+            param[hiddenParams[idx].parameter] = onlineResource[hiddenParams[idx].attribute];
+          } else {
+            param[hiddenParams[idx].parameter] = hiddenParams[idx].value;
+          }
+        }
+
+        // VT: mandatoryFilters
+        let mandatoryFilters = [];
+        if (layer.filterCollection.mandatoryFilters) {
+          mandatoryFilters = layer.filterCollection.mandatoryFilters;
+        }
+        for (const idx in mandatoryFilters) {
+          param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;
+        }
+      }
+      return param;
+    };
+
 
 }
