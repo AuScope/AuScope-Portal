@@ -1,5 +1,6 @@
 import { OnlineResourceModel } from '../../model/data/onlineresource.model';
 import { RenderStatusService } from './renderstatus/render-status.service';
+import { Constants } from '../../utility/constants.service';
 import { Injectable, Inject } from '@angular/core';
 import olMap from 'ol/map';
 import olTile from 'ol/layer/tile';
@@ -25,11 +26,10 @@ export class OlMapObject {
     this.map = new olMap({
         layers: [osm_layer],
         view: new olView({
-            center: [14793316.706200, -2974317.644633],
+            center: Constants.CENTRE_COORD,
             zoom: 4
         })
     });
-
   }
 
   /**

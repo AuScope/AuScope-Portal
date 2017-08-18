@@ -8,11 +8,12 @@ import { FormsModule } from '@angular/forms';
 // Configs
 import { AuscopeConfiguration } from './appconfig/app.config';
 
-
 // Components
 import { OlMapComponent } from './openlayermap/olmap.component';
+import { OlMapPreviewComponent } from './openlayermap/olmap.preview.component';
 import { LayerPanelComponent } from './layerpanel/layerpanel.component';
-import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.component'
+import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.component';
+import { InfoPanelComponent} from './layerpanel/infopanel/infopanel.component';
 import { NgbdModalStatusReportComponent } from './modalwindow/renderstatus/renderstatus.component';
 
 
@@ -21,9 +22,11 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module'
 @NgModule({
   declarations: [
     OlMapComponent,
+    OlMapPreviewComponent,
     LayerPanelComponent,
     FilterPanelComponent,
-    NgbdModalStatusReportComponent
+    NgbdModalStatusReportComponent,
+    InfoPanelComponent
   ],
   imports: [
     BrowserModule,

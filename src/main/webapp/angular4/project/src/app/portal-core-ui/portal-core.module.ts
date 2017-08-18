@@ -18,6 +18,7 @@ import { RenderStatusService } from './service/openlayermap/renderstatus/render-
 import { OlWMSService } from './service/wms/ol-wms.service';
 import { OlWFSService } from './service/wfs/ol-wfs.service';
 import { GMLParserService } from './utility/gmlparser.service';
+import { LegendService } from './service/wms/legend.service';
 
 
 
@@ -37,7 +38,8 @@ import { GMLParserService } from './utility/gmlparser.service';
               OlWFSService,
               GMLParserService,
               RenderStatusService,
-              FilterPanelService
+              FilterPanelService,
+              LegendService
               ]
 })
 
@@ -62,5 +64,3 @@ export class PortalCoreModule {
 
 
 }
-
-

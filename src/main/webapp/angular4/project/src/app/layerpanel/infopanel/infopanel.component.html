@@ -1,0 +1,46 @@
+								<div>
+							        <app-ol-preview-map></app-ol-preview-map>
+								</div>
+								<div *ngIf="layer.name != undefined">
+								    <h4><span class="text-primary">Abstract</span></h4>
+								    <p>{{layer.name}}</p>
+								</div>
+								<div *ngIf="layer.description != undefined">
+								    <h4><span class="text-primary">Summary</span></h4>
+								    <p>{{layer.description}}</p>
+								</div>
+								<div *ngIf="layer.iconUrl != undefined">
+								    <h4><span class="text-primary">Icon</span></h4>
+								    <img src="{{layer.iconUrl}}" width="20" height="20">
+								</div>
+								<div *ngIf="cswRecords.length > 0">
+								    <h4><span class="text-primary">Details</span></h4>
+								    <div class="panel panel-inverse">
+									    <div class="panel-body" style="padding-left: 0px;padding-right: 0px;">																		
+										    <div class="panel-group" id="accordion">
+										       <div *ngFor="let cswRecord of cswRecords" class="panel panel-inverse panel-bordered">
+												   <div class="panel-heading" id="headingOne">
+													    <h4 class="panel-title">
+														    <a href="#collapseOne" class="accordion-link" data-toggle="collapse" data-parent="#accordion">
+															{{cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information'}}
+														    </a>
+													    </h4>
+												   </div>
+												   <div id="collapseOne" class="panel-collapse collapse in">
+													    <div class="panel-body">
+														    <p><b>Contact org: </b>{{cswRecord.contactOrg}}</p>
+														    <p><b>Description: </b>{{cswRecord.description}}</p>
+														    <p><b>Name: </b>{{cswRecord.name}}</p>
+														    <p><b>Info Url: </b><a target="_blank" href="{{cswRecord.recordInfoUrl}}">Link to Geonetwork Record</a></p>
+														    <div *ngFor="let onlineResource of cswRecord.onlineResources">
+														        <p *ngIf="onlineResource.type!='Unsupported'"><a target="_blank" href="{{onlineResource.url}}">{{onlineResource.type}} endpoint url</a>  <span class="label label-default">{{onlineResource.type}} </span></p>
+														    </div>
+														    <p *ngIf="wmsUrls[cswRecord.adminArea]!=undefined"><b>WMS Preview: </b><img src="{{wmsUrls[cswRecord.adminArea]}}" height="100" width="100" alt="Loading preview..."/></p>
+														    <p *ngIf="legends[cswRecord.adminArea]!=undefined"><b>Legend: </b><img src="{{legends[cswRecord.adminArea]}}" alt="Loading legend..."/></p>
+													    </div>
+												    </div>
+											    </div>
+										    </div>
+									    </div>
+								    </div>
+							   </div>

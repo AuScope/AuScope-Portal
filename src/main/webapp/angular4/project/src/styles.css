@@ -17,14 +17,6 @@ Contain Auscope specific modification to the original template.
 	height:43px;
 }
 
-.display-none{
-	display: none!;
-}
-
-.display-block{
-	display: block!;
-}
-
 .width-80{
 	width: 80%;
 }
@@ -85,29 +77,29 @@ max-width: 768px(small screen)
 		left:-60px;
 		width:100%;
 	}
-	
+
 	.layer-panel > .panel-heading li > a{
 		height:30px;
 	}
-	
+
 	.desktop-only{
 		display: none!important
 	}
-	
+
 	.mobile-only{
 		display:block;
 	}
-	
+
 }
 
 @media (min-width: 768px) {
-		
+
 	.mobile-only{
 		display: none!important
 	}
-	
+
 	.desktop-only{
 		display:block;
 	}
-	
+
 }
