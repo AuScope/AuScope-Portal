@@ -36,7 +36,7 @@ public class SF0BoreholeService extends BoreholeService {
     /**
      * Get all SF0 Boreholes from a given service url and return the response
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param bbox
      *            Set to the bounding box in which to fetch results, otherwise set it to null
      * @param restrictToIDList
@@ -44,15 +44,15 @@ public class SF0BoreholeService extends BoreholeService {
      * @return
      * @throws Exception
      */
-    public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+    public WFSResponse getAllBoreholes(String serviceUrl, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox) throws Exception {
-        return getAllBoreholes(serviceURL, boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null);
+        return getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null);
     }
 
     /**
      * Get all SF0 Boreholes from a given service url and return the response
      *
-     * @param serviceURL
+     * @param serviceUrl
      * @param bbox
      *            Set to the bounding box in which to fetch results, otherwise set it to null
      * @param restrictToIDList
@@ -60,7 +60,7 @@ public class SF0BoreholeService extends BoreholeService {
      * @return
      * @throws Exception
      */
-    public WFSResponse getAllBoreholes(String serviceURL, String boreholeName, String custodian,
+    public WFSResponse getAllBoreholes(String serviceUrl, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox, String outputFormat) throws Exception {
         String filterString;
         SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, null, null,null,null);
@@ -73,7 +73,7 @@ public class SF0BoreholeService extends BoreholeService {
         HttpRequestBase method = null;
         try {
             // Create a GetFeature request with an empty filter - get all
-            method = this.generateWFSRequest(serviceURL, getTypeName(), null, filterString, maxFeatures, null,
+            method = this.generateWFSRequest(serviceUrl, getTypeName(), null, filterString, maxFeatures, null,
                     ResultType.Results, outputFormat);
             String responseGml = this.httpServiceCaller.getMethodResponseAsString(method);
 

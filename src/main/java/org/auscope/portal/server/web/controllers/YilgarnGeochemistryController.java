@@ -11,7 +11,7 @@ import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.gsml.YilgarnGeochemistryFilter;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
 import org.auscope.portal.gsml.YilgarnObservationRecord;
-import org.auscope.portal.server.web.service.WFSService;
+import org.auscope.portal.core.services.WFSService;
 import org.auscope.portal.server.web.service.YilgarnGeochemistryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

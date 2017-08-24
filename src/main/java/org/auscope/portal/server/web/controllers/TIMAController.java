@@ -1,10 +1,10 @@
 package org.auscope.portal.server.web.controllers;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
+import org.auscope.portal.core.services.WFSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.gsml.TIMAGeosampleFilter;
-import org.auscope.portal.server.web.service.WFSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

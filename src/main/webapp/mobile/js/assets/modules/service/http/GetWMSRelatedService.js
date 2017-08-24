@@ -166,7 +166,7 @@ allModules.service('GetWMSRelatedService',['$http','$q',function ($http,$q) {
         var bbHeight = Math.floor(Math.abs(gglPixelCoordsNE.y-gglPixelCoordsSW.y));
         
         // NB: If SLD_BODY is used in future, look out for ArcGIS which does not like SLD_BODY (see Querier.js)
-        var get_params= "WMS_URL="+encodeURIComponent(serviceInfo.url)+
+        var get_params= "serviceUrl="+encodeURIComponent(serviceInfo.url)+
             "&lat="+pt[1]+ // NB: 'lat' and 'lng' are projection map coords, not latitude, longitude angles
             "&lng="+pt[0]+
             "&QUERY_LAYERS="+encodeURIComponent(layerName)+

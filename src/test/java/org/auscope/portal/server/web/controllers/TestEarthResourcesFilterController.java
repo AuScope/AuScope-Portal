@@ -72,20 +72,20 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
     @Test
     public void testDoMineFilterSpecificError() throws Exception {
         final String mineName = "testMine";
-        final String serviceURL = "http://testblah.com";
+        final String serviceUrl = "http://testblah.com";
         final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
 
         context.checking(new Expectations() {
             {
                 allowing(mockMethod).getURI();
-                will(returnValue(new URI(serviceURL)));
+                will(returnValue(new URI(serviceUrl)));
 
-                oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
+                oneOf(mineralOccurrenceService).getMinesGml(serviceUrl, mineName, null, 0);
                 will(throwException(new PortalServiceException(mockMethod)));
             }
         });
 
-        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
+        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceUrl, mineName, null, 0);
 
         //Ensure that we get a response that says failure
         testMAVResponse(modelAndView, new Boolean(false), null);
@@ -98,7 +98,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
      */
     @Test
     public void testDoMineFilterAnyError() throws Exception {
-        final String serviceURL = "http://testblah.com";
+        final String serviceUrl = "http://testblah.com";
         final String expectedKML = "";
         final String mineName = "mineName";
         final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
@@ -107,12 +107,12 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
 
         context.checking(new Expectations() {
             {
-                oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
+                oneOf(mineralOccurrenceService).getMinesGml(serviceUrl, mineName, null, 0);
                 will(returnValue(new WFSTransformedResponse(xmlErrorResponse, expectedKML, mockMethod)));
             }
         });
 
-        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
+        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceUrl, mineName, null, 0);
 
         //Ensure that we get a response that says failure
         testMAVResponse(modelAndView, new Boolean(false), null);
@@ -125,7 +125,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
      */
     @Test
     public void testDoMineFilterAllMines() throws Exception {
-        final String serviceURL = "http://localhost?";
+        final String serviceUrl = "http://localhost?";
         final String mineName = ""; //to get all mines
         final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
         final String expectedGML = "<gml/>";
@@ -133,14 +133,14 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 allowing(mockMethod).getURI();
-                will(returnValue(new URI(serviceURL)));
-                oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
+                will(returnValue(new URI(serviceUrl)));
+                oneOf(mineralOccurrenceService).getMinesGml(serviceUrl, mineName, null, 0);
                 will(returnValue(new WFSResponse(expectedGML, mockMethod)));
             }
         });
 
         //call with updateCSWRecords dud url
-        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
+        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceUrl, mineName, null, 0);
 
         //Ensure that we get a valid response
         testMAVResponse(modelAndView, new Boolean(true), expectedGML);
@@ -153,7 +153,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
      */
     @Test
     public void testDoMineFilterSingleMine() throws Exception {
-        final String serviceURL = "http://localhost?";
+        final String serviceUrl = "http://localhost?";
         final String mineName = "mineName"; //to get all mines
         final HttpRequestBase mockMethod = context.mock(HttpRequestBase.class);
         final String expectedGML = "<gml/>";
@@ -161,14 +161,14 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         context.checking(new Expectations() {
             {
                 allowing(mockMethod).getURI();
-                will(returnValue(new URI(serviceURL)));
-                oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
+                will(returnValue(new URI(serviceUrl)));
+                oneOf(mineralOccurrenceService).getMinesGml(serviceUrl, mineName, null, 0);
                 will(returnValue(new WFSResponse(expectedGML, mockMethod)));
             }
         });
 
         //call with updateCSWRecords dud url
-        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
+        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceUrl, mineName, null, 0);
 
         //Ensure that we get a valid response
         testMAVResponse(modelAndView, new Boolean(true), expectedGML);
@@ -176,18 +176,18 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
 
     @Test
     public void testRequestFailure() throws Exception {
-        final String serviceURL = "http://localhost?";
+        final String serviceUrl = "http://localhost?";
         final String mineName = "mineName"; //to get all mines
 
         context.checking(new Expectations() {
             {
-                oneOf(mineralOccurrenceService).getMinesGml(serviceURL, mineName, null, 0);
+                oneOf(mineralOccurrenceService).getMinesGml(serviceUrl, mineName, null, 0);
                 will(throwException(new PortalServiceException("")));
             }
         });
 
         //call with updateCSWRecords dud url
-        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceURL, mineName, null, 0);
+        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilter(serviceUrl, mineName, null, 0);
 
         //Ensure that we get a valid response
         testMAVResponse(modelAndView, new Boolean(false), null);
@@ -200,19 +200,19 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
      */
     @Test
     public void testMineCount() throws Exception {
-        final String serviceURL = "http://localhost?";
+        final String serviceUrl = "http://localhost?";
         final String mineName = "mineName"; //to get all mines
         final int maxFeatures = 21341;
         final int responseCount = 21;
 
         context.checking(new Expectations() {
             {
-                oneOf(mineralOccurrenceService).getMinesCount(serviceURL, mineName, null, maxFeatures);
+                oneOf(mineralOccurrenceService).getMinesCount(serviceUrl, mineName, null, maxFeatures);
                 will(returnValue(new WFSCountResponse(responseCount)));
             }
         });
 
-        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilterCount(serviceURL, mineName, null,
+        ModelAndView modelAndView = this.earthResourcesFilterController.doMineFilterCount(serviceUrl, mineName, null,
                 maxFeatures);
         testMAVResponseCount(modelAndView, new Boolean(true), responseCount);
     }
@@ -255,7 +255,7 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
      */
     @Test
     public void testMineActivityCount() throws Exception {
-        final String serviceURL = "http://localhost?";
+        final String serviceUrl = "http://localhost?";
         final int maxFeatures = 21341;
         final int responseCount = 21;
         final String mineName = "mineName"; //to get all mines
@@ -267,13 +267,13 @@ public class TestEarthResourcesFilterController extends PortalTestClass {
         final String production = "prod";
         context.checking(new Expectations() {
             {
-                oneOf(mineralOccurrenceService).getMiningActivityCount(serviceURL, mineName, startDate, endDate,
+                oneOf(mineralOccurrenceService).getMiningActivityCount(serviceUrl, mineName, startDate, endDate,
                         oreProcessed, producedMaterial, cutOffGrade, production, maxFeatures, null);
                 will(returnValue(new WFSCountResponse(responseCount)));
             }
         });
 
-        ModelAndView modelAndView = this.earthResourcesFilterController.doMiningActivityFilterCount(serviceURL,
+        ModelAndView modelAndView = this.earthResourcesFilterController.doMiningActivityFilterCount(serviceUrl,
                 mineName, startDate, endDate, oreProcessed, producedMaterial, cutOffGrade, production, null,
                 maxFeatures);
         testMAVResponseCount(modelAndView, new Boolean(true), responseCount);

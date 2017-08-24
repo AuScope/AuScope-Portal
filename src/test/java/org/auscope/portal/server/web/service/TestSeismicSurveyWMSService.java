@@ -1,4 +1,4 @@
-package org.auscope.portal.services;
+package org.auscope.portal.server.web.service;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
