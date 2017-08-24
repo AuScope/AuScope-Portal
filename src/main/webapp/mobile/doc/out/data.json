@@ -2574,7 +2574,7 @@
             "name": "getNVCLLogs",
             "params": [
                 {
-                    "name": "serviceURL",
+                    "name": "serviceUrl",
                     "description": "online resource URL"
                 }
             ],
