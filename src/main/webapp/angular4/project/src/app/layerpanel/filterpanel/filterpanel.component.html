@@ -16,9 +16,9 @@
 	            <div *ngIf="mandatoryFilter.type == 'MANDATORY.DROPDOWNSELECTLIST'">
 	                <div class="form-group  form-group-sm">
 	                    <label>{{mandatoryFilter.label}}</label>	                    
-						<select class="form-control">
+						<select class="form-control" [(ngModel)]="mandatoryFilter.value">
 							<option value="" selected="selected">-- choose a {{mandatoryFilter.label}} --</option>
-							<option *ngFor="let option of mandatoryFilter.options">{{getKey(option)}}</option>
+							<option *ngFor="let option of mandatoryFilter.options" [ngValue]="getValue(option)">{{getKey(option)}}</option>
 						</select>
 	                </div>
 	            </div>                        
@@ -69,7 +69,7 @@
 	                    <label>{{optionalFilter.label}}</label>	                    
 						<select class="form-control" [(ngModel)]="optionalFilter.value">
 							<option value="" selected="selected">-- choose a {{optionalFilter.label}} --</option>
-							<option *ngFor="let option of optionalFilter.options">{{option.key}}</option>
+							<option *ngFor="let option of optionalFilter.options" [ngValue]="option.value">{{option.key}}</option>
 						</select>
 	                </div>
 	            </div>

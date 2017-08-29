@@ -116,6 +116,8 @@ public class NotificationService {
             return cache;
         } catch (TwitterException ex) {
             throw new PortalServiceException("Exception accessing notifications for " + notificationAccount + " : " + ex.getMessage(), ex);
+        }catch (NullPointerException ex) {
+            return null;
         }
 
     }

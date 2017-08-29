@@ -33,7 +33,7 @@ export class FilterPanelService {
   public getCommodity(url: string): Observable<any> {
     return this.http.get(url)
       .map(response => {
-        const data = response['data'].data;
+        const data = response['data'];
         const result = [];
         data.forEach(function(item, i, ar) {
           result.push({

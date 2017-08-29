@@ -21,6 +21,7 @@ export class OlMapService {
    * @param layer the layer to add to the map
    */
   public addLayer(layer: LayerModel, param: any): void {
+    this.olMapObject.removeLayerById(layer.id);
     if (this.layerHandlerService.containsWMS(layer)) {
       this.olWMSService.addLayer(layer, param);
     }else if (this.layerHandlerService.containsWFS(layer)) {

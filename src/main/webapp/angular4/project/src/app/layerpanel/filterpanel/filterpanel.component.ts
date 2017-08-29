@@ -4,7 +4,7 @@ import { FilterPanelService } from '../../portal-core-ui/service/filterpanel/fil
 import { OlMapService } from '../../portal-core-ui/service/openlayermap/ol-map.service';
 import { UtilitiesService } from '../../portal-core-ui/utility/utilities.service';
 import { Component, Input} from '@angular/core';
-
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-filter-panel',
@@ -28,7 +28,7 @@ export class FilterPanelComponent {
 
   public addLayer(layer): void {
     const param = {
-      optionalFilters: this.optionalFilters
+      optionalFilters: _.cloneDeep(this.optionalFilters)
     };
 
     for (const optFilter of param.optionalFilters) {
@@ -42,6 +42,12 @@ export class FilterPanelComponent {
   public getKey(options: Object): string {
     return UtilitiesService.getKey(options);
   }
+
+  public getValue(options: Object): string {
+    return UtilitiesService.getValue(options);
+  }
+
+
 
    /**
      * Adds a new filter to be displayed in the panel
@@ -64,7 +70,7 @@ export class FilterPanelComponent {
             for (const provider of this.providers) {
               filter.value[provider['value']] = true;
             }
-            filter.value['uat-gisservices.information.qld.gov.au'] = false;
+
 
         }
         if (UtilitiesService.isEmpty(filter.options) && filter.type === 'OPTIONAL.DROPDOWNREMOTE') {

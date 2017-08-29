@@ -2,6 +2,7 @@ import { APP_CONFIG, AppConfig } from '../../appconfig/app.config';
 import { CSWRecordModel } from '../../model/data/cswrecord.model';
 import { Injectable, Inject, SkipSelf } from '@angular/core';
 import {LayerModel} from '../../model/data/layer.model'
+import { OnlineResourceModel } from '../../model/data/onlineresource.model';
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from '../openlayermap/ol-map-object';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
@@ -26,8 +27,13 @@ export class OlWMSService {
                                       private layerHandlerService: LayerHandlerService,
                                       private olMapObject: OlMapObject,
                                       private http: HttpClient,
-                                      private renderStatusService: RenderStatusService) {
+                                      private renderStatusService: RenderStatusService
+                                      ) {
     this.map = this.olMapObject.getMap();
+  }
+
+  private wmsUrlTooLong(sldBody: string): boolean {
+    return encodeURIComponent(sldBody).length > Constants.WMSMAXURLGET;
   }
 
 
@@ -36,20 +42,22 @@ export class OlWMSService {
    * @param layers the wms layer
    * @param sld_body associated sld_body
    */
-  public getWMS1_3_0param(layers: string, sld_body?: string): any {
-     const params = {
-       'LAYERS': layers,
-       'TILED': true,
-       'DISPLAYOUTSIDEMAXEXTENT': true,
-       'FORMAT': 'image/png',
-       'TRANSPARENT': true,
-       'VERSION': '1.3.0',
-       'WIDTH' : Constants.TILE_SIZE,
-       'HEIGHT' : Constants.TILE_SIZE
-     }
+  public getWMS1_3_0param(layer: LayerModel, onlineResource: OnlineResourceModel, param, sld_body?: string): any {
+    const params = {
+      'LAYERS': onlineResource.name,
+      'TILED': true,
+      'DISPLAYOUTSIDEMAXEXTENT': true,
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.3.0',
+      'WIDTH': Constants.TILE_SIZE,
+      'HEIGHT': Constants.TILE_SIZE
+    }
 
-    if (sld_body) {
+    if (sld_body && !this.wmsUrlTooLong(sld_body)) {
       params['sld_body'] = sld_body;
+    } else if (sld_body && this.wmsUrlTooLong(sld_body)) {
+      params['sld'] = this.getSldUrl(layer, onlineResource, param);
     }
     return params;
 
@@ -60,19 +68,21 @@ export class OlWMSService {
    * @param layers the wms layer
    * @param sld_body associated sld_body
    */
-  public getWMS1_1param(layers: string, sld_body?: string): any {
-     const params = {
-       'LAYERS': layers,
-       'TILED': true,
-       'DISPLAYOUTSIDEMAXEXTENT': true,
-       'FORMAT': 'image/png',
-       'TRANSPARENT': true,
-       'VERSION': '1.1.1',
-       'WIDTH' : Constants.TILE_SIZE,
-       'HEIGHT' : Constants.TILE_SIZE
-     }
-    if (sld_body) {
+  public getWMS1_1param(layer: LayerModel, onlineResource: OnlineResourceModel, param, sld_body?: string): any {
+    const params = {
+      'LAYERS': onlineResource.name,
+      'TILED': true,
+      'DISPLAYOUTSIDEMAXEXTENT': true,
+      'FORMAT': 'image/png',
+      'TRANSPARENT': true,
+      'VERSION': '1.1.1',
+      'WIDTH': Constants.TILE_SIZE,
+      'HEIGHT': Constants.TILE_SIZE
+    }
+    if (sld_body && !this.wmsUrlTooLong(sld_body)) {
       params['sld_body'] = sld_body;
+    } else if (sld_body && this.wmsUrlTooLong(sld_body)) {
+      params['sld'] = this.getSldUrl(layer, onlineResource, param);
     }
     return params;
 
@@ -105,6 +115,22 @@ export class OlWMSService {
   }
 
   /**
+     * Get the wms style url if proxyStyleUrl is valid
+     * @method getWMSStyleUrl
+     * @param layer - the layer we would like to retrieve the sld for if proxyStyleUrl is defined
+     * @param onlineResource - the onlineResource of the layer we are rendering
+     * @param param - OPTIONAL - parameter to be passed into retrieving the SLD.Used in capdf
+     * @return url - getUrl to retrieve sld
+     */
+  public getSldUrl(layer: LayerModel, onlineResource: OnlineResourceModel, param) {
+    if (layer.proxyStyleUrl) {
+      return Constants.SLDURL + layer.proxyStyleUrl + '?' + $.param(param);
+    } else {
+      return null;
+    }
+  };
+
+  /**
    * Add a wms layer to the map
    * @param layer the wms layer to add to the map.
    */
@@ -122,12 +148,12 @@ export class OlWMSService {
         this.renderStatusService.skip(layer, wmsOnlineResource);
         continue;
       }
+      const collatedParam = UtilitiesService.collateParam(layer, wmsOnlineResource, param);
+      this.getSldBody(layer.proxyStyleUrl, collatedParam).subscribe(response => {
 
-      this.getSldBody(layer.proxyStyleUrl, param).subscribe(response => {
-        const collatedParam = UtilitiesService.collateParam(layer, wmsOnlineResource, param);
         const params = wmsOnlineResource.version.startsWith('1.3') ?
-          this.getWMS1_3_0param(wmsOnlineResource.name, response) :
-          this.getWMS1_1param(wmsOnlineResource.name, response);
+          this.getWMS1_3_0param(layer, wmsOnlineResource, collatedParam, response) :
+          this.getWMS1_1param(layer, wmsOnlineResource, collatedParam, response);
 
         const wmsTile = new olTile({
           extent: this.map.getView().calculateExtent(this.map.getSize()),

@@ -44,6 +44,20 @@ export class UtilitiesService {
       return Object.keys(options)[0];
     };
 
+    /**
+     * Retrieve the first value of a object
+     * @method getValue
+     * @param obj - the object to query
+     * @return string - the key of the object
+     */
+    public static getValue(options): string {
+      for (const key in options) {
+        return options[key];
+      }
+    };
+
+
+
 
     /**
      * Test if string s contains c

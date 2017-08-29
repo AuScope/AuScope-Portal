@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 
+import com.gargoylesoftware.htmlunit.TextUtil;
+
 @Controller
 public class MineralTenementController extends BasePortalController {
 
@@ -240,6 +242,7 @@ public class MineralTenementController extends BasePortalController {
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             HttpServletResponse response) throws Exception {
         String style = "";
+        ccProperty = org.auscope.portal.core.util.TextUtil.cleanQueryParameter(ccProperty);
         switch (ccProperty) {
         case "TenementType" :
             style = this.getStyle(false,ccProperty,"mt:MineralTenement",name, tenementType, owner, size, endDate);

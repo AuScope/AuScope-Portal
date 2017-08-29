@@ -122,6 +122,10 @@ export class OlWFSService {
     }
 
     for (const onlineResource of wfsOnlineResources){
+      if (UtilitiesService.filterProviderSkip(param.optionalFilters, onlineResource.url)) {
+        this.renderStatusService.skip(layer, onlineResource);
+        continue;
+      }
       this.renderStatusService.addResource(layer, onlineResource);
       const collatedParam = UtilitiesService.collateParam(layer, onlineResource, param);
       this.getFeature(layer, onlineResource, collatedParam).subscribe(response => {

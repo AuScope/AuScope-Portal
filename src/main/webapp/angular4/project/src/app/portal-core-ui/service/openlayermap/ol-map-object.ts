@@ -64,12 +64,14 @@ export class OlMapObject {
   }
 
   public removeLayerById(id: string) {
-    const activelayers  = this.getLayerById(id);
-    activelayers.forEach(layer => {
-      this.map.removeLayer(layer);
-    })
+    const activelayers = this.getLayerById(id);
+    if (activelayers) {
+      activelayers.forEach(layer => {
+        this.map.removeLayer(layer);
+      })
 
-    this.renderStatusService.resetLayer(id);
+      this.renderStatusService.resetLayer(id);
+    }
 
   }
 
