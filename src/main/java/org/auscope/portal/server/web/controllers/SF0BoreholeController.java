@@ -98,7 +98,6 @@ public class SF0BoreholeController extends BasePortalController {
             @RequestParam(required = false, value = "analyticsJobId") String analyticsJobId,
             @RequestParam(required = false, value = "failIds") String failIds,
             @RequestParam(required = false, value = "errorIds") String errorIds,
-            @RequestParam(required = false, value = "showNoneHylogged", defaultValue = "false") Boolean showNoneHylogged,
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters)
 
                     throws Exception {

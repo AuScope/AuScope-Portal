@@ -103,7 +103,7 @@ export class OlWMSService {
        })
     }
 
-    let httpParams = new HttpParams();
+    let httpParams = Object.getOwnPropertyNames(param).reduce((p, key1) => p.set(key1, param[key1]), new HttpParams());
     httpParams = UtilitiesService.convertObjectToHttpParam(httpParams, param);
 
     return this.http.get('../' + sldUrl, {

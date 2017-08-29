@@ -48,10 +48,9 @@ export class OlWFSService {
   public getFeature(layer: LayerModel, onlineResource: OnlineResourceModel, param: any): Observable<any> {
 
 
-    let httpParams = new HttpParams();
-    httpParams = httpParams.set('serviceUrl', onlineResource.url);
+    let httpParams = Object.getOwnPropertyNames(param).reduce((p, key1) => p.set(key1, param[key1]), new HttpParams());
+    httpParams = httpParams.append('serviceUrl', onlineResource.url);
     httpParams = httpParams.append('typeName', onlineResource.name);
-
     httpParams = UtilitiesService.convertObjectToHttpParam(httpParams, param);
 
     if (layer.proxyUrl) {
