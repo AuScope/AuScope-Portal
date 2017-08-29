@@ -57,7 +57,7 @@ export class OlWMSService {
     if (sld_body && !this.wmsUrlTooLong(sld_body)) {
       params['sld_body'] = sld_body;
     } else if (sld_body && this.wmsUrlTooLong(sld_body)) {
-      params['sld'] = this.getSldUrl(layer, onlineResource, param);
+      params['sldUrl'] = this.getSldUrl(layer, onlineResource, param);
     }
     return params;
 
@@ -82,7 +82,7 @@ export class OlWMSService {
     if (sld_body && !this.wmsUrlTooLong(sld_body)) {
       params['sld_body'] = sld_body;
     } else if (sld_body && this.wmsUrlTooLong(sld_body)) {
-      params['sld'] = this.getSldUrl(layer, onlineResource, param);
+      params['sldUrl'] = this.getSldUrl(layer, onlineResource, param);
     }
     return params;
 
@@ -124,7 +124,7 @@ export class OlWMSService {
      */
   public getSldUrl(layer: LayerModel, onlineResource: OnlineResourceModel, param) {
     if (layer.proxyStyleUrl) {
-      return Constants.SLDURL + layer.proxyStyleUrl + '?' + $.param(param);
+      return '/' + layer.proxyStyleUrl + '?' + $.param(param);
     } else {
       return null;
     }
@@ -140,7 +140,6 @@ export class OlWMSService {
     }
 
 
-
     const wmsOnlineResources = this.layerHandlerService.getWMSResource(layer);
 
     for (const wmsOnlineResource of wmsOnlineResources) {
@@ -150,22 +149,37 @@ export class OlWMSService {
       }
       const collatedParam = UtilitiesService.collateParam(layer, wmsOnlineResource, param);
       this.getSldBody(layer.proxyStyleUrl, collatedParam).subscribe(response => {
-
+        const me = this;
         const params = wmsOnlineResource.version.startsWith('1.3') ?
           this.getWMS1_3_0param(layer, wmsOnlineResource, collatedParam, response) :
           this.getWMS1_1param(layer, wmsOnlineResource, collatedParam, response);
 
-        const wmsTile = new olTile({
-          extent: this.map.getView().calculateExtent(this.map.getSize()),
-          source: new olTileWMS({
-            url: wmsOnlineResource.url,
-            params: params,
-            serverType: 'geoserver',
-            projection: 'EPSG:4326'
+        let wmsTile;
+        if (this.wmsUrlTooLong(response)) {
+          wmsTile = new olTile({
+            extent: this.map.getView().calculateExtent(this.map.getSize()),
+            source: new olTileWMS({
+              url: wmsOnlineResource.url,
+              params: params,
+              serverType: 'geoserver',
+              projection: 'EPSG:4326',
+              tileLoadFunction: function(image, src) {
+                me.imagePostFunction(image, src);
+              }
+            })
           })
-        })
+        } else {
+          wmsTile = new olTile({
+            extent: this.map.getView().calculateExtent(this.map.getSize()),
+            source: new olTileWMS({
+              url: wmsOnlineResource.url,
+              params: params,
+              serverType: 'geoserver',
+              projection: 'EPSG:4326'
+            })
+          })
+        }
 
-        const me = this;
         wmsTile.getSource().on('tileloadstart', function(event) {
           me.renderStatusService.addResource(layer, wmsOnlineResource);
         });
@@ -181,6 +195,36 @@ export class OlWMSService {
         this.olMapObject.addLayerById(wmsTile, layer.id);
       })
     }
+  }
+
+  public imagePostFunction(image, src) {
+    const img = image.getImage();
+      const dataEntries = src.split('&');
+      const url = '../getWMSMapViaProxy.do?';
+      const params = {};
+      for (let i = 0; i < dataEntries.length; i++) {
+        if (i === 0) {
+          params['url'] = dataEntries[i];
+        } else {
+          if (dataEntries[i].toLowerCase().indexOf('layers') >= 0) {
+            params['layer'] = decodeURIComponent(dataEntries[i].split('=')[1]);
+          }
+          if (dataEntries[i].toLowerCase().indexOf('bbox') >= 0) {
+            params['bbox'] = decodeURIComponent(dataEntries[i].split('=')[1]);
+          }
+          if (dataEntries[i].toLowerCase().indexOf('sldurl') >= 0) {
+            params['sldUrl'] = decodeURIComponent(dataEntries[i].split('=')[1]);
+          }
+          if (dataEntries[i].toLowerCase().indexOf('version') >= 0) {
+            params['version'] = decodeURIComponent(dataEntries[i].split('=')[1]);
+          }
+          if (dataEntries[i].toLowerCase().indexOf('crs') === 0 || dataEntries[i].toLowerCase().indexOf('srs')  === 0) {
+            params['crs'] = decodeURIComponent(dataEntries[i].split('=')[1]);
+          }
+        }
+      }
+      img.src = url + $.param(params);
+
   }
 
   public addCSWRecord(cswRecord: CSWRecordModel) {
