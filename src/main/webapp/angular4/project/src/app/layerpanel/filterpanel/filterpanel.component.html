@@ -5,8 +5,8 @@
 	            <div *ngIf="mandatoryFilter.type == 'MANDATORY.CHECKBOX'">
 	                <div class="form-group  form-group-sm">
 	                	<div class="checkbox">
-							<input type="checkbox" [(ngModel)]="mandatoryFilter.value"/>
-							<label>
+							<input id="{{ 'filter-MANDATORY.CHECKBOX-' + mandatoryFilter.label }}" type="checkbox" [(ngModel)]="mandatoryFilter.value"/>
+							<label for="{{ 'filter-MANDATORY.CHECKBOX-' + mandatoryFilter.label }}">
 								{{mandatoryFilter.label}}
 							</label>
 						</div>
