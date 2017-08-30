@@ -16,7 +16,7 @@
 								<div *ngIf="cswRecords.length > 0">
 								    <h4><span class="text-primary">Details</span></h4>
 								    <div class="panel panel-inverse">
-									    <div class="panel-body" style="padding-left: 0px;padding-right: 0px;">																		
+									    <div class="panel-body" style="padding-left: 0px;padding-right: 0px;">
 										    <div class="panel-group" id="accordion">
 										       <div *ngFor="let cswRecord of cswRecords" class="panel panel-inverse panel-bordered">
 												   <div class="panel-heading" id="headingOne">
@@ -36,7 +36,7 @@
 														        <p *ngIf="onlineResource.type!='Unsupported'"><a target="_blank" href="{{onlineResource.url}}">{{onlineResource.type}} endpoint url</a>  <span class="label label-default">{{onlineResource.type}} </span></p>
 														    </div>
 														    <p *ngIf="wmsUrls[cswRecord.adminArea]!=undefined"><b>WMS Preview: </b><img src="{{wmsUrls[cswRecord.adminArea]}}" height="100" width="100" alt="Loading preview..."/></p>
-														    <p *ngIf="legends[cswRecord.adminArea]!=undefined"><b>Legend: </b><img src="{{legends[cswRecord.adminArea]}}" alt="Loading legend..."/></p>
+														    <p *ngIf="legends[cswRecord.adminArea]!=undefined"><b>Legend: </b><img src="{{legends[cswRecord.adminArea]}}" style="max-width: 260px;" alt="Loading legend..."/></p>
 													    </div>
 												    </div>
 											    </div>

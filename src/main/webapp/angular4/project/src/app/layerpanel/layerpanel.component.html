@@ -1,25 +1,25 @@
 
-					
+
 	<li class="has-sub" *ngFor="let layerGroup of layerGroups | getKey">
    		<a href="javascript:;">
             <b class="caret caret-right pull-right"></b>
               {{layerGroup.key}}
         </a>
-		<ul class="sub-menu">									
+		<ul class="sub-menu">
 			<li *ngFor="let layer of layerGroup.value" [ngClass]="{'active': layer.expanded}">
-				<a (click)="layer.expanded = !layer.expanded">					
+				<a (click)="layer.expanded = !layer.expanded">
 					<div class="project-info">
 						<span *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="pull-right project-percentage hasEvent light-blue"><u (click)="openStatusReport(uiLayerModels[layer.id]); $event.stopPropagation();">{{uiLayerModels[layer.id].statusMap.completePercentage}}<i *ngIf="!uiLayerModels[layer.id].statusMap.containsError" class="fa fa-warning text-warning"></i></u></span>
 						<div class="project-title">
-							<i *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-ban text-danger" (click) = "removeLayer(layer);$event.stopPropagation();"></i>							
-								{{layer.name}} 
+							<i *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-ban text-danger" (click) = "removeLayer(layer);$event.stopPropagation();"></i>
+								{{layer.name}}
 								<span *ngIf="layer.expanded && !uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-arrow-circle-down"></span>
 						</div>
 						<div *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="progress progress-xs">
 							<div class="progress-bar bg-gradient-blue-purple" [style.width]="uiLayerModels[layer.id].statusMap.completePercentage" role="progressbar"></div>
 						</div>
-					</div>					 
-					
+					</div>
+
 				</a>
 				<div [hidden]="!layer.expanded" class="sidebar-panel-menu-show">
 
@@ -41,7 +41,7 @@
 							</div>
 
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.infopanel.expanded}">
-								<info-panel (show)="displayMap(layer.id)" [cswRecords]=layer.cswRecords [layer]=layer ></info-panel>
+								<info-panel [expanded]="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [cswRecords]=layer.cswRecords [layer]=layer ></info-panel>
 							</div>
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.downloadpanel.expanded}">
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { LayerHandlerService } from '../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
@@ -28,6 +28,7 @@ export class LayerPanelComponent implements OnInit {
     uiLayerModels: {};
     bsModalRef: BsModalRef;
     @ViewChild(InfoPanelComponent) private infoPanel: InfoPanelComponent;
+    @Output() expanded: EventEmitter<any> = new EventEmitter();
 
     constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
       private modalService: BsModalService, private olMapService: OlMapService) {
