@@ -82,7 +82,7 @@ export class FilterPanelComponent implements OnInit {
       this.getProvider();
       filter.value = {};
       for (const provider of this.providers) {
-        filter.value[provider['value']] = true;
+        filter.value[provider['value']] = false;
       }
 
 

@@ -1,4 +1,3 @@
-import { APP_CONFIG, AppConfig } from '../../appconfig/app.config';
 import { CSWRecordModel } from '../../model/data/cswrecord.model';
 import { Injectable, Inject, SkipSelf } from '@angular/core';
 import {LayerModel} from '../../model/data/layer.model'
@@ -23,12 +22,11 @@ export class OlWMSService {
 
   private map: olMap;
 
-  constructor( @Inject(APP_CONFIG) private config: AppConfig,
-                                      private layerHandlerService: LayerHandlerService,
-                                      private olMapObject: OlMapObject,
-                                      private http: HttpClient,
-                                      private renderStatusService: RenderStatusService
-                                      ) {
+  constructor(private layerHandlerService: LayerHandlerService,
+    private olMapObject: OlMapObject,
+    private http: HttpClient,
+    private renderStatusService: RenderStatusService
+  ) {
     this.map = this.olMapObject.getMap();
   }
 

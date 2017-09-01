@@ -53,7 +53,10 @@
 					</div>
 	            </div> 
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.DATE'">
-	                <p>dates</p>
+	                <div class="form-group">
+						<label class="control-label">{{optionalFilter.label}}:</label>
+						<input type="date" class="form-control" [(ngModel)]="optionalFilter.value"/>
+					</div>
 	            </div> 
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.DROPDOWNSELECTLIST'">	                
                     <div class="form-group  form-group-sm">

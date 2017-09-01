@@ -5,9 +5,6 @@ import { NgClass } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 
-// Configs
-import { AuscopeConfiguration } from './appconfig/app.config';
-
 // Components
 import { OlMapComponent } from './openlayermap/olmap.component';
 import { OlMapPreviewComponent } from './openlayermap/olmap.preview.component';
@@ -33,7 +30,6 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module'
     FormsModule,
     HttpClientModule,
     PortalCoreModule,
-    PortalCoreModule.forRoot(AuscopeConfiguration),
     ModalModule.forRoot()
   ],
   entryComponents: [NgbdModalStatusReportComponent],

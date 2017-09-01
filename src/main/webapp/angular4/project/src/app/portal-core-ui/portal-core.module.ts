@@ -1,10 +1,6 @@
 import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-// Configs
-import { AppConfig, APP_CONFIG } from './appconfig/app.config';
-
-
 // Utilities
 import {KeysPipe} from './uiutilities/pipes';
 
@@ -45,14 +41,6 @@ import { LegendService } from './service/wms/legend.service';
 
 export class PortalCoreModule {
 
-  public static forRoot(config: AppConfig): ModuleWithProviders {
-    return {
-      ngModule: PortalCoreModule,
-      providers: [
-        {provide: APP_CONFIG, useValue: config }
-      ]
-    };
-  }
 
   constructor (@Optional() @SkipSelf() parentModule: PortalCoreModule) {
     if (parentModule) {

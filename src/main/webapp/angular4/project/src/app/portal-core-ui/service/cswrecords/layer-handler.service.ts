@@ -1,4 +1,3 @@
-import { AppConfig, APP_CONFIG } from '../../appconfig/app.config';
 import { CSWRecordModel } from '../../model/data/cswrecord.model';
 import { Injectable, Inject } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
@@ -6,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {LayerModel} from '../../model/data/layer.model'
 import { OnlineResourceModel } from '../../model/data/onlineresource.model';
+import { environment } from '../../../../environments/environment';
 /**
  * Service class to handle jobs relating to getting csw records from the server
  *
@@ -16,7 +16,7 @@ export class LayerHandlerService {
   private layerRecord;
   private getCSWUrl;
 
-  constructor(private http: HttpClient, @Inject(APP_CONFIG) private config: AppConfig ) {
+  constructor(private http: HttpClient) {
     this.layerRecord = [];
 
   }
@@ -29,7 +29,7 @@ export class LayerHandlerService {
     if (this.layerRecord.length > 0) {
         return Observable.of(this.layerRecord);
     }else {
-      return this.http.get(this.config.getCSWRecordUrl)
+      return this.http.get(environment.getCSWRecordUrl)
         .map(response => {
             const cswRecord = response['data'];
             cswRecord.forEach(function(item, i, ar){

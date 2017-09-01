@@ -1,4 +1,3 @@
-import { AppConfig, APP_CONFIG } from '../../appconfig/app.config';
 import { CSWRecordModel } from '../../model/data/cswrecord.model';
 import { Injectable, Inject } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
@@ -13,7 +12,7 @@ import { OnlineResourceModel } from '../../model/data/onlineresource.model';
 @Injectable()
 export class FilterPanelService {
 
-  constructor(private http: HttpClient, @Inject(APP_CONFIG) private config: AppConfig ) {}
+  constructor(private http: HttpClient) {}
 
   /**
    * Helper service to retrieve remote options for the filter options
