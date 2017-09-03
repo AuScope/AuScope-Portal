@@ -26,6 +26,7 @@
     "@turf/center": "^4.6.1",
     "@turf/envelope": "^4.6.0",
     "@turf/helpers": "^4.5.2",
+    "@turf/inside": "^4.6.0",
     "@types/geojson": "^1.0.2",
     "@types/jquery": "^3.2.9",
     "core-js": "^2.4.1",

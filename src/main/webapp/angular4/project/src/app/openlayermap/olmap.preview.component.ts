@@ -1,8 +1,11 @@
 import { OlMapObject } from '../portal-core-ui/service/openlayermap/ol-map-object';
+import { OlMapService } from '../portal-core-ui/service/openlayermap/ol-map.service';
 import { RenderStatusService } from '../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
 import { Constants } from '../portal-core-ui/utility/constants.service';
 import { AfterViewInit, Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
-import { point, featureCollection, Geoms } from '@turf/helpers';
+import { point, featureCollection, Geoms, polygon, feature } from '@turf/helpers';
+import * as inside from '@turf/inside';
+import * as bbox from '@turf/bbox';
 import olStyle from 'ol/style/style';
 import olSource from 'ol/source/source';
 import olFormat from 'ol/';
@@ -30,12 +33,30 @@ export class OlMapPreviewComponent implements AfterViewInit {
     iDiv: any = null;
     new_id: any = null;
     olMapObject: OlMapObject = null;
+    bboxGeojsonObjectArr: GeoJSON.FeatureCollection<Geoms>[] = [];
 
     /**
      * This constructor creates the preview map
      */
-    constructor() {
+    constructor(private olMapService: OlMapService) {
         this.olMapObject = new OlMapObject(new RenderStatusService());
+        const map = this.olMapObject.getMap();
+        const me = this;
+
+        // When the user clicks on a rectangle in the preview, the main map zooms to the same area
+        map.on('singleclick', function(event) {
+            for (const featureColl of me.bboxGeojsonObjectArr) {
+                for (const feat of featureColl.features) {
+                    const poly = polygon([[feat.geometry.coordinates[0][0],
+                            feat.geometry.coordinates[0][1], feat.geometry.coordinates[0][2],
+                            feat.geometry.coordinates[0][3], feat.geometry.coordinates[0][4]]]);
+                    if (inside(point(event.coordinate), poly)) {
+                        const bboxX: [number, number, number, number] = bbox(poly);
+                        olMapService.fitView(bboxX);
+                    }
+                }
+            }
+        } );
     }
 
     /**
@@ -71,6 +92,9 @@ export class OlMapPreviewComponent implements AfterViewInit {
     * @param bboxGeojsonObject  Bounding boxes in GeoJSON format
     */
     setupBBoxes(reCentrePt: [number, number], bboxGeojsonObject: GeoJSON.FeatureCollection<Geoms>) {
+        // Store the BBOXes for making the main map's view fit to the BBOX when BBOX is clicked on in preview map
+        this.bboxGeojsonObjectArr.push(bboxGeojsonObject);
+
         // Set up bounding box style
         const rectStyle = new olStyle({
             stroke: new olStroke({

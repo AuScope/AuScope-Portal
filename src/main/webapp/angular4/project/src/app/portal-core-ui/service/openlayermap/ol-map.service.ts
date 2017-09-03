@@ -20,19 +20,30 @@ export class OlMapService {
    * Add layer to the wms
    * @param layer the layer to add to the map
    */
-  public addLayer(layer: LayerModel, param: any): void {
-    this.olMapObject.removeLayerById(layer.id);
-    if (this.layerHandlerService.containsWMS(layer)) {
-      this.olWMSService.addLayer(layer, param);
-    }else if (this.layerHandlerService.containsWFS(layer)) {
-      this.olWFSService.addLayer(layer, param);
-    }
+   public addLayer(layer: LayerModel, param: any): void {
+       this.olMapObject.removeLayerById(layer.id);
+       if (this.layerHandlerService.containsWMS(layer)) {
+           this.olWMSService.addLayer(layer, param);
+       }else if (this.layerHandlerService.containsWFS(layer)) {
+           this.olWFSService.addLayer(layer, param);
+       }
+   }
+
+  /**
+   * Remove layer from map
+   * @param layer the layer to remove from the map
+   */
+  public removeLayer(layer: LayerModel): void {
+      this.olMapObject.removeLayerById(layer.id);
   }
 
-  public removeLayer(layer: LayerModel): void {
-    this.olMapObject.removeLayerById(layer.id);
+  /**
+   * Fit the map to the extent that is provided
+   * @param extent An array of numbers representing an extent: [minx, miny, maxx, maxy]
+   */
+  public fitView(extent: [number, number, number, number]): void {
+      this.olMapObject.getMap().getView().fit(extent);
   }
 
 
 }
-
