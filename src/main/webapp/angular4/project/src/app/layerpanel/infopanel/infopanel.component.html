@@ -18,15 +18,15 @@
 								    <div class="panel panel-inverse">
 									    <div class="panel-body" style="padding-left: 0px;padding-right: 0px;">
 										    <div class="panel-group" id="accordion">
-										       <div *ngFor="let cswRecord of cswRecords" class="panel panel-inverse panel-bordered">
+										       <div *ngFor="let cswRecord of cswRecords.slice(0,10)" class="panel panel-inverse panel-bordered">
 												   <div class="panel-heading" id="headingOne">
 													    <h4 class="panel-title">
-														    <a href="#collapseOne" class="accordion-link" data-toggle="collapse" data-parent="#accordion">
+														    <a class="accordion-link" data-parent="#accordion" (click)="cswRecord.expanded = !cswRecord.expanded" (mouseenter)="highlightOnPreviewMap(layer.name, cswRecord.adminArea)" (mouseleave)="lowlightOnPreviewMap(layer.name, cswRecord.adminArea)">
 															{{cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information'}}
 														    </a>
 													    </h4>
 												   </div>
-												   <div id="collapseOne" class="panel-collapse collapse in">
+												   <div class="panel-collapse collapse" [ngClass]="{'in': cswRecord.expanded}">
 													    <div class="panel-body">
 														    <p><b>Contact org: </b>{{cswRecord.contactOrg}}</p>
 														    <p><b>Description: </b>{{cswRecord.description}}</p>

@@ -19,6 +19,6 @@ export class CSWRecordModel {
   onlineResources: OnlineResourceModel[];
   recordInfoUrl: string;
   resourceProvider: string;
-  service: boolean
-
+  service: boolean;
+  expanded = false;
 }

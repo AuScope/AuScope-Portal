@@ -2,7 +2,7 @@ import { OlMapObject } from '../portal-core-ui/service/openlayermap/ol-map-objec
 import { OlMapService } from '../portal-core-ui/service/openlayermap/ol-map.service';
 import { RenderStatusService } from '../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
 import { Constants } from '../portal-core-ui/utility/constants.service';
-import { AfterViewInit, Component, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { point, featureCollection, Geoms, polygon, feature } from '@turf/helpers';
 import * as inside from '@turf/inside';
 import * as bbox from '@turf/bbox';
@@ -34,6 +34,9 @@ export class OlMapPreviewComponent implements AfterViewInit {
     new_id: any = null;
     olMapObject: OlMapObject = null;
     bboxGeojsonObjectArr: GeoJSON.FeatureCollection<Geoms>[] = [];
+    BBOX_LOW_COLOUR = 'black';
+    BBOX_HIGH_COLOUR = 'green';
+    layerVectorArr: { [key: string]: olLayerVector } = {};
 
     /**
      * This constructor creates the preview map
@@ -89,33 +92,41 @@ export class OlMapPreviewComponent implements AfterViewInit {
     /**
     * Adds bounding boxes to the preview map, recentres the map to the middle of the bounding boxes
     * @param reCentrePt  Point to re-centre map
-    * @param bboxGeojsonObject  Bounding boxes in GeoJSON format
+    * @param bboxGeojsonObj  Bounding boxes in GeoJSON format
     */
-    setupBBoxes(reCentrePt: [number, number], bboxGeojsonObject: GeoJSON.FeatureCollection<Geoms>) {
-        // Store the BBOXes for making the main map's view fit to the BBOX when BBOX is clicked on in preview map
-        this.bboxGeojsonObjectArr.push(bboxGeojsonObject);
+    setupBBoxes(reCentrePt: [number, number], bboxGeojsonObj: { [key: string]: GeoJSON.FeatureCollection<Geoms> }) {
 
-        // Set up bounding box style
-        const rectStyle = new olStyle({
-            stroke: new olStroke({
-                color: 'black',
-                width: 2
-            }),
-            fill: new olFill({
-                color: 'rgba(128, 128, 128, 0.25)'
-            })
-        });
-        const source = new olSourceVector({
-            features: (new olGeoJSON()).readFeatures(bboxGeojsonObject)
-        });
-        const vectorLayer = new olLayerVector({
-            source: source,
-            style: [rectStyle]
-        });
-        // Add bounding boxes
-        this.olMapObject.getMap().addLayer(vectorLayer);
-        let newView;
+        for (const key in bboxGeojsonObj) {
+            // Store the BBOXes for making the main map's view fit to the BBOX when BBOX is clicked on in preview map
+            this.bboxGeojsonObjectArr.push(bboxGeojsonObj[key]);
+
+            // Set up bounding box style
+            const rectStyle = new olStyle({
+                stroke: new olStroke({
+                    color: this.BBOX_LOW_COLOUR,
+                    width: 2
+                }),
+                fill: new olFill({
+                    color: 'rgba(128, 128, 128, 0.25)'
+                })
+            });
+            const source = new olSourceVector({
+                features: (new olGeoJSON()).readFeatures(bboxGeojsonObj[key])
+            });
+            const layerVector = new olLayerVector({
+                source: source,
+                style: [rectStyle]
+            });
+
+            // Keep a record of layers for bbox highlighting function
+            this.layerVectorArr[key] = layerVector;
+
+            // Add bounding boxes to map
+            this.olMapObject.getMap().addLayer(layerVector);
+        }
+
         // Only re-centre and zoom using valid coordinates, otherwise just recentre to middle of Australia
+        let newView;
         if (isNaN(reCentrePt[0]) || isNaN(reCentrePt[1])) {
             newView = new olView({center: Constants.CENTRE_COORD, zoom: 3});
         } else {
@@ -123,5 +134,38 @@ export class OlMapPreviewComponent implements AfterViewInit {
         }
         this.olMapObject.getMap().setView(newView);
     }
+
+   /**
+    * Highlights or unhighlights a bounding box in the preview map
+    * @param state if true will highlight bounding box, else will unhighlight it
+    * @param key used for selecting which bounding box to (un)highlight
+    */
+   setBBoxHighlight(state: boolean, key: string) {
+       const map  = this.olMapObject.getMap();
+       let strokeColour: string = this.BBOX_LOW_COLOUR;
+       if (state) {
+           strokeColour = this.BBOX_HIGH_COLOUR;
+       }
+       const layers = map.getLayers();
+       // Find the selected layer using the 'layerVectorArry'
+       for (const layer of layers.getArray()) {
+           if (layer === this.layerVectorArr[key]) {
+               // Renew the layer but with a new colour
+               map.removeLayer(layer);
+               const rectStyle = new olStyle({
+                   stroke: new olStroke({
+                       color: strokeColour,
+                       width: 2
+                   }),
+                   fill: new olFill({
+                       color: 'rgba(128, 128, 128, 0.25)'
+                   })
+               });
+               layer.setStyle(rectStyle);
+               map.addLayer(layer)
+               break;
+           }
+       }
+   }
 
 }
