@@ -17,16 +17,18 @@ import { GMLParserService } from './utility/gmlparser.service';
 import { LegendService } from './service/wms/legend.service';
 
 
+// Directives
+import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
 
 @NgModule({
   declarations: [
-    KeysPipe
-
+    KeysPipe,
+    ImgLoadingDirective
   ],
   imports: [
     HttpClientModule
   ],
-  exports: [KeysPipe],
+  exports: [KeysPipe, ImgLoadingDirective],
   providers: [LayerHandlerService,
               OlMapService,
               OlWMSService,
@@ -35,7 +37,8 @@ import { LegendService } from './service/wms/legend.service';
               GMLParserService,
               RenderStatusService,
               FilterPanelService,
-              LegendService
+              LegendService,
+              ImgLoadingDirective
               ]
 })
 

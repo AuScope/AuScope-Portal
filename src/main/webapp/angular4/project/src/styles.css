@@ -17,11 +17,15 @@ Contain Auscope specific modification to the original template.
 	height:43px;
 }
 
+.infopanel-legend {
+	max-width: 260px;
+}
+
 .width-80{
 	width: 80%;
 }
 
-.sidebar-panel-menu-show{	
+.sidebar-panel-menu-show{
 	list-style-type: none;
 	margin: 0;
 	padding: 5px 0;
@@ -30,8 +34,8 @@ Contain Auscope specific modification to the original template.
 }
 
 .hasEvent {
-	pointer-events: auto; 
-	cursor: pointer;	
+	pointer-events: auto;
+	cursor: pointer;
 }
 
 .light-blue{

@@ -23,7 +23,7 @@
 													    <h4 class="panel-title">
 														    <a class="accordion-link" data-parent="#accordion" (click)="cswRecord.expanded = !cswRecord.expanded" (mouseenter)="highlightOnPreviewMap(layer.name, cswRecord.adminArea)" (mouseleave)="lowlightOnPreviewMap(layer.name, cswRecord.adminArea)">
 															{{cswRecord.adminArea !='' && cswRecord.adminArea!=null ? cswRecord.adminArea : 'More Information'}}
-														    </a>
+														</a>
 													    </h4>
 												   </div>
 												   <div class="panel-collapse collapse" [ngClass]="{'in': cswRecord.expanded}">
@@ -35,8 +35,12 @@
 														    <div *ngFor="let onlineResource of cswRecord.onlineResources">
 														        <p *ngIf="onlineResource.type!='Unsupported'"><a target="_blank" href="{{onlineResource.url}}">{{onlineResource.type}} endpoint url</a>  <span class="label label-default">{{onlineResource.type}} </span></p>
 														    </div>
-														    <p *ngIf="wmsUrls[cswRecord.adminArea]!=undefined"><b>WMS Preview: </b><img src="{{wmsUrls[cswRecord.adminArea]}}" height="100" width="100" alt="Loading preview..."/></p>
-														    <p *ngIf="legends[cswRecord.adminArea]!=undefined"><b>Legend: </b><img src="{{legends[cswRecord.adminArea]}}" style="max-width: 260px;" alt="Loading legend..."/></p>
+														    <p *ngIf="wmsUrls[cswRecord.adminArea]!=undefined">
+															    <b>WMS Preview: </b><img appImgLoading src="{{wmsUrls[cswRecord.adminArea]}}" height="100" width="100"/>
+															</p>
+														    <p *ngIf="legends[cswRecord.adminArea]!=undefined">
+																<b>Legend: </b><img appImgLoading src="{{legends[cswRecord.adminArea]}}" class="infopanel-legend"/>
+															</p>
 													    </div>
 												    </div>
 											    </div>
