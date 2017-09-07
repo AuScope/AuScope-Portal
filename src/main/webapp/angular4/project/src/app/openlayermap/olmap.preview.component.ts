@@ -34,8 +34,10 @@ export class OlMapPreviewComponent implements AfterViewInit {
     new_id: any = null;
     olMapObject: OlMapObject = null;
     bboxGeojsonObjectArr: GeoJSON.FeatureCollection<Geoms>[] = [];
-    BBOX_LOW_COLOUR = 'black';
-    BBOX_HIGH_COLOUR = 'green';
+    BBOX_LOW_STROKE_COLOUR = 'black';
+    BBOX_HIGH_STROKE_COLOUR = '#ff33cc';
+    BBOX_LOW_FILL_COLOUR = 'rgba(128,128,128,0.25)';
+    BBOX_HIGH_FILL_COLOUR = 'rgba(255,179,236,0.4)';
     layerVectorArr: { [key: string]: olLayerVector } = {};
 
     /**
@@ -103,11 +105,11 @@ export class OlMapPreviewComponent implements AfterViewInit {
             // Set up bounding box style
             const rectStyle = new olStyle({
                 stroke: new olStroke({
-                    color: this.BBOX_LOW_COLOUR,
+                    color: this.BBOX_LOW_STROKE_COLOUR,
                     width: 2
                 }),
                 fill: new olFill({
-                    color: 'rgba(128, 128, 128, 0.25)'
+                    color: this.BBOX_LOW_FILL_COLOUR
                 })
             });
             const source = new olSourceVector({
@@ -142,9 +144,11 @@ export class OlMapPreviewComponent implements AfterViewInit {
     */
    setBBoxHighlight(state: boolean, key: string) {
        const map  = this.olMapObject.getMap();
-       let strokeColour: string = this.BBOX_LOW_COLOUR;
+       let strokeColour: string = this.BBOX_LOW_STROKE_COLOUR;
+       let fillColour: string = this.BBOX_LOW_FILL_COLOUR;
        if (state) {
-           strokeColour = this.BBOX_HIGH_COLOUR;
+           strokeColour = this.BBOX_HIGH_STROKE_COLOUR;
+           fillColour = this.BBOX_HIGH_FILL_COLOUR;
        }
        const layers = map.getLayers();
        // Find the selected layer using the 'layerVectorArry'
@@ -158,7 +162,7 @@ export class OlMapPreviewComponent implements AfterViewInit {
                        width: 2
                    }),
                    fill: new olFill({
-                       color: 'rgba(128, 128, 128, 0.25)'
+                       color: fillColour
                    })
                });
                layer.setStyle(rectStyle);
