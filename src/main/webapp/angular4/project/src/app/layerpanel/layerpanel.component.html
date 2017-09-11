@@ -44,17 +44,7 @@
 								<info-panel [expanded]="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [cswRecords]=layer.cswRecords [layer]=layer ></info-panel>
 							</div>
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.downloadpanel.expanded}">
-
-								<form>
-									<div class="form-group">
-										<label class="control-label">Download form <span class="text-danger">*</span></label>
-										<select class="selectpicker form-control">
-											<option>download 1</option>
-											<option>download 2</option>
-											<option>download 3</option>
-										</select>
-									</div>
-								</form>
+								<app-download-panel [layer]=layer></app-download-panel>
 							</div>
 
 						</div>

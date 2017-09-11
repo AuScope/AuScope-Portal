@@ -6,7 +6,7 @@ import { CSWRecordModel } from '../../portal-core-ui/model/data/cswrecord.model'
 import { LayerModel } from '../../portal-core-ui/model/data/layer.model';
 import { LegendService } from '../../portal-core-ui/service/wms/legend.service';
 import { UtilitiesService } from '../../portal-core-ui/utility/utilities.service';
-import { OlMapPreviewComponent } from '../../openlayermap/olmap.preview.component';
+import { OlMapPreviewComponent } from './openlayermappreview/olmap.preview.component';
 import olProj from 'ol/proj';
 
 

@@ -7,9 +7,10 @@ import { FormsModule } from '@angular/forms';
 
 // Components
 import { OlMapComponent } from './openlayermap/olmap.component';
-import { OlMapPreviewComponent } from './openlayermap/olmap.preview.component';
+import { OlMapPreviewComponent } from './layerpanel/infopanel/openlayermappreview/olmap.preview.component';
 import { LayerPanelComponent } from './layerpanel/layerpanel.component';
 import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.component';
+import { DownloadPanelComponent } from './layerpanel/downloadpanel/downloadpanel.component';
 import { InfoPanelComponent} from './layerpanel/infopanel/infopanel.component';
 import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
 
@@ -22,6 +23,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module'
     OlMapPreviewComponent,
     LayerPanelComponent,
     FilterPanelComponent,
+    DownloadPanelComponent,
     NgbdModalStatusReportComponent,
     InfoPanelComponent
   ],
