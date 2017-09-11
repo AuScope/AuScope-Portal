@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/cor
 import { LayerHandlerService } from '../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../template/js/apps.js'
-import { NgbdModalStatusReportComponent } from '../modalwindow/renderstatus/renderstatus.component';
+import { NgbdModalStatusReportComponent } from '../toppanel/renderstatus/renderstatus.component';
 import { LayerModel } from '../portal-core-ui/model/data/layer.model';
 import { OlMapService } from '../portal-core-ui/service/openlayermap/ol-map.service';
 import { UILayerModel } from './model/ui/uilayer.model';

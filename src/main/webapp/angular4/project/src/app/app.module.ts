@@ -11,7 +11,7 @@ import { OlMapPreviewComponent } from './openlayermap/olmap.preview.component';
 import { LayerPanelComponent } from './layerpanel/layerpanel.component';
 import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.component';
 import { InfoPanelComponent} from './layerpanel/infopanel/infopanel.component';
-import { NgbdModalStatusReportComponent } from './modalwindow/renderstatus/renderstatus.component';
+import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
 
 
 import { PortalCoreModule } from './portal-core-ui/portal-core.module'
