@@ -49,83 +49,9 @@
 				</div>
 				<!-- END mobile sidebar expand / collapse button -->
 				<!-- BEGIN header navigation right -->
-				<div class="navbar-xs-justified">
+				<div class="navbar-xs-justified">					
 					<ul class="nav navbar-nav navbar-right">
-
-						<li class="dropdown p-r-10">
-							<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle navbar-icon with-label">
-								<i class="ti-bell"></i>
-							</a>
-							<ul class="dropdown-menu dropdown-lg no-padding">
-								<li class="dropdown-header"><a href="#" class="dropdown-close">&times;</a>Today</li>
-								<li class="notification">
-									<a href="#">
-										<div class="notification-icon bg-primary">
-											<i class="ti-apple"></i>
-										</div>
-										<div class="notification-info">
-											<h4 class="notification-title">Nagios <span class="notification-time">Just now</span></h4>
-											<p class="notification-desc">
-												GSWA Service unreachable
-											</p>
-										</div>
-									</a>
-								</li>
-								<li class="notification">
-									<a href="#">
-										<div class="notification-icon bg-success">
-											<i class="ti-android"></i>
-										</div>
-										<div class="notification-info">
-											<h4 class="notification-title">Twitter <span class="notification-time">5 min ago</span></h4>
-											<p class="notification-desc">
-												Auscope portal 4.4.0 released
-											</p>
-										</div>
-									</a>
-								</li>
-								<li class="notification">
-									<a href="#">
-										<div class="notification-icon bg-muted">
-											<i class="ti-github"></i>
-										</div>
-										<div class="notification-info">
-											<h4 class="notification-title">Nagios  <span class="notification-time">12 min ago</span></h4>
-											<p class="notification-desc">
-												Cannot reach catalogue, using cached result
-											</p>
-										</div>
-									</a>
-								</li>
-								<li class="dropdown-header"><a href="#" class="dropdown-close">&times;</a>Yesterday</li>
-								<li class="notification">
-									<a href="#">
-										<div class="notification-icon bg-purple">
-											<i class="ti-email"></i>
-										</div>
-										<div class="notification-info">
-											<h4 class="notification-title">Nagios  <span class="notification-time">12:50pm</span></h4>
-											<p class="notification-desc">
-												GSNSW cannot be reached
-											</p>
-										</div>
-									</a>
-								</li>
-								<li class="notification">
-									<a href="#">
-										<div class="notification-icon bg-success">
-											<i class="ti-android"></i>
-										</div>
-										<div class="notification-info">
-											<h4 class="notification-title">Twitter  <span class="notification-time">10:20am</span></h4>
-											<p class="notification-desc">
-												Auscope 15 year anniversary
-											</p>
-										</div>
-									</a>
-								</li>
-							</ul>
-						</li>
+						<li class="dropdown p-r-10" app-notification></li>
 						<li class="dropdown p-r-10">
 							<a href="javascript:;" data-toggle="dropdown" class="navbar-icon">
 								<i class="ti-settings"></i>
@@ -484,7 +410,7 @@
 
     <!-- ================Template js============================= -->
     <script src="template/js/apps.js"></script>
-
+	<script async src="http://platform.twitter.com/widgets.js"></script>  
 
 
   </body>
