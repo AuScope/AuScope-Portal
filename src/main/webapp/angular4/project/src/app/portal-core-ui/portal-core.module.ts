@@ -15,6 +15,7 @@ import { OlWMSService } from './service/wms/ol-wms.service';
 import { OlWFSService } from './service/wfs/ol-wfs.service';
 import { GMLParserService } from './utility/gmlparser.service';
 import { LegendService } from './service/wms/legend.service';
+import { NotificationService } from './service/toppanel/notification.service';
 
 
 // Directives
@@ -38,7 +39,8 @@ import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
               RenderStatusService,
               FilterPanelService,
               LegendService,
-              ImgLoadingDirective
+              ImgLoadingDirective,
+              NotificationService
               ]
 })
 

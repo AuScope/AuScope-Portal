@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { NotificationService} from './notification.service';
+import { NotificationService } from '../../portal-core-ui/service/toppanel/notification.service';
+
 
 @Component({
   selector: '[app-notification]',

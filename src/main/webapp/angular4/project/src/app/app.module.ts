@@ -14,11 +14,9 @@ import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.compo
 import { DownloadPanelComponent } from './layerpanel/downloadpanel/downloadpanel.component';
 import { InfoPanelComponent} from './layerpanel/infopanel/infopanel.component';
 import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
-
+import { NotificationComponent } from './toppanel/notification/notification.component';
 
 import { PortalCoreModule } from './portal-core-ui/portal-core.module';
-import { NotificationComponent } from './toppanel/notification/notification.component';
-import { NotificationService} from './toppanel/notification/notification.service';
 @NgModule({
   declarations: [
     OlMapComponent,
@@ -38,7 +36,6 @@ import { NotificationService} from './toppanel/notification/notification.service
     PortalCoreModule,
     ModalModule.forRoot()
   ],
-  providers:[NotificationService],
   entryComponents: [NgbdModalStatusReportComponent],
   bootstrap: [OlMapComponent, LayerPanelComponent,NotificationComponent]
 })
