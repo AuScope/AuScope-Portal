@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.WFSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.test.PortalTestClass;
@@ -36,6 +37,8 @@ public class TestSF0BoreholeController extends PortalTestClass {
     private CSWCacheService mockCSWService;
 
     private NVCL2_0_DataService mockNvclService;
+
+	private WFSService mockWfsService;
     /**
      * Setup.
      */
@@ -45,7 +48,9 @@ public class TestSF0BoreholeController extends PortalTestClass {
         this.mockSF0BoreholeService = context.mock(SF0BoreholeService.class);
         this.mockCSWService = context.mock(CSWCacheService.class);
         this.mockNvclService = context.mock(NVCL2_0_DataService.class);
-        this.sf0BoreholeController = new SF0BoreholeController(this.mockSF0BoreholeService, this.mockCSWService, this.mockNvclService);
+        this.mockWfsService = context.mock(WFSService.class);
+        
+        this.sf0BoreholeController = new SF0BoreholeController(this.mockSF0BoreholeService, this.mockCSWService, this.mockNvclService, this.mockWfsService);
     }
 
     /**

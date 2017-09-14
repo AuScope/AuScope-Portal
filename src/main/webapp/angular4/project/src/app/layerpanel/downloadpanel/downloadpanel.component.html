@@ -1,5 +1,19 @@
 <div class="filter-form">
 	<div class="form-group">
-		<button type="button" class="btn btn-purple" (click)="drawBound()">Select Bounds</button>
+		<div *ngIf="bbox">
+			<div class="row">
+				<span class="label label-info col-xs-4 col-xs-offset-4">{{bbox.northBoundLatitude}}</span>
+			</div>
+			<div class="row">
+				<span class="label label-info col-xs-3">{{bbox.westBoundLongitude}}</span>
+				<span class="label label-info col-xs-3 col-xs-offset-3">{{bbox.eastBoundLongitude}}</span>
+			</div>
+			<div class="row">
+				<span class="label label-info col-xs-4 col-xs-offset-4">{{bbox.southBoundLatitude}}</span>
+			</div>
+		</div>
+		<button type="button" class="btn btn-purple" (click)="drawBound()">Select
+			Bounds</button>
+		<button type="button" class="btn btn-purple" (click)="download()">Download</button>	
 	</div>
 </div>

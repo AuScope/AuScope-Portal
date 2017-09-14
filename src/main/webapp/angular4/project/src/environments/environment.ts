@@ -5,5 +5,11 @@
 
 export const environment = {
   production: false,
-  getCSWRecordUrl: '../getKnownLayers.do'
+  getCSWRecordUrl: '../getKnownLayers.do',
+  portalBaseUrl: 'http://localhost:8080/AuScope-Portal/',
+  csvSupportedLayer: [
+    'mineral-tenements',
+    'tima-geosample',
+    'nvcl-v2-borehole',
+    'tima-shrimp-geosample']
 };

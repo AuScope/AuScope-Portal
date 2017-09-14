@@ -5,7 +5,8 @@ import { OlWFSService } from '../wfs/ol-wfs.service';
 import { OlMapObject } from './ol-map-object';
 import { OlWMSService } from '../wms/ol-wms.service';
 import { RenderStatusService } from './renderstatus/render-status.service';
-
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import olLayerVector from 'ol/layer/vector';
 
 /**
  * Wrapper class to provide all things related to the ol map such as adding layer or removing layer.
@@ -43,6 +44,13 @@ export class OlMapService {
    */
   public fitView(extent: [number, number, number, number]): void {
       this.olMapObject.getMap().getView().fit(extent);
+  }
+
+  /**
+   * DrawBound
+   */
+  public drawBound(): BehaviorSubject<olLayerVector> {
+    return this.olMapObject.drawBox();
   }
 
 
