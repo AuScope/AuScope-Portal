@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
+import {HttpModule} from '@angular/http';
 import { NgClass } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
@@ -13,10 +14,9 @@ import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.compo
 import { DownloadPanelComponent } from './layerpanel/downloadpanel/downloadpanel.component';
 import { InfoPanelComponent} from './layerpanel/infopanel/infopanel.component';
 import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
+import { NotificationComponent } from './toppanel/notification/notification.component';
 
-
-import { PortalCoreModule } from './portal-core-ui/portal-core.module'
-
+import { PortalCoreModule } from './portal-core-ui/portal-core.module';
 @NgModule({
   declarations: [
     OlMapComponent,
@@ -25,16 +25,18 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module'
     FilterPanelComponent,
     DownloadPanelComponent,
     NgbdModalStatusReportComponent,
-    InfoPanelComponent
+    InfoPanelComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    HttpModule,
     PortalCoreModule,
     ModalModule.forRoot()
   ],
   entryComponents: [NgbdModalStatusReportComponent],
-  bootstrap: [OlMapComponent, LayerPanelComponent]
+  bootstrap: [OlMapComponent, LayerPanelComponent,NotificationComponent]
 })
 export class AppModule { }
