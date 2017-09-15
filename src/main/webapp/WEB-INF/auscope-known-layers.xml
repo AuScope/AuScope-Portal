@@ -182,10 +182,10 @@
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement"/>
         <property name="group" value="Tenements"/>
         <property name="proxyUrl" value="getAllMineralTenementFeatures.do"/>
-	<property name="proxyGetFeatureInfoUrl" value="getMineralTenementFeatureInfo.do" />
+		<property name="proxyGetFeatureInfoUrl" value="getMineralTenementFeatureInfo.do" />
         <property name="proxyCountUrl" value="getMineralTenementCount.do"/>
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
-        <property name="proxyDownloadUrl" value="doMineralTenementDownload.do"/>       
+        <property name="proxyDownloadUrl" value="doMineralTenementCSVDownload.do"/>       
         <property name="order" value="150" />
         <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
@@ -628,6 +628,7 @@
         <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyDownloadUrl" value="doBoreholeViewCSVDownload.do"/>
         <property name="proxyStyleUrl" value="doNvclV2FilterStyle.do"/>
         <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/> -->
         <property name="iconAnchor">
@@ -728,6 +729,7 @@
         <property name="description" value="A collection of the results published from TIMA"/>
         <property name="proxyUrl" value="doTIMAGeoSample.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyDownloadUrl" value="doTIMAGeoSampleCSVDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-circle.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
@@ -779,6 +781,7 @@
         <property name="description" value="A collection of the results published from SHRIMP U-Pb mass spectrometer"/>
         <property name="proxyUrl" value="doSHRIMPGeoSample.do"/>
         <property name="proxyCountUrl" value=""/>
+        <property name="proxyDownloadUrl" value="doSHRIMPGeoSampleCSVDownload.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">

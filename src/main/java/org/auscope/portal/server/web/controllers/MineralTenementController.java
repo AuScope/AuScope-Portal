@@ -161,12 +161,13 @@ public class MineralTenementController extends BasePortalController {
         return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
     }
 
-    @RequestMapping("/doMineralTenementDownload.do")
-    public void doMineralTenementDownload(
+    
+    @RequestMapping("/doMineralTenementCSVDownload.do")
+    public void doMineralTenementCSVDownload(
             @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam("name") String name,
+            @RequestParam(required = false, value = "name") String name,
             @RequestParam(required = false, value = "tenementType") String tenementType,
-            @RequestParam("owner") String owner,
+            @RequestParam(required = false, value = "owner") String owner,
             @RequestParam(required = false, value = "size") String size,
             @RequestParam(required = false, value = "endDate") String endDate,
             @RequestParam(required = false, value = "bbox") String bboxJson,
@@ -175,19 +176,20 @@ public class MineralTenementController extends BasePortalController {
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
         String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,
-                bbox, null,  mineralTenementServiceProviderType); //VT:get filter from service
+                bbox, null,  mineralTenementServiceProviderType); 
 
         // Some ArcGIS servers do not support filters (not enabled?)
         if (mineralTenementServiceProviderType == MineralTenementServiceProviderType.ArcGIS) {
             filter = "";
         }
-        response.setContentType("text/xml");
+        response.setContentType("text/csv");
         OutputStream outputStream = response.getOutputStream();
-        InputStream results = this.mineralTenementService.downloadWFS(serviceUrl, mineralTenementServiceProviderType.featureType(), filter, null);
+        InputStream results = this.mineralTenementService.downloadCSV(serviceUrl, mineralTenementServiceProviderType.featureType(), filter, null);
         FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
         outputStream.close();
 
     }
+    
     @RequestMapping("/getMineralTenementLegendStyle.do")
     public void doMineLegendStyle(
             @RequestParam(required = false, value = "ccProperty") String ccProperty,

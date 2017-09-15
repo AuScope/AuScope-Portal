@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '../../portal-core-ui/service/toppanel/notification.service';
+import {Component, OnInit} from '@angular/core';
+import {NotificationService} from '../../portal-core-ui/service/toppanel/notification.service';
 
 
 @Component({
@@ -11,8 +11,7 @@ export class NotificationComponent implements OnInit {
   result: String;
 
   constructor(private notificationService: NotificationService) {
-
-   }
+  }
 
   ngOnInit() {
 
@@ -21,8 +20,8 @@ export class NotificationComponent implements OnInit {
   onGetNotifications() {
     this.notificationService.getNotifications()
       .subscribe(
-        (data: any[]) => { this.notifications = data['data']; },
-        (error) => {console.log('Something went wrong!'); }
+      (data: any[]) => {this.notifications = data['data']; },
+      (error) => {console.log('Something went wrong!'); }
       );
   }
 }

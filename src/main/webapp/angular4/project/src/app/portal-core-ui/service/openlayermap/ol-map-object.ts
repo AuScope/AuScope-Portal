@@ -7,6 +7,11 @@ import olTile from 'ol/layer/tile';
 import olOSM from 'ol/source/osm';
 import olView from 'ol/view';
 import olLayer from 'ol/layer/layer';
+import olSourceVector from 'ol/source/vector';
+import olLayerVector from 'ol/layer/vector';
+import olDraw from 'ol/interaction/draw';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 
 
 /**
@@ -63,6 +68,10 @@ export class OlMapObject {
     return this.activeLayer[id];
   }
 
+  /**
+   * remove references to the layer by layer id.
+   * @param id the layer id is used
+   */
   public removeLayerById(id: string) {
     const activelayers = this.getLayerById(id);
     if (activelayers) {
@@ -76,5 +85,32 @@ export class OlMapObject {
   }
 
 
+  public drawBox(): BehaviorSubject<olLayerVector> {
+    const source = new olSourceVector({wrapX: false});
+
+    const vector = new olLayerVector({
+      source: source
+    });
+
+    const vectorBS = new BehaviorSubject<olLayerVector>(vector);
+
+
+    this.map.addLayer(vector);
+    const draw = new olDraw({
+      source: source,
+      type: /** @type {ol.geom.GeometryType} */ ('Circle'),
+      geometryFunction: olDraw.createBox()
+    });
+    const me = this;
+    draw.on('drawend', function() {
+      me.map.removeInteraction(draw);
+      setTimeout(function() {
+        me.map.removeLayer(vector);
+        vectorBS.next(vector);
+      }, 500);
+    })
+    this.map.addInteraction(draw);
+    return vectorBS
+  }
 
 }

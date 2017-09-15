@@ -1,6 +1,7 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
+import org.auscope.portal.core.services.WFSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
 import org.auscope.portal.server.web.service.BoreholeService.Mark;
 import org.auscope.portal.server.web.service.NVCL2_0_DataService;
@@ -37,14 +40,16 @@ public class SF0BoreholeController extends BasePortalController {
     private CSWCacheService cswService;
     private GsmlpNameSpaceTable gsmlpNameSpaceTable;
     private NVCL2_0_DataService nvclDataService;
+    private WFSService wfsService;
 
     @Autowired
-    public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService, NVCL2_0_DataService nvclDataService) {
+    public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService, NVCL2_0_DataService nvclDataService, WFSService wfsService) {
         this.boreholeService = sf0BoreholeService;
         this.cswService = cswService;
         this.nvclDataService = nvclDataService;
         GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
         this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
+        this.wfsService = wfsService;
     }
 
     /**
@@ -73,6 +78,50 @@ public class SF0BoreholeController extends BasePortalController {
             return this.generateExceptionResponse(e, serviceUrl);
         }
     }
+    
+    
+    /**
+     * Handles the borehole filter queries.
+     *
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param mineName
+     *            the name of the mine to query for
+     * @param request
+     *            the HTTP client request
+     * @return a WFS response converted into KML
+     * @throws Exception
+     */
+    @RequestMapping("/doBoreholeViewCSVDownload.do")
+    public void doBoreholeViewCSVDownload(String serviceUrl,String typeName,
+    		@RequestParam(required=false, value="bbox") String bbox,
+            @RequestParam(required=false, value="outputFormat") String outputFormat,
+            HttpServletResponse response) throws Exception {
+    	
+        try {
+        	response.setContentType("text/csv");
+        	OutputStream outputStream = response.getOutputStream();
+            FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox);
+            
+            String filterString;
+            SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter();
+            if (bbox == null) {
+                filterString = sf0BoreholeFilter.getFilterStringAllRecords();
+            } else {
+                filterString = sf0BoreholeFilter.getFilterStringBoundingBox(box);
+            }
+            
+            
+            InputStream result = wfsService.downloadCSV(serviceUrl, typeName, filterString,0);
+            FileIOUtil.writeInputToOutputStream(result, outputStream, 8 * 1024, true);
+            outputStream.close();
+            
+        } catch (Exception e) {
+        	log.warn(String.format("Unable to request/transform WFS response from '%1$s': %2$s", serviceUrl,e));
+            log.debug("Exception: ", e);  
+        }
+    }
+    
     /**
      * Handles getting the style of the SF0 borehole filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
      * implicitly)

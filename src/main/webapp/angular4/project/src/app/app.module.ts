@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpModule} from '@angular/http';
-import { NgClass } from '@angular/common';
+import { NgClass, DecimalPipe } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 
@@ -37,6 +37,6 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     ModalModule.forRoot()
   ],
   entryComponents: [NgbdModalStatusReportComponent],
-  bootstrap: [OlMapComponent, LayerPanelComponent,NotificationComponent]
+  bootstrap: [OlMapComponent, LayerPanelComponent, NotificationComponent]
 })
 export class AppModule { }

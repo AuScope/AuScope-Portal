@@ -35,12 +35,6 @@ export class Constants {
         'POLYGON': 'POLYGON'
     }
 
-     public static statusProgress = {
-        'RUNNING': 'RUNNING',
-        'COMPLETED': 'COMPLETED',
-        'SKIPPED' : 'SKIPPED',
-        'ERROR': 'ERROR'
-    }
 
      public static analyticLoader = {
         'capdf-hydrogeochem' : 'views/analytic/capdf-hydrogeochem.htm',
