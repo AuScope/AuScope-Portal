@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {NotificationService} from '../../portal-core-ui/service/toppanel/notification.service';
 
 
@@ -6,22 +6,19 @@ import {NotificationService} from '../../portal-core-ui/service/toppanel/notific
   selector: '[app-notification]',
   templateUrl: './notification.component.html'
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent {
   notifications: Notification[];
   result: String;
 
   constructor(private notificationService: NotificationService) {
   }
 
-  ngOnInit() {
-
-  }
 
   onGetNotifications() {
     this.notificationService.getNotifications()
       .subscribe(
       (data: any[]) => {this.notifications = data['data']; },
-      (error) => {console.log('Something went wrong!'); }
+      (error) => {console.log('Error with retrieving notification!'); }
       );
   }
 }
