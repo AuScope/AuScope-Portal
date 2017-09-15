@@ -27,8 +27,8 @@ export class DownloadPanelComponent {
       const features = vector.getSource().getFeatures();
       const me = this;
       // Go through this array and get coordinates of their geometry.
-      me.bbox = new Bbox();
       features.forEach(function(feature) {
+        me.bbox = new Bbox();
         me.bbox.crs = 'EPSG:4326';
         const bbox4326 = feature.getGeometry().transform('EPSG:3857', 'EPSG:4326');
         me.bbox.eastBoundLongitude = bbox4326.getExtent()[2];
@@ -38,6 +38,10 @@ export class DownloadPanelComponent {
       });
 
     });
+  }
+
+  public clearBound(): void {
+    this.bbox = null;
   }
 
   public download(): void {
