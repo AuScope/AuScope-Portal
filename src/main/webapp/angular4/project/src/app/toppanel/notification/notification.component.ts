@@ -10,19 +10,19 @@ export class NotificationComponent implements OnInit {
   notifications: Notification[];
   result: String;
 
-  constructor(private notificationService : NotificationService) {
+  constructor(private notificationService: NotificationService) {
 
-   } 
+   }
 
   ngOnInit() {
 
   }
 
-  onGetNotifications(){
+  onGetNotifications() {
     this.notificationService.getNotifications()
       .subscribe(
-        (data:any[]) => { this.notifications = data['data']; },
-        (error) => {console.log('Something went wrong!');}
+        (data: any[]) => { this.notifications = data['data']; },
+        (error) => {console.log('Something went wrong!'); }
       );
   }
 }
