@@ -60,6 +60,10 @@ Contain Auscope specific modification to the original template.
 	color: #5ac7f9;
 }
 
+.line-height-1-8{
+	line-height:1.8
+}
+
 fieldset.show-fieldset-borders{
 	border: 1px solid #c4c4c4;
     padding: 0 1.4em 1.4em 1.4em;
@@ -71,6 +75,11 @@ fieldset legend{
 	color: #fff;
 	width: 70%;
 	padding-left:10px;
+}
+
+.standard-title h4 span {
+	border-bottom: 2px solid rgba(255,255,255,0.25);
+	padding-bottom: 5px;
 }
 
 /*
