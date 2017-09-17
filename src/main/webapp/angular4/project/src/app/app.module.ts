@@ -13,6 +13,7 @@ import { LayerPanelComponent } from './layerpanel/layerpanel.component';
 import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.component';
 import { DownloadPanelComponent } from './layerpanel/downloadpanel/downloadpanel.component';
 import { InfoPanelComponent} from './layerpanel/infopanel/infopanel.component';
+import { InfoPanelSubComponent } from './layerpanel/infopanel/subpanel/subpanel.component';
 import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
 import { NotificationComponent } from './toppanel/notification/notification.component';
 
@@ -27,6 +28,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     NgbdModalStatusReportComponent,
     InfoPanelComponent,
     NotificationComponent
+    InfoPanelSubComponent
   ],
   imports: [
     BrowserModule,
