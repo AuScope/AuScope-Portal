@@ -27,7 +27,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     DownloadPanelComponent,
     NgbdModalStatusReportComponent,
     InfoPanelComponent,
-    NotificationComponent
+    NotificationComponent,
     InfoPanelSubComponent
   ],
   imports: [
