@@ -41,7 +41,6 @@
 							</div>
 
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.infopanel.expanded}">
-								<!-- <info-panel *ngIf="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [expanded]="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [cswRecords]=layer.cswRecords [layer]=layer ></info-panel> -->
 								<info-panel *ngIf="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [expanded]="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [cswRecords]=layer.cswRecords [layer]=layer ></info-panel>
 							</div>
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.downloadpanel.expanded}">
