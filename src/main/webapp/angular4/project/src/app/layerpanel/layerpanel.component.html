@@ -37,14 +37,14 @@
 						<div id="panel-tab-content" class="tab-content">
 
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.filterpanel.expanded}">
-								<app-filter-panel [layer]=layer></app-filter-panel>
+								<app-filter-panel *ngIf="uiLayerModels[layer.id].tabpanel.filterpanel.expanded "[layer]=layer></app-filter-panel>
 							</div>
 
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.infopanel.expanded}">
-								<info-panel [expanded]="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [cswRecords]=layer.cswRecords [layer]=layer ></info-panel>
+								<info-panel *ngIf="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [expanded]="uiLayerModels[layer.id].tabpanel.infopanel.expanded" [cswRecords]=layer.cswRecords [layer]=layer ></info-panel>
 							</div>
 							<div class="tab-pane fade" [ngClass]="{'in active': uiLayerModels[layer.id].tabpanel.downloadpanel.expanded}">
-								<app-download-panel [layer]=layer></app-download-panel>
+								<app-download-panel *ngIf="uiLayerModels[layer.id].tabpanel.downloadpanel.expanded" [layer]=layer></app-download-panel>
 							</div>
 
 						</div>

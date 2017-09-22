@@ -72,22 +72,16 @@ export class OlMapPreviewComponent implements AfterViewInit {
          const map = this.olMapObject.getMap();
          map.setTarget(this.mapElement.nativeElement);
 
-         // Bootstrap tabs makes the map have a zero size when initialised
-         // So we must force the map to display by changing its size
-         const mapSize = map.getSize();
-         if (mapSize[0] === 0) {
-             map.setSize([300, 300]);
-             // Remove controls
-             const contrColl = map.getControls();
-             for (let i = 0; i < contrColl.getLength(); i++) {
-                 map.removeControl(contrColl.item(i));
-             }
-             // Disable pan and zoom via keyboard & mouse
-             const actionColl = map.getInteractions();
-             for (let i = 0; i < actionColl.getLength(); i++) {
-                 const action = actionColl.item(i);
-                 action.setActive(false);
-             }
+         // Remove controls
+         const contrColl = map.getControls();
+         for (let i = 0; i < contrColl.getLength(); i++) {
+             map.removeControl(contrColl.item(i));
+         }
+         // Disable pan and zoom via keyboard & mouse
+         const actionColl = map.getInteractions();
+         for (let i = 0; i < actionColl.getLength(); i++) {
+             const action = actionColl.item(i);
+             action.setActive(false);
          }
      }
 

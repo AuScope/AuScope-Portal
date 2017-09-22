@@ -6,6 +6,7 @@ import {Injectable} from '@angular/core';
 import {Headers, RequestOptions} from '@angular/http';
 import { environment } from '../../../../../environments/environment';
 import * as $ from 'jquery'
+import { Observable } from 'rxjs/Observable';
 
 
 /**
@@ -54,6 +55,8 @@ export class DownloadWfsService {
       responseType: 'blob'
     }).map((response) => { // download file
       return response;
+    }).catch((error: Response) => {
+        return Observable.throw(error);
     })
 
   }
