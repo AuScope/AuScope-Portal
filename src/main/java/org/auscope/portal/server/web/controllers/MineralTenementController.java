@@ -21,7 +21,6 @@ import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.SLDLoader;
 import org.auscope.portal.server.MineralTenementServiceProviderType;
-import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.auscope.portal.server.web.service.MineralTenementService;
 import org.auscope.portal.xslt.ArcGISToMineralTenement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +28,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document;
+import org.w3c.dom.Document; 
 
-import com.gargoylesoftware.htmlunit.TextUtil;
 
 @Controller
 public class MineralTenementController extends BasePortalController {
