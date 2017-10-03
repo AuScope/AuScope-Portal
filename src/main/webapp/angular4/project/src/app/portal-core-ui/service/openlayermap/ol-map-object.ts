@@ -1,7 +1,7 @@
-import { OnlineResourceModel } from '../../model/data/onlineresource.model';
-import { RenderStatusService } from './renderstatus/render-status.service';
-import { Constants } from '../../utility/constants.service';
-import { Injectable, Inject } from '@angular/core';
+import {OnlineResourceModel} from '../../model/data/onlineresource.model';
+import {RenderStatusService} from './renderstatus/render-status.service';
+import {Constants} from '../../utility/constants.service';
+import {Injectable, Inject} from '@angular/core';
 import olMap from 'ol/map';
 import olTile from 'ol/layer/tile';
 import olOSM from 'ol/source/osm';
@@ -9,7 +9,10 @@ import olView from 'ol/view';
 import olLayer from 'ol/layer/layer';
 import olSourceVector from 'ol/source/vector';
 import olLayerVector from 'ol/layer/vector';
+import olControlMousePosition from 'ol/control/MousePosition';
+import olCoordinate from 'ol/coordinate';
 import olDraw from 'ol/interaction/draw';
+import olControl from 'ol/control';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 
@@ -24,17 +27,30 @@ export class OlMapObject {
   private activeLayer: {};
 
   constructor(private renderStatusService: RenderStatusService) {
+
+    const mousePositionControl = new olControlMousePosition({
+      coordinateFormat: olCoordinate.createStringXY(4),
+      projection: 'EPSG:4326',
+      target: document.getElementById('mouse-position'),
+      undefinedHTML: '&nbsp;'
+    });
+
     const osm_layer: any = new olTile({
-        source: new olOSM()
+      source: new olOSM()
     });
     this.activeLayer = {};
     this.map = new olMap({
-        layers: [osm_layer],
-        view: new olView({
-            center: Constants.CENTRE_COORD,
-            zoom: 4
-        })
-    });
+      controls: olControl.defaults({
+          attributionOptions: ({
+            collapsible: false
+          })
+        }).extend([mousePositionControl]),
+      layers: [osm_layer],
+      view: new olView({
+        center: Constants.CENTRE_COORD,
+        zoom: 4
+      })
+    })
   }
 
   /**

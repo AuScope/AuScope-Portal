@@ -14,6 +14,7 @@ import { FilterPanelComponent } from './layerpanel/filterpanel/filterpanel.compo
 import { DownloadPanelComponent } from './layerpanel/downloadpanel/downloadpanel.component';
 import { InfoPanelComponent} from './layerpanel/infopanel/infopanel.component';
 import { InfoPanelSubComponent } from './layerpanel/infopanel/subpanel/subpanel.component';
+import { OlMapZoomComponent } from './openlayermap/olmap.zoom.component';
 import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
 import { NotificationComponent } from './toppanel/notification/notification.component';
 
@@ -28,7 +29,8 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     NgbdModalStatusReportComponent,
     InfoPanelComponent,
     NotificationComponent,
-    InfoPanelSubComponent
+    InfoPanelSubComponent,
+    OlMapZoomComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +41,6 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     ModalModule.forRoot()
   ],
   entryComponents: [NgbdModalStatusReportComponent],
-  bootstrap: [OlMapComponent, LayerPanelComponent, NotificationComponent]
+  bootstrap: [OlMapComponent, LayerPanelComponent, NotificationComponent, OlMapZoomComponent]
 })
 export class AppModule { }

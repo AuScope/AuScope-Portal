@@ -216,20 +216,12 @@
 
 				</h1>
 				<!-- END page-header -->
-                <div class="btn-group map-btn pull-right">
-                    <button type="button" class="btn btn-sm btn-inverse active" id="map-theme-text">Default Style</button>
-                    <button type="button" class="btn btn-sm btn-inverse dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" id="map-theme-selection">
-                        <li class="active"><a href="javascript:;" data-map-theme="default">Default Style</a></li>
-                        <li><a href="javascript:;" data-map-theme="silver">Silver Style</a></li>
-                        <li><a href="javascript:;" data-map-theme="retro">Retro Style</a></li>
-                        <li><a href="javascript:;" data-map-theme="dark">Dark Style</a></li>
-                        <li><a href="javascript:;" data-map-theme="night">Night Style</a></li>
-                        <li><a href="javascript:;" data-map-theme="aubergine">Aubergine</a></li>
-                    </ul>
+                <div class="btn-group pull-right">
+                    <app-ol-map-zoom></app-ol-map-zoom>                    
                 </div>
+
+                <div id="mouse-position"></div> 
+                
 			</div>
 			<!-- BEGIN content-container -->
 
