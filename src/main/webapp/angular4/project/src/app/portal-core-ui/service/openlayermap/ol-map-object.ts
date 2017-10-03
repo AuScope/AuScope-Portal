@@ -32,7 +32,7 @@ export class OlMapObject {
       coordinateFormat: olCoordinate.createStringXY(4),
       projection: 'EPSG:4326',
       target: document.getElementById('mouse-position'),
-      undefinedHTML: '&nbsp;'
+      undefinedHTML: 'Mouse out of range'
     });
 
     const osm_layer: any = new olTile({
