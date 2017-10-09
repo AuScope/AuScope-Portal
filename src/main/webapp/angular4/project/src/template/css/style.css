@@ -3698,6 +3698,10 @@ input[type=radio][disabled] + label {
 	border-color: #205829;
 	box-shadow: 0 0 0px 2px rgba(55, 150, 70, 0.35);
 }
+
+
+
+
 .has-warning .checkbox, 
 .has-warning .checkbox-inline, 
 .has-warning .control-label, 
@@ -3742,6 +3746,10 @@ input[type=radio][disabled] + label {
 .has-success .checkbox-inline input:not(:checked) + label:before {
 	border-color: #379646;
 }
+
+
+
+
 .has-warning .checkbox input:not(:checked) + label:before, 
 .has-warning .checkbox-inline input:not(:checked) + label:before {
 	border-color: #ca7702;
@@ -3754,6 +3762,7 @@ input[type=radio][disabled] + label {
 .has-success .radio-inline input:not(:checked) + label:before {
 	border-color: #379646;
 }
+
 .has-warning .radio input:not(:checked) + label:before, 
 .has-warning .radio-inline input:not(:checked) + label:before {
 	border-color: #ca7702;
@@ -3770,6 +3779,7 @@ input[type=radio][disabled] + label {
 	border-color: #379646;
 	color: #379646;
 }
+
 .has-warning .input-group-addon {
 	background: #fff5e6;
 	border-color: #ca7702;

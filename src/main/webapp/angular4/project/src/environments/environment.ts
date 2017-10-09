@@ -6,6 +6,7 @@
 export const environment = {
   production: false,
   getCSWRecordUrl: '../getKnownLayers.do',
+  getCustomLayers: '../getCustomLayers.do',
   portalBaseUrl: 'http://localhost:8080/AuScope-Portal/',
   csvSupportedLayer: [
     'mineral-tenements',

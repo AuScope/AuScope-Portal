@@ -23,6 +23,8 @@ declare var App: any;
 
 export class CustomPanelComponent {
 
+   private searchUrl: string;
+   private loading: boolean;
 
    layerGroups: {};
     uiLayerModels: {};
@@ -33,27 +35,27 @@ export class CustomPanelComponent {
     constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
       private modalService: BsModalService, private olMapService: OlMapService) {
       this.uiLayerModels = {};
-
+      this.loading = false;
     }
 
     public selectTabPanel(layerId, panelType) {
       (<UILayerModel>this.uiLayerModels[layerId]).tabpanel.setPanelOpen(panelType);
     }
 
-     public search() {
-       this.layerHandlerService.getLayerRecord().subscribe(
-        response => {this.layerGroups = response;
+    public search() {
+      this.loading = true;
+      this.layerHandlerService.getCustomLayerRecord(this.searchUrl).subscribe(
+        response => {
+          this.layerGroups = response;
+          this.loading = false;
           for (const key in this.layerGroups) {
-             for (let i = 0; i < this.layerGroups[key].length; i++) {
-               const uiLayerModel = new UILayerModel(this.layerGroups[key][i].id, this.renderStatusService.getStatusBSubject(this.layerGroups[key][i]));
-               this.uiLayerModels[this.layerGroups[key][i].id] = uiLayerModel;
-             }
+            for (let i = 0; i < this.layerGroups[key].length; i++) {
+              const uiLayerModel = new UILayerModel(this.layerGroups[key][i].id, this.renderStatusService.getStatusBSubject(this.layerGroups[key][i]));
+              this.uiLayerModels[this.layerGroups[key][i].id] = uiLayerModel;
+            }
           }
-          $(document).ready(function() {
-            App.init();
-          });
         });
-     }
+    }
 
     public openStatusReport(uiLayerModel: UILayerModel) {
       this.bsModalRef = this.modalService.show(NgbdModalStatusReportComponent, {class: 'modal-lg'});

@@ -74,6 +74,9 @@ export class InfoPanelComponent implements OnChanges {
                         }
                     };
                 }
+                if (this.cswRecords.length === 1) {
+                  this.cswRecords[i].expanded = true;
+                }
             }
 
             // Use 'turf' to calculate the centre point of the BBOXES, use this to re-centre the map
