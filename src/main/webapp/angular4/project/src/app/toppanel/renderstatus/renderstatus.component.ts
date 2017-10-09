@@ -1,4 +1,4 @@
-import {UILayerModel} from '../../layerpanel/model/ui/uilayer.model';
+import {UILayerModel} from '../../menupanel/layerpanel/model/ui/uilayer.model';
 import {Component, Input} from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 

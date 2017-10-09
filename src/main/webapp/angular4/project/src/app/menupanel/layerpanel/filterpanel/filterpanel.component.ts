@@ -1,8 +1,8 @@
-import {LayerModel} from '../../portal-core-ui/model/data/layer.model';
-import {LayerHandlerService} from '../../portal-core-ui/service/cswrecords/layer-handler.service';
-import {FilterPanelService} from '../../portal-core-ui/service/filterpanel/filterpanel-service';
-import {OlMapService} from '../../portal-core-ui/service/openlayermap/ol-map.service';
-import {UtilitiesService} from '../../portal-core-ui/utility/utilities.service';
+import {LayerModel} from '../../../portal-core-ui/model/data/layer.model';
+import {LayerHandlerService} from '../../../portal-core-ui/service/cswrecords/layer-handler.service';
+import {FilterPanelService} from '../../../portal-core-ui/service/filterpanel/filterpanel-service';
+import {OlMapService} from '../../../portal-core-ui/service/openlayermap/ol-map.service';
+import {UtilitiesService} from '../../../portal-core-ui/utility/utilities.service';
 import {Component, Input, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 

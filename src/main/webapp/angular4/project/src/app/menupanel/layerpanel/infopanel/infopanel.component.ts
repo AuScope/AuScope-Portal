@@ -2,8 +2,8 @@ import { Component, Input, ViewChild, OnChanges, SimpleChanges, ElementRef } fro
 import { point, featureCollection, polygon } from '@turf/helpers';
 import * as center from '@turf/center';
 import * as envelope from '@turf/envelope';
-import { CSWRecordModel } from '../../portal-core-ui/model/data/cswrecord.model';
-import { LayerModel } from '../../portal-core-ui/model/data/layer.model';
+import { CSWRecordModel } from '../../../portal-core-ui/model/data/cswrecord.model';
+import { LayerModel } from '../../../portal-core-ui/model/data/layer.model';
 import { OlMapPreviewComponent } from './openlayermappreview/olmap.preview.component';
 import olProj from 'ol/proj';
 
