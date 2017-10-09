@@ -1,30 +1,30 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { LayerHandlerService } from '../../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../../template/js/apps'
 import { NgbdModalStatusReportComponent } from '../../toppanel/renderstatus/renderstatus.component';
 import { LayerModel } from '../../portal-core-ui/model/data/layer.model';
 import { OlMapService } from '../../portal-core-ui/service/openlayermap/ol-map.service';
-import { UILayerModel } from '../common/model/ui/uilayer.model';
-import { UITabPanel } from '../common/model/ui/uitabpanel.model';
 import { RenderStatusService } from '../../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { InfoPanelComponent } from '../common/infopanel/infopanel.component';
+import { UILayerModel } from '../common/model/ui/uilayer.model';
 
 
 
 declare var App: any;
 
 @Component({
-    selector: '[appLayerPanel]',
-    templateUrl: './layerpanel.component.html'
+    selector: '[appCustomPanel]',
+    templateUrl: './custompanel.component.html'
 })
 
 
-export class LayerPanelComponent implements OnInit {
+export class CustomPanelComponent {
 
-    layerGroups: {};
+
+   layerGroups: {};
     uiLayerModels: {};
     bsModalRef: BsModalRef;
     @ViewChild(InfoPanelComponent) private infoPanel: InfoPanelComponent;
@@ -40,7 +40,7 @@ export class LayerPanelComponent implements OnInit {
       (<UILayerModel>this.uiLayerModels[layerId]).tabpanel.setPanelOpen(panelType);
     }
 
-     public ngOnInit() {
+     public search() {
        this.layerHandlerService.getLayerRecord().subscribe(
         response => {this.layerGroups = response;
           for (const key in this.layerGroups) {
@@ -65,8 +65,5 @@ export class LayerPanelComponent implements OnInit {
     public removeLayer(layer: LayerModel) {
       this.olMapService.removeLayer(layer);
     }
-
-
-
 
 }

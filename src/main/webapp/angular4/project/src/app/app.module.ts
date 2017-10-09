@@ -8,12 +8,13 @@ import { FormsModule } from '@angular/forms';
 
 // Components
 import { OlMapComponent } from './openlayermap/olmap.component';
-import { OlMapPreviewComponent } from './menupanel/layerpanel/infopanel/openlayermappreview/olmap.preview.component';
+import { OlMapPreviewComponent } from './menupanel/common/infopanel/openlayermappreview/olmap.preview.component';
 import { LayerPanelComponent } from './menupanel/layerpanel/layerpanel.component';
-import { FilterPanelComponent } from './menupanel/layerpanel/filterpanel/filterpanel.component';
-import { DownloadPanelComponent } from './menupanel/layerpanel/downloadpanel/downloadpanel.component';
-import { InfoPanelComponent} from './menupanel/layerpanel/infopanel/infopanel.component';
-import { InfoPanelSubComponent } from './menupanel/layerpanel/infopanel/subpanel/subpanel.component';
+import { CustomPanelComponent } from './menupanel/custompanel/custompanel.component';
+import { FilterPanelComponent } from './menupanel/common/filterpanel/filterpanel.component';
+import { DownloadPanelComponent } from './menupanel/common/downloadpanel/downloadpanel.component';
+import { InfoPanelComponent} from './menupanel/common/infopanel/infopanel.component';
+import { InfoPanelSubComponent } from './menupanel/common/infopanel/subpanel/subpanel.component';
 import { OlMapZoomComponent } from './openlayermap/olmap.zoom.component';
 import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
 import { NotificationComponent } from './toppanel/notification/notification.component';
@@ -24,6 +25,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     OlMapComponent,
     OlMapPreviewComponent,
     LayerPanelComponent,
+    CustomPanelComponent,
     FilterPanelComponent,
     DownloadPanelComponent,
     NgbdModalStatusReportComponent,
@@ -41,6 +43,6 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     ModalModule.forRoot()
   ],
   entryComponents: [NgbdModalStatusReportComponent],
-  bootstrap: [OlMapComponent, LayerPanelComponent, NotificationComponent, OlMapZoomComponent]
+  bootstrap: [OlMapComponent, LayerPanelComponent, CustomPanelComponent, NotificationComponent, OlMapZoomComponent]
 })
 export class AppModule { }
