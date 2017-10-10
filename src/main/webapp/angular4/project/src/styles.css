@@ -83,14 +83,14 @@ fieldset legend{
 }
 
 .has-info .input-group-addon {
-	background: #d8f1fe;
-	border-color: #5ac8fa;
-	color: #5ac8fa;
+	background: #272727;
+	border-color: #ffffff;
+	color: #ffffff;
 }
 
 .has-info .checkbox input:not(:checked) + label:before, 
 .has-info .checkbox-inline input:not(:checked) + label:before {
-	border-color: #5ac8fa;
+	border-color: #ffffff;
 }
 
 .has-info .checkbox, 
@@ -103,21 +103,26 @@ fieldset legend{
 .has-info.checkbox-inline label, 
 .has-info.radio label, 
 .has-info.radio-inline label {
-	color: #5ac8fa;
+	color: #272727;
 }
 .has-info .form-control {
 	box-shadow: none;
-	border-color: #d8f1fe;
+	border-color: #ffffff;
 }
 .has-info .form-control:focus {
-	border-color: #5ac8fa;
+	border-color: #ffffff;
 	box-shadow: 0 0 0px 2px rgba(55, 150, 70, 0.35);
 }
 
 .has-info .radio input:not(:checked) + label:before, 
 .has-info .radio-inline input:not(:checked) + label:before {
-	border-color: #5ac8fa;
+	border-color: #ffffff;
 }
+
+.has-info .form-control-feedback {
+  color: #272727;
+}
+
 
 /*
 max-width: 768px(small screen)

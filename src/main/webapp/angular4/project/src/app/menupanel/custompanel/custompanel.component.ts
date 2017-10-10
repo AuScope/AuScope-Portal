@@ -25,6 +25,7 @@ export class CustomPanelComponent {
 
    private searchUrl: string;
    private loading: boolean;
+   private statusmsg: string;
 
    layerGroups: {};
     uiLayerModels: {};
@@ -36,6 +37,7 @@ export class CustomPanelComponent {
       private modalService: BsModalService, private olMapService: OlMapService) {
       this.uiLayerModels = {};
       this.loading = false;
+      this.statusmsg = 'Enter your WMS service endpoint url and hit <span class="fa fa-search"></span>';
     }
 
     public selectTabPanel(layerId, panelType) {
@@ -46,13 +48,17 @@ export class CustomPanelComponent {
       this.loading = true;
       this.layerHandlerService.getCustomLayerRecord(this.searchUrl).subscribe(
         response => {
-          this.layerGroups = response;
           this.loading = false;
-          for (const key in this.layerGroups) {
-            for (let i = 0; i < this.layerGroups[key].length; i++) {
-              const uiLayerModel = new UILayerModel(this.layerGroups[key][i].id, this.renderStatusService.getStatusBSubject(this.layerGroups[key][i]));
-              this.uiLayerModels[this.layerGroups[key][i].id] = uiLayerModel;
+          if (response != null) {
+            this.layerGroups = response;
+            for (const key in this.layerGroups) {
+              for (let i = 0; i < this.layerGroups[key].length; i++) {
+                const uiLayerModel = new UILayerModel(this.layerGroups[key][i].id, this.renderStatusService.getStatusBSubject(this.layerGroups[key][i]));
+                this.uiLayerModels[this.layerGroups[key][i].id] = uiLayerModel;
+              }
             }
+          } else {
+            this.statusmsg = '<div class="text-danger">No viable WMS found on the service endpoint. Kindly check your URL again.</div>';
           }
         });
     }

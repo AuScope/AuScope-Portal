@@ -57,6 +57,9 @@ export class LayerHandlerService {
     return this.http.get(environment.getCustomLayers, {
       params: httpParams
     }).map(response => {
+      if (response['success'] === false) {
+        return null;
+      }
       const cswRecord = response['data'];
       const itemLayers = [];
       itemLayers['Results'] = [];

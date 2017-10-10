@@ -4,8 +4,8 @@
 	<div class="input-group ">
 		<input type="text" class="form-control input-sm" [(ngModel)] = "searchUrl" ><span class="input-group-addon" (click)="search()"><i *ngIf="!loading" class="fa fa-search"></i><i *ngIf="loading" class="fa fa-spinner fa-spin fa-fw"></i></span> 
 	</div>
-	<span class="glyphicon glyphicon-ok form-control-feedback"></span> <span class="help-block m-b-0 small">
-	Enter your WMS service endpoint url and hit <span class="fa fa-search"></span></span>
+	 <span class="help-block m-b-0 small" [innerHTML]="statusmsg">
+	</span>
 </div>
 
 
