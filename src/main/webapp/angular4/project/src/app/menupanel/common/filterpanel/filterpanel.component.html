@@ -5,7 +5,7 @@
 	            <div *ngIf="mandatoryFilter.type == 'MANDATORY.CHECKBOX'">
 	                <div class="form-group  form-group-sm">
 	                	<div class="checkbox">
-							<input id="{{ 'filter-MANDATORY.CHECKBOX-' + mandatoryFilter.label }}" type="checkbox" [(ngModel)]="mandatoryFilter.value"/>
+							<input class="input-sm" id="{{ 'filter-MANDATORY.CHECKBOX-' + mandatoryFilter.label }}" type="checkbox" [(ngModel)]="mandatoryFilter.value"/>
 							<label for="{{ 'filter-MANDATORY.CHECKBOX-' + mandatoryFilter.label }}">
 								{{mandatoryFilter.label}}
 							</label>
@@ -16,7 +16,7 @@
 	            <div *ngIf="mandatoryFilter.type == 'MANDATORY.DROPDOWNSELECTLIST'">
 	                <div class="form-group  form-group-sm">
 	                    <label>{{mandatoryFilter.label}}</label>	                    
-						<select class="form-control" [(ngModel)]="mandatoryFilter.value">
+						<select class="form-control input-sm" [(ngModel)]="mandatoryFilter.value">
 							<option value="" selected="selected">-- choose a {{mandatoryFilter.label}} --</option>
 							<option *ngFor="let option of mandatoryFilter.options" [ngValue]="getValue(option)">{{getKey(option)}}</option>
 						</select>
@@ -39,7 +39,7 @@
         	<legend><h5>Optional Filters</h5></legend>
         	<div class="form-group  form-group-sm">
 	            <label><i class="fa fa-refresh hasEvent light-blue" (click)="refreshFilter()"></i> Select Filter:</label>        			  
-                <select class="form-control" [ngModel]="selectedFilter" (ngModelChange)="addFilter($event)">				
+                <select class="form-control input-sm" [ngModel]="selectedFilter" (ngModelChange)="addFilter($event)">				
 					<option [ngValue]="filt" *ngFor="let filt of layer.filterCollection.optionalFilters">{{filt.label}}</option>
 				</select>			   
 		    </div>
@@ -49,19 +49,19 @@
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.TEXT'">
 	                <div class="form-group  form-group-sm">
 					    <label>{{optionalFilter.label}}:</label>
-					    <input type="text" class="form-control"  [(ngModel)]="optionalFilter.value">				   
+					    <input type="text" class="form-control input-sm"  [(ngModel)]="optionalFilter.value">				   
 					</div>
 	            </div> 
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.DATE'">
 	                <div class="form-group">
 						<label class="control-label">{{optionalFilter.label}}:</label>
-						<input type="date" class="form-control" [(ngModel)]="optionalFilter.value"/>
+						<input type="date" class="form-control input-sm" [(ngModel)]="optionalFilter.value"/>
 					</div>
 	            </div> 
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.DROPDOWNSELECTLIST'">	                
                     <div class="form-group  form-group-sm">
 	                    <label>{{optionalFilter.label}}</label>	                    
-						<select class="form-control" [(ngModel)]="optionalFilter.value">
+						<select class="form-control input-sm" [(ngModel)]="optionalFilter.value">
 							<option value="" selected="selected">-- choose a {{optionalFilter.label}} --</option>
 							<option *ngFor="let option of optionalFilter.options">{{getKey(option)}}</option>
 						</select>
@@ -70,7 +70,7 @@
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.DROPDOWNREMOTE'">	                
 	                <div class="form-group  form-group-sm">
 	                    <label>{{optionalFilter.label}}</label>	                    
-						<select class="form-control" [(ngModel)]="optionalFilter.value">
+						<select class="form-contro input-sml" [(ngModel)]="optionalFilter.value">
 							<option value="" selected="selected">-- choose a {{optionalFilter.label}} --</option>
 							<option *ngFor="let option of optionalFilter.options" [ngValue]="option.value">{{option.key}}</option>
 						</select>
@@ -79,7 +79,7 @@
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.PROVIDER'">	               
 	                <div class="form-group">						
 						<div class="checkbox" *ngFor="let provider of providers;let idx = index">
-							<input id="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}" type="checkbox" [(ngModel)]="optionalFilter.value[provider.value]"/>
+							<input class="input-sm" id="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}" type="checkbox" [(ngModel)]="optionalFilter.value[provider.value]"/>
 							<label for="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}">
 								{{provider.label}}
 							</label>

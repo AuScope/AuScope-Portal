@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { LayerHandlerService } from '../../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
 import '../../../template/js/apps'
@@ -24,20 +24,53 @@ declare var App: any;
 
 export class LayerPanelComponent implements OnInit {
 
-    layerGroups: {};
-    uiLayerModels: {};
-    bsModalRef: BsModalRef;
-    @ViewChild(InfoPanelComponent) private infoPanel: InfoPanelComponent;
-    @Output() expanded: EventEmitter<any> = new EventEmitter();
+  layerGroups: {};
+  uiLayerModels: {};
+  bsModalRef: BsModalRef;
+  @ViewChild(InfoPanelComponent) private infoPanel: InfoPanelComponent;
+  @Output() expanded: EventEmitter<any> = new EventEmitter();
+  searchText: string
+  searchMode: boolean;
 
-    constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
-      private modalService: BsModalService, private olMapService: OlMapService) {
-      this.uiLayerModels = {};
+  constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
+    private modalService: BsModalService, private olMapService: OlMapService, private changeDetectorRef: ChangeDetectorRef) {
+    this.uiLayerModels = {};
+    this.searchMode = false;
 
     }
 
     public selectTabPanel(layerId, panelType) {
       (<UILayerModel>this.uiLayerModels[layerId]).tabpanel.setPanelOpen(panelType);
+    }
+
+    public search() {
+      if (this.searchText.trim() === '') {
+        this.searchMode = false;
+      } else {
+        this.searchMode = true;
+      }
+
+      for (const layerGroupKey in this.layerGroups) {
+        this.layerGroups[layerGroupKey].hide = true;
+        for (const layer of this.layerGroups[layerGroupKey]) {
+          if (layerGroupKey.toLowerCase().indexOf(this.searchText.toLowerCase()) >= 0
+            || layer.description.toLowerCase().indexOf(this.searchText.toLowerCase()) >= 0
+            || layer.name.toLowerCase().indexOf(this.searchText.toLowerCase()) >= 0) {
+            layer.hide = false;
+            this.layerGroups[layerGroupKey].hide = false;
+          } else {
+            layer.hide = true;
+          }
+        }
+      }
+    }
+
+    public clearSearch() {
+      setTimeout(() => {
+        this.searchMode = false;
+        this.searchText = '';
+        this.search();
+      }, 0);
     }
 
      public ngOnInit() {

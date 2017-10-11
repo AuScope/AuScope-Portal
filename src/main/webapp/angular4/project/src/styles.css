@@ -3,6 +3,9 @@
 Contain Auscope specific modification to the original template.
 
 */
+
+[hidden] { display: none !important;}
+
 .layer-panel{
 	left:-100px;
 	width:319px;

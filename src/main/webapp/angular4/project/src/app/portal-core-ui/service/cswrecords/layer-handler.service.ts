@@ -39,6 +39,7 @@ export class LayerHandlerService {
               // VT: attempted to cast the object into a typescript class however it doesn't seem like its possible
               // all examples points to casting from json to interface but not object to interface.
               item.expanded = false;
+              item.hide = false;
               me.layerRecord[item.group].push(item);
             });
             return me.layerRecord;

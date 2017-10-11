@@ -10,3 +10,34 @@ export class KeysPipe implements PipeTransform {
     return keys;
   }
 }
+
+//@Pipe({name: 'hideLayerGroup'})
+//export class HideLayerGroup implements PipeTransform {
+//  transform(value, args?): Array<any> {
+//    if (value) {
+//      return value.filter(layerGroup => {
+//        if (layerGroup.hide) {
+//          return false
+//        } else {
+//          return true;
+//        }
+//      });
+//    }
+//  }
+//}
+//
+//
+//@Pipe({name: 'hideLayer'})
+//export class HideLayer implements PipeTransform {
+// transform(value, args?): Array<any> {
+//    if (value) {
+//      return value.filter(layer => {
+//        if (layer.hide) {
+//          return false
+//        } else {
+//          return true;
+//        }
+//      });
+//    }
+//  }
+//}
