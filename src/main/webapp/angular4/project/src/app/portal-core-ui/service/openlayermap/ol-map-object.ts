@@ -9,7 +9,7 @@ import olView from 'ol/view';
 import olLayer from 'ol/layer/layer';
 import olSourceVector from 'ol/source/vector';
 import olLayerVector from 'ol/layer/vector';
-import olControlMousePosition from 'ol/control/MousePosition';
+import olControlMousePosition from 'ol/control/mouseposition';
 import olCoordinate from 'ol/coordinate';
 import olDraw from 'ol/interaction/draw';
 import olControl from 'ol/control';
