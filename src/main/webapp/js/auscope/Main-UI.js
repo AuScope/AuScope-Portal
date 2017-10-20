@@ -326,7 +326,6 @@ Ext.application({
 
             deserializationHandler = Ext.create('portal.util.permalink.DeserializationHandler', {
                 knownLayerStore : knownLayerStore,
-                cswRecordStore : unmappedCSWRecordStore,
                 layerFactory : layerFactory,
                 layerStore : layerStore,
                 map : map,
