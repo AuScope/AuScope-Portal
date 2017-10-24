@@ -13,7 +13,7 @@ export class ModalComponent implements AfterViewInit {
     public analyticsContent: string;
     public detailsContent: string;
 
-    constructor(private bsModalRef: BsModalRef) {
+    constructor(public bsModalRef: BsModalRef) {
     }
 
     ngAfterViewInit() {
