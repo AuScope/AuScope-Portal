@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
 
 export class OlMapZoomComponent {
 
-  private buttonText = 'Magnify';
+  buttonText = 'Magnify';
 
   constructor(private olMapService: OlMapService) {}
 

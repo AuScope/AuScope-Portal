@@ -23,9 +23,9 @@ declare var App: any;
 
 export class CustomPanelComponent {
 
-   private searchUrl: string;
-   private loading: boolean;
-   private statusmsg: string;
+   searchUrl: string;
+   loading: boolean;
+   statusmsg: string;
 
    layerGroups: {};
     uiLayerModels: {};
