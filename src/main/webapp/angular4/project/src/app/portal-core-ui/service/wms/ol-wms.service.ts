@@ -1,6 +1,6 @@
 import { CSWRecordModel } from '../../model/data/cswrecord.model';
 import { Injectable, Inject, SkipSelf } from '@angular/core';
-import {LayerModel} from '../../model/data/layer.model'
+import {LayerModel} from '../../model/data/layer.model';
 import { OnlineResourceModel } from '../../model/data/onlineresource.model';
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlMapObject } from '../openlayermap/ol-map-object';

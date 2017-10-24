@@ -16,7 +16,6 @@ import olControl from 'ol/control';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 
-
 /**
  * A wrapper around the openlayer object for use in the portal.
  */
@@ -25,6 +24,7 @@ export class OlMapObject {
 
   private map: olMap;
   private activeLayer: {};
+  private clickHandlerList: ((p: any) => void )[] = [];
 
   constructor(private renderStatusService: RenderStatusService) {
 
@@ -50,7 +50,24 @@ export class OlMapObject {
         center: Constants.CENTRE_COORD,
         zoom: 4
       })
-    })
+    });
+
+    // Call a list of functions when the map is clicked on
+    const me = this;
+    this.map.on('click', function(evt) {
+        const pixel = me.map.getEventPixel(evt.originalEvent);
+        for (const clickHandler of me.clickHandlerList) {
+            clickHandler(pixel);
+        }
+    });
+  }
+
+  /**
+   * Register a click handler callback function which is called when there is a click event
+   * @param clickHandler callback function, input parameter is the pixel coords that were clicked on
+   */
+  public registerClickHandler( clickHandler: (p: number[]) => void) {
+      this.clickHandlerList.push(clickHandler);
   }
 
   /**
@@ -61,7 +78,7 @@ export class OlMapObject {
   }
 
   /**
-   * Add a ol layer to the ol map. At the same time keep a reference map of the layers
+   * Add an ol layer to the ol map. At the same time keep a reference map of the layers
    * @param layer: the ol layer to add to map
    * @param id the layer id is used
    */
@@ -76,13 +93,22 @@ export class OlMapObject {
 
 
   /**
-   * retrieve references to the layer by layer name.
+   * Retrieve references to the layer by layer name.
    * @param id the layer id is used
    * @return the ol layer
    */
   public getLayerById(id: string): [olLayer] {
     return this.activeLayer[id];
   }
+
+
+  /**
+   * Get all active layers
+   */
+  public getLayers(): { [id: string]: [olLayer]} {
+      return this.activeLayer;
+  }
+
 
   /**
    * remove references to the layer by layer id.
