@@ -1,0 +1,35 @@
+
+	<!-- Modal for querier-->
+                <div class="modal-header">
+                </div>
+				<div class="modal-body">
+
+					<div class="panel panel-default panel-with-tabs">
+                        <!-- BEGIN panel-heading -->
+                        <div class="panel-heading">
+                            <ul id="panel-tab" class="nav nav-tabs pull-right">
+                                <li class="active"><a href="#panel-tab-home3" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">Details</span></a></li>
+                                <li><a href="#panel-tab-profile3" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Analytics</span></a></li>
+                            </ul>
+                            <h4 class="panel-title">Feature Detail</h4>
+                        </div>
+                        <!-- END panel-heading -->
+                        <!-- BEGIN tab-content -->
+                        <div id="panel-tab-content" class="tab-content">
+                        	<!-- BEGIN tab-pane -->
+                            <div class="tab-pane fade in active" id="panel-tab-home3">
+                                {{detailsContent}}
+                            </div>
+                        	<!-- END tab-pane -->
+                        	<!-- BEGIN tab-pane -->
+                            <div class="tab-pane fade" id="panel-tab-profile3">
+                                {{analyticsContent}}
+                            </div>
+                        	<!-- END tab-pane -->
+                        </div>
+                        <!-- END tab-content -->
+                    </div>
+				</div>
+				<div class="modal-footer">
+                    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+				</div>

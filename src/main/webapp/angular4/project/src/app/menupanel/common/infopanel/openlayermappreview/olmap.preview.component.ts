@@ -165,5 +165,4 @@ export class OlMapPreviewComponent implements AfterViewInit {
            }
        }
    }
-
 }
