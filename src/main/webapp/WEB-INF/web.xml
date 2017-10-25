@@ -47,6 +47,11 @@
       <url-pattern>*.test</url-pattern>
    </servlet-mapping>
 
+    <servlet-mapping>
+      <servlet-name>annotationsDispatcher</servlet-name>
+      <url-pattern>*.html</url-pattern>
+   </servlet-mapping>
+
    <servlet-mapping>
       <servlet-name>annotationsDispatcher</servlet-name>
       <url-pattern>*.do</url-pattern>
