@@ -40,7 +40,7 @@ export class QuerierModalComponent implements AfterViewInit {
       ]
     };
 
-    constructor(private bsModalRef: BsModalRef) {
+    constructor(public bsModalRef: BsModalRef) {
       this.docs = [];
     }
 
