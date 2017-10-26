@@ -19,7 +19,8 @@ import { OlWFSService } from '../wfs/ol-wfs.service';
 import { OlMapObject } from './ol-map-object';
 import { OlWMSService } from '../wms/ol-wms.service';
 import { RenderStatusService } from './renderstatus/render-status.service';
-import { ModalComponent } from '../../../modalwindow/modal.component';
+import { QuerierModalComponent } from '../../../modalwindow/querier/querier.modal.component';
+import { GMLParserService } from '../../utility/gmlparser.service';
 import { QueryWMSService } from '../wms/query-wms.service';
 import { QueryWFSService } from '../wfs/query-wfs.service';
 
@@ -35,10 +36,10 @@ export class OlMapService {
    private bsModalRef: BsModalRef;
 
    constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService,
-              private olWFSService: OlWFSService, private olMapObject: OlMapObject, private modalService: BsModalService,
-           private queryWFSService: QueryWFSService, private queryWMSService: QueryWMSService) {
+     private olWFSService: OlWFSService, private olMapObject: OlMapObject, private modalService: BsModalService,
+     private queryWFSService: QueryWFSService, private queryWMSService: QueryWMSService,  private gmlParserService: GMLParserService) {
 
-                  this.olMapObject.registerClickHandler(this.mapClickHandler.bind(this));
+     this.olMapObject.registerClickHandler(this.mapClickHandler.bind(this));
    }
 
    /**
@@ -69,10 +70,10 @@ export class OlMapService {
                                    const tBbox = [bbox.eastBoundLongitude, bbox.southBoundLatitude, bbox.westBoundLongitude, bbox.northBoundLatitude];
                                    const poly = bboxPolygon(tBbox);
                                    if (inside(clickPoint, poly)) {
-                                       // Add to list of clicked layers
-                                       clickedLayerList.push(activeLayer);
-                                       found = true;
-                                       break;
+                                     // Add to list of clicked layers
+                                     clickedLayerList.push(activeLayer);
+                                     found = true;
+                                     break;
                                    }
                                }
                                if (found) {
@@ -96,20 +97,22 @@ export class OlMapService {
            // Process lists of layers and features
            for (const feature of clickedFeatureList) {
                // NB: This is just testing that the popup window does display
-               this.bsModalRef = this.modalService.show(ModalComponent, {class: 'modal-lg'});
+               this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
                this.bsModalRef.content.analyticsContent = 'Analytics Content!';
-               this.bsModalRef.content.detailsContent = 'Details Content!';
-               // TODO: Get the feature info and display in the popup
-               // this.queryWFSService.getFeatureInfo(layer, );
+                this.queryWFSService.getFeatureInfo(feature.onlineResource, feature.id_).subscribe(result => {
+                  this.bsModalRef.content.parseTreeCollection(this.gmlParserService.getRootNode(result), feature.onlineResource);
+                });
            }
            for (const layer of clickedLayerList) {
                // NB: This is just testing that the popup window does display
-               this.bsModalRef = this.modalService.show(ModalComponent, {class: 'modal-lg'});
+               this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
                this.bsModalRef.content.analyticsContent = 'Analytics Content!';
-               this.bsModalRef.content.detailsContent = 'Details Content!';
                // TODO: Get the feature info and display in popup
-               // this.queryWMSService.getFeatureInfo(layer, );
+               this.queryWMSService.getFeatureInfo(layer.onlineResource, layer.sldBody, pixel, clickCoord).subscribe(result => {
+                  this.bsModalRef.content.parseTreeCollection(this.gmlParserService.getRootNode(result), layer.onlineResource);
+                });
           }
+
    }
 
 

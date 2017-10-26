@@ -1,0 +1,65 @@
+
+	<!-- Modal for querier-->
+                <div class="modal-header">
+                </div>
+				<div class="modal-body">
+				
+					<div class="panel panel-default">
+						
+						<!-- END panel-heading -->
+						<!-- BEGIN panel-body -->
+						<div class="panel-body">							
+							<!-- BEGIN panel-group -->
+							<div class="panel-group" id="querier-accordion">
+								<!-- BEGIN panel -->
+								<div *ngFor="let doc of docs | getKey" class="panel panel-default panel-bordered">
+									<!-- BEGIN panel-heading -->
+									<div class="panel-heading" id="headingOne">
+										<h4 class="panel-title">
+											<a href="#{{doc.key}}" class="accordion-link" data-toggle="collapse" data-parent="#querier-accordion">
+												{{doc.key}}
+											</a>
+										</h4>
+									</div>
+									<!-- END panel-heading -->
+									<!-- BEGIN panel-collapse -->
+									<div id="{{doc.key}}" class="panel-collapse collapse in">
+										<div class="panel panel-default panel-with-tabs">
+											<!-- BEGIN panel-heading -->
+											<div class="panel-heading">
+												<ul id="panel-tab" class="nav nav-tabs pull-right">
+													<li class="active"><a href="#{{doc.key}}-panel-tab-home" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">Home</span></a></li>
+													<li><a href="#{{doc.key}}-panel-tab-profile" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">NVCL</span></a></li>
+												</ul>
+												<h4 class="panel-title">Feature Detail</h4>
+											</div>
+											<!-- END panel-heading -->
+											<!-- BEGIN tab-content -->
+											<div id="panel-tab-content" class="tab-content">
+												<!-- BEGIN tab-pane -->
+												<div class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
+													<tree [tree]="tree"></tree>
+												</div>
+												<!-- END tab-pane -->
+												<!-- BEGIN tab-pane -->
+												<div class="tab-pane fade" id="{{doc.key}}-panel-tab-profile">																										
+													<p><img src="assets/img/demo/nvclimage.png" style="width: 100%;"></p>
+													
+												</div>
+												<!-- END tab-pane -->
+											</div>
+											<!-- END tab-content -->
+										</div>
+									</div>
+									<!-- END panel-collapse -->
+								</div>
+								<!-- END panel -->
+							</div>
+							<!-- END panel-group -->
+						</div>
+						<!-- END panel-body -->
+					</div>
+				</div>
+				<div class="modal-footer">
+                    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
+				</div>
