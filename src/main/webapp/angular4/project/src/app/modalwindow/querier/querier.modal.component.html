@@ -16,14 +16,14 @@
 									<!-- BEGIN panel-heading -->
 									<div class="panel-heading" id="headingOne">
 										<h4 class="panel-title">
-											<a href="#{{doc.key}}" class="accordion-link" data-toggle="collapse" data-parent="#querier-accordion">
+											<a href="#{{doc.key}}" (click)="collapse[doc.key]=!collapse[doc.key];parseTree(doc.key,doc.value)" class="accordion-link" data-toggle="collapse" data-parent="#querier-accordion">
 												{{doc.key}}
 											</a>
 										</h4>
 									</div>
 									<!-- END panel-heading -->
 									<!-- BEGIN panel-collapse -->
-									<div id="{{doc.key}}" class="panel-collapse collapse in">
+									<div id="{{doc.key}}" class="panel-collapse collapse" [ngClass]="{'in' :collapse[doc.key]}">
 										<div class="panel panel-default panel-with-tabs">
 											<!-- BEGIN panel-heading -->
 											<div class="panel-heading">
@@ -36,14 +36,17 @@
 											<!-- END panel-heading -->
 											<!-- BEGIN tab-content -->
 											<div id="panel-tab-content" class="tab-content">
-												<!-- BEGIN tab-pane -->
-												<div class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
-													<tree [tree]="tree"></tree>
+												<!-- BEGIN tab-pane -->												
+												<div *ngIf="doc.key !== 'Server Error'" class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
+													<tree *ngIf="JSONTreeStruct[doc.key]" [tree]="JSONTreeStruct[doc.key]"></tree>
+												</div>
+												<div *ngIf="doc.key === 'Server Error'" class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
+													<p>Sorry - server has returned an error message. See browser console for more information</p>
 												</div>
 												<!-- END tab-pane -->
 												<!-- BEGIN tab-pane -->
 												<div class="tab-pane fade" id="{{doc.key}}-panel-tab-profile">																										
-													<p><img src="assets/img/demo/nvclimage.png" style="width: 100%;"></p>
+													<p>demo NVCL</p>
 													
 												</div>
 												<!-- END tab-pane -->
