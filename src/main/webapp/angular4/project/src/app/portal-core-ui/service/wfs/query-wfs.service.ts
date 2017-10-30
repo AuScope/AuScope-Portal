@@ -19,25 +19,25 @@ export class QueryWFSService {
      * @param onlineresource the wfs online resource
      * @return Observable the observable from the http request
      */
-    public getFeatureInfo(layer: LayerModel, onlineResource: OnlineResourceModel, param: any): Observable<any> {
+    public getFeatureInfo(onlineResource: OnlineResourceModel, featureId: string): Observable<any> {
       //
       // TODO: This is copied from elsewhere and will need to be adapted
       //
-      let httpParams = Object.getOwnPropertyNames(param).reduce((p, key1) => p.set(key1, param[key1]), new HttpParams());
+      let httpParams = new HttpParams();
       httpParams = httpParams.append('serviceUrl', onlineResource.url);
       httpParams = httpParams.append('typeName', onlineResource.name);
-      httpParams = UtilitiesService.convertObjectToHttpParam(httpParams, param);
+      httpParams = httpParams.append('featureId', featureId);
 
-      if (layer.proxyUrl) {
-        return this.http.get('../' + layer.proxyUrl, {
-          params: httpParams
-        }).map(response => {
-          return response['data'];
-        });
-      } else {
-        return Observable.create(function () {
-              return undefined;
-          });
-      }
+      return this.http.get('../requestFeature.do', {
+        params: httpParams,
+        responseType: 'text'
+      }).map(response => {
+        return response;
+      }).catch(
+        (error: Response) => {
+          return Observable.throw(error);
+        }
+      );
+
   }
 }

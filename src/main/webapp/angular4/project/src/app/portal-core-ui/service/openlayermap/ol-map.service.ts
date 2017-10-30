@@ -19,10 +19,14 @@ import { OlWFSService } from '../wfs/ol-wfs.service';
 import { OlMapObject } from './ol-map-object';
 import { OlWMSService } from '../wms/ol-wms.service';
 import { RenderStatusService } from './renderstatus/render-status.service';
-import { ModalComponent } from '../../../modalwindow/modal.component';
+import { QuerierModalComponent } from '../../../modalwindow/querier/querier.modal.component';
+import { OnlineResourceModel } from '../../model/data/onlineresource.model';
+import { GMLParserService } from '../../utility/gmlparser.service';
+import { SimpleXMLService } from '../../utility/simplexml.service';
+import { UtilitiesService } from '../../utility/utilities.service';
 import { QueryWMSService } from '../wms/query-wms.service';
 import { QueryWFSService } from '../wfs/query-wfs.service';
-
+import { Constants } from '../../..//portal-core-ui/utility/constants.service';
 
 /**
  * Wrapper class to provide all things related to the ol map such as adding layer or removing layer.
@@ -35,10 +39,10 @@ export class OlMapService {
    private bsModalRef: BsModalRef;
 
    constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService,
-              private olWFSService: OlWFSService, private olMapObject: OlMapObject, private modalService: BsModalService,
-           private queryWFSService: QueryWFSService, private queryWMSService: QueryWMSService) {
+     private olWFSService: OlWFSService, private olMapObject: OlMapObject, private modalService: BsModalService,
+     private queryWFSService: QueryWFSService, private queryWMSService: QueryWMSService,  private gmlParserService: GMLParserService) {
 
-                  this.olMapObject.registerClickHandler(this.mapClickHandler.bind(this));
+     this.olMapObject.registerClickHandler(this.mapClickHandler.bind(this));
    }
 
    /**
@@ -69,10 +73,10 @@ export class OlMapService {
                                    const tBbox = [bbox.eastBoundLongitude, bbox.southBoundLatitude, bbox.westBoundLongitude, bbox.northBoundLatitude];
                                    const poly = bboxPolygon(tBbox);
                                    if (inside(clickPoint, poly)) {
-                                       // Add to list of clicked layers
-                                       clickedLayerList.push(activeLayer);
-                                       found = true;
-                                       break;
+                                     // Add to list of clicked layers
+                                     clickedLayerList.push(activeLayer);
+                                     found = true;
+                                     break;
                                    }
                                }
                                if (found) {
@@ -96,20 +100,92 @@ export class OlMapService {
            // Process lists of layers and features
            for (const feature of clickedFeatureList) {
                // NB: This is just testing that the popup window does display
-               this.bsModalRef = this.modalService.show(ModalComponent, {class: 'modal-lg'});
+               this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
                this.bsModalRef.content.analyticsContent = 'Analytics Content!';
-               this.bsModalRef.content.detailsContent = 'Details Content!';
-               // TODO: Get the feature info and display in the popup
-               // this.queryWFSService.getFeatureInfo(layer, );
+                this.queryWFSService.getFeatureInfo(feature.onlineResource, feature.id_).subscribe(result => {
+                  this.bsModalRef.content.parseTreeCollection(this.gmlParserService.getRootNode(result), feature.onlineResource);
+                  this.bsModalRef.content.updateView();
+                });
            }
            for (const layer of clickedLayerList) {
-               // NB: This is just testing that the popup window does display
-               this.bsModalRef = this.modalService.show(ModalComponent, {class: 'modal-lg'});
-               this.bsModalRef.content.analyticsContent = 'Analytics Content!';
-               this.bsModalRef.content.detailsContent = 'Details Content!';
-               // TODO: Get the feature info and display in popup
-               // this.queryWMSService.getFeatureInfo(layer, );
-          }
+             // NB: This is just testing that the popup window does display
+             this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
+             this.bsModalRef.content.analyticsContent = 'Analytics Content!';
+             // TODO: Get the feature info and display in popup
+             this.queryWMSService.getFeatureInfo(layer.onlineResource, layer.sldBody, pixel, clickCoord).subscribe(result => {
+               this.bsModalRef.content.docs = this.parseTreeCollection(this.gmlParserService.getRootNode(result), layer.onlineResource);
+
+             });
+           }
+
+   }
+
+   public parseTreeCollection(rootNode: Document, onlineResource: OnlineResourceModel) {
+
+
+     const docs: any[] = [];
+     if (rootNode) {
+       let features = null;
+       const wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'FeatureCollection');
+       if (UtilitiesService.isEmpty(wfsFeatureCollection)) {
+         // Check for error reports - some WMS servers mark their error reports with <ServiceExceptionReport>, some with <html>
+         const exceptionNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'ServiceExceptionReport');
+         const serviceErrorNode = SimpleXMLService.evaluateXPath(rootNode, rootNode, 'html', Constants.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
+         const nextNode = serviceErrorNode.iterateNext();
+         if (!UtilitiesService.isEmpty(exceptionNode) || nextNode != null) {
+           // There is an error report from the server;
+           docs['Server Error'] = document.createTextNode('Sorry - server has returned an error message. See browser console for more information');
+           return docs;
+         }
+         const featureInfoNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'FeatureInfoResponse');
+         if (UtilitiesService.isEmpty(featureInfoNode)) {
+           // Assume the node to be a feature node.
+           features = [rootNode];
+         } else {
+           // 'text/xml'
+           const fieldNodes = SimpleXMLService.getMatchingChildNodes(featureInfoNode[0], null, 'FIELDS');
+           if (UtilitiesService.isEmpty(fieldNodes)) {
+             features = featureInfoNode;
+           } else {
+             features = fieldNodes;
+             for (let i = 0; i < features.length; i++) {
+               let name = features[i].getAttribute('identifier');
+               if (!name) {
+                 name = onlineResource.name;
+               }
+               docs[name] = features[i];
+               const displayStr = ' ';
+
+             }
+             return docs
+           }
+         }
+       } else {
+         let featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, 'featureMembers');
+         if (UtilitiesService.isEmpty(featureMembers)) {
+           featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, 'featureMember');
+           features = featureMembers;
+         } else {
+           features = featureMembers[0].childNodes;
+         }
+
+       }
+       for (let i = 0; i < features.length; i++) {
+         const featureNode = features[i];
+         let name = featureNode.getAttribute('gml:id');
+         if (UtilitiesService.isEmpty(name)) {
+           name = SimpleXMLService.evaluateXPath(rootNode, featureNode, 'gml:name', Constants.XPATH_STRING_TYPE).stringValue;
+           if (UtilitiesService.isEmpty(name)) {
+             name = onlineResource.name;
+           }
+         }
+         if (typeof name === 'string' || name.length > 0) {
+           docs[name] = featureNode;
+         }
+       }
+     }
+
+     return docs;
    }
 
 

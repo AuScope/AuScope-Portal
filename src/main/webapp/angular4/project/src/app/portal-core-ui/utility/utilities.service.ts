@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpParams} from '@angular/common/http';
-
+import * as _ from 'lodash';
 
 declare var jQuery: any;
 declare function unescape(s: string): string;
@@ -357,7 +357,10 @@ export class UtilitiesService {
     /**
      * This utility will collate the different type of filter into a single parameter object
      */
-    public static collateParam(layer, onlineResource, param) {
+    public static collateParam(layer, onlineResource, parameter) {
+
+      let param = _.cloneDeep(parameter)
+
       if (!param) {
         param = {};
       }
@@ -384,22 +387,31 @@ export class UtilitiesService {
           param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;
         }
       }
+
+      for (let i = 0; i < param.optionalFilters.length; i++) {
+        if (param.optionalFilters[i].TYPE === 'OPTIONAL.PROVIDER') {
+          param.optionalFilters.splice(i, 1);
+          break;
+        }
+      }
       return param;
     };
 
     public static convertObjectToHttpParam(httpParam: HttpParams, paramObject: object, mykey?: string): HttpParams {
       // https://github.com/angular/angular/pull/18490 (this is needed to parse object into parameter
+      let first = true;
       for (let i = 0; i < paramObject['optionalFilters'].length; i++) {
-        if (i === 0) {
-          httpParam = httpParam.set('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
-        } else {
-          httpParam = httpParam.set('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
+        if (paramObject['optionalFilters'][i].type !== 'OPTIONAL.PROVIDER') {
+          if (first) {
+            httpParam = httpParam.set('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
+            first = false;
+          }else {
+            httpParam = httpParam.append('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
+          }
         }
-
 
       }
       return httpParam;
-
     }
 
 

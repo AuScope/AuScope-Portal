@@ -60,9 +60,15 @@ export class OlWFSService {
         return response['data'];
       });
     }else {
-      return Observable.create(function () {
-            return undefined;
-        });
+      return this.http.get('../getAllFeatures.do', {
+        params: httpParams
+      }).map(response => {
+        return response['data'];
+      }).catch(
+        (error: Response) => {
+          return Observable.throw(error);
+        }
+      );
     }
   }
 
@@ -71,7 +77,7 @@ export class OlWFSService {
    * @param layer the layer where this point derived from
    * @param primitive the point primitive
    */
-  public addPoint(layer: LayerModel, primitive: PrimitiveModel): void {
+  public addPoint(layer: LayerModel, onlineResource: OnlineResourceModel, primitive: PrimitiveModel): void {
      const geom = new olPoint(olProj.transform([primitive.coords.lng, primitive.coords.lat], 'EPSG:4326', 'EPSG:3857'));
        const feature = new olFeature(geom);
        feature.setStyle([
@@ -91,6 +97,7 @@ export class OlWFSService {
        if (primitive.name) {
          feature.setId(primitive.name);
        }
+       feature.onlineResource = onlineResource;
     // VT: we chose the first layer in the array based on the assumption that we only create a single vector
     // layer for each wfs layer. WMS may potentially contain more than 1 layer in the array. note the difference
     (<olLayerVector>this.olMapObject.getLayerById(layer.id)[0]).getSource().addFeature(feature);
@@ -134,7 +141,7 @@ export class OlWFSService {
         for (const primitive of primitives){
           switch (primitive.geometryType) {
             case Constants.geometryType.POINT:
-               this.addPoint(layer, primitive);
+               this.addPoint(layer, onlineResource, primitive);
               break
             case Constants.geometryType.LINESTRING:
                this.addLine(primitive);

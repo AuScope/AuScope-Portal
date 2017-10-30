@@ -178,6 +178,9 @@ export class OlWMSService {
           })
         }
 
+        wmsTile.sldBody = response;
+        wmsTile.onlineResource = wmsOnlineResource;
+
         wmsTile.getSource().on('tileloadstart', function(event) {
           me.renderStatusService.addResource(layer, wmsOnlineResource);
         });

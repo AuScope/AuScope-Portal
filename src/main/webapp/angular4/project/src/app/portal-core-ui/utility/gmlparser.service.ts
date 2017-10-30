@@ -19,7 +19,7 @@ export class GMLParserService {
      * @param gml - GML String
      * @return dom - the root node
      */
-    getRootNode(gml: string): string {
+    getRootNode(gml: string): any {
         return SimpleXMLService.parseStringToDOM(gml);
     }
 
