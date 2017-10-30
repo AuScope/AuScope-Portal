@@ -716,7 +716,7 @@ Ext.define('auscope.layer.querier.wfs.knownlayerfactories.NVCLFactory', {
                         xtype  : 'box',
                         autoEl : {
                             tag  : 'div',
-                            html : 'This data is best viewed in TSG Viewer. Freely available from <a target="_blank" href="http://www.thespectralgeologist.com/tsg_viewer.htm">here</a>.'
+                            html : 'This data is best viewed with the free TSG Base. Available from <a target="_blank" href="https://research.csiro.au/thespectralgeologist/tsg/pricing/purchase-tsg/">here</a>.'
                         }
                     }]
                 },{
