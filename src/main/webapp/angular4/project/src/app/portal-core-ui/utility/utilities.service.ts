@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpParams} from '@angular/common/http';
-
+import * as _ from 'lodash';
 
 declare var jQuery: any;
 declare function unescape(s: string): string;
@@ -357,7 +357,10 @@ export class UtilitiesService {
     /**
      * This utility will collate the different type of filter into a single parameter object
      */
-    public static collateParam(layer, onlineResource, param) {
+    public static collateParam(layer, onlineResource, parameter) {
+
+      let param = _.cloneDeep(parameter)
+
       if (!param) {
         param = {};
       }
@@ -382,6 +385,13 @@ export class UtilitiesService {
         }
         for (const idx in mandatoryFilters) {
           param[mandatoryFilters[idx].parameter] = mandatoryFilters[idx].value;
+        }
+      }
+
+      for (let i = 0; i < param.optionalFilters.length; i++) {
+        if (param.optionalFilters[i].TYPE === 'OPTIONAL.PROVIDER') {
+          param.optionalFilters.splice(i, 1);
+          break;
         }
       }
       return param;
