@@ -389,17 +389,19 @@ export class UtilitiesService {
 
     public static convertObjectToHttpParam(httpParam: HttpParams, paramObject: object, mykey?: string): HttpParams {
       // https://github.com/angular/angular/pull/18490 (this is needed to parse object into parameter
+      let first = true;
       for (let i = 0; i < paramObject['optionalFilters'].length; i++) {
-        if (i === 0) {
-          httpParam = httpParam.set('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
-        } else {
-          httpParam = httpParam.set('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
+        if (paramObject['optionalFilters'][i].type !== 'OPTIONAL.PROVIDER') {
+          if (first) {
+            httpParam = httpParam.set('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
+            first = false;
+          }else {
+            httpParam = httpParam.append('optionalFilters', JSON.stringify(paramObject['optionalFilters'][i]));
+          }
         }
-
 
       }
       return httpParam;
-
     }
 
 
