@@ -59,7 +59,11 @@ export class QueryWMSService {
       responseType: 'text'
     }).map(response => {
       return response;
-    });
+    }).catch(
+        (error: Response) => {
+          return Observable.throw(error);
+        }
+      );
 
 
   }

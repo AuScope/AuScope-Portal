@@ -1,6 +1,8 @@
+import { OnlineResourceModel } from '../model/data/onlineresource.model';
 import { Injectable } from '@angular/core';
 
 import { Constants } from './constants.service';
+import { UtilitiesService } from './utilities.service';
 
 declare var XPath: any;
 declare var ActiveXObject: any;
@@ -216,7 +218,7 @@ export class SimpleXMLService {
      * @param childNodeName [Optional] The node name to lookup as a String
      * @return dom - return the result in a dom
      */
-    public static getMatchingChildNodes(domNode: any, childNamespaceURI: string, childNodeName: string): any {
+    public static getMatchingChildNodes(domNode: any, childNamespaceURI?: string, childNodeName?: string): any {
         return this.filterNodeArray(domNode.childNodes, this.XML_NODE.XML_NODE_ELEMENT, childNamespaceURI, childNodeName);
     }
 
@@ -227,7 +229,7 @@ export class SimpleXMLService {
      * @param childNodeName [Optional] The node name to lookup as a String
      * @return dom - return the result in a dom or null upon error
      */
-    public static getMatchingAttributes(domNode: any, attributeNamespaceURI: string, attributeName: string): any {
+    public static getMatchingAttributes(domNode: any, attributeNamespaceURI?: string, attributeName?: string): any {
         // VT: cannot find the _fitlerNodeArray, suspect bug
         // return this._filterNodeArray(domNode.attributes, XML_NODE_ATTRIBUTE, attributeNamespaceURI, attributeName);
         if (domNode.attributes) {
@@ -273,6 +275,74 @@ export class SimpleXMLService {
         }
         return xmlDocument;
     }
+
+  public static parseTreeCollection(rootNode: Document, onlineResource: OnlineResourceModel): any[] {
+
+
+     const docs: any[] = [];
+     if (rootNode) {
+       let features = null;
+       const wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'FeatureCollection');
+       if (UtilitiesService.isEmpty(wfsFeatureCollection)) {
+         // Check for error reports - some WMS servers mark their error reports with <ServiceExceptionReport>, some with <html>
+         const exceptionNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'ServiceExceptionReport');
+         const serviceErrorNode = SimpleXMLService.evaluateXPath(rootNode, rootNode, 'html', Constants.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
+         const nextNode = serviceErrorNode.iterateNext();
+         if (!UtilitiesService.isEmpty(exceptionNode) || nextNode != null) {
+           // There is an error report from the server;
+           docs['Server Error'] = document.createTextNode('Sorry - server has returned an error message. See browser console for more information');
+           return docs;
+         }
+         const featureInfoNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'FeatureInfoResponse');
+         if (UtilitiesService.isEmpty(featureInfoNode)) {
+           // Assume the node to be a feature node.
+           features = [rootNode];
+         } else {
+           // 'text/xml'
+           const fieldNodes = SimpleXMLService.getMatchingChildNodes(featureInfoNode[0], null, 'FIELDS');
+           if (UtilitiesService.isEmpty(fieldNodes)) {
+             features = featureInfoNode;
+           } else {
+             features = fieldNodes;
+             for (let i = 0; i < features.length; i++) {
+               let name = features[i].getAttribute('identifier');
+               if (!name) {
+                 name = onlineResource.name;
+               }
+               docs[name] = features[i];
+               const displayStr = ' ';
+
+             }
+             return docs
+           }
+         }
+       } else {
+         let featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, 'featureMembers');
+         if (UtilitiesService.isEmpty(featureMembers)) {
+           featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, 'featureMember');
+           features = featureMembers;
+         } else {
+           features = featureMembers[0].childNodes;
+         }
+
+       }
+       for (let i = 0; i < features.length; i++) {
+         const featureNode = features[i];
+         let name = featureNode.getAttribute('gml:id');
+         if (UtilitiesService.isEmpty(name)) {
+           name = SimpleXMLService.evaluateXPath(rootNode, featureNode, 'gml:name', Constants.XPATH_STRING_TYPE).stringValue;
+           if (UtilitiesService.isEmpty(name)) {
+             name = onlineResource.name;
+           }
+         }
+         if (typeof name === 'string' || name.length > 0) {
+           docs[name] = featureNode;
+         }
+       }
+     }
+
+     return docs;
+   }
 
 
 }

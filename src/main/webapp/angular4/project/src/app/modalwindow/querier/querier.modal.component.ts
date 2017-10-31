@@ -13,7 +13,7 @@ import { TreeModel } from 'ng2-tree';
 })
 
 export class QuerierModalComponent implements AfterViewInit {
-
+  public downloading: boolean;
   public docs: any[] = [];
   public collapse: any[] = [];
   public JSONTreeStruct: TreeModel[] = [];
@@ -33,102 +33,51 @@ export class QuerierModalComponent implements AfterViewInit {
       }
 
       const tree: TreeModel = {
-        value: 'Programming languages by programming paradigm',
+        id: 'root' + name,
+        value: name,
         children: []
       }
-      tree['children'] = [
-      {
-        value: 'Object-oriented programming',
-        children: [
-          {value: 'Java'},
-          {value: 'C++'},
-          {value: 'C#'}
-        ]
-      },
-      {
-        value: 'Prototype-based programming',
-        children: [
-          {value: 'JavaScript'},
-          {value: 'CoffeeScript'},
-          {value: 'Lua'}
-        ]
-      }
-    ]
+
+      const parseNodeToJson = function(node, tier, child): any{
+            const attrArr = SimpleXMLService.getMatchingAttributes(node);
+            const attrChildren = [];
+            if (attrArr) {
+                for (let i = 0; i < attrArr.length; i++) {
+                    if (attrArr[i].name && attrArr[i].value) {
+                        attrChildren.push({value: attrArr[i].name + ': ' + attrArr[i].value});
+                    }
+                }
+            }
+            if (SimpleXMLService.isLeafNode(node)) {
+                return ({
+                    value : SimpleXMLService.getNodeLocalName(node),
+                    id: 'id' + tier + child,
+                    children : [{
+                        value : SimpleXMLService.getNodeTextContent(node),
+                        id: 'id' + (tier + 1) + child
+                        // children : attrChildren
+                    }]
+                });
+
+            }else {
+                const nodeObj =  {
+                        value : SimpleXMLService.getNodeLocalName(node),
+                        id: 'id' + tier,
+                        children : attrChildren
+                };
+
+                const child = SimpleXMLService.getMatchingChildNodes(node);
+                for (let i = 0; i < child.length; i++) {
+                    nodeObj.children.push(parseNodeToJson(child[i], tier + 1, i));
+                }
+                return nodeObj
+            }
+
+        };
+        tree['children'].push(parseNodeToJson(this.docs[name], 0, 0));
 
       this.JSONTreeStruct[name] = tree;
     }
 
-//    public parseTreeCollection(rootNode: Document, onlineResource: OnlineResourceModel) {
-//
-//      let displayable = false;
-//
-//      if (rootNode) {
-//        let features = null;
-//        const wfsFeatureCollection = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'FeatureCollection');
-//        if (UtilitiesService.isEmpty(wfsFeatureCollection)) {
-//          // Check for error reports - some WMS servers mark their error reports with <ServiceExceptionReport>, some with <html>
-//          const exceptionNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'ServiceExceptionReport');
-//          const serviceErrorNode = SimpleXMLService.evaluateXPath(rootNode, rootNode, 'html', Constants.XPATH_UNORDERED_NODE_ITERATOR_TYPE);
-//          const nextNode = serviceErrorNode.iterateNext();
-//          if (!UtilitiesService.isEmpty(exceptionNode) || nextNode != null) {
-//            // There is an error report from the server;
-//            this.docs['Server Error'] = document.createTextNode('Sorry - server has returned an error message. See browser console for more information');
-//            return true;
-//          }
-//          const featureInfoNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'FeatureInfoResponse');
-//          if (UtilitiesService.isEmpty(featureInfoNode)) {
-//            // Assume the node to be a feature node.
-//            features = [rootNode];
-//          } else {
-//            // 'text/xml'
-//            const fieldNodes = SimpleXMLService.getMatchingChildNodes(featureInfoNode[0], null, 'FIELDS');
-//            if (UtilitiesService.isEmpty(fieldNodes)) {
-//              features = featureInfoNode;
-//            } else {
-//              features = fieldNodes;
-//              for (let i = 0; i < features.length; i++) {
-//                let name = features[i].getAttribute('identifier');
-//                if (!name) {
-//                  name = onlineResource.name;
-//                }
-//                this.docs[name] = features[i];
-//                const displayStr = ' ';
-//                displayable = true;
-//              }
-//              return displayable;
-//            }
-//          }
-//        } else {
-//          let featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, 'featureMembers');
-//          if (UtilitiesService.isEmpty(featureMembers)) {
-//            featureMembers = SimpleXMLService.getMatchingChildNodes(wfsFeatureCollection[0], null, 'featureMember');
-//            features = featureMembers;
-//          } else {
-//            features = featureMembers[0].childNodes;
-//          }
-//
-//        }
-//        for (let i = 0; i < features.length; i++) {
-//          const featureNode = features[i];
-//          let name = featureNode.getAttribute('gml:id');
-//          if (UtilitiesService.isEmpty(name)) {
-//            name = SimpleXMLService.evaluateXPath(rootNode, featureNode, 'gml:name', Constants.XPATH_STRING_TYPE).stringValue;
-//            if (UtilitiesService.isEmpty(name)) {
-//              name = onlineResource.name;
-//            }
-//          }
-//          if (typeof name === 'string' || name.length > 0) {
-//            this.docs[name] = featureNode;
-//            displayable = true;
-//          }
-//        }
-//      }
-//
-//      return displayable;
-//    }
-
-    public updateView() {
-      this.changeDetectorRef.detectChanges();
-    }
 
 }

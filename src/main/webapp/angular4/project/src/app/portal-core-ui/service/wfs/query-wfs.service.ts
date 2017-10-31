@@ -32,12 +32,16 @@ export class QueryWFSService {
         params: httpParams,
         responseType: 'text'
       }).map(response => {
-        return response;
+        if (response['success']) {
+          return response['data']['gml'];
+        } else {
+          return Observable.throw('error');
+        }
       }).catch(
         (error: Response) => {
           return Observable.throw(error);
         }
-      );
+        );
 
   }
 }

@@ -1,6 +1,7 @@
 
 	<!-- Modal for querier-->
                 <div class="modal-header">
+                	<h1 class="page-header">Response: <small>Get Feature Info result</small></h1>
                 </div>
 				<div class="modal-body">
 				
@@ -10,6 +11,7 @@
 						<!-- BEGIN panel-body -->
 						<div class="panel-body">							
 							<!-- BEGIN panel-group -->
+							<div *ngIf="downloading"><h2 class="wip">Downloading <span class="fa fa-circle small">&nbsp</span><span class="fa fa-circle small">&nbsp</span><span class="fa fa-circle small">&nbsp</span></h2></div>
 							<div class="panel-group" id="querier-accordion">
 								<!-- BEGIN panel -->
 								<div *ngFor="let doc of docs | getKey" class="panel panel-default panel-bordered">
@@ -38,7 +40,7 @@
 											<div id="panel-tab-content" class="tab-content">
 												<!-- BEGIN tab-pane -->												
 												<div *ngIf="doc.key !== 'Server Error'" class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
-													<tree *ngIf="JSONTreeStruct[doc.key]" [tree]="JSONTreeStruct[doc.key]"></tree>
+													<tree *ngIf="JSONTreeStruct[doc.key]" [tree]="JSONTreeStruct[doc.key]" [attr.id]="doc.key"></tree>
 												</div>
 												<div *ngIf="doc.key === 'Server Error'" class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
 													<p>Sorry - server has returned an error message. See browser console for more information</p>
