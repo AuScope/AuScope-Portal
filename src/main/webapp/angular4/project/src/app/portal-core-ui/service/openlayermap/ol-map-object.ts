@@ -13,6 +13,12 @@ import olControlMousePosition from 'ol/control/mouseposition';
 import olCoordinate from 'ol/coordinate';
 import olDraw from 'ol/interaction/draw';
 import olControl from 'ol/control';
+import olStyleStyle from 'ol/style/style';
+import olStyleCircle from 'ol/style/circle';
+import olStyleFill from 'ol/style/fill';
+import olGeomPoint from 'ol/geom/point';
+import olProj from 'ol/proj';
+import olFeature from 'ol/feature';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 
@@ -154,5 +160,30 @@ export class OlMapObject {
     this.map.addInteraction(draw);
     return vectorBS
   }
+
+   public drawDot(coord): olLayerVector {
+    const source = new olSourceVector({wrapX: false});
+    const vector = new olLayerVector({
+      source: source,
+      style: new olStyleStyle({
+          image: new olStyleCircle({
+            radius: 7,
+            fill: new olStyleFill({
+              color: '#ffcc33'
+            })
+          })
+        })
+    });
+
+    this.map.addLayer(vector);
+    const geom = new olGeomPoint(coord);
+    const feature = new olFeature(geom);
+    source.addFeature(feature);
+    return vector;
+  }
+
+   public removeVector(vector: olLayerVector) {
+     this.map.removeLayer(vector);
+   }
 
 }

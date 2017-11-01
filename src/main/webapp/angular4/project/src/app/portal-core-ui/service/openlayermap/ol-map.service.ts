@@ -101,14 +101,10 @@ export class OlMapService {
            });
 
            // Process lists of features
-           let modalDisplayed = false;
+           const modalDisplayed = {value: false}
            for (const feature of clickedFeatureList) {
              // NB: This is just testing that the popup window does display
-             if (!modalDisplayed) {
-               this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
-               modalDisplayed = true;
-               this.bsModalRef.content.downloading = true;
-             }
+             this.displayModal(modalDisplayed, clickCoord);
 
              this.queryWFSService.getFeatureInfo(feature.onlineResource, feature.id_).subscribe(result => {
                this.setModal(result, feature, this.bsModalRef);
@@ -119,11 +115,7 @@ export class OlMapService {
            }
            for (const layer of clickedLayerList) {
              // NB: This is just testing that the popup window does display
-             if (!modalDisplayed) {
-               this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
-               modalDisplayed = true;
-               this.bsModalRef.content.downloading = true;
-             }
+              this.displayModal(modalDisplayed, clickCoord);
              // TODO: Get the feature info and display in popup
              if (layer.onlineResource) {
                this.bsModalRef.content.downloading = true;
@@ -136,6 +128,19 @@ export class OlMapService {
              }
            }
 
+
+   }
+
+   private displayModal(modalDisplayed, clickCoord) {
+     if (modalDisplayed.value === false) {
+       this.bsModalRef  = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
+       modalDisplayed.value = true;
+       this.bsModalRef.content.downloading = true;
+       const vector = this.drawDot(clickCoord);
+       this.modalService.onHide.subscribe(reason => {
+         this.removeVector(vector);
+       })
+     }
    }
 
    private setModal(result: string, layer: any, bsModalRef: BsModalRef) {
@@ -200,6 +205,14 @@ export class OlMapService {
    */
   public drawBound(): BehaviorSubject<olLayerVector> {
     return this.olMapObject.drawBox();
+  }
+
+  public drawDot(coord): olLayerVector {
+    return this.olMapObject.drawDot(coord);
+  }
+
+  public removeVector(vector: olLayerVector) {
+    this.olMapObject.removeVector(vector);
   }
 
 
