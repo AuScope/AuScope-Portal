@@ -11,6 +11,23 @@ export class KeysPipe implements PipeTransform {
   }
 }
 
+@Pipe({name: 'querierFeatureSearchPipe'})
+export class QuerierFeatureSearchPipe implements PipeTransform {
+  transform(value, args?): Array<any> {
+    if (value && value.length > 0) {
+      return value.filter(feature => {
+        if (feature.layerName) {
+          if (feature.layerName === args || args === 'ALL' ) {
+            return true;
+          }
+        }
+      });
+    }else {
+      return value;
+    }
+  }
+}
+
 //@Pipe({name: 'hideLayerGroup'})
 //export class HideLayerGroup implements PipeTransform {
 //  transform(value, args?): Array<any> {

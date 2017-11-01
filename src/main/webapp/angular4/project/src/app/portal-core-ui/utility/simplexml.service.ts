@@ -276,7 +276,7 @@ export class SimpleXMLService {
         return xmlDocument;
     }
 
-  public static parseTreeCollection(rootNode: Document, onlineResource: OnlineResourceModel): any[] {
+  public static parseTreeCollection(rootNode: Document, onlineResource: OnlineResourceModel, layerName: string): any[] {
 
 
      const docs: any[] = [];
@@ -290,7 +290,11 @@ export class SimpleXMLService {
          const nextNode = serviceErrorNode.iterateNext();
          if (!UtilitiesService.isEmpty(exceptionNode) || nextNode != null) {
            // There is an error report from the server;
-           docs['Server Error'] = document.createTextNode('Sorry - server has returned an error message. See browser console for more information');
+           docs.push({
+             key: 'Server Error',
+             layerName: layerName,
+             value: (document.createTextNode('Sorry - server has returned an error message. See browser console for more information'))
+             });
            return docs;
          }
          const featureInfoNode = SimpleXMLService.getMatchingChildNodes(rootNode, null, 'FeatureInfoResponse');
@@ -309,7 +313,11 @@ export class SimpleXMLService {
                if (!name) {
                  name = onlineResource.name;
                }
-               docs[name] = features[i];
+               docs.push({
+                 key: name,
+                 layerName: layerName,
+                 value: features[i]
+               });
                const displayStr = ' ';
 
              }
@@ -336,7 +344,11 @@ export class SimpleXMLService {
            }
          }
          if (typeof name === 'string' || name.length > 0) {
-           docs[name] = featureNode;
+           docs.push({
+             key: name,
+             layerName: layerName,
+             value: featureNode
+           });
          }
        }
      }

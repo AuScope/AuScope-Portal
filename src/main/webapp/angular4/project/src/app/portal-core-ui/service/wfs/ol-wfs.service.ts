@@ -98,6 +98,7 @@ export class OlWFSService {
          feature.setId(primitive.name);
        }
        feature.onlineResource = onlineResource;
+       feature.layerName = layer.name;
     // VT: we chose the first layer in the array based on the assumption that we only create a single vector
     // layer for each wfs layer. WMS may potentially contain more than 1 layer in the array. note the difference
     (<olLayerVector>this.olMapObject.getLayerById(layer.id)[0]).getSource().addFeature(feature);

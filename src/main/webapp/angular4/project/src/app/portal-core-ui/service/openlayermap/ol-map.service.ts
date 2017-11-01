@@ -101,22 +101,17 @@ export class OlMapService {
            });
 
            // Process lists of features
-           let featureModalDisplayed = false;
+           let modalDisplayed = false;
            for (const feature of clickedFeatureList) {
              // NB: This is just testing that the popup window does display
-             if (!featureModalDisplayed) {
+             if (!modalDisplayed) {
                this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
-               featureModalDisplayed = true;
+               modalDisplayed = true;
                this.bsModalRef.content.downloading = true;
              }
 
              this.queryWFSService.getFeatureInfo(feature.onlineResource, feature.id_).subscribe(result => {
-               const treeCollections = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), feature.onlineResource);
-               this.bsModalRef.content.docs = treeCollections;
-//               for (const idx in treeCollections) {
-//                 this.bsModalRef.content.docs[idx] = treeCollections[idx];
-//               }
-               this.bsModalRef.content.downloading = false;
+               this.setModal(result, feature, this.bsModalRef);
              },
               err => {
                 this.bsModalRef.content.downloading = false;
@@ -124,21 +119,36 @@ export class OlMapService {
            }
            for (const layer of clickedLayerList) {
              // NB: This is just testing that the popup window does display
-             this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
+             if (!modalDisplayed) {
+               this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
+               modalDisplayed = true;
+               this.bsModalRef.content.downloading = true;
+             }
              // TODO: Get the feature info and display in popup
              if (layer.onlineResource) {
-                this.bsModalRef.content.downloading = true;
+               this.bsModalRef.content.downloading = true;
                this.queryWMSService.getFeatureInfo(layer.onlineResource, layer.sldBody, pixel, clickCoord).subscribe(result => {
-                 this.bsModalRef.content.docs = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), layer.onlineResource);
-                 this.bsModalRef.content.downloading = false;
+                this.setModal(result, layer, this.bsModalRef);
                },
-               err => {
-                this.bsModalRef.content.downloading = false;
-               });
+                 err => {
+                   this.bsModalRef.content.downloading = false;
+                 });
              }
            }
 
    }
+
+   private setModal(result: string, layer: any, bsModalRef: BsModalRef) {
+     const treeCollections = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), layer.onlineResource, layer.layerName);
+     for (const treeCollection of treeCollections) {
+       bsModalRef.content.docs.push(treeCollection);
+       if (bsModalRef.content.uniqueLayerNames.indexOf(layer.layerName) === -1) {
+         bsModalRef.content.uniqueLayerNames.push(layer.layerName)
+       }
+     }
+     this.bsModalRef.content.downloading = false;
+   }
+
 
 
   /**
