@@ -29,8 +29,7 @@ export class QueryWFSService {
       httpParams = httpParams.append('featureId', featureId);
 
       return this.http.get('../requestFeature.do', {
-        params: httpParams,
-        responseType: 'text'
+        params: httpParams
       }).map(response => {
         if (response['success']) {
           return response['data']['gml'];

@@ -6,12 +6,12 @@
 				<div class="modal-body">
 				
 					<div class="panel panel-default">
-						
+						<p *ngFor="let doc of docs">{{doc}}</p>
 						<!-- END panel-heading -->
 						<!-- BEGIN panel-body -->
 						<div class="panel-body">							
 							<!-- BEGIN panel-group -->
-							<div *ngIf="downloading"><h2 class="wip">Downloading <span class="fa fa-circle small">&nbsp</span><span class="fa fa-circle small">&nbsp</span><span class="fa fa-circle small">&nbsp</span></h2></div>
+							<div *ngIf="downloading"><h2 class="wip">Downloading <span class="fa fa-circle small"></span><span class="fa fa-circle small"></span><span class="fa fa-circle small"></span></h2></div>
 							<div class="panel-group" id="querier-accordion">
 								<!-- BEGIN panel -->
 								<div *ngFor="let doc of docs | getKey" class="panel panel-default panel-bordered">

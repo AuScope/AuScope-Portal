@@ -100,19 +100,27 @@ export class OlMapService {
                clickedFeatureList.push(feature);
            });
 
-           // Process lists of layers and features
+           // Process lists of features
+           let featureModalDisplayed = false;
            for (const feature of clickedFeatureList) {
              // NB: This is just testing that the popup window does display
-             this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
+             if (!featureModalDisplayed) {
+               this.bsModalRef = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
+               featureModalDisplayed = true;
+               this.bsModalRef.content.downloading = true;
+             }
 
-             this.bsModalRef.content.downloading = true;
              this.queryWFSService.getFeatureInfo(feature.onlineResource, feature.id_).subscribe(result => {
-               this.bsModalRef.content.docs = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), feature.onlineResource);
+               const treeCollections = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), feature.onlineResource);
+               this.bsModalRef.content.docs = treeCollections;
+//               for (const idx in treeCollections) {
+//                 this.bsModalRef.content.docs[idx] = treeCollections[idx];
+//               }
                this.bsModalRef.content.downloading = false;
              },
               err => {
                 this.bsModalRef.content.downloading = false;
-               });
+              });
            }
            for (const layer of clickedLayerList) {
              // NB: This is just testing that the popup window does display
