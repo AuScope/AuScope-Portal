@@ -144,11 +144,11 @@ export class OlMapService {
    }
 
    private setModal(result: string, layer: any, bsModalRef: BsModalRef) {
-     const treeCollections = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), layer.onlineResource, layer.layerName);
+     const treeCollections = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), layer);
      for (const treeCollection of treeCollections) {
        bsModalRef.content.docs.push(treeCollection);
-       if (bsModalRef.content.uniqueLayerNames.indexOf(layer.layerName) === -1) {
-         bsModalRef.content.uniqueLayerNames.push(layer.layerName)
+       if (bsModalRef.content.uniqueLayerNames.indexOf(layer.layer.name) === -1) {
+         bsModalRef.content.uniqueLayerNames.push(layer.layer.name)
        }
      }
      this.bsModalRef.content.downloading = false;

@@ -167,7 +167,22 @@ export class OlMapObject {
    public drawDot(coord): olLayerVector {
     const source = new olSourceVector({wrapX: false});
     const vector = new olLayerVector({
-      source: source
+      source: source,
+      style: new olStyleStyle({
+        fill: new olStyleFill({
+          color: 'rgba(255, 255, 255, 0.2)'
+        }),
+        stroke: new olStyleStroke({
+          color: '#ffcc33',
+          width: 2
+        }),
+        image: new olStyleCircle({
+          radius: 7,
+          fill: new olStyleFill({
+            color: '#ffcc33'
+          })
+        })
+      })
     });
 
     this.map.addLayer(vector);

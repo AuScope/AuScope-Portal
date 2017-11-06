@@ -180,7 +180,7 @@ export class OlWMSService {
 
         wmsTile.sldBody = response;
         wmsTile.onlineResource = wmsOnlineResource;
-        wmsTile.layerName = layer.name;
+        wmsTile.layer = layer;
 
         wmsTile.getSource().on('tileloadstart', function(event) {
           me.renderStatusService.addResource(layer, wmsOnlineResource);

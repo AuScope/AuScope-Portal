@@ -276,7 +276,7 @@ export class SimpleXMLService {
         return xmlDocument;
     }
 
-  public static parseTreeCollection(rootNode: Document, onlineResource: OnlineResourceModel, layerName: string): any[] {
+  public static parseTreeCollection(rootNode: Document, layer: any): any[] {
 
 
      const docs: any[] = [];
@@ -292,7 +292,8 @@ export class SimpleXMLService {
            // There is an error report from the server;
            docs.push({
              key: 'Server Error',
-             layerName: layerName,
+             layer: layer.layer,
+             onlineResource: layer.onlineResource,
              value: (document.createTextNode('Sorry - server has returned an error message. See browser console for more information'))
              });
            return docs;
@@ -311,11 +312,12 @@ export class SimpleXMLService {
              for (let i = 0; i < features.length; i++) {
                let name = features[i].getAttribute('identifier');
                if (!name) {
-                 name = onlineResource.name;
+                 name = layer.onlineResource.name;
                }
                docs.push({
                  key: name,
-                 layerName: layerName,
+                 layer: layer.layer,
+                 onlineResource: layer.onlineResource,
                  value: features[i]
                });
                const displayStr = ' ';
@@ -340,13 +342,14 @@ export class SimpleXMLService {
          if (UtilitiesService.isEmpty(name)) {
            name = SimpleXMLService.evaluateXPath(rootNode, featureNode, 'gml:name', Constants.XPATH_STRING_TYPE).stringValue;
            if (UtilitiesService.isEmpty(name)) {
-             name = onlineResource.name;
+             name = layer.onlineResource.name;
            }
          }
          if (typeof name === 'string' || name.length > 0) {
            docs.push({
              key: name,
-             layerName: layerName,
+             layer: layer.layer,
+             onlineResource: layer.onlineResource,
              value: featureNode
            });
          }

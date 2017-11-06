@@ -16,8 +16,8 @@ export class QuerierFeatureSearchPipe implements PipeTransform {
   transform(value, args?): Array<any> {
     if (value && value.length > 0) {
       return value.filter(feature => {
-        if (feature.layerName) {
-          if (feature.layerName === args || args === 'ALL' ) {
+        if (feature.layer.name) {
+          if (feature.layer.name === args || args === 'ALL' ) {
             return true;
           }
         }

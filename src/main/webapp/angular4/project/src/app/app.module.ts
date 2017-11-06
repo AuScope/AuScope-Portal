@@ -15,6 +15,8 @@ import { FilterPanelComponent } from './menupanel/common/filterpanel/filterpanel
 import { DownloadPanelComponent } from './menupanel/common/downloadpanel/downloadpanel.component';
 import { InfoPanelComponent} from './menupanel/common/infopanel/infopanel.component';
 import { InfoPanelSubComponent } from './menupanel/common/infopanel/subpanel/subpanel.component';
+import { DynamicAnalyticComponent } from './modalwindow/querier/dynamic.analytic.component';
+import { NVCLDatasetListComponent } from './modalwindow/querier/customanalytic/nvcl/nvcl.datasetlist.component';
 import { OlMapZoomComponent } from './openlayermap/olmap.zoom.component';
 import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderstatus.component';
 import { NotificationComponent } from './toppanel/notification/notification.component';
@@ -36,7 +38,9 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     NotificationComponent,
     InfoPanelSubComponent,
     OlMapZoomComponent,
-    QuerierModalComponent
+    QuerierModalComponent,
+    DynamicAnalyticComponent,
+    NVCLDatasetListComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +51,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     TreeModule,
     ModalModule.forRoot()
   ],
-  entryComponents: [NgbdModalStatusReportComponent, QuerierModalComponent],
+  entryComponents: [NgbdModalStatusReportComponent, QuerierModalComponent, NVCLDatasetListComponent],
   bootstrap: [OlMapComponent, LayerPanelComponent, CustomPanelComponent, NotificationComponent, OlMapZoomComponent]
 })
 export class AppModule { }
