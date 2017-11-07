@@ -17,7 +17,8 @@ export class QuerierModalComponent implements AfterViewInit {
   public docs: any[] = [];
   public collapse: any[] = [];
   public JSONTreeStruct: TreeModel[] = [];
-
+  public uniqueLayerNames: string[] = [];
+  public selectLayerNameFilter = 'ALL';
 
     constructor(public bsModalRef: BsModalRef, private changeDetectorRef: ChangeDetectorRef) {
     }
@@ -74,7 +75,7 @@ export class QuerierModalComponent implements AfterViewInit {
             }
 
         };
-        tree['children'].push(parseNodeToJson(this.docs[name], 0, 0));
+        tree['children'].push(parseNodeToJson(doc, 0, 0));
 
       this.JSONTreeStruct[name] = tree;
     }

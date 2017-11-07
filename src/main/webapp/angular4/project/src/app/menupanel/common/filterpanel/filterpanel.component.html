@@ -79,8 +79,8 @@
 	            <div *ngIf="optionalFilter.type=='OPTIONAL.PROVIDER'">	               
 	                <div class="form-group">						
 						<div class="checkbox" *ngFor="let provider of providers;let idx = index">
-							<input class="input-sm" id="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}" type="checkbox" [(ngModel)]="optionalFilter.value[provider.value]"/>
-							<label for="{{ 'filter-OPTIONAL.PROVIDER-' + idx }}">
+							<input class="input-sm" id="{{ 'filter-OPTIONAL.PROVIDER-' + idx + '-' + layer.id }}" type="checkbox" [(ngModel)]="optionalFilter.value[provider.value]"/>
+							<label for="{{ 'filter-OPTIONAL.PROVIDER-' + idx + '-' + layer.id }}">
 								{{provider.label}}
 							</label>
 						</div>						

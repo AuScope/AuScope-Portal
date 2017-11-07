@@ -13,6 +13,15 @@ import olControlMousePosition from 'ol/control/mouseposition';
 import olCoordinate from 'ol/coordinate';
 import olDraw from 'ol/interaction/draw';
 import olControl from 'ol/control';
+import olStyleStyle from 'ol/style/style';
+import olStyleCircle from 'ol/style/circle';
+import olStyleFill from 'ol/style/fill';
+import olStyleStroke from 'ol/style/stroke';
+import olGeomPoint from 'ol/geom/point';
+import olProj from 'ol/proj';
+import olFeature from 'ol/feature';
+import olEasing from 'ol/easing';
+import olObservable from 'ol/observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 
@@ -154,5 +163,79 @@ export class OlMapObject {
     this.map.addInteraction(draw);
     return vectorBS
   }
+
+   public drawDot(coord): olLayerVector {
+    const source = new olSourceVector({wrapX: false});
+    const vector = new olLayerVector({
+      source: source,
+      style: new olStyleStyle({
+        fill: new olStyleFill({
+          color: 'rgba(255, 255, 255, 0.2)'
+        }),
+        stroke: new olStyleStroke({
+          color: '#ffcc33',
+          width: 2
+        }),
+        image: new olStyleCircle({
+          radius: 7,
+          fill: new olStyleFill({
+            color: '#ffcc33'
+          })
+        })
+      })
+    });
+
+    this.map.addLayer(vector);
+    const me = this;
+    const geom = new olGeomPoint(coord);
+    const feature = new olFeature(geom);
+     function flash(feature) {
+        const start = new Date().getTime();
+        let listenerKey;
+
+        function animate(event) {
+          const vectorContext = event.vectorContext;
+          const frameState = event.frameState;
+          const flashGeom = feature.getGeometry().clone();
+          const elapsed = frameState.time - start;
+          const elapsedRatio = elapsed / 3000;
+          // radius will be 5 at start and 30 at end.
+          const radius = olEasing.easeOut(elapsedRatio) * 25 + 5;
+          const opacity = olEasing.easeOut(1 - elapsedRatio);
+
+          const style = new olStyleStyle({
+            image: new olStyleCircle({
+              radius: radius,
+              snapToPixel: false,
+              stroke: new olStyleStroke({
+                color: 'rgba(255, 0, 0, ' + opacity + ')',
+                width: 0.25 + opacity
+              })
+            })
+          });
+
+          vectorContext.setStyle(style);
+          vectorContext.drawGeometry(flashGeom);
+          if (elapsed > 3000) {
+            olObservable.unByKey(listenerKey);
+            return;
+          }
+          // tell OpenLayers to continue postcompose animation
+          me.map.render();
+        }
+        listenerKey = me.map.on('postcompose', animate);
+      }
+
+      source.on('addfeature', function(e) {
+        flash(e.feature);
+      });
+     source.addFeature(feature);
+
+    return vector;
+  }
+
+   public removeVector(vector: olLayerVector) {
+     this.map.removeLayer(vector);
+   }
 
 }

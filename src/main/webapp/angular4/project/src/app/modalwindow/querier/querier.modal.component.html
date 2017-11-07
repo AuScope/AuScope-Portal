@@ -4,17 +4,26 @@
                 	<h1 class="page-header">Response: <small>Get Feature Info result</small></h1>
                 </div>
 				<div class="modal-body">
-				
-					<div class="panel panel-default">
-						<p *ngFor="let doc of docs">{{doc}}</p>
+					
+					<div class="panel panel-default">						
 						<!-- END panel-heading -->
 						<!-- BEGIN panel-body -->
+						
 						<div class="panel-body">							
 							<!-- BEGIN panel-group -->
+							<div class="form-inline p-b-15">
+								<div class="form-group  form-group-sm">
+				                    <label><i class="fa fa-filter" aria-hidden="true"></i> Filter: </label>	                    
+									<select class="form-control input-sm" [(ngModel)]="selectLayerNameFilter">
+										<option value="ALL" selected="selected">ALL</option>
+										<option *ngFor="let uniqueLayerName of uniqueLayerNames">{{uniqueLayerName}}</option>
+									</select>
+				                </div>
+			                </div>
 							<div *ngIf="downloading"><h2 class="wip">Downloading <span class="fa fa-circle small"></span><span class="fa fa-circle small"></span><span class="fa fa-circle small"></span></h2></div>
 							<div class="panel-group" id="querier-accordion">
 								<!-- BEGIN panel -->
-								<div *ngFor="let doc of docs | getKey" class="panel panel-default panel-bordered">
+								<div *ngFor="let doc of docs | querierFeatureSearchPipe:selectLayerNameFilter" class="panel panel-default panel-bordered">
 									<!-- BEGIN panel-heading -->
 									<div class="panel-heading" id="headingOne">
 										<h4 class="panel-title">
@@ -30,8 +39,8 @@
 											<!-- BEGIN panel-heading -->
 											<div class="panel-heading">
 												<ul id="panel-tab" class="nav nav-tabs pull-right">
-													<li class="active"><a href="#{{doc.key}}-panel-tab-home" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">Home</span></a></li>
-													<li><a href="#{{doc.key}}-panel-tab-profile" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">NVCL</span></a></li>
+													<li><a href="#{{doc.key}}-panel-tab-home" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">Home</span></a></li>
+													<li class="active"><a href="#{{doc.key}}-panel-tab-profile" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">NVCL</span></a></li>
 												</ul>
 												<h4 class="panel-title">Feature Detail</h4>
 											</div>
@@ -39,17 +48,16 @@
 											<!-- BEGIN tab-content -->
 											<div id="panel-tab-content" class="tab-content">
 												<!-- BEGIN tab-pane -->												
-												<div *ngIf="doc.key !== 'Server Error'" class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
+												<div *ngIf="doc.key !== 'Server Error'" class="tab-pane fade" id="{{doc.key}}-panel-tab-home">													
 													<tree *ngIf="JSONTreeStruct[doc.key]" [tree]="JSONTreeStruct[doc.key]" [attr.id]="doc.key"></tree>
 												</div>
-												<div *ngIf="doc.key === 'Server Error'" class="tab-pane fade in active" id="{{doc.key}}-panel-tab-home">													
+												<div *ngIf="doc.key === 'Server Error'" class="tab-pane fade" id="{{doc.key}}-panel-tab-home">													
 													<p>Sorry - server has returned an error message. See browser console for more information</p>
 												</div>
 												<!-- END tab-pane -->
 												<!-- BEGIN tab-pane -->
-												<div class="tab-pane fade" id="{{doc.key}}-panel-tab-profile">																										
-													<p>demo NVCL</p>
-													
+												<div class="tab-pane fade in active" id="{{doc.key}}-panel-tab-profile">																										
+													<app-custom-analytic [layer]="doc.layer" [onlineResource] = "doc.onlineResource" [featureId]="doc.key"></app-custom-analytic>
 												</div>
 												<!-- END tab-pane -->
 											</div>
