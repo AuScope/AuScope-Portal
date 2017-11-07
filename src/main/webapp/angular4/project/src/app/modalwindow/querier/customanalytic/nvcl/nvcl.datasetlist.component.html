@@ -1,0 +1,52 @@
+<div class="panel-group" id="nvcl-dataset-accordion">
+	<!-- BEGIN panel -->
+	<div *ngFor="let nvclDataset of nvclDatasets;let i = index" class="panel panel-default panel-bordered">
+		<!-- BEGIN panel-heading -->
+		<div class="panel-heading" id="headingOne">
+			<h4 class="panel-title">
+				<a href="#{{nvclDataset.datasetName}}" class="accordion-link" data-toggle="collapse" data-parent="#nvcl-dataset-accordion">
+					DatasetName: {{nvclDataset.datasetName}}
+				</a>
+			</h4>
+		</div>
+		<!-- END panel-heading -->
+		<!-- BEGIN panel-collapse -->
+		<div id="{{nvclDataset.datasetName}}" class="panel-collapse collapse" [ngClass]="{'in':i==0}" >
+			<div class="panel panel-default panel-with-tabs">
+				<!-- BEGIN panel-heading -->
+				<div class="panel-heading">
+					<ul id="nvcl-panel-tab" class="nav nav-tabs pull-right">
+						<li (click)="nvclDataset.image=true;nvclDataset.scalar=false;nvclDataset.download=false;" [ngClass]="{'active':nvclDataset.image}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-image" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">Image</span></a></li>
+						<li (click)="nvclDataset.image=false;nvclDataset.scalar=true;nvclDataset.download=false;" [ngClass]="{'active':nvclDataset.scalar}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Scalar</span></a></li>
+						<li (click)="nvclDataset.image=false;nvclDataset.scalar=false;nvclDataset.download=true;" [ngClass]="{'active':nvclDataset.download}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-download" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Download</span></a></li>
+					</ul>
+					<h4 class="panel-title">NVCL</h4>
+				</div>
+				<!-- END panel-heading -->
+				<!-- BEGIN tab-content -->
+				<div id="panel-tab-content" class="tab-content">
+					<!-- BEGIN tab-pane -->										
+					<div class="tab-pane fade in active" [ngClass]="{'active in':nvclDataset.image}" id="{{nvclDataset.datasetName}}-nvcl-panel-tab-image">		
+						<div class="modal-panel-size loading-iframe">											
+							<iframe *ngIf="datasetImages[nvclDataset.datasetId]" style="overflow:auto;width:100%;height:100%;" frameborder="0" [src]="datasetImages[nvclDataset.datasetId] | trustResourceUrl"></iframe>
+						</div>
+					</div>					
+					<!-- END tab-pane -->
+					<!-- BEGIN tab-pane -->
+					<div class="tab-pane fade" [ngClass]="{'active in':nvclDataset.scalar}" id="{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar">																										
+						<p>scalar</p>
+					</div>
+					<!-- END tab-pane -->
+					<!-- BEGIN tab-pane -->
+					<div class="tab-pane fade" [ngClass]="{'active in':nvclDataset.download}" id="{{nvclDataset.datasetName}}-nvcl-panel-tab-download">																										
+						<p>download</p>
+					</div>
+					<!-- BEGIN tab-pane -->
+				</div>
+				<!-- END tab-content -->
+			</div>
+		</div>
+		<!-- END panel-collapse -->
+	</div>
+	<!-- END panel -->
+</div>

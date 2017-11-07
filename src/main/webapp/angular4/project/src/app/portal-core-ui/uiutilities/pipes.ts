@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({name: 'getKey'})
 export class KeysPipe implements PipeTransform {
@@ -28,33 +29,11 @@ export class QuerierFeatureSearchPipe implements PipeTransform {
   }
 }
 
-//@Pipe({name: 'hideLayerGroup'})
-//export class HideLayerGroup implements PipeTransform {
-//  transform(value, args?): Array<any> {
-//    if (value) {
-//      return value.filter(layerGroup => {
-//        if (layerGroup.hide) {
-//          return false
-//        } else {
-//          return true;
-//        }
-//      });
-//    }
-//  }
-//}
-//
-//
-//@Pipe({name: 'hideLayer'})
-//export class HideLayer implements PipeTransform {
-// transform(value, args?): Array<any> {
-//    if (value) {
-//      return value.filter(layer => {
-//        if (layer.hide) {
-//          return false
-//        } else {
-//          return true;
-//        }
-//      });
-//    }
-//  }
-//}
+@Pipe({ name: 'trustResourceUrl' })
+export class TrustResourceUrlPipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) {}
+  transform(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+}
+

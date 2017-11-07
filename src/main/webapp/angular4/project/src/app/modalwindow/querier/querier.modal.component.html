@@ -27,7 +27,7 @@
 									<!-- BEGIN panel-heading -->
 									<div class="panel-heading" id="headingOne">
 										<h4 class="panel-title">
-											<a href="#{{doc.key}}" (click)="collapse[doc.key]=!collapse[doc.key];parseTree(doc.key,doc.value)" class="accordion-link" data-toggle="collapse" data-parent="#querier-accordion">
+											<a href="#{{doc.key}}" (click)="collapse[doc.key]=!collapse[doc.key];parseTree(doc);" class="accordion-link" data-toggle="collapse" data-parent="#querier-accordion">
 												{{doc.key}}
 											</a>
 										</h4>
@@ -38,9 +38,9 @@
 										<div class="panel panel-default panel-with-tabs">
 											<!-- BEGIN panel-heading -->
 											<div class="panel-heading">
-												<ul id="panel-tab" class="nav nav-tabs pull-right">
-													<li><a href="#{{doc.key}}-panel-tab-home" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">Home</span></a></li>
-													<li class="active"><a href="#{{doc.key}}-panel-tab-profile" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">NVCL</span></a></li>
+												<ul id="querier-panel-tab" class="nav nav-tabs pull-right">
+													<li (click)="doc.home=true;doc.analytic=false;" [ngClass]="{'active':doc.home}"><a href="#{{doc.key}}-panel-tab-home" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">WFS</span></a></li>
+													<li (click)="doc.home=false;doc.analytic=true" [ngClass]="{'active':doc.analytic}" *ngIf="analyticMap[doc.layer.id]" ><a href="#{{doc.key}}-panel-tab-profile" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Analytic</span></a></li>
 												</ul>
 												<h4 class="panel-title">Feature Detail</h4>
 											</div>
@@ -48,16 +48,16 @@
 											<!-- BEGIN tab-content -->
 											<div id="panel-tab-content" class="tab-content">
 												<!-- BEGIN tab-pane -->												
-												<div *ngIf="doc.key !== 'Server Error'" class="tab-pane fade" id="{{doc.key}}-panel-tab-home">													
+												<div *ngIf="doc.key !== 'Server Error'" class="tab-pane fade" [ngClass]="{'active in':doc.home}" id="{{doc.key}}-panel-tab-home">													
 													<tree *ngIf="JSONTreeStruct[doc.key]" [tree]="JSONTreeStruct[doc.key]" [attr.id]="doc.key"></tree>
 												</div>
-												<div *ngIf="doc.key === 'Server Error'" class="tab-pane fade" id="{{doc.key}}-panel-tab-home">													
+												<div *ngIf="doc.key === 'Server Error'" class="tab-pane fade" [ngClass]="{'active in':doc.home}" id="{{doc.key}}-panel-tab-home">													
 													<p>Sorry - server has returned an error message. See browser console for more information</p>
 												</div>
 												<!-- END tab-pane -->
 												<!-- BEGIN tab-pane -->
-												<div class="tab-pane fade in active" id="{{doc.key}}-panel-tab-profile">																										
-													<app-custom-analytic [layer]="doc.layer" [onlineResource] = "doc.onlineResource" [featureId]="doc.key"></app-custom-analytic>
+												<div *ngIf="analyticMap[doc.layer.id]" class="tab-pane fade" [ngClass]="{'active in':doc.analytic}" id="{{doc.key}}-panel-tab-profile">																										
+													<app-custom-analytic [layer]="doc.layer" [load]="doc.loadSubComponent" [onlineResource] = "doc.onlineResource" [featureId]="doc.key"></app-custom-analytic>
 												</div>
 												<!-- END tab-pane -->
 											</div>

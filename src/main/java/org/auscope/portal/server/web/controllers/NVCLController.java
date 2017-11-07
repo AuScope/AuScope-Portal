@@ -194,7 +194,7 @@ public class NVCLController extends BasePortalController {
             @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
             @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
             @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "100") int maxFeatures,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "200") int maxFeatures,
             @RequestParam(required = false, value = "bbox") String bboxJson,
             @RequestParam(required = false, value = "onlyHylogger") String onlyHyloggerString,
             @RequestParam(required = false, value = "serviceFilter", defaultValue = "") String serviceFilter,

@@ -2,7 +2,7 @@ import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core
 import { HttpClientModule } from '@angular/common/http';
 
 // Utilities
-import {KeysPipe, QuerierFeatureSearchPipe} from './uiutilities/pipes';
+import {KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe} from './uiutilities/pipes';
 
 
 // Services
@@ -29,27 +29,28 @@ import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
   declarations: [
     KeysPipe,
     QuerierFeatureSearchPipe,
+    TrustResourceUrlPipe,
     ImgLoadingDirective
   ],
   imports: [
     HttpClientModule
   ],
-  exports: [KeysPipe, QuerierFeatureSearchPipe, ImgLoadingDirective],
+  exports: [KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, ImgLoadingDirective],
   providers: [LayerHandlerService,
-              OlMapService,
-              OlWMSService,
-              OlMapObject,
-              OlWFSService,
-              DownloadWfsService,
-              GMLParserService,
-              RenderStatusService,
-              FilterPanelService,
-              LegendService,
-              ImgLoadingDirective,
-              NotificationService,
-              QueryWMSService,
-              QueryWFSService
-              ]
+    OlMapService,
+    OlWMSService,
+    OlMapObject,
+    OlWFSService,
+    DownloadWfsService,
+    GMLParserService,
+    RenderStatusService,
+    FilterPanelService,
+    LegendService,
+    ImgLoadingDirective,
+    NotificationService,
+    QueryWMSService,
+    QueryWFSService
+  ]
 })
 
 export class PortalCoreModule {

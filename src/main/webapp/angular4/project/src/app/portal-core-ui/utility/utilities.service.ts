@@ -414,5 +414,10 @@ export class UtilitiesService {
       return httpParam;
     }
 
+   public static getBaseUrl(url): string {
+        const splitUrl = url.split('://');
+        return splitUrl[0] + '://' + splitUrl[1].slice(0, splitUrl[1].indexOf('/'));
+    }
+
 
 }

@@ -2,37 +2,39 @@ import { LayerModel } from '../../portal-core-ui/model/data/layer.model';
 import { OnlineResourceModel } from '../../portal-core-ui/model/data/onlineresource.model';
 import { NVCLDatasetListComponent } from './customanalytic/nvcl/nvcl.datasetlist.component';
 import { Component, Input, AfterViewInit, ViewChild, ComponentFactoryResolver, OnDestroy, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
-
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-custom-analytic',
-  // template: `<div><ng-template appDynamicAnalyticHost></ng-template></div>`
-   template: `<div #parent></div>`
+   template: `<div #dynamicContentAnalyticPlaceholder></div>`
 })
 
 
-export class DynamicAnalyticComponent implements AfterViewInit {
+export class DynamicAnalyticComponent {
   @Input() layer: LayerModel;
   @Input() onlineResource: OnlineResourceModel;
   @Input() featureId: string;
-  // @ViewChild(CustomAnalyticDirective) customAnalyticHost: CustomAnalyticDirective;
-  @ViewChild('parent', {read: ViewContainerRef})
-  customAnalyticHost: ViewContainerRef;
+  private _load: boolean;
+  @ViewChild('dynamicContentAnalyticPlaceholder', {read: ViewContainerRef})
+  dyanmicAnalyticHost: ViewContainerRef;
 
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private changeDetectorRef: ChangeDetectorRef ) { }
 
-  ngAfterViewInit() {
-    this.loadComponent();
+  @Input()
+  set load(load: boolean) {
+    this._load = load;
+    if (this._load) {
+      this.loadComponent();
+    }
   }
-
 
   loadComponent() {
 
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(NVCLDatasetListComponent);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(environment.analytic[this.layer.id]);
 
-    const viewContainerRef = this.customAnalyticHost
+    const viewContainerRef = this.dyanmicAnalyticHost
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent(componentFactory);
 

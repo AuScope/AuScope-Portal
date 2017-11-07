@@ -6,6 +6,7 @@ import { Constants } from '../../portal-core-ui/utility/constants.service';
 import { AfterViewInit, Component, ChangeDetectorRef } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { TreeModel } from 'ng2-tree';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-querier-modal-window',
@@ -19,8 +20,11 @@ export class QuerierModalComponent implements AfterViewInit {
   public JSONTreeStruct: TreeModel[] = [];
   public uniqueLayerNames: string[] = [];
   public selectLayerNameFilter = 'ALL';
+  public analyticMap;
+  public tab: {};
 
     constructor(public bsModalRef: BsModalRef, private changeDetectorRef: ChangeDetectorRef) {
+      this.analyticMap = environment.analytic;
     }
 
     ngAfterViewInit() {
@@ -28,7 +32,17 @@ export class QuerierModalComponent implements AfterViewInit {
     }
 
 
-    public parseTree(name, doc): void {
+    public parseTree(document): void {
+      const name = document.key;
+      const doc = document.value;
+      if (!document.home) {
+        document.home = true;
+      }
+
+      if (!document.loadSubComponent) {
+        document.loadSubComponent = true;
+      }
+
       if (this.JSONTreeStruct[name]) {
         return;
       }
@@ -79,6 +93,7 @@ export class QuerierModalComponent implements AfterViewInit {
 
       this.JSONTreeStruct[name] = tree;
     }
+
 
 
 }

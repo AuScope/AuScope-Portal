@@ -199,6 +199,14 @@ fieldset legend{
     animation-delay: .4s;
 }
 
+.modal-panel-size {
+	width: 100%;
+	height: 500px;
+}
+
+.loading-iframe {
+	background:url(./template/img/loader/loader.gif) center center no-repeat;
+}
 /*
 max-width: 768px(small screen)
 */
