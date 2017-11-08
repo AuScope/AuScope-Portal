@@ -33,8 +33,53 @@
 					</div>					
 					<!-- END tab-pane -->
 					<!-- BEGIN tab-pane -->
-					<div class="tab-pane fade" [ngClass]="{'active in':nvclDataset.scalar}" id="{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar">																										
-						<p>scalar</p>
+					<div class="tab-pane fade" [ngClass]="{'active in':nvclDataset.scalar}"
+						id="{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar">
+						<div class="modal-panel-size">
+							<!-- BEGIN mail-box -->
+							<div style="overflow:auto;width:100%;height:100%;">
+								<div class="mail-box-content">
+									<!-- BEGIN mail-box-toolbar -->
+									<div class="mail-box-toolbar">
+										<div class="pull-right hidden-xs">
+											<div  class="btn btn-default btn-sm"><i class="ti-download"></i></div> 
+											<div class="btn btn-default btn-sm"><i class="ti-bar-chart-alt"></i></div> 
+											<div class="btn btn-default btn-sm"><i class="ti-loop"></i></div>
+										</div>
+									</div>
+									<!-- END mail-box-toolbar -->
+									<!-- BEGIN mail-box-container -->
+									<div class="mail-box-container">
+										<!-- BEGIN scrollbar -->
+										<div data-scrollbar="true" data-height="100%">
+											<!-- END table-email -->
+											<ul class="email-list">
+												<li class="" *ngFor="let datasetScalar of datasetScalars[nvclDataset.datasetId]">
+													<div class="email-checkbox">
+														<div class="checkbox">
+															<input type="checkbox" value="10" id="email-checkbox-10" /> <label for="email-checkbox-10"></label>
+														</div>
+													</div>
+													<div class="email-message">
+														<div>
+															<div class="email-sender">
+																<span class="email-time"><div class="fake-link" (click)="getDefinition(datasetScalar.logName)">Definition</div></span>
+																{{datasetScalar.logName}}
+															</div>
+															<div class="email-title">LogId: {{datasetScalar.logId}}</div>
+															<div class="email-desc" *ngIf="datasetScalarDefinition[datasetScalar.logName]">{{datasetScalarDefinition[datasetScalar.logName].definition}}</div>
+														</div>
+													</div>
+												</li>
+											</ul>
+											<!-- END table-email -->
+										</div>
+										<!-- END scrollbar -->
+									</div>
+									<!-- END mail-box-container -->
+								</div>
+							</div>
+						</div>
 					</div>
 					<!-- END tab-pane -->
 					<!-- BEGIN tab-pane -->

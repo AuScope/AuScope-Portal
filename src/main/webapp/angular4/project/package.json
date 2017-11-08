@@ -36,6 +36,7 @@
     "ng2-tree": "^2.0.0-alpha.10",
     "ngx-bootstrap": "^1.9.3",
     "ol": "^4.3.1",
+    "rickshaw": "^1.6.3",
     "rxjs": "^5.1.0",
     "systemjs": "^0.20.16",
     "zone.js": "^0.8.14"

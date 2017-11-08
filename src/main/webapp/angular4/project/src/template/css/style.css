@@ -6611,16 +6611,15 @@ body .fc-event.fc-external-event:active {
 	border-right: 1px solid #d1d1d4;
 }
 .mail-box-content {
-	position: absolute;
 	top: 0;
 	left: 200px;
 	right: 0;
 	bottom: 0;
 	background: #fff;
 }
-.mail-box-container {
-	position: absolute;
-	top: 51px;
+.mail-box-container {	
+	padding-top: 35px;
+	top: 55px;
 	left: 0;
 	right: 0;
 	bottom: 0;
@@ -6725,11 +6724,13 @@ body .fc-event.fc-external-event:active {
 .mail-box-header .dropdown-menu:before {
 	top: -15px;
 }
-.mail-box-toolbar {
+.mail-box-toolbar {	
 	position: absolute;
-	top: 0;
+	background-color: white;
+	z-index: 1;
+	top: 38px;
 	left: 0;
-	right: 0;
+	right: 15px;
 	height: 51px;
 	border-bottom: 1px solid #d1d1d4;
 	padding: 10px 20px;
@@ -6824,7 +6825,6 @@ body .fc-event.fc-external-event:active {
 }
 .email-message .email-desc {
 	color: #8A8A8F;
-	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	position: relative;

@@ -32,7 +32,7 @@ export class NVCLService {
       );
   }
 
-   public getNVCL2_0_Logs(serviceUrl: string, datasetId: string): Observable<any> {
+   public getNVCL2_0_Images(serviceUrl: string, datasetId: string): Observable<any> {
     let httpParams = new HttpParams();
     const nvclUrl = this.getNVCLDataServiceUrl(serviceUrl);
     httpParams = httpParams.append('serviceUrl', nvclUrl);
@@ -52,6 +52,46 @@ export class NVCLService {
       }
       );
   }
+
+  public getNVCLScalars(serviceUrl: string, datasetId: string): Observable<any> {
+    let httpParams = new HttpParams();
+    const nvclUrl = this.getNVCLDataServiceUrl(serviceUrl);
+    httpParams = httpParams.append('serviceUrl', nvclUrl);
+    httpParams = httpParams.append('datasetId',  datasetId);
+    return this.http.get('../getNVCLLogs.do', {
+      params: httpParams
+    }).map(response => {
+      if (response['success'] === true) {
+        return response['data'];
+      } else {
+        return Observable.throw(response['msg']);
+      }
+    }).catch(
+      (error: Response) => {
+        return Observable.throw(error);
+      }
+      );
+  }
+
+  public getLogDefinition(logName): Observable<any> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('repository', 'nvcl-scalars');
+    httpParams = httpParams.append('label',  logName);
+    return this.http.get('../getScalar.do', {
+      params: httpParams
+    }).map(response => {
+      if (response['success'] === true) {
+        return response['data'];
+      } else {
+        return Observable.throw(response['msg']);
+      }
+    }).catch(
+      (error: Response) => {
+        return Observable.throw(error);
+      }
+      );
+  }
+
 
   public getNVCLDownloadServiceUrl(serviceUrl: string): string {
     let nvclUrl = UtilitiesService.getBaseUrl(serviceUrl);

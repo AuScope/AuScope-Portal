@@ -17,6 +17,8 @@ export class NVCLDatasetListComponent implements AfterViewInit {
   public nvclDatasets: any[];
   public collapse: any[] = [];
   public datasetImages: any[] = [];
+  public datasetScalars: any[] = [];
+  public datasetScalarDefinition: string[] = [];
 
   constructor(public nvclService: NVCLService, public domSanitizer: DomSanitizer) {}
 
@@ -28,16 +30,26 @@ export class NVCLDatasetListComponent implements AfterViewInit {
         nvclDataset.image = true;
         nvclDataset.scalar = false;
         nvclDataset.download = false;
-        this._getNVCLLogs(nvclDataset.datasetId);
+        this._getNVCLImage(this.onlineResource.url, nvclDataset.datasetId);
+        this._getNVCLScalar(this.onlineResource.url, nvclDataset.datasetId);
       }
     })
   }
 
-  private _getNVCLLogs(datasetId: string) {
+  public getDefinition(logName: string): void {
+    this.datasetScalarDefinition[logName] = {
+      definition: 'Loading ...'
+    }
+    this.nvclService.getLogDefinition(logName).subscribe(result => {
+      this.datasetScalarDefinition[logName] = result;
+    })
+  }
+
+  private _getNVCLImage(url: string, datasetId: string) {
     if (this.datasetImages[datasetId]) {
       return;
     }
-    this.nvclService.getNVCL2_0_Logs(this.onlineResource.url, datasetId).subscribe(trayImages => {
+    this.nvclService.getNVCL2_0_Images(url, datasetId).subscribe(trayImages => {
       for (const trayImage of trayImages) {
         if (trayImage.logName === 'Tray Thumbnail Images') {
           this.datasetImages[datasetId] = []
@@ -49,6 +61,15 @@ export class NVCLDatasetListComponent implements AfterViewInit {
           this.datasetImages[datasetId].push('getNVCL2_0_Thumbnail.do?' + httpParams.toString());
         }
       }
+    })
+  }
+
+  private _getNVCLScalar(url: string, datasetId: string) {
+    if (this.datasetScalars[datasetId]) {
+      return;
+    }
+    this.nvclService.getNVCLScalars(url, datasetId).subscribe(scalars => {
+      this.datasetScalars[datasetId] = scalars;
     })
   }
 }

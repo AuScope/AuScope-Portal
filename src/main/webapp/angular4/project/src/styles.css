@@ -45,8 +45,14 @@ Contain Auscope specific modification to the original template.
 	color: #7a7ae6;
 }
 
-.light-blue{
-	color: #fe1022;
+.red {
+	 color: #fe1022;
+}
+
+.fake-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .content-break-word{
