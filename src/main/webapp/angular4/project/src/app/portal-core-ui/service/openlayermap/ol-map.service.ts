@@ -127,7 +127,7 @@ export class OlMapService {
                  });
              }
            }
-
+     this.displayModal({value: false}, clickCoord);
 
    }
 

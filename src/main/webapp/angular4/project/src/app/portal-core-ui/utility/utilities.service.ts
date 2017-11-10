@@ -34,6 +34,15 @@ export class UtilitiesService {
         }
     }
 
+  public static leftPad(str, size, character) {
+        let result = String(str);
+        character = character || ' ';
+        while (result.length < size) {
+            result = character + result;
+        }
+        return result;
+    }
+
     /**
      * Retrieve the key of a object
      * @method getKey

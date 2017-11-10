@@ -4,6 +4,9 @@ import { NVCLService } from './nvcl.service';
 import { Component, Input, AfterViewInit } from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
+import * as $ from 'jquery'
+
+declare var Rickshaw: any;
 
 @Component({
   templateUrl: './nvcl.datasetlist.component.html',
@@ -24,6 +27,7 @@ export class NVCLDatasetListComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
+
     this.nvclService.getNVCLDatasets(this.onlineResource.url, this.featureId).subscribe(result => {
       this.nvclDatasets = result;
       for (const nvclDataset of this.nvclDatasets) {
@@ -34,6 +38,23 @@ export class NVCLDatasetListComponent implements AfterViewInit {
         this._getNVCLScalar(this.onlineResource.url, nvclDataset.datasetId);
       }
     })
+  }
+
+  public drawGraph() {
+    const graph = new Rickshaw.Graph({
+      element: $('#graph123')[0],
+      series: [
+        {
+          color: 'steelblue',
+          data: [{x: 0, y: 23}, {x: 1, y: 15}, {x: 2, y: 79}]
+        }, {
+          color: 'lightblue',
+          data: [{x: 0, y: 30}, {x: 1, y: 20}, {x: 2, y: 64}]
+        }
+      ]
+    });
+
+    graph.render();
   }
 
   public getDefinition(logName: string): void {

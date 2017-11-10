@@ -22,7 +22,95 @@
 			                </div>
 							<div *ngIf="downloading"><h2 class="wip">Downloading <span class="fa fa-circle small"></span><span class="fa fa-circle small"></span><span class="fa fa-circle small"></span></h2></div>
 							<div class="panel-group" id="querier-accordion">
-								<!-- BEGIN panel -->
+
+
+
+
+				<div class="modal-panel-size">
+					<div style="overflow: auto; width: 100%; height: 100%;">					
+						<div id="rickshawChart_outer">
+							<div id="content_0">
+								<form id="left_side_panel_0">
+									<h1>Grp1 uTSAT</h1>
+									<section>
+										<div id="legend_0" class="rickshaw_legend"></div>
+									</section>
+									<section>
+										<div id="renderer_form_0" class="toggler">
+											<input type="radio" name="renderer" id="area_0" value="area"> 
+											<label for="area_0">area</label> 
+											<input type="radio" name="renderer" id="bar_0" value="bar" checked> 
+											<label for="bar_0">bar</label> 
+											<input type="radio" name="renderer" id="line_0" value="line"> 
+											<label for="line_0">line</label> 
+											<input type="radio" name="renderer" id="scatter_0" value="scatterplot"> 
+											<label for="scatter_0">scatter</label>
+										</div>
+									</section>
+									<section>
+										<div id="offset_form">
+											<label for="stack">
+												<input type="radio" name="offset" id="stack" value="zero" checked="">
+												<span>stack</span>
+											</label>
+											<label for="stream">
+												<input type="radio" name="offset" id="stream" value="wiggle">
+												<span>stream</span>
+											</label>
+											<label for="pct">
+												<input type="radio" name="offset" id="pct" value="expand">
+												<span>pct</span>
+											</label>
+											<label for="value">
+												<input type="radio" name="offset" id="value" value="value">
+												<span>value</span>
+											</label>
+										</div>										
+										<div id="interpolation_form" style="display: none;">
+											<label for="cardinal">
+												<input type="radio" name="interpolation" id="cardinal" value="cardinal" checked="">
+												<span>cardinal</span>
+											</label>
+											<label for="linear">
+												<input type="radio" name="interpolation" id="linear" value="linear">
+												<span>linear</span>
+											</label>
+											<label for="step">
+												<input type="radio" name="interpolation" id="step" value="step-after">
+												<span>step</span>
+											</label>
+										</div>
+									</section>
+									<section>
+										<h6>Smoothing</h6>
+										<div id="smoother_0"></div>
+									</section>									
+								</form>
+								<div id="chartcontainer_0">
+									<div id="y_axis_0"></div>
+									<div id="chart_0"></div>
+									<div id="x_axis_0"></div>
+								</div>
+								<div id="preview_0"></div>
+								
+							</div>
+						</div>
+					  </div>
+				   </div>
+				
+
+
+
+
+
+
+
+
+
+
+
+
+				<!-- BEGIN panel -->
 								<div *ngFor="let doc of docs | querierFeatureSearchPipe:selectLayerNameFilter" class="panel panel-default panel-bordered">
 									<!-- BEGIN panel-heading -->
 									<div class="panel-heading" id="headingOne">

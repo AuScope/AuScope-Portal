@@ -37,7 +37,7 @@
 						id="{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar">
 						<div class="modal-panel-size">
 							<!-- BEGIN mail-box -->
-							<div style="overflow:auto;width:100%;height:100%;">
+							<div *ngIf="1==0" style="overflow:auto;width:100%;height:100%;">
 								<div class="mail-box-content">
 									<!-- BEGIN mail-box-toolbar -->
 									<div class="mail-box-toolbar">
@@ -78,6 +78,9 @@
 									</div>
 									<!-- END mail-box-container -->
 								</div>
+							</div>
+							<div style="overflow:auto;width:100%;height:100%;">
+								<div id="graph123"></div>
 							</div>
 						</div>
 					</div>

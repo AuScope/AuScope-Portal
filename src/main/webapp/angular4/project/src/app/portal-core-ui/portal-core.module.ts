@@ -1,3 +1,4 @@
+import { RickshawService } from './chart/rickshaw.service';
 import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -49,7 +50,8 @@ import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
     ImgLoadingDirective,
     NotificationService,
     QueryWMSService,
-    QueryWFSService
+    QueryWFSService,
+    RickshawService
   ]
 })
 
