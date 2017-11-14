@@ -101,10 +101,6 @@ export class RickshawService {
     // Draw each graph
     yaxis_keys.forEach(function(yaxis_key, idx, arr) {
 
-      if (idx > 0) {
-        return;
-      }
-
       // Create an array of all the X-values for the graph, values must be sorted by x-value
       const seriesX = [];
       let index = 0;
@@ -184,6 +180,7 @@ export class RickshawService {
       // Graph's x-axis
       const xAxis = new Rickshaw.Graph.Axis.X({
         graph: graph,
+        width: 500,
         tickFormat: formatMetres,
         ticksTreatment: ticksTreatment,
         orientation: 'bottom',
@@ -236,7 +233,7 @@ export class RickshawService {
       graphs: graph_list,
       width: 500 + 20, // Add 20 to allow for the grips at both ends of the previewer, this ensures that the
       // preview window and the real window are the same width and their ticks line up together
-      element: local_div.select('[id=preview_0]').node(),
+      element: local_div.select('[id=preview_last]').node(),
       height: yaxis_keys.length * 50,
     });
 
@@ -273,6 +270,6 @@ export class RickshawService {
   }
 
 
-  
+
 
 }

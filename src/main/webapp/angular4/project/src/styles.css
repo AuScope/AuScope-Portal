@@ -248,8 +248,29 @@ max-width: 768px(small screen)
 
 }
 
+@media (min-width: 1100px) {
+    .modal-lg {
+        width: 1100px;
+        height: 900px; /* control height here */
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1100px) {
+    .modal-lg {
+        width: 900px;
+        height: 900px; /* control height here */
+    }
+}
+
+@media (min-width: 750px) and (max-width: 900px) {
+    .modal-lg {
+        width: 760px;
+        height: 900px; /* control height here */
+    }
+}
+
 #rickshawChart_outer [id^=content_] [id^=chartcontainer_] {
-	width: 750px;
+	width: 74%;
 	display: inline-block;
 }
 
@@ -283,7 +304,7 @@ max-width: 768px(small screen)
     font-family:  Tahoma, Arial, Helvetica, sans-serif;
     font-size: 10pt;
     opacity: 0.7;
-	
+	width:520px;
 }
 
 #rickshawChart_outer [id^=content_] [id^=x_axis_] {
@@ -292,14 +313,14 @@ max-width: 768px(small screen)
 }
 
 #rickshawChart_outer [id^=content_] [id^=left_side_panel_] {
-    width: 240px;
+    width: 25%;
     padding: 0px 0px 0px 0px;
 	position: relative;
 }
 
 #rickshawChart_outer [id^=content_] [id^=left_side_panel_] * {
     font-family:  Tahoma, Arial, Helvetica, sans-serif;
-    font-size: 10pt;
+    font-size: 10pt;    
 }
 
 
@@ -308,9 +329,15 @@ max-width: 768px(small screen)
     font-weight: 400;
 }
 
-#rickshawChart_outer [id^=content_] [id^=preview_] {
+#rickshawChart_outer [id^=content_] {
+   width: 900px;
+   display: inline-flex;   
+}
+
+#rickshawChart_outer [id^=preview_] {
     position: relative;
-	left: 333px;
+	left: 325px;
+	width:500px
 }
 
 

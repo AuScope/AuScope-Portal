@@ -17,8 +17,8 @@
 				<div class="panel-heading">
 					<ul id="nvcl-panel-tab" class="nav nav-tabs pull-right">
 						<li (click)="nvclDataset.image=true;nvclDataset.scalar=false;nvclDataset.download=false;" [ngClass]="{'active':nvclDataset.image}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-image" data-toggle="tab"><i class="fa fa-home"></i> <span class="hidden-xs">Image</span></a></li>
-						<li (click)="nvclDataset.image=false;nvclDataset.scalar=true;nvclDataset.download=false;" [ngClass]="{'active':nvclDataset.scalar}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Scalar</span></a></li>
-						<li (click)="nvclDataset.image=false;nvclDataset.scalar=false;nvclDataset.download=true;" [ngClass]="{'active':nvclDataset.download}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-download" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Download</span></a></li>
+						<li class="desktop-only" (click)="nvclDataset.image=false;nvclDataset.scalar=true;nvclDataset.download=false;" [ngClass]="{'active':nvclDataset.scalar}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Scalar</span></a></li>
+						<li class="desktop-only" (click)="nvclDataset.image=false;nvclDataset.scalar=false;nvclDataset.download=true;" [ngClass]="{'active':nvclDataset.download}" ><a href="#{{nvclDataset.datasetName}}-nvcl-panel-tab-download" data-toggle="tab"><i class="fa fa-user"></i> <span class="hidden-xs">Download</span></a></li>
 					</ul>
 					<h4 class="panel-title">NVCL</h4>
 				</div>
@@ -37,14 +37,20 @@
 						id="{{nvclDataset.datasetName}}-nvcl-panel-tab-scalar">
 						<div class="modal-panel-size">
 							<!-- BEGIN mail-box -->
-							<div *ngIf="1==0" style="overflow:auto;width:100%;height:100%;">
+							<div *ngIf="drawGraphMode==false;" style="overflow: auto; width: 100%; height: 100%;">
 								<div class="mail-box-content">
 									<!-- BEGIN mail-box-toolbar -->
 									<div class="mail-box-toolbar">
 										<div class="pull-right hidden-xs">
-											<div  class="btn btn-default btn-sm"><i class="ti-download"></i></div> 
-											<div class="btn btn-default btn-sm"><i class="ti-bar-chart-alt"></i></div> 
-											<div class="btn btn-default btn-sm"><i class="ti-loop"></i></div>
+											<div data-toggle="tooltip" title="Download csv" class="btn btn-default btn-sm">
+												<i class="ti-download"></i>
+											</div>
+											<div data-toggle="tooltip" title="Plot analytic Graph" (click)="changeDrawGraphMode(true, nvclDataset.datasetId)" class="btn btn-default btn-sm">
+												<i class="ti-bar-chart-alt"></i>
+											</div>
+											<div data-toggle="tooltip" title="Reset selection" class="btn btn-default btn-sm">
+												<i (click)="clearCheckBox(nvclDataset.datasetId)" class="ti-loop"></i>
+											</div>
 										</div>
 									</div>
 									<!-- END mail-box-toolbar -->
@@ -57,7 +63,7 @@
 												<li class="" *ngFor="let datasetScalar of datasetScalars[nvclDataset.datasetId]">
 													<div class="email-checkbox">
 														<div class="checkbox">
-															<input type="checkbox" value="10" id="email-checkbox-10" /> <label for="email-checkbox-10"></label>
+															<input type="checkbox" value="10" id="log-checkbox-{{nvclDataset.datasetName}}-{{datasetScalar.logName}}" [(ngModel)]="datasetScalar.value"/> <label for="log-checkbox-{{nvclDataset.datasetName}}-{{datasetScalar.logName}}"></label>
 														</div>
 													</div>
 													<div class="email-message">
@@ -79,8 +85,60 @@
 									<!-- END mail-box-container -->
 								</div>
 							</div>
-							<div style="overflow:auto;width:100%;height:100%;">
-								<div id="graph123"></div>
+
+							<div *ngIf="drawGraphMode==true;" class="modal-panel-size">
+								<div style="overflow: auto; width: 100%; height: 100%;">
+									<div class="hasEvent light-blue" (click)="changeDrawGraphMode(false)" style="position: fixed;z-index: 10;right: 10%;">
+									<i class="fa fa-window-close" aria-hidden="true"></i> close</div>
+									<div id="rickshawChart_outer">
+										<div  *ngFor="let selectedLogName of selectedLogNames[nvclDataset.datasetId]; let j = index">
+											<div id="content_{{j}}" [ngClass]="{'loading-iframe': processingGraph}">
+												<form id="left_side_panel_{{j}}">
+													<h1>{{selectedLogName}}</h1>
+													<section>
+														<div id="legend_{{j}}" class="rickshaw_legend"></div>
+													</section>
+													<section>
+														<div id="renderer_form_{{j}}" class="toggler">
+															<input type="radio" name="renderer" id="area_{{j}}" value="area"> <label for="area_{{j}}">area</label> <input
+																type="radio" name="renderer" id="bar_{{j}}" value="bar" checked> <label for="bar_{{j}}">bar</label> <input
+																type="radio" name="renderer" id="line_{{j}}" value="line"> <label for="line_{{j}}">line</label> <input
+																type="radio" name="renderer" id="scatter_{{j}}" value="scatterplot"> <label for="scatter_{{j}}">scatter</label>
+														</div>
+													</section>
+													<section>
+														<div id="offset_form_{{j}}" class="toggler">
+															<label for="stack_{{j}}"> <input type="radio" name="offset" id="stack_{{j}}" value="zero" checked=""><span>stack</span></label>  
+															<label for="pct_{{j}}"> <input type="radio" name="offset" id="pct_{{j}}" value="expand"> <span>pct</span></label>
+															<label for="value_{{j}}"> <input type="radio" name="offset" id="value_{{j}}" value="value"> <span>value</span></label>
+														</div>
+														<div id="interpolation_form_{{j}}" style="display: none;">
+															<label for="cardinal_{{j}}"> <input type="radio" name="interpolation" id="cardinal-{{j}}" value="cardinal"
+																checked=""> <span>cardinal</span>
+															</label> <label for="linear_{{j}}"> <input type="radio" name="interpolation" id="linear_{{j}}" value="linear">
+																<span>linear</span>
+															</label> <label for="step_{{j}}"> <input type="radio" name="interpolation" id="step_{{j}}" value="step-after">
+																<span>step</span>
+															</label>
+														</div>
+													</section>
+													<section>
+														<h6>Smoothing</h6>
+														<div id="smoother_{{j}}"></div>
+													</section>
+												</form>
+												<div id="chartcontainer_{{j}}">
+													<div id="y_axis_{{j}}"></div>
+													<div id="chart_{{j}}"></div>
+													<div id="x_axis_{{j}}"></div>
+												</div>
+												<hr>
+											</div>
+											<hr>
+										</div>
+										<div id="preview_last"></div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
