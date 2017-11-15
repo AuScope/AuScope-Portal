@@ -33,9 +33,11 @@ public class NotificationService {
     private long cachePopulated;
     private long cacheMaxAge = 15 * 60 * 1000; // 15 minutes
     private int maxTweetAgeDays = 14; //How many days in the past to look back for notifications
+    private boolean enableTwitter = false;
 
     public NotificationService(boolean enableTwitter, String notificationAccount, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret) {
-        if (!enableTwitter) {
+    	this.enableTwitter = enableTwitter;
+        if (!this.enableTwitter) {
             return;
         }
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -93,6 +95,9 @@ public class NotificationService {
      */
     public synchronized List<Notification> getRecentNotifications() throws PortalServiceException {
 
+        if (!this.enableTwitter) {
+            return null;
+        }
         //If cache is valid, use that
         Calendar calendar = Calendar.getInstance();
         if (cache != null &&
