@@ -3,14 +3,18 @@ import { OnlineResourceModel } from '../../portal-core-ui/model/data/onlineresou
 import { SimpleXMLService } from '../../portal-core-ui/utility/simplexml.service';
 import { UtilitiesService } from '../../portal-core-ui/utility/utilities.service';
 import { Constants } from '../../portal-core-ui/utility/constants.service';
-import { AfterViewInit, Component, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { TreeModel } from 'ng2-tree';
 import {environment} from '../../../environments/environment';
+import { NVCLService } from './customanalytic/nvcl/nvcl.service';
+import * as $ from 'jquery'
+
 
 @Component({
-    selector: 'app-querier-modal-window',
-    templateUrl: './querier.modal.component.html'
+  selector: 'app-querier-modal-window',
+  templateUrl: './querier.modal.component.html',
+  providers: [NVCLService]
 })
 
 export class QuerierModalComponent implements AfterViewInit {
@@ -23,13 +27,15 @@ export class QuerierModalComponent implements AfterViewInit {
   public analyticMap;
   public tab: {};
 
-    constructor(public bsModalRef: BsModalRef, private changeDetectorRef: ChangeDetectorRef) {
+
+    constructor(public bsModalRef: BsModalRef, private changeDetectorRef: ChangeDetectorRef, private nvclService: NVCLService) {
       this.analyticMap = environment.analytic;
     }
 
     ngAfterViewInit() {
 
     }
+
 
 
     public parseTree(document): void {

@@ -28,8 +28,8 @@ public class PressureDBFilter extends BoreholeFilter {
         super(null, null, null, null, null,null);
     }
 
-    public PressureDBFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd, String ccProperty,int ccStart,int ccEnd) {
-        super(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, null, null );
+    public PressureDBFilter(String boreholeName, String custodian, String dateOfDrillingStart, String dateOfDrillingEnd, String ccProperty,int ccStart,int ccEnd, String optionalFilter) {
+        super(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, null, optionalFilter );
         this.ccProperty = ccProperty;
         this.ccStart = ccStart;
         this.ccEnd = ccEnd;

@@ -113,6 +113,7 @@ export class OlMapService {
                 this.bsModalRef.content.downloading = false;
               });
            }
+            // TODO: observer pattern or a callback to return the clicked layer list instead of handling it in map server class.
            for (const layer of clickedLayerList) {
              // NB: This is just testing that the popup window does display
               this.displayModal(modalDisplayed, clickCoord);
@@ -127,8 +128,6 @@ export class OlMapService {
                  });
              }
            }
-
-
    }
 
    private displayModal(modalDisplayed, clickCoord) {

@@ -2,7 +2,7 @@ import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core
 import { HttpClientModule } from '@angular/common/http';
 
 // Utilities
-import {KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe} from './uiutilities/pipes';
+import {KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, TrustResourceHtmlPipe} from './uiutilities/pipes';
 
 
 // Services
@@ -30,12 +30,13 @@ import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
     KeysPipe,
     QuerierFeatureSearchPipe,
     TrustResourceUrlPipe,
+    TrustResourceHtmlPipe,
     ImgLoadingDirective
   ],
   imports: [
     HttpClientModule
   ],
-  exports: [KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, ImgLoadingDirective],
+  exports: [KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, TrustResourceHtmlPipe, ImgLoadingDirective],
   providers: [LayerHandlerService,
     OlMapService,
     OlWMSService,
