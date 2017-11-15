@@ -5,6 +5,7 @@ import { NVCLService } from './nvcl.service';
 import { Component, Input, AfterViewInit } from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
+import {saveAs} from 'file-saver/FileSaver';
 import * as $ from 'jquery'
 
 declare var Rickshaw: any;
@@ -286,6 +287,29 @@ export class NVCLDatasetListComponent implements AfterViewInit {
       this.selectedLogNames = [];
     }
   }
+
+  public downloadCSV(datasetId: string) {
+    const logs = this.datasetScalars[datasetId];
+    const logIds = [];
+    const logNames = [];
+
+    for (const log of logs) {
+      if (log.value) {
+        logIds.push(log.logId);
+
+      }
+    }
+
+    if (logIds.length <= 0) {
+      alert('no logs selected');
+    }
+    this.nvclService.getNVCL2_0_CSVDownload(this.onlineResource.url, logIds).
+      subscribe(response => {
+        const blob = new Blob([response], {type: 'application/csv'});
+        saveAs(blob, datasetId + '.csv');
+      })
+  }
+
 
   public clearCheckBox(datasetId: string) {
      const logs = this.datasetScalars[datasetId];

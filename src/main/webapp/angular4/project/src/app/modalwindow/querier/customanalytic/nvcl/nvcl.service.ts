@@ -92,6 +92,25 @@ export class NVCLService {
       );
   }
 
+  public getNVCL2_0_CSVDownload(serviceUrl: string, logIds: string[]): Observable<any> {
+    let httpParams = new HttpParams();
+    const nvclUrl = this.getNVCLDataServiceUrl(serviceUrl);
+    httpParams = httpParams.append('serviceUrl', nvclUrl);
+    for (const logId of logIds) {
+      httpParams = httpParams.append('logIds', logId);
+    }
+    return this.http.post('../getNVCL2_0_CSVDownload.do', httpParams.toString(), {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+      responseType: 'blob'
+    }).map(response => {
+      return response;
+    }).catch(
+      (error: Response) => {
+        return Observable.throw(error);
+      }
+      );
+  }
+
   public _findLogName(bvLogId, logIds, logNames) {
     let logIdx = 0;
     while (logIdx < logIds.length) {

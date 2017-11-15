@@ -42,14 +42,14 @@
 									<!-- BEGIN mail-box-toolbar -->
 									<div class="mail-box-toolbar">
 										<div class="pull-right hidden-xs">
-											<div data-toggle="tooltip" title="Download csv" class="btn btn-default btn-sm">
+											<div data-toggle="tooltip" title="Download csv" (click)="downloadCSV(nvclDataset.datasetId)" class="btn btn-default btn-sm">
 												<i class="ti-download"></i>
 											</div>
 											<div data-toggle="tooltip" title="Plot analytic Graph" (click)="changeDrawGraphMode(true, nvclDataset.datasetId)" class="btn btn-default btn-sm">
 												<i class="ti-bar-chart-alt"></i>
 											</div>
-											<div data-toggle="tooltip" title="Reset selection" class="btn btn-default btn-sm">
-												<i (click)="clearCheckBox(nvclDataset.datasetId)" class="ti-loop"></i>
+											<div data-toggle="tooltip" title="Reset selection" (click)="clearCheckBox(nvclDataset.datasetId)" class="btn btn-default btn-sm">
+												<i  class="ti-loop"></i>
 											</div>
 										</div>
 									</div>
