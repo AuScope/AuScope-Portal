@@ -37,3 +37,10 @@ export class TrustResourceUrlPipe implements PipeTransform {
   }
 }
 
+@Pipe({ name: 'trustResourceHtml' })
+export class TrustResourceHtmlPipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) {}
+  transform(html) {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+}

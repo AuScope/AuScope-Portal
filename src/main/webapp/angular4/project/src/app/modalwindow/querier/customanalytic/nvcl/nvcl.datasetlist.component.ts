@@ -29,6 +29,9 @@ export class NVCLDatasetListComponent implements AfterViewInit {
   public drawGraphMode = false;
   public selectedLogNames = [];
   public processingGraph = false;
+  public downloadEmail = '';
+  public downloadResponse = '';
+  public downloadingTSG = false;
 
   constructor(public nvclService: NVCLService, public domSanitizer: DomSanitizer, private rickshawService: RickshawService) {}
 
@@ -310,6 +313,20 @@ export class NVCLDatasetListComponent implements AfterViewInit {
       })
   }
 
+  public downloadTSG(datasetId: string) {
+    if (this.downloadEmail.length === 0 || this.downloadEmail.indexOf('@') < 0) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    this.downloadingTSG = true;
+    this.nvclService.getNVCLTSGDownload(this.onlineResource.url, datasetId, this.downloadEmail).
+      subscribe(response => {
+        this.downloadResponse = response;
+        this.downloadingTSG = false;
+      }, error => {
+        this.downloadingTSG = false;
+      })
+  }
 
   public clearCheckBox(datasetId: string) {
      const logs = this.datasetScalars[datasetId];

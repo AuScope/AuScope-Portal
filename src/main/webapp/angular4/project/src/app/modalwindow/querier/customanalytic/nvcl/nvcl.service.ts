@@ -149,6 +149,26 @@ export class NVCLService {
       );
   }
 
+  public getNVCLTSGDownload(serviceUrl: string, datasetId: string, downloadEmail: string) {
+    let httpParams = new HttpParams();
+    const nvclUrl = this.getNVCLDownloadServiceUrl(serviceUrl);
+    httpParams = httpParams.append('serviceUrl', nvclUrl);
+    httpParams = httpParams.append('datasetId', datasetId);
+    httpParams = httpParams.append('tsg', 'on');
+    httpParams = httpParams.append('email', downloadEmail);
+
+    return this.http.post('../getNVCLTSGDownload.do', httpParams.toString(), {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'),
+      responseType: 'text'
+    }).map(response => {
+      return response;
+    }).catch(
+      (error: Response) => {
+        return Observable.throw(error);
+      }
+      );
+  }
+
 
   public getNVCLDownloadServiceUrl(serviceUrl: string): string {
     let nvclUrl = UtilitiesService.getBaseUrl(serviceUrl);
