@@ -184,9 +184,9 @@ public class PressureDBController extends BasePortalController {
         String style = "";
         if (ccProperty.contains("Length") || 
             ccProperty.contains("Elevation" )) {
-            style = getColorCodedStyle(true,"gsmlp:BoreholeView", null,null, null, null, ccProperty);
+            style = getColorCodedStyle(true,"gsmlp:BoreholeView", null,null, null, null, ccProperty, null);
         } else {
-            style = getStyle(true,"gsmlp:BoreholeView", "gsmlp:shape", "#2242c7",null,null, null, null);
+            style = getStyle(true,"gsmlp:BoreholeView", "gsmlp:shape", "#2242c7",null,null, null, null,null);
         }
         response.setContentType("text/xml");
         ByteArrayInputStream styleStream = new ByteArrayInputStream(
@@ -218,9 +218,9 @@ public class PressureDBController extends BasePortalController {
         String style = "";
         if (ccProperty.contains("Length") || 
             ccProperty.contains("Elevation" )) {
-            style = getColorCodedStyle(false,"gsmlp:BoreholeView", boreholeName,custodian, dateOfDrillingStart, dateOfDrillingEnd, ccProperty);
+            style = getColorCodedStyle(false,"gsmlp:BoreholeView", boreholeName,custodian, dateOfDrillingStart, dateOfDrillingEnd, ccProperty,optionalFilters);
         } else {
-            style = getStyle(false,"gsmlp:BoreholeView", "gsmlp:shape", "#2242c7",boreholeName,custodian, dateOfDrillingStart, dateOfDrillingEnd);
+            style = getStyle(false,"gsmlp:BoreholeView", "gsmlp:shape", "#2242c7",boreholeName,custodian, dateOfDrillingStart, dateOfDrillingEnd, optionalFilters);
         }
         response.setContentType("text/xml");
         ByteArrayInputStream styleStream = new ByteArrayInputStream(
@@ -233,10 +233,10 @@ public class PressureDBController extends BasePortalController {
         outputStream.close();
     }
 
-    String getStyle(boolean isLegend,String layerName, String geometryName, String color,String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd) {
+    String getStyle(boolean isLegend,String layerName, String geometryName, String color,String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd, String optionalFilter) {
         String filter ="";
         if (!isLegend) {
-            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,null,0,0);
+            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,null,0,0,optionalFilter);
             filter = pressureDBFilter.getFilterString(null);
         }
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -285,13 +285,13 @@ public class PressureDBController extends BasePortalController {
      *            - the name of the layer.
      * @return
      */
-    public String getColorCodedStyle(boolean isLegend,String layerName,String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,String ccProperty) {
+    public String getColorCodedStyle(boolean isLegend,String layerName,String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,String ccProperty, String optionalFilter) {
             String styleRules = "";
-            styleRules += getStyleRuleByIndex(isLegend,0,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-            styleRules += getStyleRuleByIndex(isLegend,1,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-            styleRules += getStyleRuleByIndex(isLegend,2,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-            styleRules += getStyleRuleByIndex(isLegend,3,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
-            styleRules += getStyleRuleByIndex(isLegend,4,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty);
+            styleRules += getStyleRuleByIndex(isLegend,0,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,optionalFilter);
+            styleRules += getStyleRuleByIndex(isLegend,1,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,optionalFilter);
+            styleRules += getStyleRuleByIndex(isLegend,2,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,optionalFilter);
+            styleRules += getStyleRuleByIndex(isLegend,3,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,optionalFilter);
+            styleRules += getStyleRuleByIndex(isLegend,4,boreholeName,custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,optionalFilter);
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/4.0\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
@@ -312,7 +312,7 @@ public class PressureDBController extends BasePortalController {
         return style;
     }
 
-    public String getStyleRuleByIndex(boolean isLegend, int index, String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,String ccProperty ) {    
+    public String getStyleRuleByIndex(boolean isLegend, int index, String boreholeName,String custodian, String dateOfDrillingStart,String dateOfDrillingEnd,String ccProperty, String optionalFilter ) {    
         String rule;
         String filter;
         int ccStart;
@@ -325,7 +325,7 @@ public class PressureDBController extends BasePortalController {
                 ccEnd = PRESSURE_DB_LENGTH_MAP.get(0);        
             }
             if (!isLegend) {
-            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd);
+            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd, optionalFilter);
             filter = pressureDBFilter.getFilterString(null);
             } else {
                 filter = "";
@@ -353,7 +353,7 @@ public class PressureDBController extends BasePortalController {
             }    
             ccEnd = PressureDBFilter.CC_END;
             if (!isLegend) {
-            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd);
+            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd, optionalFilter);
             filter = pressureDBFilter.getFilterString(null);
             } else {
                 filter = "";
@@ -383,7 +383,7 @@ public class PressureDBController extends BasePortalController {
             }
             
             if (!isLegend) {
-            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd);
+            PressureDBFilter pressureDBFilter = new PressureDBFilter(boreholeName, custodian,dateOfDrillingStart,dateOfDrillingEnd,ccProperty,ccStart,ccEnd, optionalFilter);
             filter = pressureDBFilter.getFilterString(null);
             } else {
                 filter = "";

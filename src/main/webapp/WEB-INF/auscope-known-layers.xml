@@ -1057,7 +1057,32 @@
                         </bean>
                        
                     </list>
-                </property>               
+                </property>
+                <property name ="mandatoryFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UIDropDownSelectList">
+                            <constructor-arg name="label" type="java.lang.String" value="Color Code"></constructor-arg>
+                            <constructor-arg name="parameter" type="java.lang.String" value="ccProperty"></constructor-arg>                         
+                            <constructor-arg name="value" type="java.lang.String" value=""></constructor-arg>  
+                            <constructor-arg name="options">
+                                <list>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Length</value></constructor-arg>
+                                        <constructor-arg name="right"><value  type="java.lang.String">Length</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Elevation</value></constructor-arg>
+                                        <constructor-arg name="right"><value type="java.lang.String">Elevation</value></constructor-arg>
+                                    </bean>
+                                    <bean class="org.apache.commons.lang3.tuple.ImmutablePair">
+                                        <constructor-arg name="left"><value  type="java.lang.String">Default</value></constructor-arg>
+                                        <constructor-arg name="right"><value type="java.lang.String"></value></constructor-arg>
+                                    </bean>                                    
+                                </list>                               
+                            </constructor-arg>                                                      
+                        </bean>
+                    </list>
+                </property>                   
             </bean>        
         </property>
     </bean>
