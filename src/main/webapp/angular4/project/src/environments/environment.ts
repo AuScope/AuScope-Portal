@@ -3,6 +3,7 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
+import { NVCLBoreholeAnalyticComponent } from '../app/modalwindow/layeranalytic/nvcl/nvcl.boreholeanalytic.component';
 import { NVCLDatasetListComponent } from '../app/modalwindow/querier/customanalytic/nvcl/nvcl.datasetlist.component';
 export const environment = {
   production: false,
@@ -16,5 +17,8 @@ export const environment = {
     'tima-shrimp-geosample'],
   analytic: {
       'nvcl-borehole': NVCLDatasetListComponent,
+  },
+  layeranalytic: {
+      'nvcl-v2-borehole': NVCLBoreholeAnalyticComponent,
   }
 };

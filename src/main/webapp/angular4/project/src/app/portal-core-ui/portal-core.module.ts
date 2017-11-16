@@ -24,6 +24,7 @@ import { QueryWFSService} from './service/wfs/query-wfs.service';
 
 // Directives
 import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
+import { StopPropagationDirective } from './utility/utilities.directives';
 
 @NgModule({
   declarations: [
@@ -31,12 +32,13 @@ import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
     QuerierFeatureSearchPipe,
     TrustResourceUrlPipe,
     TrustResourceHtmlPipe,
-    ImgLoadingDirective
+    ImgLoadingDirective,
+    StopPropagationDirective
   ],
   imports: [
     HttpClientModule
   ],
-  exports: [KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, TrustResourceHtmlPipe, ImgLoadingDirective],
+  exports: [KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, TrustResourceHtmlPipe, ImgLoadingDirective, StopPropagationDirective],
   providers: [LayerHandlerService,
     OlMapService,
     OlWMSService,
