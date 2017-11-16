@@ -7,6 +7,7 @@ import { AfterViewInit, Component, ChangeDetectorRef, ViewChild, ElementRef } fr
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { TreeModel } from 'ng2-tree';
 import {environment} from '../../../environments/environment';
+import { OlMapService } from '../../portal-core-ui/service/openlayermap/ol-map.service';
 import { NVCLService } from './customanalytic/nvcl/nvcl.service';
 import * as $ from 'jquery'
 
@@ -28,9 +29,10 @@ export class QuerierModalComponent implements AfterViewInit {
   public tab: {};
 
 
-    constructor(public bsModalRef: BsModalRef, private changeDetectorRef: ChangeDetectorRef, private nvclService: NVCLService) {
-      this.analyticMap = environment.analytic;
-    }
+  constructor(public bsModalRef: BsModalRef, private changeDetectorRef: ChangeDetectorRef,
+    private nvclService: NVCLService) {
+    this.analyticMap = environment.analytic;
+  }
 
     ngAfterViewInit() {
 
