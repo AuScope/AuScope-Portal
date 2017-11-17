@@ -1,1 +1,134 @@
-<div>{{layer.name}}</div>
+<!-- Modal for querier-->
+<div class="modal-header">
+	<h1 class="page-header">
+		Borehole <small>analytics</small>
+	</h1>
+</div>
+<div class="modal-body">
+
+	<div class="panel panel-default">
+		<!-- END panel-heading -->
+		<!-- BEGIN panel-body -->
+
+		<div class="panel-heading">
+			<h4 class="panel-title">{{layer.name}}</h4>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-inverse fade in">
+                <p>National Virtual Core Library analytics are run remotely and may take some time to complete. By entering an email and a job name you can come back to this form later to collect your results.</p>
+            </div>
+            
+            <div class="form-horizontal">
+	            <div class="form-group  form-group-sm">
+				    <label class="col-sm-1">Email:</label>
+				    <div class="col-sm-4">
+				    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+				    </div>				   
+				</div>
+				<div class="form-group  form-group-sm">
+				    <label class="col-sm-1">Job Name:</label>
+				    <div class="col-sm-4">
+				    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+				    </div>				   
+				</div>
+			</div>
+			
+			<div class="alert alert-inverse fade in">
+                <p>Please select a classification algorithm to filter boreholes against.</p>
+            </div>
+		    
+			<fieldset class="show-fieldset-borders-whitebg">
+	        	<legend><h5>Algorithm</h5></legend>
+	        	<div class="form-horizontal">
+	        		<div class="row">
+			            <div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Algorithm Output</label>
+						    <div class="col-sm-8">						    	
+						    	<select class="form-control input-sm" [(ngModel)]="selectedAlgorithm" (change) = "changeAlgorithm()">
+									<option value="">Non Standard Algorithm</option>
+									<option *ngFor="let algorithm of algorithms" [ngValue]="algorithm">{{algorithm.outputName}}</option>
+								</select>
+						    </div>				   
+						</div>
+						<div *ngIf="selectedAlgorithm" class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
+						    <label class="col-sm-3">version</label>
+						    <div class="col-sm-8">
+						    	<select class="form-control input-sm" [(ngModel)]="selectedVersion" (change) = "changeVersion()">
+									<option *ngFor="let version of selectedAlgorithm.versions" [ngValue]="version">{{version.version}}</option>
+								</select>
+						    </div>				   
+						</div>
+					</div>
+					<div class="row" *ngIf="classifications">
+						<div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Classification</label>
+						    <div class="col-sm-8">
+						    	<select class="form-control input-sm" [(ngModel)]="nvclform.email">
+									<option *ngFor="let classification of classifications">{{classification.classText}}</option>
+								</select>
+						    </div>				   
+						</div>
+					</div>
+				</div>					   
+		    </fieldset>
+	    	<div class="alert alert-inverse fade in">
+                <p>Please select a borehole depth range and value (compared against the above algorithm) to filter NVCL boreholes.</p>
+            </div>
+            
+			<fieldset class="show-fieldset-borders-whitebg">
+	        	<legend><h5>Filter Parameters</h5></legend>
+	        	<div class="form-horizontal">
+	        		<div class="row">
+			            <div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Region of interest</label>
+						    <div class="col-sm-8">
+						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<span class="form-control-feedback">m</span>	
+						    </div>						    			  
+						</div>
+						<div class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
+						    <label class="col-sm-3">metres to</label>
+						    <div class="col-sm-8">
+						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<span class="form-control-feedback">m</span>
+						    </div>				   
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Operator</label>
+						    <div class="col-sm-8">
+						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    </div>				   
+						</div>
+					</div>
+					<div class="row">
+			            <div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Value</label>
+						    <div class="col-sm-8">
+						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    </div>				   
+						</div>
+						<div class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
+						    <label class="col-sm-3">type</label>
+						    <div class="col-sm-8">
+						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    </div>				   
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Evaluated over a span of:</label>
+						    <div class="col-sm-8">
+						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<span class="form-control-feedback">m</span>
+						    </div>							    			  
+						</div>
+					</div>
+				</div>					   
+		    </fieldset>
+		</div>
+		<!-- END panel-body -->
+	</div>
+</div>
+

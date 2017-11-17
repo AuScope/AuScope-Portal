@@ -86,6 +86,18 @@ fieldset legend{
 	padding-left:10px;
 }
 
+fieldset.show-fieldset-borders-whitebg{
+	border: 1px solid #c4c4c4;
+    padding: 0 1.4em 1.4em 1.4em;
+}
+
+fieldset.show-fieldset-borders-whitebg legend{
+	border-bottom:	0px;
+	color: #000000;
+	width: 20%;
+	padding-left:10px;
+}
+
 .standard-title h4 span {
 	border-bottom: 2px solid rgba(255,255,255,0.25);
 	padding-bottom: 5px;

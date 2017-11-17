@@ -3,6 +3,7 @@ import { OnlineResourceModel } from '../../portal-core-ui/model/data/onlineresou
 import { Component, Input, AfterViewInit, ViewChild, ComponentFactoryResolver, ViewContainerRef, ChangeDetectorRef } from '@angular/core';
 import {environment} from '../../../environments/environment';
 import { NVCLBoreholeAnalyticComponent } from './nvcl/nvcl.boreholeanalytic.component';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 
 @Component({
   selector: 'app-dynamic-layer-analytic',
