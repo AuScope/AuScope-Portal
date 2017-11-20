@@ -382,4 +382,8 @@ max-width: 768px(small screen)
     margin-left: -1px !important;
 }
 
+/**End of rickshaw*/
 
+.selectize-dropdown{
+	top: inherit !important;
+}

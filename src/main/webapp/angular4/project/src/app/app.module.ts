@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
-import {HttpModule} from '@angular/http';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { FormsModule } from '@angular/forms';
+
+
 
 // Components
 import { OlMapComponent } from './openlayermap/olmap.component';
@@ -25,6 +23,7 @@ import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderst
 import { NotificationComponent } from './toppanel/notification/notification.component';
 import { QuerierModalComponent } from './modalwindow/querier/querier.modal.component';
 import { TreeModule } from 'ng2-tree';
+
 
 
 import { PortalCoreModule } from './portal-core-ui/portal-core.module';
@@ -49,10 +48,6 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     NVCLBoreholeAnalyticComponent
   ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    HttpModule,
     PortalCoreModule,
     TreeModule,
     ModalModule.forRoot()

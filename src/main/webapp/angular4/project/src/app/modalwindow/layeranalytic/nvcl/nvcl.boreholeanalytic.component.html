@@ -28,7 +28,7 @@
 				<div class="form-group  form-group-sm">
 				    <label class="col-sm-1">Job Name:</label>
 				    <div class="col-sm-4">
-				    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+				    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.jobName">
 				    </div>				   
 				</div>
 			</div>
@@ -45,28 +45,42 @@
 						    <label class="col-sm-3">Algorithm Output</label>
 						    <div class="col-sm-8">						    	
 						    	<select class="form-control input-sm" [(ngModel)]="selectedAlgorithm" (change) = "changeAlgorithm()">
-									<option value="">Non Standard Algorithm</option>
+									<option value="nsa">Non Standard Algorithm</option>
 									<option *ngFor="let algorithm of algorithms" [ngValue]="algorithm">{{algorithm.outputName}}</option>
 								</select>
 						    </div>				   
 						</div>
-						<div *ngIf="selectedAlgorithm" class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
+						<div *ngIf="selectedAlgorithm && selectedAlgorithm!='nsa'" class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
 						    <label class="col-sm-3">version</label>
 						    <div class="col-sm-8">
-						    	<select class="form-control input-sm" [(ngModel)]="selectedVersion" (change) = "changeVersion()">
-									<option *ngFor="let version of selectedAlgorithm.versions" [ngValue]="version">{{version.version}}</option>
+								<ng-selectize [config]="ngSelectiveConfig" [options] = "ngSelectiveOptions" placeholder="Select Versions" ngDefaultControl [(ngModel)]="nvclform.algorithmOutputIds" (ngModelChange)="onVersionChange($event)"></ng-selectize>
+						    </div>				   
+						</div>
+					</div>
+					<div class="row" *ngIf="classifications && selectedAlgorithm!='nsa'">
+						<div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Classification</label>
+						    <div class="col-sm-8">
+						    	<select class="form-control input-sm" [(ngModel)]="nvclform.classification">
+									<option *ngFor="let classification of classifications">{{classification.classText}}</option>
 								</select>
 						    </div>				   
 						</div>
 					</div>
-					<div class="row" *ngIf="classifications">
+					<div class="row" *ngIf="selectedAlgorithm ==='nsa'">
 						<div class="form-group  form-group-sm col-sm-5">
-						    <label class="col-sm-3">Classification</label>
-						    <div class="col-sm-8">
-						    	<select class="form-control input-sm" [(ngModel)]="nvclform.email">
-									<option *ngFor="let classification of classifications">{{classification.classText}}</option>
-								</select>
-						    </div>				   
+							<label class="col-sm-3">Log Name:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control input-sm" [(ngModel)]="nvclform.logName">
+							</div>
+						</div>
+					</div>
+					<div class="row" *ngIf="selectedAlgorithm ==='nsa'">
+						<div class="form-group  form-group-sm col-sm-5">
+							<label class="col-sm-3">Classification:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control input-sm" [(ngModel)]="nvclform.classification">
+							</div>
 						</div>
 					</div>
 				</div>					   
@@ -82,14 +96,14 @@
 			            <div class="form-group  form-group-sm col-sm-5">
 						    <label class="col-sm-3">Region of interest</label>
 						    <div class="col-sm-8">
-						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.startDepth">
 						    	<span class="form-control-feedback">m</span>	
 						    </div>						    			  
 						</div>
 						<div class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
 						    <label class="col-sm-3">metres to</label>
 						    <div class="col-sm-8">
-						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.endDepth">
 						    	<span class="form-control-feedback">m</span>
 						    </div>				   
 						</div>
@@ -98,7 +112,11 @@
 						<div class="form-group  form-group-sm col-sm-5">
 						    <label class="col-sm-3">Operator</label>
 						    <div class="col-sm-8">
-						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<select class="form-control input-sm" [(ngModel)]="nvclform.operator">
+									<option value="lt">&lt;</option>
+									<option value="gt">&gt;</option>
+									<option value="eq">=</option>
+								</select>
 						    </div>				   
 						</div>
 					</div>
@@ -106,13 +124,16 @@
 			            <div class="form-group  form-group-sm col-sm-5">
 						    <label class="col-sm-3">Value</label>
 						    <div class="col-sm-8">
-						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.value">
 						    </div>				   
 						</div>
 						<div class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
-						    <label class="col-sm-3">type</label>
+						    <label class="col-sm-3">Units</label>
 						    <div class="col-sm-8">
-						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<select class="form-control input-sm" [(ngModel)]="nvclform.units">
+									<option value="count">count</option>
+									<option value="pct">%</option>									
+								</select>
 						    </div>				   
 						</div>
 					</div>
@@ -120,13 +141,17 @@
 						<div class="form-group  form-group-sm col-sm-5">
 						    <label class="col-sm-3">Evaluated over a span of:</label>
 						    <div class="col-sm-8">
-						    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+						    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.span">
 						    	<span class="form-control-feedback">m</span>
 						    </div>							    			  
 						</div>
-					</div>
+					</div>					
 				</div>					   
 		    </fieldset>
+		    
+			<div class="m-t-20  p-r-20 pull-right">
+				<button (click) = "submit()" class="btn btn-primary">Submit</button>
+			</div>
 		</div>
 		<!-- END panel-body -->
 	</div>
