@@ -16,7 +16,7 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
   public algorithms;
   public selectedAlgorithm;
   public classifications;
-
+  public isExistingAlgorithm = true;
 
   public ngSelectiveConfig = {};
   public ngSelectiveOptions = [];
@@ -63,6 +63,12 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
 
   }
 
+  public changeTSGAlgorithm() {
+    this.nvclBoreholeAnalyticService.getTSGAlgorithm(this.nvclform.tsgAlgName).subscribe(response => {
+      this.nvclform.tsgAlgorithm = response;
+    })
+  }
+
   public onVersionChange($event) {
     const algorithmOutputIds = $event;
     if (algorithmOutputIds.length <= 0) {
@@ -74,12 +80,21 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
   }
 
   public submit() {
-    this.nvclform.algorithm = this.selectedAlgorithm.algorithmId;
-    this.nvclBoreholeAnalyticService.submitSF0NVCLProcessingJob(this.nvclform, this.layer).subscribe(response => {
-      if (response === true) {
-        alert('success');
-      }
-    })
+    if (this.isExistingAlgorithm) {
+      this.nvclform.algorithm = this.selectedAlgorithm.algorithmId;
+      this.nvclBoreholeAnalyticService.submitSF0NVCLProcessingJob(this.nvclform, this.layer).subscribe(response => {
+        if (response === true) {
+          alert('Job have been successfully submitted. The results will be send to your email');
+        }
+      })
+    } else {
+      this.nvclBoreholeAnalyticService.submitSF0NVCLProcessingTsgJob(this.nvclform, this.layer).subscribe(response => {
+        if (response === true) {
+          alert('Job have been successfully submitted. The results will be send to your email');
+        }
+      })
+    }
+
   }
 
 

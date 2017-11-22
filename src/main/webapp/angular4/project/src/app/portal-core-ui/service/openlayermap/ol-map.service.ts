@@ -26,8 +26,6 @@ export class OlMapService {
 
    private layerModelList: { [key: string]: LayerModel; } = {};
 
-   
-
    private clickedLayerListBS = new BehaviorSubject<any>({});
 
    constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService,
@@ -57,7 +55,6 @@ export class OlMapService {
            const clickedLayerList: olLayer[] = [];
            const layerColl = map.getLayers();
            const me = this;
-           let found = false;
            layerColl.forEach(function(layer) {
                for (const layerId in activeLayers) {
                    for (const activeLayer of activeLayers[layerId]) {
@@ -73,17 +70,9 @@ export class OlMapService {
                                    if (inside(clickPoint, poly)) {
                                      // Add to list of clicked layers
                                      clickedLayerList.push(activeLayer);
-                                     found = true;
-                                     break;
                                    }
                                }
-                               if (found) {
-                                   break;
-                               }
                            }
-                       }
-                       if (found) {
-                           break;
                        }
                    }
                }
@@ -103,8 +92,6 @@ export class OlMapService {
            });
 
    }
-
-  
 
 
 

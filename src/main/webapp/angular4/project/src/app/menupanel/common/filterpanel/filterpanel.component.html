@@ -21,7 +21,13 @@
 							<option *ngFor="let option of mandatoryFilter.options" [ngValue]="getValue(option)">{{getKey(option)}}</option>
 						</select>
 	                </div>
-	            </div>                        
+	            </div>   
+	            <div *ngIf="mandatoryFilter.type == 'MANDATORY.TEXTBOX'">
+	                <div class="form-group  form-group-sm">
+	                    <label>{{mandatoryFilter.label}}</label>	                    
+						<input type="text" class="form-control input-sm"  [(ngModel)]="mandatoryFilter.value">
+	                </div>
+	            </div>                       
 	        </div>
 	        
         </div>

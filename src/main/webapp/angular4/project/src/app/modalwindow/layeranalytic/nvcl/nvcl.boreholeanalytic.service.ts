@@ -59,6 +59,26 @@ export class NVCLBoreholeAnalyticService {
       );
   }
 
+  public getTSGAlgorithm(tsgAlgName: string): Observable<any> {
+
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('tsgAlgName', tsgAlgName);
+    return this.http.get('../getTsgAlgorithms.do', {
+      params: httpParams
+    }).map(response => {
+      if (response['success'] === true) {
+        return response['data'];
+      } else {
+        return Observable.throw(response['msg']);
+      }
+    }).catch(
+      (error: Response) => {
+        return Observable.throw(error);
+      }
+      );
+  }
+
+
   public submitSF0NVCLProcessingJob(parameters: any, layer: LayerModel): Observable<any> {
     let httpParams = new HttpParams();
 
@@ -101,7 +121,43 @@ export class NVCLBoreholeAnalyticService {
       );
   }
 
+  public submitSF0NVCLProcessingTsgJob(parameters: any, layer: LayerModel): Observable<any> {
+    let httpParams = new HttpParams();
 
+    const wfsResources = this.layerHandlerService.getWFSResource(layer);
+    for (const wfsResource of wfsResources) {
+      httpParams = httpParams.append('wfsUrl', wfsResource.url);
+    }
+
+    httpParams = httpParams.append('email', parameters.email);
+    httpParams = httpParams.append('jobName', parameters.jobName);
+    httpParams = httpParams.append('existingAlg', 'existingAlg');
+
+    httpParams = httpParams.append('tsgAlgName', parameters.tsgAlgName);
+    httpParams = httpParams.append('tsgAlgorithm', parameters.tsgAlgorithm);
+
+    httpParams = httpParams.append('startDepth', parameters.startDepth);
+    httpParams = httpParams.append('endDepth', parameters.endDepth);
+    httpParams = httpParams.append('operator', parameters.operator);
+    httpParams = httpParams.append('value', parameters.value);
+    httpParams = httpParams.append('units', parameters.units);
+    httpParams = httpParams.append('span', parameters.span);
+
+
+    return this.http.get('../submitSF0NVCLProcessingTsgJob.do', {
+      params: httpParams
+    }).map(response => {
+      if (response['success'] === true) {
+        return response['success'];
+      } else {
+        return Observable.throw(response['msg']);
+      }
+    }).catch(
+      (error: Response) => {
+        return Observable.throw(error);
+      }
+      );
+  }
 
 }
 

@@ -36,8 +36,43 @@
 			<div class="alert alert-inverse fade in">
                 <p>Please select a classification algorithm to filter boreholes against.</p>
             </div>
-		    
-			<fieldset class="show-fieldset-borders-whitebg">
+
+			<div class="form-group  form-group-sm">
+				<div class="checkbox">
+					<input class="input-sm" id="nvcl-boreholeanalytic-existing-algor" type="checkbox"
+						[(ngModel)]="isExistingAlgorithm" /> <label for="nvcl-boreholeanalytic-existing-algor">
+						Existing Algorithm </label>
+				</div>
+			</div>
+
+			<fieldset *ngIf="!isExistingAlgorithm" class="show-fieldset-borders-whitebg">
+	        	<legend><h5>TSG Algorithm</h5></legend>
+	        	<div class="form">
+	        		<div class="row">
+			            <div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Name:</label>
+						    <div class="col-sm-8">						    	
+						    	<select class="form-control input-sm" [(ngModel)]="nvclform.tsgAlgName" (change) = "changeTSGAlgorithm()">
+									<option value="Hematite-goethite_distr">Hematite-goethite_distr</option>
+									<option value="Kaolinite Crystallinity">Kaolinite Crystallinity</option>
+									<option value="None Template Algorithm">None Template Algorithm</option>									
+								</select>
+						    </div>				   
+						</div>
+					</div>
+					<div class="row" *ngIf="nvclform.tsgAlgName">
+						<div class="form-group  form-group-sm col-sm-5">
+						    <label class="col-sm-3">Algorithm</label>
+						    <div class="col-sm-8">						    	
+								<textarea rows="12" cols="50" [(ngModel)]="nvclform.tsgAlgorithm"></textarea>
+						    </div>				   
+						</div>
+					</div>
+				</div>					   
+		    </fieldset>
+
+
+			<fieldset *ngIf="isExistingAlgorithm" class="show-fieldset-borders-whitebg">
 	        	<legend><h5>Algorithm</h5></legend>
 	        	<div class="form-horizontal">
 	        		<div class="row">
