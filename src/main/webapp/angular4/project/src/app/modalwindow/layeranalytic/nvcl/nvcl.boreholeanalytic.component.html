@@ -230,7 +230,8 @@
 							</table>
 						</div>
 						<div class="m-t-20  p-r-20 pull-left">
-							<button (click) = "checkStatus()" class="btn btn-primary">Check status</button>
+							<button *ngIf="currentStatus.length==0" (click) = "checkStatus()" class="btn btn-primary">Check status</button>
+							<button *ngIf="currentStatus.length>0" (click) = "checkStatus()" class="btn btn-primary">Refresh</button>
 							<p *ngIf="!nvclform.email" class="text-danger small">Make sure you have entered a valid email address</p>
 						</div>	
 					</div>

@@ -4,6 +4,7 @@ import { OnlineResourceModel } from '../../../portal-core-ui/model/data/onlinere
 import { NVCLBoreholeAnalyticService } from './nvcl.boreholeanalytic.service';
 import { Component, Input, AfterViewInit, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   templateUrl: './nvcl.boreholeanalytic.component.html',
@@ -29,7 +30,7 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
   };
 
 
-  constructor(public nvclBoreholeAnalyticService: NVCLBoreholeAnalyticService) {
+  constructor(public nvclBoreholeAnalyticService: NVCLBoreholeAnalyticService, private cookieService: CookieService) {
     this.nvclform = {};
   }
 
@@ -37,6 +38,9 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
   ngAfterViewInit(): void {
     this.nvclBoreholeAnalyticService.getNVCLAlgorithms().subscribe(results => {
       this.algorithms = results;
+      if (this.cookieService.check('email')) {
+        this.nvclform.email = this.cookieService.get('email');
+      }
     });
   }
 
@@ -92,12 +96,14 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
       this.nvclBoreholeAnalyticService.submitSF0NVCLProcessingJob(this.nvclform, this.layer).subscribe(response => {
         if (response === true) {
           alert('Job have been successfully submitted. The results will be send to your email');
+          this.cookieService.set( 'email', this.nvclform.email );
         }
       })
     } else {
       this.nvclBoreholeAnalyticService.submitSF0NVCLProcessingTsgJob(this.nvclform, this.layer).subscribe(response => {
         if (response === true) {
           alert('Job have been successfully submitted. The results will be send to your email');
+          this.cookieService.set( 'email', this.nvclform.email );
         }
       })
     }
@@ -107,6 +113,9 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
   public checkStatus() {
     this.nvclBoreholeAnalyticService.checkNVCLProcessingJob(this.nvclform.email).subscribe(response => {
       this.currentStatus = response;
+      if (response.length > 0) {
+        this.cookieService.set('email', this.nvclform.email);
+      }
     });
   }
 
@@ -114,6 +123,7 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
     this.nvclBoreholeAnalyticService.downloadNVCLProcessingResults(jobId).subscribe(response => {
       const blob = new Blob([response], {type: 'application/zip'});
       saveAs(blob, 'download.zip');
+      this.cookieService.set( 'email', this.nvclform.email );
     })
   }
 

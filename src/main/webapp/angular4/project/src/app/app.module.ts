@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
+import { CookieService } from 'ngx-cookie-service';
 
 
 // Components
@@ -47,6 +47,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     DynamicLayerAnalyticComponent,
     NVCLBoreholeAnalyticComponent
   ],
+  providers: [CookieService],
   imports: [
     PortalCoreModule,
     TreeModule,
