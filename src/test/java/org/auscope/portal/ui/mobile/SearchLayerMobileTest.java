@@ -93,8 +93,8 @@ public class SearchLayerMobileTest extends SearchLayerTest {
         List<WebElement> results = driver
                 .findElements(By.cssSelector(".panel-title"));
 
-        // Verify that there is 1 match
-        assertEquals(1, results.size());
+        // Verify that there is 2 match
+        assertEquals(2, results.size());
 
         // result should be tenement layer
         WebElement layerGroup = results.get(0);
