@@ -1,4 +1,3 @@
-import { environment } from '../../../environments/environment';
 import { Component, OnInit, ViewChild, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { LayerHandlerService } from '../../portal-core-ui/service/cswrecords/layer-handler.service';
 import * as $ from 'jquery'
@@ -33,13 +32,11 @@ export class LayerPanelComponent implements OnInit {
   @Output() expanded: EventEmitter<any> = new EventEmitter();
   searchText: string
   searchMode: boolean;
-  public analyticMap;
 
   constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
     private modalService: BsModalService, private olMapService: OlMapService, private changeDetectorRef: ChangeDetectorRef) {
     this.uiLayerModels = {};
     this.searchMode = false;
-    this.analyticMap = environment.layeranalytic;
    }
 
     public selectTabPanel(layerId, panelType) {
@@ -102,10 +99,6 @@ export class LayerPanelComponent implements OnInit {
       this.olMapService.removeLayer(layer);
     }
 
-    public processLayerAnalytic(layer: LayerModel) {
-      const bsModalRef = this.modalService.show(LayerAnalyticModalComponent, {class: 'modal-lg'});
-      bsModalRef.content.layer = layer;
-    }
 
 
 }

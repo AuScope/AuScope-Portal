@@ -5,6 +5,9 @@ import {OlMapService} from '../../../portal-core-ui/service/openlayermap/ol-map.
 import {UtilitiesService} from '../../../portal-core-ui/utility/utilities.service';
 import {Component, Input, OnInit} from '@angular/core';
 import * as _ from 'lodash';
+import { environment } from '../../../../environments/environment';
+import { LayerAnalyticModalComponent } from '../../../modalwindow/layeranalytic/layer.analytic.modal.component';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-filter-panel',
@@ -14,18 +17,17 @@ import * as _ from 'lodash';
 
 export class FilterPanelComponent implements OnInit {
 
-
-
-
   @Input() layer: LayerModel;
   private providers: Array<Object>;
   public optionalFilters: Array<Object>;
   private selectedFilter;
+  public analyticMap;
 
   constructor(private olMapService: OlMapService, private layerHandlerService: LayerHandlerService,
-    private filterPanelService: FilterPanelService) {
+    private filterPanelService: FilterPanelService, private modalService: BsModalService) {
     this.providers = [];
     this.optionalFilters = [];
+     this.analyticMap = environment.layeranalytic;
   }
 
   ngOnInit(): void {
@@ -129,5 +131,10 @@ export class FilterPanelComponent implements OnInit {
   public refreshFilter(): void {
     this.optionalFilters = [];
     this.selectedFilter = {};
+  }
+
+  public processLayerAnalytic(layer: LayerModel) {
+    const bsModalRef = this.modalService.show(LayerAnalyticModalComponent, {class: 'modal-lg'});
+    bsModalRef.content.layer = layer;
   }
 }

@@ -95,5 +95,10 @@
 	        </div>
 		   
 	    </fieldset>
-    	<button type="button" class="btn btn-info btn-sm" (click)="addLayer(layer)">Add Layer</button>
+	    <div class="row">
+	    	<button type="button" class="btn btn-info btn-sm pull-right" (click)="addLayer(layer)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Layer</button>    	
+	    	<button *ngIf="analyticMap[layer.id]" type="button" class="btn btn-warning btn-sm" (click)="processLayerAnalytic(layer)"><i class="fa fa-bar-chart" aria-hidden="true"></i> Analytic</button>
+    	</div>
+    	
+    	
 </div>
