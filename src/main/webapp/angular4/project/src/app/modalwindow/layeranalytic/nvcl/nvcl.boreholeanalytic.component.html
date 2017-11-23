@@ -223,7 +223,7 @@
 										<td>{{status.status}}</td>											
 										<td *ngIf="status.status=='Success'" class="btn-col" style="white-space: nowrap">
 											<a class="btn btn-purple btn-xs"><i class="ti-map-alt"></i></a>
-											<a class="btn btn-default btn-xs"><i class="ti-download"></i></a>												
+											<a class="btn btn-default btn-xs" (click)="download(status.jobId)"><i class="ti-download"></i></a>												
 										</td>
 									</tr>										
 								</tbody>
@@ -231,7 +231,7 @@
 						</div>
 						<div class="m-t-20  p-r-20 pull-left">
 							<button (click) = "checkStatus()" class="btn btn-primary">Check status</button>
-							<p class="text-warning small">Make sure you have entered a valid email address</p>
+							<p *ngIf="!nvclform.email" class="text-danger small">Make sure you have entered a valid email address</p>
 						</div>	
 					</div>
 					<!-- END tab-pane -->

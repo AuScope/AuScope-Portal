@@ -1,4 +1,4 @@
-
+import {saveAs} from 'file-saver/FileSaver';
 import { LayerModel } from '../../../portal-core-ui/model/data/layer.model';
 import { OnlineResourceModel } from '../../../portal-core-ui/model/data/onlineresource.model';
 import { NVCLBoreholeAnalyticService } from './nvcl.boreholeanalytic.service';
@@ -108,6 +108,13 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
     this.nvclBoreholeAnalyticService.checkNVCLProcessingJob(this.nvclform.email).subscribe(response => {
       this.currentStatus = response;
     });
+  }
+
+  public download(jobId: string) {
+    this.nvclBoreholeAnalyticService.downloadNVCLProcessingResults(jobId).subscribe(response => {
+      const blob = new Blob([response], {type: 'application/zip'});
+      saveAs(blob, 'download.zip');
+    })
   }
 
 

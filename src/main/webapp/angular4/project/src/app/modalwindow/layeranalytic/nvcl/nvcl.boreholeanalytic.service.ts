@@ -181,5 +181,18 @@ export class NVCLBoreholeAnalyticService {
   }
 
 
+  public downloadNVCLProcessingResults(jobId: string): Observable<any> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('jobId', jobId);
+
+    return this.http.get('../downloadNVCLProcessingResults.do', {
+      params: httpParams,
+      responseType: 'blob'
+    }).map((response) => { // download file
+      return response;
+    }).catch((error: Response) => {
+      return Observable.throw(error);
+    })
+  }
 }
 
