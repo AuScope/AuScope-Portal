@@ -20,6 +20,13 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
 
   public ngSelectiveConfig = {};
   public ngSelectiveOptions = [];
+  public currentStatus = [];
+
+  // VT: object to keep track of the tabpanel
+  public UItabpanel = {
+    algorithm: true,
+    checkprocess: false
+  };
 
 
   constructor(public nvclBoreholeAnalyticService: NVCLBoreholeAnalyticService) {
@@ -95,6 +102,12 @@ export class NVCLBoreholeAnalyticComponent implements AfterViewInit, OnInit  {
       })
     }
 
+  }
+
+  public checkStatus() {
+    this.nvclBoreholeAnalyticService.checkNVCLProcessingJob(this.nvclform.email).subscribe(response => {
+      this.currentStatus = response;
+    });
   }
 
 

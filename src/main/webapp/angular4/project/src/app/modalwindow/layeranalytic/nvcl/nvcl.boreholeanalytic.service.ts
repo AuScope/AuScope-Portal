@@ -159,5 +159,27 @@ export class NVCLBoreholeAnalyticService {
       );
   }
 
+  public checkNVCLProcessingJob(email: string): Observable<any> {
+    let httpParams = new HttpParams();
+
+    httpParams = httpParams.append('email', email);
+
+
+    return this.http.get('../checkNVCLProcessingJob.do', {
+      params: httpParams
+    }).map(response => {
+      if (response['success'] === true) {
+        return response['data'];
+      } else {
+        return Observable.throw(response['msg']);
+      }
+    }).catch(
+      (error: Response) => {
+        return Observable.throw(error);
+      }
+      );
+  }
+
+
 }
 
