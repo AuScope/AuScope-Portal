@@ -1,32 +1,22 @@
+
 import { Injectable, Inject } from '@angular/core';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import olLayerVector from 'ol/layer/vector';
 import olLayer from 'ol/layer/layer';
 import olFeature from 'ol/feature';
 import olRenderFeature from 'ol/render/feature';
 import olProj from 'ol/proj';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-
 import { point, polygon } from '@turf/helpers';
 import * as inside from '@turf/inside';
 import * as bbox from '@turf/bbox';
 import * as bboxPolygon from '@turf/bbox-polygon';
-
 import {LayerModel} from '../../model/data/layer.model';
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
 import { OlWFSService } from '../wfs/ol-wfs.service';
 import { OlMapObject } from './ol-map-object';
 import { OlWMSService } from '../wms/ol-wms.service';
-import { RenderStatusService } from './renderstatus/render-status.service';
-import { QuerierModalComponent } from '../../../modalwindow/querier/querier.modal.component';
-import { OnlineResourceModel } from '../../model/data/onlineresource.model';
-import { GMLParserService } from '../../utility/gmlparser.service';
-import { SimpleXMLService } from '../../utility/simplexml.service';
-import { UtilitiesService } from '../../utility/utilities.service';
-import { QueryWMSService } from '../wms/query-wms.service';
-import { QueryWFSService } from '../wfs/query-wfs.service';
-import { Constants } from '../../..//portal-core-ui/utility/constants.service';
+
+
 
 /**
  * Wrapper class to provide all things related to the ol map such as adding layer or removing layer.
@@ -36,13 +26,16 @@ export class OlMapService {
 
    private layerModelList: { [key: string]: LayerModel; } = {};
 
-   private bsModalRef: BsModalRef;
+   private clickedLayerListBS = new BehaviorSubject<any>({});
 
    constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService,
-     private olWFSService: OlWFSService, private olMapObject: OlMapObject, private modalService: BsModalService,
-     private queryWFSService: QueryWFSService, private queryWMSService: QueryWMSService,  private gmlParserService: GMLParserService) {
+     private olWFSService: OlWFSService, private olMapObject: OlMapObject) {
 
      this.olMapObject.registerClickHandler(this.mapClickHandler.bind(this));
+   }
+
+   public getClickedLayerListBS(): BehaviorSubject<any> {
+     return this.clickedLayerListBS;
    }
 
    /**
@@ -62,7 +55,6 @@ export class OlMapService {
            const clickedLayerList: olLayer[] = [];
            const layerColl = map.getLayers();
            const me = this;
-           let found = false;
            layerColl.forEach(function(layer) {
                for (const layerId in activeLayers) {
                    for (const activeLayer of activeLayers[layerId]) {
@@ -78,17 +70,9 @@ export class OlMapService {
                                    if (inside(clickPoint, poly)) {
                                      // Add to list of clicked layers
                                      clickedLayerList.push(activeLayer);
-                                     found = true;
-                                     break;
                                    }
                                }
-                               if (found) {
-                                   break;
-                               }
                            }
-                       }
-                       if (found) {
-                           break;
                        }
                    }
                }
@@ -100,57 +84,13 @@ export class OlMapService {
                clickedFeatureList.push(feature);
            });
 
-           // Process lists of features
-           const modalDisplayed = {value: false}
-           for (const feature of clickedFeatureList) {
-             // NB: This is just testing that the popup window does display
-             this.displayModal(modalDisplayed, clickCoord);
+           this.clickedLayerListBS.next({
+             clickedFeatureList: clickedFeatureList,
+             clickedLayerList: clickedLayerList,
+             pixel: pixel,
+             clickCoord: clickCoord
+           });
 
-             this.queryWFSService.getFeatureInfo(feature.onlineResource, feature.id_).subscribe(result => {
-               this.setModal(result, feature, this.bsModalRef);
-             },
-              err => {
-                this.bsModalRef.content.downloading = false;
-              });
-           }
-            // TODO: observer pattern or a callback to return the clicked layer list instead of handling it in map server class.
-           for (const layer of clickedLayerList) {
-             // NB: This is just testing that the popup window does display
-              this.displayModal(modalDisplayed, clickCoord);
-             // TODO: Get the feature info and display in popup
-             if (layer.onlineResource) {
-               this.bsModalRef.content.downloading = true;
-               this.queryWMSService.getFeatureInfo(layer.onlineResource, layer.sldBody, pixel, clickCoord).subscribe(result => {
-                this.setModal(result, layer, this.bsModalRef);
-               },
-                 err => {
-                   this.bsModalRef.content.downloading = false;
-                 });
-             }
-           }
-   }
-
-   private displayModal(modalDisplayed, clickCoord) {
-     if (modalDisplayed.value === false) {
-       this.bsModalRef  = this.modalService.show(QuerierModalComponent, {class: 'modal-lg'});
-       modalDisplayed.value = true;
-       this.bsModalRef.content.downloading = true;
-       const vector = this.drawDot(clickCoord);
-       this.modalService.onHide.subscribe(reason => {
-         this.removeVector(vector);
-       })
-     }
-   }
-
-   private setModal(result: string, layer: any, bsModalRef: BsModalRef) {
-     const treeCollections = SimpleXMLService.parseTreeCollection(this.gmlParserService.getRootNode(result), layer);
-     for (const treeCollection of treeCollections) {
-       bsModalRef.content.docs.push(treeCollection);
-       if (bsModalRef.content.uniqueLayerNames.indexOf(layer.layer.name) === -1) {
-         bsModalRef.content.uniqueLayerNames.push(layer.layer.name)
-       }
-     }
-     this.bsModalRef.content.downloading = false;
    }
 
 

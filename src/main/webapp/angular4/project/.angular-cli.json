@@ -22,14 +22,17 @@
         "styles.css",
         "../node_modules/ng2-tree/styles.css",
         "../node_modules/rickshaw/rickshaw.min.css",
-        "../src/template/css/rickshaw/extensions.css"
+        "../src/template/css/rickshaw/extensions.css",
+        "../node_modules/ng-selectize/selectize/selectize.css",
+		"../node_modules/selectize/dist/css/selectize.default.css"
       ],
       "scripts": [
       	"../node_modules/d3/d3.min.js",
       	"../node_modules/rickshaw/rickshaw.min.js",
       	"../src/template/framework/rickshaw/extensions.js",
       	"../src/template/framework/rickshaw/Rickshaw.Graph.RangeSlider.MultiPreview.min.js",
-      	"../src/template/framework/rickshaw/Rickshaw.Graph.SmootherPlus.min.js"
+      	"../src/template/framework/rickshaw/Rickshaw.Graph.SmootherPlus.min.js",
+		"../node_modules/ng-selectize/selectize/selectize.standalone.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -1,3 +1,4 @@
+import { NVCLBoreholeAnalyticComponent } from '../app/modalwindow/layeranalytic/nvcl/nvcl.boreholeanalytic.component';
 import { NVCLDatasetListComponent } from '../app/modalwindow/querier/customanalytic/nvcl/nvcl.datasetlist.component';
 
 export const environment = {
@@ -12,6 +13,9 @@ export const environment = {
     'tima-shrimp-geosample'],
   analytic: {
       'nvcl-borehole': NVCLDatasetListComponent,
+  },
+  layeranalytic: {
+      'nvcl-v2-borehole': NVCLBoreholeAnalyticComponent,
   }
 
 };

@@ -1,5 +1,8 @@
 import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import { BrowserModule } from '@angular/platform-browser';
 
 // Utilities
 import {KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, TrustResourceHtmlPipe} from './uiutilities/pipes';
@@ -19,11 +22,12 @@ import { LegendService } from './service/wms/legend.service';
 import { NotificationService } from './service/toppanel/notification.service';
 import { QueryWMSService} from './service/wms/query-wms.service';
 import { QueryWFSService} from './service/wfs/query-wfs.service';
-
+import {NgSelectizeModule} from 'ng-selectize';
 
 
 // Directives
 import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
+import { StopPropagationDirective } from './utility/utilities.directives';
 
 @NgModule({
   declarations: [
@@ -31,12 +35,18 @@ import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
     QuerierFeatureSearchPipe,
     TrustResourceUrlPipe,
     TrustResourceHtmlPipe,
-    ImgLoadingDirective
+    ImgLoadingDirective,
+    StopPropagationDirective
   ],
   imports: [
-    HttpClientModule
+    HttpClientModule,
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    NgSelectizeModule
   ],
-  exports: [KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, TrustResourceHtmlPipe, ImgLoadingDirective],
+  exports: [KeysPipe, QuerierFeatureSearchPipe, TrustResourceUrlPipe, TrustResourceHtmlPipe, ImgLoadingDirective, StopPropagationDirective,
+    HttpClientModule, BrowserModule, FormsModule, HttpModule, NgSelectizeModule],
   providers: [LayerHandlerService,
     OlMapService,
     OlWMSService,

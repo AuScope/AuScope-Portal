@@ -143,6 +143,7 @@ export class LayerHandlerService {
     const uniqueURLSet = new Set<string>();
     for (const cswRecord of cswRecords) {
       for (const onlineResource of cswRecord.onlineResources) {
+        onlineResource.cswRecord = cswRecord;
         if (resourceType && onlineResource.type === resourceType) {
           if (!uniqueURLSet.has(onlineResource.url)) {
             onlineResourceResult.push(onlineResource);

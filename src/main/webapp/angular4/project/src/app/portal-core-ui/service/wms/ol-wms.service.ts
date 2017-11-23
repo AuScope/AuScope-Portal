@@ -9,6 +9,7 @@ import { Headers, RequestOptions } from '@angular/http';
 import olMap from 'ol/map';
 import olTile from 'ol/layer/tile';
 import olTileWMS from 'ol/source/tilewms';
+import olProj from 'ol/proj';
 import { Observable } from 'rxjs/Rx';
 import { Constants } from '../../utility/constants.service';
 import { UtilitiesService } from '../../utility/utilities.service';
@@ -152,10 +153,24 @@ export class OlWMSService {
           this.getWMS1_3_0param(layer, wmsOnlineResource, collatedParam, response) :
           this.getWMS1_1param(layer, wmsOnlineResource, collatedParam, response);
 
+
         let wmsTile;
+
+        let defaultExtent;
+        if (wmsOnlineResource.cswRecord.geographicElements.length > 0) {
+          const cswExtent = wmsOnlineResource.cswRecord.geographicElements[0];
+          defaultExtent = olProj.transformExtent([cswExtent.westBoundLongitude, cswExtent.southBoundLatitude,
+          cswExtent.eastBoundLongitude, cswExtent.northBoundLatitude], 'EPSG:4326', 'EPSG:3857');
+        } else {
+          defaultExtent = this.map.getView().calculateExtent(this.map.getSize());
+        }
+
+
+
+
         if (this.wmsUrlTooLong(response)) {
           wmsTile = new olTile({
-            extent: this.map.getView().calculateExtent(this.map.getSize()),
+            extent: defaultExtent,
             source: new olTileWMS({
               url: wmsOnlineResource.url,
               params: params,
@@ -168,7 +183,7 @@ export class OlWMSService {
           })
         } else {
           wmsTile = new olTile({
-            extent: this.map.getView().calculateExtent(this.map.getSize()),
+            extent: defaultExtent,
             source: new olTileWMS({
               url: wmsOnlineResource.url,
               params: params,

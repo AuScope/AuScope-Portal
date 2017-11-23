@@ -1,0 +1,287 @@
+<!-- Modal for querier-->
+<div class="modal-header">
+	<h1 class="page-header">
+		Borehole <small>analytics</small>
+	</h1>
+</div>
+<div class="modal-body">
+
+	<div class="panel panel-default">
+		<!-- END panel-heading -->
+		<!-- BEGIN panel-body -->
+
+		<div class="panel-heading">
+			<h4 class="panel-title">{{layer.name}}</h4>
+		</div>
+		<div class="panel-body">
+			<div class="alert alert-inverse fade in">
+                <p>National Virtual Core Library analytics are run remotely and may take some time to complete. By entering an email and a job name you can come back to this form later to collect your results.</p>
+            </div>
+            
+            <div class="form-horizontal">
+	            <div class="form-group  form-group-sm">
+				    <label class="col-sm-1">Email:</label>
+				    <div class="col-sm-4">
+				    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.email">
+				    </div>				   
+				</div>
+				<div class="form-group  form-group-sm">
+				    <label class="col-sm-1">Job Name:</label>
+				    <div class="col-sm-4">
+				    	<input type="text" class="form-control input-sm"  [(ngModel)]="nvclform.jobName">
+				    </div>				   
+				</div>
+			</div>
+			
+			
+			<div class="panel panel-default panel-with-tabs">
+				<!-- BEGIN panel-heading -->
+				<div class="panel-heading">
+					<ul class="nav nav-tabs pull-right">
+						<li (click)="UItabpanel.algorithm = true;UItabpanel.checkprocess=false;" [ngClass]="{'active':UItabpanel.algorithm}"><a href="#nvcl-boreholeanalytic-tabpanel-algorithm" data-toggle="tab"><i class="fa fa-sliders"></i> <span class="hidden-xs">Algorithms</span></a></li>
+						<li (click)="UItabpanel.algorithm = false;UItabpanel.checkprocess=true;checkStatus()" [ngClass]="{'active':UItabpanel.checkprocess}"><a href="#nvcl-boreholeanalytic-tabpanel-checkprocess" data-toggle="tab"><i class="fa fa-tasks"></i> <span class="hidden-xs">Check process</span></a></li>
+					</ul>
+					<h4 class="panel-title">Borehole Analytics</h4>
+				</div>
+				<!-- END panel-heading -->
+				<!-- BEGIN tab-content -->
+				<div id="panel-tab-content" class="tab-content">
+					<!-- BEGIN tab-pane -->												
+					<div class="tab-pane fade" [ngClass]="{'active in': UItabpanel.algorithm}" id="nvcl-boreholeanalytic-tabpanel-algorithm">													
+						<div class="alert alert-inverse fade in">
+			                <p>Please select a classification algorithm to filter boreholes against.</p>
+			            </div>
+			
+						<div class="form-group  form-group-sm">
+							<div class="checkbox">
+								<input class="input-sm" id="nvcl-boreholeanalytic-existing-algor" type="checkbox"
+									[(ngModel)]="isExistingAlgorithm" /> <label for="nvcl-boreholeanalytic-existing-algor">
+									Existing Algorithm </label>
+							</div>
+						</div>
+			
+						<fieldset *ngIf="!isExistingAlgorithm" class="show-fieldset-borders-whitebg">
+				        	<legend><h5>TSG Algorithm</h5></legend>
+				        	<div class="form">
+				        		<div class="row">
+						            <div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Name:</label>
+									    <div class="col-sm-8">						    	
+									    	<select class="form-control input-sm" [(ngModel)]="nvclform.tsgAlgName" (change) = "changeTSGAlgorithm()">
+												<option value="Hematite-goethite_distr">Hematite-goethite_distr</option>
+												<option value="Kaolinite Crystallinity">Kaolinite Crystallinity</option>
+												<option value="None Template Algorithm">None Template Algorithm</option>									
+											</select>
+									    </div>				   
+									</div>
+								</div>
+								<div class="row" *ngIf="nvclform.tsgAlgName">
+									<div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Algorithm</label>
+									    <div class="col-sm-8">						    	
+											<textarea rows="12" cols="50" [(ngModel)]="nvclform.tsgAlgorithm"></textarea>
+									    </div>				   
+									</div>
+								</div>
+							</div>					   
+					    </fieldset>
+			
+			
+						<fieldset *ngIf="isExistingAlgorithm" class="show-fieldset-borders-whitebg">
+				        	<legend><h5>Algorithm</h5></legend>
+				        	<div class="form-horizontal">
+				        		<div class="row">
+						            <div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Algorithm Output</label>
+									    <div class="col-sm-8">						    	
+									    	<select class="form-control input-sm" [(ngModel)]="selectedAlgorithm" (change) = "changeAlgorithm()">
+												<option value="nsa">Non Standard Algorithm</option>
+												<option *ngFor="let algorithm of algorithms" [ngValue]="algorithm">{{algorithm.outputName}}</option>
+											</select>
+									    </div>				   
+									</div>
+									<div *ngIf="selectedAlgorithm && selectedAlgorithm!='nsa'" class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
+									    <label class="col-sm-3">version</label>
+									    <div class="col-sm-8">
+											<ng-selectize [config]="ngSelectiveConfig" [options] = "ngSelectiveOptions" placeholder="Select Versions" ngDefaultControl [(ngModel)]="nvclform.algorithmOutputIds" (ngModelChange)="onVersionChange($event)"></ng-selectize>
+									    </div>				   
+									</div>
+								</div>
+								<div class="row" *ngIf="classifications && selectedAlgorithm!='nsa'">
+									<div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Classification</label>
+									    <div class="col-sm-8">
+									    	<select class="form-control input-sm" [(ngModel)]="nvclform.classification">
+												<option *ngFor="let classification of classifications">{{classification.classText}}</option>
+											</select>
+									    </div>				   
+									</div>
+								</div>
+								<div class="row" *ngIf="selectedAlgorithm ==='nsa'">
+									<div class="form-group  form-group-sm col-sm-5">
+										<label class="col-sm-3">Log Name:</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control input-sm" [(ngModel)]="nvclform.logName">
+										</div>
+									</div>
+								</div>
+								<div class="row" *ngIf="selectedAlgorithm ==='nsa'">
+									<div class="form-group  form-group-sm col-sm-5">
+										<label class="col-sm-3">Classification:</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control input-sm" [(ngModel)]="nvclform.classification">
+										</div>
+									</div>
+								</div>
+							</div>					   
+					    </fieldset>
+				    	<div class="alert alert-inverse fade in">
+			                <p>Please select a borehole depth range and value (compared against the above algorithm) to filter NVCL boreholes.</p>
+			            </div>
+			            
+						<fieldset class="show-fieldset-borders-whitebg">
+				        	<legend><h5>Filter Parameters</h5></legend>
+				        	<div class="form-horizontal">
+				        		<div class="row">
+						            <div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Region of interest</label>
+									    <div class="col-sm-8">
+									    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.startDepth">
+									    	<span class="form-control-feedback">m</span>	
+									    </div>						    			  
+									</div>
+									<div class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
+									    <label class="col-sm-3">metres to</label>
+									    <div class="col-sm-8">
+									    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.endDepth">
+									    	<span class="form-control-feedback">m</span>
+									    </div>				   
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Operator</label>
+									    <div class="col-sm-8">
+									    	<select class="form-control input-sm" [(ngModel)]="nvclform.operator">
+												<option value="lt">&lt;</option>
+												<option value="gt">&gt;</option>
+												<option value="eq">=</option>
+											</select>
+									    </div>				   
+									</div>
+								</div>
+								<div class="row">
+						            <div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Value</label>
+									    <div class="col-sm-8">
+									    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.value">
+									    </div>				   
+									</div>
+									<div class="form-group  form-group-sm col-sm-5 col-sm-offset-1">
+									    <label class="col-sm-3">Units</label>
+									    <div class="col-sm-8">
+									    	<select class="form-control input-sm" [(ngModel)]="nvclform.units">
+												<option value="count">count</option>
+												<option value="pct">%</option>									
+											</select>
+									    </div>				   
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group  form-group-sm col-sm-5">
+									    <label class="col-sm-3">Evaluated over a span of:</label>
+									    <div class="col-sm-8">
+									    	<input type="number" class="form-control input-sm"  [(ngModel)]="nvclform.span">
+									    	<span class="form-control-feedback">m</span>
+									    </div>							    			  
+									</div>
+								</div>					
+							</div>					   
+					    </fieldset>
+					    
+						<div class="m-t-20  p-r-20 pull-left">
+							<button (click) = "submit()" class="btn btn-primary">Submit</button>
+						</div>
+					</div>					
+					<!-- END tab-pane -->
+					<!-- BEGIN tab-pane -->
+					<div  class="tab-pane fade" [ngClass]="{'active in':UItabpanel.checkprocess}" id="nvcl-boreholeanalytic-tabpanel-checkprocess">																										
+						<div class="table-responsive">
+							<table class="table m-b-0">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Submitted</th>
+										<th>Status</th>
+										<th style="width:1%">ACTIONS</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor = "let status of currentStatus">
+										<td>{{status.jobDescription}}</td>
+										<td>{{status.timestamp}}</td>
+										<td>{{status.status}}</td>											
+										<td *ngIf="status.status=='Success'" class="btn-col" style="white-space: nowrap">
+											<a class="btn btn-purple btn-xs"><i class="ti-map-alt"></i></a>
+											<a class="btn btn-default btn-xs" (click)="download(status.jobId)"><i class="ti-download"></i></a>												
+										</td>
+									</tr>										
+								</tbody>
+							</table>
+						</div>
+						<div class="m-t-20  p-r-20 pull-left">
+							<button *ngIf="currentStatus.length==0" (click) = "checkStatus()" class="btn btn-primary">Check status</button>
+							<button *ngIf="currentStatus.length>0" (click) = "checkStatus()" class="btn btn-primary">Refresh</button>
+							<p *ngIf="!nvclform.email" class="text-danger small">Make sure you have entered a valid email address</p>
+						</div>	
+					</div>
+					<!-- END tab-pane -->
+				</div>
+				<!-- END tab-content -->
+			</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</div>
+		<!-- END panel-body -->
+	</div>
+</div>
+

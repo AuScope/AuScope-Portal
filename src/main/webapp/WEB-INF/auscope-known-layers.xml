@@ -646,7 +646,16 @@
         <property name="order" value="51" />
         <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name ="filterCollection">
-             <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">    
+             <property name ="mandatoryFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.mandatory.UITextBox">
+                            <constructor-arg name="label" type="java.lang.String" value="Analytics Job Id"></constructor-arg>
+                            <constructor-arg name="parameter" type="java.lang.String" value="analyticsJobId"></constructor-arg>                         
+                            <constructor-arg name="value" type="java.lang.String" value=""></constructor-arg>                                                        
+                        </bean>
+                    </list>
+                </property>            
                 <property name ="optionalFilters">
                     <list>
                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">

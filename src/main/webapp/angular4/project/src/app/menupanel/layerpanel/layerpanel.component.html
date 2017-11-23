@@ -10,7 +10,7 @@
 		
 	   		<a [hidden]="layerGroup.value.hide" href="javascript:;">
 	            <b class="caret caret-right pull-right"></b>
-	              {{layerGroup.key}}
+	              {{layerGroup.key}} 
 	        </a>
 			<ul class="sub-menu">
 				<li *ngFor="let layer of layerGroup.value" [ngClass]="{'active': layer.expanded}">
@@ -19,7 +19,7 @@
 							<span *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="pull-right project-percentage hasEvent light-blue"><u (click)="openStatusReport(uiLayerModels[layer.id]); $event.stopPropagation();">{{uiLayerModels[layer.id].statusMap.completePercentage}}<i *ngIf="!uiLayerModels[layer.id].statusMap.containsError" class="fa fa-warning text-warning"></i></u></span>
 							<div class="project-title">
 								<i *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-ban text-danger" (click) = "removeLayer(layer);$event.stopPropagation();"></i>
-									{{layer.name}}
+									{{layer.name}}<span appStopPropagation (click)="processLayerAnalytic(layer)" *ngIf="analyticMap[layer.id]" class="hasEvent light-blue">analytic</span>
 									<span *ngIf="layer.expanded && !uiLayerModels[layer.id].statusMap.renderStarted" class="fa fa-arrow-circle-down"></span>
 							</div>
 							<div *ngIf="uiLayerModels[layer.id].statusMap.renderStarted" class="progress progress-xs">
