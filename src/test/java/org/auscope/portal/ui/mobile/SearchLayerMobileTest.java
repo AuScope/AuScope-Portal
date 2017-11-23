@@ -106,9 +106,9 @@ public class SearchLayerMobileTest extends SearchLayerTest {
 
         toggle.click();
 
-        // there should only be 1 layer in the group
+        // there should only be 2 layer in the group
         List<WebElement> rows = driver.findElements(By.className("layer-row"));
-        assertEquals(1, rows.size());
+        assertEquals(2, rows.size());
 
         WebElement layer = rows.get(0);
         assertEquals("Mineral Tenements", layer.getAttribute("innerText").trim());
