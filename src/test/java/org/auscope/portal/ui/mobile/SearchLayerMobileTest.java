@@ -11,6 +11,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.JavascriptExecutor;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -45,6 +47,8 @@ public class SearchLayerMobileTest extends SearchLayerTest {
         WebElement menuToggle = new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(
                 driver.findElement(By.cssSelector(".menu-icon-toggle"))));
         menuToggle.click();
+        // bring up search box
+        ((JavascriptExecutor)driver).executeScript("document.querySelectorAll('.search-icon-border-right')[0].click()");        
     }
 
     @Test
