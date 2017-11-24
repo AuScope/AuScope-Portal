@@ -32,7 +32,8 @@
       	"../src/template/framework/rickshaw/extensions.js",
       	"../src/template/framework/rickshaw/Rickshaw.Graph.RangeSlider.MultiPreview.min.js",
       	"../src/template/framework/rickshaw/Rickshaw.Graph.SmootherPlus.min.js",
-		"../node_modules/ng-selectize/selectize/selectize.standalone.js"
+		"../node_modules/ng-selectize/selectize/selectize.standalone.js",
+		"../node_modules/lzma/src/lzma_worker-min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

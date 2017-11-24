@@ -7,6 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import { environment } from '../../../../environments/environment';
 import { LayerAnalyticModalComponent } from '../../../modalwindow/layeranalytic/layer.analytic.modal.component';
+import { ManageStateService } from '../../../portal-core-ui/service/permanentlink/manage-state.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -24,7 +25,7 @@ export class FilterPanelComponent implements OnInit {
   public analyticMap;
 
   constructor(private olMapService: OlMapService, private layerHandlerService: LayerHandlerService,
-    private filterPanelService: FilterPanelService, private modalService: BsModalService) {
+    private filterPanelService: FilterPanelService, private modalService: BsModalService, private manageStateService: ManageStateService) {
     this.providers = [];
     this.optionalFilters = [];
      this.analyticMap = environment.layeranalytic;
@@ -52,6 +53,8 @@ export class FilterPanelComponent implements OnInit {
         optFilter['options'] = [];
       }
     }
+    this.manageStateService.addLayer(layer.id, layer.filterCollection, this.optionalFilters);
+
     this.olMapService.addLayer(layer, param);
   }
 

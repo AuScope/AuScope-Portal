@@ -12,6 +12,7 @@ import * as bbox from '@turf/bbox';
 import * as bboxPolygon from '@turf/bbox-polygon';
 import {LayerModel} from '../../model/data/layer.model';
 import { LayerHandlerService } from '../cswrecords/layer-handler.service';
+import { ManageStateService } from '../permanentlink/manage-state.service';
 import { OlWFSService } from '../wfs/ol-wfs.service';
 import { OlMapObject } from './ol-map-object';
 import { OlWMSService } from '../wms/ol-wms.service';
@@ -29,7 +30,7 @@ export class OlMapService {
    private clickedLayerListBS = new BehaviorSubject<any>({});
 
    constructor(private layerHandlerService: LayerHandlerService, private olWMSService: OlWMSService,
-     private olWFSService: OlWFSService, private olMapObject: OlMapObject) {
+     private olWFSService: OlWFSService, private olMapObject: OlMapObject, private manageStateService: ManageStateService) {
 
      this.olMapObject.registerClickHandler(this.mapClickHandler.bind(this));
    }
@@ -116,6 +117,7 @@ export class OlMapService {
    * @param layer the layer to remove from the map
    */
   public removeLayer(layer: LayerModel): void {
+      this.manageStateService.removeLayer(layer.id);
       this.olMapObject.removeLayerById(layer.id);
       delete this.layerModelList[layer.id];
   }

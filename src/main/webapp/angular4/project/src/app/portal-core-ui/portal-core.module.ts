@@ -14,6 +14,7 @@ import { FilterPanelService } from './service/filterpanel/filterpanel-service';
 import { OlMapObject } from './service/openlayermap/ol-map-object';
 import { OlMapService } from './service/openlayermap/ol-map.service';
 import { RenderStatusService } from './service/openlayermap/renderstatus/render-status.service';
+import { ManageStateService } from './service/permanentlink/manage-state.service';
 import { DownloadWfsService } from './service/wfs/download/download-wfs.service';
 import { OlWMSService } from './service/wms/ol-wms.service';
 import { OlWFSService } from './service/wfs/ol-wfs.service';
@@ -60,7 +61,8 @@ import { StopPropagationDirective } from './utility/utilities.directives';
     ImgLoadingDirective,
     NotificationService,
     QueryWMSService,
-    QueryWFSService
+    QueryWFSService,
+    ManageStateService
   ]
 })
 

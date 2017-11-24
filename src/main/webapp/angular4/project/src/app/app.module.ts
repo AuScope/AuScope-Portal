@@ -13,6 +13,7 @@ import { FilterPanelComponent } from './menupanel/common/filterpanel/filterpanel
 import { DownloadPanelComponent } from './menupanel/common/downloadpanel/downloadpanel.component';
 import { InfoPanelComponent} from './menupanel/common/infopanel/infopanel.component';
 import { InfoPanelSubComponent } from './menupanel/common/infopanel/subpanel/subpanel.component';
+import { PermanentLinkComponent } from './menupanel/permanentlink/permanentlink.component';
 import { DynamicLayerAnalyticComponent } from './modalwindow/layeranalytic/dynamic.layer.analytic.component';
 import { LayerAnalyticModalComponent } from './modalwindow/layeranalytic/layer.analytic.modal.component';
 import { NVCLBoreholeAnalyticComponent } from './modalwindow/layeranalytic/nvcl/nvcl.boreholeanalytic.component';
@@ -45,7 +46,8 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     NVCLDatasetListComponent,
     LayerAnalyticModalComponent,
     DynamicLayerAnalyticComponent,
-    NVCLBoreholeAnalyticComponent
+    NVCLBoreholeAnalyticComponent,
+    PermanentLinkComponent
   ],
   providers: [CookieService],
   imports: [
@@ -53,7 +55,8 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
     TreeModule,
     ModalModule.forRoot()
   ],
-  entryComponents: [NgbdModalStatusReportComponent, QuerierModalComponent, NVCLDatasetListComponent, LayerAnalyticModalComponent, NVCLBoreholeAnalyticComponent],
-  bootstrap: [OlMapComponent, LayerPanelComponent, CustomPanelComponent, NotificationComponent, OlMapZoomComponent]
+  entryComponents: [NgbdModalStatusReportComponent, QuerierModalComponent, NVCLDatasetListComponent,
+    LayerAnalyticModalComponent, NVCLBoreholeAnalyticComponent],
+  bootstrap: [OlMapComponent, LayerPanelComponent, CustomPanelComponent, NotificationComponent, OlMapZoomComponent, PermanentLinkComponent]
 })
 export class AppModule { }
