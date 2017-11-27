@@ -3,7 +3,7 @@ import { UtilitiesService } from '../../portal-core-ui/utility/utilities.service
 import { environment } from '../../../environments/environment';
 import {Component} from '@angular/core';
 
-declare var LZMA: any;
+
 
 @Component({
   selector: '[appPermanentLink]',
@@ -13,21 +13,21 @@ declare var LZMA: any;
 export class PermanentLinkComponent {
 
   public permanentlink = '';
+  public textwww = 'fdsafdas';
+  public showPermanentLink = false;
 
   constructor(private manageStateService: ManageStateService) {}
 
   public generatePermanentLink() {
-
-
     const uncompStateStr = JSON.stringify(this.manageStateService.getState());
     const me = this;
-    LZMA.compress(uncompStateStr, 1, function on_compress_complete(result) {
+    this.manageStateService.getCompressedString(uncompStateStr, function(result) {
 
       // Encode state in base64 so it can be used in a URL
       const stateStr = UtilitiesService.encode_base64(String.fromCharCode.apply(String, result));
-      me.permanentlink = environment.portalBaseUrl + '?state=' + stateStr
+      me.permanentlink = environment.hostUrl + '?state=' + stateStr
     });
-
   }
+
 
 }

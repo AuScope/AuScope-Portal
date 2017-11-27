@@ -37,9 +37,24 @@ export class FilterPanelComponent implements OnInit {
 
       for (const mandatoryFilter of mandatoryFilters) {
         if (mandatoryFilter['type'] === 'MANDATORY.CHECKBOX') {
-          mandatoryFilter['value'] = (mandatoryFilter['type'] === 'true')
+          mandatoryFilter['value'] = (mandatoryFilter['value'] === 'true')
         }
       }
+    }
+
+    // VT: permanent link
+    const state = UtilitiesService.getUrlParameterByName('state');
+    if (state) {
+      const me = this;
+      this.manageStateService.getUnCompressedString(state, function(result) {
+        const layerStateObj = JSON.parse(result);
+        if (layerStateObj[me.layer.id]) {
+          if (UtilitiesService.isEmpty(me.providers)) {
+            me.getProvider();
+          }
+          me.optionalFilters = layerStateObj[me.layer.id].optionalFilters;
+        }
+      })
     }
   }
 

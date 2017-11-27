@@ -6,6 +6,7 @@ export const environment = {
   getCSWRecordUrl: '../getKnownLayers.do',
   getCustomLayers: '../getCustomLayers.do',
   portalBaseUrl: 'http://portal.auscope.org/portal/',
+  hostUrl: 'http://portal.auscope.org/portal/index.htm',
   csvSupportedLayer: [
     'mineral-tenements',
     'tima-geosample',

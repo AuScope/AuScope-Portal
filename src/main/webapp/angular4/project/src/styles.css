@@ -6,6 +6,10 @@ Contain Auscope specific modification to the original template.
 
 [hidden] { display: none !important;}
 
+.display-block {
+	display: block !important;
+}
+
 .layer-panel{
 	left:-100px;
 	width:319px;
@@ -405,7 +409,7 @@ max-width: 768px(small screen)
 .popup .popuptext {
     visibility: hidden;
     width: 260px;
-    background-color: #555;
+    background-color: #8a8a8f;
     color: #fff;
     text-align: center;
     border-radius: 6px;

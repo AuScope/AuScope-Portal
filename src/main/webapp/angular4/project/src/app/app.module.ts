@@ -24,10 +24,11 @@ import { NgbdModalStatusReportComponent } from './toppanel/renderstatus/renderst
 import { NotificationComponent } from './toppanel/notification/notification.component';
 import { QuerierModalComponent } from './modalwindow/querier/querier.modal.component';
 import { TreeModule } from 'ng2-tree';
-
+import { ClipboardModule } from 'ngx-clipboard';
 
 
 import { PortalCoreModule } from './portal-core-ui/portal-core.module';
+import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     OlMapComponent,
@@ -53,6 +54,7 @@ import { PortalCoreModule } from './portal-core-ui/portal-core.module';
   imports: [
     PortalCoreModule,
     TreeModule,
+    ClipboardModule,
     ModalModule.forRoot()
   ],
   entryComponents: [NgbdModalStatusReportComponent, QuerierModalComponent, NVCLDatasetListComponent,

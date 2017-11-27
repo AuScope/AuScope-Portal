@@ -37,6 +37,7 @@
     "ng-selectize": "^1.1.0",
     "ng2-tree": "^2.0.0-alpha.10",
     "ngx-bootstrap": "^1.9.3",
+    "ngx-clipboard": "^8.1.0",
     "ngx-cookie-service": "^1.0.9",
     "ol": "^4.3.1",
     "rickshaw": "^1.6.3",

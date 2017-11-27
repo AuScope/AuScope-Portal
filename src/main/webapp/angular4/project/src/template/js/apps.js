@@ -245,12 +245,7 @@ var handleSidebarMenu = function() {
 			});
 		}
 	});
-	$('.sidebar .nav > .has-sub .sub-menu li.has-sub > a').click(function() {
-		if ($('.page-sidebar-minified').length === 0) {
-			var target = $(this).next('.sub-menu');
-			$(target).slideToggle(250);
-		}
-	});
+	
 	$('[data-click="sidebar-toggled"]').live('click', function(e) {
 		e.preventDefault();
 		

@@ -9,9 +9,12 @@ import { OlMapService } from '../../portal-core-ui/service/openlayermap/ol-map.s
 import { UILayerModel } from '../common/model/ui/uilayer.model';
 import { UITabPanel } from '../common/model/ui/uitabpanel.model';
 import { RenderStatusService } from '../../portal-core-ui/service/openlayermap/renderstatus/render-status.service';
+import { ManageStateService } from '../../portal-core-ui/service/permanentlink/manage-state.service';
+import { UtilitiesService } from '../../portal-core-ui/utility/utilities.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { InfoPanelComponent } from '../common/infopanel/infopanel.component';
+
 
 
 
@@ -33,8 +36,10 @@ export class LayerPanelComponent implements OnInit {
   searchText: string
   searchMode: boolean;
 
+
   constructor(private layerHandlerService: LayerHandlerService, private renderStatusService: RenderStatusService,
-    private modalService: BsModalService, private olMapService: OlMapService, private changeDetectorRef: ChangeDetectorRef) {
+    private modalService: BsModalService, private olMapService: OlMapService, private changeDetectorRef: ChangeDetectorRef,
+    private manageStateService: ManageStateService) {
     this.uiLayerModels = {};
     this.searchMode = false;
    }
@@ -73,20 +78,36 @@ export class LayerPanelComponent implements OnInit {
       }, 0);
     }
 
-     public ngOnInit() {
-       this.layerHandlerService.getLayerRecord().subscribe(
-        response => {this.layerGroups = response;
-          for (const key in this.layerGroups) {
-             for (let i = 0; i < this.layerGroups[key].length; i++) {
-               const uiLayerModel = new UILayerModel(this.layerGroups[key][i].id, this.renderStatusService.getStatusBSubject(this.layerGroups[key][i]));
-               this.uiLayerModels[this.layerGroups[key][i].id] = uiLayerModel;
-             }
-          }
-          $(document).ready(function() {
-            App.init();
-          });
-        });
-     }
+    public ngOnInit() {
+
+        const state = UtilitiesService.getUrlParameterByName('state');
+        const me = this;
+        this.manageStateService.getUnCompressedString(state, function(result) {
+          const layerStateObj = JSON.parse(result);
+          me.layerHandlerService.getLayerRecord().subscribe(
+            response => {
+              me.layerGroups = response;
+              for (const key in me.layerGroups) {
+                for (let i = 0; i < me.layerGroups[key].length; i++) {
+                  const uiLayerModel = new UILayerModel(me.layerGroups[key][i].id, me.renderStatusService.getStatusBSubject(me.layerGroups[key][i]));
+                  // VT: permanent link
+                  if (layerStateObj && layerStateObj[uiLayerModel.id]) {
+                    me.layerGroups[key].expanded = true;
+                    me.layerGroups[key][i].expanded = true;
+                    me.layerGroups[key][i].filterCollection.hiddenParams = layerStateObj[uiLayerModel.id].filterCollection.hiddenParams
+                    me.layerGroups[key][i].filterCollection.mandatoryFilters = layerStateObj[uiLayerModel.id].filterCollection.mandatoryFilters
+                  }
+                  me.uiLayerModels[me.layerGroups[key][i].id] = uiLayerModel;
+
+                }
+              }
+              $(document).ready(function() {
+                App.init();
+              });
+            });
+        })
+
+    }
 
     public openStatusReport(uiLayerModel: UILayerModel) {
       this.bsModalRef = this.modalService.show(NgbdModalStatusReportComponent, {class: 'modal-lg'});

@@ -26,6 +26,7 @@ import { QueryWFSService} from './service/wfs/query-wfs.service';
 import {NgSelectizeModule} from 'ng-selectize';
 
 
+
 // Directives
 import { ImgLoadingDirective } from './uiutilities/imgloading.directive';
 import { StopPropagationDirective } from './utility/utilities.directives';

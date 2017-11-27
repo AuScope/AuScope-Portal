@@ -84,7 +84,7 @@ export class UtilitiesService {
      * @param url - the get url string to break
      * @param options - splitArgs - {Boolean} Split comma delimited params into arrays? Default is true
      */
-    public static getUrlParameters(url: string, options: any): any {
+    public static getUrlParameters(url: string, options?: any): any {
         const localStringContain  = function(s, c){
             return s.indexOf(c) !== -1;
         };
@@ -114,8 +114,7 @@ export class UtilitiesService {
                     key = unescape(key);
                 }
 
-                // being liberal by replacing "+" with " "
-                let value: any = (keyValue[1] || '').replace(/\+/g, ' ');
+                let value: any = (keyValue[1] || '');
 
                 try {
                     value = decodeURIComponent(value);
@@ -361,6 +360,13 @@ export class UtilitiesService {
         }
 
         return string;
+    }
+
+    public static getUrlParameterByName(name: string, url?: string): string {
+      if (!url) {
+        url = window.location.href
+      };
+     return this.getUrlParameters(url)[name];
     }
 
     /**
