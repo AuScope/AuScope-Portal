@@ -1,8 +1,0 @@
-{
-  "/": {
-    "target": "http://localhost:8080/AuScope-Portal",
-    "secure": false,
-    "pathRewrite": {"^/" : ""},
-     "logLevel":"debug"
-  }
-}
