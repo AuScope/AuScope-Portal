@@ -628,7 +628,7 @@
         <property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
         <property name="proxyCountUrl" value=""/>
-        <property name="proxyDownloadUrl" value="doBoreholeViewCSVDownload.do"/>
+        <property name="proxyDownloadUrl" value="doNVCLBoreholeViewCSVDownload.do"/>
         <property name="proxyStyleUrl" value="doNvclV2FilterStyle.do"/>
         <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png"/> -->
         <property name="iconAnchor">

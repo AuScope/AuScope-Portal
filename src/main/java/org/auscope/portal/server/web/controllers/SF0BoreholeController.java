@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
@@ -92,20 +93,21 @@ public class SF0BoreholeController extends BasePortalController {
      * @return a WFS response converted into KML
      * @throws Exception
      */
-    @RequestMapping("/doBoreholeViewCSVDownload.do")
-    public void doBoreholeViewCSVDownload(String serviceUrl,String typeName,
+    @RequestMapping("/doNVCLBoreholeViewCSVDownload.do")
+    public void doNVCLBoreholeViewCSVDownload(String serviceUrl,String typeName,
     		@RequestParam(required=false, value="bbox") String bbox,
             @RequestParam(required=false, value="outputFormat") String outputFormat,
             HttpServletResponse response) throws Exception {
     	
+    	OutputStream outputStream = response.getOutputStream();
         try {
         	response.setContentType("text/csv");
-        	OutputStream outputStream = response.getOutputStream();
+        	
             FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox);
             
             String filterString;
-            SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter();
-            if (bbox == null) {
+            SF0BoreholeFilter sf0BoreholeFilter = new SF0BoreholeFilter(true);
+            if (box == null) {
                 filterString = sf0BoreholeFilter.getFilterStringAllRecords();
             } else {
                 filterString = sf0BoreholeFilter.getFilterStringBoundingBox(box);
@@ -119,6 +121,8 @@ public class SF0BoreholeController extends BasePortalController {
         } catch (Exception e) {
         	log.warn(String.format("Unable to request/transform WFS response from '%1$s': %2$s", serviceUrl,e));
             log.debug("Exception: ", e);  
+            IOUtils.write("An error has occurred: "+ e.getMessage(), outputStream);
+            outputStream.close();
         }
     }
     
