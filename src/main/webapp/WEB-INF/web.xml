@@ -25,6 +25,17 @@
         <filter-name>etagFilter</filter-name>
        <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <!--  tomcat crosFilter -->
+	<filter>
+	  <filter-name>CorsFilter</filter-name>
+	  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+	  <!-- jetty crosFilter. if you want to run in jetty, please comment out tomcat crosFilter first then enable jetty filter -->
+	  <!--filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class-->
+	</filter>
+	<filter-mapping>
+	  <filter-name>CorsFilter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
 
    <listener>
       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
