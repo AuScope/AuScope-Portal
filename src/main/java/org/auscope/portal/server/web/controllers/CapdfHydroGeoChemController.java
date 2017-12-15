@@ -432,7 +432,8 @@ public class CapdfHydroGeoChemController extends BasePortalController {
             @RequestParam(required = false, value = "batchid") String batchid,
             @RequestParam(required = false, value = "featureType") String featureType,
             @RequestParam(required = false, value = "poi") String poi,
-            @RequestParam(required = false, value = "minMax") String minMax,
+            @RequestParam(required = false, value = "min") String min,
+            @RequestParam(required = false, value = "max") String max,
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             HttpServletResponse response) throws Exception {
 
@@ -441,9 +442,8 @@ public class CapdfHydroGeoChemController extends BasePortalController {
 
         String style = "";
 
-        if (poi != null && !poi.isEmpty()) {
-            String[] splitMinMAx = minMax.split(",");
-            style = this.getColorCodedStyle(splitMinMAx[0],splitMinMAx[1],poi, featureType);
+        if (poi != null && !poi.isEmpty()) {           
+            style = this.getColorCodedStyle(min,max,poi, featureType);
         } else {
             String stylefilterRules = this.capdfHydroGeoChemService.getHydroGeoChemFilter(batchid, bbox,optionalFilters); //VT:get filter from service
             style = this.getStyle(stylefilterRules, CAPDF_HYDROGEOCHEMTYPE, "#DB70B8");

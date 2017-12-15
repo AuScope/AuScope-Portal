@@ -235,7 +235,8 @@ allControllers.controller('capdfHydrogeochemCtrl', ['$scope','GoogleMapService',
             CapdfWMSService.renderLayer(goi,$scope.layer,{
                 featureType:goi,
                 poi : poi,
-                minMax:[minValue,maxValue]
+                min : minValue,
+                max : maxValue
             });
         }            
     };
