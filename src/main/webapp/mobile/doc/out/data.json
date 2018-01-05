@@ -1094,7 +1094,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 243,
+            "line": 244,
             "description": "Request to start the drawing process for bounding box selection",
             "itemtype": "method",
             "name": "selectBound",
@@ -1103,7 +1103,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 251,
+            "line": 252,
             "description": "Performs a box plot in the panel",
             "itemtype": "method",
             "name": "plotBox",
@@ -1118,7 +1118,7 @@
         },
         {
             "file": "../js/assets/controllers/analytics/capdfHydrogeochemCtrl.js",
-            "line": 286,
+            "line": 287,
             "description": "Performs a scatter plot in the panel",
             "itemtype": "method",
             "name": "plotScatter",
