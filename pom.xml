@@ -400,7 +400,7 @@
         <repository>
             <id>cgsrv8.arrc.csiro.au</id>
             <name>AuScope Nexus - PortalRepo</name>
-            <url>http://cgsrv8.arrc.csiro.au/nexus/content/groups/PortalRepository/</url>
+            <url>https://cgsrv8.arrc.csiro.au/nexus/repository/PortalRepository/</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
