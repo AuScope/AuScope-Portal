@@ -259,7 +259,7 @@ public class BoreholeService extends BaseWFSService {
     }
 
     /**
-     * Generates a broad SLD for symbolising a set of filters. Default Mark is Square
+     * Generates a broad SLD for symbolising a set of filters. Default Mark is Circle
      *
      * @param names 1-1 correspondance with filters - the human readable names of each filter
      * @param filters The filters to be symbolised
@@ -268,7 +268,7 @@ public class BoreholeService extends BaseWFSService {
      * @return
      */
     public String getStyle(List<String> names, List<String> filters, List<String> colors, String gsmlpNameSpace) {
-        return getStyle(names, filters, colors, new ArrayList<Mark>(Collections.nCopies(filters.size(), Mark.SQUARE)), gsmlpNameSpace);
+        return getStyle(names, filters, colors, new ArrayList<Mark>(Collections.nCopies(filters.size(), Mark.CIRCLE)), gsmlpNameSpace);
     }
 
     /**
@@ -317,9 +317,16 @@ public class BoreholeService extends BaseWFSService {
             sb.append("<CssParameter name=\"fill\">");
             sb.append(colors.get(i));
             sb.append("</CssParameter>");
+            sb.append("<CssParameter name=\"fill-opacity\">0.4</CssParameter>");            
             sb.append("</Fill>");
+            sb.append("<Stroke>");
+            sb.append("<CssParameter name=\"stroke\">");
+            sb.append(colors.get(i));
+            sb.append("</CssParameter>");
+            sb.append("<CssParameter name=\"stroke-width\">1</CssParameter>");            
+            sb.append("</Stroke>");
             sb.append("</Mark>");
-            sb.append("<Size>8</Size>");
+            sb.append("<Size>6</Size>");
             sb.append("</Graphic>");
             sb.append("</PointSymbolizer>");
             sb.append("</Rule>");
