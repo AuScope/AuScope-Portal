@@ -965,7 +965,7 @@
         <property name="description" value="Borehole observations made with a multi-sensor core logger."/>
         <property name="group" value="Boreholes"/>
         <property name="proxyUrl" value="doBoreholeViewFilter.do"/>
-        <property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do"/>
+        <property name="proxyStyleUrl" value=""/>
                 
         <property name="proxyCountUrl" value=""/>
         <!-- <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/> -->
