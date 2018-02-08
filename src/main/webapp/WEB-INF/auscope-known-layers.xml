@@ -994,6 +994,7 @@
         <property name="name" value="IRIS Feed"/>
         <property name="description" value="Seismographs in Schools data feed from Incorporated Research Institutions for Seismology (IRIS). S network code."/>
         <property name="group" value="Seismographs in Schools Network"/>
+        <property name="proxyUrl" value="getIRISStations.do"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png"/>
         <property name="iconAnchor">
             <bean class="java.awt.Point">
