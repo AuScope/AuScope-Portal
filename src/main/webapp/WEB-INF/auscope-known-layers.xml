@@ -433,6 +433,34 @@
         <property name="order" value="405" />
     </bean>
     
+     <!-- Geomodels -->
+    <bean id="knownTypeGeoModels" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="portal-geo-models"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
+                <property name="recordId" value="6b6ef3b4-e61d-4ead-90ea-91e2873e5f78"/> <!-- TODO: replace with keyword search -->
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Geological Models"/>
+        <property name="description" value="Various Geological Models"/>
+        <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png"/>
+        <property name="iconAnchor">
+            <bean class="java.awt.Point">
+                <constructor-arg index="0" value="16"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="iconSize">
+            <bean class="java.awt.Dimension">
+                <constructor-arg index="0" value="32"/>
+                <constructor-arg index="1" value="32"/>
+            </bean>
+        </property>
+        <property name="order" value="407" />
+    </bean>
+
+
     <bean id="knownTypeReports" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
         <constructor-arg name="id" value="portal-reports"/>
         <constructor-arg name="knownLayerSelector">

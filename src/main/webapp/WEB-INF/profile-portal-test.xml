@@ -241,11 +241,11 @@
                 <ref bean="knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03Ga" />
                 <ref bean="knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGis" />
                 <ref bean="knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSyst" />
-                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />
-                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />
-                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />
+                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />                
                 <ref bean="knownTypeAreTherAnySandUranSystInTheEromBasi" />
-                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />
+                <ref bean="knownTypeGeoModels" />
+                
+                
                 <!-- Generated from former test "Registered" tab END -->
             </list>
         </constructor-arg>
