@@ -438,7 +438,7 @@
         <constructor-arg name="id" value="portal-geo-models"/>
         <constructor-arg name="knownLayerSelector">
             <bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <property name="recordId" value="6b6ef3b4-e61d-4ead-90ea-91e2873e5f78"/> <!-- TODO: replace with keyword search -->
+                <property name="descriptiveKeyword" value="3D Geological Models"/>
             </bean>
         </constructor-arg>
 
