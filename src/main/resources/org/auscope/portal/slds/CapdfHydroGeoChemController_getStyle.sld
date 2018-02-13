@@ -14,10 +14,15 @@
                     <PointSymbolizer>
                         <Graphic>
                             <Mark>
-                                <WellKnownName>square</WellKnownName>
+                                <WellKnownName>circle</WellKnownName>
                                 <Fill>
                                     <CssParameter name="fill">[color]</CssParameter>
+                                    <CssParameter name="fill-opacity">0.4</CssParameter>
                                 </Fill>
+                                <Stroke>
+					               <CssParameter name="stroke">[color]</CssParameter>
+					               <CssParameter name="stroke-width">1</CssParameter>
+					             </Stroke>
                             </Mark>
                             <Size>6</Size>
                         </Graphic>

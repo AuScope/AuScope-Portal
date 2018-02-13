@@ -129,6 +129,8 @@
                 <ref bean="knownTypeLandLineOfTasmMinResoTasm" />
                 <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
                 <ref bean="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" />
+                
+                <ref bean="knownTypeGeoModels" />
                 <!-- Generated from former prod "Registered" tab END -->
                 <ref bean="knownTypeGeologicalProvinces" />
                 
