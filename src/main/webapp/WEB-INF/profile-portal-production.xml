@@ -130,6 +130,7 @@
                 <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
                 <ref bean="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" />
                 <!-- Generated from former prod "Registered" tab END -->
+                <ref bean="knownTypeGeologicalProvinces" />
                 
             </list>
         </constructor-arg>

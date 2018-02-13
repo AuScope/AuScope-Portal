@@ -247,6 +247,7 @@
                 <ref bean="knownTypeAreTherAnySandUranSystInTheEromBasi" />
                 <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />
                 <!-- Generated from former test "Registered" tab END -->
+                <ref bean="knownTypeGeologicalProvinces" />
             </list>
         </constructor-arg>
     </bean>

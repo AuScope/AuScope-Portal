@@ -3326,4 +3326,46 @@ Bo"/>
         <property name="order" value="Registered_109"/>
     </bean>
     <!-- Generated from registered layers END -->
+
+	<bean id="knownTypeGeologicalProvinces" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+		<constructor-arg name="id" value="geological-provinces" />
+		<constructor-arg name="knownLayerSelector">
+			<bean class="org.auscope.portal.core.view.knownlayer.WMSWFSSelector">
+				<constructor-arg name="featureTypeName" value="gml:ProvinceFullExtent" />
+				<constructor-arg name="layerName" value="GeologicalProvinces" />
+			</bean>
+		</constructor-arg>
+
+		<property name="name" value="Geological Provinces" />
+		<property name="description" value="Geological Provinces provided by GA" />
+		<property name="group" value="Geological Provinces" />
+		<!-- <property name="proxyUrl" value="getAllGeologicalProvincesFeatures.do"/> -->
+		<!-- <property name="proxyGetFeatureInfoUrl" value="getMineralTenementFeatureInfo.do" 
+			/> -->
+		<!-- <property name="proxyCountUrl" value="getGeologicalProvincesCount.do"/> -->
+		<property name="proxyStyleUrl" value="getGeologicalProvincestyle.do" /> <!-- create this! -->
+		<!-- <property name="proxyDownloadUrl" value="doGeologicalProvincesCSVDownload.do"/> 
+			create this -->
+		<property name="order" value="provinces_01" />
+
+		<property name="filterCollection">
+			<bean class="org.auscope.portal.core.uifilter.FilterCollection">
+				<property name="optionalFilters">
+					<list>
+						<bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+							<constructor-arg name="label" value="Name"></constructor-arg>
+							<constructor-arg name="xpath" value="gml:NAME"></constructor-arg>
+							<constructor-arg name="value">
+								<null />
+							</constructor-arg>
+							<constructor-arg name="predicate">
+								<value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+							</constructor-arg>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+    
 </beans>
