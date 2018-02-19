@@ -732,7 +732,7 @@
                             <constructor-arg name="value"><null/></constructor-arg>                                                        
                         </bean>
                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <constructor-arg name="label" value="Draw Polygon BBox"></constructor-arg>
+                            <constructor-arg name="label" value="Polygon BBox"></constructor-arg>
                             <constructor-arg name="xpath" value="gsmlp:shape"></constructor-arg>
                             <constructor-arg name="value"><null/></constructor-arg>                            
                             <constructor-arg name="predicate">
@@ -3396,5 +3396,5 @@ Bo"/>
 			</bean>
 		</property>
 	</bean>
-    
+
 </beans>
