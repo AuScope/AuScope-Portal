@@ -1966,19 +1966,7 @@
     </bean>
 
 
-    <bean id="knownTypeTest" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
-        <constructor-arg name="id" value="test"/>
-        <constructor-arg name="knownLayerSelector">
-            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <constructor-arg name="featureTypeName" value="auscope:test"/>
-            </bean>
-        </constructor-arg>
-        <property name="id" value="test"/>
-        <property name="name" value="Test"/>
-        <property name="group" value="Geoscience Australia"/>
-        <property name="description" value="For Rob"/>
-        <property name="order" value="Registered_13"/>
-    </bean>
+
 
 
     <bean id="knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06Ga" class="org.auscope.portal.core.view.knownlayer.KnownLayer">

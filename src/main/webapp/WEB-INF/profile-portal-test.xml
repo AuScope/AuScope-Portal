@@ -34,13 +34,7 @@
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
-                <ref bean="knownTypeLateriteYilgarnGeoChem"/>
-                <ref bean="knownTypeHighPSiteFeatureType"/>
-                <ref bean="knownTypeHighPFeatureType"/>
-                <ref bean="knownTypeHighPREIronLayer"/>
-                <ref bean="knownTypeHighPREPhosLayer"/>
-                <ref bean="knownTypeHighPSiteIronLayer"/>
-                <ref bean="knownTypeHighPSitePhosLayer"/>
+                <ref bean="knownTypeLateriteYilgarnGeoChem"/>                                                                                            
                 <ref bean="knownTypePortals"/>
                 <ref bean="knownTypeGeoNetworks"/>
                 <ref bean="knownTypeAster" />
@@ -104,17 +98,14 @@
                 <ref bean="knownTypeNswDrillholesCoal" />
                 <ref bean="knownTypeNswGeologicalFieldObservations" />
                 <ref bean="knownTypeNswDrillholesMinerals" />
-
                 <ref bean="knownTypeNswGeologySimplified" />
                 <ref bean="knownTypeHistoricalExplorationActivityPoints" />
                 <ref bean="knownTypeNswDrillholesPetroleum" />
                 <ref bean="knownTypeCate1ExplLicePolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeGravBaseStatOfTasmMinResoTasm" />
-                <ref bean="knownTypeRadnlOperR25PcprrL3Knmi" />
-                <ref bean="knownTypeTest" />
+                <ref bean="knownTypeRadnlOperR25PcprrL3Knmi" />                
                 <ref bean="knownTypeGsvGeologicalUnit250KAge" />
-                <ref bean="knownTypeReleases" />
-                <ref bean="knownTypeNswDrillholeAll" />
+                <ref bean="knownTypeReleases" />                
                 <ref bean="knownTypeMineOccuPoinOfTasmMinResoTasm" />
                 <ref bean="knownTypeGsvShearDisplacementStructure50K" />
                 <ref bean="knownTypeMineralOccurenceIndustryFull" />
@@ -122,127 +113,72 @@
                 <ref bean="knownTypeCate2ExplLicePolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeNswMapBlockGraticule" />
                 <ref bean="knownTypeSection574" />
-
                 <ref bean="knownTypeBlLocalaboriginallandcouncil" />
                 <ref bean="knownTypeLandLineOfTasmMinResoTasm" />
                 <ref bean="knownTypeMiniLeasPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeNswMineralOccurrenceIndustry" />
-                <ref bean="knownTypeNswMineralOccurrenceIndustry" />
+                <ref bean="knownTypeNswMineralOccurrenceIndustry" />                
                 <ref bean="knownTypeLandPoinOfTasmMinResoTasm" />
-
-                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
-                <ref bean="knownTypeLandDamaPoinOfTasmMinResoTasm" />
+                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />                
                 <ref bean="knownTypeGsvGeologicalUnit50KLithology" />
                 <ref bean="knownTypeSection19" />
                 <ref bean="knownTypeNsw100KMapSheetExtents" />
                 <ref bean="knownTypeCate5ExplLicePolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeMinesAndMineralDepositsMinedex" />
-                <ref bean="knownTypeNswFossickingDistricts" />
-                <ref bean="knownTypeNsw100KMapSheetExtents" />
+                <ref bean="knownTypeNswFossickingDistricts" />                
                 <ref bean="knownTypeNswGeologicalFieldObservationsPhoto" />
                 <ref bean="knownTypeGeopTotaMagnInteRtpTmiRtpTiltFilt" />
-                <ref bean="knownTypeNswSeismic" />
-                <ref bean="knownTypeLandDamaPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeStrategicProspectivityZones" />
-                <ref bean="knownTypeGravBaseStatOfTasmMinResoTasm" />
+                <ref bean="knownTypeNswSeismic" />                                
+                
                 <ref bean="knownTypeNswCurrMiniAndExplTitl" />
                 <ref bean="knownTypeBorePoinOfTasmMinResoTasm" />
                 <ref bean="knownTypeGeopTotaMagnInte1StDeriReduToPole" />
                 <ref bean="knownTypeNswGeologicalSpectralSamples" />
-                <ref bean="knownTypeGeopTernRadiPota" />
-                <ref bean="knownTypeBlLocalaboriginallandcouncil" />
+                <ref bean="knownTypeGeopTernRadiPota" />                
                 <ref bean="knownTypeGsvGeologicalUnit250K" />
                 <ref bean="knownTypeCate4ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeMineralisationZonesNonS572Aa" />
-                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
+                <ref bean="knownTypeMineralisationZonesNonS572Aa" />                
                 <ref bean="knownTypeNswDrillholesCsg" />
-                <ref bean="knownTypeNswCurrentMiningApplications" />
-                <ref bean="knownTypeNswSeismic" />
+                <ref bean="knownTypeNswCurrentMiningApplications" />                
                 <ref bean="knownTypeAmalgamations" />
                 <ref bean="knownTypeNswOperatingMineralMines" />
-
-                <ref bean="knownTypeNswOperatingMineralMines" />
+                
                 <ref bean="knownTypeTenementsCurrent" />
                 <ref bean="knownTypeBoreTracOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvGeologicalUnitContact250K" />
-                <ref bean="knownTypeMineralOccurenceIndustryFull" />
+                <ref bean="knownTypeGsvGeologicalUnitContact250K" />                
                 <ref bean="knownTypeGeophysicsElevation" />
                 <ref bean="knownTypeNswGeolSimpRockUnitBoun" />
                 <ref bean="knownTypeBlocksAndUnitsGraticule" />
-                <ref bean="knownTypeAirbGeopSurvOfTasmMinResoTasm" />
-                <ref bean="knownTypeNswDrillhole" />
-                <ref bean="knownTypeNswGeologicalSpectralSamples" />
-                <ref bean="knownTypeNswMapUnitGraticule" />
-                <ref bean="knownTypeNswCurrentMiningApplications" />
+                <ref bean="knownTypeAirbGeopSurvOfTasmMinResoTasm" />                              
+                <ref bean="knownTypeNswMapUnitGraticule" />                
                 <ref bean="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeNswGeochronology" />
-                <ref bean="knownTypeLandLineOfTasmMinResoTasm" />
+                
                 <ref bean="knownTypeGeophysicsIsostaticBougerGravity" />
                 <ref bean="knownTypeGeopTotaMagnInteReduToPole" />
-                <ref bean="knownTypeNswCoreLibrarySamples" />
-                <ref bean="knownTypeNswGeologicalFieldObservationsPhoto" />
-                <ref bean="knownTypeNswDrillholesPetroleum" />
-                <ref bean="knownTypeNswFossickingDistricts" />
-                <ref bean="knownTypeMineOccuPoinOfTasmMinResoTasm" />
+                <ref bean="knownTypeNswCoreLibrarySamples" />                                                            
                 <ref bean="knownTypeNswGeochemistrySamples" />
-                <ref bean="knownTypeNswTitles" />
-                <ref bean="knownTypeAirbGeopSurvOfTasmMinResoTasm" />
+                <ref bean="knownTypeNswTitles" />                
                 <ref bean="knownTypeGsvGeologicalUnit250KLithology" />
-                <ref bean="knownTypeNswDrillholesCsg" />
-
-                <ref bean="knownTypeCate2ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeHistoricalExplorationActivityLines" />
-                <ref bean="knownTypeNswMapUnitGraticule" />
-                <ref bean="knownTypeGravMeasOfTasmMinResoTasm" />
+                               
+                <ref bean="knownTypeHistoricalExplorationActivityLines" />                              
                 <ref bean="knownTypeRestorations" />
                 <ref bean="knownTypeBorehole" />
                 <ref bean="knownTypeNswGeology" />
-                <ref bean="knownTypeGeopIsosGravOverTmiRtpTilt" />
-                <ref bean="knownTypeNswCurrMiniAndExplTitl" />
-                <ref bean="knownTypeNswGeologicalFieldObservations" />
-                <ref bean="knownTypeNswAssaySurface" />
+                <ref bean="knownTypeGeopIsosGravOverTmiRtpTilt" />                                           
                 <ref bean="knownTypeGsvShearDisplacementStructure250K" />
                 <ref bean="knownTypeNswLithologySamples" />
                 <ref bean="knownTypeRadnlOperR25PcprrL3Color" />
-                <ref bean="knownTypeNswBase" />
-
-                <ref bean="knownTypeCate1ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate6ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeNswGeochemistrySamples" />
-
-                <ref bean="knownTypeNswGeolSimpRockUnitBoun" />
-                <ref bean="knownTypeNswFieldObservations" />
-
-                <ref bean="knownTypeNswCoreLibrarySamples" />
-                <ref bean="knownTypeNswLithologySamples" />
-                <ref bean="knownTypeMiniLeasPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate5ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeNswDownholeAssaySamples" />
-                <ref bean="knownTypeNswDrillholesMinerals" />
-                <ref bean="knownTypeNswGeologySimplified" />
-                <ref bean="knownTypeHist" />
-                <ref bean="knownTypeNswDrillholesCoal" />
-                <ref bean="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeNswGeochronology" />
-                <ref bean="knownTypeNswMineralOccurrenceCommodity" />
-                <ref bean="knownTypeNswMineralOccurrenceCommodity" />
-                <ref bean="knownTypeNswHistoricExplorationTitles" />
-
-                <ref bean="knownTypeLandPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate4ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeNswMapBlockGraticule" />
-                <ref bean="knownTypeGsvGeologicalUnitContact50K" />
-                <ref bean="knownTypeBoreTracOfTasmMinResoTasm" />
-                <ref bean="knownTypeLandPoinOfTasmMinResoTasm" />
-                <ref bean="knownTypeLandPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeBorePoinOfTasmMinResoTasm" />
+                <ref bean="knownTypeNswBase" />                                                                                                                                                                          
+                <ref bean="knownTypeHist" />                                                
+                <ref bean="knownTypeNswMineralOccurrenceCommodity" />                
+                <ref bean="knownTypeLandPolyOfTasmMinResoTasm" />                              
+                <ref bean="knownTypeGsvGeologicalUnitContact50K" />                                                           
                 <ref bean="knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06Ga" />
                 <ref bean="knownTypeAreTherAnySandUranSystInTheEromBasi" />
                 <ref bean="knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03Ga" />
                 <ref bean="knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGis" />
                 <ref bean="knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSyst" />
-                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />                
-                <ref bean="knownTypeAreTherAnySandUranSystInTheEromBasi" />
+                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />                                
                 <ref bean="knownTypeGeoModels" />
                 
                 
