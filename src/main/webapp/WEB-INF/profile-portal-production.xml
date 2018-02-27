@@ -79,7 +79,7 @@
                 <ref bean="knownTypeRsSample" />
                 <ref bean="knownTypeMineOccuPoinOfTasmMinResoTasm" />
                 <ref bean="knownTypeGravBaseStatOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvGeologicalUnit50KAge" />
+                
 
                 <ref bean="knownTypeGsvGeologicalUnit250KLithology" />
                 <ref bean="knownTypeCate2ExplLicePolyOfTasmMinResoTasm" />
@@ -90,46 +90,27 @@
                 <ref bean="knownTypeLandDamaPolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeLandLineOfTasmMinResoTasm" />
                 <ref bean="knownTypeLandPoinOfTasmMinResoTasm" />
-                <ref bean="knownTypeMineOccuPoinOfTasmMinResoTasm" />
-                <ref bean="knownTypeGravBaseStatOfTasmMinResoTasm" />
+                
                 <ref bean="knownTypeLandPolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeLandDamaPoinOfTasmMinResoTasm" />
                 <ref bean="knownTypeGsvGeologicalUnit50K" />
                 <ref bean="knownTypeGsvGeologicalUnit50KLithology" />
                 <ref bean="knownTypeGravMeasOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate6ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeBoreTracOfTasmMinResoTasm" />
+                
+                
                 <ref bean="knownTypeMiniLeasPolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeBorePoinOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeGravMeasOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvShearDisplacementStructure50K" />
-                <ref bean="knownTypeGsvGeologicalUnitContact250K" />
-                <ref bean="knownTypeMiniLeasPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeLandDamaPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeStrategicProspectivityZones" />
-                <ref bean="knownTypeLandPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvShearDisplacementStructure250K" />
-                <ref bean="knownTypeAirbGeopSurvOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate4ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate1ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeBorePoinOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvGeologicalUnit250K" />
-                <ref bean="knownTypeLandDamaPoinOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate2ExplLicePolyOfTasmMinResoTasm" />
-
-                <ref bean="knownTypeCate5ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeCate1ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvGeologicalUnitContact50K" />
-                <ref bean="knownTypeRsSample" />
-                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvGeologicalUnit250KAge" />
-                <ref bean="knownTypeLandPoinOfTasmMinResoTasm" />
-
-                <ref bean="knownTypeLandLineOfTasmMinResoTasm" />
-                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
                 <ref bean="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" />
                 
+                <ref bean="knownTypeGsvShearDisplacementStructure50K" />
+                <ref bean="knownTypeGsvGeologicalUnitContact250K" />
+                <ref bean="knownTypeGsvShearDisplacementStructure250K" />
+                <ref bean="knownTypeCate1ExplLicePolyOfTasmMinResoTasm" />
+                <ref bean="knownTypeGsvGeologicalUnit250K" />
+                <ref bean="knownTypeGsvGeologicalUnitContact50K" />
+                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
+                <ref bean="knownTypeGsvGeologicalUnit250KAge" />
+
                 <ref bean="knownTypeGeoModels" />
                 <!-- Generated from former prod "Registered" tab END -->
                 <ref bean="knownTypeGeologicalProvinces" />
