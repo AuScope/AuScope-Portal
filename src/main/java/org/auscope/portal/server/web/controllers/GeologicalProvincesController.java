@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.server.web.service.GeologicalProvincesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GeologicalProvincesController extends BasePortalController {
-
-    //@Autowired
-    public GeologicalProvincesController() {
+    private GeologicalProvincesService geologicalProvincesService;
+    @Autowired
+    public GeologicalProvincesController(GeologicalProvincesService geologicalProvincesService) {
+    	this.geologicalProvincesService = geologicalProvincesService;
+    	//this.geologicalProvincesService = new GeologicalProvincesService();
     	
     }
 
@@ -35,11 +38,11 @@ public class GeologicalProvincesController extends BasePortalController {
             @RequestParam(required = false, value = "name") String name,
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
             HttpServletResponse response) throws Exception {
-        String style = "";
-
-
-        response.setContentType("text/xml");
-        style = getStyle("gml:ProvinceFullExtent" , "gsm:the_geom", "#2242c7",name);
+    	
+        response.setContentType("text/xml");    	
+        String style = "";        
+        String filter = this.geologicalProvincesService.getGeologicalProvincesFilter(name,optionalFilters);
+        style = getStyle("gml:ProvinceFullExtent", "gsm:the_geom", "#2242c7", name, filter);
         ByteArrayInputStream styleStream = new ByteArrayInputStream(style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
@@ -49,8 +52,7 @@ public class GeologicalProvincesController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getStyle(String layerName,String geometryName, String color, String name) {
-    	String filter = "";
+    public String getStyle(String layerName,String geometryName, String color, String name, String filter) {
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/4.0\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
