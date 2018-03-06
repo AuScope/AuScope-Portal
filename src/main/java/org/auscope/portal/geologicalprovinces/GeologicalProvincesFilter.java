@@ -28,7 +28,7 @@ public class GeologicalProvincesFilter extends GenericFilter {
 
         if(optionalFilters == null || optionalFilters.isEmpty()){
             if (name != null && !name.isEmpty()) {
-                fragments.add(this.generatePropertyIsLikeFragment("FEATUREID", "*" + name + "*"));
+                fragments.add(this.generatePropertyIsLikeFragment("NAME", "*" + name + "*"));
             }
         }else{
             fragments = this.generateParameterFragments();

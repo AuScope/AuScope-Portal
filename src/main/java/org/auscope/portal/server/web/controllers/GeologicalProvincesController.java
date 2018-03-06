@@ -42,7 +42,7 @@ public class GeologicalProvincesController extends BasePortalController {
         response.setContentType("text/xml");    	
         String style = "";        
         String filter = this.geologicalProvincesService.getGeologicalProvincesFilter(name,optionalFilters);
-        style = getStyle("gml:ProvinceFullExtent", "gsm:the_geom", "#2242c7", name, filter);
+        style = getStyle("gml:ProvinceFullExtent","#ff0000", name, filter);
         ByteArrayInputStream styleStream = new ByteArrayInputStream(style.getBytes());
         OutputStream outputStream = response.getOutputStream();
 
@@ -52,7 +52,7 @@ public class GeologicalProvincesController extends BasePortalController {
         outputStream.close();
     }
 
-    public String getStyle(String layerName,String geometryName, String color, String name, String filter) {
+    public String getStyle(String layerName, String color, String name, String filter) {
         String style = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<StyledLayerDescriptor version=\"1.0.0\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/4.0\" "
                 + "xsi:schemaLocation=\"http://www.opengis.net/sld StyledLayerDescriptor.xsd\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:sld=\"http://www.opengis.net/sld\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
@@ -68,24 +68,31 @@ public class GeologicalProvincesController extends BasePortalController {
                 + "<Rule>"
                 + "<Name>Boreholes</Name>"
                 + filter
-                + "<PointSymbolizer>"
-                + "<Geometry><ogc:PropertyName>" + geometryName + "</ogc:PropertyName></Geometry>"
-                + "<Graphic>"
-                + "<Mark>"
-                + "<WellKnownName>square</WellKnownName>"
-                + "<Fill>"
-                + "<CssParameter name=\"fill\">"
-                + color
+                + "<PolygonSymbolizer>"
+                + "<Stroke>"
+                + "<CssParameter name=\"stroke\">"
+                + color 
                 + "</CssParameter>"
-                + "</Fill>"
-                + "</Mark>"
-                + "<Size>8</Size>"
-                + "</Graphic>"
-                + "</PointSymbolizer>"
+                + "<CssParameter name=\"stroke-width\">0.1</CssParameter>"
+                + "</Stroke>"
+                + "</PolygonSymbolizer>"                
+//                + "<PointSymbolizer>"
+//                + "<Geometry><ogc:PropertyName>" + geometryName + "</ogc:PropertyName></Geometry>"
+//                + "<Graphic>"
+//                + "<Mark>"
+//                + "<WellKnownName>square</WellKnownName>"
+//                + "<Fill>"
+//                + "<CssParameter name=\"fill\">"
+//                + color
+//                + "</CssParameter>"
+//                + "</Fill>"
+//                + "</Mark>"
+//                + "<Size>8</Size>"
+//                + "</Graphic>"
+//                + "</PointSymbolizer>"
                 + "</Rule>"
                 + "</FeatureTypeStyle>"
-                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";
-
+                + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";      
         return style;
     }   
 

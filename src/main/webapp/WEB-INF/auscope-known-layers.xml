@@ -3371,7 +3371,7 @@ Bo"/>
 					<list>
 						<bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
 							<constructor-arg name="label" value="Name"></constructor-arg>
-							<constructor-arg name="xpath" value="gml:NAME"></constructor-arg>
+							<constructor-arg name="xpath" value="NAME"></constructor-arg>
 							<constructor-arg name="value">
 								<null />
 							</constructor-arg>
