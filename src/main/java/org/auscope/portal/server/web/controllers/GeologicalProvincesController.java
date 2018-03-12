@@ -33,7 +33,7 @@ public class GeologicalProvincesController extends BasePortalController {
      * @throws Exception
      */
     @RequestMapping("/getGeologicalProvincestyle.do")
-    public void doMineFilterStyle(
+    public void getGeologicalProvincestyle(
             @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "name") String name,
             @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
@@ -75,26 +75,11 @@ public class GeologicalProvincesController extends BasePortalController {
                 + "</CssParameter>"
                 + "<CssParameter name=\"stroke-width\">0.1</CssParameter>"
                 + "</Stroke>"
-                + "</PolygonSymbolizer>"                
-//                + "<PointSymbolizer>"
-//                + "<Geometry><ogc:PropertyName>" + geometryName + "</ogc:PropertyName></Geometry>"
-//                + "<Graphic>"
-//                + "<Mark>"
-//                + "<WellKnownName>square</WellKnownName>"
-//                + "<Fill>"
-//                + "<CssParameter name=\"fill\">"
-//                + color
-//                + "</CssParameter>"
-//                + "</Fill>"
-//                + "</Mark>"
-//                + "<Size>8</Size>"
-//                + "</Graphic>"
-//                + "</PointSymbolizer>"
+                + "</PolygonSymbolizer>" 
                 + "</Rule>"
                 + "</FeatureTypeStyle>"
                 + "</UserStyle>" + "</NamedLayer>" + "</StyledLayerDescriptor>";      
         return style;
     }   
-
 }
 
