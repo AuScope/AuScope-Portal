@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
@@ -11,7 +10,7 @@
     <!-- All elements must be of type org.auscope.portal.server.web.KnownLayer -->
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
-            <list>                
+            <list>
                 <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeMineralOccurrence" />
@@ -24,19 +23,19 @@
                 <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
                 <ref bean="knownTypeBoreholeNvcl" />
-                <ref bean="knownTypeBoreholeNvclV2" />                
+                <ref bean="knownTypeBoreholeNvclV2" />
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeReports" />
                 <ref bean="knownTypePMDCRCReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeTimaGeoSample" />
-                <ref bean="knownTypeSHRIMPGeoSample" />                
-                <ref bean="knownTypeYilgarnGeochemistry"/>
-                <ref bean="knownTypeSamplingPoint"/>
-                <ref bean="knownTypeFeatureCollection"/>
-                <ref bean="knownTypeLateriteYilgarnGeoChem"/>                                                                                            
-                <ref bean="knownTypePortals"/>
-                <ref bean="knownTypeGeoNetworks"/>
+                <ref bean="knownTypeSHRIMPGeoSample" />
+                <ref bean="knownTypeYilgarnGeochemistry" />
+                <ref bean="knownTypeSamplingPoint" />
+                <ref bean="knownTypeFeatureCollection" />
+                <ref bean="knownTypeLateriteYilgarnGeoChem" />
+                <ref bean="knownTypePortals" />
+                <ref bean="knownTypeGeoNetworks" />
                 <ref bean="knownTypeAster" />
                 <ref bean="knownTypeAsterAloh" />
                 <ref bean="knownTypeAsterFerrous" />
@@ -57,23 +56,17 @@
                 <ref bean="knownTypeSilicaContent" />
                 <ref bean="knownTypeBoreholeMSCL" />
                 <ref bean="knownTypeSeismologyInSchool" />
-                <ref bean="knownTypeSF0BoreholeNVCL" />             
+                <ref bean="knownTypeSF0BoreholeNVCL" />
                 <!-- Analytics -->
-                <!-- ref bean="knownTypeBouguerGeodetic" />
-                <ref bean="knownTypeGravAnomalyGeodetic" />
-                <ref bean="knownTypeRadMapTotaldose" />
-                <ref bean="knownTypeMagMap" />
-                <ref bean="knownTypeGocadModels" />
-                <ref bean="KnownTypeGeophysicsDatasets" />
-                <ref bean="knownTypeGAAemSurvey" />
-                <ref bean="knownTypeGARumJungleAEM" />
-                <ref bean="knownTypeGAWoolnerAEM" />
-                <ref bean="knownTypeGAGravitySurvey" />
-                <ref bean="knownTypeMusgraveAem" />
-                <ref bean="knownTypeWesternAreaAem" />
-                <ref bean="knownTypeAshburtonAem" /-->
+                <!-- ref bean="knownTypeBouguerGeodetic" /> <ref bean="knownTypeGravAnomalyGeodetic" 
+                    /> <ref bean="knownTypeRadMapTotaldose" /> <ref bean="knownTypeMagMap" /> 
+                    <ref bean="knownTypeGocadModels" /> <ref bean="KnownTypeGeophysicsDatasets" 
+                    /> <ref bean="knownTypeGAAemSurvey" /> <ref bean="knownTypeGARumJungleAEM" 
+                    /> <ref bean="knownTypeGAWoolnerAEM" /> <ref bean="knownTypeGAGravitySurvey" 
+                    /> <ref bean="knownTypeMusgraveAem" /> <ref bean="knownTypeWesternAreaAem" 
+                    /> <ref bean="knownTypeAshburtonAem" / -->
                 <!-- End Analytics -->
-                
+
                 <!-- Generated from former test "Registered" tab START -->
                 <ref bean="knownTypeHighpSiteIronlayer" />
                 <ref bean="knownTypeHighpfeaturetype" />
@@ -103,9 +96,9 @@
                 <ref bean="knownTypeNswDrillholesPetroleum" />
                 <ref bean="knownTypeCate1ExplLicePolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeGravBaseStatOfTasmMinResoTasm" />
-                <ref bean="knownTypeRadnlOperR25PcprrL3Knmi" />                
+                <ref bean="knownTypeRadnlOperR25PcprrL3Knmi" />
                 <ref bean="knownTypeGsvGeologicalUnit250KAge" />
-                <ref bean="knownTypeReleases" />                
+                <ref bean="knownTypeReleases" />
                 <ref bean="knownTypeMineOccuPoinOfTasmMinResoTasm" />
                 <ref bean="knownTypeGsvShearDisplacementStructure50K" />
                 <ref bean="knownTypeMineralOccurenceIndustryFull" />
@@ -116,74 +109,86 @@
                 <ref bean="knownTypeBlLocalaboriginallandcouncil" />
                 <ref bean="knownTypeLandLineOfTasmMinResoTasm" />
                 <ref bean="knownTypeMiniLeasPolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeNswMineralOccurrenceIndustry" />                
+                <ref bean="knownTypeNswMineralOccurrenceIndustry" />
                 <ref bean="knownTypeLandPoinOfTasmMinResoTasm" />
-                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />                
+                <ref bean="knownTypeProcLandAreaOfTasmMinResoTasm" />
                 <ref bean="knownTypeGsvGeologicalUnit50KLithology" />
                 <ref bean="knownTypeSection19" />
                 <ref bean="knownTypeNsw100KMapSheetExtents" />
                 <ref bean="knownTypeCate5ExplLicePolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeMinesAndMineralDepositsMinedex" />
-                <ref bean="knownTypeNswFossickingDistricts" />                
+                <ref bean="knownTypeNswFossickingDistricts" />
                 <ref bean="knownTypeNswGeologicalFieldObservationsPhoto" />
                 <ref bean="knownTypeGeopTotaMagnInteRtpTmiRtpTiltFilt" />
-                <ref bean="knownTypeNswSeismic" />                                
-                
+                <ref bean="knownTypeNswSeismic" />
+
                 <ref bean="knownTypeNswCurrMiniAndExplTitl" />
                 <ref bean="knownTypeBorePoinOfTasmMinResoTasm" />
                 <ref bean="knownTypeGeopTotaMagnInte1StDeriReduToPole" />
                 <ref bean="knownTypeNswGeologicalSpectralSamples" />
-                <ref bean="knownTypeGeopTernRadiPota" />                
+                <ref bean="knownTypeGeopTernRadiPota" />
                 <ref bean="knownTypeGsvGeologicalUnit250K" />
                 <ref bean="knownTypeCate4ExplLicePolyOfTasmMinResoTasm" />
-                <ref bean="knownTypeMineralisationZonesNonS572Aa" />                
+                <ref bean="knownTypeMineralisationZonesNonS572Aa" />
                 <ref bean="knownTypeNswDrillholesCsg" />
-                <ref bean="knownTypeNswCurrentMiningApplications" />                
+                <ref bean="knownTypeNswCurrentMiningApplications" />
                 <ref bean="knownTypeAmalgamations" />
                 <ref bean="knownTypeNswOperatingMineralMines" />
-                
+
                 <ref bean="knownTypeTenementsCurrent" />
                 <ref bean="knownTypeBoreTracOfTasmMinResoTasm" />
-                <ref bean="knownTypeGsvGeologicalUnitContact250K" />                
+                <ref bean="knownTypeGsvGeologicalUnitContact250K" />
                 <ref bean="knownTypeGeophysicsElevation" />
                 <ref bean="knownTypeNswGeolSimpRockUnitBoun" />
                 <ref bean="knownTypeBlocksAndUnitsGraticule" />
-                <ref bean="knownTypeAirbGeopSurvOfTasmMinResoTasm" />                              
-                <ref bean="knownTypeNswMapUnitGraticule" />                
+                <ref bean="knownTypeAirbGeopSurvOfTasmMinResoTasm" />
+                <ref bean="knownTypeNswMapUnitGraticule" />
                 <ref bean="knownTypeCate3ExplLicePolyOfTasmMinResoTasm" />
                 <ref bean="knownTypeNswGeochronology" />
-                
+
                 <ref bean="knownTypeGeophysicsIsostaticBougerGravity" />
                 <ref bean="knownTypeGeopTotaMagnInteReduToPole" />
-                <ref bean="knownTypeNswCoreLibrarySamples" />                                                            
+                <ref bean="knownTypeNswCoreLibrarySamples" />
                 <ref bean="knownTypeNswGeochemistrySamples" />
-                <ref bean="knownTypeNswTitles" />                
+                <ref bean="knownTypeNswTitles" />
                 <ref bean="knownTypeGsvGeologicalUnit250KLithology" />
-                               
-                <ref bean="knownTypeHistoricalExplorationActivityLines" />                              
+
+                <ref bean="knownTypeHistoricalExplorationActivityLines" />
                 <ref bean="knownTypeRestorations" />
                 <ref bean="knownTypeBorehole" />
                 <ref bean="knownTypeNswGeology" />
-                <ref bean="knownTypeGeopIsosGravOverTmiRtpTilt" />                                           
+                <ref bean="knownTypeGeopIsosGravOverTmiRtpTilt" />
                 <ref bean="knownTypeGsvShearDisplacementStructure250K" />
                 <ref bean="knownTypeNswLithologySamples" />
                 <ref bean="knownTypeRadnlOperR25PcprrL3Color" />
-                <ref bean="knownTypeNswBase" />                                                                                                                                                                          
-                <ref bean="knownTypeHist" />                                                
-                <ref bean="knownTypeNswMineralOccurrenceCommodity" />                
-                <ref bean="knownTypeLandPolyOfTasmMinResoTasm" />                              
-                <ref bean="knownTypeGsvGeologicalUnitContact50K" />                                                           
+                <ref bean="knownTypeNswBase" />
+                <ref bean="knownTypeHist" />
+                <ref bean="knownTypeNswMineralOccurrenceCommodity" />
+                <ref bean="knownTypeLandPolyOfTasmMinResoTasm" />
+                <ref bean="knownTypeGsvGeologicalUnitContact50K" />
                 <ref bean="knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06Ga" />
                 <ref bean="knownTypeAreTherAnySandUranSystInTheEromBasi" />
                 <ref bean="knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03Ga" />
                 <ref bean="knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGis" />
                 <ref bean="knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSyst" />
-                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />                                
+                <ref bean="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004" />
                 <ref bean="knownTypeGeoModels" />
-                
-                
+
                 <!-- Generated from former test "Registered" tab END -->
                 <ref bean="knownTypeGeologicalProvinces" />
+
+                <!-- UOW OCTOPUS Open Cosmogenic Isotope and Luminescence Database -->
+                <ref bean="knownTypeUOWCrnAusBasins" />
+                <ref bean="knownTypeUOWCrnAusOutlets" />
+                <ref bean="knownTypeUOWCrnInprepBasins" />
+                <ref bean="knownTypeUOWCrnInprepOutlets" />
+                <ref bean="knownTypeUOWCrnIntBasins" />
+                <ref bean="knownTypeUOWCrnIntOutlets" />
+                <ref bean="knownTypeUOWCrnXXLBasins" />
+                <ref bean="knownTypeUOWCrnXXLOutlets" />
+                <ref bean="knownTypeUOWOSLTLBasins" />
+                <ref bean="knownTypeUOWOSLTLOutlets" />
+                <!-- END UOW OCTOPUS -->
             </list>
         </constructor-arg>
     </bean>
