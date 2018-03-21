@@ -114,7 +114,18 @@
                 <ref bean="knownTypeGeoModels" />
                 <!-- Generated from former prod "Registered" tab END -->
                 <ref bean="knownTypeGeologicalProvinces" />
-                
+                <!-- UOW OCTOPUS Open Cosmogenic Isotope and Luminescence Database -->
+                <ref bean="knownTypeUOWCrnAusBasins" />
+                <ref bean="knownTypeUOWCrnAusOutlets" />
+                <ref bean="knownTypeUOWCrnInprepBasins" />
+                <ref bean="knownTypeUOWCrnInprepOutlets" />
+                <ref bean="knownTypeUOWCrnIntBasins" />
+                <ref bean="knownTypeUOWCrnIntOutlets" />
+                <ref bean="knownTypeUOWCrnXXLBasins" />
+                <ref bean="knownTypeUOWCrnXXLOutlets" />
+                <ref bean="knownTypeUOWOSLTLBasins" />
+                <ref bean="knownTypeUOWOSLTLOutlets" />
+                <!-- END UOW OCTOPUS -->
             </list>
         </constructor-arg>
     </bean>
