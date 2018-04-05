@@ -20,10 +20,11 @@ public class AuScopeWebAppContext extends PortalProfileXmlWebApplicationContext 
         init.run();
         //--  end of initialization
 
-        String[] auscopeLocations = Arrays.copyOf(locations, locations.length + 3);
+        String[] auscopeLocations = Arrays.copyOf(locations, locations.length + 4);
         auscopeLocations[auscopeLocations.length - 1] = DEFAULT_CONFIG_LOCATION_PREFIX + "auscope-known-layers.xml";
         auscopeLocations[auscopeLocations.length - 2] = DEFAULT_CONFIG_LOCATION_PREFIX + "auscope-registries.xml";
-        auscopeLocations[auscopeLocations.length - 3] = DEFAULT_CONFIG_LOCATION_PREFIX + "service-level-config.xml";
+        auscopeLocations[auscopeLocations.length - 3] = DEFAULT_CONFIG_LOCATION_PREFIX + "ausgin-vocabularies.xml";
+        auscopeLocations[auscopeLocations.length - 4] = DEFAULT_CONFIG_LOCATION_PREFIX + "service-level-config.xml";
 
         return auscopeLocations;
     }

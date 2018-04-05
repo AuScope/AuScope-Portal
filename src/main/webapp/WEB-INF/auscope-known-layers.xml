@@ -107,7 +107,7 @@
                             <constructor-arg name="predicate">
                                 <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
                             </constructor-arg>
-                            <constructor-arg name="url" value="../getAllCommodities.do"></constructor-arg>
+                            <constructor-arg name="url" value="getAllCommodities.do"></constructor-arg>
                         </bean>  
                          <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
                             <constructor-arg name="label" value="Provider"></constructor-arg>                            
@@ -354,6 +354,171 @@
                                 <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
                             </constructor-arg>
                         </bean>                                             
+                    </list>
+                </property>                       
+            </bean>        
+        </property>   
+    </bean>
+    
+    <bean id="knownTypeErlMineView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="erl-mineview"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="erl:MineView"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Mine View"/>
+        <property name="description" value="Earth ResourceML Lite Mine"/>
+        <property name="group" value="Earth Resources Lite"/>
+
+        <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getErlMineViewStyle.do"/>
+        <property name="proxyDownloadUrl" value=""/>
+        <property name="order" value="160" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
+                            <constructor-arg name="label" value="Status"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:status_uri"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
+                            </constructor-arg>
+                            <constructor-arg name="url" value="getAllMineStatuses.do"></constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                                    
+                    </list>
+                </property>                       
+            </bean>        
+        </property>   
+    </bean>
+    
+    <bean id="knownTypeErlMineralOccurrenceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="erl-mineraloccurrenceview"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="erl:MineralOccurrenceView"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Mineral Occurrence"/>
+        <property name="description" value="Earth ResourceML Lite Mineral Occurrence View"/>
+        <property name="group" value="Earth Resources Lite"/>
+
+        <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getErlMineralOccurrenceViewStyle.do"/>
+        <property name="proxyDownloadUrl" value=""/>
+        <property name="order" value="160" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:name"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
+                            <constructor-arg name="label" value="Commodity"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:representativeCommodity_uri"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
+                            </constructor-arg>
+                            <constructor-arg name="url" value="getAllCommodities.do"></constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
+                            <constructor-arg name="label" value="Geologic Timescale"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:representativeAge_uri"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
+                            </constructor-arg>
+                            <constructor-arg name="url" value="getAllTimescales.do"></constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                                   
+                    </list>
+                </property>                       
+            </bean>        
+        </property>   
+    </bean>
+    
+    <bean id="knownTypeErlCommodityResourceView" class="org.auscope.portal.core.view.knownlayer.KnownLayer">
+        <constructor-arg name="id" value="erl-commodityresourceview"/>
+        <constructor-arg name="knownLayerSelector">
+            <bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
+                <constructor-arg name="featureTypeName" value="erl:CommodityResourceView"/>
+            </bean>
+        </constructor-arg>
+
+        <property name="name" value="Commodity Resource"/>
+        <property name="description" value="Earth ResourceML Lite Commodity Resource View"/>
+        <property name="group" value="Earth Resources Lite"/>
+
+        <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
+        <property name="proxyUrl" value=""/>
+        <property name="proxyCountUrl" value=""/>
+        <property name="proxyStyleUrl" value="getErlCommodityResourceViewStyle.do"/>
+        <property name="proxyDownloadUrl" value=""/>
+        <property name="order" value="160" />
+        <property name ="filterCollection">
+             <bean class="org.auscope.portal.core.uifilter.FilterCollection">
+                <property name ="optionalFilters">
+                    <list>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Mine Name"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:mineName"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
+                            <constructor-arg name="label" value="Commodity"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:commodityClassifier_uri"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
+                            </constructor-arg>
+                            <constructor-arg name="url" value="getAllCommodities.do"></constructor-arg>
+                        </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
+                            <constructor-arg name="label" value="JORC Category"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:resourcesCategory_uri"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
+                            </constructor-arg>
+                            <constructor-arg name="url" value="getAllJorcCategories.do"></constructor-arg>
+                        </bean> 
+                        <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
+                            <constructor-arg name="label" value="Provider"></constructor-arg>                            
+                            <constructor-arg name="value"><null/></constructor-arg>                                                        
+                        </bean>                                  
                     </list>
                 </property>                       
             </bean>        

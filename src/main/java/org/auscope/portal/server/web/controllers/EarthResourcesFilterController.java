@@ -1,8 +1,10 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLDecoder;
+import java.util.Hashtable;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +14,9 @@ import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
+import org.auscope.portal.core.uifilter.GenericFilterAdapter;
 import org.auscope.portal.core.util.FileIOUtil;
+import org.auscope.portal.core.util.SLDLoader;
 import org.auscope.portal.server.web.controllers.downloads.EarthResourcesDownloadController;
 import org.auscope.portal.server.web.service.MineralOccurrenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -429,6 +433,112 @@ public class EarthResourcesFilterController extends BasePortalController {
         styleStream.close();
         outputStream.close();
     }
+    
+    /**
+     * Handles getting the style of the Earth Resource Lite Mine View filter queries. (If the bbox elements are specified, they will limit the output response to 200
+     * records implicitly)
+     *
+     * @param optionalFilters
+     * @param maxFeatures
+     * @throws Exception
+     */
+    @RequestMapping("/getErlMineViewStyle.do")
+    public void getErlMineViewStyle(
+            HttpServletResponse response,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+                    throws Exception {
+        //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
+        FilterBoundingBox bbox = null;
+        // Get the mining activities
+        GenericFilterAdapter filterObject = new GenericFilterAdapter(optionalFilters,"shape"); 
+        String filter = filterObject.getFilterStringAllRecords();
+
+        String style = this.getErLStyle(filter, "erl:MineView", "#a51f2f");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+    
+    /**
+     * Handles getting the style of the Earth Resource Lite Mineral Occurrence filter queries. (If the bbox elements are specified, they will limit the output response to 200
+     * records implicitly)
+     *
+     * @param optionalFilters 
+     *            
+     * @param maxFeatures
+     * @throws Exception
+     */
+    @RequestMapping("/getErlMineralOccurrenceViewStyle.do")
+    public void getErlMineralOccurrenceViewStyle(
+            HttpServletResponse response,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+                    throws Exception {
+        //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
+        FilterBoundingBox bbox = null;
+        // Get the mining activities
+        GenericFilterAdapter filterObject = new GenericFilterAdapter(optionalFilters,"shape"); 
+        String filter = filterObject.getFilterStringAllRecords();
+
+        String style = this.getErLStyle(filter, "erl:MineralOccurrenceView", "#e02e16");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+    
+    /**
+     * Handles getting the style of the Earth Resource Lite Commodity Resource filter queries. (If the bbox elements are specified, they will limit the output response to 200
+     * records implicitly)
+     *
+     * @param optionalFilters 
+     *            
+     * @param maxFeatures
+     * @throws Exception
+     */
+    @RequestMapping("/getErlCommodityResourceViewStyle.do")
+    public void getErlCommodityResourceViewStyle(
+            HttpServletResponse response,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
+                    throws Exception {
+        //FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(URLDecoder.decode(bboxJson,"UTF-8"));
+        FilterBoundingBox bbox = null;
+        // Get the mining activities
+        GenericFilterAdapter filterObject = new GenericFilterAdapter(optionalFilters,"shape"); 
+        String filter = filterObject.getFilterStringAllRecords();
+
+        String style = this.getErLStyle(filter, "erl:CommodityResourceView", "#940ea3");
+
+        response.setContentType("text/xml");
+
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(
+                style.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
+
+        styleStream.close();
+        outputStream.close();
+    }
+                    
+                    
 
     /**
      * Handles counting the results of a Earth Resource MineralOccerrence style request query.
@@ -516,6 +626,15 @@ public class EarthResourcesFilterController extends BasePortalController {
         styleStream.close();
         outputStream.close();
     }
+    
+    public String getErLStyle(String filter, String name, String color) throws IOException{
+    	 Hashtable<String,String> valueMap = new Hashtable<String,String>();
+         valueMap.put("filter", filter);
+         valueMap.put("name", name);
+         valueMap.put("color", color);
+
+         return  SLDLoader.loadSLD("/org/auscope/portal/slds/erl_MineView.sld", valueMap,false);
+    }
 
     public String getStyle(String serviceUrl, String filter, String name, String color) {
         //VT : This is a hack to get around using functions in feature chaining
@@ -547,7 +666,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                 + "<CssParameter name=\"stroke-width\">1</CssParameter>"
                 + "</Stroke>"
                 + "</Mark>"
-                + "<Size>6</Size>"
+                + "<Size>8</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>"
                 + "</Rule>"

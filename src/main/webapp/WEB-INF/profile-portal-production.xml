@@ -12,7 +12,10 @@
         <constructor-arg>
             <list>
                 <ref bean="knownTypeMine" />
+                <ref bean="knownTypeErlMineView" />
                 <ref bean="knownTypeMineralOccurrence" />
+                <ref bean="knownTypeErlMineralOccurrenceView" />
+                <ref bean="knownTypeErlCommodityResourceView" />                  
                 <ref bean="knownTypeMiningActivity" />
                 <ref bean="knownTypeMineralTenements" />               
                 <ref bean="knownTypeRemanentAnomalies" />
@@ -141,3 +144,4 @@
     </bean>
 
 </beans>
+

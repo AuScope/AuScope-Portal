@@ -326,7 +326,7 @@ public class BoreholeService extends BaseWFSService {
             sb.append("<CssParameter name=\"stroke-width\">1</CssParameter>");            
             sb.append("</Stroke>");
             sb.append("</Mark>");
-            sb.append("<Size>6</Size>");
+            sb.append("<Size>8</Size>");
             sb.append("</Graphic>");
             sb.append("</PointSymbolizer>");
             sb.append("</Rule>");

@@ -344,6 +344,9 @@ public class MineralOccurrenceService extends BaseWFSService {
         MineFilter filter = new MineFilter(mineName, optionalFilters);
         return generateFilterString(filter, bbox);
     }
+    
+    
+    
 
     public String getMineralOccurrenceFilter(String commodityName, FilterBoundingBox bbox,String optionalFilters)
             throws Exception {

@@ -270,7 +270,7 @@ public class PressureDBController extends BasePortalController {
                 + "<CssParameter name=\"stroke-width\">1</CssParameter>"
                 + "</Stroke>"
                 + "</Mark>"
-                + "<Size>6</Size>"
+                + "<Size>8</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>"
                 + "</Rule>"
@@ -352,7 +352,7 @@ public class PressureDBController extends BasePortalController {
                     + "<CssParameter name=\"stroke-width\">1</CssParameter>"
                     + "</Stroke>"
                     + "</Mark>"
-                    + "<Size>6</Size>"
+                    + "<Size>8</Size>"
                     + "</Graphic>"
                     + "</PointSymbolizer>" + "</Rule>";
         } else if (index == 4) {
@@ -384,7 +384,7 @@ public class PressureDBController extends BasePortalController {
                     + "<CssParameter name=\"stroke-width\">1</CssParameter>"
                     + "</Stroke>"
                     + "</Mark>"
-                    + "<Size>6</Size>"
+                    + "<Size>8</Size>"
                     + "</Graphic>"
                     + "</PointSymbolizer>" + "</Rule>";
         } else { //index = 1,2,3,4,5,6,7
@@ -420,7 +420,7 @@ public class PressureDBController extends BasePortalController {
                     + "<CssParameter name=\"stroke-width\">1</CssParameter>"
                     + "</Stroke>"
                     + "</Mark>"
-                    + "<Size>6</Size>"
+                    + "<Size>8</Size>"
                     + "</Graphic>"
                     + "</PointSymbolizer>" + "</Rule>";        
         }

@@ -137,7 +137,7 @@ public class RemanentAnomaliesController extends BasePortalController {
                 + "</CssParameter>"
                 + "</Fill>"
                 + "</Mark>"
-                + "<Size>6</Size>"
+                + "<Size>8</Size>"
                 + "</Graphic>"
                 + "</PointSymbolizer>"
                 + "</Rule>"
