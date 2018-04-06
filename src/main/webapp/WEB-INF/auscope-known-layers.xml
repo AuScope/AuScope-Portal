@@ -19,7 +19,7 @@
 
         <property name="name" value="Earth Resource Mine"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine"/>
-        <property name="group" value="Earth Resources"/>
+        <property name="group" value="Earth Resources(old)"/>
         <property name="proxyUrl" value="doMineFilter.do"/>
         <property name="proxyCountUrl" value="doMineFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineFilterStyle.do"/>
@@ -76,7 +76,7 @@
 
         <property name="name" value="Earth Resource Mineral Occurrence"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MineralOccurence"/>
-        <property name="group" value="Earth Resources"/>
+        <property name="group" value="Earth Resources(old)"/>
         <property name="proxyUrl" value="doMineralOccurrenceFilter.do"/>
         <property name="proxyCountUrl" value="doMineralOccurrenceFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do"/>
@@ -134,7 +134,7 @@
 
         <property name="name" value="Earth Resource Mining Activity"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity"/>
-        <property name="group" value="Earth Resources"/>
+        <property name="group" value="Earth Resources(old)"/>
         <property name="proxyUrl" value="doMiningActivityFilter.do"/>
         <property name="proxyCountUrl" value="doMiningActivityFilterCount.do"/>
         <property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do"/>
@@ -370,7 +370,7 @@
 
         <property name="name" value="Mine View"/>
         <property name="description" value="Earth ResourceML Lite Mine"/>
-        <property name="group" value="Earth Resources Lite"/>
+        <property name="group" value="Earth Resources Lite(new)"/>
 
         <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
@@ -419,7 +419,7 @@
 
         <property name="name" value="Mineral Occurrence"/>
         <property name="description" value="Earth ResourceML Lite Mineral Occurrence View"/>
-        <property name="group" value="Earth Resources Lite"/>
+        <property name="group" value="Earth Resources Lite(new)"/>
 
         <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
@@ -477,7 +477,7 @@
 
         <property name="name" value="Commodity Resource"/>
         <property name="description" value="Earth ResourceML Lite Commodity Resource View"/>
-        <property name="group" value="Earth Resources Lite"/>
+        <property name="group" value="Earth Resources Lite(new)"/>
 
         <!-- We don't need proxyUrl as capdf hydrogeochem are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
@@ -535,7 +535,7 @@
 
         <property name="name" value="Mineral Occurrence View"/>
         <property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mo:MinOccView"/>
-        <property name="group" value="Earth Resources"/>
+        <property name="group" value="Earth Resources(old)"/>
         <!-- We don't need proxyUrl as Mineral tenements are WMS and NOT WFS -->
         <property name="proxyUrl" value=""/>
         <property name="proxyCountUrl" value=""/>
