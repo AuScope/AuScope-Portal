@@ -259,7 +259,7 @@
                          <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
                             <constructor-arg name="label" value="Provider"></constructor-arg>                            
                             <constructor-arg name="value"><null/></constructor-arg>                                                        
-                        </bean>                     
+                        </bean>
                     </list>
                 </property> 
                 <property name ="mandatoryFilters">
@@ -402,7 +402,15 @@
                         <bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
                             <constructor-arg name="label" value="Provider"></constructor-arg>                            
                             <constructor-arg name="value"><null/></constructor-arg>                                                        
-                        </bean>                                    
+                        </bean>  
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
+                            <constructor-arg name="label" value="Polygon BBox"></constructor-arg>
+                            <constructor-arg name="xpath" value="erl:shape"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
+                            </constructor-arg>
+                        </bean>   
                     </list>
                 </property>                       
             </bean>        
@@ -3544,6 +3552,14 @@ Bo"/>
 								<value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
 							</constructor-arg>
 						</bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
+                            <constructor-arg name="label" value="Polygon BBox"></constructor-arg>
+                            <constructor-arg name="xpath" value="the_geom"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</value>
+                            </constructor-arg>
+                        </bean>                          
 					</list>
 				</property>
 			</bean>
