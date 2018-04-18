@@ -74,6 +74,10 @@
         <constructor-arg name="serviceList" ref="vocabularyServiceList" />
     </bean>
 
+	<bean id="vocabularyFilterService" class="org.auscope.portal.core.services.VocabularyFilterService">
+        <constructor-arg name="vocabularyCacheService" ref="vocabularyCacheService"/>
+    </bean>
+    
     <bean id="cswCacheService" class="org.auscope.portal.core.services.CSWCacheService">
         <constructor-arg name="executor" ref="taskExecutor"/>
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>

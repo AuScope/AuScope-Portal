@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hp.hpl.jena.rdf.model.Model;
+
 import java.util.Map;
 
 /**
@@ -32,8 +34,8 @@ public class VocabularyCacheController extends BasePortalController {
      */
     @RequestMapping("/getVocabularies.do")
     public ModelAndView getVocabularies() {
-        Map<String, Map<String, String>> vocabularyCache = this.vocabularyCacheService.getVocabularyCache();
-        return generateJSONResponseMAV(true, vocabularyCache, "success");
+    	 Map<String, Model> vocabularyCache = this.vocabularyCacheService.getVocabularyCache();
+         return generateJSONResponseMAV(true, vocabularyCache, "success");
 
     }
 
