@@ -85,7 +85,7 @@ public class RemanentAnomaliesController extends BasePortalController {
         Boolean modelsfilter = "models".equals(styleSwitch);
         String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name, ARRAMin, ARRAMax, decMin, decMax, incMin, incMax, modelCountMin, modelCountMax,modelsfilter,optionalFilters, bbox); //VT:get filter from service
 
-        String style = this.getStyle(filter, "#0000FF",styleSwitch);
+        String style = this.getStyle(filter, "#000000",styleSwitch);
 
         response.setContentType("text/xml");
 
