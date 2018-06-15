@@ -24,7 +24,6 @@
                 <ref bean="knownTypeEMAGRemanentAnomalies" />
                 <ref bean="knownTypeEMAGRemanentAnomaliesTMI" />
                 <ref bean="knownTypeMineralOccurrenceView" />
-                <ref bean="knownTypeBoreholeNvcl" />
                 <ref bean="knownTypeBoreholeNvclV2" />                
                 <ref bean="knownTypeBoreholePressureDB" />
                 <ref bean="knownTypeReports" />
