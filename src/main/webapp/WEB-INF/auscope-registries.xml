@@ -17,7 +17,7 @@
         <constructor-arg name="id" value="cswAuscopeProduction"/>
         <constructor-arg name="title" value="AuScope Geonetwork"/>
         <constructor-arg name="serviceUrl" value="http://portal.auscope.org/geonetwork/srv/eng/csw"/>
-        <constructor-arg name="recordInformationUrl" value="http://portal.auscope.org/geonetwork/srv/eng/main.home?uuid=%1$s"/>
+        <constructor-arg name="recordInformationUrl" value="http://portal.auscope.org/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
     </bean>
     <bean id="cswMDUTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswMDUTest"/>
