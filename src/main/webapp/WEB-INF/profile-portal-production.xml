@@ -30,6 +30,7 @@
                 <ref bean="knownTypePMDCRCReports" />
                 <ref bean="knownTypeGeotransects" />
                 <ref bean="knownTypeTimaGeoSample" />
+                <ref bean="knownTypeSHRIMPGeoSample" />
                 <ref bean="knownTypeYilgarnGeochemistry"/>
                 <ref bean="knownTypeSamplingPoint"/>
                 <ref bean="knownTypeFeatureCollection"/>
@@ -64,8 +65,6 @@
                 <ref bean="knownTypeSeismologyInSchool" />
                 <ref bean="knownTypeSF0BoreholeNVCL" />
                 <ref bean="knownTypehydrogeochem" />
-                <ref bean="knownTypeTimaGeoSample" />
-                <ref bean="knownTypeSHRIMPGeoSample" />
                 
 
                 <!-- Generated from former prod "Registered" tab START -->
