@@ -884,8 +884,8 @@
                 <constructor-arg name="featureTypeName" value="tima:geosample_and_mineralogy"/>                           
             </bean>
         </constructor-arg>
-        <property name="name" value="TESCAN TIMA"/>
-        <property name="group" value="JdLC Mineralogy Library"/>
+        <property name="name" value="TESCAN TIMA Heavy Mineral Analyses"/>
+        <property name="group" value="Curtin University"/>
         <property name="description" value="A collection of the results published from TIMA"/>
         <property name="proxyUrl" value="doTIMAGeoSample.do"/>
         <property name="proxyCountUrl" value=""/>
@@ -937,7 +937,7 @@
             </bean>
         </constructor-arg>
         <property name="name" value="SHRIMP Geochronology"/>
-        <property name="group" value="JdLC Mineralogy Library"/>
+        <property name="group" value="Curtin University"/>
         <property name="description" value="A collection of the results published from SHRIMP U-Pb mass spectrometer"/>
         <property name="proxyUrl" value="doSHRIMPGeoSample.do"/>
         <property name="proxyCountUrl" value=""/>
