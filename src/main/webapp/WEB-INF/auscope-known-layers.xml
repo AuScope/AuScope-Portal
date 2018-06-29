@@ -3558,7 +3558,7 @@ Bo"/>
         <property name="name" value="CRN Australia: sample sites" />
         <property name="group" value="University of Wollongong" />
         <property name="description" value="CRN Australia: sample sites" />
-        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0x00AAFF&layerName=be10-denude:crn_aus_outlets" />        
+        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0x00AAFF&amp;layerName=be10-denude:crn_aus_outlets" />        
         <property name="order" value="Registered_1" />
     </bean>
 
@@ -3589,7 +3589,7 @@ Bo"/>
         <property name="name" value="CRN InPrep: sample sites" />
         <property name="group" value="University of Wollongong" />
         <property name="description" value="CRN InPrep: sample sites" />
-        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0x00FFBB&layerName=be10-denude:crn_inprep_outlets" />             
+        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0x00FFBB&amp;layerName=be10-denude:crn_inprep_outlets" />             
         <property name="order" value="Registered_1" />
     </bean>
 
@@ -3620,7 +3620,7 @@ Bo"/>
         <property name="name" value="CRN International: sample sites" />
         <property name="group" value="University of Wollongong" />
         <property name="description" value="CRN International: sample sites" />
-        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xBBFFAA&layerName=be10-denude:crn_int_outlets" />             
+        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xBBFFAA&amp;layerName=be10-denude:crn_int_outlets" />             
         <property name="order" value="Registered_1" />
     </bean>
 
@@ -3650,7 +3650,7 @@ Bo"/>
         <property name="name" value="CRN XXL: sample sites" />
         <property name="group" value="University of Wollongong" />
         <property name="description" value="CRN XXL: sample sites" />
-        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xDDFFAA&layerName=be10-denude:crn_xxl_outlets" />             
+        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xDDFFAA&amp;layerName=be10-denude:crn_xxl_outlets" />             
         <property name="order" value="Registered_1" />
     </bean>
 
@@ -3680,7 +3680,7 @@ Bo"/>
         <property name="name" value="OSL &amp; TL: sample sites" />
         <property name="group" value="University of Wollongong" />
         <property name="description" value="OSL &amp; TL: sample sites" />
-        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xFFDDAA&layerName=be10-denude:osltl_samples" />             
+        <property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xFFDDAA&amp;layerName=be10-denude:osltl_samples" />             
         <property name="order" value="Registered_1" />
     </bean>
     <!-- END UOW OCTOPUS -->
