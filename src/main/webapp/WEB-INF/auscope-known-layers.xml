@@ -663,7 +663,8 @@
             </bean>
         </constructor-arg>
 
-        <property name="name" value="Geological Models"/>
+        <property name="name" value="3D Geological Models"/>
+		<property name="group" value="Models"/>
         <property name="description" value="Various Geological Models"/>
         <property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png"/>
         <property name="iconAnchor">
