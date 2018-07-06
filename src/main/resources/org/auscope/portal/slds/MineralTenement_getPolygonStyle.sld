@@ -30,6 +30,12 @@
 								</ogc:Function>
 							</ogc:Function>
 						</Label>
+						<Font>
+							<CssParameter name="font-family">Arial</CssParameter>
+							<CssParameter name="font-size">12</CssParameter>
+							<CssParameter name="font-style">normal</CssParameter>
+							<CssParameter name="font-weight">normal</CssParameter>
+						</Font>
 						<Fill>
 							<CssParameter name="fill">#000000</CssParameter>
 						</Fill>

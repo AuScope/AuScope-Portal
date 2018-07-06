@@ -345,7 +345,7 @@ public class MineralTenementController extends BasePortalController {
         String rule = "<Rule>" +
         "<Name>T</Name>" +
         "<Title>" + ruleName + "</Title>" +
-		"<MaxScaleDenominator>4000000</MaxScaleDenominator>" +
+        "<MaxScaleDenominator>4000000</MaxScaleDenominator>" +
         filter +
         "<PolygonSymbolizer>" +
         "<Fill>" +
@@ -357,21 +357,27 @@ public class MineralTenementController extends BasePortalController {
         "<CssParameter name=\"stroke-width\">1</CssParameter>" +
         "</Stroke>" +
         "</PolygonSymbolizer>" +
-		"<TextSymbolizer>" +
-		"<Label>" +
-		"<ogc:Function name=\"strSubstringStart\">" +
-		"<ogc:PropertyName>mt:name</ogc:PropertyName>" +
-		"<ogc:Function name=\"parseInt\">" +
-		"<ogc:Literal>27</ogc:Literal>" +
-		"</ogc:Function>" +
-		"</ogc:Function>" +
-		"</Label>" +
-		"<Fill>" +
-		"<CssParameter name=\"fill\">#000000</CssParameter>" +
-		"</Fill>" +
-		"</TextSymbolizer>" +
+        "<TextSymbolizer>" +
+        "<Label>" +
+        "<ogc:Function name=\"strSubstringStart\">" +
+        "<ogc:PropertyName>mt:name</ogc:PropertyName>" +
+        "<ogc:Function name=\"parseInt\">" +
+        "<ogc:Literal>27</ogc:Literal>" +
+        "</ogc:Function>" +
+        "</ogc:Function>" +
+        "</Label>" +
+        "<Font>" +
+        "<CssParameter name=\"font-family\">Arial</CssParameter>" +
+        "<CssParameter name=\"font-size\">12</CssParameter>" +
+        "<CssParameter name=\"font-style\">normal</CssParameter>" +
+        "<CssParameter name=\"font-weight\">normal</CssParameter>" +
+        "</Font>" +
+        "<Fill>" +
+        "<CssParameter name=\"fill\">#000000</CssParameter>" +
+        "</Fill>" +
+        "</TextSymbolizer>" +
         "</Rule>" +
-		"<Rule>" +
+        "<Rule>" +
         "<Name>T</Name>" +
         "<Title>" + ruleName + "1</Title>" +
         filter +
