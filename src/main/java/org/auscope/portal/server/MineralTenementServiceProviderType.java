@@ -10,7 +10,7 @@ package org.auscope.portal.server;
  */
 public enum MineralTenementServiceProviderType {
     GeoServer("mt:MineralTenement", "#66ff66", "#4B6F44", "mt:name", "mt:owner", "mt:shape","Polygon for mineral tenement"), 
-    ArcGIS("MineralTenement", "#66ff66", "#4B6F44", "TENNAME", "TENOWNER", "SHAPE","");
+    ArcGIS("MineralTenement", "#00ff00", "#66ff66", "TENNAME", "TENOWNER", "SHAPE","");
 
     private final String featureType;
     private final String styleName;
