@@ -8,42 +8,6 @@
 				<Rule>
 					<Name>[styleName]</Name>
 					<Title>Mineral Tenement</Title>
-					<Abstract>40 percent transparent [color] fill with a [borderColor] outline 0.5 pixels in width and a text label below 4m zoom</Abstract>
-					<MaxScaleDenominator>4000000</MaxScaleDenominator>
-                    [filter]
-					<PolygonSymbolizer>
-						<Fill>
-							<CssParameter name="fill">[color]</CssParameter>
-							<CssParameter name="fill-opacity">0.4</CssParameter>
-						</Fill>
-						<Stroke>
-							<CssParameter name="stroke">[borderColor]</CssParameter>
-							<CssParameter name="stroke-width">0.5</CssParameter>
-						</Stroke>
-					</PolygonSymbolizer>
-					<TextSymbolizer>
-						<Label>
-							<ogc:Function name="strSubstringStart">
-								<ogc:PropertyName>mt:name</ogc:PropertyName>
-								<ogc:Function name="parseInt">
-									<ogc:Literal>27</ogc:Literal>
-								</ogc:Function>
-							</ogc:Function>
-						</Label>
-						<Font>
-							<CssParameter name="font-family">Arial</CssParameter>
-							<CssParameter name="font-size">12</CssParameter>
-							<CssParameter name="font-style">normal</CssParameter>
-							<CssParameter name="font-weight">normal</CssParameter>
-						</Font>
-						<Fill>
-							<CssParameter name="fill">#000000</CssParameter>
-						</Fill>
-					</TextSymbolizer>
-				</Rule>
-				<Rule>
-					<Name>[styleName]1</Name>
-					<Title>Mineral Tenement</Title>
 					<Abstract>40 percent transparent [color] fill with a [borderColor] outline 0.5 pixels in width</Abstract>
                     [filter]
 					<PolygonSymbolizer>
