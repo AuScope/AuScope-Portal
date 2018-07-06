@@ -345,6 +345,35 @@ public class MineralTenementController extends BasePortalController {
         String rule = "<Rule>" +
         "<Name>T</Name>" +
         "<Title>" + ruleName + "</Title>" +
+		"<MaxScaleDenominator>4000000</MaxScaleDenominator>" +
+        filter +
+        "<PolygonSymbolizer>" +
+        "<Fill>" +
+        "<CssParameter name=\"fill\">" + color + "</CssParameter>" +
+        "<CssParameter name=\"fill-opacity\">0.6</CssParameter>" +
+        "</Fill>" +
+        "<Stroke>" +
+        "<CssParameter name=\"stroke\">" + color + "</CssParameter>" +
+        "<CssParameter name=\"stroke-width\">1</CssParameter>" +
+        "</Stroke>" +
+        "</PolygonSymbolizer>" +
+		"<TextSymbolizer>" +
+		"<Label>" +
+		"<ogc:Function name=\"strSubstringStart\">" +
+		"<ogc:PropertyName>mt:name</ogc:PropertyName>" +
+		"<ogc:Function name=\"parseInt\">" +
+		"<ogc:Literal>27</ogc:Literal>" +
+		"</ogc:Function>" +
+		"</ogc:Function>" +
+		"</Label>" +
+		"<Fill>" +
+		"<CssParameter name=\"fill\">#000000</CssParameter>" +
+		"</Fill>" +
+		"</TextSymbolizer>" +
+        "</Rule>" +
+		"<Rule>" +
+        "<Name>T</Name>" +
+        "<Title>" + ruleName + "1</Title>" +
         filter +
         "<PolygonSymbolizer>" +
         "<Fill>" +
