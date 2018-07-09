@@ -372,6 +372,14 @@ public class MineralTenementController extends BasePortalController {
         "<CssParameter name=\"font-style\">normal</CssParameter>" +
         "<CssParameter name=\"font-weight\">normal</CssParameter>" +
         "</Font>" +
+		"<LabelPlacement>" +
+		"<PointPlacement>" +
+		"<AnchorPoint>" +
+		"<AnchorPointX>0.5</AnchorPointX>" +
+		"<AnchorPointY>0.5</AnchorPointY>" +
+		"</AnchorPoint>" +
+		"</PointPlacement>" +
+		"</LabelPlacement>" +
         "<Fill>" +
         "<CssParameter name=\"fill\">#000000</CssParameter>" +
         "</Fill>" +
