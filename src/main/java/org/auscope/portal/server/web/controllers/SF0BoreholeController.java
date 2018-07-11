@@ -39,7 +39,7 @@ public class SF0BoreholeController extends BasePortalController {
     private SF0BoreholeService boreholeService;
 
     private CSWCacheService cswService;
-    private GsmlpNameSpaceTable gsmlpNameSpaceTable;
+    // private GsmlpNameSpaceTable gsmlpNameSpaceTable;
     private NVCL2_0_DataService nvclDataService;
     private WFSService wfsService;
 
@@ -48,8 +48,8 @@ public class SF0BoreholeController extends BasePortalController {
         this.boreholeService = sf0BoreholeService;
         this.cswService = cswService;
         this.nvclDataService = nvclDataService;
-        GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
-        this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
+        // GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
+        // this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
         this.wfsService = wfsService;
     }
 
@@ -162,7 +162,10 @@ public class SF0BoreholeController extends BasePortalController {
         List<String> filterColors = new ArrayList<String>();
         List<String> filters = new ArrayList<String>();
         List<Mark> filterMarks = new ArrayList<Mark>();
-        String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
+        String gsmlpNameSpace = "http://xmlns.geosciml.org/geosciml-portrayal/4.0";
+		// gsmlpNameSpaceTable is no longer required as all data providers support v4
+		// However it may be required again for future versions of boreholeview 		
+		// String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         if (StringUtils.isNotEmpty(analyticsJobId)) {
             //Generate a style for displaying pass/fail/error holes
             AnalyticalJobResults analyticsResults = nvclDataService.getProcessingResults(analyticsJobId);
@@ -267,7 +270,10 @@ public class SF0BoreholeController extends BasePortalController {
         List<String> filterColors = new ArrayList<String>();
         List<String> filters = new ArrayList<String>();
         List<Mark> filterMarks = new ArrayList<Mark>();
-        String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
+		String gsmlpNameSpace = "http://xmlns.geosciml.org/geosciml-portrayal/4.0";
+		// gsmlpNameSpaceTable is no longer required as all data providers support v4
+		// However it may be required again for future versions of boreholeview 
+        // String gsmlpNameSpace = gsmlpNameSpaceTable.getGsmlpNameSpace(serviceUrl);
         if (StringUtils.isNotEmpty(analyticsJobId)) {
             //Generate a style for displaying pass/fail/error holes
             AnalyticalJobResults analyticsResults = nvclDataService.getProcessingResults(analyticsJobId);
@@ -324,14 +330,15 @@ public class SF0BoreholeController extends BasePortalController {
     }
 
     /**
-     * This controller method is for forcing the internal cache of GsmlpNameSpaceTable to invalidate and update.
+     * NOT CURRENTLY USED
+	 * This controller method is for forcing the internal cache of GsmlpNameSpaceTable to invalidate and update.
      *
      * @return
      */
-
+	/*
     @RequestMapping("/updateGsmlpNSCache.do")
     public ModelAndView updateGsmlpNSCache() throws Exception {
-        try {
+	    try {
             if (gsmlpNameSpaceTable != null )
                 gsmlpNameSpaceTable.clearCache();
             return generateJSONResponseMAV(true);
@@ -340,5 +347,7 @@ public class SF0BoreholeController extends BasePortalController {
             log.debug("Exception:", e);
             return generateJSONResponseMAV(false);
         }
+		
     }
+	*/
 }
