@@ -388,6 +388,7 @@ public class MineralTenementController extends BasePortalController {
         "<Rule>" +
         "<Name>T</Name>" +
         "<Title>" + ruleName + "1</Title>" +
+		"<MinScaleDenominator>4000000</MinScaleDenominator>" +
         filter +
         "<PolygonSymbolizer>" +
         "<Fill>" +

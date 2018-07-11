@@ -362,6 +362,7 @@ public class BoreholeService extends BaseWFSService {
             sb.append("<Rule>");
             sb.append("<Name>" + names.get(i) + "</Name>");
             sb.append("<Abstract>" + names.get(i) + "</Abstract>");
+			sb.append("<MinScaleDenominator>4000000</MinScaleDenominator>");
             sb.append(filters.get(i));
             sb.append("<PointSymbolizer>");
             sb.append("<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>");
