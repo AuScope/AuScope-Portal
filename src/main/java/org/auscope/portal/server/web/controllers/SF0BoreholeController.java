@@ -179,14 +179,14 @@ public class SF0BoreholeController extends BasePortalController {
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
-                filterColors.add("#8390C6");
+                filterColors.add("#ffff00");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true,optionalFilters));
                 filterMarks.add(Mark.CIRCLE);
             }
 
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
-                filterColors.add(color.isEmpty() ? "#2242c7" : color);
+                filterColors.add(color.isEmpty() ? "#0000ff" : color);
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true,optionalFilters));
                 filterMarks.add(Mark.CIRCLE);
             }
