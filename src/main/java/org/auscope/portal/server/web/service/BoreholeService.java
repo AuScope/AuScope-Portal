@@ -268,7 +268,7 @@ public class BoreholeService extends BaseWFSService {
      * @return
      */
     public String getStyle(List<String> names, List<String> filters, List<String> colors, String gsmlpNameSpace) {
-        return getStyle(names, filters, colors, new ArrayList<Mark>(Collections.nCopies(filters.size(), Mark.CIRCLE)), gsmlpNameSpace);
+        return getStyle(names, filters, colors, new ArrayList<String>(Collections.nCopies(filters.size(), "circle")), gsmlpNameSpace);
     }
 
     /**
@@ -281,7 +281,7 @@ public class BoreholeService extends BaseWFSService {
      * @param gsmlpNameSpace
      * @return
      */
-    public String getStyle(List<String> names, List<String> filters, List<String> colors, List<Mark> marks, String gsmlpNameSpace) {
+    public String getStyle(List<String> names, List<String> filters, List<String> colors, List<String> marks, String gsmlpNameSpace) {
         if (filters.size() != colors.size() || filters.size() != names.size() || filters.size() != marks.size()) {
             throw new IllegalArgumentException("names/filters/colors/marks must have the same length");
         }
@@ -313,7 +313,7 @@ public class BoreholeService extends BaseWFSService {
             sb.append("<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>");
             sb.append("<Graphic>");
             sb.append("<Mark>");
-            sb.append("<WellKnownName>" + marks.get(i).toString() + "</WellKnownName>");
+            sb.append("<WellKnownName>" + marks.get(i) + "</WellKnownName>");
             sb.append("<Fill>");
             sb.append("<CssParameter name=\"fill\">");
             sb.append(colors.get(i));
@@ -368,7 +368,7 @@ public class BoreholeService extends BaseWFSService {
             sb.append("<Geometry><ogc:PropertyName>" + getGeometryName() + "</ogc:PropertyName></Geometry>");
             sb.append("<Graphic>");
             sb.append("<Mark>");
-            sb.append("<WellKnownName>" + marks.get(i).toString() + "</WellKnownName>");
+            sb.append("<WellKnownName>" + marks.get(i) + "</WellKnownName>");
             sb.append("<Fill>");
             sb.append("<CssParameter name=\"fill\">");
             sb.append(colors.get(i));

@@ -18,7 +18,6 @@ import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
-import org.auscope.portal.server.web.service.BoreholeService.Mark;
 import org.auscope.portal.server.web.service.NVCL2_0_DataService;
 import org.auscope.portal.server.web.service.SF0BoreholeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,7 +160,7 @@ public class SF0BoreholeController extends BasePortalController {
         List<String> filterNames = new ArrayList<String>();
         List<String> filterColors = new ArrayList<String>();
         List<String> filters = new ArrayList<String>();
-        List<Mark> filterMarks = new ArrayList<Mark>();
+        List<String> filterMarks = new ArrayList<String>();
         String gsmlpNameSpace = "http://xmlns.geosciml.org/geosciml-portrayal/4.0";
 		// gsmlpNameSpaceTable is no longer required as all data providers support v4
 		// However it may be required again for future versions of boreholeview 		
@@ -172,23 +171,23 @@ public class SF0BoreholeController extends BasePortalController {
 
             if (!analyticsResults.getErrorBoreholes().isEmpty()) {
                 filterNames.add("Error Boreholes");
-                filterColors.add("#ff0000");
+                filterColors.add("#ff8000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true,optionalFilters));
-                filterMarks.add(Mark.X);
+                filterMarks.add("ttf://Webdings#0x0073");
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
-                filterColors.add("#ffff00");
+                filterColors.add("#cc0000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true,optionalFilters));
-                filterMarks.add(Mark.CIRCLE);
+                filterMarks.add("ttf://Webdings#0x0072");
             }
 
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
                 filterColors.add(color.isEmpty() ? "#0000ff" : color);
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true,optionalFilters));
-                filterMarks.add(Mark.CIRCLE);
+                filterMarks.add("ttf://Webdings#0x0061");
             }
         } else {
             if (this.boreholeService.namespaceSupportsHyloggerFilter(gsmlpNameSpace)) {
@@ -197,7 +196,7 @@ public class SF0BoreholeController extends BasePortalController {
                         hyloggerBoreholeIDs, true,optionalFilters));
                 filterColors.add("#FF0000");
                 filterNames.add("Hylogged");
-                filterMarks.add(Mark.CIRCLE);
+                filterMarks.add("circle");
             }
         }
 
@@ -269,7 +268,7 @@ public class SF0BoreholeController extends BasePortalController {
         List<String> filterNames = new ArrayList<String>();
         List<String> filterColors = new ArrayList<String>();
         List<String> filters = new ArrayList<String>();
-        List<Mark> filterMarks = new ArrayList<Mark>();
+        List<String> filterMarks = new ArrayList<String>();
 		String gsmlpNameSpace = "http://xmlns.geosciml.org/geosciml-portrayal/4.0";
 		// gsmlpNameSpaceTable is no longer required as all data providers support v4
 		// However it may be required again for future versions of boreholeview 
@@ -280,30 +279,30 @@ public class SF0BoreholeController extends BasePortalController {
 
             if (!analyticsResults.getErrorBoreholes().isEmpty()) {
                 filterNames.add("Error Boreholes");
-                filterColors.add("#ff0000");
+                filterColors.add("#ff8000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true,optionalFilters));
-                filterMarks.add(Mark.X);
+                filterMarks.add("ttf://Webdings#0x0073");
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
-                filterColors.add("#8390C6");
+                filterColors.add("#cc0000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true,optionalFilters));
-                filterMarks.add(Mark.CIRCLE);
+                filterMarks.add("ttf://Webdings#0x0072");
             }
 
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
-                filterColors.add(color.isEmpty() ? "#2242c7" : color);
+                filterColors.add(color.isEmpty() ? "#0000ff" : color);
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true,optionalFilters));
-                filterMarks.add(Mark.CIRCLE);
+                filterMarks.add("ttf://Webdings#0x0061");
             }
         } else {
             //Generate a Hylogged vs Non Hylogged style
             filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, null, null,optionalFilters));
             filterColors.add(color.isEmpty() ? "#2242c7" : color);
             filterNames.add("Boreholes");
-            filterMarks.add(Mark.CIRCLE);
+            filterMarks.add("circle");
 
             //Not all borehole services support the hylogged attribute
             Boolean justNVCL = showNoneHylogged;
@@ -313,7 +312,7 @@ public class SF0BoreholeController extends BasePortalController {
                         hyloggerBoreholeIDs, justNVCL,optionalFilters));
                 filterColors.add("#FF0000");
                 filterNames.add("Hylogged");
-                filterMarks.add(Mark.CIRCLE);
+                filterMarks.add("circle");
             }
         }
 
