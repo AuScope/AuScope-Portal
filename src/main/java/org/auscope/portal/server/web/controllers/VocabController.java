@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Selector;
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
-import com.hp.hpl.jena.vocabulary.DCTerms;
-import com.hp.hpl.jena.vocabulary.RDF;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Selector;
+import org.apache.jena.rdf.model.SimpleSelector;
+import org.apache.jena.vocabulary.DCTerms;
+import org.apache.jena.vocabulary.RDF;
 
 import au.gov.geoscience.portal.services.vocabularies.VocabularyLookup;
 

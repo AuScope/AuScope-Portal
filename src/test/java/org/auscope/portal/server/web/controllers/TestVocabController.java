@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
+import org.apache.jena.rdf.model.SimpleSelector;
 
 import au.gov.geoscience.portal.services.vocabularies.VocabularyLookup;
 import net.sf.json.JSONArray;

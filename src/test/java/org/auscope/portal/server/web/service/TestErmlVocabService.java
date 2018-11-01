@@ -16,7 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Resource;
 
 public class TestErmlVocabService extends PortalTestClass {
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class, "mockMethod");
