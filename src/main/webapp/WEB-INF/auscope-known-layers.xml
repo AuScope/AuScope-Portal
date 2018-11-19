@@ -729,8 +729,7 @@
                         <value>https://geossdi.dmp.wa.gov.au/services/wfs</value>
                         <value>http://geology.data.nt.gov.au:80/geoserver/wfs</value>
                         <value>https://geology.data.nt.gov.au/geoserver/wfs</value>
-                        <value>http://auscope.dpi.nsw.gov.au:80/geoserver/wfs</value>
-                        <value>https://auscope.dpi.nsw.gov.au/geoserver/wfs</value>
+                        <value>https://gs.geoscience.nsw.gov.au/geoserver/wfs</value>
                         <value>https://sarigdata.pir.sa.gov.au/nvcl/geoserver/wfs</value>
                         <value>http://geology-uat.information.qld.gov.au/geoserver/wfs</value>
                         <value>https://geology-uat.information.qld.gov.au/geoserver/wfs</value>
