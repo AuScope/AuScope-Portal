@@ -31,12 +31,6 @@
         <constructor-arg name="serviceUrl" value="http://mdu-data.arrc.csiro.au/geonetwork/srv/en/csw"/>
         <constructor-arg name="recordInformationUrl" value="http://mdu-data.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
     </bean>
-    <bean id="cswSissANUProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
-        <constructor-arg name="id" value="cswSissANUProduction"/>
-        <constructor-arg name="title" value="SISS ANU Geonetwork"/>
-        <constructor-arg name="serviceUrl" value="http://siss1.anu.edu.au/geonetwork/srv/en/csw"/>
-        <constructor-arg name="recordInformationUrl" value="http://siss1.anu.edu.au/geonetwork/srv/en/main.home?uuid=%1$s"/>
-    </bean>
     <bean id="cswGAPetroleumTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswGAPetroleumTest"/>
         <constructor-arg name="title" value="GA Petroleum Geonetwork"/>
