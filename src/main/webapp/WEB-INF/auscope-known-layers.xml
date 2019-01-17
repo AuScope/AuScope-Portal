@@ -806,6 +806,14 @@
                                 <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
                             </constructor-arg>
                         </bean>
+                        <bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
+                            <constructor-arg name="label" value="Identifier"></constructor-arg>
+                            <constructor-arg name="xpath" value="gsmlp:identifier"></constructor-arg>
+                            <constructor-arg name="value"><null/></constructor-arg>                            
+                            <constructor-arg name="predicate">
+                                <value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</value>
+                            </constructor-arg>
+                        </bean>
                         <bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
                             <constructor-arg name="label" value="Drilling Start From"></constructor-arg>
                             <constructor-arg name="xpath" value="gsmlp:drillStartDate"></constructor-arg>
