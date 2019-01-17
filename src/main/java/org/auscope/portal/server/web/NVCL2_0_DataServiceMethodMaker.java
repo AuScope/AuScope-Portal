@@ -332,11 +332,11 @@ public class NVCL2_0_DataServiceMethodMaker extends AbstractMethodMaker {
      * @return
      * @throws URISyntaxException
      */
-    public HttpRequestBase getTSGJobsByBoreholeIdMethod(String serviceUrl, String boreholeId) throws URISyntaxException {
+    public HttpRequestBase getTSGJobsByBoreholeIdMethod(String serviceUrl, String boreholeId, String email) throws URISyntaxException {
         HttpGet method = new HttpGet();
         URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "getTsgJobsByBoreholeid.do"));
         builder.setParameter("boreholeid", boreholeId);
-
+        builder.setParameter("email", email);
         method.setURI(builder.build());
         return method;
     }

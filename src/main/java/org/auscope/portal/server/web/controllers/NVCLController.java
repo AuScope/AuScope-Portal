@@ -689,10 +689,11 @@ public class NVCLController extends BasePortalController {
      * @return
      */
     @RequestMapping("getNVCL2_0_TsgJobsByBoreholeId.do")
-    public ModelAndView getNVCL2_0_TsgJobsByBoreholeId(@RequestParam("boreholeId") String boreholeId) throws Exception {
+    public ModelAndView getNVCL2_0_TsgJobsByBoreholeId(@RequestParam("boreholeId") String boreholeId,
+            @RequestParam(required = false, value = "email") String email) throws Exception {
         //Make our request
         try {
-            JSONArray jsonResponse = dataService2_0.getNVCL2_0_getTsgJobsByBoreholeId(boreholeId);
+            JSONArray jsonResponse = dataService2_0.getNVCL2_0_getTsgJobsByBoreholeId(boreholeId, email);
             return generateJSONResponseMAV(true, jsonResponse, "");
 
         } catch (Exception ex) {
@@ -785,6 +786,7 @@ public class NVCLController extends BasePortalController {
     @RequestMapping("getNVCLTSGDownloadStatus.do")
     public void getNVCLTSGDownloadStatus(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("email") String email,
+            @RequestParam(required=false, value="format",defaultValue= "html") String format,
             HttpServletResponse response) throws Exception {
 
         //Make our request
