@@ -786,7 +786,6 @@ public class NVCLController extends BasePortalController {
     @RequestMapping("getNVCLTSGDownloadStatus.do")
     public void getNVCLTSGDownloadStatus(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("email") String email,
-            @RequestParam(required=false, value="format",defaultValue= "html") String format,
             HttpServletResponse response) throws Exception {
 
         //Make our request
