@@ -38,7 +38,6 @@
             </bean>
         </property>
         <property name="order" value="10" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -96,7 +95,6 @@
             </bean>
         </property>
         <property name="order" value="11" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -155,7 +153,6 @@
             </bean>
         </property>
         <property name="order" value="12" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -190,7 +187,6 @@
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralTenementCSVDownload.do"/>       
         <property name="order" value="150" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="TenementsLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -382,7 +378,6 @@
         <property name="proxyStyleUrl" value="getErlMineViewStyle.do"/>
         <property name="proxyDownloadUrl" value=""/>
         <property name="order" value="160" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -441,7 +436,6 @@
         <property name="proxyStyleUrl" value="getErlMineralOccurrenceViewStyle.do"/>
         <property name="proxyDownloadUrl" value=""/>
         <property name="order" value="160" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -509,7 +503,6 @@
         <property name="proxyStyleUrl" value="getErlCommodityResourceViewStyle.do"/>
         <property name="proxyDownloadUrl" value=""/>
         <property name="order" value="160" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -576,7 +569,6 @@
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
         <property name="order" value="13" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -783,7 +775,6 @@
             </bean>
         </property>
         <property name="order" value="51" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="NVCLBoreholeViewLayer"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">    
@@ -1015,7 +1006,6 @@
             </bean>
         </property>
         <property name="order" value="52" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
         <property name="nagiosServiceGroup" value="BoreholeViewLayer"/>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
