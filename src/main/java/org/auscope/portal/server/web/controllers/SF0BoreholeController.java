@@ -173,21 +173,24 @@ public class SF0BoreholeController extends BasePortalController {
                 filterNames.add("Error Boreholes");
                 filterColors.add("#ff8000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true,optionalFilters));
-                filterMarks.add("ttf://Webdings#0x0073");
+                //filterMarks.add("ttf://Webdings#0x0073");
+                filterMarks.add("circle");
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
                 filterColors.add("#cc0000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true,optionalFilters));
-                filterMarks.add("ttf://Webdings#0x0072");
+                //filterMarks.add("ttf://Webdings#0x0072");
+                filterMarks.add("circle");
             }
 
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
                 filterColors.add(color.isEmpty() ? "#0000ff" : color);
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true,optionalFilters));
-                filterMarks.add("ttf://Webdings#0x0061");
+                //filterMarks.add("ttf://Webdings#0x0061");
+                filterMarks.add("circle");
             }
         } else {
             if (this.boreholeService.namespaceSupportsHyloggerFilter(gsmlpNameSpace)) {
@@ -281,21 +284,24 @@ public class SF0BoreholeController extends BasePortalController {
                 filterNames.add("Error Boreholes");
                 filterColors.add("#ff8000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getErrorBoreholes(), true,optionalFilters));
-                filterMarks.add("ttf://Webdings#0x0073");
+                //filterMarks.add("ttf://Webdings#0x0073");
+                filterMarks.add("circle");
             }
 
             if (!analyticsResults.getFailBoreholes().isEmpty()) {
                 filterNames.add("Fail Boreholes");
                 filterColors.add("#cc0000");
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getFailBoreholes(), true,optionalFilters));
-                filterMarks.add("ttf://Webdings#0x0072");
+                //filterMarks.add("ttf://Webdings#0x0072");
+                filterMarks.add("circle");
             }
 
             if (!analyticsResults.getPassBoreholes().isEmpty()) {
                 filterNames.add("Pass Boreholes");
                 filterColors.add(color.isEmpty() ? "#0000ff" : color);
                 filters.add(this.boreholeService.getFilter(boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null, analyticsResults.getPassBoreholes(), true,optionalFilters));
-                filterMarks.add("ttf://Webdings#0x0061");
+                //filterMarks.add("ttf://Webdings#0x0061");
+                filterMarks.add("circle");
             }
         } else {
             //Generate a Hylogged vs Non Hylogged style
