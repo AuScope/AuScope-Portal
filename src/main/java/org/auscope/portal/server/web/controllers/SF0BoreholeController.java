@@ -124,6 +124,45 @@ public class SF0BoreholeController extends BasePortalController {
             outputStream.close();
         }
     }
+    /**
+     * Handles getting the style of the SF0 borehole filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
+     * implicitly)
+     *
+     * @param mineName
+     *            the name of the mine to query for
+     * @param bbox
+     * @param maxFeatures
+     * @throws Exception
+     */
+    @RequestMapping("/doNvclV2Filter.do")
+    public void doNvclV2Filter(
+            HttpServletResponse response,
+            @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
+            @RequestParam(required = false, value = "custodian", defaultValue = "") String custodian,
+            @RequestParam(required = false, value = "dateOfDrillingStart", defaultValue = "") String dateOfDrillingStart,
+            @RequestParam(required = false, value = "dateOfDrillingEnd", defaultValue = "") String dateOfDrillingEnd,
+            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            @RequestParam(required = false, value = "optionalFilters") String optionalFilters)
+
+                    throws Exception {
+
+        FilterBoundingBox bbox = null;
+        List<String> hyloggerBoreholeIDs = null;
+
+        String filters = this.boreholeService.getFilter(boreholeName,
+                    custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox,
+                    hyloggerBoreholeIDs, true,optionalFilters);
+
+        response.setContentType("text/xml");
+        ByteArrayInputStream styleStream = new ByteArrayInputStream(filters.getBytes());
+        OutputStream outputStream = response.getOutputStream();
+
+        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
+
+        styleStream.close();
+        outputStream.close();
+    }
     
     /**
      * Handles getting the style of the SF0 borehole filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
