@@ -1,22 +1,22 @@
 Manifest-Version: 1.0
 Implementation-Title: AuScope-Portal
 projectName: AuScope-Portal
-Implementation-Version: 5.0.0-SNAPSHOT
-Built-By: tey006
+Implementation-Version: 5.1.0-SNAPSHOT
+Built-By: jia020
 Specification-Vendor: AuScope
 Specification-Title: AuScope-Portal
 Implementation-Vendor-Id: org.auscope.portal
-version: 5.0.0-SNAPSHOT
-javaVersion: 1.8.0_121
+version: 5.1.0-SNAPSHOT
+javaVersion: 1.8.0_51
 Implementation-Vendor: AuScope
 javaVmVendor: Oracle Corporation
-javaVmVersion: 25.121-b13
+javaVmVersion: 25.51-b03
 javaVendor: Oracle Corporation
 Implementation-Build: 
-buildDate: 04-10-2017 12:58
-osVersion: 10.0
-Created-By: Apache Maven 3.3.9
-Build-Jdk: 1.8.0_121
-Specification-Version: 5.0.0-SNAPSHOT
-osName: Windows 10
+buildDate: 26-03-2019 11:13
+osVersion: 4.15.0-45-generic
+Created-By: Apache Maven 3.2.5
+Build-Jdk: 1.8.0_51
+Specification-Version: 5.1.0-SNAPSHOT
+osName: Linux
 
