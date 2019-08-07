@@ -10,7 +10,8 @@
     <!-- All elements must be of type org.auscope.portal.server.web.KnownLayer -->
     <bean id="knownTypes" class="java.util.ArrayList">
         <constructor-arg>
-            <list>
+            <list>                
+                <ref bean="knownTypeMBIEWell" />                
                 <ref bean="knownTypehydrogeochem" />
                 <ref bean="knownTypeMine" />
                 <ref bean="knownTypeErlMineView" />
