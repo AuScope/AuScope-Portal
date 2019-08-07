@@ -6,7 +6,12 @@
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
-
+    <bean id="cswMBIEProduction" class="org.auscope.portal.core.services.csw.CSWServiceItem">
+        <constructor-arg name="id" value="cswMBIEProduction"/>
+        <constructor-arg name="title" value="MBIE Production Geonetwork"/>
+        <constructor-arg name="serviceUrl" value="http://ermexplorergeonetwork.azurewebsites.net/geonetwork/srv/eng/csw"/>
+        <constructor-arg name="recordInformationUrl" value="http://ermexplorergeonetwork.azurewebsites.net/geonetwork/srv/eng/catalog.search#/metadata/%1$s"/>
+    </bean>
     <bean id="cswAuscopeTest" class="org.auscope.portal.core.services.csw.CSWServiceItem">
         <constructor-arg name="id" value="cswAuscopeTest"/>
         <constructor-arg name="title" value="AuScope Test Geonetwork"/>
