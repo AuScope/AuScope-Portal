@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - oraclejdk8 
+  - openjdk8 
 # - oraclejdk7 # disabled due to pom.xml targets jdk8
 cache:
   directories:
