@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Provides a controller interface into some basic administration functionality/tests
+ * e.g. pulling simple notifications from Twitter
  *
  * @author Josh Vote
  *

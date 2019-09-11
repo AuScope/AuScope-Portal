@@ -30,7 +30,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document; 
 
-
+/*
+ * Controller for Mineral Tenement services
+ */
 @Controller
 public class MineralTenementController extends BasePortalController {
 
@@ -63,6 +65,22 @@ public class MineralTenementController extends BasePortalController {
         
         }
 
+    /**
+     * Retrieves a list of mineral tenement features
+     *
+     * @param serviceUrl
+     *        URL to request mineral tenements features from
+     * @param tenementName
+     *        name of mineral tenement layer
+     * @param owner
+     *        name of the owner of mineral tenement
+     * @param bbox
+     *        bounding box in JSON format
+     * @param maxFeatures
+     *        maximum number of features 
+     * @return gml tenement feature data 
+     * @throws Exception
+     */
     @RequestMapping("/getAllMineralTenementFeatures.do")
     public ModelAndView getAllMineralTenementFeatures(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -89,7 +107,35 @@ public class MineralTenementController extends BasePortalController {
         log.warn("GML: " + response.getData());
         return generateJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
     }
-
+    
+    /**
+     * Retrieves WMS mineral tenement feature info
+     *
+     * @param serviceUrl
+     *        URL to request mineral tenement feature info from
+     * @param lat, lng
+     *        latitude, longitude
+     * @param QUERY_LAYERS
+     *        name of the WMS layers
+     * @param x,y
+              x,y location of enquiry
+     * @param bbox
+     *        bounding box in JSON format
+     * @param WIDTH, HEIGHT
+     *        width, height of image
+     * @param INFO_FORMAT
+     *        image format
+     * @param SLD_BODY
+     *        style sheet for image
+     * @param postMethod
+     *        if true will use a POST request, default is GET
+     * @param version
+     *        WMS version
+     * @param feature_count  
+     *        max number of features to retrieve      
+     * @return gml tenement feature data 
+     * @throws Exception
+     */
     @RequestMapping("/getMineralTenementFeatureInfo.do")
     public void getMineralTenementFeatureInfo(HttpServletRequest request, HttpServletResponse response,
             @RequestParam("serviceUrl") String serviceUrl, @RequestParam("lat") String latitude,
@@ -128,7 +174,21 @@ public class MineralTenementController extends BasePortalController {
     }
 
 
-
+    /**
+     * Returns a count of the number mineral tenement features
+     *
+     * @param serviceUrl
+     *        URL to request mineral tenements features from
+     * @param tenementName
+     *        name of mineral tenement layer
+     * @param owner
+     *        name of owner of mineral tenement
+     * @param bbox
+     *        bounding box in JSON format
+     * @param maxFeatures
+     *        maximum number of features 
+     * @throws Exception
+     */
     @RequestMapping("/getMineralTenementCount.do")
     public ModelAndView getMineralTenementCount(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -159,7 +219,26 @@ public class MineralTenementController extends BasePortalController {
         return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
     }
 
-    
+    /**
+     * Returns mineral tenement features in CSV format
+     *
+     * @param serviceUrl
+     *        URL to request mineral tenements features from
+     * @param name
+     *        name of mineral tenement layer
+     * @param tenementType
+     *        mineral tenement type
+     * @param owner
+     *        name of owner of mineral tenement
+     * @param size
+     *        size of mineral tenement area
+     * @param endDate
+     *        mineral tenement expiry date
+     * @param bbox
+     *        bounding box in JSON format 
+     * @return mineral tenement features in CSV format
+     * @throws Exception
+     */
     @RequestMapping("/doMineralTenementCSVDownload.do")
     public void doMineralTenementCSVDownload(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -188,6 +267,15 @@ public class MineralTenementController extends BasePortalController {
 
     }
     
+ 
+    /**
+     * Retrieves mineral tenement legend stylesheet
+     *
+     * @param ccProperty
+     *        resulting image can be styled according to "TenementType" or "TenementStatus" or ""
+     * @return xml stylesheet
+     * @throws Exception
+     */
     @RequestMapping("/getMineralTenementLegendStyle.do")
     public void doMineLegendStyle(
             @RequestParam(required = false, value = "ccProperty") String ccProperty,
@@ -219,15 +307,29 @@ public class MineralTenementController extends BasePortalController {
         styleStream.close();
         outputStream.close();
     }
+
+
     /**
      * Handles getting the style of the mineral tenement filter queries. (If the bbox elements are specified, they will limit the output response to 200 records
      * implicitly)
      *
      * @param serviceUrl
+     *        URL of WMS mineral tenement service
      * @param name
+     *        name of WMS mineral tenement layer
      * @param tenementType
+     *        type of mineral tenement
      * @param owner
-     * @param status
+     *        name of mineral tenement owner
+     * @param size
+     *        size of mineral tenement area
+     * @param endDate
+     *        mineral tenement expiry date
+     * @param ccProperty
+     *        resulting image can be styled according to "TenementType" or "TenementStatus" or ""
+     * @param optionalFilters
+     *        optional filters which can be applied to stylesheet, xml format
+     * @return xml stylesheet
      * @throws Exception
      */
     @RequestMapping("/getMineralTenementStyle.do")
@@ -257,7 +359,6 @@ public class MineralTenementController extends BasePortalController {
                     mineralTenementServiceProviderType.styleName());
             break;
         }
-
 
         response.setContentType("text/xml");
 

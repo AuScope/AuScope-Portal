@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Controller handles mineral data analysis service of certain sites
+ */
 @Controller
 public class TIMAController extends BasePortalController {
 
@@ -29,14 +32,14 @@ public class TIMAController extends BasePortalController {
     }
 
     /**
-     * Handles the borehole filter queries.
+     * Handles the TIMA (TESCAN Integrated Mineral Analyser) data analysis filter queries.
      *
      * @param serviceUrl
      *            the url of the service to query
      * @param sampleName
      *            The name of the sample
      * @param igsn
-     * @return a WFS response converted into KML
+     * @return a WFS response converted into GML
      * @throws Exception
      */
     @RequestMapping("/doTIMAGeoSample.do")
@@ -69,6 +72,24 @@ public class TIMAController extends BasePortalController {
         return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
     }
     
+    /**
+     * Downloads results from TIMA (TESCAN Integrated Mineral Analyser) analysis in CSV format
+     *
+     * @param sampleName
+     *            Name of sample
+     * @param igsn
+     *            IGSN (International Geo Sample Number) of sample
+     * @param bbox
+     *            JSON bounding box
+     * @param maxFeatures
+     *            Maximum numb er of features to retrieve
+     * @param optionalFilters
+     *            Extra WFS filters to insert into query
+     * @param outputFormat
+     *             (not used)
+     * @return a WFS response converted into CSV
+     * @throws Exception
+     */
     @RequestMapping("/doTIMAGeoSampleCSVDownload.do")
     public void doTIMAGeoSampleCSVDownload(@RequestParam(required = false, value = "serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "sampleName") String sampleName,
@@ -106,14 +127,14 @@ public class TIMAController extends BasePortalController {
     
     
     /**
-     * Handles the borehole filter queries.
+     * Handles the SHRIMP (Sensitive High Resolution Ion Micro Probe) data analysis filter queries
      *
      * @param serviceUrl
      *            the url of the service to query
      * @param sampleName
      *            The name of the sample
      * @param igsn
-     * @return a WFS response converted into KML
+     * @return a WFS response converted into GML
      * @throws Exception
      */
     @RequestMapping("/doSHRIMPGeoSample.do")
@@ -147,14 +168,14 @@ public class TIMAController extends BasePortalController {
     }
     
     /**
-     * Handles the borehole filter queries.
+     * Downloads results from SHRIMP (Sensitive High Resolution Ion Micro Probe) analysis in CSV format
      *
      * @param serviceUrl
      *            the url of the service to query
      * @param sampleName
      *            The name of the sample
      * @param igsn
-     * @return a WFS response converted into KML
+     * @return a WFS response converted into CSV
      * @throws Exception
      */
     @RequestMapping("/doSHRIMPGeoSampleCSVDownload.do")

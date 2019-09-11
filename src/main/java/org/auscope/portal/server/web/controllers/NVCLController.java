@@ -222,6 +222,30 @@ public class NVCLController extends BasePortalController {
         return doBoreholeFilter(serviceUrl, boreholeName, custodian, dateOfDrillingStart,dateOfDrillingEnd, maxFeatures, bbox, onlyHylogger, outputFormat, false,optionalFilters);
     }
 
+    /**
+     * Handles detailed borehole query
+     *
+     * @param serviceUrl
+     *            the url of the service to query
+     * @param boreholeName
+     *            the name of boreholes
+     * @param custodian
+     *            name of borehole custodian
+     * @param dateOfDrillingStart
+     *
+     * @param dateOfDrillingEnd
+     *
+     * @param maxFeatures
+     *            maximum number of features to retrieve
+     * @param bbox
+     *            JSON bounding box
+     * @param onlyHylogger
+     *            if "true" then only boreholes with Hylogger data (NVCL) will be retrieved
+     * @param serviceFilter
+     *            if set, then will only retrieve data from the host specified in service filter
+     * @return a WFS response converted into KML
+     * @throws Exception
+     */
     @RequestMapping("/doNVCLFilterHits.do")
     public ModelAndView doNVCLFilterHits(@RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "boreholeName", defaultValue = "") String boreholeName,
@@ -402,7 +426,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
+     * Proxies an NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
      *
      * @param serviceUrl
      *            The URL of an NVCL Data service
@@ -433,7 +457,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a NVCL Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
+     * Proxies an NVCL 2.0 Mosaic request for mosaic imagery. Writes directly to the HttpServletResponse
      *
      * @param serviceUrl
      *            The URL of an NVCL Data service
@@ -478,7 +502,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a NVCL Plot Scalar request. Writes directly to the HttpServletResponse
+     * Proxies an NVCL Plot Scalar request. Writes directly to the HttpServletResponse
      *
      * @param serviceUrl
      *            The URL of an NVCL Data service
@@ -565,7 +589,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a CSV download request to a WFS from a NVCL 2.0 service. Writes directly to the HttpServletResponse
+     * Proxies a CSV download request to a WFS from an NVCL 2.0 service. Writes directly to the HttpServletResponse
      *
      * @param serviceUrl
      *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
@@ -606,7 +630,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a CSV download request to a WFS from a NVCL 2.0 service. Parses the response into a series of 1m averaged bins.
+     * Proxies a CSV download request to a WFS from an NVCL 2.0 service. Parses the response into a series of 1m averaged bins.
      *
      * @param serviceUrl
      *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
@@ -816,7 +840,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a NVCL WFS download request. Writes directly to the HttpServletResponse
+     * Proxies an NVCL WFS download request. Writes directly to the HttpServletResponse
      *
      * @param serviceUrl
      *            The URL of the NVCLDataService
@@ -860,7 +884,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a NVCL WFS status request. Writes directly to the HttpServletResponse
+     * Proxies an NVCL WFS status request. Writes directly to the HttpServletResponse
      *
      * @param serviceUrl
      *            The URL of the NVCLDataService
@@ -898,7 +922,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a NVCL getTsgAlgorithms request. Returns a JSON response
+     * Proxies an NVCL getTsgAlgorithms request. Returns a JSON response
      *
      * @param serviceUrl
      *            The URL of the NVCLDataService
@@ -916,7 +940,7 @@ public class NVCLController extends BasePortalController {
     }        
         
     /**
-     * Proxies a NVCL getAlgorithms request. Returns a JSON response
+     * Proxies an NVCL getAlgorithms request. Returns a JSON response
      *
      * @param serviceUrl
      *            The URL of the NVCLDataService
@@ -934,7 +958,7 @@ public class NVCLController extends BasePortalController {
     }
 
     /**
-     * Proxies a NVCL getAlgorithms request. Returns a JSON response
+     * Proxies an NVCL getClassifications request. Returns a JSON response
      *
      * @param serviceUrl
      *            The URL of the NVCLDataService
@@ -1011,6 +1035,7 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
+
     /**
      * Submits an NVCL processing TsgJob to the remote analytical services
      *
@@ -1058,6 +1083,7 @@ public class NVCLController extends BasePortalController {
             return generateJSONResponseMAV(false);
         }
     }
+
     /**
      * Returns an array of JSON AnalyticalJobStatus objects describing job status responses for a given email
      * @param email
@@ -1077,7 +1103,8 @@ public class NVCLController extends BasePortalController {
 
     /**
      * Returns an object containing passing, failing and erroring borehole ID's for a given processing job
-     * @param email
+     * @param jobid
+     *            requested job id
      * @return
      */
     @RequestMapping("/getNVCLProcessingResults.do")
@@ -1092,6 +1119,14 @@ public class NVCLController extends BasePortalController {
         }
     }
 
+
+    /**
+     * Downloads results of NVCL processing job
+     * @param jobId
+     *            job id NVCL processing job
+     * @param returns results as a byte stream encoded in zip format, containing csv files
+     * @throws Exception
+     */     
     @RequestMapping("/downloadNVCLProcessingResults.do")
     public void downloadNVCLProcessingResults(@RequestParam("jobId") String jobId, HttpServletResponse response) throws Exception {
         AnalyticalJobResults results = this.dataService2_0.getProcessingResults(jobId);
@@ -1125,7 +1160,18 @@ public class NVCLController extends BasePortalController {
             zout.close();
         }
     }
-    
+
+
+    /**
+     * Requests the image tray depth from NVCL services
+     *
+     * @param serviceUrl
+     *            URL of NVCL service
+     * @param logid
+     *            requested log id
+     * @return JSON struct of image tray depths
+     * @throws Exception
+     */
     @RequestMapping("/getNVCLImageTrayDepth.do")
     public ModelAndView getNVCLImageTrayDepth(@RequestParam("serviceUrl") String serviceUrl, @RequestParam("logid") String logId) throws Exception {
         try {

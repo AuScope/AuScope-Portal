@@ -15,6 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/*
+ *  Controller for the Remanent Anomalies service
+ */
 @Controller
 public class RemanentAnomaliesController extends BasePortalController {
 
@@ -27,6 +30,34 @@ public class RemanentAnomaliesController extends BasePortalController {
         this.remanentAnomaliesService = remanentAnomaliesService;
     }
 
+    /**
+     * Remanent anomaly filter WFS query 
+     *
+     * @param serviceURL
+     *            URL for the anomaly service
+     * @param name
+     *            anomaly name
+     * @param ARRAMin
+     *            minimum Apparent_resultant_rotation_angle of the first model
+     * @param ARRAMax
+     *            maximum Apparent_resultant_rotation_angle of the first model
+     * @param decMin
+     *            minimum declination of the first model
+     * @param decMax
+     *            maximum declination of the first model
+     * @param incMin
+     *            minimum inclination of the first model
+     * @param incMax
+     *            maximum inclination of the first model
+     * @param modelCountMin
+     *            minimum number of models generated for this anomaly
+     * @param modelCountMax
+     *            maximum number of models generated for this anomaly
+     * @param bbox
+     *             JSON bounding box
+     * @return WFS repsonse in XML format
+     * @throws Exception
+     */
     @RequestMapping("/doRemanentAnomaliesDownload.do")
     public void doRemanentAnomaliesDownload(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -59,8 +90,30 @@ public class RemanentAnomaliesController extends BasePortalController {
      * Handles getting the style of the Remanent Anomalies filter queries. (If the bbox elements are specified, they will limit the output response to 200
      * records implicitly)
      *
-     * @param serviceUrl
+     * @param serviceURL
+     *            URL for the anomaly service
      * @param name
+     *            anomaly name
+     * @param ARRAMin
+     *            minimum Apparent_resultant_rotation_angle of the first model
+     * @param ARRAMax
+     *            maximum Apparent_resultant_rotation_angle of the first model
+     * @param decMin
+     *            minimum declination of the first model
+     * @param decMax
+     *            maximum declination of the first model
+     * @param incMin
+     *            minimum inclination of the first model
+     * @param incMax
+     *            maximum inclination of the first model
+     * @param modelCountMin
+     *            minimum number of models generated for this anomaly
+     * @param modelCountMax
+     *            maximum number of models generated for this anomaly
+     * @param styleSwitch
+     *            set to "models" to enable a special filter required for modelCount styling
+     * @param optionalFilters
+     *            Additional style filters
      * @throws Exception
      */
     @RequestMapping("/getRemanentAnomaliesStyle.do")

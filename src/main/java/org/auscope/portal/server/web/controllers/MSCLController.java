@@ -53,7 +53,8 @@ public class MSCLController extends BasePortalController {
     }
 
     /**
-     * 
+     * Retrieves MCSL observations in JSON format
+     *
      * @param serviceUrl
      *            The URL of the WFS's endpoint. It should be of the form: http://{domain}:{port}/{path}/wfs
      * @param featureType
@@ -82,7 +83,23 @@ public class MSCLController extends BasePortalController {
             return generateJSONResponseMAV(false, null, e.getMessage());
         }
     }
-
+    
+    /**
+     * Retrieves MCSL observations in JSON format for use in a graph
+     *
+     * @param serviceUrl
+     *            The URL of the WFS's endpoint. It should be of the form: http://{domain}:{port}/{path}/wfs
+     * @param boreholeHeaderId
+     *            borehole identifier
+     * @param startDepth
+     *            starting depth
+     * @param endDepth
+     *            ending depth
+     * @param observationsToReturn
+     *            string which specifies which observations to return
+     * @return A ModelAndView object encapsulating the data series to plot along with an indicator of success or failure.
+     * @throws Exception
+     */
     @RequestMapping("/getMsclObservationsForGraph.do")
     public ModelAndView getMsclObservationsForGraph(
             @RequestParam("serviceUrl") final String serviceUrl,

@@ -15,6 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/*
+ *  Controller for the Remanent Anomalies AutoSearch service
+ */
 @Controller
 public class RemanentAnomaliesAutoSearchController extends BasePortalController {
     private RemanentAnomaliesAutoSearchService remanentAnomaliesAutoSearchService;
@@ -26,6 +29,18 @@ public class RemanentAnomaliesAutoSearchController extends BasePortalController 
         this.remanentAnomaliesAutoSearchService = remanentAnomaliesAutoSearchService;
     }
 
+    /**
+     * Handles getting Remanent Anomalies WFS filter query
+     *
+     * @param serviceUrl
+     *            URL of Remanent Anomalies Auto Search WFS service
+     * @param name
+     *            remanent anomaly name
+     * @param bbox
+     *            JSON bounding box
+     * @return XML WFS data
+     * @throws Exception
+     */
     @RequestMapping("/doRemanentAnomaliesAutoSearchDownload.do")
     public void doRemanentAnomaliesAutoSearchDownload(
             @RequestParam("serviceUrl") String serviceUrl,
@@ -51,7 +66,7 @@ public class RemanentAnomaliesAutoSearchController extends BasePortalController 
      * records implicitly)
      *
      * @param serviceUrl
-     * @param name
+     *            URL for remanent anomalies auto search service
      * @throws Exception
      */
     @RequestMapping("/getRemanentAnomaliesAutoSearchStyle.do")

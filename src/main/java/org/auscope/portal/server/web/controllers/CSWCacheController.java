@@ -18,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @version $Id: CSWCacheController.java 1863 2011-08-08 07:55:42Z JoshVote $
+ *
+ * Controller for CSWRecord caching and retrieval
+ *
  */
 @Controller
 public class CSWCacheController extends BaseCSWController {
@@ -76,7 +79,7 @@ public class CSWCacheController extends BaseCSWController {
     }
 
     /**
-     * Requests every keyword as cached by
+     * Requests every keyword from internal cache
      *
      * @return
      */

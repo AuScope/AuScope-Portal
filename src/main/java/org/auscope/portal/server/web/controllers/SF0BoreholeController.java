@@ -81,7 +81,7 @@ public class SF0BoreholeController extends BasePortalController {
     
     
     /**
-     * Handles the borehole filter queries.
+     * Handles the borehole filter queries, but returns CSV values
      *
      * @param serviceUrl
      *            the url of the service to query
@@ -89,7 +89,7 @@ public class SF0BoreholeController extends BasePortalController {
      *            the name of the mine to query for
      * @param request
      *            the HTTP client request
-     * @return a WFS response converted into KML
+     * @return a WFS response converted into CSV
      * @throws Exception
      */
     @RequestMapping("/doNVCLBoreholeViewCSVDownload.do")
