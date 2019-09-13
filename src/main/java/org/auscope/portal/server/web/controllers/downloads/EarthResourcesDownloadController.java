@@ -20,6 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/*
+ * Controller for handling requests for downloads of Earth Resource data
+ */
 @Controller
 public class EarthResourcesDownloadController extends BasePortalController {
 
@@ -97,7 +100,7 @@ public class EarthResourcesDownloadController extends BasePortalController {
     }
 
     /**
-     * Handles the Earth Resource MineralOccerrence filter queries.
+     * Handles the Earth Resource MineralOccurrence filter queries.
      *
      * @param serviceUrl
      * @param commodityName

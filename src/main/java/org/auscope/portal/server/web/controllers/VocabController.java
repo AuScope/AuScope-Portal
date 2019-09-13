@@ -112,7 +112,11 @@ public class VocabController extends BasePortalController {
         return map;
     }
 
-
+    /**
+     * Queries the vocabulary service for mineral occurrence types
+     *
+     * @return vocublary mapping in JSON forma
+     */
     @RequestMapping("getAllMineralOccurrenceTypes.do")
     public ModelAndView getAllMineralOccurrenceTypes() {
         Map<String, String> vocabularyMappings = this.vocabularyFilterService.getVocabularyById(MINERAL_OCCURRENCE_TYPE_VOCABULARY);
@@ -123,7 +127,7 @@ public class VocabController extends BasePortalController {
     /**
      * Get all GA commodity URNs with prefLabels
      *
-     * @param
+     * @return vocublary mapping in JSON format
      */
     @RequestMapping("getAllCommodities.do")
     public ModelAndView getAllCommodities() {
@@ -134,8 +138,9 @@ public class VocabController extends BasePortalController {
 
 
     /**
-     * @return
-     * @throws Exception
+     * Queries the vocabulary service for mine status types
+     *
+     * @return vocublary mapping in JSON format
      */
     @RequestMapping("getAllMineStatuses.do")
     public ModelAndView getAllMineStatuses() {
@@ -146,8 +151,10 @@ public class VocabController extends BasePortalController {
 
 
     /**
-     * @return
-     * @throws Exception
+     * Queries the vocabilary service for a list of the JORC (Joint Ore Reserves Committee) categories
+     * (also known as "Australasian  Code  for  Reporting  of  Exploration Results, Mineral Resources and Ore Reserves")
+     *
+     * @return vocublary mapping in JSON format
      */
     @RequestMapping("getAllJorcCategories.do")
     public ModelAndView getAllJorcCategories() {
@@ -173,7 +180,9 @@ public class VocabController extends BasePortalController {
 
 
     /**
-     * @return
+     * Queries the vocabulary service for a list of time scales
+     *
+     * @return vocublary mapping in JSON format
      */
     @RequestMapping("getAllTimescales.do")
     public ModelAndView getAllTimescales() {
@@ -195,7 +204,9 @@ public class VocabController extends BasePortalController {
     }
 
     /**
-     * @return
+     * Queries the vocabulary service for a list of mineral tenement types
+     *
+     * @return vocublary mapping in JSON format
      */
     @RequestMapping("getTenementTypes.do")
     public ModelAndView getTenementTypes() {
@@ -216,7 +227,9 @@ public class VocabController extends BasePortalController {
     }
 
     /**
-     * @return
+     * Queries the vocabulary service for a list of the different kinds of mineral tenement status
+     *
+     * @return vocublary mapping in JSON format
      */
     @RequestMapping("getTenementStatuses.do")
     public ModelAndView getTenementStatuses() {

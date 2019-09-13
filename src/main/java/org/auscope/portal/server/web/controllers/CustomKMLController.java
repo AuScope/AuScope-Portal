@@ -23,6 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
+/*
+ * Controller enables loading of KML layers onto map
+ */
+
 @Controller
 public class CustomKMLController extends BasePortalController {
     FileDownloadService fileDownloadService;
@@ -31,7 +35,13 @@ public class CustomKMLController extends BasePortalController {
     public CustomKMLController(FileDownloadService fileDownloadService) {
         this.fileDownloadService = fileDownloadService;
     }
-
+    
+    /**
+     * Parses the given KML file content
+     *
+     * @return KML data which can be loaded as a layer
+     * @throws Exception
+     */
     @RequestMapping("/addKMLLayer.do")
     public @ResponseBody String addKMLLayer(FileUploadBean uploadItem, BindingResult result,
             HttpServletResponse response) {
@@ -49,6 +59,14 @@ public class CustomKMLController extends BasePortalController {
         }
     }
 
+    /**
+     * Retrieves KML from the given URL
+     *
+     * @param url
+     *       URL of KML file to be retrieved
+     * @return KML data which can be loaded as a layer
+     * @throws Exception
+     */
     @RequestMapping("/addKMLUrl.do")
     public ModelAndView addKMLUrl(
             @RequestParam("url") String url,

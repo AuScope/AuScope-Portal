@@ -32,7 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
  * <ul>
  * <li>Mine</li>
  * <li>Mineral Occurrence</li>
- * <li>Mininig Activity</li>
+ * <li>Mining Activity</li>
  * </ul>
  * </p>
  *
@@ -131,7 +131,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     }
 
     /**
-     * Handles the Earth Resource MineralOccerrence filter queries.
+     * Handles the Earth Resource MineralOccurrence filter queries.
      *
      * @param serviceUrl
      * @param commodityName
@@ -185,7 +185,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     }
 
     /**
-     * Handles counting the results of a Earth Resource MineralOccerrence filter query.
+     * Handles counting the results of an Earth Resource MineralOccurrence filter query.
      *
      * @param serviceUrl
      * @param commodityName
@@ -541,7 +541,7 @@ public class EarthResourcesFilterController extends BasePortalController {
                     
 
     /**
-     * Handles counting the results of a Earth Resource MineralOccerrence style request query.
+     * Handles counting the results of an Earth Resource Mineral Occurrence style request query.
      *
      * @param commodityName
      * @param bbox
@@ -583,7 +583,7 @@ public class EarthResourcesFilterController extends BasePortalController {
     }
 
     /**
-     * Handles counting the results of a Earth Resource MineralOccerrence SF0 view style request query.
+     * Handles counting the results of an Earth Resource Mineral Occurrence SF0 view style request query.
      *
      * @param commodityName
      * @param bbox

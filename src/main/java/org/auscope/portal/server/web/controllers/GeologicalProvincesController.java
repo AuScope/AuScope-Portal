@@ -13,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+/*
+ * Controller for geological province service
+ */
 @Controller
 public class GeologicalProvincesController extends BasePortalController {
     private GeologicalProvincesService geologicalProvincesService;

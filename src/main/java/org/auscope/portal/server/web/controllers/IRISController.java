@@ -27,6 +27,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/*
+ *
+ * Controller for handling IRIS (Incorporated Research Institutions for Seismology) services
+ *
+ */
 @Controller
 public class IRISController extends BasePortalController {
     /**
@@ -208,6 +213,26 @@ public class IRISController extends BasePortalController {
         }
     }
 
+    /**
+     * Makes a request to IRIS service for time series data
+     *
+     * @param serviceUrl
+     *            The IRIS web service URL.
+     * @param networkCode
+     *            The network code that you're interested in.
+     * @param stationCode
+     *            The code of the station to interrogate.
+     * @param channel
+     *            The channel that you're interested in.
+     * @param start
+     *            Time series start date.
+     * @param duration
+     *            Time series duration.
+     * @param output
+     *            Output format.
+     *
+     * @return a JSONResponseMAV containing the time series data
+     */
     @RequestMapping("/getTimeseriesUrl.do")
     public ModelAndView getTimeseriesUrl(
             @RequestParam("serviceUrl") String serviceUrl,

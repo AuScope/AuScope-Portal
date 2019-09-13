@@ -177,6 +177,13 @@ public class PressureDBController extends BasePortalController {
             return generateJSONResponseMAV(false, null, "Failure communicating with Pressure DB data service");
         }
     }
+
+    /**
+     * Returns a stylesheet for styling pressure db legend images
+     * @param ccProperty
+     *            stylesheet can be styled for a property, e.g. "Length", "Elevation"
+     * @return xml stylesheet used for styling legend image
+     */
     @RequestMapping("/getPressureDBLegendStyle.do")
     public void getPressureDBLegendStyle(
             @RequestParam(required = false, value = "ccProperty") String ccProperty,
@@ -199,6 +206,32 @@ public class PressureDBController extends BasePortalController {
         outputStream.close();
     }
     
+    /**
+     * Returns a stylesheet for styling pressure db queries
+     * @param serviceUrl
+     *            URL of WMS pressure db service
+     * @param boreholeName
+     *            Name of borehole
+     * @param custodian
+     *            Borehole of custodian
+     * @param dateOfDrillingStart
+     *            earliest borehole drilling date
+     * @param dateOfDrillingEnd
+     *            latest borehole drilling date
+     * @param maxFeatures
+     *            (not used)
+     * @param bbox
+     *            (not used)
+     * @param serviceFilter
+     *            (not used)
+     * @param color
+     *            (not used)
+     * @param ccProperty
+     *            stylesheet can be styled for a property, e.g. "Length", "Elevation"
+     * @param optionalFilters
+     *            additional filters which can be applied to stylesheet
+     * @return xml stylesheet used for styling legend image
+     */
     @RequestMapping("/doPressureDBFilterStyle.do")
     public void doPressureDBFilterStyle(
             HttpServletResponse response,

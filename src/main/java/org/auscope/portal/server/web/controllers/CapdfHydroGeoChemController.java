@@ -319,7 +319,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
     }
 
     /**
-     * Returns a list of values for graphing scatter plot
+     * Returns a list of values for graphing box plot
      *
      * @param serviceUrl
      *            - serviceUrl

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * A controller used to query a service that displays onshore seismic survey lines
+ */
 @Controller
 @Scope("session")
 // this can't be a singleton as each request by a user may be targeting a
@@ -43,7 +46,10 @@ public class SeismicSurveyWMS extends BaseCSWController {
         this.seismicWMSService = seismicWMSService;
         this.serviceCaller = serviceCaller;
     }
-
+    
+    /**
+     * Query to retrieve the CSW record for a service that displays onshore seismic survey lines
+     */
     @RequestMapping(value = "/getSeismicCSWRecord.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView getSeismicCSWRecord(@RequestParam("serviceUrl") String serviceUrl,
             HttpServletRequest request, HttpServletResponse response)
