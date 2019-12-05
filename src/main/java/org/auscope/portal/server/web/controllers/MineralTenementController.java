@@ -13,7 +13,6 @@ import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.SLDLoader;
 import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.auscope.portal.server.web.service.MineralTenementService;
-import org.auscope.portal.xslt.ArcGISToMineralTenement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,7 @@ public class MineralTenementController extends BasePortalController {
     private HashMap<String, String> MINERAL_TENEMENT_COLOUR_MAP = new HashMap<String, String>();    
 
     @Autowired
-    public MineralTenementController(MineralTenementService mineralTenementService, WMSService wmsService, ArcGISToMineralTenement arcGISToMineralTenement) {
+    public MineralTenementController(MineralTenementService mineralTenementService, WMSService wmsService) {
         this.mineralTenementService = mineralTenementService;
         MINERAL_TENEMENT_COLOUR_MAP.put("exploration", "#0000FF");
         MINERAL_TENEMENT_COLOUR_MAP.put("prospecting", "#00FFFF");
@@ -90,7 +89,7 @@ public class MineralTenementController extends BasePortalController {
             style = this.getStyle(false,ccProperty,"mt:MineralTenement",name, tenementType, owner, size, endDate);
             break;
         default:
-            MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
+            MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
             String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters, mineralTenementServiceProviderType); //VT:get filter from service
             style = this.getPolygonStyle(filter, mineralTenementServiceProviderType.featureType(), mineralTenementServiceProviderType.fillColour(), mineralTenementServiceProviderType.borderColour(),
                     mineralTenementServiceProviderType.styleName());
