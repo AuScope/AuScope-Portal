@@ -8,6 +8,8 @@ import java.io.Serializable;
  *
  */
 public class AlgorithmOutputClassification implements Serializable {
+
+    private static final long serialVersionUID = -7430804968407946156L;
     private String classText;
     private int color;
     private int index;

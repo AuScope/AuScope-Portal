@@ -3,7 +3,7 @@ package org.auscope.portal.mineraloccurrence;
 import java.io.InputStream;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.http.client.methods.HttpGet;
 import org.auscope.portal.core.server.http.HttpClientInputStream;

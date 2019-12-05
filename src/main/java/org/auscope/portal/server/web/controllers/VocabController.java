@@ -9,7 +9,6 @@ import net.sf.json.JSONArray;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
-import org.auscope.portal.core.services.VocabularyCacheService;
 import org.auscope.portal.core.services.VocabularyFilterService;
 import org.auscope.portal.server.web.service.NvclVocabService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,22 +111,11 @@ public class VocabController extends BasePortalController {
         return map;
     }
 
-    /**
-     * Queries the vocabulary service for mineral occurrence types
-     *
-     * @return vocublary mapping in JSON forma
-     */
-    @RequestMapping("getAllMineralOccurrenceTypes.do")
-    public ModelAndView getAllMineralOccurrenceTypes() {
-        Map<String, String> vocabularyMappings = this.vocabularyFilterService.getVocabularyById(MINERAL_OCCURRENCE_TYPE_VOCABULARY);
-
-        return getVocabularyMappings(vocabularyMappings);
-    }
 
     /**
      * Get all GA commodity URNs with prefLabels
      *
-     * @return vocublary mapping in JSON format
+     * @return vocubulary mapping in JSON format
      */
     @RequestMapping("getAllCommodities.do")
     public ModelAndView getAllCommodities() {
@@ -140,7 +128,7 @@ public class VocabController extends BasePortalController {
     /**
      * Queries the vocabulary service for mine status types
      *
-     * @return vocublary mapping in JSON format
+     * @return vocubulary mapping in JSON format
      */
     @RequestMapping("getAllMineStatuses.do")
     public ModelAndView getAllMineStatuses() {
@@ -151,10 +139,10 @@ public class VocabController extends BasePortalController {
 
 
     /**
-     * Queries the vocabilary service for a list of the JORC (Joint Ore Reserves Committee) categories
+     * Queries the vocabulary service for a list of the JORC (Joint Ore Reserves Committee) categories
      * (also known as "Australasian  Code  for  Reporting  of  Exploration Results, Mineral Resources and Ore Reserves")
      *
-     * @return vocublary mapping in JSON format
+     * @return vocubulary mapping in JSON format
      */
     @RequestMapping("getAllJorcCategories.do")
     public ModelAndView getAllJorcCategories() {

@@ -6,7 +6,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.gsml.YilgarnGeochemistryFilter;
 import org.auscope.portal.gsml.YilgarnLocatedSpecimenRecord;
@@ -171,46 +170,6 @@ public class YilgarnGeochemistryController extends BasePortalController {
         }
 
         return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
-    }
-
-    /**
-     * Similar to doYilgarnGeochemistryFilter, this method returns the count of the matched features
-     *
-     * @param serviceUrl
-     *            A WFS endpoint
-     * @param geologicName
-     *            A name filter for the geologic unit
-     * @param bboxJson
-     *            A FilterBoundingBox encoded in JSON
-     * @param maxFeatures
-     *            The maximum number of features to request (or 0 for unbounded)
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping("/doYilgarnGeochemistryCount.do")
-    public ModelAndView doYilgarnGeochemistryCount(
-            @RequestParam(required = false, value = "serviceUrl") String serviceUrl,
-            @RequestParam(required = false, value = "geologicName") String geologicName,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-            throws Exception {
-
-        //Build our filter details
-        String filterString = generateGeologicUnitFilter(geologicName, bboxJson);
-
-        //Make our request and get it transformed
-        WFSCountResponse response = null;
-        try {
-            response = wfsService.getWfsFeatureCount(serviceUrl, "gsml:GeologicUnit", filterString, maxFeatures, null);
-        } catch (Exception ex) {
-            log.warn(String.format("Unable to request/transform WFS response for '%1$s' from '%2$s': %3$s",
-                    geologicName, serviceUrl, ex));
-            log.debug("Exception: ", ex);
-            return generateExceptionResponse(ex, serviceUrl);
-        }
-
-        return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
     }
 
 }

@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.PortalServiceException;
-import org.auscope.portal.core.services.SISSVoc3Service;
 import org.auscope.portal.core.services.VocabularyService;
 import org.auscope.portal.core.services.methodmakers.VocabularyMethodMaker;
 import org.auscope.portal.core.services.methodmakers.VocabularyMethodMaker.View;

@@ -9,6 +9,8 @@ import java.util.List;
  *
  */
 public class AlgorithmOutputResponse implements Serializable {
+
+    private static final long serialVersionUID = 3260347056439267886L;
     private int algorithmId;
     private String algorithmName;
     private String outputName;

@@ -7,7 +7,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.auscope.portal.core.services.namespaces.OGCNamespaceContext;
 import org.auscope.portal.core.util.DOMUtil;

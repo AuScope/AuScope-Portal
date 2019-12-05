@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
 
 /**
  * Class that represents ogc:Filter markup for capricorn distal footprint queries

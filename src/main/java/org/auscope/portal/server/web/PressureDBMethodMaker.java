@@ -1,14 +1,9 @@
 package org.auscope.portal.server.web;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.auscope.portal.core.services.methodmakers.AbstractMethodMaker;
 import org.springframework.stereotype.Repository;
 

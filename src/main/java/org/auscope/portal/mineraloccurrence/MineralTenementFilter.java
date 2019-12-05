@@ -3,7 +3,6 @@ package org.auscope.portal.mineraloccurrence;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.auscope.portal.core.uifilter.GenericFilter;

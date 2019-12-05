@@ -8,6 +8,8 @@ import java.io.Serializable;
  *
  */
 public class AlgorithmVersion implements Serializable {
+
+    private static final long serialVersionUID = 2019021708462831412L;
     private int algorithmOutputId;
     private int version;
 

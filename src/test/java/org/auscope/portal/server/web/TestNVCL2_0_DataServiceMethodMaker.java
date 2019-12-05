@@ -2,9 +2,8 @@ package org.auscope.portal.server.web;
 
 import java.net.URI;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -9,6 +9,8 @@ import java.util.List;
  *
  */
 public class AnalyticalJobResults implements Serializable {
+
+    private static final long serialVersionUID = -4599429428385852064L;
     private String jobId;
     private String jobDescription;
     private String email;

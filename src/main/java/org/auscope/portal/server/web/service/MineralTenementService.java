@@ -2,8 +2,6 @@ package org.auscope.portal.server.web.service;
 
 import java.net.URISyntaxException;
 
-import javax.naming.OperationNotSupportedException;
-
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;

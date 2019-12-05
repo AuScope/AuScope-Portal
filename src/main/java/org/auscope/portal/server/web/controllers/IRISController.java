@@ -39,8 +39,6 @@ public class IRISController extends BasePortalController {
      */
     private static final String ENCODING = "ISO-8859-1";
 
-    private HttpServiceCaller httpService;
-
     /**
      * Makes sure that a string has a trailing forward slash.
      *
@@ -68,7 +66,6 @@ public class IRISController extends BasePortalController {
      */
     @Autowired
     public IRISController(HttpServiceCaller httpService) {
-        this.httpService = httpService;
     }
 
     /**

@@ -11,6 +11,7 @@ import java.util.Map;
  */
 public class BinnedCSVResponse implements Serializable {
 
+    private static final long serialVersionUID = 4130569490065611309L;
     private double binSize;
     private Bin[] binnedValues;
 

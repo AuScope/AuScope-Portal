@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.services.PortalServiceException;
 
 import twitter4j.Query;
@@ -25,8 +23,6 @@ import twitter4j.conf.ConfigurationBuilder;
  *
  */
 public class NotificationService {
-    private final Log log = LogFactory.getLog(getClass());
-
     private Twitter twitter;
     private String notificationAccount;
     private List<Notification> cache;

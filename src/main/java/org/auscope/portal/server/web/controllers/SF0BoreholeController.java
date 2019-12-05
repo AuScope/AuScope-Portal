@@ -14,7 +14,6 @@ import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.WFSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.gsml.SF0BoreholeFilter;
 import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller for handling requests for the SF0 Borehole
@@ -37,7 +35,6 @@ public class SF0BoreholeController extends BasePortalController {
 
     private SF0BoreholeService boreholeService;
 
-    private CSWCacheService cswService;
     // private GsmlpNameSpaceTable gsmlpNameSpaceTable;
     private NVCL2_0_DataService nvclDataService;
     private WFSService wfsService;
@@ -45,40 +42,12 @@ public class SF0BoreholeController extends BasePortalController {
     @Autowired
     public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService, NVCL2_0_DataService nvclDataService, WFSService wfsService) {
         this.boreholeService = sf0BoreholeService;
-        this.cswService = cswService;
         this.nvclDataService = nvclDataService;
         // GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
         // this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
         this.wfsService = wfsService;
     }
 
-    /**
-     * Handles the borehole filter queries.
-     *
-     * @param serviceUrl
-     *            the url of the service to query
-     * @param mineName
-     *            the name of the mine to query for
-     * @param request
-     *            the HTTP client request
-     * @return a WFS response converted into KML
-     * @throws Exception
-     */
-    @RequestMapping("/doBoreholeViewFilter.do")
-    public ModelAndView doBoreholeFilter(String serviceUrl, String boreholeName, String custodian,
-            String dateOfDrillingStart, String dateOfDrillingEnd, int maxFeatures, String bbox,
-            @RequestParam(required=false, value="outputFormat") String outputFormat) throws Exception {
-
-        try {
-            FilterBoundingBox box = FilterBoundingBox.attemptParseFromJSON(bbox);
-            WFSResponse response = this.boreholeService.getAllBoreholes(serviceUrl, boreholeName, custodian,
-                    dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, box, outputFormat);
-            return generateNamedJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
-        } catch (Exception e) {
-            return this.generateExceptionResponse(e, serviceUrl);
-        }
-    }
-    
     
     /**
      * Handles the borehole filter queries, but returns CSV values

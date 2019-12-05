@@ -12,10 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.auscope.portal.core.server.controllers.BasePortalController;
-import org.auscope.portal.mineraloccurrence.MineralTenementFilter;
 import org.auscope.portal.pressuredb.AvailableOMResponse;
 import org.auscope.portal.pressuredb.PressureDBFilter;
-import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.auscope.portal.server.web.service.PressureDBService;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,33 +176,6 @@ public class PressureDBController extends BasePortalController {
         }
     }
 
-    /**
-     * Returns a stylesheet for styling pressure db legend images
-     * @param ccProperty
-     *            stylesheet can be styled for a property, e.g. "Length", "Elevation"
-     * @return xml stylesheet used for styling legend image
-     */
-    @RequestMapping("/getPressureDBLegendStyle.do")
-    public void getPressureDBLegendStyle(
-            @RequestParam(required = false, value = "ccProperty") String ccProperty,
-            HttpServletResponse response) throws Exception {
-        String style = "";
-        if (ccProperty.contains("Length") || 
-            ccProperty.contains("Elevation" )) {
-            style = getColorCodedStyle(true,"gsmlp:BoreholeView", null,null, null, null, ccProperty, null);
-        } else {
-            style = getStyle(true,"gsmlp:BoreholeView", "gsmlp:shape", "#2242c7",null,null, null, null,null);
-        }
-        response.setContentType("text/xml");
-        ByteArrayInputStream styleStream = new ByteArrayInputStream(
-                style.getBytes());
-        OutputStream outputStream = response.getOutputStream();
-
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024,false);
-
-        styleStream.close();
-        outputStream.close();
-    }
     
     /**
      * Returns a stylesheet for styling pressure db queries

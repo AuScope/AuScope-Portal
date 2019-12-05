@@ -7,7 +7,6 @@ import org.auscope.portal.core.services.admin.AdminDiagnosticResponse;
 import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc2MethodMaker;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
-import org.auscope.portal.server.web.controllers.VocabController;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Test;

@@ -3,8 +3,6 @@ package org.auscope.portal.server.web.service;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
@@ -34,7 +32,6 @@ public class MineralOccurrenceService extends BaseWFSService {
 
     // -------------------------------------------------------------- Constants
 
-    private final Log log = LogFactory.getLog(getClass());
     public static final String MINE_FEATURE_TYPE = "er:MiningFeatureOccurrence";
     public static final String MINERAL_OCCURRENCE_FEATURE_TYPE = "gsml:MappedFeature";
     public static final String MINING_ACTIVITY_FEATURE_TYPE = "er:MiningFeatureOccurrence";

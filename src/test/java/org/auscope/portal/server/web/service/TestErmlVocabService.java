@@ -1,7 +1,6 @@
 package org.auscope.portal.server.web.service;
 
 import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.methods.HttpRequestBase;
@@ -16,8 +15,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.jena.rdf.model.Resource;
-
 public class TestErmlVocabService extends PortalTestClass {
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class, "mockMethod");
     private HttpRequestBase mockMethod2 = context.mock(HttpRequestBase.class, "mockMethod2");
@@ -31,15 +28,6 @@ public class TestErmlVocabService extends PortalTestClass {
     public void setup() {
         service = new ErmlVocabService(mockServiceCaller, mockMethodMaker, baseUrl);
         service.setPageSize(50);
-    }
-
-    private boolean containsResourceUri(List<Resource> list, String uri) {
-        for (Resource res : list) {
-            if (res.getURI().equals(uri)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

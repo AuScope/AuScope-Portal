@@ -1,8 +1,6 @@
 package org.auscope.portal.gsml;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -12,7 +10,6 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.auscope.portal.core.services.namespaces.IterableNamespace;
 import org.auscope.portal.core.services.responses.ows.OWSExceptionParser;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
