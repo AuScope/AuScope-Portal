@@ -12,7 +12,7 @@ import org.junit.Test;
  * User: Mathew Wyatt Date: 24/03/2009 Time: 10:24:29 AM
  */
 public class TestMineralOccurrenceResponseHandler extends PortalTestClass {
-    MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler = new MineralOccurrencesResponseHandler();
+   /* MineralOccurrencesResponseHandler mineralOccurrencesResponseHandler = new MineralOccurrencesResponseHandler();
 
     @Test
     public void testHandleMineResponse() throws Exception {
@@ -61,5 +61,5 @@ public class TestMineralOccurrenceResponseHandler extends PortalTestClass {
                 mineralOccurrencesResponseHandler.getNumberOfFeatures(getFeatureResponse);
 
         Assert.assertEquals("There are 0 features", 0, numberOfFeatures);
-    }
+    }*/
 }

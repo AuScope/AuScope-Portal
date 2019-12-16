@@ -88,7 +88,7 @@ public class EarthResourcesFilterController extends BasePortalController {
         // VT: Currently not working as GeoServer is returning strange error for this filer
         String filter = this.mineralOccurrenceService.getMiningActivityFilter(
                 mineName, startDate, endDate, oreProcessed, producedMaterial,
-                cutOffGrade, production, maxFeatures, bbox);
+                cutOffGrade, production, bbox);
 
         String style = this.getStyle(serviceUrl, filter, "er:MiningFeatureOccurrence", "#FF9900");
 
