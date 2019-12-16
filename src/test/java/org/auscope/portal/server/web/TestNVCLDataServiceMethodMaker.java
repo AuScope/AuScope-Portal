@@ -4,7 +4,6 @@ import java.net.URI;
 
 import org.junit.Assert;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,54 +60,6 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         assertContainsURLParam(uri, "mosaicsvc", "no");
     }
 
-    @Test
-    public void testParamValidity_GetPlotScalar() throws Exception {
-        //Mandatory
-        URI uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, null, null, null, null, null, null, 0)
-                .getURI();
-        assertContainsURLParam(uri, "logid", logIdentifier);
-        assertDoesntContainURLParam(uri, "startdepth");
-        assertDoesntContainURLParam(uri, "enddepth");
-        assertDoesntContainURLParam(uri, "samplinginterval");
-        assertDoesntContainURLParam(uri, "width");
-        assertDoesntContainURLParam(uri, "height");
-        assertDoesntContainURLParam(uri, "graphtype");
-        assertContainsURLParam(uri, "legend", "0");
-
-        //Optional (also test the various PlotScalarGraphType mappins)
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5,
-                PlotScalarGraphType.LineChart, 0).getURI();
-        assertContainsURLParam(uri, "logid", logIdentifier);
-        assertContainsURLParam(uri, "startdepth", "10");
-        assertContainsURLParam(uri, "enddepth", "20");
-        assertContainsURLParam(uri, "samplinginterval", "4.5");
-        assertContainsURLParam(uri, "width", "30");
-        assertContainsURLParam(uri, "height", "40");
-        assertContainsURLParam(uri, "graphtype", "3");
-        assertContainsURLParam(uri, "legend", "0");
-
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5,
-                PlotScalarGraphType.ScatteredChart, 1).getURI();
-        assertContainsURLParam(uri, "logid", logIdentifier);
-        assertContainsURLParam(uri, "startdepth", "10");
-        assertContainsURLParam(uri, "enddepth", "20");
-        assertContainsURLParam(uri, "samplinginterval", "4.5");
-        assertContainsURLParam(uri, "width", "30");
-        assertContainsURLParam(uri, "height", "40");
-        assertContainsURLParam(uri, "graphtype", "2");
-        assertContainsURLParam(uri, "legend", "1");
-
-        uri = methodMaker.getPlotScalarMethod(serviceUrl, logIdentifier, 10, 20, 30, 40, 4.5,
-                PlotScalarGraphType.StackedBarChart, 1).getURI();
-        assertContainsURLParam(uri, "logid", logIdentifier);
-        assertContainsURLParam(uri, "startdepth", "10");
-        assertContainsURLParam(uri, "enddepth", "20");
-        assertContainsURLParam(uri, "samplinginterval", "4.5");
-        assertContainsURLParam(uri, "width", "30");
-        assertContainsURLParam(uri, "height", "40");
-        assertContainsURLParam(uri, "graphtype", "1");
-        assertContainsURLParam(uri, "legend", "1");
-    }
 
     @Test
     public void testParamValidity_GetMosaic() throws Exception {
@@ -192,17 +143,6 @@ public class TestNVCLDataServiceMethodMaker extends PortalTestClass {
         //Mandatory only
         URI uri = methodMaker.getCheckTSGStatusMethod(serviceUrl, email).getURI();
         assertContainsURLParam(uri, "email", email);
-    }
-
-    @Test
-    public void testParamValidity_WFSDownload() throws Exception {
-        //Mandatory only
-        URI uri = methodMaker.getDownloadWFSMethod(serviceUrl, email, "borehole-id", "http://om.service.url",
-                "type:Name").getURI();
-        assertContainsURLParam(uri, "email", email);
-        assertContainsURLParam(uri, "boreholeid", "borehole-id");
-        assertContainsURLParam(uri, "serviceurl", "http://om.service.url");
-        assertContainsURLParam(uri, "typename", "type:Name");
     }
 
     @Test

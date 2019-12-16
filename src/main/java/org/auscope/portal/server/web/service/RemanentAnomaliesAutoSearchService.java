@@ -47,16 +47,9 @@ public class RemanentAnomaliesAutoSearchService extends BaseWFSService {
         return filterString;
     }
 
-    public String getRemanentAnomaliesAutoSearchFilter(FilterBoundingBox bbox)
-            throws Exception {
+    public String getRemanentAnomaliesAutoSearchFilter(FilterBoundingBox bbox) {
         RemanentAnomaliesAutoSearchFilter filter = new RemanentAnomaliesAutoSearchFilter();
         return generateFilterString(filter, bbox);
-    }
-
-    public String getRemanentAnomaliesAutoSearchWithStyling(String name)
-            throws Exception {
-        RemanentAnomaliesAutoSearchFilter filter = new RemanentAnomaliesAutoSearchFilter();
-        return generateAdditionalStyleFilter(filter);
     }
 
     /**

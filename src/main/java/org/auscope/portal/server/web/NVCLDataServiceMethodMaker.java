@@ -120,78 +120,6 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
         return method;
     }
      
-    /**
-     * Generates a method for making a request for the Mosaic imagery for a particular logId
-     *
-     * The response will be either HTML or a binary stream representing an image
-     * 
-     * @param serviceUrl
-     *            The URL of the NVCLDataService
-     * @param logId
-     *            The logID (from a getLogCollection request) to query
-     * @param width
-     *            [Optional] the width of the image in pixel
-     * @param height
-     *            [Optional] the height of the image in pixel
-     * @param startDepth
-     *            [Optional] the start depth of a borehole collar
-     * @param endDepth
-     *            [Optional] the end depth of a borehole collar
-     * @param samplingInterval
-     *            [Optional] the interval of the sampling
-     * @param graphType
-     *            [Optional] The type of graph to plot
-     * @return
-     * @throws URISyntaxException
-     */
-    public HttpRequestBase getPlotScalarMethod(String serviceUrl, String logId, Integer startDepth, Integer endDepth,
-            Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType, Integer legend)
-            throws URISyntaxException {
-        HttpGet method = new HttpGet();
-
-        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "plotscalar.html"));
-
-        //set all of the parameters
-        builder.setParameter("logid", logId);
-        if (width != null) {
-            builder.setParameter("width", width.toString());
-        }
-        if (height != null) {
-            builder.setParameter("height", height.toString());
-        }
-        if (startDepth != null) {
-            builder.setParameter("startdepth", startDepth.toString());
-        }
-        if (endDepth != null) {
-            builder.setParameter("enddepth", endDepth.toString());
-        }
-        if (samplingInterval != null) {
-            builder.setParameter("samplinginterval", samplingInterval.toString());
-        }
-
-        if (legend != null) {
-            builder.setParameter("legend", legend.toString());
-        }
-
-        if (graphType != null) {
-            switch (graphType) {
-            case LineChart:
-                builder.setParameter("graphtype", "3");
-                break;
-            case ScatteredChart:
-                builder.setParameter("graphtype", "2");
-                break;
-            case StackedBarChart:
-                builder.setParameter("graphtype", "1");
-                break;
-            }
-        }
-
-        //attach them to the method
-        method.setURI(builder.build());
-
-        return method;
-    }
 
     /**
      * TSG Download Service is part of the DownloadServices. When triggered, the tsg download service will download entire Hylogging dataset from Hylogging
@@ -298,43 +226,6 @@ public class NVCLDataServiceMethodMaker extends AbstractMethodMaker {
         return method;
     }
 
-    /**
-     * When triggered, the wfs download service will call the Observations and Measurements WFS request, get the GeoSciML? output and compress it into a zip
-     * file for download. The user will have to first make a download request and come back to check the download status. When the download is completed, a link
-     * will be provided to download the requested Observations and Measurements output in zip format.
-     *
-     * This method will return a HTML stream
-     *
-     * @param serviceUrl
-     *            The URL of the NVCLDataService
-     * @param email
-     *            The user's email address
-     * @param boreholeId
-     *            selected borehole id (use as feature id for filtering purpose)
-     * @param omUrl
-     *            The valid url for the Observations and Measurements WFS
-     * @param typeName
-     *            The url parameter for the wfs request
-     * @return
-     * @throws URISyntaxException
-     */
-    public HttpRequestBase getDownloadWFSMethod(String serviceUrl, String email, String boreholeId, String omUrl,
-            String typeName) throws URISyntaxException {
-        HttpGet method = new HttpGet();
-
-        URIBuilder builder = new URIBuilder(urlPathConcat(serviceUrl, "downloadwfs.html"));
-
-        //set all of the parameters
-        builder.setParameter("email", email);
-        builder.setParameter("boreholeid", boreholeId);
-        builder.setParameter("serviceurl", omUrl + "wfs");
-        builder.setParameter("typename", typeName);
-
-        //attach them to the method
-        method.setURI(builder.build());
-
-        return method;
-    }
 
     /**
      * Checks a user's WFS download status
