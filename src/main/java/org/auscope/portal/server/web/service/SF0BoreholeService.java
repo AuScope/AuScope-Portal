@@ -44,10 +44,10 @@ public class SF0BoreholeService extends BoreholeService {
      * @return
      * @throws Exception
      */
-    public WFSResponse getAllBoreholes(String serviceUrl, String boreholeName, String custodian,
+    /*public WFSResponse getAllBoreholes(String serviceUrl, String boreholeName, String custodian,
             String dateOfDrillingStart,String dateOfDrillingEnd, int maxFeatures, FilterBoundingBox bbox) throws Exception {
         return getAllBoreholes(serviceUrl, boreholeName, custodian, dateOfDrillingStart, dateOfDrillingEnd, maxFeatures, bbox, null);
-    }
+    }*/
 
     /**
      * Get all SF0 Boreholes from a given service url and return the response

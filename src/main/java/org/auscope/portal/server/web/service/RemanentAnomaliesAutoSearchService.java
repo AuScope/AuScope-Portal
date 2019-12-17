@@ -51,23 +51,4 @@ public class RemanentAnomaliesAutoSearchService extends BaseWFSService {
         RemanentAnomaliesAutoSearchFilter filter = new RemanentAnomaliesAutoSearchFilter();
         return generateFilterString(filter, bbox);
     }
-
-    /**
-     * Utility for turning a filter and add additional styling to the filter.
-     * 
-     * @param filter
-     *            The filter
-     * @return
-     * @throws OperationNotSupportedException
-     */
-    public static String generateAdditionalStyleFilter(IFilter filter) throws OperationNotSupportedException {
-        if (filter instanceof RemanentAnomaliesAutoSearchFilter) {
-            RemanentAnomaliesAutoSearchFilter remanomFilter = (RemanentAnomaliesAutoSearchFilter) filter;
-            return remanomFilter.getFilterWithAdditionalStyle();
-        } else {
-            throw new OperationNotSupportedException(
-                    "Only MineralTenementFilter supports the use of additional style filtering");
-        }
-
-    }
 }
