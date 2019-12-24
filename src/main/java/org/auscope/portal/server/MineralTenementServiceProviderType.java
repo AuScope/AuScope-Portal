@@ -59,4 +59,12 @@ public enum MineralTenementServiceProviderType {
         return styleName;
     }
 
+    public static MineralTenementServiceProviderType parseUrl(String serviceUrl) {
+        if (serviceUrl != null && (serviceUrl.toUpperCase().contains("MAPSERVER/WFSSERVER")
+                || serviceUrl.toUpperCase().contains("MAPSERVER/WMSSERVER"))) {
+            return MineralTenementServiceProviderType.ArcGIS;
+        }
+        return MineralTenementServiceProviderType.GeoServer;
+    }
+
 }

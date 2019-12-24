@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -9,6 +10,7 @@ import java.util.Hashtable;
 import javax.servlet.http.HttpServletResponse;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.WMSService;
+import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.SLDLoader;
 import org.auscope.portal.server.MineralTenementServiceProviderType;
@@ -43,6 +45,55 @@ public class MineralTenementController extends BasePortalController {
         MINERAL_TENEMENT_COLOUR_MAP.put("MineralTenement", "#0000FF");
         
         }
+
+
+    /**
+     * Returns mineral tenement features in CSV format
+     *
+     * @param serviceUrl
+     *        URL to request mineral tenements features from
+     * @param name
+     *        name of mineral tenement layer
+     * @param tenementType
+     *        mineral tenement type
+     * @param owner
+     *        name of owner of mineral tenement
+     * @param size
+     *        size of mineral tenement area
+     * @param endDate
+     *        mineral tenement expiry date
+     * @param bbox
+     *        bounding box in JSON format
+     * @return mineral tenement features in CSV format
+     * @throws Exception
+     */
+    @RequestMapping("/doMineralTenementCSVDownload.do")
+    public void doMineralTenementCSVDownload(
+            @RequestParam("serviceUrl") String serviceUrl,
+            @RequestParam(required = false, value = "name") String name,
+            @RequestParam(required = false, value = "tenementType") String tenementType,
+            @RequestParam(required = false, value = "owner") String owner,
+            @RequestParam(required = false, value = "size") String size,
+            @RequestParam(required = false, value = "endDate") String endDate,
+            @RequestParam(required = false, value = "bbox") String bboxJson,
+            HttpServletResponse response) throws Exception {
+
+        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
+        MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
+        String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,
+                bbox, null,  mineralTenementServiceProviderType);
+
+        // Some ArcGIS servers do not support filters (not enabled?)
+        if (mineralTenementServiceProviderType == MineralTenementServiceProviderType.ArcGIS) {
+            filter = "";
+        }
+        response.setContentType("text/csv");
+        OutputStream outputStream = response.getOutputStream();
+        InputStream results = this.mineralTenementService.downloadCSV(serviceUrl, mineralTenementServiceProviderType.featureType(), filter, null);
+        FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
+        outputStream.close();
+
+    }
 
 
     /**
