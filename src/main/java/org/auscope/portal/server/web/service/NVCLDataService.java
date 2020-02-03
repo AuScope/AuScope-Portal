@@ -7,27 +7,18 @@ import java.util.List;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIBuilder;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.util.DOMUtil;
-import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
-import org.auscope.portal.server.domain.nvcldataservice.PlotScalarResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGStatusResponse;
-import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
-import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
-import org.auscope.portal.server.domain.nvcldataservice.ImageTrayDepthResponse;
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker;
-import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -44,11 +35,8 @@ import org.w3c.dom.NodeList;
 @Service
 public class NVCLDataService {
 
-    private final Log log = LogFactory.getLog(getClass());
-
     private HttpServiceCaller httpServiceCaller;
     private NVCLDataServiceMethodMaker methodMaker;
-    private WFSGetFeatureMethodMaker wfsMethodMaker;
 
     /**
      * Creates a new NVCLDataService with the specified dependencies
@@ -58,7 +46,6 @@ public class NVCLDataService {
             WFSGetFeatureMethodMaker wfsMethodMaker) {
         this.httpServiceCaller = httpServiceCaller;
         this.methodMaker = methodMaker;
-        this.wfsMethodMaker = wfsMethodMaker;
     }
 
     /**
@@ -179,82 +166,6 @@ public class NVCLDataService {
         return new MosaicResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
     
-    /**
-     * Makes a plot scalar request and returns the resulting data in a PlotScalarResponse object.
-     *
-     * @param serviceUrl
-     *            The URL of the NVCLDataService
-     * @param logId
-     *            The logID (from a getLogCollection request) to query
-     * @param width
-     *            [Optional] the width of the image in pixel
-     * @param height
-     *            [Optional] the height of the image in pixel
-     * @param startDepth
-     *            [Optional] the start depth of a borehole collar
-     * @param endDepth
-     *            [Optional] the end depth of a borehole collar
-     * @param samplingInterval
-     *            [Optional] the interval of the sampling
-     * @param graphType
-     *            [Optional] The type of graph to plot
-     * @return
-     */
-    public PlotScalarResponse getPlotScalar(String serviceUrl, String logId, Integer startDepth, Integer endDepth,
-            Integer width, Integer height, Double samplingInterval, PlotScalarGraphType graphType, Integer legend)
-            throws Exception {
-        HttpRequestBase method = methodMaker.getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width,
-                height, samplingInterval, graphType, legend);
-
-        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
-        InputStream responseStream = httpResponse.getEntity().getContent();
-        Header contentHeader = httpResponse.getEntity().getContentType();
-
-        return new PlotScalarResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
-    }
-
-    /**
-     * Makes a CSV download request and returns the resulting data in a CSVDownloadResponse
-     *
-     * Response should be a stream of bytes for a CSV file
-     *
-     * @param serviceUrl
-     *            The URL of an observation and measurements URL (obtained from a getDatasetCollection response)
-     * @param datasetId
-     *            The dataset to download
-     * @return
-     * @throws Exception
-     */
-    public CSVDownloadResponse getCSVDownload(String serviceUrl, String datasetId) throws Exception {
-
-        //This is to workaround some erroneous behaviour from the dataservice
-        //Where the logged omUrl points to a geoserver instance RATHER than the actual WFS service endpoint
-        if (!serviceUrl.endsWith("wfs") && !serviceUrl.endsWith("wfs/")) {
-            log.warn("altering ServiceURL:" + serviceUrl);
-
-            if (serviceUrl.endsWith("/")) {
-                serviceUrl += "wfs";
-            } else {
-                serviceUrl += "/wfs";
-            }
-
-            log.warn("altered ServiceURL:" + serviceUrl);
-        }
-
-        //We need to make a normal WFS request with some simple modifications
-        HttpRequestBase method = wfsMethodMaker.makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null,
-                null);
-        URIBuilder builder = new URIBuilder(method.getURI());
-        builder.setParameter("CQL_FILTER", String.format("(DATASET_ID='%1$s')",datasetId));
-        builder.setParameter("outputformat","csv");
-        method.setURI(builder.build());
-
-        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
-        InputStream responseStream = httpResponse.getEntity().getContent();
-        Header contentHeader = httpResponse.getEntity().getContentType();
-
-        return new CSVDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
-    }
 
     /**
      * Makes a TSG download request and returns the resulting data in a TSGDownloadResponse object.
@@ -317,56 +228,4 @@ public class NVCLDataService {
 
         return new TSGStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
     }
-
-    /**
-     * Begins a NVCL data service WFS download
-     *
-     * This method will return a HTML stream
-     *
-     * @param serviceUrl
-     *            The URL of the NVCLDataService
-     * @param email
-     *            The user's email address
-     * @param boreholeId
-     *            selected borehole id (use as feature id for filtering purpose)
-     * @param omUrl
-     *            The valid url for the Observations and Measurements WFS
-     * @param typeName
-     *            The url parameter for the wfs request
-     * @return
-     * @throws Exception
-     */
-    public WFSDownloadResponse getWFSDownload(String serviceUrl, String email, String boreholeId, String omUrl,
-            String typeName) throws Exception {
-        HttpRequestBase method = methodMaker.getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);
-
-        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
-        InputStream responseStream = httpResponse.getEntity().getContent();
-        Header contentHeader = httpResponse.getEntity().getContentType();
-
-        return new WFSDownloadResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
-    }
-
-    /**
-     * Checks a user's WFS download status
-     *
-     * This method will return a HTML stream
-     *
-     * @param serviceUrl
-     *            The URL of the NVCLDataService
-     * @param email
-     *            The user's email address
-     * @return
-     * @throws Exception
-     */
-    public WFSStatusResponse checkWFSStatus(String serviceUrl, String email) throws Exception {
-        HttpRequestBase method = methodMaker.getCheckWFSStatusMethod(serviceUrl, email);
-
-        HttpResponse httpResponse = httpServiceCaller.getMethodResponseAsHttpResponse(method);
-        InputStream responseStream = httpResponse.getEntity().getContent();
-        Header contentHeader = httpResponse.getEntity().getContentType();
-
-        return new WFSStatusResponse(responseStream, contentHeader == null ? null : contentHeader.getValue());
-    }
-
 }

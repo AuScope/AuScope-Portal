@@ -3,10 +3,9 @@ package org.auscope.portal.gsml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.auscope.portal.core.services.methodmakers.filter.AbstractFilter;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.uifilter.GenericFilter;
-import org.auscope.portal.service.colorcoding.CapdfHydroChemColorCoding;
+
 
 /**
  * Class that represents ogc:Filter markup for mt:mineralTenement queries

@@ -20,7 +20,6 @@ import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
 import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.nvcl.NVCLNamespaceContext;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Before;
@@ -138,29 +137,6 @@ public class TestBoreholeService extends PortalTestClass {
     }
 
     /**
-     * Test that filter style will return a style layer descriptor with correct feature type name and geom.
-     */
-    @Test
-    public void testFilterStyle() throws Exception {
-        final String nameFilter = "filterBob";
-        final String custodianFilter = "filterCustodian";
-        final String filterDateStart = "1986-10-09";
-        final String filterDateEnd = "1986-10-10";
-        final int maxFeatures = 10;
-        final FilterBoundingBox bbox = null;
-
-        String filter = service.getFilter(nameFilter, custodianFilter,
-                filterDateStart, filterDateEnd, maxFeatures, bbox, null, null,null);
-
-
-        String style = service.getStyle(Arrays.asList("style1"), Arrays.asList(filter), Arrays.asList("#2242c7"), null);
-        Assert.assertNotNull(style);
-        Assert.assertThat(style, Matchers.containsString("gsml:Borehole"));
-        Assert.assertTrue(style.contains(service.getGeometryName()));
-
-    }
-
-    /**
      * Test get restricted boreholes bbox.
      *
      * @throws Exception
@@ -215,7 +191,6 @@ public class TestBoreholeService extends PortalTestClass {
         final String dateOfDrillingStart = "2010-01-02";
         final String dateOfDrillingEnd = "2010-01-03";
         final String gmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><wfs:FeatureCollection xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:nvcl=\"http://www.auscope.org/nvcl\" xmlns:gsmlp=\"http://xmlns.geosciml.org/geosciml-portrayal/4.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:ows=\"http://www.opengis.net/ows\" xmlns:topp=\"http://www.openplans.org/topp\" xmlns:sa=\"http://www.opengis.net/sampling/1.0\" xmlns:gsml=\"urn:cgi:xmlns:CGI:GeoSciML:2.0\" xmlns:it.geosolutions=\"http://www.geo-solutions.it\" xmlns:om=\"http://www.opengis.net/om/1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" numberOfFeatures=\"24\" timeStamp=\"2016-01-14T02:33:48.680Z\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\"/>";
-        final String kmlString = "kmlString";
         final List<String> restrictedIds = Arrays.asList("id1", "id2", "id3");
         final String filterString = (new BoreholeFilter(boreholeName, custodian,
                 dateOfDrillingStart, dateOfDrillingEnd, restrictedIds,null))

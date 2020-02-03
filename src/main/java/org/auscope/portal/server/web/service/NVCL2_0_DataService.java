@@ -17,8 +17,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -43,8 +41,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import net.sf.json.JSONObject;
-import net.sf.json.JSONArray;
 import au.com.bytecode.opencsv.CSVReader;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -52,7 +48,6 @@ import org.apache.commons.lang3.ArrayUtils;
 @Service
 public class NVCL2_0_DataService {
 
-    private final Log log = LogFactory.getLog(getClass());
     private NVCL2_0_DataServiceMethodMaker nvclMethodMaker;
     private HttpServiceCaller httpServiceCaller;
     private String analyticalServicesUrl;

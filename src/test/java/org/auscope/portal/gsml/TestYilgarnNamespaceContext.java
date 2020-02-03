@@ -2,8 +2,7 @@ package org.auscope.portal.gsml;
 
 import javax.xml.namespace.NamespaceContext;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.junit.Test;
 
@@ -14,9 +13,6 @@ public class TestYilgarnNamespaceContext extends PortalTestClass {
 
     /** The TEST prefix. */
     private static final String TESTPREFIX = "ogc";
-
-    /** The TEST_FAKE_PREFIX . */
-    private static final String TESTFAKEPREFIX = "uHaHa";
 
     /** The namespace uri. */
     private static final String TESTNAMESPACEURI = "http://www.opengis.net/ogc";

@@ -66,4 +66,5 @@ public enum MineralTenementServiceProviderType {
         }
         return MineralTenementServiceProviderType.GeoServer;
     }
+
 }

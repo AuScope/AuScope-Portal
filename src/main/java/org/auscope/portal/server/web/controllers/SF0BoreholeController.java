@@ -37,7 +37,6 @@ public class SF0BoreholeController extends BasePortalController {
 
     private SF0BoreholeService boreholeService;
 
-    private CSWCacheService cswService;
     // private GsmlpNameSpaceTable gsmlpNameSpaceTable;
     private NVCL2_0_DataService nvclDataService;
     private WFSService wfsService;
@@ -45,7 +44,6 @@ public class SF0BoreholeController extends BasePortalController {
     @Autowired
     public SF0BoreholeController(SF0BoreholeService sf0BoreholeService, CSWCacheService cswService, NVCL2_0_DataService nvclDataService, WFSService wfsService) {
         this.boreholeService = sf0BoreholeService;
-        this.cswService = cswService;
         this.nvclDataService = nvclDataService;
         // GsmlpNameSpaceTable _gsmlpNameSpaceTable = new GsmlpNameSpaceTable();
         // this.gsmlpNameSpaceTable = _gsmlpNameSpaceTable;
@@ -78,7 +76,7 @@ public class SF0BoreholeController extends BasePortalController {
             return this.generateExceptionResponse(e, serviceUrl);
         }
     }
-    
+
     
     /**
      * Handles the borehole filter queries, but returns CSV values

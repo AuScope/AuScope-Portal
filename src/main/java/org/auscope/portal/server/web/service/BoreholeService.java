@@ -2,7 +2,6 @@ package org.auscope.portal.server.web.service;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
@@ -256,19 +255,6 @@ public class BoreholeService extends BaseWFSService {
         }
 
         return filterString;
-    }
-
-    /**
-     * Generates a broad SLD for symbolising a set of filters. Default Mark is Circle
-     *
-     * @param names 1-1 correspondance with filters - the human readable names of each filter
-     * @param filters The filters to be symbolised
-     * @param colors 1-1 correspondance with filters - The CSS color for each filter to be symbolised with
-     * @param gsmlpNameSpace
-     * @return
-     */
-    public String getStyle(List<String> names, List<String> filters, List<String> colors, String gsmlpNameSpace) {
-        return getStyle(names, filters, colors, new ArrayList<String>(Collections.nCopies(filters.size(), "circle")), gsmlpNameSpace);
     }
 
     /**

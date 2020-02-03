@@ -3,7 +3,6 @@ package org.auscope.portal.server.web.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.ConnectException;
-import java.net.URI;
 import java.util.List;
 
 import org.apache.http.Header;
@@ -16,17 +15,14 @@ import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
-import org.auscope.portal.server.domain.nvcldataservice.CSVDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
-import org.auscope.portal.server.domain.nvcldataservice.PlotScalarResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGDownloadResponse;
 import org.auscope.portal.server.domain.nvcldataservice.TSGStatusResponse;
-import org.auscope.portal.server.domain.nvcldataservice.WFSDownloadResponse;
-import org.auscope.portal.server.domain.nvcldataservice.WFSStatusResponse;
+
 import org.auscope.portal.server.web.NVCLDataServiceMethodMaker;
-import org.auscope.portal.server.web.NVCLDataServiceMethodMaker.PlotScalarGraphType;
+
 import org.jmock.Expectations;
 import org.junit.Assert;
 import org.junit.Test;
@@ -271,214 +267,6 @@ public class TestNVCLDataService extends PortalTestClass {
         dataService.getMosaic(serviceUrl, logId, width, startSampleNo, endSampleNo);
     }
 
-    /**
-     * Tests parsing of a PlotScalarResponse
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetPlotScalar() throws Exception {
-        final String serviceUrl = "http://example/url";
-        final String logId = "logId";
-        final Integer width = 10;
-        final Integer height = 9;
-        final Integer startDepth = 11;
-        final Integer endDepth = 12;
-        final Double samplingInterval = 1.5;
-        final PlotScalarGraphType graphType = PlotScalarGraphType.ScatteredChart;
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/html";
-
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockMethodMaker).getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height,
-                        samplingInterval, graphType, 0);
-                will(returnValue(mockMethod));
-
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                oneOf(httpEntity).getContent();
-                will(returnValue(responseStream));
-                oneOf(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                oneOf(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        PlotScalarResponse response = dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height,
-                samplingInterval, graphType, 0);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
-
-    /**
-     * Tests parsing of a GetMosaicResponse fails when we fail to connect to the service
-     *
-     * @throws Exception
-     */
-    @Test(expected = ConnectException.class)
-    public void testGetPlotScalarError() throws Exception {
-        final String serviceUrl = "http://example/url";
-        final String logId = "logId";
-        final Integer width = 10;
-        final Integer height = 9;
-        final Integer startDepth = 11;
-        final Integer endDepth = 12;
-        final Double samplingInterval = 1.5;
-        final PlotScalarGraphType graphType = PlotScalarGraphType.ScatteredChart;
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockMethodMaker).getPlotScalarMethod(serviceUrl, logId, startDepth, endDepth, width, height,
-                        samplingInterval, graphType, 0);
-                will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(throwException(new ConnectException()));
-            }
-        });
-
-        dataService.getPlotScalar(serviceUrl, logId, startDepth, endDepth, width, height, samplingInterval, graphType,
-                0);
-    }
-
-    /**
-     * Tests parsing of a CSVDownloadResponse
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testCSVDownload() throws Exception {
-        final String serviceUrl = "http://example/url/wfs";
-        final String datasetId = "id";
-
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/csv";
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);
-                will(returnValue(mockMethod));
-
-                //We aren't testing the query string additions
-                allowing(mockMethod).getURI();
-                will(returnValue(new URI("")));
-                allowing(mockMethod).setURI(with(any(URI.class)));
-
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                oneOf(httpEntity).getContent();
-                will(returnValue(responseStream));
-                oneOf(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                oneOf(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        CSVDownloadResponse response = dataService.getCSVDownload(serviceUrl, datasetId);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
-
-    /**
-     * Tests a workaround for the dataservice to overcome omUrl pointing to a geoserver instance RATHER than a WFS endpoint
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testCSVDownload_NonWFSEndpoint() throws Exception {
-        final String gsUrl1 = "http://example/url";
-        final String gsUrl2 = "http://example/url/";
-        final String actualWFSEndpoint = "http://example/url/wfs";
-        final String datasetId = "id";
-
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/csv";
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-
-                allowing(mockWFSMethodMaker).makeGetMethod(actualWFSEndpoint, "om:GETPUBLISHEDSYSTEMTSA",
-                        (Integer) null, null);
-                will(returnValue(mockMethod));
-
-                //We aren't testing the query string additions
-                allowing(mockMethod).getURI();
-                will(returnValue(new URI("")));
-                allowing(mockMethod).setURI(with(any(URI.class)));
-
-                atLeast(1).of(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                exactly(2).of(httpEntity).getContent();
-                will(returnValue(responseStream));
-                exactly(2).of(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                allowing(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        CSVDownloadResponse response = dataService.getCSVDownload(gsUrl1, datasetId);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-
-        response = dataService.getCSVDownload(gsUrl2, datasetId);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
-
-    /**
-     * Tests parsing of a CSVDownloadResponse fails when underlying service fails
-     *
-     * @throws Exception
-     */
-    @Test(expected = ConnectException.class)
-    public void testCSVDownloadError() throws Exception {
-        final String serviceUrl = "http://example/url/wfs";
-        final String datasetId = "id";
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockWFSMethodMaker).makeGetMethod(serviceUrl, "om:GETPUBLISHEDSYSTEMTSA", (Integer) null, null);
-                will(returnValue(mockMethod));
-
-                //We aren't testing the query string additions
-                allowing(mockMethod).getURI();
-                will(returnValue(new URI("")));
-                allowing(mockMethod).setURI(with(any(URI.class)));
-
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(throwException(new ConnectException()));
-            }
-        });
-
-        dataService.getCSVDownload(serviceUrl, datasetId);
-    }
 
     /**
      * Tests parsing of a TSGDownloadResponse
@@ -565,89 +353,6 @@ public class TestNVCLDataService extends PortalTestClass {
         });
 
         TSGStatusResponse response = dataService.checkTSGStatus(serviceUrl, email);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
-
-    /**
-     * Tests parsing of a WFSDownloadResponse
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testDownloadWFS() throws Exception {
-        final String serviceUrl = "http://example/url";
-        final String email = "email@test";
-        final String boreholeId = "bid";
-        final String omUrl = "http://omUrl/wfs";
-        final String typeName = "type:Name";
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/html";
-
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockMethodMaker).getDownloadWFSMethod(serviceUrl, email, boreholeId, omUrl, typeName);
-                will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                oneOf(httpEntity).getContent();
-                will(returnValue(responseStream));
-                oneOf(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                oneOf(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        WFSDownloadResponse response = dataService.getWFSDownload(serviceUrl, email, boreholeId, omUrl, typeName);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
-
-    /**
-     * Tests parsing of a WFSStatusResponse
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testWFSStatus() throws Exception {
-        final String serviceUrl = "http://example/url";
-        final String email = "email@test";
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/html";
-
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockMethodMaker).getCheckWFSStatusMethod(serviceUrl, email);
-                will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                oneOf(httpEntity).getContent();
-                will(returnValue(responseStream));
-                oneOf(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                oneOf(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        WFSStatusResponse response = dataService.checkWFSStatus(serviceUrl, email);
         Assert.assertNotNull(response);
         Assert.assertSame(responseStream, response.getResponse());
         Assert.assertEquals(contentType, response.getContentType());

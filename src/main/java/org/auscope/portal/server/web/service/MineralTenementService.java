@@ -1,19 +1,10 @@
 package org.auscope.portal.server.web.service;
 
-import java.net.URISyntaxException;
-
-import javax.naming.OperationNotSupportedException;
-
-import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.BaseWFSService;
-import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
-import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker.ResultType;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
 import org.auscope.portal.core.services.methodmakers.filter.IFilter;
-import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
-import org.auscope.portal.core.services.responses.wfs.WFSResponse;
 import org.auscope.portal.mineraloccurrence.MineralTenementCCFilter;
 import org.auscope.portal.mineraloccurrence.MineralTenementFilter;
 import org.auscope.portal.server.MineralTenementServiceProviderType;
@@ -69,52 +60,5 @@ public class MineralTenementService extends BaseWFSService {
         filter.addCCPropertyInFilter(ccProperty,ccPropertyValue);
         return generateFilterString(filter, bbox);
     }
-
-    public WFSResponse getAllTenements(String serviceUrl, String tenementName, String owner, int maxFeatures,
-            FilterBoundingBox bbox, String outputFormat, MineralTenementServiceProviderType mineralTenementServiceProviderType) throws Exception {
-        String filterString;
-        MineralTenementFilter mineralTenementFilter = new MineralTenementFilter(tenementName, null, owner, null, null, null, null, mineralTenementServiceProviderType);
-        if (bbox == null) {
-            filterString = mineralTenementFilter.getFilterStringAllRecords();
-        } else {
-            filterString = mineralTenementFilter.getFilterStringBoundingBox(bbox);
-        }
-
-        HttpRequestBase method = null;
-
-        try {
-            method = this.generateWFSRequest(serviceUrl, "mt:MineralTenement", null, filterString, maxFeatures, null,
-                    ResultType.Results,outputFormat);
-            String responseGML = this.httpServiceCaller.getMethodResponseAsString(method);
-            return new WFSResponse(responseGML, method);
-        } catch (Exception e) {
-            throw new PortalServiceException(method, e);
-        }
-
-    }
-    
-    public WFSCountResponse getTenementCount(String serviceUrl, String tenementName, String owner, int maxFeatures,
-            FilterBoundingBox bbox, MineralTenementServiceProviderType mineralTenementServiceProviderType) throws PortalServiceException, URISyntaxException {
-        // TODO Auto-generated method stub
-        String filterString;
-        MineralTenementFilter mineralTenementFilter = new MineralTenementFilter(tenementName,  null, owner, null, null, null, null, mineralTenementServiceProviderType);
-        if (bbox == null) {
-            filterString = mineralTenementFilter.getFilterStringAllRecords();
-        } else {
-            filterString = mineralTenementFilter.getFilterStringBoundingBox(bbox);
-        }
-
-        HttpRequestBase method = null;
-
-        method = generateWFSRequest(serviceUrl, "mt:MineralTenement", null, filterString, maxFeatures, null,
-                ResultType.Hits);
-        return getWfsFeatureCount(method);
-
-    }
-
-
-
-
-
 
 }

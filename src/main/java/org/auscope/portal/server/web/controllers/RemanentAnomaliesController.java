@@ -1,7 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
@@ -30,61 +29,6 @@ public class RemanentAnomaliesController extends BasePortalController {
         this.remanentAnomaliesService = remanentAnomaliesService;
     }
 
-    /**
-     * Remanent anomaly filter WFS query 
-     *
-     * @param serviceURL
-     *            URL for the anomaly service
-     * @param name
-     *            anomaly name
-     * @param ARRAMin
-     *            minimum Apparent_resultant_rotation_angle of the first model
-     * @param ARRAMax
-     *            maximum Apparent_resultant_rotation_angle of the first model
-     * @param decMin
-     *            minimum declination of the first model
-     * @param decMax
-     *            maximum declination of the first model
-     * @param incMin
-     *            minimum inclination of the first model
-     * @param incMax
-     *            maximum inclination of the first model
-     * @param modelCountMin
-     *            minimum number of models generated for this anomaly
-     * @param modelCountMax
-     *            maximum number of models generated for this anomaly
-     * @param bbox
-     *             JSON bounding box
-     * @return WFS repsonse in XML format
-     * @throws Exception
-     */
-    @RequestMapping("/doRemanentAnomaliesDownload.do")
-    public void doRemanentAnomaliesDownload(
-            @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam(required = false, value = "name") String name,
-            @RequestParam(required = false, value = "ARRAMin") Float ARRAMin,
-            @RequestParam(required = false, value = "ARRAMax") Float ARRAMax,
-            @RequestParam(required = false, value = "decMin") Float decMin,
-            @RequestParam(required = false, value = "decMax") Float decMax,
-            @RequestParam(required = false, value = "incMin") Float incMin,
-            @RequestParam(required = false, value = "incMax") Float incMax,
-            @RequestParam(required = false, value = "modelCountMin") Integer modelCountMin,
-            @RequestParam(required = false, value = "modelCountMax") Integer modelCountMax,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
-            HttpServletResponse response) throws Exception {
-
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        String filter = this.remanentAnomaliesService.getRemanentAnomaliesFilter(name, ARRAMin, ARRAMax, decMin, decMax, incMin, incMax, modelCountMin, modelCountMax,false,null, bbox);
-
-        response.setContentType("text/xml");
-        OutputStream outputStream = response.getOutputStream();
-
-        InputStream results = this.remanentAnomaliesService.downloadWFS(serviceUrl, REMANENT_ANOMALIES_TYPE, filter,
-                null);
-        FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
-        outputStream.close();
-
-    }
 
     /**
      * Handles getting the style of the Remanent Anomalies filter queries. (If the bbox elements are specified, they will limit the output response to 200

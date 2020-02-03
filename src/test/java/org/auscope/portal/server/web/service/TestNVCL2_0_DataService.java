@@ -36,7 +36,6 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
     private HttpServiceCaller mockServiceCaller = context.mock(HttpServiceCaller.class);
     private NVCL2_0_DataServiceMethodMaker mockMethodMaker = context.mock(NVCL2_0_DataServiceMethodMaker.class);
     private HttpRequestBase mockMethod = context.mock(HttpRequestBase.class, "mockMethod");
-    private HttpRequestBase mockMethod2 = context.mock(HttpRequestBase.class, "mockMethod2");
     private NVCL2_0_DataService dataService;
 
     @Before

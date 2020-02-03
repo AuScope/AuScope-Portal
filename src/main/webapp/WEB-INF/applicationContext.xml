@@ -53,9 +53,6 @@
 
     <bean id="wfsToKmlTransformer" class="org.auscope.portal.core.xslt.WfsToKmlTransformer">
     </bean>
-
-	<bean id="arcGISToMineralTenementTransformer" class="org.auscope.portal.xslt.ArcGISToMineralTenement">
-    </bean>
     
     <bean id="vocabularyServiceList" class="java.util.ArrayList" >
         <constructor-arg>

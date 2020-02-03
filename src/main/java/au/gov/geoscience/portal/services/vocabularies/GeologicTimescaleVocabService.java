@@ -25,8 +25,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 
-import static com.sun.org.apache.bcel.internal.Repository.getRepository;
-
 public class GeologicTimescaleVocabService extends VocabularyService {
 
     private static final Set<String> RANKS = new HashSet<String>(

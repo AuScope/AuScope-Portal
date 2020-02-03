@@ -1,7 +1,6 @@
 package org.auscope.portal.server.web.controllers;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,37 +28,6 @@ public class RemanentAnomaliesAutoSearchController extends BasePortalController 
         this.remanentAnomaliesAutoSearchService = remanentAnomaliesAutoSearchService;
     }
 
-    /**
-     * Handles getting Remanent Anomalies WFS filter query
-     *
-     * @param serviceUrl
-     *            URL of Remanent Anomalies Auto Search WFS service
-     * @param name
-     *            remanent anomaly name
-     * @param bbox
-     *            JSON bounding box
-     * @return XML WFS data
-     * @throws Exception
-     */
-    @RequestMapping("/doRemanentAnomaliesAutoSearchDownload.do")
-    public void doRemanentAnomaliesAutoSearchDownload(
-            @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam(required = false, value = "name") String name,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
-            HttpServletResponse response) throws Exception {
-
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
-        String filter = this.remanentAnomaliesAutoSearchService.getRemanentAnomaliesAutoSearchFilter(bbox);
-
-        response.setContentType("text/xml");
-        OutputStream outputStream = response.getOutputStream();
-
-        InputStream results = this.remanentAnomaliesAutoSearchService.downloadWFS(serviceUrl,
-                REMANENT_ANOMALIESAUTOSEARCH_TYPE, filter, null);
-        FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
-        outputStream.close();
-
-    }
 
     /**
      * Handles getting the style of the Remanent Anomalies filter queries. (If the bbox elements are specified, they will limit the output response to 200

@@ -7,28 +7,18 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.auscope.portal.core.server.OgcServiceProviderType;
 import org.auscope.portal.core.server.controllers.BasePortalController;
 import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.methodmakers.filter.FilterBoundingBox;
-import org.auscope.portal.core.services.responses.wfs.WFSResponse;
-import org.auscope.portal.core.services.responses.wfs.WFSCountResponse;
 import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.SLDLoader;
 import org.auscope.portal.server.MineralTenementServiceProviderType;
 import org.auscope.portal.server.web.service.MineralTenementService;
-import org.auscope.portal.xslt.ArcGISToMineralTenement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.w3c.dom.Document; 
 
 /*
  * Controller for Mineral Tenement services
@@ -37,20 +27,11 @@ import org.w3c.dom.Document;
 public class MineralTenementController extends BasePortalController {
 
     private MineralTenementService mineralTenementService;
-    private WMSService mineralTenementWMSService;
-
-    private ArcGISToMineralTenement arcGISToMineralTenementTransformer;
-
-    private static final String ENCODING = "ISO-8859-1";
-    private static final int BUFFERSIZE = 1024 * 1024;
     private HashMap<String, String> MINERAL_TENEMENT_COLOUR_MAP = new HashMap<String, String>();    
 
     @Autowired
-    public MineralTenementController(MineralTenementService mineralTenementService, WMSService wmsService, ArcGISToMineralTenement arcGISToMineralTenement) {
+    public MineralTenementController(MineralTenementService mineralTenementService, WMSService wmsService) {
         this.mineralTenementService = mineralTenementService;
-        this.mineralTenementWMSService = wmsService;
-        this.arcGISToMineralTenementTransformer = arcGISToMineralTenement;
-        
         MINERAL_TENEMENT_COLOUR_MAP.put("exploration", "#0000FF");
         MINERAL_TENEMENT_COLOUR_MAP.put("prospecting", "#00FFFF");
         MINERAL_TENEMENT_COLOUR_MAP.put("miscellaneous", "#00FF00");
@@ -65,159 +46,6 @@ public class MineralTenementController extends BasePortalController {
         
         }
 
-    /**
-     * Retrieves a list of mineral tenement features
-     *
-     * @param serviceUrl
-     *        URL to request mineral tenements features from
-     * @param tenementName
-     *        name of mineral tenement layer
-     * @param owner
-     *        name of the owner of mineral tenement
-     * @param bbox
-     *        bounding box in JSON format
-     * @param maxFeatures
-     *        maximum number of features 
-     * @return gml tenement feature data 
-     * @throws Exception
-     */
-    @RequestMapping("/getAllMineralTenementFeatures.do")
-    public ModelAndView getAllMineralTenementFeatures(
-            @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam(required = false, value = "tenementName") String tenementName,
-            @RequestParam(required = false, value = "owner") String owner,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-                    throws Exception {
-
-        // The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
-        // This will in turn limit the number of points returned to 200
-        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
-        MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
-        WFSResponse response = null;
-        try {
-            response = this.mineralTenementService.getAllTenements(serviceUrl, tenementName, owner,
-                    maxFeatures, bbox, null, mineralTenementServiceProviderType);
-        } catch (Exception e) {
-            log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
-            log.debug("Exception: ", e);
-            return this.generateExceptionResponse(e, serviceUrl);
-        }
-        log.warn("GML: " + response.getData());
-        return generateJSONResponseMAV(true, "gml", response.getData(), response.getMethod());
-    }
-    
-    /**
-     * Retrieves WMS mineral tenement feature info
-     *
-     * @param serviceUrl
-     *        URL to request mineral tenement feature info from
-     * @param lat, lng
-     *        latitude, longitude
-     * @param QUERY_LAYERS
-     *        name of the WMS layers
-     * @param x,y
-              x,y location of enquiry
-     * @param bbox
-     *        bounding box in JSON format
-     * @param WIDTH, HEIGHT
-     *        width, height of image
-     * @param INFO_FORMAT
-     *        image format
-     * @param SLD_BODY
-     *        style sheet for image
-     * @param postMethod
-     *        if true will use a POST request, default is GET
-     * @param version
-     *        WMS version
-     * @param feature_count  
-     *        max number of features to retrieve      
-     * @return gml tenement feature data 
-     * @throws Exception
-     */
-    @RequestMapping("/getMineralTenementFeatureInfo.do")
-    public void getMineralTenementFeatureInfo(HttpServletRequest request, HttpServletResponse response,
-            @RequestParam("serviceUrl") String serviceUrl, @RequestParam("lat") String latitude,
-            @RequestParam("lng") String longitude, @RequestParam("QUERY_LAYERS") String queryLayers,
-            @RequestParam("x") String x, @RequestParam("y") String y, @RequestParam("BBOX") String bbox,
-            @RequestParam("WIDTH") String width, @RequestParam("HEIGHT") String height,
-            @RequestParam("INFO_FORMAT") String infoFormat, @RequestParam("SLD_BODY") String sldBody,
-            @RequestParam(value = "postMethod", defaultValue = "false") Boolean postMethod,
-            @RequestParam("version") String version,
-            @RequestParam(value = "feature_count", defaultValue = "0") String feature_count) throws Exception {
-
-        String[] bboxParts = bbox.split(",");
-        double lng1 = Double.parseDouble(bboxParts[0]);
-        double lng2 = Double.parseDouble(bboxParts[2]);
-        double lat1 = Double.parseDouble(bboxParts[1]);
-        double lat2 = Double.parseDouble(bboxParts[3]);
-        String featureInfoString = this.mineralTenementWMSService.getFeatureInfo(serviceUrl, infoFormat, queryLayers, "EPSG:3857",
-                Math.min(lng1, lng2), Math.min(lat1, lat2), Math.max(lng1, lng2), Math.max(lat1, lat2),
-                Integer.parseInt(width), Integer.parseInt(height), Double.parseDouble(longitude),
-                Double.parseDouble(latitude), (int) (Double.parseDouble(x)), (int) (Double.parseDouble(y)), "", sldBody,
-                postMethod, version, feature_count, true);
-
-        Document xmlDocument = getDocumentFromString(featureInfoString);
-
-        String responseString = "";
-        if (xmlDocument.getDocumentElement().getLocalName().equals("FeatureInfoResponse")) {
-            responseString = this.arcGISToMineralTenementTransformer.convert(featureInfoString, serviceUrl);
-        } else {
-            responseString = featureInfoString;
-        };
-
-        // responseString = getModifiedHTMLForFeatureInfoWindow(responseString);
-
-        InputStream responseStream = new ByteArrayInputStream(responseString.getBytes());
-        FileIOUtil.writeInputToOutputStream(responseStream, response.getOutputStream(), BUFFERSIZE, true);
-    }
-
-
-    /**
-     * Returns a count of the number mineral tenement features
-     *
-     * @param serviceUrl
-     *        URL to request mineral tenements features from
-     * @param tenementName
-     *        name of mineral tenement layer
-     * @param owner
-     *        name of owner of mineral tenement
-     * @param bbox
-     *        bounding box in JSON format
-     * @param maxFeatures
-     *        maximum number of features 
-     * @throws Exception
-     */
-    @RequestMapping("/getMineralTenementCount.do")
-    public ModelAndView getMineralTenementCount(
-            @RequestParam("serviceUrl") String serviceUrl,
-            @RequestParam(required = false, value = "tenementName") String tenementName,
-            @RequestParam(required = false, value = "owner") String owner,
-            @RequestParam(required = false, value = "bbox") String bboxJson,
-            @RequestParam(required = false, value = "maxFeatures", defaultValue = "0") int maxFeatures)
-                    throws Exception {
-
-        // The presence of a bounding box causes us to assume we will be using this GML for visualizing on a map
-        // This will in turn limit the number of points returned to 200
-        OgcServiceProviderType ogcServiceProviderType = OgcServiceProviderType.parseUrl(serviceUrl);
-        MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
-        FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson, ogcServiceProviderType);
-        WFSCountResponse response = null;
-        try {
-            response = this.mineralTenementService.getTenementCount(serviceUrl, tenementName, owner,
-                    maxFeatures, bbox, mineralTenementServiceProviderType);
-
-
-        } catch (Exception e) {
-            log.warn(String.format("Error performing filter for '%1$s': %2$s", serviceUrl, e));
-            log.debug("Exception: ", e);
-            return this.generateExceptionResponse(e, serviceUrl);
-        }
-
-
-        return generateJSONResponseMAV(true, new Integer(response.getNumberOfFeatures()), "");
-    }
 
     /**
      * Returns mineral tenement features in CSV format
@@ -235,7 +63,7 @@ public class MineralTenementController extends BasePortalController {
      * @param endDate
      *        mineral tenement expiry date
      * @param bbox
-     *        bounding box in JSON format 
+     *        bounding box in JSON format
      * @return mineral tenement features in CSV format
      * @throws Exception
      */
@@ -253,7 +81,7 @@ public class MineralTenementController extends BasePortalController {
         FilterBoundingBox bbox = FilterBoundingBox.attemptParseFromJSON(bboxJson);
         MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
         String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,
-                bbox, null,  mineralTenementServiceProviderType); 
+                bbox, null,  mineralTenementServiceProviderType);
 
         // Some ArcGIS servers do not support filters (not enabled?)
         if (mineralTenementServiceProviderType == MineralTenementServiceProviderType.ArcGIS) {
@@ -265,47 +93,6 @@ public class MineralTenementController extends BasePortalController {
         FileIOUtil.writeInputToOutputStream(results, outputStream, 8 * 1024, true);
         outputStream.close();
 
-    }
-    
- 
-    /**
-     * Retrieves mineral tenement legend stylesheet
-     *
-     * @param ccProperty
-     *        resulting image can be styled according to "TenementType" or "TenementStatus" or ""
-     * @return xml stylesheet
-     * @throws Exception
-     */
-    @RequestMapping("/getMineralTenementLegendStyle.do")
-    public void doMineLegendStyle(
-            @RequestParam(required = false, value = "ccProperty") String ccProperty,
-            HttpServletResponse response) throws Exception {
-        String style = "";
-        switch (ccProperty) {
-        case "TenementType" :
-            style = this.getStyle(true,ccProperty,"mt:MineralTenement",null,null,null,null,null);
-            break;
-        case "TenementStatus":
-            style = this.getStyle(true,ccProperty,"mt:MineralTenement",null,null,null,null,null);
-            break;
-        default:
-            MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
-            style = this.getPolygonStyle("", mineralTenementServiceProviderType.featureType(), mineralTenementServiceProviderType.fillColour(), mineralTenementServiceProviderType.borderColour(),
-                    mineralTenementServiceProviderType.styleName());
-            break;
-        }
-
-
-        response.setContentType("text/xml");
-
-        ByteArrayInputStream styleStream = new ByteArrayInputStream(
-                style.getBytes());
-        OutputStream outputStream = response.getOutputStream();
-
-        FileIOUtil.writeInputToOutputStream(styleStream, outputStream, 1024, false);
-
-        styleStream.close();
-        outputStream.close();
     }
 
 
@@ -353,7 +140,7 @@ public class MineralTenementController extends BasePortalController {
             style = this.getStyle(false,ccProperty,"mt:MineralTenement",name, tenementType, owner, size, endDate);
             break;
         default:
-            MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.parseUrl(serviceUrl);
+            MineralTenementServiceProviderType mineralTenementServiceProviderType = MineralTenementServiceProviderType.GeoServer;
             String filter = this.mineralTenementService.getMineralTenementFilter(name, tenementType, owner, size, endDate,null,optionalFilters, mineralTenementServiceProviderType); //VT:get filter from service
             style = this.getPolygonStyle(filter, mineralTenementServiceProviderType.featureType(), mineralTenementServiceProviderType.fillColour(), mineralTenementServiceProviderType.borderColour(),
                     mineralTenementServiceProviderType.styleName());
@@ -504,15 +291,6 @@ public class MineralTenementController extends BasePortalController {
         "</Rule>";
         return rule;
 
-    }
-
-    private Document getDocumentFromString(String responseString)
-            throws Exception {
-
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true);
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        return builder.parse(new ByteArrayInputStream(responseString.getBytes(ENCODING)));
     }
 }
 

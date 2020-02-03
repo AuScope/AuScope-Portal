@@ -3,6 +3,8 @@ package org.auscope.portal.server.domain.nvcldataservice;
 import java.io.Serializable;
 
 public class ImageTrayDepthResponse implements Serializable {
+
+    private static final long serialVersionUID = 4240200019321300734L;
     String sampleNo;
     String startValue;
     String endValue;

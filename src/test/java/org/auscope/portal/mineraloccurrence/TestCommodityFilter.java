@@ -2,7 +2,7 @@ package org.auscope.portal.mineraloccurrence;
 
 import java.io.IOException;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.server.domain.ogc.AbstractFilterTestUtilities;

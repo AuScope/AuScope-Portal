@@ -1,9 +1,6 @@
 package org.auscope.portal.server.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.gsml.BoreholeFilter;
 import org.auscope.portal.server.domain.ogc.AbstractFilterTestUtilities;

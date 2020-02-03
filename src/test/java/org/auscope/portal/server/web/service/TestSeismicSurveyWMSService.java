@@ -1,12 +1,8 @@
 package org.auscope.portal.server.web.service;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
-import org.auscope.portal.core.services.methodmakers.WMSMethodMakerInterface;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.test.PortalTestClass;
 import org.auscope.portal.core.test.ResourceUtil;
@@ -29,7 +25,6 @@ public class TestSeismicSurveyWMSService extends PortalTestClass {
 
     @Before
     public void setup() throws Exception {
-        List<WMSMethodMakerInterface> methodMaker = new ArrayList<WMSMethodMakerInterface>();
         mockServiceCaller = context.mock(HttpServiceCaller.class);
         service = new SeismicSurveyWMSService(mockServiceCaller);
     }

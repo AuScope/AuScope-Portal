@@ -8,6 +8,8 @@ import java.io.Serializable;
  *
  */
 public class AnalyticalJobStatus implements Serializable {
+
+    private static final long serialVersionUID = -8792181838362447951L;
     private String jobId;
     private String jobDescription;
     private String email;
