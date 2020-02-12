@@ -160,16 +160,16 @@
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
     </bean>    
     
-    <bean id="nagios4CachedService" class="org.auscope.portal.core.services.Nagios4CachedService">
+    <!--bean id="nagios4CachedService" class="org.auscope.portal.core.services.Nagios4CachedService">
         <constructor-arg name="serviceUrl" value="${HOST.nagios.url}"/>
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
         <constructor-arg name="methodMaker">
             <bean class="org.auscope.portal.core.services.methodmakers.Nagios4MethodMaker">
             </bean>
         </constructor-arg>
-        <property name="userName" value="${env.nagios.user}" />
-        <property name="password" value="${env.nagios.password}" />
-    </bean>
+        <property name="userName" value="${env.nagios.user}:user" />
+        <property name="password" value="${env.nagios.password}:password" />
+    </bean-->
 
         <!-- Registries to be listed on Custom registry handler but not in feature or register tab -->
     <!--bean id="cswVeglProduction" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">
