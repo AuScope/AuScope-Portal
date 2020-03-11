@@ -29,24 +29,24 @@
     <!-- Project properties -->
     <properties>
         <!-- stupid PMD plugin work around... -->
-        <targetJdk>1.8</targetJdk>
+        <targetJdk>13</targetJdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jetty.version>9.3.14.v20161028</jetty.version>
         <log4j.version>1.2.16</log4j.version>
         <spring.version>3.0.5.RELEASE</spring.version>
         <spring.security.version>3.0.5.RELEASE</spring.security.version>
         <geotools.version>2.6.5</geotools.version>
-        <portal.core.version>2.2.0-SNAPSHOT</portal.core.version>
+        <portal.core.version>2.3.0-SNAPSHOT</portal.core.version>
     </properties>
     <build>
         <plugins>        
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <compilerVersion>1.8</compilerVersion>
+		    <source>13</source>
+                    <target>13</target>
+		    <compilerVersion>13</compilerVersion>
                 </configuration>
             </plugin>
             <plugin>
@@ -113,7 +113,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.0</version>
+                <version>0.8.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -196,7 +196,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>2.4</version>
+                        <version>3.2.3</version>
                         <configuration>
                             <overlays>
                                 <overlay>
@@ -227,7 +227,7 @@
                                 </manifestEntries>
                             </archive>
                             <goals>
-                                <goal>manifest</goal>
+                                <goal>war</goal>
                             </goals>
                         </configuration>
                         <!-- This is needed to create ${basedir}/src/main/webapp/META-INF/MANIFEST.MF file -->
@@ -235,7 +235,7 @@
                             <execution>
                                 <phase>package</phase>
                                 <goals>
-                                    <goal>manifest</goal>
+                                    <goal>war</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -257,7 +257,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>2.4</version>
+                        <version>3.2.3</version>
                         <configuration>
                             <packagingExcludes>test/**</packagingExcludes>
                             <overlays>
@@ -289,7 +289,7 @@
                                 </manifestEntries>
                             </archive>
                             <goals>
-                                <goal>manifest</goal>
+                                <goal>war</goal>
                             </goals>
                         </configuration>
                         <!-- This is needed to create ${basedir}/src/main/webapp/META-INF/MANIFEST.MF file -->
@@ -297,7 +297,7 @@
                             <execution>
                                 <phase>package</phase>
                                 <goals>
-                                    <goal>manifest</goal>
+                                    <goal>war</goal>
                                 </goals>
                             </execution>
                         </executions>

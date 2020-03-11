@@ -3,7 +3,7 @@ package org.auscope.portal.server.web.controllers;
 import java.io.IOException;
 
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.ResourceUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

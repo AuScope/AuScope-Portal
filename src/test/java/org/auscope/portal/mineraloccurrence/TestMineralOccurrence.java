@@ -11,7 +11,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.junit.Assert;
 
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.ResourceUtil;
 import org.auscope.portal.core.util.DOMUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
