@@ -25,7 +25,7 @@
         <filter-name>etagFilter</filter-name>
        <url-pattern>/*</url-pattern>
     </filter-mapping>
-    <!--  tomcat crosFilter -->
+    <!--  tomcat CorsFilter -->
 	<filter>
 	  <filter-name>CorsFilter</filter-name>
 	  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
@@ -47,7 +47,7 @@
       <load-on-startup>1</load-on-startup>
    </servlet>
 
-   <servlet>
+   <!-- <servlet>
       <servlet-name>testDispatcher</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
       <load-on-startup>1</load-on-startup>
@@ -61,14 +61,14 @@
     <servlet-mapping>
       <servlet-name>annotationsDispatcher</servlet-name>
       <url-pattern>*.html</url-pattern>
-   </servlet-mapping>
+   </servlet-mapping> -->
 
    <servlet-mapping>
       <servlet-name>annotationsDispatcher</servlet-name>
       <url-pattern>*.do</url-pattern>
    </servlet-mapping>
 
-    <servlet-mapping>
+   <!-- <servlet-mapping>
       <servlet-name>annotationsDispatcher</servlet-name>
       <url-pattern>*.json</url-pattern>
    </servlet-mapping>
@@ -90,12 +90,12 @@
    <error-page>
       <error-code>403</error-code>
       <location>/access_error.html</location>
-   </error-page>
+   </error-page> -->
 
 
    <!-- Security for admin page below this comment -->
 
-   <security-constraint>
+   <!-- <security-constraint>
         <display-name>Admin User URLs</display-name>
         <web-resource-collection>
             <web-resource-name>Admin User URLs</web-resource-name>
@@ -124,6 +124,6 @@
     <login-config>
         <auth-method>BASIC</auth-method>
         <realm-name>AuScope Portal</realm-name>
-    </login-config>
+    </login-config>  -->
 
 </web-app>

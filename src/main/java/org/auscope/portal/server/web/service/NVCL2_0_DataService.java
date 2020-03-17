@@ -55,7 +55,7 @@ public class NVCL2_0_DataService {
     @Autowired
     public NVCL2_0_DataService(HttpServiceCaller httpServiceCaller,
             NVCL2_0_DataServiceMethodMaker nvclMethodMaker,
-            @Value("${HOST.nvclAnalyticalServices.url}") String analyticalServicesUrl) {
+            @Value("${env.nvclAnalyticalServices.url}") String analyticalServicesUrl) {
         this.nvclMethodMaker = nvclMethodMaker;
         this.httpServiceCaller = httpServiceCaller;
         this.analyticalServicesUrl = analyticalServicesUrl;
