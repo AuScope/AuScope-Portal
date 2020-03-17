@@ -27,9 +27,9 @@ import org.auscope.portal.core.util.FileIOUtil;
 import org.auscope.portal.core.util.SLDLoader;
 import org.auscope.portal.server.web.service.CapdfHydroGeoChemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,7 +38,7 @@ import org.springframework.web.servlet.ModelAndView;
  *
  */
 
-@Controller
+@RestController
 public class CapdfHydroGeoChemController extends BasePortalController {
 
     private CapdfHydroGeoChemService capdfHydroGeoChemService;
@@ -72,7 +72,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      * @return null: writes to the response stream.
      * @throws Exception
      */
-    @RequestMapping("/doCapdfHydroGeoChemDownload.do")
+    @GetMapping("/doCapdfHydroGeoChemDownload.do")
     public void doCapdfHydroGeoChemDownload(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "batchid") String batchid,
@@ -113,7 +113,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      * @return null: writes to the response stream.
      * @throws Exception
      */
-    @RequestMapping("/getCapdfCSVDownload.do")
+    @GetMapping("/getCapdfCSVDownload.do")
     public void getCapdfCSVDownload(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam(required = false, value = "batchid") String batchid,
@@ -153,7 +153,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      *
      * NB: This fills the 'AOI_TITLE_TO_LAYER_MAP' HashMap
      */
-    @RequestMapping("/doGetGroupOfInterest")
+    @GetMapping("/doGetGroupOfInterest")
     public ModelAndView doGetGroupOfInterest(@RequestParam("serviceUrl") String serviceUrl) throws IOException, PortalServiceException {
         
         final CSVParser parser = new CSVParser(this.newReader(this.capdfHydroGeoChemService.downloadCSV(serviceUrl,
@@ -194,7 +194,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      * NB: Assumes that 'AOI_TITLE_TO_LAYER_MAP' was filled by a prior call to 'doGetGroupOfInterest()' above.
      *     The website should enforce this.
      */
-    @RequestMapping("/doGetAOIParam")
+    @GetMapping("/doGetAOIParam")
     public ModelAndView doGetAOIParam(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("featureType") String featureType) throws IOException, PortalServiceException {
@@ -244,7 +244,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/doCapdfHydroScatterPlotList.do")
+    @GetMapping("/doCapdfHydroScatterPlotList.do")
     public ModelAndView doCapdfHydroScatterPlotList(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("xaxis") String xaxis,
@@ -324,7 +324,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/doCapdfHydroBoxPlotList.do")
+    @GetMapping("/doCapdfHydroBoxPlotList.do")
     public ModelAndView doCapdfHydroBoxPlotList(
             @RequestParam("serviceUrl") String serviceUrl,
             @RequestParam("box1") String box1,
@@ -415,7 +415,7 @@ public class CapdfHydroGeoChemController extends BasePortalController {
      *            - in a csv format, eg 15,30 for min 15 and max 30
      *
      */
-    @RequestMapping("/getCapdfHydroGeoChemStyle.do")
+    @GetMapping("/getCapdfHydroGeoChemStyle.do")
     public void getCapdfHydroGeoChemStyle(
             @RequestParam(required = false, value = "batchid") String batchid,
             @RequestParam(required = false, value = "featureType") String featureType,

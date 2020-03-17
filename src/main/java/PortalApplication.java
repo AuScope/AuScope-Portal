@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.auscope.portal.core", "au.gov.geoscience.portal.services.vocabularies"})
+@ComponentScan(basePackages = /*{"org.auscope.portal.core",*/ { "org.*", "au.gov.geoscience.portal.services.vocabularies"})
 public class PortalApplication extends SpringBootServletInitializer {
 	
 	@Override

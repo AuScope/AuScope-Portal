@@ -147,6 +147,7 @@ public class ApplicationContext {
     </bean>*/
     @Bean
     @Primary
+    @Autowired
     public HttpServiceCaller httpServiceCaller() {
     	return new HttpServiceCaller(900000);
     }
