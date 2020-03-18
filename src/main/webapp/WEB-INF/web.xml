@@ -28,9 +28,13 @@
     <!--  tomcat crosFilter -->
 	<filter>
 	  <filter-name>CorsFilter</filter-name>
+      <!-- jetty crosFilter. if you want to run in jetty, please comment out tomcat crosFilter first then enable jetty filter -->
+      <!--filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class-->
 	  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
-	  <!-- jetty crosFilter. if you want to run in jetty, please comment out tomcat crosFilter first then enable jetty filter -->
-	  <!--filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class-->
+	  <init-param>
+        <param-name>cors.allowed.origins</param-name>
+        <param-value>*</param-value>
+      </init-param>
 	</filter>
 	<filter-mapping>
 	  <filter-name>CorsFilter</filter-name>
