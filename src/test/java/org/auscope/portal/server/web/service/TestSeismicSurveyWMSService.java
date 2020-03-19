@@ -5,7 +5,7 @@ import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.responses.csw.CSWRecord;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.ResourceUtil;
 import org.auscope.portal.server.web.service.SeismicSurveyWMSService;
 import org.jmock.Expectations;
 import org.junit.Assert;
