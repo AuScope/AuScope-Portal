@@ -1,14 +1,21 @@
-package org;
+package org.auscope.portal.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 
+import org.auscope.portal.server.config.ProfilePortalTest;
 
 @SpringBootApplication
-@ComponentScan(basePackages = /*{"org.auscope.portal.core",*/ { "org.*", "au.gov.geoscience.portal.services.vocabularies"})
+// You can exclude either 'ProfilePortalTest' or 'ProfilePortalProduction'
+// @ComponentScan(basePackages = {"org.auscope.portal.core", "org.*", "au.gov.geoscience.portal.services.vocabularies"},
+@ComponentScan(
+       // basePackages = {"org.auscope.portal", "au.gov.geoscience.portal.services.vocabularies"},
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ProfilePortalTest.class)
+       )
 public class PortalApplication extends SpringBootServletInitializer {
 	
 	@Override

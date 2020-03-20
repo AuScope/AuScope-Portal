@@ -17,10 +17,10 @@ import au.gov.geoscience.portal.services.vocabularies.ReserveCategoryVocabServic
 
 @Configuration
 class ExtraVocabularies {
+
     
-    @Bean
-    @Primary
-    public HttpServiceCaller httpServiceCaller() {
+    @Bean("httpServiceCallerExtra")
+    public HttpServiceCaller httpServiceCallerExtra() {
     	return new HttpServiceCaller(900000);
     }
     
@@ -32,7 +32,7 @@ class ExtraVocabularies {
         <constructor-arg name="vocabularyService">
             <bean id="geologicTimescaleService" class="au.gov.geoscience.portal.services.vocabularies.GeologicTimescaleVocabService">
                 <constructor-arg name="baseUrl" value="http://vocabs.ands.org.au/repository/api/lda/csiro/international-chronostratigraphic-chart/2017" />
-                <constructor-arg name="httpServiceCaller" ref="httpServiceCaller"/>
+                <constructor-arg name="httpServiceCaller" ref="httpServiceCallerExtra"/>
                 <constructor-arg name="vocabularyMethodMaker">
                     <bean class="org.auscope.portal.core.services.methodmakers.VocabularyMethodMaker">
                     </bean>
@@ -43,7 +43,7 @@ class ExtraVocabularies {
 */
     @Bean
     public GeologicTimescaleVocabService geologicTimescaleService() {
-        return new GeologicTimescaleVocabService(httpServiceCaller(), new VocabularyMethodMaker(), "http://vocabs.ands.org.au/repository/api/lda/csiro/international-chronostratigraphic-chart/2017");
+        return new GeologicTimescaleVocabService(httpServiceCallerExtra(), new VocabularyMethodMaker(), "http://vocabs.ands.org.au/repository/api/lda/csiro/international-chronostratigraphic-chart/2017");
     }
     @Bean
     public VocabularyServiceItem vocabularyGeologicTimescales() {
@@ -69,7 +69,7 @@ class ExtraVocabularies {
 */
     @Bean
     public CommodityVocabService commodityCodeService() {
-        return new CommodityVocabService(httpServiceCaller(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/commodity-code");
+        return new CommodityVocabService(httpServiceCallerExtra(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/commodity-code");
     }
     @Bean
     public VocabularyServiceItem vocabularyCommodities() {
@@ -96,7 +96,7 @@ class ExtraVocabularies {
 */
     @Bean
     public MineStatusVocabService mineStatusService() {
-        return new MineStatusVocabService(httpServiceCaller(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/mine-status");
+        return new MineStatusVocabService(httpServiceCallerExtra(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/mine-status");
     }
     @Bean
     public VocabularyServiceItem vocabularyMineStatuses() {
@@ -121,7 +121,7 @@ class ExtraVocabularies {
 */
     @Bean
     public ResourceCategoryVocabService resourceCategoryService() {
-        return new ResourceCategoryVocabService(httpServiceCaller(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/resource-assessment-category");
+        return new ResourceCategoryVocabService(httpServiceCallerExtra(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/resource-assessment-category");
     }
     @Bean
     public VocabularyServiceItem vocabularyResourceCategories() {
@@ -146,7 +146,7 @@ class ExtraVocabularies {
 */
     @Bean
     public ReserveCategoryVocabService reserveCategoryService() {
-        return new ReserveCategoryVocabService(httpServiceCaller(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/reserve-assessment-category");
+        return new ReserveCategoryVocabService(httpServiceCallerExtra(), new VocabularyMethodMaker(), "http://vocabs.ga.gov.au/cgi/sissvoc/reserve-assessment-category");
     }
     @Bean
     public VocabularyServiceItem vocabularyReserveCategories() {

@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Arrays;
@@ -34,6 +34,7 @@ import org.auscope.portal.core.services.OpendapService;
 import org.auscope.portal.core.services.PortalServiceException;
 import org.auscope.portal.core.services.WCSService;
 import org.auscope.portal.core.services.WMSService;
+import org.auscope.portal.core.services.WFSService;
 
 import org.auscope.portal.core.services.csw.CSWServiceItem;
 import org.auscope.portal.core.services.csw.custom.CustomRegistry;
@@ -66,6 +67,7 @@ import org.auscope.portal.core.server.PortalPropertySourcesPlaceholderConfigurer
 import org.auscope.portal.server.web.service.NotificationService;
 import org.auscope.portal.core.services.methodmakers.Nagios4MethodMaker;
 import org.auscope.portal.core.services.Nagios4CachedService;
+import org.auscope.portal.mscl.MSCLWFSService;
 
 
 
@@ -73,21 +75,44 @@ import org.auscope.portal.core.services.Nagios4CachedService;
 
 
 /**
- * VHL bean definitions.
+ * Bean definitions.
  * 
  * Most definitions originally migrated from Spring MVC applicationContext.xml.
  * 
  *
  */
 @Configuration
-public class ApplicationContext {
-
+public class AuScopeApplicationContext {
 
     @Autowired
-	private ArrayList<CSWServiceItem> cswServiceList;
-	
-	@Autowired
-	private ArrayList<KnownLayer> knownTypes;
+    private ArrayList<CSWServiceItem> cswServiceList = new ArrayList<CSWServiceItem>();
+
+    @Autowired
+    private ArrayList<KnownLayer> knownTypes = new ArrayList<KnownLayer>();
+
+    @Bean
+    public ServiceConfiguration serviceConfiguration() {
+        /* TEMPORARY - for EarthResourcesFilterController.java */
+        List<ServiceConfigurationItem> sciList = new ArrayList<ServiceConfigurationItem>();
+        return new ServiceConfiguration(sciList);
+    }
+
+
+    @Bean
+    public WFSGetFeatureMethodMaker methodMaker() {
+    	return new WFSGetFeatureMethodMaker();
+    }
+
+    @Bean
+    public MSCLWFSService msclWfsService() {
+        return new MSCLWFSService(httpServiceCallerApp(), methodMaker());
+    }
+
+    @Bean
+    public WFSService wfsService() {
+        return new WFSService(httpServiceCallerApp(), methodMaker(), null);
+    }
+
 
     /*<bean id="propertyConfigurer" class="org.auscope.portal.core.server.PortalPropertySourcesPlaceholderConfigurer">
         <property name="locations">
@@ -97,7 +122,8 @@ public class ApplicationContext {
             </list>
         </property>
     </bean>*/
-    @Bean PortalPropertySourcesPlaceholderConfigurer propertyConfigurer() {
+    @Bean
+    public static PortalPropertySourcesPlaceholderConfigurer propertyConfigurer() {
         PortalPropertySourcesPlaceholderConfigurer pPropConf = new PortalPropertySourcesPlaceholderConfigurer();
         pPropConf.setLocations(new ClassPathResource("config.properties"), new ClassPathResource("config.properties"));
         return new PortalPropertySourcesPlaceholderConfigurer();
@@ -116,7 +142,7 @@ public class ApplicationContext {
     @Bean
     public ConversionServiceFactoryBean conversionServiceFactoryBean() {
         StringArrayToCustomRegistry strReg = new StringArrayToCustomRegistry();
-        TreeSet<StringArrayToCustomRegistry> converters = new TreeSet<StringArrayToCustomRegistry>();
+        HashSet<StringArrayToCustomRegistry> converters = new HashSet<StringArrayToCustomRegistry>();
         converters.add(strReg);
         ConversionServiceFactoryBean convServ = new ConversionServiceFactoryBean();
         convServ.setConverters(converters);
@@ -146,13 +172,12 @@ public class ApplicationContext {
         </constructor-arg>
     </bean>*/
     @Bean
-    @Primary
     @Autowired
-    public HttpServiceCaller httpServiceCaller() {
+    @Primary
+    public HttpServiceCaller httpServiceCallerApp() {
     	return new HttpServiceCaller(900000);
     }
     
-
 
     /*<bean id="viewCswRecordFactory" class="org.auscope.portal.core.view.ViewCSWRecordFactory">
     </bean>*/
@@ -177,16 +202,18 @@ public class ApplicationContext {
             <bean class="org.auscope.portal.core.services.namespaces.ErmlNamespaceContext"/>
         </property>
     </bean>*/
+/*
     @Bean 
     public ErmlNamespaceContext ermlNamespaceContext() {
     	return new ErmlNamespaceContext();
     }
-    @Bean
+    @Bean("wfsMethodMakerErmlNamespace")
     public WFSGetFeatureMethodMaker wfsMethodMakerErmlNamespace() {
     	WFSGetFeatureMethodMaker methodMaker = new WFSGetFeatureMethodMaker();
     	methodMaker.setNamespaces(ermlNamespaceContext());
     	return methodMaker;
     }
+*/
 
 
     /*<bean id="wfsToKmlTransformer" class="org.auscope.portal.core.xslt.WfsToKmlTransformer">
@@ -242,9 +269,10 @@ public class ApplicationContext {
         <constructor-arg name="cswServiceList" ref="cswServiceList"/> <!-- This is pulled from the profile xml -->
     </bean>*/
     @Bean
+    @Primary
     public CSWCacheService cswCacheService() {
     	CSWCacheService cacheService = new CSWCacheService(
-    			taskExecutor(), httpServiceCaller(), cswServiceList);
+    			taskExecutor(), httpServiceCallerApp(), cswServiceList);
     	cacheService.setForceGetMethods(true);
     	return cacheService;
     }
@@ -256,7 +284,7 @@ public class ApplicationContext {
     </bean>*/
     @Bean
     public CSWFilterService cswFilterService() {
-    	return new CSWFilterService(taskExecutor(), httpServiceCaller(), cswServiceList);
+    	return new CSWFilterService(taskExecutor(), httpServiceCallerApp(), cswServiceList);
     }
 
     /*<bean id="cswKnownLayerService" class="org.auscope.portal.core.services.KnownLayerService">
@@ -281,7 +309,7 @@ public class ApplicationContext {
     }
     @Bean
     public OpendapService opendapService() {
-    	return new OpendapService(httpServiceCaller(), getDataMethodMaker());
+    	return new OpendapService(httpServiceCallerApp(), getDataMethodMaker());
     }
     
 
@@ -308,7 +336,7 @@ public class ApplicationContext {
     
     @Bean
     public SISSVoc2Service sissVocService() {
-        return new SISSVoc2Service(httpServiceCaller(), conceptFactory(),  sissVocMethodMaker());
+        return new SISSVoc2Service(httpServiceCallerApp(), conceptFactory(),  sissVocMethodMaker());
     }
 
     /*<bean id="wcsService" class="org.auscope.portal.core.services.WCSService">
@@ -325,7 +353,7 @@ public class ApplicationContext {
     
     @Bean
     public WCSService wcsService() {
-    	return new WCSService(httpServiceCaller(), wcsMethodMaker());
+    	return new WCSService(httpServiceCallerApp(), wcsMethodMaker());
     }
 
     /*<bean id= "WMSMethodMaker" class="org.auscope.portal.core.services.methodmakers.WMSMethodMaker">
@@ -333,7 +361,7 @@ public class ApplicationContext {
     </bean>*/
     @Bean
     public WMSMethodMaker wmsMethodMaker() {
-    	return new WMSMethodMaker(httpServiceCaller());
+    	return new WMSMethodMaker(httpServiceCallerApp());
     }
 
     /*<bean id= "WMS_1_3_0_MethodMaker" class="org.auscope.portal.core.services.methodmakers.WMS_1_3_0_MethodMaker">
@@ -341,7 +369,7 @@ public class ApplicationContext {
     </bean>*/
     @Bean
     public WMS_1_3_0_MethodMaker wms130methodMaker() {
-    	return new WMS_1_3_0_MethodMaker(httpServiceCaller());
+    	return new WMS_1_3_0_MethodMaker(httpServiceCallerApp());
     }
     
 
@@ -359,7 +387,7 @@ public class ApplicationContext {
     	List<WMSMethodMakerInterface> methodMakers = new ArrayList<WMSMethodMakerInterface>();
     	methodMakers.add(wmsMethodMaker());
     	methodMakers.add(wms130methodMaker());
-    	return new WMSService(httpServiceCaller(), methodMakers);
+    	return new WMSService(httpServiceCallerApp(), methodMakers);
     }
     
 
@@ -375,7 +403,7 @@ public class ApplicationContext {
     
     @Bean
     public ErmlVocabService ermlVocabService() {
-        return new ErmlVocabService(httpServiceCaller(), new CommodityVocabMethodMaker(), ermlVocabServiceURL);
+        return new ErmlVocabService(httpServiceCallerApp(), new CommodityVocabMethodMaker(), ermlVocabServiceURL);
     }
     
 
@@ -390,7 +418,7 @@ public class ApplicationContext {
     @Value("${env.nvclVocabService.url}") private String nvclVocabServiceURL;
     @Bean
     public NvclVocabService nvclVocabService() {
-        return new NvclVocabService(httpServiceCaller(), new NvclVocabMethodMaker(), nvclVocabServiceURL);
+        return new NvclVocabService(httpServiceCallerApp(), new NvclVocabMethodMaker(), nvclVocabServiceURL);
     }
 
 
@@ -399,7 +427,7 @@ public class ApplicationContext {
     </bean>*/    
     @Bean
     public FileDownloadService fileDownloadService() {
-        return new FileDownloadService(httpServiceCaller());
+        return new FileDownloadService(httpServiceCallerApp());
     }
 
 
@@ -418,7 +446,7 @@ public class ApplicationContext {
     @Value("${env.nagios.password}") private String nagiosPassword;
     @Bean
     public Nagios4CachedService nagios4CachedService() {
-        return new Nagios4CachedService(nagiosURL, httpServiceCaller(), new Nagios4MethodMaker());
+        return new Nagios4CachedService(nagiosURL, httpServiceCallerApp(), new Nagios4MethodMaker());
     }
     
 
@@ -436,7 +464,7 @@ public class ApplicationContext {
         <constructor-arg name="serviceUrl" value="https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/csw" />
         <constructor-arg name="recordInformationUrl" value="https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s" />
     </bean>*/
-    @Bean
+    @Bean("cswSARegistry")
     public CustomRegistry cswSARegistry() {
         return new CustomRegistry("cswSARegistry", "South Australia Registry", "https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/csw", "https://sarigdata.pir.sa.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s");
     }
@@ -447,7 +475,7 @@ public class ApplicationContext {
         <constructor-arg name="serviceUrl" value="http://geology.data.nt.gov.au/geonetwork/srv/eng/csw" />
         <constructor-arg name="recordInformationUrl" value="http://geology.data.nt.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s" />
     </bean>*/
-    @Bean
+    @Bean("cswNTRegistry")
     public CustomRegistry cswNTRegistry() {
         return new CustomRegistry("cswNTRegistry", "Northern Territory Registry", "http://geology.data.nt.gov.au/geonetwork/srv/eng/csw", "http://geology.data.nt.gov.au/geonetwork/srv/eng/main.home?uuid=%1$s");
     }
@@ -461,7 +489,12 @@ public class ApplicationContext {
             </list>
         </constructor-arg>
     </bean>*/
-    public List<CustomRegistry> customRegistryList = Arrays.asList(cswSARegistry(), cswNTRegistry());
+    @Bean
+    public List<CustomRegistry> customRegistryList() {
+        List<CustomRegistry> custRegList = new ArrayList<CustomRegistry>();
+        custRegList = Arrays.asList(cswSARegistry(), cswNTRegistry());
+        return custRegList;
+    }
   
     
     /*<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
