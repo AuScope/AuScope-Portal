@@ -70,8 +70,9 @@ import org.auscope.portal.core.services.Nagios4CachedService;
 import org.auscope.portal.mscl.MSCLWFSService;
 
 
-
-
+import org.auscope.portal.core.server.controllers.NamespaceController;
+import org.auscope.portal.core.services.NamespaceService;
+import org.auscope.portal.core.services.LocalCSWFilterService;
 
 
 /**
@@ -85,14 +86,23 @@ import org.auscope.portal.mscl.MSCLWFSService;
 public class AuScopeApplicationContext {
 
     @Autowired
-    private ArrayList<CSWServiceItem> cswServiceList = new ArrayList<CSWServiceItem>();
+    ArrayList<CSWServiceItem> cswServiceList;
 
     @Autowired
-    private ArrayList<KnownLayer> knownTypes = new ArrayList<KnownLayer>();
+    ArrayList<KnownLayer> knownTypes;
+
+    @Bean
+    public LocalCSWFilterService localCSWFilterService() {
+        return(new LocalCSWFilterService(cswFilterService(), taskExecutor()));
+    }
+
+    @Bean
+    public NamespaceService namespaceService() {
+        return(new NamespaceService(httpServiceCallerApp(), methodMaker()));
+    }
 
     @Bean
     public ServiceConfiguration serviceConfiguration() {
-        /* TEMPORARY - for EarthResourcesFilterController.java */
         List<ServiceConfigurationItem> sciList = new ArrayList<ServiceConfigurationItem>();
         return new ServiceConfiguration(sciList);
     }

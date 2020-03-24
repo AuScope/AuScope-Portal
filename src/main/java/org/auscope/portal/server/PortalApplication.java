@@ -10,11 +10,14 @@ import org.springframework.context.annotation.FilterType;
 import org.auscope.portal.server.config.ProfilePortalTest;
 
 @SpringBootApplication
-// You can exclude either 'ProfilePortalTest' or 'ProfilePortalProduction'
-// @ComponentScan(basePackages = {"org.auscope.portal.core", "org.*", "au.gov.geoscience.portal.services.vocabularies"},
 @ComponentScan(
-       // basePackages = {"org.auscope.portal", "au.gov.geoscience.portal.services.vocabularies"},
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ProfilePortalTest.class)
+       basePackages = {"org.auscope.portal.server",
+                       "au.gov.geoscience.portal.services.vocabularies",
+                       "org.auscope.portal.core.server.controllers"
+                      },
+//     To switch profiles between 'Test' and 'Production', you can
+//     exclude either 'ProfilePortalTest' or 'ProfilePortalProduction'
+       excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ProfilePortalTest.class)
        )
 public class PortalApplication extends SpringBootServletInitializer {
 	

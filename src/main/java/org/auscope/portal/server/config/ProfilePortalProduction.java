@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * Definitions for all known layers
@@ -362,25 +363,27 @@ public class ProfilePortalProduction {
     
     
     @Autowired
-	@Qualifier("cswAuscopeProduction")
-	CSWServiceItem cswAuscopeProduction;
+    @Qualifier("cswAuscopeProduction")
+    CSWServiceItem cswAuscopeProduction;
+    
+    // @Autowired
+    // @Qualifier("cswMDUProduction")
+    // CSWServiceItem cswMDUProduction;
     
     @Autowired
-	@Qualifier("cswMDUProduction")
-	CSWServiceItem cswMDUProduction;
-    
-    @Autowired
-	@Qualifier("cswGAPMDCRC")
-	CSWServiceItem cswGAPMDCRC;
+    @Qualifier("cswGAPMDCRC")
+    CSWServiceItem cswGAPMDCRC;
     
     @Bean
-	public ArrayList<CSWServiceItem> cswServiceList() {
+    @Primary
+    @Autowired
+    public ArrayList<CSWServiceItem> cswServiceList() {
 		ArrayList<CSWServiceItem> serviceList = new ArrayList<CSWServiceItem>();
 		serviceList.add(cswAuscopeProduction);
-		serviceList.add(cswMDUProduction);
+		// serviceList.add(cswMDUProduction);
 		serviceList.add(cswGAPMDCRC);
 		return serviceList;
-	}
+    }
 
 }
     

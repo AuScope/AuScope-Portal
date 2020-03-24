@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.MalformedURLException;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,8 @@ import org.auscope.portal.core.view.knownlayer.CSWRecordSelector;
 import org.auscope.portal.core.view.knownlayer.KnownLayer;
 import org.auscope.portal.core.view.knownlayer.WFSSelector;
 import org.auscope.portal.core.view.knownlayer.WMSSelector;
+import org.auscope.portal.core.view.knownlayer.WMSWFSSelector;
+import org.auscope.portal.view.knownlayer.IRISSelector;
 import org.auscope.portal.core.uifilter.FilterCollection;
 import org.auscope.portal.core.uifilter.optional.xpath.UITextBox;
 import org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider;
@@ -151,8 +154,13 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeMineSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeMineSelector() {
+        WFSSelector wfsSelector = new WFSSelector("er:MiningFeatureOccurrence");
+        String[] relNameList = new String[2];
+        relNameList[0] = "er:Mine";
+        relNameList[1] = "gsml:MappedFeature";
+        wfsSelector.setRelatedFeatureTypeNames(relNameList);
+        return wfsSelector;
     }
 
     @Bean
@@ -246,9 +254,15 @@ public class AuScopeKnownLayers {
     
 */
 
+
     @Bean
-    public WMSSelector knownTypeMineralOccurrenceSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeMineralOccurrenceSelector() {
+        WFSSelector wfsSelector = new WFSSelector("gsml:MappedFeature");
+        String[] relFeatList = new String[2];
+        relFeatList[0] = "er:Commodity";
+        relFeatList[1] = "er:MineralOccurrence";
+        wfsSelector.setRelatedFeatureTypeNames(relFeatList);
+        return wfsSelector;
     }
 
     @Bean
@@ -335,9 +349,15 @@ public class AuScopeKnownLayers {
     
 */
 
+
     @Bean
-    public WMSSelector knownTypeMiningActivitySelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeMiningActivitySelector() {
+        WFSSelector wfsSelector = new WFSSelector("er:MiningFeatureOccurrence");
+        String[] relNameList = new String[2];
+        relNameList[0] = "er:MiningActivity";
+        relNameList[1] = "gsml:MappedFeature";
+        wfsSelector.setRelatedFeatureTypeNames(relNameList);
+        return wfsSelector;
     }
 
     @Bean
@@ -490,8 +510,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeMineralTenementsSelector() {
-        return new WMSSelector("?");
+    public WMSWFSSelector knownTypeMineralTenementsSelector() {
+        return new WMSWFSSelector("mt:MineralTenement", "MineralTenement");
     }
 
     @Bean
@@ -573,8 +593,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeColorCodeMineralTenementsSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeColorCodeMineralTenementsSelector() {
+        return new WFSSelector("mt:mineralTenement");
     }
 
     @Bean
@@ -633,8 +653,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypehydrogeochemSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypehydrogeochemSelector() {
+        return new WFSSelector("public:hydrogeochem");
     }
 
     @Bean
@@ -719,8 +739,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeErlMineViewSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeErlMineViewSelector() {
+        return new WFSSelector("erl:MineView");
     }
 
     @Bean
@@ -827,8 +847,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeErlMineralOccurrenceViewSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeErlMineralOccurrenceViewSelector() {
+        return new WFSSelector("erl:MineOccurrenceView");
     }
 
     @Bean
@@ -937,8 +957,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeErlCommodityResourceViewSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeErlCommodityResourceViewSelector() {
+        return new WFSSelector("erl:CommodityResourceView");
     }
 
     @Bean
@@ -1014,7 +1034,7 @@ public class AuScopeKnownLayers {
 
     @Bean
     public WMSSelector knownTypeMineralOccurrenceViewSelector() {
-        return new WMSSelector("?");
+        return new WMSSelector("mo:MinOccView");
     }
 
     @Bean
@@ -1101,8 +1121,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypePMDCRCReportsSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypePMDCRCReportsSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("PMD*CRC Publication");
+        return cswSelector;
     }
 
     @Bean
@@ -1150,8 +1172,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGeoModelsSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeGeoModelsSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("3D Geological Models");
+        return cswSelector;
     }
 
     @Bean
@@ -1197,8 +1221,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeReportsSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeReportsSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("Report");
+        return cswSelector;
     }
 
     @Bean
@@ -1254,8 +1280,14 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeYilgarnGeochemistrySelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeYilgarnGeochemistrySelector() {
+        WFSSelector wfsSelector = new WFSSelector("gsml:GeologicUnit");
+        String[] featNameList = new String[3];
+        featNameList[0] = "omx:ObservationProcess";
+        featNameList[1] = "gml:TimeInstant";
+        featNameList[2] = "sa:LocatedSpecimen";
+        wfsSelector.setRelatedFeatureTypeNames(featNameList);
+        return wfsSelector;
     }
 
     @Bean
@@ -1428,8 +1460,30 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeBoreholeNvclV2Selector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeBoreholeNvclV2Selector() {
+        String[] featNameList = {"sa:SamplingFeatureCollection", "om:GETPUBLISHEDSYSTEMTSA",
+                                 "nvcl:scannedBorehole", "nvcl:ScannedBoreholeCollection" };
+        String[] serviceEndPoints = {"http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs",
+                        "https://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs",
+                        "http://www.mrt.tas.gov.au:80/web-services/wfs",
+                        "https://www.mrt.tas.gov.au:80/web-services/wfs",
+                        "http://geossdi.dmp.wa.gov.au:80/services/wfs",
+                        "http://geossdi.dmp.wa.gov.au/services/wfs",
+                        "https://geossdi.dmp.wa.gov.au/services/wfs",
+                        "http://geology.data.nt.gov.au:80/geoserver/wfs",
+                        "https://geology.data.nt.gov.au/geoserver/wfs",
+                        "https://gs.geoscience.nsw.gov.au/geoserver/wfs",
+                        "https://sarigdata.pir.sa.gov.au/geoserver/wfs",
+                        "http://geology-uat.information.qld.gov.au/geoserver/wfs",
+                        "https://geology-uat.information.qld.gov.au/geoserver/wfs",
+                        "http://geology.information.qld.gov.au/geoserver/wfs",
+                        "https://geology.information.qld.gov.au/geoserver/wfs",
+                        "http://geology.data.vic.gov.au/nvcl/wfs",
+                        "https://geology.data.vic.gov.au/nvcl/wfs"};
+
+        WFSSelector wfsSelector = new WFSSelector("gsmlp:BoreholeView", serviceEndPoints, true);
+        wfsSelector.setRelatedFeatureTypeNames(featNameList);
+        return wfsSelector;
     }
 
     @Bean
@@ -1529,8 +1583,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeTimaGeoSampleSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeTimaGeoSampleSelector() {
+        return new WFSSelector("tima:geosample_and_mineralogy");                          
     }
 
     @Bean
@@ -1610,8 +1664,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeSHRIMPGeoSampleSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeSHRIMPGeoSampleSelector() {
+        return new WFSSelector("tima:view_shrimp_geochronology_result");                          
     }
 
     @Bean
@@ -1757,8 +1811,14 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeSF0BoreholeNVCLSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeSF0BoreholeNVCLSelector() {
+        WFSSelector wfsSelector = new WFSSelector("gsmlp:BoreholeView");
+        String[] featNameList = { "sa:SamplingFeatureCollection",
+                        "om:GETPUBLISHEDSYSTEMTSA",
+                        "nvcl:scannedBorehole",
+                        "nvcl:ScannedBoreholeCollection" };
+        wfsSelector.setRelatedFeatureTypeNames(featNameList);
+        return wfsSelector;
     }
 
     @Bean
@@ -1847,8 +1907,12 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeBoreholeMSCLSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeBoreholeMSCLSelector() {
+        String[] serviceEndPoints = {"http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs"};
+        WFSSelector wfsSelector = new WFSSelector("gsmlp:BoreholeView", serviceEndPoints, true);
+        String[] featNameList = {"mscl:scanned_data", "sa:SamplingFeatureCollection" };
+        wfsSelector.setRelatedFeatureTypeNames(featNameList);
+        return wfsSelector;
     }
 
     @Bean
@@ -1898,8 +1962,13 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeSeismologyInSchoolSelector() {
-        return new WMSSelector("?");
+    public IRISSelector knownTypeSeismologyInSchoolSelector() {
+        try {
+            return new IRISSelector("http://service.iris.edu");
+        } catch(MalformedURLException e) {
+            // TODO: Log exception??
+        }
+        return null; 
     }
 
     @Bean
@@ -2023,8 +2092,14 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeBoreholePressureDBSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeBoreholePressureDBSelector() {
+        String[] serviceEndPoints = { "http://services-test.auscope.org:80/pressuredb/wfs",
+                        "http://services.auscope.org:80/pressuredb/wfs"};
+        WFSSelector wfsSelector = new WFSSelector("gsmlp:BoreholeView", serviceEndPoints, true);
+        String[] featNameList = { "sa:SamplingFeatureCollection", "om:GETPUBLISHEDSYSTEMTSA",
+                        "pdb:rft", "pdb:nacl", "pdb:t", "pdb:cl", "pdb:tds", "pdb:dst", "pdb:fitp"};
+        wfsSelector.setRelatedFeatureTypeNames(featNameList);
+        return wfsSelector;
     }
 
     @Bean
@@ -2086,8 +2161,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAsterSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAsterSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("E6029ED0-636B-4F91-A6A1-535EBA4B5AD1");
+        return cswSelector;
     }
 
     @Bean
@@ -2120,8 +2197,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAsterAlohSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAsterAlohSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("1c3f5e49-4241-4511-a3cc-60314ea09414");
+        return cswSelector;
     }
 
     @Bean
@@ -2153,8 +2232,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAsterFerrousSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAsterFerrousSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("02e4fa4c-cbd0-429f-b487-381282debb8f");
+        return cswSelector;
     }
 
     @Bean
@@ -2186,8 +2267,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAsterOpaqueSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAsterOpaqueSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("ab9e636a-86f8-4366-acec-c24db7b72ff5");
+        return cswSelector;
     }
 
     @Bean
@@ -2219,8 +2302,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAsterFerricOxideContentSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAsterFerricOxideContentSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("7bc66a7a-5ba0-447e-9a00-bf1ccd84e4f3");
+        return cswSelector;
     }
 
     @Bean
@@ -2252,8 +2337,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAsterFeohSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAsterFeohSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("f938456a-926d-4547-b111-093844f8fc5d");
+        return cswSelector;
     }
 
     @Bean
@@ -2285,8 +2372,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeFerricOxideCompSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeFerricOxideCompSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("aa27099f-13dd-4294-8558-595661eeba01");
+        return cswSelector;
     }
 
     @Bean
@@ -2318,8 +2407,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGroupIndexSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeGroupIndexSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("ea755cf7-eb59-41d1-86bd-4d1954c93bfe");
+        return cswSelector;
     }
 
     @Bean
@@ -2351,8 +2442,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeQuartzIndexSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeQuartzIndexSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("137a4e7e-9633-40d8-9b2f-2d2d1eb15c08");
+        return cswSelector;
     }
 
     @Bean
@@ -2384,8 +2477,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeMgohContentSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeMgohContentSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("a101fef8-2c52-4d62-9b43-0914487af197");
+        return cswSelector;
     }
 
     @Bean
@@ -2417,8 +2512,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGreenVegSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeGreenVegSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("2bd17d05-22f8-4b0d-a318-3eaabc1b5c2a");
+        return cswSelector;
     }
 
     @Bean
@@ -2450,8 +2547,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeFerrCarbSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeFerrCarbSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("8601612e-3f3e-4334-9d31-3c6ec30f092a");
+        return cswSelector;
     }
 
     @Bean
@@ -2483,8 +2582,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeMgohGroupCompSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeMgohGroupCompSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("8348fe99-0d50-45cd-8a0a-5439e82da833");
+        return cswSelector;
     }
 
     @Bean
@@ -2516,8 +2617,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeFalseColorSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeFalseColorSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("bfd6b137-7227-47f4-82f0-9e7fb788c507");
+        return cswSelector;
     }
 
     @Bean
@@ -2549,8 +2652,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeRegolithRatiosSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeRegolithRatiosSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("768dcbde-ae8a-440e-9b4b-44624ba4c836");
+        return cswSelector;
     }
 
     @Bean
@@ -2582,8 +2687,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAlohGroupContentSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAlohGroupContentSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("b070d1d4-6420-4770-8ca6-3bf4b6682c3d");
+        return cswSelector;
     }
 
     @Bean
@@ -2615,8 +2722,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGypsumContentSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeGypsumContentSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("EB574238-BCB9-4A98-B1C1-71D1D1B0A946");
+        return cswSelector;
     }
 
     @Bean
@@ -2648,8 +2757,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeSilicaContentSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeSilicaContentSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setRecordId("cca633fe-5cdc-4fea-b77f-71b81c701c47");
+        return cswSelector;
     }
 
     @Bean
@@ -2710,8 +2821,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeRemanentAnomaliesSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeRemanentAnomaliesSelector() {
+        String[] serviceEndPoints = {"http://remanentanomalies.csiro.au/geoserver/wfs"};
+        WFSSelector wfsSelector = new WFSSelector("RemAnom:Anomaly", serviceEndPoints, true);
+        return wfsSelector;
     }
 
     @Bean
@@ -2757,8 +2870,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeRemanentAnomaliesAutoSearchSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeRemanentAnomaliesAutoSearchSelector() {
+        return new WFSSelector("RemAnomAutoSearch:AutoSearchAnomalies");
     }
 
     @Bean
@@ -2856,8 +2969,9 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeEMAGRemanentAnomaliesSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeEMAGRemanentAnomaliesSelector() {
+        String[] serviceEndPoints = {"http://remanentanomalies.csiro.au/geoserverEMAG/wfs"};
+        return new WFSSelector("RemAnom:Anomaly", serviceEndPoints, true);
     }
 
     @Bean
@@ -2904,7 +3018,8 @@ public class AuScopeKnownLayers {
 
     @Bean
     public WMSSelector knownTypeEMAGRemanentAnomaliesTMISelector() {
-        return new WMSSelector("?");
+        String[] serviceEndPoints = {"http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc"};
+        return new WMSSelector("z", serviceEndPoints, true);
     }
 
     @Bean
@@ -2934,8 +3049,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeSamplingPointSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeSamplingPointSelector() {
+        return new WFSSelector("sa:SamplingPoint");
     }
 
     @Bean
@@ -2963,8 +3078,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeFeatureCollectionSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeFeatureCollectionSelector() {
+        return new WFSSelector("gml:FeatureCollection");
     }
 
     @Bean
@@ -2990,8 +3105,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeLateriteYilgarnGeoChemSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeLateriteYilgarnGeoChemSelector() {
+        return new WFSSelector("Geochem:LateriteYilgarnGeoChem");
     }
 
     @Bean
@@ -3017,8 +3132,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeHighPSiteFeatureTypeSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeHighPSiteFeatureTypeSelector() {
+        return new WFSSelector("highp:HighPSiteFeatureType");
     }
 
     @Bean
@@ -3044,8 +3159,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeHighPFeatureTypeSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeHighPFeatureTypeSelector() {
+        return new WFSSelector("highp:HighPFeatureType");
     }
 
     @Bean
@@ -3071,8 +3186,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeHighPREIronLayerSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeHighPREIronLayerSelector() {
+        return new WFSSelector("HighP-RE-IronLayer");
     }
 
     @Bean
@@ -3098,8 +3213,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeHighPREPhosLayerSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeHighPREPhosLayerSelector() {
+        return new WFSSelector("HighP-RE-PhosLayer");
     }
 
     @Bean
@@ -3125,8 +3240,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeHighPSiteIronLayerSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeHighPSiteIronLayerSelector() {
+        return new WFSSelector("HighP-Site-IronLayer");
     }
 
     @Bean
@@ -3152,8 +3267,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeHighPSitePhosLayerSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeHighPSitePhosLayerSelector() {
+        return new WFSSelector("HighP-Site-PhosLayer");
     }
 
     @Bean
@@ -3179,8 +3294,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypePortalsSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypePortalsSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setDescriptiveKeyword("Portal");
+        return cswSelector;
     }
 
     @Bean
@@ -3207,8 +3324,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGeoNetworksSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeGeoNetworksSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setDescriptiveKeyword("GeoNetwork");
+        return cswSelector;
     }
 
     @Bean
@@ -3382,8 +3501,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGocadModelsSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeGocadModelsSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setDescriptiveKeyword("http://vgl.auscope.org/model/gocad");
+        return cswSelector;
     }
 
     @Bean
@@ -3430,8 +3551,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector KnownTypeGeophysicsDatasetsSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector KnownTypeGeophysicsDatasetsSelector() {
+        CSWRecordSelector cswSelector = new CSWRecordSelector();
+        cswSelector.setDescriptiveKeyword("GeophysicsDataset");
+        return cswSelector;
     }
 
     @Bean
@@ -3465,8 +3588,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGAAemSurveySelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeGAAemSurveySelector() {
+        return new WFSSelector("ga:aemsurveys");
     }
 
     @Bean
@@ -3498,8 +3621,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGARumJungleAEMSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeGARumJungleAEMSelector() {
+        return new WFSSelector("ga:rum_jungle_aem");
     }
 
     @Bean
@@ -3531,8 +3654,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGAWoolnerAEMSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeGAWoolnerAEMSelector() {
+        return new WFSSelector("ga:woolner_aem");
     }
 
     @Bean
@@ -3564,8 +3687,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGAGravitySurveySelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeGAGravitySurveySelector() {
+        return new WFSSelector("ga:gravitypoints");
     }
 
     @Bean
@@ -3597,8 +3720,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeMusgraveAemSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeMusgraveAemSelector() {
+        return new WFSSelector("ga:musgrave_aem");
     }
 
     @Bean
@@ -3630,8 +3753,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeWesternAreaAemSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeWesternAreaAemSelector() {
+        return new WFSSelector("ga:western_area_aem");
     }
 
     @Bean
@@ -3665,8 +3788,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAshburtonAemSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeAshburtonAemSelector() {
+        return new WFSSelector("ga:ashburton_aem");
     }
 
     @Bean
@@ -4063,8 +4186,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06GaSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06GaSelector() {
+        CSWRecordSelector cswRecord = new CSWRecordSelector();
+        cswRecord.setRecordId("a05f7892-ee53-7506-e044-00144fdd4fa6");
+        return cswRecord;
     }
 
     @Bean
@@ -4099,8 +4224,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeAreTherAnySandUranSystInTheEromBasiSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeAreTherAnySandUranSystInTheEromBasiSelector() {
+        CSWRecordSelector cswRecord = new CSWRecordSelector();
+        cswRecord.setRecordId("a05f7892-f9c4-7506-e044-00144fdd4fa6");
+        return cswRecord;
     }
 
     @Bean
@@ -4135,8 +4262,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03GaSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03GaSelector() {
+        CSWRecordSelector cswRecord = new CSWRecordSelector();
+        cswRecord.setRecordId("cd697530-5b75-3811-e044-00144fdd4fa6");
+        return cswRecord;
     }
 
     @Bean
@@ -4171,8 +4300,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGisSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGisSelector() {
+        CSWRecordSelector cswRecord = new CSWRecordSelector();
+        cswRecord.setRecordId("a05f7892-b7a0-7506-e044-00144fdd4fa6");
+        return cswRecord;
     }
 
     @Bean
@@ -4207,8 +4338,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSystSelector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSystSelector() {
+        CSWRecordSelector cswRecord = new CSWRecordSelector();
+        cswRecord.setRecordId("a05f7892-eafd-7506-e044-00144fdd4fa6");
+        return cswRecord;
     }
 
     @Bean
@@ -4243,8 +4376,10 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004Selector() {
-        return new WMSSelector("?");
+    public CSWRecordSelector knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004Selector() {
+        CSWRecordSelector cswRecord = new CSWRecordSelector();
+        cswRecord.setRecordId("a05f7892-ccc9-7506-e044-00144fdd4fa6");
+        return cswRecord;
     }
 
     @Bean
@@ -4747,8 +4882,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeBoreholeSelector() {
-        return new WMSSelector("?");
+    public WFSSelector knownTypeBoreholeSelector() {
+        return new WFSSelector("gsmlbh:Borehole");
     }
 
     @Bean
@@ -7371,8 +7506,8 @@ public class AuScopeKnownLayers {
 */
 
     @Bean
-    public WMSSelector knownTypeGeologicalProvincesSelector() {
-        return new WMSSelector("?");
+    public WMSWFSSelector knownTypeGeologicalProvincesSelector() {
+        return new WMSWFSSelector("gml:ProvinceFullExtent", "GeologicalProvinces");
     }
 
     @Bean

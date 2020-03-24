@@ -17,7 +17,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswAuscopeTest() {
-        return(new CSWServiceItem("cswAuscopeTest", "AuScope Test Geonetwork", "http://au-portal-2.it.csiro.au/geonetwork/srv/eng/csw", "http://au-portal-2.it.csiro.au/geonetwork/srv/eng/catalog.search#/metadata/%1$s"));
+        return(new CSWServiceItem("cswAuscopeTest",
+                                  "http://au-portal-2.it.csiro.au/geonetwork/srv/eng/csw",
+                                  "http://au-portal-2.it.csiro.au/geonetwork/srv/eng/catalog.search#/metadata/%1$s",
+                                  "AuScope Test Geonetwork"));
     }
 
 
@@ -31,7 +34,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswAuscopeProduction() {
-        return(new CSWServiceItem("cswAuscopeProduction", "AuScope Geonetwork", "http://portal.auscope.org/geonetwork/srv/eng/csw", "http://portal.auscope.org/geonetwork/srv/eng/catalog.search#/metadata/%1$s"));
+        return(new CSWServiceItem("cswAuscopeProduction",
+                                  "http://portal.auscope.org/geonetwork/srv/eng/csw",
+                                  "http://portal.auscope.org/geonetwork/srv/eng/catalog.search#/metadata/%1$s",
+                                  "AuScope Geonetwork"));
     }
 
 
@@ -45,7 +51,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswMDUTest() {
-        return(new CSWServiceItem("cswMDUTest", "MDU Test Geonetwork", "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/csw", "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/metadata.show?uuid=%1$s"));
+        return(new CSWServiceItem("cswMDUTest",
+                                  "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/csw",
+                                  "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/metadata.show?uuid=%1$s",
+                                  "MDU Test Geonetwork"));
     }
 
 
@@ -59,7 +68,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswMDUProduction() {
-        return(new CSWServiceItem("cswMDUProduction", "MDU Geonetwork", "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/csw", "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s"));
+        return(new CSWServiceItem("cswMDUProduction",
+                                  "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/csw",
+                                  "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s",
+                                  "MDU-Geonetwork"));
     }
 
 
@@ -73,7 +85,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswGAPetroleumTest() {
-        return(new CSWServiceItem("cswGAPetroleumTest", "GA Petroleum Geonetwork", "http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/eng/csw", "http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/eng/main.home?uuid=%1$s"));
+        return(new CSWServiceItem("cswGAPetroleumTest",
+                                  "http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/eng/csw",
+                                  "http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/eng/main.home?uuid=%1$s",
+                                  "GA Petroleum Geonetwork"));
     }
         
         
@@ -87,7 +102,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswMRTTest() {
-        return(new CSWServiceItem("cswMRTTest", "Tasmania Test Geonetwork", "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw", "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s"));
+        return(new CSWServiceItem("cswMRTTest",
+                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw",
+                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s",
+                                  "Tasmania Test Geonetwork"));
     }
 
 
@@ -101,7 +119,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswMRTProduction() {
-        return(new CSWServiceItem("cswMRTProduction", "Tasmania Geonetwork", "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw", "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s"));
+        return(new CSWServiceItem("cswMRTProduction",
+                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw",
+                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s",
+                                  "Tasmania Geonetwork"));
     }
 
 
@@ -116,8 +137,10 @@ class AuScopeRegistries {
     */
     @Bean
     public CSWServiceItem cswGAPMDCRC() {
-        return(new CSWServiceItem("cswGAPMDCRC", "Geoscience Australia PMD*CRC Publications", "http://www.ga.gov.au/geonetwork/srv/en/csw", "csw:AnyText Like '%PMD*CRC Publication%' AND BBOX(ows:BoundingBox, 110,-9,160,-55)",
-                                  "http://www.ga.gov.au/geonetwork/srv/en/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s"));
+        return(new CSWServiceItem("cswGAPMDCRC",
+                                  "http://www.ga.gov.au/geonetwork/srv/en/csw",
+                                  "http://www.ga.gov.au/geonetwork/srv/en/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&amp;elementSetName=full&amp;id=%1$s",
+                                  "Geoscience Australia PMD*CRC Publications",
+                                  "csw:AnyText Like '%PMD*CRC Publication%' AND BBOX(ows:BoundingBox, 110,-9,160,-55)"));
     }
-
 }
