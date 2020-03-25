@@ -4,6 +4,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFactoryConfigurationException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -31,10 +33,11 @@ public class PressureDBExceptionParser {
      * @throws PressureDBException
      */
     public static void checkForExceptionResponse(Document doc) throws PortalServiceException {
-    	XPathFactory factory = new org.apache.xpath.jaxp.XPathFactoryImpl();
-    	XPath xPath = factory.newXPath();   
-
+    	XPathFactory factory;
         try {
+            factory = XPathFactory.newInstance(XPathFactory.DEFAULT_OBJECT_MODEL_URI, "org.apache.xpath.jaxp.XPathFactoryImpl", null);
+            XPath xPath = factory.newXPath();   
+
             //Check for an exception response
             NodeList exceptionNodes = (NodeList) xPath.evaluate("/DataServiceError", doc, XPathConstants.NODESET);
             if (exceptionNodes.getLength() > 0) {
@@ -42,9 +45,9 @@ public class PressureDBExceptionParser {
 
                 throw new PortalServiceException((HttpRequestBase) null, exceptionNode.getTextContent());
             }
-        } catch (XPathExpressionException ex) {
+        } catch (XPathExpressionException | XPathFactoryConfigurationException ex) {
             //This should *hopefully* never occur
-            log.error("Error whilst attempting to check for errors", ex);
-        }
+            log.error("Error whilst attempting to check for errors in PressureDB response: ", ex);
+        }   
     }
 }

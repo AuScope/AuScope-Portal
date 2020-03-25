@@ -3,6 +3,7 @@ package org.auscope.portal.server.web.service;
 import java.io.InputStream;
 
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -77,7 +78,7 @@ public class PressureDBService {
      * @return
      * @throws XPathExpressionException
      */
-    private boolean extractBooleanXPath(String xPathString, Node node) throws XPathExpressionException {
+    private boolean extractBooleanXPath(String xPathString, Node node) throws XPathException {
         return attemptParseBoolean(DOMUtil.compileXPathExpr(xPathString).evaluate(node, XPathConstants.STRING));
     }
 
