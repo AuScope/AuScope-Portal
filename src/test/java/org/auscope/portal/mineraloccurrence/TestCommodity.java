@@ -4,13 +4,14 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.junit.Assert;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.util.ResourceUtil;
 import org.auscope.portal.core.util.DOMUtil;
+import org.auscope.portal.core.util.ResourceUtil;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -26,7 +27,7 @@ public class TestCommodity extends PortalTestClass {
     private static Commodity invalidCommodity;
 
     @Before
-    public void setUp() throws IOException, SAXException, XPathExpressionException, ParserConfigurationException {
+    public void setUp() throws IOException, SAXException, XPathException, ParserConfigurationException {
         //create updateCSWRecords valid commodity
         Document mineDocument = DOMUtil.buildDomFromStream(ResourceUtil
                 .loadResourceAsStream("org/auscope/portal/erml/commodity/commodityNodeValid.xml"));
