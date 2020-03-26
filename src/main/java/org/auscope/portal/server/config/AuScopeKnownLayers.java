@@ -687,8 +687,6 @@ public class AuScopeKnownLayers {
         <ns0:property name="name" value="Mine View" />
         <ns0:property name="description" value="Earth ResourceML Lite Mine" />
         <ns0:property name="group" value="Earth Resources Lite(new)" />
-
-        
         <ns0:property name="proxyUrl" value="" />
         <ns0:property name="proxyCountUrl" value="" />
         <ns0:property name="proxyStyleUrl" value="getErlMineViewStyle.do" />
@@ -848,7 +846,7 @@ public class AuScopeKnownLayers {
 
     @Bean
     public WFSSelector knownTypeErlMineralOccurrenceViewSelector() {
-        return new WFSSelector("erl:MineOccurrenceView");
+        return new WFSSelector("erl:MineralOccurrenceView");
     }
 
     @Bean
@@ -1123,7 +1121,7 @@ public class AuScopeKnownLayers {
     @Bean
     public CSWRecordSelector knownTypePMDCRCReportsSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
-        cswSelector.setRecordId("PMD*CRC Publication");
+        cswSelector.setDescriptiveKeyword("PMD*CRC Publication");
         return cswSelector;
     }
 
@@ -1174,7 +1172,7 @@ public class AuScopeKnownLayers {
     @Bean
     public CSWRecordSelector knownTypeGeoModelsSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
-        cswSelector.setRecordId("3D Geological Models");
+        cswSelector.setDescriptiveKeyword("3D Geological Models");
         return cswSelector;
     }
 
@@ -1223,7 +1221,7 @@ public class AuScopeKnownLayers {
     @Bean
     public CSWRecordSelector knownTypeReportsSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
-        cswSelector.setRecordId("Report");
+        cswSelector.setDescriptiveKeyword("Report");
         return cswSelector;
     }
 

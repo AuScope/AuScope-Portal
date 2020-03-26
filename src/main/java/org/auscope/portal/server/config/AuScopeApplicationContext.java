@@ -244,14 +244,30 @@ public class AuScopeApplicationContext {
             </list>
         </constructor-arg>
     </bean>*/
+
+    @Autowired
+    VocabularyServiceItem vocabularyGeologicTimescales;
+
+    @Autowired
+    VocabularyServiceItem vocabularyCommodities;
+
+    @Autowired
+    VocabularyServiceItem vocabularyMineStatuses;
+
+    @Autowired
+    VocabularyServiceItem vocabularyReserveCategories;
+
+    @Autowired
+    VocabularyServiceItem vocabularyResourceCategories;
+
     @Bean
     public ArrayList<VocabularyServiceItem> vocabularyServiceList() {
         ArrayList<VocabularyServiceItem> servList = new ArrayList<VocabularyServiceItem>();
-        // servList.add(vocabularyGeologicTimescales); /* !! from ausgin vocabs  !! */
-        // servList.add(vocabularyCommodities);
-        // servList.add(vocabularyMineStatuses);
-        // servList.add(vocabularyReserveCategories);
-        // servList.add(vocabularyResourceCategories);
+        servList.add(vocabularyGeologicTimescales);
+        servList.add(vocabularyCommodities);
+        servList.add(vocabularyMineStatuses);
+        servList.add(vocabularyReserveCategories);
+        servList.add(vocabularyResourceCategories);
         return servList;
     }
     
