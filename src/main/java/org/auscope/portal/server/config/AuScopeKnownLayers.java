@@ -91,68 +91,6 @@ public class AuScopeKnownLayers {
         optionalFilters.add(startFromDate);
     }
 
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMine">
-        <ns0:constructor-arg name="id" value="erml-mine" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="er:MiningFeatureOccurrence" />
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        <ns0:value>er:Mine</ns0:value>
-                        <ns0:value>gsml:MappedFeature</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Earth Resource Mine" />
-        <ns0:property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:Mine" />
-        <ns0:property name="group" value="Earth Resources(old)" />
-        <ns0:property name="proxyUrl" value="doMineFilter.do" />
-        <ns0:property name="proxyCountUrl" value="doMineFilterCount.do" />
-        <ns0:property name="proxyStyleUrl" value="doMineFilterStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doMineFilterDownload.do" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/pink-blank.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="10" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="EarthResourcesLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Mine Name" />
-                            <ns0:constructor-arg name="xpath" value="er:specification/er:Mine/er:mineName/er:MineName/er:mineName" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                          
-                         <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>   
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-    
-*/
-
     @Bean
     public WFSSelector knownTypeMineSelector() {
         WFSSelector wfsSelector = new WFSSelector("er:MiningFeatureOccurrence");
@@ -189,71 +127,6 @@ public class AuScopeKnownLayers {
         layer.setFilterCollection(filterCollection);
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMineralOccurrence">
-        <ns0:constructor-arg name="id" value="erml-mineraloccurrence" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="gsml:MappedFeature" />
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        <ns0:value>er:Commodity</ns0:value>
-                        <ns0:value>er:MineralOccurrence</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Earth Resource Mineral Occurrence" />
-        <ns0:property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MineralOccurence" />
-        <ns0:property name="group" value="Earth Resources(old)" />
-        <ns0:property name="proxyUrl" value="doMineralOccurrenceFilter.do" />
-        <ns0:property name="proxyCountUrl" value="doMineralOccurrenceFilterCount.do" />
-        <ns0:property name="proxyStyleUrl" value="doMineralOccurrenceFilterStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doMineralOccurrenceFilterDownload.do" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/purple-blank.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="11" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="EarthResourcesLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
-                            <ns0:constructor-arg name="label" value="Commodity" />
-                            <ns0:constructor-arg name="xpath" value="gsml:specification/er:MineralOccurrence/er:commodityDescription/er:Commodity/er:commodityName" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                            <ns0:constructor-arg name="url" value="getAllCommodities.do" />
-                        </ns0:bean>  
-                         <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean> 
-                    </ns0:list>
-                </ns0:property>                             
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-    
-*/
-
 
     @Bean
     public WFSSelector knownTypeMineralOccurrenceSelector() {
@@ -292,64 +165,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMiningActivity">
-        <ns0:constructor-arg name="id" value="erml-miningactivity" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="er:MiningFeatureOccurrence" />
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        <ns0:value>er:MiningActivity</ns0:value>
-                        <ns0:value>gsml:MappedFeature</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Earth Resource Mining Activity" />
-        <ns0:property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for er:MiningActivity" />
-        <ns0:property name="group" value="Earth Resources(old)" />
-        <ns0:property name="proxyUrl" value="doMiningActivityFilter.do" />
-        <ns0:property name="proxyCountUrl" value="doMiningActivityFilterCount.do" />
-        <ns0:property name="proxyStyleUrl" value="doMiningActivityFilterStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doMiningActivityFilterDownload.do" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/orange-blank.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="12" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="EarthResourcesLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>                        
-                         <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>                                        
-                    </ns0:list>
-                </ns0:property>                             
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-
-
-    
-*/
-
-
     @Bean
     public WFSSelector knownTypeMiningActivitySelector() {
         WFSSelector wfsSelector = new WFSSelector("er:MiningFeatureOccurrence");
@@ -380,134 +195,6 @@ public class AuScopeKnownLayers {
         layer.setFilterCollection(this.createProviderFilterCollection());
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMineralTenements">
-        <ns0:constructor-arg name="id" value="mineral-tenements" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSWFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="mt:MineralTenement" />
-                <ns0:constructor-arg name="layerName" value="MineralTenement" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Mineral Tenements" />
-        <ns0:property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement" />
-        <ns0:property name="group" value="Tenements" />
-        <ns0:property name="proxyUrl" value="getAllMineralTenementFeatures.do" />
-		<ns0:property name="proxyGetFeatureInfoUrl" value="getMineralTenementFeatureInfo.do" />
-        <ns0:property name="proxyCountUrl" value="getMineralTenementCount.do" />
-        <ns0:property name="proxyStyleUrl" value="getMineralTenementStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doMineralTenementCSVDownload.do" />       
-        <ns0:property name="order" value="150" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="TenementsLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Name" />
-                            <ns0:constructor-arg name="xpath" value="mt:name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean> 
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownSelectList">
-                            <ns0:constructor-arg name="label" value="Tenement Type" />  
-                             <ns0:constructor-arg name="xpath" value="mt:tenementType" />                          
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>
-                             <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="options">
-                                <ns0:list>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Exploration</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">exploration</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Prospecting</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">prospecting</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Miscellaneous</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">miscellaneous</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Mining Lease</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">mining</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Licence</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">licence</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                </ns0:list>                               
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Owner" />
-                            <ns0:constructor-arg name="xpath" value="mt:owner" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                         
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Expiry From" />
-                            <ns0:constructor-arg name="xpath" value="mt:expireDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Expiry To" />
-                            <ns0:constructor-arg name="xpath" value="mt:expireDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                      
-                         <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>
-                    </ns0:list>
-                </ns0:property> 
-                <ns0:property name="mandatoryFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.mandatory.UIDropDownSelectList">
-                            <ns0:constructor-arg name="label" type="java.lang.String" value="Color Code" />
-                            <ns0:constructor-arg name="parameter" type="java.lang.String" value="ccProperty" />                         
-                            <ns0:constructor-arg name="value" type="java.lang.String" value="TenementType" />  
-                            <ns0:constructor-arg name="options">
-                                <ns0:list>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Tenement Type</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">TenementType</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Tenement Status</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">TenementStatus</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">UnStyled</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String" /></ns0:constructor-arg>
-                                    </ns0:bean>                                    
-                                </ns0:list>                               
-                            </ns0:constructor-arg>                                                      
-                        </ns0:bean>
-                    </ns0:list>
-                </ns0:property>               
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WMSWFSSelector knownTypeMineralTenementsSelector() {
@@ -566,32 +253,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeColorCodeMineralTenements">
-        <ns0:constructor-arg name="id" value="colorcode-mineral-tenements" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="mt:MineralTenement" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="ColorCode Mineral Tenements" />
-        <ns0:property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mt:Mineral Tenement" />
-        <ns0:property name="group" value="Tenements" />
-
-        
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getColorCodeMineralTenementStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doMineralTenementDownload.do" />
-        
-        <ns0:property name="order" value="151" />
-    </ns0:bean>
-        
-    
-*/
-
     @Bean
     public WFSSelector knownTypeColorCodeMineralTenementsSelector() {
         return new WFSSelector("mt:mineralTenement");
@@ -610,47 +271,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("151");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypehydrogeochem">
-        <ns0:constructor-arg name="id" value="capdf-hydrogeochem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="public:hydrogeochem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Hydrogeochemistry" />
-        <ns0:property name="description" value="Northern Yilgarn Hydrogeochemistry " />
-        <ns0:property name="group" value="Northern Yilgarn Hydrogeochemistry " />
-
-        
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getCapdfHydroGeoChemStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doCapdfHydroGeoChemDownload.do" />
-        <ns0:property name="order" value="160" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Batch Id" />
-                            <ns0:constructor-arg name="xpath" value="batch_id" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                                 
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>   
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypehydrogeochemSelector() {
@@ -673,68 +293,6 @@ public class AuScopeKnownLayers {
         layer.setFilterCollection(this.createTextBoxFilterCollection("Batch Id", "batch_id"));
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeErlMineView">
-        <ns0:constructor-arg name="id" value="erl-mineview" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="erl:MineView" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Mine View" />
-        <ns0:property name="description" value="Earth ResourceML Lite Mine" />
-        <ns0:property name="group" value="Earth Resources Lite(new)" />
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getErlMineViewStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="" />
-        <ns0:property name="order" value="160" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="EarthResourcesLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Name" />
-                            <ns0:constructor-arg name="xpath" value="erl:name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
-                            <ns0:constructor-arg name="label" value="Status" />
-                            <ns0:constructor-arg name="xpath" value="erl:status_uri" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                            <ns0:constructor-arg name="url" value="getAllMineStatuses.do" />
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>  
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <ns0:constructor-arg name="label" value="Polygon BBox" />
-                            <ns0:constructor-arg name="xpath" value="erl:shape" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>   
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>   
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypeErlMineViewSelector() {
@@ -770,79 +328,6 @@ public class AuScopeKnownLayers {
         layer.setFilterCollection(filterCollection);
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeErlMineralOccurrenceView">
-        <ns0:constructor-arg name="id" value="erl-mineraloccurrenceview" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="erl:MineralOccurrenceView" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Mineral Occurrence" />
-        <ns0:property name="description" value="Earth ResourceML Lite Mineral Occurrence View" />
-        <ns0:property name="group" value="Earth Resources Lite(new)" />
-
-        
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getErlMineralOccurrenceViewStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="" />
-        <ns0:property name="order" value="160" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="EarthResourcesLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Name" />
-                            <ns0:constructor-arg name="xpath" value="erl:name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
-                            <ns0:constructor-arg name="label" value="Commodity" />
-                            <ns0:constructor-arg name="xpath" value="erl:representativeCommodity_uri" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                            <ns0:constructor-arg name="url" value="getAllCommodities.do" />
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
-                            <ns0:constructor-arg name="label" value="Geologic Timescale" />
-                            <ns0:constructor-arg name="xpath" value="erl:representativeAge_uri" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                            <ns0:constructor-arg name="url" value="getAllTimescales.do" />
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>  
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <ns0:constructor-arg name="label" value="Polygon BBox" />
-                            <ns0:constructor-arg name="xpath" value="erl:shape" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean> 
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>   
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypeErlMineralOccurrenceViewSelector() {
@@ -881,79 +366,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeErlCommodityResourceView">
-        <ns0:constructor-arg name="id" value="erl-commodityresourceview" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="erl:CommodityResourceView" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Commodity Resource" />
-        <ns0:property name="description" value="Earth ResourceML Lite Commodity Resource View" />
-        <ns0:property name="group" value="Earth Resources Lite(new)" />
-
-        
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getErlCommodityResourceViewStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="" />
-        <ns0:property name="order" value="160" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="EarthResourcesLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Mine Name" />
-                            <ns0:constructor-arg name="xpath" value="erl:mineName" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
-                            <ns0:constructor-arg name="label" value="Commodity" />
-                            <ns0:constructor-arg name="xpath" value="erl:commodityClassifier_uri" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                            <ns0:constructor-arg name="url" value="getAllCommodities.do" />
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote">
-                            <ns0:constructor-arg name="label" value="JORC Category" />
-                            <ns0:constructor-arg name="xpath" value="erl:resourcesCategory_uri" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                            <ns0:constructor-arg name="url" value="getAllJorcCategories.do" />
-                        </ns0:bean> 
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>      
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <ns0:constructor-arg name="label" value="Polygon BBox" />
-                            <ns0:constructor-arg name="xpath" value="erl:shape" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean> 
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>   
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WFSSelector knownTypeErlCommodityResourceViewSelector() {
         return new WFSSelector("erl:CommodityResourceView");
@@ -991,45 +403,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMineralOccurrenceView">
-        <ns0:constructor-arg name="id" value="mineral-occ-view" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="mo:MinOccView" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Mineral Occurrence View" />
-        <ns0:property name="description" value="A collection of services that implement the AuScope EarthResourceML v1 Profile for mo:MinOccView" />
-        <ns0:property name="group" value="Earth Resources(old)" />
-        
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="downloadMinOccurView.do" />
-        <ns0:property name="order" value="13" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="EarthResourcesLayers" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>                        
-                         <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean> 
-                    </ns0:list>
-                </ns0:property>                             
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-
-  
-    
-*/
-
     @Bean
     public WMSSelector knownTypeMineralOccurrenceViewSelector() {
         return new WMSSelector("mo:MinOccView");
@@ -1052,25 +425,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeotransects">
-        <ns0:constructor-arg name="id" value="ga-geotransects" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Onshore_Seismic_Surveys" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="id" value="ga-geotransects" />
-        <ns0:property name="name" value="GA Onshore Seismic Surveys" />
-        <ns0:property name="description" value="The Onshore Seismic Data of Australia is a collection of all land seismic traverses cross the Australian continent and its margins. The data includes raw and processed data in SEGY format. The metadata includes acquisition reports, processing reports, processed images, logs, and so on. The data acquisition was carried out in Australia from 1949-2012 by Geoscience Australia and various partners. The set of reflection and refraction data comprises over 12,000 km of coverage, and provides an insight into the variations in crustal architecture in the varied geological domains. The complete processed dataset was first available for public access in Oct 2013 (http://www.ga.gov.au/minerals/projects/current-projects/seismic-acquisition-processing.html ). The location of seismic traverses is shown by the Gallery link on the webpage. The new survey data will be updated on the webpage by the official data release date. The attribute structure of the dataset has also been revised to be more compatible with the GeoSciML data standard, published by the IUGS Commission for Geoscience Information. The onshore seismic data were collected with partner organizations: Australian Geodynamics Cooperative Research Centre, National Research Facility for Earth Sounding, Australian Nuclear Science and Technology Organisation, Cooperative Research Centre for Greenhouse Gas Technologies, Curtin University of Technology, Geological Survey of New South Wales, NSW Department of Mineral Resources, NSW Department of Primary Industries Mineral Resources, An organisation for a National Earth Science Infrastructure Program, Geological Survey Western Australia, Northern Territory Geological Survey, Primary Industries and Resources South Australia, Predictive Mineral Discovery Cooperative Research Centre, Queensland Geological Survey, GeoScience Victoria Department of Primary Industries, Tasmania Development and Resources, University of Western Australia." />
-        <ns0:property name="order" value="400" />
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGeotransectsSelector() {
         return new WMSSelector("Onshore_Seismic_Surveys");
@@ -1085,38 +439,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("400");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypePMDCRCReports">
-        <ns0:constructor-arg name="id" value="portal-pmd-crc-reports" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="descriptiveKeyword" value="PMD*CRC Publication" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="GA PMD*CRC Reports" />
-        <ns0:property name="description" value="A collection of PMD*CRC reports from Geoscience Australia's Catalogue" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="405" />
-    </ns0:bean>
-    
-     
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypePMDCRCReportsSelector() {
@@ -1135,39 +457,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("405");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeoModels">
-        <ns0:constructor-arg name="id" value="portal-geo-models" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="descriptiveKeyword" value="3D Geological Models" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="3D Geological Models" />
-		<ns0:property name="group" value="Models" />
-        <ns0:property name="description" value="Various Geological Models" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="407" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeGeoModelsSelector() {
@@ -1188,36 +477,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeReports">
-        <ns0:constructor-arg name="id" value="portal-reports" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="descriptiveKeyword" value="Report" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Reports" />
-        <ns0:property name="description" value="A collection of scientific reports that have been spatially located" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="410" />
-    </ns0:bean>
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeReportsSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -1235,47 +494,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("410");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeYilgarnGeochemistry">
-        <ns0:constructor-arg name="id" value="yilgarn-geochem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="gsml:GeologicUnit" />
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        <ns0:value>omx:ObservationProcess</ns0:value>
-                        <ns0:value>gml:TimeInstant</ns0:value>
-                        <ns0:value>sa:LocatedSpecimen</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Yilgarn Laterite Geochemistry" />
-        <ns0:property name="description" value="A collection of detailed information about all analytes that were detected at a specific location" />
-        <ns0:property name="proxyUrl" value="doYilgarnGeochemistry.do" />
-        <ns0:property name="proxyCountUrl" value="doYilgarnGeochemistryCount.do" />
-        <ns0:property name="proxyStyleUrl" value="" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-blank.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="430" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WFSSelector knownTypeYilgarnGeochemistrySelector() {
@@ -1301,161 +519,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("430");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBoreholeNvclV2">
-        <ns0:constructor-arg name="id" value="nvcl-v2-borehole" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="gsmlp:BoreholeView" />
-                <ns0:constructor-arg name="includeEndpoints" value="true" />
-                <ns0:constructor-arg name="serviceEndpoints">
-                    <ns0:list>
-                        <ns0:value>http://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs</ns0:value>
-                        <ns0:value>https://nvclwebservices.vm.csiro.au:80/geoserverBH/wfs</ns0:value>
-                        <ns0:value>http://www.mrt.tas.gov.au:80/web-services/wfs</ns0:value>
-                        <ns0:value>https://www.mrt.tas.gov.au:80/web-services/wfs</ns0:value>
-                        <ns0:value>http://geossdi.dmp.wa.gov.au:80/services/wfs</ns0:value>
-                        <ns0:value>http://geossdi.dmp.wa.gov.au/services/wfs</ns0:value>
-                        <ns0:value>https://geossdi.dmp.wa.gov.au/services/wfs</ns0:value>
-                        <ns0:value>http://geology.data.nt.gov.au:80/geoserver/wfs</ns0:value>
-                        <ns0:value>https://geology.data.nt.gov.au/geoserver/wfs</ns0:value>
-                        <ns0:value>https://gs.geoscience.nsw.gov.au/geoserver/wfs</ns0:value>
-                        <ns0:value>https://sarigdata.pir.sa.gov.au/geoserver/wfs</ns0:value>
-                        <ns0:value>http://geology-uat.information.qld.gov.au/geoserver/wfs</ns0:value>
-                        <ns0:value>https://geology-uat.information.qld.gov.au/geoserver/wfs</ns0:value>
-                        <ns0:value>http://geology.information.qld.gov.au/geoserver/wfs</ns0:value>
-                        <ns0:value>https://geology.information.qld.gov.au/geoserver/wfs</ns0:value>
-                        <ns0:value>http://geology.data.vic.gov.au/nvcl/wfs</ns0:value>
-                        <ns0:value>https://geology.data.vic.gov.au/nvcl/wfs</ns0:value>
-                    </ns0:list>
-                </ns0:constructor-arg>
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        
-                        <ns0:value>sa:SamplingFeatureCollection</ns0:value>
-                        <ns0:value>om:GETPUBLISHEDSYSTEMTSA</ns0:value>
-                        <ns0:value>nvcl:scannedBorehole</ns0:value>
-                        <ns0:value>nvcl:ScannedBoreholeCollection</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="National Virtual Core Library V-2.0" />
-        <ns0:property name="group" value="Boreholes" />
-        <ns0:property name="description" value="A collection of services implementing the National Virtual Core Library Profile v1 for gsml:Borehole and a collection of observations" />
-        <ns0:property name="proxyUrl" value="doBoreholeViewFilter.do" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyDownloadUrl" value="doNVCLBoreholeViewCSVDownload.do" />
-        <ns0:property name="proxyStyleUrl" value="doNvclV2FilterStyle.do" />
-        
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="51" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="NVCLBoreholeViewLayer" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">    
-             <ns0:property name="mandatoryFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.mandatory.UITextBox">
-                            <ns0:constructor-arg name="label" type="java.lang.String" value="Analytics Job Id" />
-                            <ns0:constructor-arg name="parameter" type="java.lang.String" value="analyticsJobId" />                         
-                            <ns0:constructor-arg name="value" type="java.lang.String" value="" />                                                        
-                        </ns0:bean>
-                    </ns0:list>
-                </ns0:property>            
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Name" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Identifier" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:identifier" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling Start From" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillStartDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling Start To" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillStartDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                         <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling End From" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillEndDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling End To" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillEndDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <ns0:constructor-arg name="label" value="Polygon BBox - Clipboard" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:shape" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                          
-                    </ns0:list>
-                </ns0:property>  
-                <ns0:property name="hiddenParams">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.mandatory.UIHiddenResourceAttribute">
-                            <ns0:constructor-arg name="parameter" type="java.lang.String" value="serviceUrl" />
-                            <ns0:constructor-arg name="attribute" type="java.lang.String" value="url" />                         
-                            <ns0:constructor-arg name="value" type="java.lang.String" value="true" />                                                        
-                        </ns0:bean>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-    
-     
-*/
 
     @Bean
     public WFSSelector knownTypeBoreholeNvclV2Selector() {
@@ -1523,63 +586,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeTimaGeoSample">
-        <ns0:constructor-arg name="id" value="tima-geosample" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="tima:geosample_and_mineralogy" />                           
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="TESCAN TIMA Heavy Mineral Analyses" />
-        <ns0:property name="group" value="Curtin University" />
-        <ns0:property name="description" value="A collection of the results published from TIMA" />
-        <ns0:property name="proxyUrl" value="doTIMAGeoSample.do" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyDownloadUrl" value="doTIMAGeoSampleCSVDownload.do" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/grn-circle.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="180" />
-         <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Name" />
-                            <ns0:constructor-arg name="xpath" value="name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean> 
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="IGSN" />
-                            <ns0:constructor-arg name="xpath" value="igsn" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                                                                       
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-     
-*/
-
     @Bean
     public WFSSelector knownTypeTimaGeoSampleSelector() {
         return new WFSSelector("tima:geosample_and_mineralogy");                          
@@ -1603,64 +609,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeSHRIMPGeoSample">
-        <ns0:constructor-arg name="id" value="tima-shrimp-geosample" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="tima:view_shrimp_geochronology_result" />                           
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="SHRIMP Geochronology" />
-        <ns0:property name="group" value="Curtin University" />
-        <ns0:property name="description" value="A collection of the results published from SHRIMP U-Pb mass spectrometer" />
-        <ns0:property name="proxyUrl" value="doSHRIMPGeoSample.do" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyDownloadUrl" value="doSHRIMPGeoSampleCSVDownload.do" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="180" />
-         <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Name" />
-                            <ns0:constructor-arg name="xpath" value="name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean> 
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="IGSN" />
-                            <ns0:constructor-arg name="xpath" value="igsn" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                                                                       
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-        
-    
-*/
-
     @Bean
     public WFSSelector knownTypeSHRIMPGeoSampleSelector() {
         return new WFSSelector("tima:view_shrimp_geochronology_result");                          
@@ -1683,130 +631,6 @@ public class AuScopeKnownLayers {
         layer.setFilterCollection(this.createIgsnFilterCollection());
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeSF0BoreholeNVCL">
-        <ns0:constructor-arg name="id" value="sf0-borehole-nvcl" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="gsmlp:BoreholeView" />
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        
-                        <ns0:value>sa:SamplingFeatureCollection</ns0:value>
-                        <ns0:value>om:GETPUBLISHEDSYSTEMTSA</ns0:value>
-                        <ns0:value>nvcl:scannedBorehole</ns0:value>
-                        <ns0:value>nvcl:ScannedBoreholeCollection</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="All Boreholes" />
-        <ns0:property name="group" value="Boreholes" />
-        <ns0:property name="description" value="A collection of services implementing the GeoSciML Portrayal Borehole View (gsmlp:BoreholeView)" />
-        <ns0:property name="proxyUrl" value="doBoreholeViewFilter.do" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="doBoreholeViewFilterStyle.do" />
-        
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="52" />
-        <ns0:property name="nagiosHostGroup" value="GeolSurveySISSDeployments" />
-        <ns0:property name="nagiosServiceGroup" value="BoreholeViewLayer" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">                
-                <ns0:property name="mandatoryFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.mandatory.UICheckbox">
-                            <ns0:constructor-arg name="label" type="java.lang.String" value="Show Hylogged boreholes" />
-                            <ns0:constructor-arg name="parameter" type="java.lang.String" value="showNoneHylogged" />                         
-                            <ns0:constructor-arg name="value" type="java.lang.String" value="false" />                                                        
-                        </ns0:bean>
-                    </ns0:list>
-                </ns0:property>
-                <ns0:property name="hiddenParams">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.mandatory.UIHiddenResourceAttribute">
-                            <ns0:constructor-arg name="parameter" type="java.lang.String" value="serviceUrl" />
-                            <ns0:constructor-arg name="attribute" type="java.lang.String" value="url" />                         
-                            <ns0:constructor-arg name="value" type="java.lang.String" value="true" />                                                        
-                        </ns0:bean>
-                    </ns0:list>
-                </ns0:property>
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Name" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling Start From" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillStartDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling Start To" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillStartDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                         <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling End From" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillEndDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling End To" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillEndDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider">
-                            <ns0:constructor-arg name="label" value="Provider" />                            
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                                                        
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <ns0:constructor-arg name="label" value="Polygon BBox - Clipboard" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:shape" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>       
-                    </ns0:list>
-                </ns0:property>                
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-        
-    
-*/
 
     @Bean
     public WFSSelector knownTypeSF0BoreholeNVCLSelector() {
@@ -1856,54 +680,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBoreholeMSCL">
-        <ns0:constructor-arg name="id" value="mscl-borehole" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="gsmlp:BoreholeView" />
-                <ns0:constructor-arg name="includeEndpoints" value="true" />
-                <ns0:constructor-arg name="serviceEndpoints">
-                    <ns0:list>
-                        <ns0:value>http://sisstest.arrc.csiro.au:8080/agos/wfs</ns0:value>
-                        <ns0:value>http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs</ns0:value>
-                    </ns0:list>
-                </ns0:constructor-arg>
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        <ns0:value>mscl:scanned_data</ns0:value>
-                        <ns0:value>sa:SamplingFeatureCollection</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="MSCL Data" />
-        <ns0:property name="description" value="Borehole observations made with a multi-sensor core logger." />
-        <ns0:property name="group" value="Boreholes" />
-        <ns0:property name="proxyUrl" value="doBoreholeViewFilter.do" />
-        <ns0:property name="proxyStyleUrl" value="" />
-                
-        <ns0:property name="proxyCountUrl" value="" />
-        
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="200" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WFSSelector knownTypeBoreholeMSCLSelector() {
         String[] serviceEndPoints = {"http://meiproc.earthsci.unimelb.edu.au:80/geoserver/wfs"};
@@ -1927,38 +703,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeSeismologyInSchool">
-        <ns0:constructor-arg name="id" value="seismology-in-schools-site" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.view.knownlayer.IRISSelector">
-                <ns0:constructor-arg name="serviceEndpoint" value="http://service.iris.edu" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="IRIS Feed" />
-        <ns0:property name="description" value="Seismographs in Schools data feed from Incorporated Research Institutions for Seismology (IRIS). S network code." />
-        <ns0:property name="group" value="Seismographs in Schools Network" />
-        <ns0:property name="proxyUrl" value="getIRISStations.do" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/ltblu-blank.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="300" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public IRISSelector knownTypeSeismologyInSchoolSelector() {
         try {
@@ -1981,113 +725,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("300");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBoreholePressureDB">
-        <ns0:constructor-arg name="id" value="pressuredb-borehole" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">                
-                <ns0:constructor-arg name="featureTypeName" value="gsmlp:BoreholeView" />
-                <ns0:constructor-arg name="includeEndpoints" value="true" />
-                <ns0:constructor-arg name="serviceEndpoints">
-                    <ns0:list>
-                        <ns0:value>http://services-test.auscope.org:80/pressuredb/wfs</ns0:value>
-                        <ns0:value>http://services.auscope.org:80/pressuredb/wfs</ns0:value>
-                    </ns0:list>
-                </ns0:constructor-arg>
-                <ns0:property name="relatedFeatureTypeNames">
-                    <ns0:list>
-                        <ns0:value>sa:SamplingFeatureCollection</ns0:value>
-                        <ns0:value>om:GETPUBLISHEDSYSTEMTSA</ns0:value>
-                        <ns0:value>pdb:rft</ns0:value>
-                        <ns0:value>pdb:nacl</ns0:value>
-                        <ns0:value>pdb:t</ns0:value>
-                        <ns0:value>pdb:cl</ns0:value>
-                        <ns0:value>pdb:tds</ns0:value>
-                        <ns0:value>pdb:dst</ns0:value>
-                        <ns0:value>pdb:fitp</ns0:value>
-                    </ns0:list>
-                </ns0:property>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="Pressure DB" />
-        <ns0:property name="description" value="A collection of services implementing the Pressure DB Profile for gsml:Borehole and a collection of observations" />
-        <ns0:property name="group" value="Boreholes" />
-        <ns0:property name="proxyUrl" value="doBoreholeViewFilter.do" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="doPressureDBFilterStyle.do" />       
-        <ns0:property name="order" value="52" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Borehole Name" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:name" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling Start Date" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillStartDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">BIGGER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIDate">
-                            <ns0:constructor-arg name="label" value="Drilling End Date" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:drillStartDate" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">SMALLER_THAN</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <ns0:constructor-arg name="label" value="Polygon BBox" />
-                            <ns0:constructor-arg name="xpath" value="gsmlp:shape" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                        
-                    </ns0:list>
-                </ns0:property>
-                <ns0:property name="mandatoryFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.mandatory.UIDropDownSelectList">
-                            <ns0:constructor-arg name="label" type="java.lang.String" value="Color Code" />
-                            <ns0:constructor-arg name="parameter" type="java.lang.String" value="ccProperty" />                         
-                            <ns0:constructor-arg name="value" type="java.lang.String" value="" />  
-                            <ns0:constructor-arg name="options">
-                                <ns0:list>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Length</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">Length</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Elevation</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String">Elevation</ns0:value></ns0:constructor-arg>
-                                    </ns0:bean>
-                                    <ns0:bean class="org.apache.commons.lang3.tuple.ImmutablePair">
-                                        <ns0:constructor-arg name="left"><ns0:value type="java.lang.String">Default</ns0:value></ns0:constructor-arg>
-                                        <ns0:constructor-arg name="right"><ns0:value type="java.lang.String" /></ns0:constructor-arg>
-                                    </ns0:bean>                                    
-                                </ns0:list>                               
-                            </ns0:constructor-arg>                                                      
-                        </ns0:bean>
-                    </ns0:list>
-                </ns0:property>                   
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WFSSelector knownTypeBoreholePressureDBSelector() {
@@ -2139,25 +776,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAster">
-        <ns0:constructor-arg name="id" value="aster-main" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="E6029ED0-636B-4F91-A6A1-535EBA4B5AD1" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Maps" />
-        <ns0:property name="description" value="This is the parent datafile of a datset that comprises a set of 14+ geoscience products made up of mosaiced ASTER scenes across Australia." />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="hidden" value="true" />
-         <ns0:property name="order" value="30_ASTER Maps_010" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeAsterSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2176,24 +794,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAsterAloh">
-        <ns0:constructor-arg name="id" value="aster-aloh" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="1c3f5e49-4241-4511-a3cc-60314ea09414" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map AlOH group composition" />
-        <ns0:property name="description" value="1. Band ratio: B5/B7Blue is well ordered kaolinite, Al-rich muscovite/illite, paragonite, pyrophyllite Red is Al-poor (Si-rich) muscovite (phengite)" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_020" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeAsterAlohSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2210,24 +810,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_020");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAsterFerrous">
-        <ns0:constructor-arg name="id" value="aster-ferrous" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="02e4fa4c-cbd0-429f-b487-381282debb8f" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map Ferrous iron index" />
-        <ns0:property name="description" value="1. Band ratio: B5/B4Blue is low abundance, Red is high abundance" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_030" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeAsterFerrousSelector() {
@@ -2246,24 +828,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAsterOpaque">
-        <ns0:constructor-arg name="id" value="aster-opaque" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="ab9e636a-86f8-4366-acec-c24db7b72ff5" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map Opaque index" />
-        <ns0:property name="description" value="1. Band ratio: B1/B4Blue is low abundance, Red is high abundance(potentially includes  carbon black (e.g. ash), magnetite, Mn oxides, and sulphides in unoxidised envornments" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_040" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeAsterOpaqueSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2280,24 +844,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_040");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAsterFerricOxideContent">
-        <ns0:constructor-arg name="id" value="aster-ferric-oxide-content" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="7bc66a7a-5ba0-447e-9a00-bf1ccd84e4f3" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map Ferric oxide content" />
-        <ns0:property name="description" value="1. Band ratio: B4/B3Blue is low abundance, Red is high abundance" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_050" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeAsterFerricOxideContentSelector() {
@@ -2316,24 +862,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAsterFeoh">
-        <ns0:constructor-arg name="id" value="aster-feoh" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="f938456a-926d-4547-b111-093844f8fc5d" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map FeOH group content" />
-        <ns0:property name="description" value="1. Band ratio: (B6+B8)/B7Blue is low content, Red is high content(potentially includes: chlorite, epidote, jarosite, nontronite, gibbsite, gypsum, opal-chalcedony)" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_060" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeAsterFeohSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2350,24 +878,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_060");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeFerricOxideComp">
-        <ns0:constructor-arg name="id" value="aster-ferric-oxide-comp" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="aa27099f-13dd-4294-8558-595661eeba01" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map Ferric oxide composition" />
-        <ns0:property name="description" value="1. Band ratio: B2/B1Blue-cyan is goethite rich, Green is hematite-goethite, Red-yellow is hematite-rich" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_070" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeFerricOxideCompSelector() {
@@ -2386,24 +896,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGroupIndex">
-        <ns0:constructor-arg name="id" value="aster-group-index" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="ea755cf7-eb59-41d1-86bd-4d1954c93bfe" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map Kaolin group index" />
-        <ns0:property name="description" value="B6/B5(potential includes: pyrophyllite, alunite, well-ordered kaolinite)Blue is low content, Red is high content" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_080" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeGroupIndexSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2420,24 +912,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_080");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeQuartzIndex">
-        <ns0:constructor-arg name="id" value="aster-quartz-index" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="137a4e7e-9633-40d8-9b2f-2d2d1eb15c08" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map TIR Quartz index" />
-        <ns0:property name="description" value="1. Band ratio: B11/(B10+B12)Blue is low quartz contentRed is high quartz content" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_090" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeQuartzIndexSelector() {
@@ -2456,24 +930,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMgohContent">
-        <ns0:constructor-arg name="id" value="aster-mgoh-content" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="a101fef8-2c52-4d62-9b43-0914487af197" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map MgOH group content" />
-        <ns0:property name="description" value="1. Band ratio: (B6+B9/(B7+B8)Blue is low content, Red is high content(potentially includes: calcite, dolomite, magnesite, chlorite, epidote, amphibole, talc, serpentine)" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_100" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeMgohContentSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2490,24 +946,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_100");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGreenVeg">
-        <ns0:constructor-arg name="id" value="aster-green-veg" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="2bd17d05-22f8-4b0d-a318-3eaabc1b5c2a" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map green vegetation content" />
-        <ns0:property name="description" value="Band ratio: B3/B2 Blue is low contentRed is high content" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_110" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeGreenVegSelector() {
@@ -2526,24 +964,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeFerrCarb">
-        <ns0:constructor-arg name="id" value="aster-ferr-carb" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="8601612e-3f3e-4334-9d31-3c6ec30f092a" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map Ferrous iron content in MgOH/carbonate" />
-        <ns0:property name="description" value="1. Band ratio: B5/B4Blue is low ferrous iron content in carbonate and MgOH minerals like talc and tremolite.Red is high ferrous iron content in carbonate and MgOH minerals like chlorite and actinolite." />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_120" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeFerrCarbSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2560,24 +980,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_120");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMgohGroupComp">
-        <ns0:constructor-arg name="id" value="aster-mgoh-group-comp" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="8348fe99-0d50-45cd-8a0a-5439e82da833" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map MgOH group composition" />
-        <ns0:property name="description" value="1. Band ratio: B7/B8Blue-cyan is magnesite-dolomite, amphibole, chlorite\tRed is calcite, epidote, amphibole" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_130" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeMgohGroupCompSelector() {
@@ -2596,24 +998,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeFalseColor">
-        <ns0:constructor-arg name="id" value="aster-false-color" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="bfd6b137-7227-47f4-82f0-9e7fb788c507" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map false colour mosaic" />
-        <ns0:property name="description" value="1. False colour RGB composite Red: B3Green: B2Blue: B1(red = green vegetation)" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_140" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeFalseColorSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2630,24 +1014,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_140");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRegolithRatios">
-        <ns0:constructor-arg name="id" value="aster-reg-ratio" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="768dcbde-ae8a-440e-9b4b-44624ba4c836" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map Regolith Ratios" />
-        <ns0:property name="description" value="1. 3 band RGB composite Red: B3/B2Green: B3/B7Blue: B4/B7(white = green vegetation)" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_150" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeRegolithRatiosSelector() {
@@ -2666,24 +1032,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAlohGroupContent">
-        <ns0:constructor-arg name="id" value="aster-aloh-group-content" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="b070d1d4-6420-4770-8ca6-3bf4b6682c3d" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map AlOH group content" />
-        <ns0:property name="description" value="1. Band ratio: (B5+B7)/B6Blue is low abundance, Red is high abundance potentially includes: phengite, muscovite, paragonite, lepidolite, illite, brammalite, montmorillonite, beidellite, kaolinite, dickite" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_160" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeAlohGroupContentSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2700,24 +1048,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_160");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGypsumContent">
-        <ns0:constructor-arg name="id" value="aster-gypsum-content" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="EB574238-BCB9-4A98-B1C1-71D1D1B0A946" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map TIR Gypsum index" />
-        <ns0:property name="description" value="1. Band ratio: (B10+B12)/B11Blue is low gypsum contentRed is high gypsum content" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_170" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeGypsumContentSelector() {
@@ -2736,24 +1066,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeSilicaContent">
-        <ns0:constructor-arg name="id" value="aster-silica-content" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="cca633fe-5cdc-4fea-b77f-71b81c701c47" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="ASTER Map TIR Silica index" />
-        <ns0:property name="description" value="1. Band ratio: B13/B10Blue is low silica contentRed is high silica content(potentially includes Si-rich minerals, such as quartz, feldspars, Al-clays)" />
-        <ns0:property name="group" value="ASTER Maps" />
-        <ns0:property name="order" value="30_ASTER Maps_180" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeSilicaContentSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -2770,53 +1082,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("30_ASTER Maps_180");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRemanentAnomalies">
-        <ns0:constructor-arg name="id" value="remanent-anomalies" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="RemAnom:Anomaly" />
-                <ns0:constructor-arg name="includeEndpoints" value="true" />
-                <ns0:constructor-arg name="serviceEndpoints">
-                    <ns0:list>
-                        <ns0:value>http://remanentanomalies.csiro.au/geoserver/wfs</ns0:value>
-                    </ns0:list>
-                </ns0:constructor-arg>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="AUS5 - Remanent Anomalies" />
-        <ns0:property name="description" value="A collection of services publishing magnetic anomalies" />
-        <ns0:property name="group" value="Magnetics" />
-
-        
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do" />
-        <ns0:property name="order" value="80" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Remanent Anomaly Name" />
-                            <ns0:constructor-arg name="xpath" value="RemAnom:AnomalyName" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>   
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WFSSelector knownTypeRemanentAnomaliesSelector() {
@@ -2843,30 +1108,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRemanentAnomaliesAutoSearch">
-        <ns0:constructor-arg name="id" value="remanent-anomalies-AutoSearch" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="RemAnomAutoSearch:AutoSearchAnomalies" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="AUS5 - AutoSearch Anomalies" />
-        <ns0:property name="description" value="A collection of services publishing magnetic anomalies" />
-        <ns0:property name="group" value="Magnetics" />
-
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getRemanentAnomaliesAutoSearchStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doRemanentAnomaliesAutoSearchDownload.do" />
-        <ns0:property name="order" value="81" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WFSSelector knownTypeRemanentAnomaliesAutoSearchSelector() {
         return new WFSSelector("RemAnomAutoSearch:AutoSearchAnomalies");
@@ -2886,24 +1127,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRemanentAnomaliesTMI">
-        <ns0:constructor-arg name="id" value="remanent-anomaliesTMI" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mag:australia_tmihires2a" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="AUS5 - Total Magnetic Intensity" />
-        <ns0:property name="description" value="Total Magnetic Intensity from Magnetic Anomaly Map of Australia (fifth edition), Geoscience Australia and other sources" />
-        <ns0:property name="group" value="Magnetics" />
-        <ns0:property name="order" value="82" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeRemanentAnomaliesTMISelector() {
         return new WMSSelector("mag:australia_tmihires2a");
@@ -2918,53 +1141,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("82");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeEMAGRemanentAnomalies">
-        <ns0:constructor-arg name="id" value="remanent-anomalies-EMAG" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="RemAnom:Anomaly" />
-                <ns0:constructor-arg name="includeEndpoints" value="true" />
-                <ns0:constructor-arg name="serviceEndpoints">
-                    <ns0:list>
-                        <ns0:value>http://remanentanomalies.csiro.au/geoserverEMAG/wfs</ns0:value>
-                    </ns0:list>
-                </ns0:constructor-arg>
-            </ns0:bean>
-        </ns0:constructor-arg>
-
-        <ns0:property name="name" value="EMAG2 - Remanent Anomalies" />
-        <ns0:property name="description" value="A collection of services publishing magnetic anomalies from the EMAG2 layer" />
-        <ns0:property name="group" value="Magnetics" />
-
-        
-        <ns0:property name="proxyUrl" value="" />
-        <ns0:property name="proxyCountUrl" value="" />
-        <ns0:property name="proxyStyleUrl" value="getRemanentAnomaliesStyle.do" />
-        <ns0:property name="proxyDownloadUrl" value="doRemanentAnomaliesDownload.do" />
-        <ns0:property name="order" value="83" />
-        <ns0:property name="filterCollection">
-             <ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-                <ns0:property name="optionalFilters">
-                    <ns0:list>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-                            <ns0:constructor-arg name="label" value="Remanent Anomaly Name" />
-                            <ns0:constructor-arg name="xpath" value="RemAnom:AnomalyName" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean> 
-                    </ns0:list>
-                </ns0:property>                       
-            </ns0:bean>        
-        </ns0:property>
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WFSSelector knownTypeEMAGRemanentAnomaliesSelector() {
@@ -2989,31 +1165,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeEMAGRemanentAnomaliesTMI">
-        <ns0:constructor-arg name="id" value="remanent-anomalies-EMAGTMI" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="z" />
-                <ns0:constructor-arg name="includeEndpoints" value="true" />
-                <ns0:constructor-arg name="serviceEndpoints">
-                    <ns0:list>
-                        <ns0:value>http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc</ns0:value>
-                    </ns0:list>
-                </ns0:constructor-arg>
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="EMAG2 - Total Magnetic Intensity" />
-        <ns0:property name="description" value="Total Magnetic Intensity from the EMAG2 datasource.http://www.geomag.org/models/emag2.html" />
-        <ns0:property name="group" value="Magnetics" />
-        <ns0:property name="order" value="84" />
-    </ns0:bean>
-
-    
-    
-*/
-
     @Bean
     public WMSSelector knownTypeEMAGRemanentAnomaliesTMISelector() {
         String[] serviceEndPoints = {"http://remanentanomalies.csiro.au/thredds/wms/Emag2/EMAG2.nc"};
@@ -3030,22 +1181,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeSamplingPoint">
-        <ns0:constructor-arg name="id" value="notused-samplingpoint" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="sa:SamplingPoint" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-        <ns0:property name="order" value="450" />
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeSamplingPointSelector() {
         return new WFSSelector("sa:SamplingPoint");
@@ -3059,22 +1194,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeFeatureCollection">
-        <ns0:constructor-arg name="id" value="notused-featurecollection" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="gml:FeatureCollection" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-        
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeFeatureCollectionSelector() {
         return new WFSSelector("gml:FeatureCollection");
@@ -3086,21 +1205,6 @@ public class AuScopeKnownLayers {
         layer.setHidden(true);
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLateriteYilgarnGeoChem">
-        <ns0:constructor-arg name="id" value="notused-lateriteyilgarngeochem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="Geochem:LateriteYilgarnGeoChem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypeLateriteYilgarnGeoChemSelector() {
@@ -3114,21 +1218,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighPSiteFeatureType">
-        <ns0:constructor-arg name="id" value="notused-highpsitefeaturetype" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="highp:HighPSiteFeatureType" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeHighPSiteFeatureTypeSelector() {
         return new WFSSelector("highp:HighPSiteFeatureType");
@@ -3140,21 +1229,6 @@ public class AuScopeKnownLayers {
         layer.setHidden(true);
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighPFeatureType">
-        <ns0:constructor-arg name="id" value="notused-highpfeaturetype" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="highp:HighPFeatureType" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypeHighPFeatureTypeSelector() {
@@ -3168,21 +1242,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighPREIronLayer">
-        <ns0:constructor-arg name="id" value="notused-highpreironlayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="HighP-RE-IronLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeHighPREIronLayerSelector() {
         return new WFSSelector("HighP-RE-IronLayer");
@@ -3194,21 +1253,6 @@ public class AuScopeKnownLayers {
         layer.setHidden(true);
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighPREPhosLayer">
-        <ns0:constructor-arg name="id" value="notused-highprephoslayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="HighP-RE-PhosLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypeHighPREPhosLayerSelector() {
@@ -3222,21 +1266,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighPSiteIronLayer">
-        <ns0:constructor-arg name="id" value="notused-highpsiteironlayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="HighP-Site-IronLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeHighPSiteIronLayerSelector() {
         return new WFSSelector("HighP-Site-IronLayer");
@@ -3249,21 +1278,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighPSitePhosLayer">
-        <ns0:constructor-arg name="id" value="notused-highpsitephoslayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="HighP-Site-PhosLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeHighPSitePhosLayerSelector() {
         return new WFSSelector("HighP-Site-PhosLayer");
@@ -3275,21 +1289,6 @@ public class AuScopeKnownLayers {
         layer.setHidden(true);
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypePortals">
-        <ns0:constructor-arg name="id" value="notused-portals" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="descriptiveKeyword" value="Portal" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypePortalsSelector() {
@@ -3305,22 +1304,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeoNetworks">
-        <ns0:constructor-arg name="id" value="notused-geonetwork" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="descriptiveKeyword" value="GeoNetwork" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="hidden" value="true" />
-    </ns0:bean>
-    
-    
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeGeoNetworksSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -3334,24 +1317,6 @@ public class AuScopeKnownLayers {
         layer.setHidden(true);
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBouguerGeodetic">
-        <ns0:constructor-arg name="id" value="ga-onshore-bouguer-geodetic" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="onshore_only_Bouguer_geodetic" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Onshore Only Bouguer Geodetic" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia Coverages" />
-        <ns0:property name="order" value="110" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeBouguerGeodeticSelector() {
@@ -3368,24 +1333,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGravAnomalyGeodetic">
-        <ns0:constructor-arg name="id" value="ga-grav-anom-geo" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="onshore_and_offshore_gravity_anomaly_geodetic" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Onshore and Offshore Gravity Anomaly Geodetic" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia Coverages" />
-        <ns0:property name="order" value="111" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGravAnomalyGeodeticSelector() {
         return new WMSSelector("onshore_and_offshore_gravity_anomaly_geodetic");
@@ -3400,24 +1347,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("111");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMagMap">
-        <ns0:constructor-arg name="id" value="ga-magmap-v5-2010" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="magmap_V5_2010" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="MagMap V5 2010" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia Coverages" />
-        <ns0:property name="order" value="112" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeMagMapSelector() {
@@ -3434,24 +1363,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRadMapTotaldose">
-        <ns0:constructor-arg name="id" value="ga-radmap-totaldose" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="radmap10_filtered_totaldose" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="RadMap Totaldose" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Geoscience Australia Coverages" />
-        <ns0:property name="order" value="120" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeRadMapTotaldoseSelector() {
         return new WMSSelector("radmap10_filtered_totaldose");
@@ -3466,37 +1377,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("120");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGocadModels">
-        <ns0:constructor-arg name="id" value="gocad-models" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="descriptiveKeyword" value="http://vgl.auscope.org/model/gocad" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="GOCAD Models" />
-        <ns0:property name="description" value="A collection of spatially located 3D models that have been generated using GOCAD" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="130" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeGocadModelsSelector() {
@@ -3517,37 +1397,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="KnownTypeGeophysicsDatasets">
-        <ns0:constructor-arg name="id" value="geophysics-datasets" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="descriptiveKeyword" value="GeophysicsDataset" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="GA Geophysics Projects" />
-        <ns0:property name="description" value="A collection of spatially located geophysics datasets from GA" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia" />
-        <ns0:property name="iconUrl" value="http://maps.google.com/mapfiles/kml/paddle/blu-square.png" />
-        <ns0:property name="iconAnchor">
-            <ns0:bean class="java.awt.Point">
-                <ns0:constructor-arg index="0" value="16" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="iconSize">
-            <ns0:bean class="java.awt.Dimension">
-                <ns0:constructor-arg index="0" value="32" />
-                <ns0:constructor-arg index="1" value="32" />
-            </ns0:bean>
-        </ns0:property>
-        <ns0:property name="order" value="131" />
-    </ns0:bean>
-
-     
-*/
-
     @Bean
     public CSWRecordSelector KnownTypeGeophysicsDatasetsSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
@@ -3567,24 +1416,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGAAemSurvey">
-        <ns0:constructor-arg name="id" value="ga-aem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="ga:aemsurveys" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Paterson Airbone Electromagnetic Survey" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia" />
-        <ns0:property name="order" value="132" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WFSSelector knownTypeGAAemSurveySelector() {
         return new WFSSelector("ga:aemsurveys");
@@ -3599,24 +1430,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("132");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGARumJungleAEM">
-        <ns0:constructor-arg name="id" value="ga-rum-jungle-aem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="ga:rum_jungle_aem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Rum Jungle Airbone Electromagnetic Survey" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia" />
-        <ns0:property name="order" value="133" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WFSSelector knownTypeGARumJungleAEMSelector() {
@@ -3633,24 +1446,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGAWoolnerAEM">
-        <ns0:constructor-arg name="id" value="ga-woolner-aem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="ga:woolner_aem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Woolner Airbone Electromagnetic Survey" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia" />
-        <ns0:property name="order" value="134" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WFSSelector knownTypeGAWoolnerAEMSelector() {
         return new WFSSelector("ga:woolner_aem");
@@ -3665,24 +1460,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("134");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGAGravitySurvey">
-        <ns0:constructor-arg name="id" value="ga-gravity" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="ga:gravitypoints" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Australian Point Gravity" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - Geoscience Australia" />
-        <ns0:property name="order" value="135" />
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypeGAGravitySurveySelector() {
@@ -3699,24 +1476,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMusgraveAem">
-        <ns0:constructor-arg name="id" value="csiro-musgrave-aem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="ga:musgrave_aem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Musgrave Airbone Electromagnetic Survey" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - CSIRO" />
-        <ns0:property name="order" value="140" />
-    </ns0:bean>
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeMusgraveAemSelector() {
         return new WFSSelector("ga:musgrave_aem");
@@ -3731,24 +1490,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("140");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeWesternAreaAem">
-        <ns0:constructor-arg name="id" value="csiro-western-area-aem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="ga:western_area_aem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Western Area Airbone Electromagnetic Survey" />
-        <ns0:property name="description" value="Western Area 70001" />
-        <ns0:property name="group" value="Analytic - CSIRO" />
-        <ns0:property name="order" value="141" />
-    </ns0:bean>
-    
-    
-*/
 
     @Bean
     public WFSSelector knownTypeWesternAreaAemSelector() {
@@ -3765,26 +1506,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAshburtonAem">
-        <ns0:constructor-arg name="id" value="csiro-ashburton-aem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="ga:ashburton_aem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="name" value="Ashburton Airbone Electromagnetic Survey" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="group" value="Analytic - CSIRO" />
-        <ns0:property name="order" value="142" />
-    </ns0:bean>
-    
-
-    
-    
-*/
-
     @Bean
     public WFSSelector knownTypeAshburtonAemSelector() {
         return new WFSSelector("ga:ashburton_aem");
@@ -3799,26 +1520,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("142");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnit250K">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-250k-" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNIT" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-250k-" />
-        <ns0:property name="name" value="Gsv Geological Unit 250K " />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal" />
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnit250KSelector() {
@@ -3836,26 +1537,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnitContact250K">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-contact-250k-" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNITCONTACT" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-contact-250k-" />
-        <ns0:property name="name" value="Gsv Geological Unit Contact 250K " />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological boundaries represented as two dimensional lines, designed for portray" />
-        <ns0:property name="order" value="Registered_2" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnitContact250KSelector() {
         return new WMSSelector("erdd:GSV_SG_250K_GEOLUNITCONTACT");
@@ -3871,26 +1552,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_2");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnitContact50K">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-contact-50k-" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNITCONTACT" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-contact-50k-" />
-        <ns0:property name="name" value="Gsv Geological Unit Contact 50K " />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological boundaries represented as two dimensional lines, designed for portray" />
-        <ns0:property name="order" value="Registered_3" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnitContact50KSelector() {
@@ -3908,26 +1569,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnit250KAge">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-250k-age" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNIT_AGE" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-250k-age" />
-        <ns0:property name="name" value="Gsv Geological Unit 250K Age" />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal" />
-        <ns0:property name="order" value="Registered_4" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnit250KAgeSelector() {
         return new WMSSelector("erdd:GSV_SG_250K_GEOLUNIT_AGE");
@@ -3943,26 +1584,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_4");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvShearDisplacementStructure250K">
-        <ns0:constructor-arg name="id" value="gsv-shear-displacement-structure-250k-" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_250K_SHEARDISPSTRUCTURE" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-shear-displacement-structure-250k-" />
-        <ns0:property name="name" value="Gsv Shear Displacement Structure 250K " />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Shear displacement structures (faults) represented as two dimensional lines, des" />
-        <ns0:property name="order" value="Registered_5" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGsvShearDisplacementStructure250KSelector() {
@@ -3980,26 +1601,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnit250KLithology">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-250k-lithology" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_250K_GEOLUNIT_LITHOLOGY" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-250k-lithology" />
-        <ns0:property name="name" value="Gsv Geological Unit 250K Lithology" />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal" />
-        <ns0:property name="order" value="Registered_6" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnit250KLithologySelector() {
         return new WMSSelector("erdd:GSV_SG_250K_GEOLUNIT_LITHOLOGY");
@@ -4015,26 +1616,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_6");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnit50KLithology">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-50k-lithology" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNIT_LITHOLOGY" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-50k-lithology" />
-        <ns0:property name="name" value="Gsv Geological Unit 50K Lithology" />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal" />
-        <ns0:property name="order" value="Registered_7" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnit50KLithologySelector() {
@@ -4052,26 +1633,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnit50K">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-50k-" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNIT" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-50k-" />
-        <ns0:property name="name" value="Gsv Geological Unit 50K " />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal" />
-        <ns0:property name="order" value="Registered_8" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnit50KSelector() {
         return new WMSSelector("erdd:GSV_SG_50K_GEOLUNIT");
@@ -4087,26 +1648,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_8");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvShearDisplacementStructure50K">
-        <ns0:constructor-arg name="id" value="gsv-shear-displacement-structure-50k-" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_50K_SHEARDISPSTRUCTURE" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-shear-displacement-structure-50k-" />
-        <ns0:property name="name" value="Gsv Shear Displacement Structure 50K " />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Shear displacement structures (faults) represented as two dimensional lines, des" />
-        <ns0:property name="order" value="Registered_9" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGsvShearDisplacementStructure50KSelector() {
@@ -4124,29 +1665,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGsvGeologicalUnit50KAge">
-        <ns0:constructor-arg name="id" value="gsv-geological-unit-50k-age" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="erdd:GSV_SG_50K_GEOLUNIT_AGE" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="gsv-geological-unit-50k-age" />
-        <ns0:property name="name" value="Gsv Geological Unit 50K Age" />
-        <ns0:property name="group" value="Geological Survey of Victoria" />
-        <ns0:property name="description" value="Geological units represented as two dimensional polygons, designed for portrayal" />
-        <ns0:property name="order" value="Registered_10" />
-    </ns0:bean>
-
-
-
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGsvGeologicalUnit50KAgeSelector() {
         return new WMSSelector("erdd:GSV_SG_50K_GEOLUNIT_AGE");
@@ -4162,26 +1680,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_10");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06Ga">
-        <ns0:constructor-arg name="id" value="l180-mt-isa-deep-crus-seis-surv-qld-2006-stac-and-migr-data-and-imag-for-line-06ga-to-06ga" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="a05f7892-ee53-7506-e044-00144fdd4fa6" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="l180-mt-isa-deep-crus-seis-surv-qld-2006-stac-and-migr-data-and-imag-for-line-06ga-to-06ga" />
-        <ns0:property name="name" value="L180 Mt Isa Deep Crustal Seismic Survey Qld 2006 Stacked And Migrated Data And Images For Lines 06Ga M1 To 06Ga M6" />
-        <ns0:property name="group" value="Geoscience Australia" />
-        <ns0:property name="description" value="Processed seismic data (SEG-Y format) and TIFF images for the 2006 Mt Isa Deep C" />
-        <ns0:property name="order" value="Registered_14" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeL180MtIsaDeepCrusSeisSurvQld2006StacAndMigrDataAndImagForLine06GaTo06GaSelector() {
@@ -4201,26 +1699,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAreTherAnySandUranSystInTheEromBasi">
-        <ns0:constructor-arg name="id" value="are-ther-any-sand-uran-syst-in-the-erom-basi" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="a05f7892-f9c4-7506-e044-00144fdd4fa6" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="are-ther-any-sand-uran-syst-in-the-erom-basi" />
-        <ns0:property name="name" value="Are There Any Sandstone Hosted Uranium Systems In The Eromanga Basin " />
-        <ns0:property name="group" value="Geoscience Australia" />
-        <ns0:property name="description" value="As part of Geoscience Australia's Onshore Energy Security Program the authors ha" />
-        <ns0:property name="order" value="Registered_15" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeAreTherAnySandUranSystInTheEromBasiSelector() {
         CSWRecordSelector cswRecord = new CSWRecordSelector();
@@ -4238,26 +1716,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_15");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03Ga">
-        <ns0:constructor-arg name="id" value="l164-curn-seis-surv-sa-2003-2004-stac-and-migr-seis-data-and-imag-for-line-03ga" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="cd697530-5b75-3811-e044-00144fdd4fa6" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="l164-curn-seis-surv-sa-2003-2004-stac-and-migr-seis-data-and-imag-for-line-03ga" />
-        <ns0:property name="name" value="L164 Curnamona Seismic Survey Sa 2003 2004 Stacked And Migrated Seismic Data And Images For Lines 03Ga Cu1" />
-        <ns0:property name="group" value="Geoscience Australia" />
-        <ns0:property name="description" value="A seismic survey using the Australian National Seismic Imaging Resource (ANSIR) " />
-        <ns0:property name="order" value="Registered_16" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypeL164CurnSeisSurvSa20032004StacAndMigrSeisDataAndImagForLine03GaSelector() {
@@ -4277,26 +1735,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGis">
-        <ns0:constructor-arg name="id" value="lawn-hill-plat-and-leic-rive-faul-trou-meas-stra-sect-onli-gis" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="a05f7892-b7a0-7506-e044-00144fdd4fa6" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="lawn-hill-plat-and-leic-rive-faul-trou-meas-stra-sect-onli-gis" />
-        <ns0:property name="name" value="Lawn Hill Platform And Leichhardt River Fault Trough Measured Stratigraphic Section Online Gis" />
-        <ns0:property name="group" value="Geoscience Australia" />
-        <ns0:property name="description" value="This GIS web browser contains stratigraphic information from the southern flank " />
-        <ns0:property name="order" value="Registered_17" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeLawnHillPlatAndLeicRiveFaulTrouMeasStraSectOnliGisSelector() {
         CSWRecordSelector cswRecord = new CSWRecordSelector();
@@ -4314,26 +1752,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_17");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSyst">
-        <ns0:constructor-arg name="id" value="pred-mine-disc-in-the-east-yilg-crat-an-exam-of-dist-targ-of-an-orog-gold-mine-syst" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="a05f7892-eafd-7506-e044-00144fdd4fa6" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="pred-mine-disc-in-the-east-yilg-crat-an-exam-of-dist-targ-of-an-orog-gold-mine-syst" />
-        <ns0:property name="name" value="Predictive Mineral Discovery In The Eastern Yilgarn Craton An Example Of District Scale Targeting Of An Orogenic Gold Mineral System" />
-        <ns0:property name="group" value="Geoscience Australia" />
-        <ns0:property name="description" value="Predictive mineral discovery is concerned with the application of a whole of sys" />
-        <ns0:property name="order" value="Registered_18" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public CSWRecordSelector knownTypePredMineDiscInTheEastYilgCratAnExamOfDistTargOfAnOrogGoldMineSystSelector() {
@@ -4353,26 +1771,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004">
-        <ns0:constructor-arg name="id" value="fina-repo-3d-geol-mode-of-the-east-yilg-crat-proj-pmd-y2-sept-2001-dece-2004" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.CSWRecordSelector">
-                <ns0:property name="recordId" value="a05f7892-ccc9-7506-e044-00144fdd4fa6" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="fina-repo-3d-geol-mode-of-the-east-yilg-crat-proj-pmd-y2-sept-2001-dece-2004" />
-        <ns0:property name="name" value="Final Report 3D Geological Models Of The Eastern Yilgarn Craton Project Pmd Crc Y2 September 2001 December 2004" />
-        <ns0:property name="group" value="Geoscience Australia" />
-        <ns0:property name="description" value="The pmd*CRC Y2 project operated for a little over three years, and in this time " />
-        <ns0:property name="order" value="Registered_19" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public CSWRecordSelector knownTypeFinaRepo3DGeolModeOfTheEastYilgCratProjPmdY2Sept2001Dece2004Selector() {
         CSWRecordSelector cswRecord = new CSWRecordSelector();
@@ -4391,26 +1789,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMineralFields">
-        <ns0:constructor-arg name="id" value="mineral-fields" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Mineral_Fields" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="mineral-fields" />
-        <ns0:property name="name" value="Mineral Fields" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_22" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeMineralFieldsSelector() {
         return new WMSSelector("Mineral_Fields");
@@ -4426,26 +1804,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_22");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHistoricalExplorationActivityPoints">
-        <ns0:constructor-arg name="id" value="historical-exploration-activity-points" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Historical_Exploration_Activity_-_points" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="historical-exploration-activity-points" />
-        <ns0:property name="name" value="Historical Exploration Activity Points" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_23" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeHistoricalExplorationActivityPointsSelector() {
@@ -4463,26 +1821,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeReleases">
-        <ns0:constructor-arg name="id" value="releases" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Releases" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="releases" />
-        <ns0:property name="name" value="Releases" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_24" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeReleasesSelector() {
         return new WMSSelector("Releases");
@@ -4498,26 +1836,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_24");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeSection574">
-        <ns0:constructor-arg name="id" value="section-57-4" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Section_57-4" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="section-57-4" />
-        <ns0:property name="name" value="Section 57 4" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_25" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeSection574Selector() {
@@ -4535,26 +1853,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeSection19">
-        <ns0:constructor-arg name="id" value="section-19" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Section_19" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="section-19" />
-        <ns0:property name="name" value="Section 19" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_26" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeSection19Selector() {
         return new WMSSelector("Section_19");
@@ -4570,26 +1868,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_26");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMinesAndMineralDepositsMinedex">
-        <ns0:constructor-arg name="id" value="mines-and-mineral-deposits-minedex" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Mines_and_Mineral_Deposits_-_MINEDEX" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="mines-and-mineral-deposits-minedex" />
-        <ns0:property name="name" value="Mines And Mineral Deposits Minedex" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="Mines and Mineral Deposits of Western Australia (MINEDEX)" />
-        <ns0:property name="order" value="Registered_27" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeMinesAndMineralDepositsMinedexSelector() {
@@ -4607,26 +1885,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMineralisationZonesNonS572Aa">
-        <ns0:constructor-arg name="id" value="mineralisation-zones-non-s57-2aa" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Mineralisation_Zones_Non_S57-2AA" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="mineralisation-zones-non-s57-2aa" />
-        <ns0:property name="name" value="Mineralisation Zones Non S57 2Aa" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_28" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeMineralisationZonesNonS572AaSelector() {
         return new WMSSelector("Mineralisation_Zones_Non_S57-2AA");
@@ -4642,26 +1900,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_28");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAmalgamations">
-        <ns0:constructor-arg name="id" value="amalgamations" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Amalgamations" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="amalgamations" />
-        <ns0:property name="name" value="Amalgamations" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_29" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeAmalgamationsSelector() {
@@ -4679,26 +1917,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeTenementsCurrent">
-        <ns0:constructor-arg name="id" value="tenements-current" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Tenements_Current" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="tenements-current" />
-        <ns0:property name="name" value="Tenements Current" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="Current Mining Tenements of Western Australia" />
-        <ns0:property name="order" value="Registered_30" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeTenementsCurrentSelector() {
         return new WMSSelector("Tenements_Current");
@@ -4714,26 +1932,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_30");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHistoricalExplorationActivityLines">
-        <ns0:constructor-arg name="id" value="historical-exploration-activity-lines" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Historical_Exploration_Activity_-_lines" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="historical-exploration-activity-lines" />
-        <ns0:property name="name" value="Historical Exploration Activity Lines" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_31" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeHistoricalExplorationActivityLinesSelector() {
@@ -4751,26 +1949,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRestorations">
-        <ns0:constructor-arg name="id" value="restorations" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Restorations" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="restorations" />
-        <ns0:property name="name" value="Restorations" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_32" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeRestorationsSelector() {
         return new WMSSelector("Restorations");
@@ -4786,26 +1964,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_32");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHist">
-        <ns0:constructor-arg name="id" value="hist" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Historical_Exploration_Activity_-_polygons" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="hist" />
-        <ns0:property name="name" value="Historical Exploration Activity Polygons" />
-        <ns0:property name="group" value="WA Department of Mines and Petroleum" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_33" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeHistSelector() {
@@ -4823,26 +1981,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRsSample">
-        <ns0:constructor-arg name="id" value="rs-sample" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="test:rs_sample" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="rs-sample" />
-        <ns0:property name="name" value="Rs Sample" />
-        <ns0:property name="group" value="Geological Survey of New South Wales" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_34" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeRsSampleSelector() {
         return new WMSSelector("test:rs_sample");
@@ -4858,26 +1996,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_34");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBorehole">
-        <ns0:constructor-arg name="id" value="borehole" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WFSSelector">
-                <ns0:constructor-arg name="featureTypeName" value="gsmlbh:Borehole" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="borehole" />
-        <ns0:property name="name" value="Borehole" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="Boreholes submitted to CSIRO by industry and government organisations for analys" />
-        <ns0:property name="order" value="Registered_35" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WFSSelector knownTypeBoreholeSelector() {
@@ -4895,26 +2013,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighpSiteIronlayer">
-        <ns0:constructor-arg name="id" value="highp-site-ironlayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="HighP-Site-IronLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="highp-site-ironlayer" />
-        <ns0:property name="name" value="Highp Site Ironlayer" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="Layer-Group type layer: HighP-Site-IronLayer" />
-        <ns0:property name="order" value="Registered_36" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeHighpSiteIronlayerSelector() {
         return new WMSSelector("HighP-Site-IronLayer");
@@ -4930,26 +2028,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_36");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighpfeaturetype">
-        <ns0:constructor-arg name="id" value="highpfeaturetype" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="highp:HighPFeatureType" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="highpfeaturetype" />
-        <ns0:property name="name" value="Highpfeaturetype" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_37" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeHighpfeaturetypeSelector() {
@@ -4967,26 +2045,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighpSiteFeatureType">
-        <ns0:constructor-arg name="id" value="highp-site-feature-type" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="highp:HighPSiteFeatureType" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="highp-site-feature-type" />
-        <ns0:property name="name" value="Highp Site Feature Type" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="Generated from highp" />
-        <ns0:property name="order" value="Registered_38" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeHighpSiteFeatureTypeSelector() {
         return new WMSSelector("highp:HighPSiteFeatureType");
@@ -5002,26 +2060,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_38");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighpSitePhoslayer">
-        <ns0:constructor-arg name="id" value="highp-site-phoslayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="HighP-Site-PhosLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="highp-site-phoslayer" />
-        <ns0:property name="name" value="Highp Site Phoslayer" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="Layer-Group type layer: HighP-Site-PhosLayer" />
-        <ns0:property name="order" value="Registered_39" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeHighpSitePhoslayerSelector() {
@@ -5039,26 +2077,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLateriteWesternYilgarnGeochem">
-        <ns0:constructor-arg name="id" value="laterite-western-yilgarn-geochem" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="Geochem:LateriteYilgarnGeoChem" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="laterite-western-yilgarn-geochem" />
-        <ns0:property name="name" value="Laterite Western Yilgarn Geochem" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="This Record is the ?nal release of a 53-element dataset for approximately 3150 l" />
-        <ns0:property name="order" value="Registered_40" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeLateriteWesternYilgarnGeochemSelector() {
         return new WMSSelector("Geochem:LateriteYilgarnGeoChem");
@@ -5074,26 +2092,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_40");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighpRePhoslayer">
-        <ns0:constructor-arg name="id" value="highp-re-phoslayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="HighP-RE-PhosLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="highp-re-phoslayer" />
-        <ns0:property name="name" value="Highp Re Phoslayer" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="Layer-Group type layer: HighP-RE-PhosLayer" />
-        <ns0:property name="order" value="Registered_41" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeHighpRePhoslayerSelector() {
@@ -5111,26 +2109,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeHighpReIronlayer">
-        <ns0:constructor-arg name="id" value="highp-re-ironlayer" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="HighP-RE-IronLayer" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="highp-re-ironlayer" />
-        <ns0:property name="name" value="Highp Re Ironlayer" />
-        <ns0:property name="group" value="CSIRO" />
-        <ns0:property name="description" value="Layer-Group type layer: HighP-RE-IronLayer" />
-        <ns0:property name="order" value="Registered_42" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeHighpReIronlayerSelector() {
         return new WMSSelector("HighP-RE-IronLayer");
@@ -5146,26 +2124,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_42");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeCate3ExplLicePolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="cate-3-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LicenceCategory3" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="cate-3-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Category 3 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Category 3 Exploration Licence polygons and Exploration Release Areas across Tas" />
-        <ns0:property name="order" value="Registered_43" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeCate3ExplLicePolyOfTasmMinResoTasmSelector() {
@@ -5183,26 +2141,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeCate1ExplLicePolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="cate-1-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LicenceCategory1" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="cate-1-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Category 1 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Category 1 Exploration Licence polygons and Exploration Release Areas across Tas" />
-        <ns0:property name="order" value="Registered_44" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeCate1ExplLicePolyOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:LicenceCategory1");
@@ -5218,26 +2156,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_44");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeProcLandAreaOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="proc-land-area-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:ProclaimedAreasPoly" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="proc-land-area-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Proclaimed Landslip Areas Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Proclaimed Landslip Areas (A and B) of Tasmania, which are defined under the Min" />
-        <ns0:property name="order" value="Registered_45" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeProcLandAreaOfTasmMinResoTasmSelector() {
@@ -5255,26 +2173,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeAirbGeopSurvOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="airb-geop-surv-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:AirborneSurveys" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="airb-geop-surv-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Airborne Geophysical Surveys Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Spatial index of open file airborne geophysical surveys for which digital data i" />
-        <ns0:property name="order" value="Registered_46" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeAirbGeopSurvOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:AirborneSurveys");
@@ -5290,26 +2188,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_46");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLandPoinOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="land-poin-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LandSlidePoint" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="land-poin-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Landslide Points Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Landslide features across Tasmania as representative points, with summary landsl" />
-        <ns0:property name="order" value="Registered_47" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeLandPoinOfTasmMinResoTasmSelector() {
@@ -5327,26 +2205,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMineOccuPoinOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="mine-occu-poin-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:MineralOccurences" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="mine-occu-poin-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Mineral Occurrence Points Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Mineral occurrences, including operating and abandoned mines, located in Tasmani" />
-        <ns0:property name="order" value="Registered_48" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeMineOccuPoinOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:MineralOccurences");
@@ -5362,26 +2220,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_48");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLandLineOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="land-line-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LandSlideLine" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="land-line-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Landslide Lines Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Linear landslide components of landslide features mapped across Tasmania, with s" />
-        <ns0:property name="order" value="Registered_49" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeLandLineOfTasmMinResoTasmSelector() {
@@ -5399,26 +2237,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLandDamaPolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="land-dama-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:DamagePoly" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="land-dama-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Landslide Damage Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Polygons of structures or property known to be damaged by a landslide in Tasmani" />
-        <ns0:property name="order" value="Registered_50" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeLandDamaPolyOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:DamagePoly");
@@ -5434,26 +2252,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_50");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeCate4ExplLicePolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="cate-4-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LicenceCategory4" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="cate-4-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Category 4 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Category 4 Exploration Licence polygons and Exploration Release Areas across Tas" />
-        <ns0:property name="order" value="Registered_51" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeCate4ExplLicePolyOfTasmMinResoTasmSelector() {
@@ -5471,26 +2269,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeCate6ExplLicePolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="cate-6-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LicenceCategory6" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="cate-6-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Category 6 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Category 6 Exploration Licence polygons and Exploration Release Areas across Tas" />
-        <ns0:property name="order" value="Registered_52" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeCate6ExplLicePolyOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:LicenceCategory6");
@@ -5506,26 +2284,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_52");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMiniLeasPolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="mini-leas-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:Leases" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="mini-leas-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Mining Lease Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Mining Lease polygons and production licence polygons for all mineral categories" />
-        <ns0:property name="order" value="Registered_53" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeMiniLeasPolyOfTasmMinResoTasmSelector() {
@@ -5543,26 +2301,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeCate2ExplLicePolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="cate-2-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LicenceCategory2" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="cate-2-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Category 2 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Category 2 Exploration Licence polygons and Exploration Release Areas across Tas" />
-        <ns0:property name="order" value="Registered_54" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeCate2ExplLicePolyOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:LicenceCategory2");
@@ -5578,26 +2316,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_54");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGravMeasOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="grav-meas-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:GravityMeasurements" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="grav-meas-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Gravity Measurements Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Primary and derived (i.e. Bouguer anomaly) gravity observation points (stations)" />
-        <ns0:property name="order" value="Registered_55" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGravMeasOfTasmMinResoTasmSelector() {
@@ -5615,26 +2333,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeCate5ExplLicePolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="cate-5-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LicenceCategory5" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="cate-5-expl-lice-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Category 5 Exploration Licence Polygons Of Tasmania Mineral Resources Tasmania" />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Category 5 Exploration Licence polygons and Exploration Release Areas across Tas" />
-        <ns0:property name="order" value="Registered_56" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeCate5ExplLicePolyOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:LicenceCategory5");
@@ -5650,26 +2348,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_56");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLandDamaPoinOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="land-dama-poin-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:DamagePoint" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="land-dama-poin-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Landslide Damage Points Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Point locations of known damage to structures or property caused by a landslide " />
-        <ns0:property name="order" value="Registered_57" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeLandDamaPoinOfTasmMinResoTasmSelector() {
@@ -5687,26 +2365,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGravBaseStatOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="grav-base-stat-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:GravityBaseStations" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="grav-base-stat-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Gravity Base Stations Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Precise locations where the absolute value of gravity is known." />
-        <ns0:property name="order" value="Registered_58" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGravBaseStatOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:GravityBaseStations");
@@ -5722,26 +2380,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_58");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBorePoinOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="bore-poin-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:Boreholes" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="bore-poin-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Borehole Points Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Borehole features across Tasmania derived from the Borehole Database, administer" />
-        <ns0:property name="order" value="Registered_59" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeBorePoinOfTasmMinResoTasmSelector() {
@@ -5759,26 +2397,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeStrategicProspectivityZones">
-        <ns0:constructor-arg name="id" value="strategic-prospectivity-zones" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:StrategicProspectivityZones" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="strategic-prospectivity-zones" />
-        <ns0:property name="name" value="Strategic Prospectivity Zones" />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_60" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeStrategicProspectivityZonesSelector() {
         return new WMSSelector("mrtwfs:StrategicProspectivityZones");
@@ -5794,26 +2412,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_60");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeLandPolyOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="land-poly-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:LandSlidePoly" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="land-poly-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Landslide Polygons Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="Landslide component polygons of landslide features mapped across Tasmania, with " />
-        <ns0:property name="order" value="Registered_61" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeLandPolyOfTasmMinResoTasmSelector() {
@@ -5831,26 +2429,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBoreTracOfTasmMinResoTasm">
-        <ns0:constructor-arg name="id" value="bore-trac-of-tasm-min-reso-tasm" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="mrtwfs:BoreholeTrace" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="bore-trac-of-tasm-min-reso-tasm" />
-        <ns0:property name="name" value="Borehole Traces Of Tasmania Mineral Resources Tasmania " />
-        <ns0:property name="group" value="Mineral Resources Tasmania" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_62" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeBoreTracOfTasmMinResoTasmSelector() {
         return new WMSSelector("mrtwfs:BoreholeTrace");
@@ -5866,26 +2444,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_62");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRadnlOperR25PcprrL3Knmi">
-        <ns0:constructor-arg name="id" value="radnl-oper-r-25pcprr-l3-knmi" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="RADNL_OPER_R___25PCPRR_L3_KNMI" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="radnl-oper-r-25pcprr-l3-knmi" />
-        <ns0:property name="name" value="Radnl Oper R 25Pcprr L3 Knmi" />
-        <ns0:property name="group" value="Unknown" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_66" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeRadnlOperR25PcprrL3KnmiSelector() {
@@ -5903,26 +2461,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeRadnlOperR25PcprrL3Color">
-        <ns0:constructor-arg name="id" value="radnl-oper-r-25pcprr-l3-color" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="RADNL_OPER_R___25PCPRR_L3_COLOR" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="radnl-oper-r-25pcprr-l3-color" />
-        <ns0:property name="name" value="Radnl Oper R 25Pcprr L3 Color" />
-        <ns0:property name="group" value="Unknown" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_67" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeRadnlOperR25PcprrL3ColorSelector() {
         return new WMSSelector("RADNL_OPER_R___25PCPRR_L3_COLOR");
@@ -5938,26 +2476,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_67");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswDrillhole">
-        <ns0:constructor-arg name="id" value="nsw-drillhole" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_drillhole" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-drillhole" />
-        <ns0:property name="name" value="Nsw Drillhole" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This is the full NSW drilling dataset available from Geoscientific Data Warehous" />
-        <ns0:property name="order" value="Registered_68" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswDrillholeSelector() {
@@ -5975,26 +2493,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswAssaySurface">
-        <ns0:constructor-arg name="id" value="nsw-assay-surface" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_surfassay" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-assay-surface" />
-        <ns0:property name="name" value="Nsw Assay Surface" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This dataset contains geochemical assay data collected by companies exploring in" />
-        <ns0:property name="order" value="Registered_69" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswAssaySurfaceSelector() {
         return new WMSSelector("gsnsw:dw_surfassay");
@@ -6010,26 +2508,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_69");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswFieldObservations">
-        <ns0:constructor-arg name="id" value="nsw-field-observations" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_fieldobs_full" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-field-observations" />
-        <ns0:property name="name" value="Nsw Field Observations" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_70" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswFieldObservationsSelector() {
@@ -6047,26 +2525,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswDownholeAssaySamples">
-        <ns0:constructor-arg name="id" value="nsw-downhole-assay-samples" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_assayhole" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-downhole-assay-samples" />
-        <ns0:property name="name" value="Nsw Downhole Assay Samples" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_71" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswDownholeAssaySamplesSelector() {
         return new WMSSelector("gsnsw:dw_assayhole");
@@ -6082,26 +2540,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_71");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswDrillholeAll">
-        <ns0:constructor-arg name="id" value="nsw-drillhole-all" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_drillhole_full" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-drillhole-all" />
-        <ns0:property name="name" value="Nsw Drillhole All" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_72" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswDrillholeAllSelector() {
@@ -6119,26 +2557,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswDrillholesCoal">
-        <ns0:constructor-arg name="id" value="nsw-drillholes-coal" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_coal" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-drillholes-coal" />
-        <ns0:property name="name" value="Nsw Drillholes Coal" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This is the coal subset of the NSW drilling dataset available from Geoscientific" />
-        <ns0:property name="order" value="Registered_73" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswDrillholesCoalSelector() {
         return new WMSSelector("gsnsw:dw_drillhole_full_coal");
@@ -6154,26 +2572,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_73");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeologicalFieldObservations">
-        <ns0:constructor-arg name="id" value="nsw-geological-field-observations" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_fieldobs" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geological-field-observations" />
-        <ns0:property name="name" value="Nsw Geological Field Observations" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="The Field Observations (FieldObs) database stores observations and measurements " />
-        <ns0:property name="order" value="Registered_74" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswGeologicalFieldObservationsSelector() {
@@ -6191,26 +2589,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswDrillholesMinerals">
-        <ns0:constructor-arg name="id" value="nsw-drillholes-minerals" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_min" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-drillholes-minerals" />
-        <ns0:property name="name" value="Nsw Drillholes Minerals" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This is the mineral subset of the NSW drilling dataset available from Geoscienti" />
-        <ns0:property name="order" value="Registered_75" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswDrillholesMineralsSelector() {
         return new WMSSelector("gsnsw:dw_drillhole_full_min");
@@ -6226,26 +2604,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_75");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeologySimplified">
-        <ns0:constructor-arg name="id" value="nsw-geology-simplified" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:ge_geology15m" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geology-simplified" />
-        <ns0:property name="name" value="Nsw Geology Simplified" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_76" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswGeologySimplifiedSelector() {
@@ -6263,26 +2621,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswDrillholesPetroleum">
-        <ns0:constructor-arg name="id" value="nsw-drillholes-petroleum" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_pet" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-drillholes-petroleum" />
-        <ns0:property name="name" value="Nsw Drillholes Petroleum" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="The petroleum drillholes dataset stores information about conventional petroleum" />
-        <ns0:property name="order" value="Registered_77" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswDrillholesPetroleumSelector() {
         return new WMSSelector("gsnsw:dw_drillhole_full_pet");
@@ -6298,26 +2636,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_77");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeMineralOccurenceIndustryFull">
-        <ns0:constructor-arg name="id" value="mineral-occurence-industry-full" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_mineraloccurrence_full" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="mineral-occurence-industry-full" />
-        <ns0:property name="name" value="Mineral Occurence Industry Full" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_78" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeMineralOccurenceIndustryFullSelector() {
@@ -6335,26 +2653,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswHistoricExplorationTitles">
-        <ns0:constructor-arg name="id" value="nsw-historic-exploration-titles" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_histels" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-historic-exploration-titles" />
-        <ns0:property name="name" value="Nsw Historic Exploration Titles" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_79" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswHistoricExplorationTitlesSelector() {
         return new WMSSelector("gsnsw:bl_histels");
@@ -6370,26 +2668,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_79");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswMapBlockGraticule">
-        <ns0:constructor-arg name="id" value="nsw-map-block-graticule" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_mapblock" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-map-block-graticule" />
-        <ns0:property name="name" value="Nsw Map Block Graticule" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_80" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswMapBlockGraticuleSelector() {
@@ -6407,26 +2685,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBlLocalaboriginallandcouncil">
-        <ns0:constructor-arg name="id" value="bl-localaboriginallandcouncil" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_localaboriginallandcouncil" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="bl-localaboriginallandcouncil" />
-        <ns0:property name="name" value="Bl Localaboriginallandcouncil" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_81" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeBlLocalaboriginallandcouncilSelector() {
         return new WMSSelector("gsnsw:bl_localaboriginallandcouncil");
@@ -6442,26 +2700,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_81");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswMineralOccurrenceIndustry">
-        <ns0:constructor-arg name="id" value="nsw-mineral-occurrence-industry" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_metindustry" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-mineral-occurrence-industry" />
-        <ns0:property name="name" value="Nsw Mineral Occurrence Industry" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_82" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswMineralOccurrenceIndustrySelector() {
@@ -6479,26 +2717,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNsw100KMapSheetExtents">
-        <ns0:constructor-arg name="id" value="nsw-100k-map-sheet-extents" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_mapsheet100k" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-100k-map-sheet-extents" />
-        <ns0:property name="name" value="Nsw 100K Map Sheet Extents" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_83" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNsw100KMapSheetExtentsSelector() {
         return new WMSSelector("gsnsw:bl_mapsheet100k");
@@ -6514,26 +2732,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_83");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswFossickingDistricts">
-        <ns0:constructor-arg name="id" value="nsw-fossicking-districts" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_fossicking" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-fossicking-districts" />
-        <ns0:property name="name" value="Nsw Fossicking Districts" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="Fossicking is the small scale search for and collection of minerals, gemstones o" />
-        <ns0:property name="order" value="Registered_84" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswFossickingDistrictsSelector() {
@@ -6551,26 +2749,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeologicalFieldObservationsPhoto">
-        <ns0:constructor-arg name="id" value="nsw-geological-field-observations-photo" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_photo" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geological-field-observations-photo" />
-        <ns0:property name="name" value="Nsw Geological Field Observations Photo" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_85" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswGeologicalFieldObservationsPhotoSelector() {
         return new WMSSelector("gsnsw:dw_photo");
@@ -6586,26 +2764,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_85");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeopTotaMagnInteRtpTmiRtpTiltFilt">
-        <ns0:constructor-arg name="id" value="geop-tota-magn-inte-rtp-tmi-rtp-tilt-filt" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="geophys:MagRTPtilt" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="geop-tota-magn-inte-rtp-tmi-rtp-tilt-filt" />
-        <ns0:property name="name" value="Geophysics Total Magnetic Intensity Rtp Tmi Rtp Tilt Filter" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.  To" />
-        <ns0:property name="order" value="Registered_86" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGeopTotaMagnInteRtpTmiRtpTiltFiltSelector() {
@@ -6623,26 +2781,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswSeismic">
-        <ns0:constructor-arg name="id" value="nsw-seismic" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_seismic" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-seismic" />
-        <ns0:property name="name" value="Nsw Seismic" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_87" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswSeismicSelector() {
         return new WMSSelector("gsnsw:dw_seismic");
@@ -6658,26 +2796,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_87");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswCurrMiniAndExplTitl">
-        <ns0:constructor-arg name="id" value="nsw-curr-mini-and-expl-titl" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_title" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-curr-mini-and-expl-titl" />
-        <ns0:property name="name" value="Nsw Current Mining And Exploration Titles" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_88" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswCurrMiniAndExplTitlSelector() {
@@ -6695,26 +2813,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeopTotaMagnInte1StDeriReduToPole">
-        <ns0:constructor-arg name="id" value="geop-tota-magn-inte-1st-deri-redu-to-pole" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="geophys:TMI_RTP_1st" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="geop-tota-magn-inte-1st-deri-redu-to-pole" />
-        <ns0:property name="name" value="Geophysics Total Magnetic Intensity 1St Derivative Reduced To Pole" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_89" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGeopTotaMagnInte1StDeriReduToPoleSelector() {
         return new WMSSelector("geophys:TMI_RTP_1st");
@@ -6730,26 +2828,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_89");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeologicalSpectralSamples">
-        <ns0:constructor-arg name="id" value="nsw-geological-spectral-samples" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_spectral" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geological-spectral-samples" />
-        <ns0:property name="name" value="Nsw Geological Spectral Samples" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_90" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswGeologicalSpectralSamplesSelector() {
@@ -6767,26 +2845,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeopTernRadiPota">
-        <ns0:constructor-arg name="id" value="geop-tern-radi-pota" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="geophys:Radio" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="geop-tern-radi-pota" />
-        <ns0:property name="name" value="Geophysics Ternary Radioelement Potassium K Thorium Th Uranium U " />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.  Te" />
-        <ns0:property name="order" value="Registered_91" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGeopTernRadiPotaSelector() {
         return new WMSSelector("geophys:Radio");
@@ -6802,26 +2860,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_91");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswDrillholesCsg">
-        <ns0:constructor-arg name="id" value="nsw-drillholes-csg" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_drillhole_full_csg" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-drillholes-csg" />
-        <ns0:property name="name" value="Nsw Drillholes Csg" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="The coal seam gas drillholes dataset stores information about CSG sites within N" />
-        <ns0:property name="order" value="Registered_92" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswDrillholesCsgSelector() {
@@ -6839,26 +2877,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswCurrentMiningApplications">
-        <ns0:constructor-arg name="id" value="nsw-current-mining-applications" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_titleappl" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-current-mining-applications" />
-        <ns0:property name="name" value="Nsw Current Mining Applications" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_93" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswCurrentMiningApplicationsSelector() {
         return new WMSSelector("gsnsw:bl_titleappl");
@@ -6874,26 +2892,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_93");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswOperatingMineralMines">
-        <ns0:constructor-arg name="id" value="nsw-operating-mineral-mines" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_opmines" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-operating-mineral-mines" />
-        <ns0:property name="name" value="Nsw Operating Mineral Mines" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_94" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswOperatingMineralMinesSelector() {
@@ -6911,26 +2909,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeophysicsElevation">
-        <ns0:constructor-arg name="id" value="geophysics-elevation" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="geophys:DEM" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="geophysics-elevation" />
-        <ns0:property name="name" value="Geophysics Elevation" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="Elevation is a pseudocolour layer with a histogram-equalised colour-stretch. Coo" />
-        <ns0:property name="order" value="Registered_95" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGeophysicsElevationSelector() {
         return new WMSSelector("geophys:DEM");
@@ -6946,26 +2924,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_95");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeolSimpRockUnitBoun">
-        <ns0:constructor-arg name="id" value="nsw-geol-simp-rock-unit-boun" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:ge_geology15m_bdy" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geol-simp-rock-unit-boun" />
-        <ns0:property name="name" value="Nsw Geology Simplified Rock Unit Boundary" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_96" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswGeolSimpRockUnitBounSelector() {
@@ -6983,26 +2941,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeBlocksAndUnitsGraticule">
-        <ns0:constructor-arg name="id" value="blocks-and-units-graticule" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:Map Blocks and Units" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="blocks-and-units-graticule" />
-        <ns0:property name="name" value="Blocks And Units Graticule" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="Layer-Group type layer: gsnsw:Map Blocks and Units" />
-        <ns0:property name="order" value="Registered_97" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeBlocksAndUnitsGraticuleSelector() {
         return new WMSSelector("gsnsw:Map Blocks and Units");
@@ -7018,26 +2956,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_97");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswMapUnitGraticule">
-        <ns0:constructor-arg name="id" value="nsw-map-unit-graticule" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:bl_mapunit" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-map-unit-graticule" />
-        <ns0:property name="name" value="Nsw Map Unit Graticule" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_98" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswMapUnitGraticuleSelector() {
@@ -7055,26 +2973,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeochronology">
-        <ns0:constructor-arg name="id" value="nsw-geochronology" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_geochron" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geochronology" />
-        <ns0:property name="name" value="Nsw Geochronology" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="The radiogenic isotope database contains geochronological data managed by the Ge" />
-        <ns0:property name="order" value="Registered_99" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswGeochronologySelector() {
         return new WMSSelector("gsnsw:dw_geochron");
@@ -7090,26 +2988,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_99");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeophysicsIsostaticBougerGravity">
-        <ns0:constructor-arg name="id" value="geophysics-isostatic-bouger-gravity" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="geophys:IsoGrav" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="geophysics-isostatic-bouger-gravity" />
-        <ns0:property name="name" value="Geophysics Isostatic Bouger Gravity" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.  Is" />
-        <ns0:property name="order" value="Registered_100" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGeophysicsIsostaticBougerGravitySelector() {
@@ -7127,26 +3005,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeopTotaMagnInteReduToPole">
-        <ns0:constructor-arg name="id" value="geop-tota-magn-inte-redu-to-pole" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="geophys:MagRTP" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="geop-tota-magn-inte-redu-to-pole" />
-        <ns0:property name="name" value="Geophysics Total Magnetic Intensity Reduced To Pole" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.  To" />
-        <ns0:property name="order" value="Registered_101" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeGeopTotaMagnInteReduToPoleSelector() {
         return new WMSSelector("geophys:MagRTP");
@@ -7162,26 +3020,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_101");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswCoreLibrarySamples">
-        <ns0:constructor-arg name="id" value="nsw-core-library-samples" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_corelibhole" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-core-library-samples" />
-        <ns0:property name="name" value="Nsw Core Library Samples" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_102" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswCoreLibrarySamplesSelector() {
@@ -7199,26 +3037,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeochemistrySamples">
-        <ns0:constructor-arg name="id" value="nsw-geochemistry-samples" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_geochemistry" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geochemistry-samples" />
-        <ns0:property name="name" value="Nsw Geochemistry Samples" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="The Geochemistry (Whole Rock) dataset contains information about the chemistry o" />
-        <ns0:property name="order" value="Registered_103" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswGeochemistrySamplesSelector() {
         return new WMSSelector("gsnsw:dw_geochemistry");
@@ -7234,26 +3052,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_103");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswTitles">
-        <ns0:constructor-arg name="id" value="nsw-titles" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:Titles" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-titles" />
-        <ns0:property name="name" value="Nsw Titles" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="Layer-Group type layer: gsnsw:Titles" />
-        <ns0:property name="order" value="Registered_104" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswTitlesSelector() {
@@ -7271,26 +3069,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswGeology">
-        <ns0:constructor-arg name="id" value="nsw-geology" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:NSW_Geology" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-geology" />
-        <ns0:property name="name" value="Nsw Geology" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="Layer-Group type layer: gsnsw:NSW_Geology" />
-        <ns0:property name="order" value="Registered_105" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswGeologySelector() {
         return new WMSSelector("gsnsw:NSW_Geology");
@@ -7306,26 +3084,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_105");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeopIsosGravOverTmiRtpTilt">
-        <ns0:constructor-arg name="id" value="geop-isos-grav-over-tmi-rtp-tilt" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="geophys:IsoGravTilt" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="geop-isos-grav-over-tmi-rtp-tilt" />
-        <ns0:property name="name" value="Geophysics Isostatic Gravity Over Tmi Rtp Tilt" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This dataset is part of the Geological Survey NSW Geophysics dataset series.  Bo" />
-        <ns0:property name="order" value="Registered_106" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeGeopIsosGravOverTmiRtpTiltSelector() {
@@ -7343,26 +3101,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswLithologySamples">
-        <ns0:constructor-arg name="id" value="nsw-lithology-samples" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_lithhole" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-lithology-samples" />
-        <ns0:property name="name" value="Nsw Lithology Samples" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="" />
-        <ns0:property name="order" value="Registered_107" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeNswLithologySamplesSelector() {
         return new WMSSelector("gsnsw:dw_lithhole");
@@ -7378,26 +3116,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_107");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswBase">
-        <ns0:constructor-arg name="id" value="nsw-base" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:NSW_Base" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-base" />
-        <ns0:property name="name" value="Nsw Base" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="Layer-Group type layer: gsnsw:NSW_Base" />
-        <ns0:property name="order" value="Registered_108" />
-    </ns0:bean>
-
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeNswBaseSelector() {
@@ -7415,26 +3133,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeNswMineralOccurrenceCommodity">
-        <ns0:constructor-arg name="id" value="nsw-mineral-occurrence-commodity" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="gsnsw:dw_metelement" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="nsw-mineral-occurrence-commodity" />
-        <ns0:property name="name" value="Nsw Mineral Occurrence Commodity" />
-        <ns0:property name="group" value="Geological Survey NSW" />
-        <ns0:property name="description" value="This spatial dataset is a derivative product of the New South Wales Mineral Occu" />
-        <ns0:property name="order" value="Registered_109" />
-    </ns0:bean>
-    
-
-	
-*/
-
     @Bean
     public WMSSelector knownTypeNswMineralOccurrenceCommoditySelector() {
         return new WMSSelector("gsnsw:dw_metelement");
@@ -7450,58 +3148,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_109");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeGeologicalProvinces">
-		<ns0:constructor-arg name="id" value="geological-provinces" />
-		<ns0:constructor-arg name="knownLayerSelector">
-			<ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSWFSSelector">
-				<ns0:constructor-arg name="featureTypeName" value="gml:ProvinceFullExtent" />
-				<ns0:constructor-arg name="layerName" value="GeologicalProvinces" />
-			</ns0:bean>
-		</ns0:constructor-arg>
-
-		<ns0:property name="name" value="Geological Provinces" />
-		<ns0:property name="description" value="Geological Provinces provided by GA" />
-		<ns0:property name="group" value="Geological Provinces" />
-		
-		
-		
-		<ns0:property name="proxyStyleUrl" value="getGeologicalProvincestyle.do" /> 
-		
-		<ns0:property name="order" value="provinces_01" />
-
-		<ns0:property name="filterCollection">
-			<ns0:bean class="org.auscope.portal.core.uifilter.FilterCollection">
-				<ns0:property name="optionalFilters">
-					<ns0:list>
-						<ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UITextBox">
-							<ns0:constructor-arg name="label" value="Name" />
-							<ns0:constructor-arg name="xpath" value="NAME" />
-							<ns0:constructor-arg name="value">
-								<ns0:null />
-							</ns0:constructor-arg>
-							<ns0:constructor-arg name="predicate">
-								<ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISLIKE</ns0:value>
-							</ns0:constructor-arg>
-						</ns0:bean>
-                        <ns0:bean class="org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox">
-                            <ns0:constructor-arg name="label" value="Polygon BBox" />
-                            <ns0:constructor-arg name="xpath" value="the_geom" />
-                            <ns0:constructor-arg name="value"><ns0:null /></ns0:constructor-arg>                            
-                            <ns0:constructor-arg name="predicate">
-                                <ns0:value type="org.auscope.portal.core.uifilter.Predicate">ISEQUAL</ns0:value>
-                            </ns0:constructor-arg>
-                        </ns0:bean>                          
-					</ns0:list>
-				</ns0:property>
-			</ns0:bean>
-		</ns0:property>
-	</ns0:bean>
-    
-    
-*/
 
     @Bean
     public WMSWFSSelector knownTypeGeologicalProvincesSelector() {
@@ -7529,27 +3175,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnAusBasins">
-        <ns0:constructor-arg name="id" value="UOW-Crn-Aus-Basins" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_aus_basins" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-Aus-Basins" />
-        <ns0:property name="name" value="CRN Australia: river Basins" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN Australia: river Basins" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultPolygonStyle.do?colour=0x0000EE" />
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeUOWCrnAusBasinsSelector() {
         return new WMSSelector("be10-denude:crn_aus_basins");
@@ -7566,26 +3191,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_1");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnAusOutlets">
-        <ns0:constructor-arg name="id" value="UOW-Crn-Aus-Outlets" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_aus_outlets" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-Aus-Outlets" />
-        <ns0:property name="name" value="CRN Australia: sample sites" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN Australia: sample sites" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0x00AAFF&amp;layerName=be10-denude:crn_aus_outlets" />        
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeUOWCrnAusOutletsSelector() {
@@ -7604,27 +3209,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnInprepBasins">
-        <ns0:constructor-arg name="id" value="UOW-Crn-Inprep-Basins" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_inprep_basins" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-Inprep-Basins" />
-        <ns0:property name="name" value="CRN InPrep: river Basins" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN InPrep: river Basins" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultPolygonStyle.do?colour=0x00FFFF" />
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeUOWCrnInprepBasinsSelector() {
         return new WMSSelector("be10-denude:crn_inprep_basins");
@@ -7641,26 +3225,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_1");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnInprepOutlets">
-        <ns0:constructor-arg name="id" value="UOW-Crn-Inprep-Outlets" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_inprep_outlets" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-Inprep-Outlets" />
-        <ns0:property name="name" value="CRN InPrep: sample sites" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN InPrep: sample sites" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0x00FFBB&amp;layerName=be10-denude:crn_inprep_outlets" />             
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeUOWCrnInprepOutletsSelector() {
@@ -7679,27 +3243,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnIntBasins">
-        <ns0:constructor-arg name="id" value="UOW-Crn-Int-Basins" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_int_basins" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-Int-Basins" />
-        <ns0:property name="name" value="CRN International: river Basins" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN International: river Basins" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultPolygonStyle.do?colour=0xBBFF00" />
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeUOWCrnIntBasinsSelector() {
         return new WMSSelector("be10-denude:crn_int_basins");
@@ -7716,26 +3259,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_1");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnIntOutlets">
-        <ns0:constructor-arg name="id" value="UOW-Crn-Int-Outlets" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_int_outlets" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-Int-Outlets" />
-        <ns0:property name="name" value="CRN International: sample sites" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN International: sample sites" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xBBFFAA&amp;layerName=be10-denude:crn_int_outlets" />             
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeUOWCrnIntOutletsSelector() {
@@ -7754,26 +3277,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnXXLBasins">
-        <ns0:constructor-arg name="id" value="UOW-Crn-XXL-Basins" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_xxl_basins" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-XXL-Basins" />
-        <ns0:property name="name" value="CRN XXL: river Basins" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN XXL: river Basins" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultPolygonStyle.do?colour=0xDDFF00" />
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeUOWCrnXXLBasinsSelector() {
         return new WMSSelector("be10-denude:crn_xxl_basins");
@@ -7790,26 +3293,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_1");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWCrnXXLOutlets">
-        <ns0:constructor-arg name="id" value="UOW-Crn-XXL-Outlets" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:crn_xxl_outlets" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-Crn-XXL-Outlets" />
-        <ns0:property name="name" value="CRN XXL: sample sites" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="CRN XXL: sample sites" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xDDFFAA&amp;layerName=be10-denude:crn_xxl_outlets" />             
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-    
-*/
 
     @Bean
     public WMSSelector knownTypeUOWCrnXXLOutletsSelector() {
@@ -7828,26 +3311,6 @@ public class AuScopeKnownLayers {
         return layer;
     }
 
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWOSLTLBasins">
-        <ns0:constructor-arg name="id" value="UOW-OSLTL-Basins" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:osltl_basins" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-OSLTL-Basins" />
-        <ns0:property name="name" value="OSL &amp; TL: river Basins" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="OSL &amp; TL: river Basins" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultPolygonStyle.do?colour=0xFFDD00" />
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-
-    
-*/
-
     @Bean
     public WMSSelector knownTypeUOWOSLTLBasinsSelector() {
         return new WMSSelector("be10-denude:osltl_basins");
@@ -7864,26 +3327,6 @@ public class AuScopeKnownLayers {
         layer.setOrder("Registered_1");
         return layer;
     }
-
-
-/*
-<ns0:bean xmlns:ns0="http://www.springframework.org/schema/beans" class="org.auscope.portal.core.view.knownlayer.KnownLayer" id="knownTypeUOWOSLTLOutlets">
-        <ns0:constructor-arg name="id" value="UOW-OSLTL-Outlets" />
-        <ns0:constructor-arg name="knownLayerSelector">
-            <ns0:bean class="org.auscope.portal.core.view.knownlayer.WMSSelector">
-                <ns0:constructor-arg name="layerName" value="be10-denude:osltl_samples" />
-            </ns0:bean>
-        </ns0:constructor-arg>
-        <ns0:property name="id" value="UOW-OSLTL-Outlets" />
-        <ns0:property name="name" value="OSL &amp; TL: sample sites" />
-        <ns0:property name="group" value="University of Wollongong" />
-        <ns0:property name="description" value="OSL &amp; TL: sample sites" />
-        <ns0:property name="proxyStyleUrl" value="getDefaultStyle.do?colour=0xFFDDAA&amp;layerName=be10-denude:osltl_samples" />             
-        <ns0:property name="order" value="Registered_1" />
-    </ns0:bean>
-    
-
-*/
 
     @Bean
     public WMSSelector knownTypeUOWOSLTLOutletsSelector() {
