@@ -200,6 +200,7 @@
                         <configuration>
                             <overlays>
                                 <overlay>
+                                    <id>org.auscope.portal</id>
                                     <groupId>org.auscope.portal</groupId>
                                     <artifactId>portal-core</artifactId>
                                     <type>jar</type>
