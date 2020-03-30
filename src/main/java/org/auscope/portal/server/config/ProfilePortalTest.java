@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
 
 /**
  * Definitions for all known layers
@@ -15,6 +18,17 @@ import org.springframework.context.annotation.Configuration;
  
 @Configuration
 public class ProfilePortalTest {
+
+/* Allow CORS for development purposes */
+@Bean
+public WebMvcConfigurer configurer() {
+    return new WebMvcConfigurer(){
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/*").allowedOrigins("*");
+        }
+    };
+}
     
     @Autowired
     KnownLayer knownTypehydrogeochem;
@@ -564,9 +578,9 @@ public class ProfilePortalTest {
 	@Qualifier("cswAuscopeTest")
 	CSWServiceItem cswAuscopeTest;
     
-    @Autowired
-	@Qualifier("cswMDUTest")
-	CSWServiceItem cswMDUTest;
+    //@Autowired
+    //	@Qualifier("cswMDUTest")
+    //	CSWServiceItem cswMDUTest;
     
     @Autowired
 	@Qualifier("cswGAPMDCRC")
@@ -576,7 +590,7 @@ public class ProfilePortalTest {
 	public ArrayList<CSWServiceItem> cswServiceList() {
 		ArrayList<CSWServiceItem> serviceList = new ArrayList<CSWServiceItem>();
 		serviceList.add(cswAuscopeTest);
-		serviceList.add(cswMDUTest);
+	        // serviceList.add(cswMDUTest);
 		serviceList.add(cswGAPMDCRC);
 		return serviceList;
 	}
