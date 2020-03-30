@@ -122,7 +122,7 @@ public class AuScopeApplicationContext {
         </property>
     </bean>*/
     @Bean
-    public ConversionServiceFactoryBean conversionServiceFactoryBean() {
+    public ConversionServiceFactoryBean conversionService() {
         StringArrayToCustomRegistry strReg = new StringArrayToCustomRegistry();
         HashSet<StringArrayToCustomRegistry> converters = new HashSet<StringArrayToCustomRegistry>();
         converters.add(strReg);
