@@ -126,21 +126,6 @@ public WebMvcConfigurer configurer() {
     KnownLayer knownTypeSeismologyInSchool;
     @Autowired
     KnownLayer knownTypeSF0BoreholeNVCL;
-    /* Analytics */
-    /* KnownLayer knownTypeBouguerGeodeticKnownLayer;
-    KnownLayer knownTypeGravAnomalyGeodetic;
-    KnownLayer knownTypeRadMapTotaldose;
-    KnownLayer knownTypeMagMap;
-    KnownLayer knownTypeGocadModels;
-    KnownLayer KnownTypeGeophysicsDatasets; 
-    KnownLayer knownTypeGAAemSurvey;
-    KnownLayer knownTypeGARumJungleAEM; 
-    KnownLayer knownTypeGAWoolnerAEM;
-    KnownLayer knownTypeGAGravitySurvey; 
-    KnownLayer knownTypeMusgraveAem;
-    KnownLayer knownTypeWesternAreaAem;
-    KnownLayer knownTypeAshburtonAem; */
-    /* End Analytics */    
 
     /* Generated from former test "Registered" tab START */
     @Autowired
