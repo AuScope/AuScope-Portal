@@ -10,12 +10,26 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
 /**
  * Definitions for all known layers
  */
  
 @Configuration
 public class ProfilePortalProduction {
+
+/* When running a local development server, uncomment this to disable CORS checking */
+//@Bean
+//public WebMvcConfigurer configurer() {
+//    return new WebMvcConfigurer(){
+//        @Override
+//        public void addCorsMappings(CorsRegistry registry) {
+//            registry.addMapping("/*").allowedOrigins("*");
+//        }
+//    };
+//}
 
     @Autowired
     KnownLayer knownTypeMine;
