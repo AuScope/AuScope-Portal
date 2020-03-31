@@ -5,6 +5,10 @@ Implementation-Version: 5.2.0-SNAPSHOT
 Built-By: faz014
 Specification-Vendor: AuScope
 Specification-Title: AuScope-Portal
+Specification-Version: 5.2.0-SNAPSHOT
+Specification-Vendor: AuScope
+Implementation-Title: AuScope-Portal
+Implementation-Version: 5.2.0-SNAPSHOT
 Implementation-Vendor-Id: org.auscope.portal
 version: 5.2.0-SNAPSHOT
 javaVersion: 1.8
@@ -19,4 +23,3 @@ Created-By: Apache Maven 3.5.0
 Build-Jdk: 1.8.0_232
 Specification-Version: 5.2.0-SNAPSHOT
 osName: Windows 10
-

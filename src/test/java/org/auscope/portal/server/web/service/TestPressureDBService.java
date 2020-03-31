@@ -21,7 +21,6 @@ public class TestPressureDBService extends PortalTestClass {
     private PressureDBMethodMaker mockMethodMaker = context.mock(PressureDBMethodMaker.class);
     private HttpServiceCaller mockHttpServiceCaller = context.mock(HttpServiceCaller.class);
     private HttpRequestBase mockHttpMethod = context.mock(HttpRequestBase.class);
-    private InputStream mockStream = context.mock(InputStream.class);
 
     @Before
     public void setUp() {
@@ -112,28 +111,6 @@ public class TestPressureDBService extends PortalTestClass {
 
         //make the request - it should throw an exception
         service.makeGetAvailableOMRequest(wellID, serviceUrl);
-    }
-
-    @Test
-    public void testDownload() throws Exception {
-        final String wellID = "123";
-        final String serviceUrl = "http://example.com/pressure-db-dataservice";
-        final String[] features = new String[] {"a", "b", "c"};
-        final HttpClientInputStream responseIs = new HttpClientInputStream(mockStream, null);
-
-        context.checking(new Expectations() {
-            {
-                oneOf(mockMethodMaker).makeDownloadMethod(serviceUrl, wellID, features);
-                will(returnValue(mockHttpMethod));
-
-                oneOf(mockHttpServiceCaller).getMethodResponseAsStream(mockHttpMethod);
-                will(returnValue(responseIs));
-            }
-        });
-
-        //make the request - it should return a stream
-        InputStream result = service.makeDownloadRequest(wellID, serviceUrl, features);
-        Assert.assertSame(responseIs, result);
     }
 
     @Test(expected = IOException.class)
