@@ -113,14 +113,7 @@ public class AuScopeApplicationContext {
         return new PortalPropertySourcesPlaceholderConfigurer();
     }
 
-    /*<!-- This list all the implementation of converters used in Spring -->
-    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <set>
-                <bean class="org.auscope.portal.server.web.controllers.sessonobject.StringArrayToCustomRegistry" />
-            </set>
-        </property>
-    </bean>*/
+    /* This lists all the implementation of converters used in Spring */
     @Bean
     public ConversionServiceFactoryBean conversionService() {
         StringArrayToCustomRegistry strReg = new StringArrayToCustomRegistry();
