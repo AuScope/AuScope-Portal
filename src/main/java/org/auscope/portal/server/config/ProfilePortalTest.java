@@ -416,22 +416,6 @@ public WebMvcConfigurer configurer() {
         knownLayers.add(knownTypeSeismologyInSchool);
         knownLayers.add(knownTypeSF0BoreholeNVCL);
 
-        /* Analytics */
-        /* knownLayers.add(knownTypeBouguerGeodetic);
-        knownLayers.add(knownTypeGravAnomalyGeodetic);
-        knownLayers.add(knownTypeRadMapTotaldose);
-        knownLayers.add(knownTypeMagMap);
-        knownLayers.add(knownTypeGocadModels);
-        knownLayers.add(knownTypeGeophysicsDatasets);
-        knownLayers.add(knownTypeGAAemSurvey);
-        knownLayers.add(knownTypeGARumJungleAEM);
-        knownLayers.add(knownTypeGAWoolnerAEM);
-        knownLayers.add(knownTypeGAGravitySurvey);
-        knownLayers.add(knownTypeMusgraveAem);
-        knownLayers.add(knownTypeWesternAreaAem);
-        knownLayers.add(knownTypeAshburtonAem); */
-        /* End Analytics */
-
         /* Generated from former test "Registered" tab START */
         knownLayers.add(knownTypeHighpSiteIronlayer);
         knownLayers.add(knownTypeHighpfeaturetype);
