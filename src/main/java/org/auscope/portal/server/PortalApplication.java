@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 import org.auscope.portal.server.config.ProfilePortalTest;
+import org.auscope.portal.server.config.ProfilePortalProduction;
 
 @SpringBootApplication
 @ComponentScan(

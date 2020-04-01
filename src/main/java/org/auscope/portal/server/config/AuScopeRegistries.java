@@ -25,49 +25,22 @@ class AuScopeRegistries {
     }
 
 
-    @Bean
-    public CSWServiceItem cswMDUTest() {
-        return(new CSWServiceItem("cswMDUTest",
-                                  "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/csw",
-                                  "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/metadata.show?uuid=%1$s",
-                                  "MDU Test Geonetwork"));
-    }
+    // @Bean
+    // public CSWServiceItem cswMDUTest() {
+    //     return(new CSWServiceItem("cswMDUTest",
+    //                               "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/csw",
+    //                               "http://mdu-data-2.arrc.csiro.au/geonetwork/srv/en/metadata.show?uuid=%1$s",
+    //                               "MDU Test Geonetwork"));
+    // }
 
 
-    @Bean
-    public CSWServiceItem cswMDUProduction() {
-        return(new CSWServiceItem("cswMDUProduction",
-                                  "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/csw",
-                                  "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s",
-                                  "MDU-Geonetwork"));
-    }
-
-
-    @Bean
-    public CSWServiceItem cswGAPetroleumTest() {
-        return(new CSWServiceItem("cswGAPetroleumTest",
-                                  "http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/eng/csw",
-                                  "http://auscope-portal-dev.arrc.csiro.au/geonetwork/srv/eng/main.home?uuid=%1$s",
-                                  "GA Petroleum Geonetwork"));
-    }
-        
-        
-    @Bean
-    public CSWServiceItem cswMRTTest() {
-        return(new CSWServiceItem("cswMRTTest",
-                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw",
-                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s",
-                                  "Tasmania Test Geonetwork"));
-    }
-
-
-    @Bean
-    public CSWServiceItem cswMRTProduction() {
-        return(new CSWServiceItem("cswMRTProduction",
-                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/csw",
-                                  "http://www.mrt.tas.gov.au/web-catalogue/srv/eng/main.home?uuid=%1$s",
-                                  "Tasmania Geonetwork"));
-    }
+    // @Bean
+    // public CSWServiceItem cswMDUProduction() {
+    //     return(new CSWServiceItem("cswMDUProduction",
+    //                               "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/csw",
+    //                               "http://mdu-data.arrc.csiro.au/geonetwork/srv/en/main.home?uuid=%1$s",
+    //                               "MDU-Geonetwork"));
+    // }
 
 
     @Bean
