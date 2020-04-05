@@ -160,16 +160,18 @@
         <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
     </bean>    
     
-    <!--bean id="nagios4CachedService" class="org.auscope.portal.core.services.Nagios4CachedService">
-        <constructor-arg name="serviceUrl" value="${HOST.nagios.url}"/>
-        <constructor-arg name="serviceCaller" ref="httpServiceCaller"/>
+    <bean id="googleCloudMonitoringCachedService" class="org.auscope.portal.core.services.GoogleCloudMonitoringCachedService">
         <constructor-arg name="methodMaker">
-            <bean class="org.auscope.portal.core.services.methodmakers.Nagios4MethodMaker">
+            <bean class="org.auscope.portal.core.services.methodmakers.GoogleCloudMonitoringMethodMaker">
             </bean>
-        </constructor-arg>
-        <property name="userName" value="${env.nagios.user}:user" />
-        <property name="password" value="${env.nagios.password}:password" />
-    </bean-->
+        </constructor-arg>    
+        <property name="privateKey" value="${env.stackdriver.private_key}" />
+        <property name="privateKeyId" value="${env.stackdriver.private_key_id}" />
+        <property name="clientId" value="${env.stackdriver.client_id}" />
+        <property name="clientEmail" value="${env.stackdriver.client_email}" />
+        <property name="tokenUri" value="${env.stackdriver.token_uri}" />
+        <property name="projectId" value="${env.stackdriver.project_id}" />
+    </bean>
 
         <!-- Registries to be listed on Custom registry handler but not in feature or register tab -->
     <!--bean id="cswVeglProduction" class="org.auscope.portal.core.services.csw.custom.CustomRegistry">

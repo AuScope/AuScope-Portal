@@ -38,8 +38,13 @@
             </bean>
         </property>
         <property name="order" value="10" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureminoccview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>        
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -96,8 +101,13 @@
             </bean>
         </property>
         <property name="order" value="11" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureminoccview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -155,8 +165,13 @@
             </bean>
         </property>
         <property name="order" value="12" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureminoccview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -190,8 +205,13 @@
         <property name="proxyStyleUrl" value="getMineralTenementStyle.do"/>
         <property name="proxyDownloadUrl" value="doMineralTenementCSVDownload.do"/>       
         <property name="order" value="150" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="TenementsLayers"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="TenementsLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeaturetenements</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -382,8 +402,13 @@
         <property name="proxyStyleUrl" value="getErlMineViewStyle.do"/>
         <property name="proxyDownloadUrl" value=""/>
         <property name="order" value="160" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureminoccview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -440,9 +465,14 @@
         <property name="proxyCountUrl" value=""/>
         <property name="proxyStyleUrl" value="getErlMineralOccurrenceViewStyle.do"/>
         <property name="proxyDownloadUrl" value=""/>
-        <property name="order" value="160" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
+        <property name="order" value="160" />    
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureminoccview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -509,8 +539,13 @@
         <property name="proxyStyleUrl" value="getErlCommodityResourceViewStyle.do"/>
         <property name="proxyDownloadUrl" value=""/>
         <property name="order" value="160" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureminoccview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -576,8 +611,13 @@
         <property name="proxyStyleUrl" value="doMinOccurViewFilterStyle.do"/>
         <property name="proxyDownloadUrl" value="downloadMinOccurView.do"/>
         <property name="order" value="13" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="EarthResourcesLayers"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureminoccview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
                 <property name ="optionalFilters">
@@ -783,8 +823,15 @@
             </bean>
         </property>
         <property name="order" value="51" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="NVCLBoreholeViewLayer"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="NVCLBoreholeViewLayer"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>nvcldataservices</value>
+                <value>nvcldownloadservices</value>
+                <value>wfsgetfeatureboreholeview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">    
              <property name ="mandatoryFilters">
@@ -1015,8 +1062,13 @@
             </bean>
         </property>
         <property name="order" value="52" />
-        <property name="nagiosHostGroup" value="GeolSurveySISSDeployments"/>
-        <property name="nagiosServiceGroup" value="BoreholeViewLayer"/>
+        <!-- To replace nagios check <property name="nagiosServiceGroup" value="BoreholeViewLayer"/> -->
+        <property name="stackdriverCheckList">
+            <list>
+                <value>wfsgetfeatureboreholeview</value>
+                <value>wfsgetcaps</value>
+            </list>
+        </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
                 <property name ="mandatoryFilters">
