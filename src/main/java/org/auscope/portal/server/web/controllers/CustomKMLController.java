@@ -2,6 +2,7 @@ package org.auscope.portal.server.web.controllers;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,7 +50,7 @@ public class CustomKMLController extends BasePortalController {
             CommonsMultipartFile file = uploadItem.getFile();
             ModelMap model = new ModelMap();
             model.put("success", true);
-            model.put("file", IOUtils.toString(file.getInputStream()));
+            model.put("file", IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8));
             model.put("name", file.getOriginalFilename());
             return new Gson().toJson(model);
         } catch (Exception e) {
@@ -84,7 +85,7 @@ public class CustomKMLController extends BasePortalController {
 
             ModelMap model = new ModelMap();
             model.put("success", true);
-            model.put("file", IOUtils.toString(dlRes.getResponseAsStream()));
+            model.put("file", IOUtils.toString(dlRes.getResponseAsStream(), StandardCharsets.UTF_8));
             model.put("name", uri.getHost() + fileExtension);
 
             return generateJSONResponseMAV(true, model, "success");

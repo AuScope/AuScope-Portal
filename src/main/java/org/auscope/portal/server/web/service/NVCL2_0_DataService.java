@@ -55,7 +55,7 @@ public class NVCL2_0_DataService {
     @Autowired
     public NVCL2_0_DataService(HttpServiceCaller httpServiceCaller,
             NVCL2_0_DataServiceMethodMaker nvclMethodMaker,
-            @Value("${HOST.nvclAnalyticalServices.url}") String analyticalServicesUrl) {
+            @Value("${env.nvclAnalyticalServices.url}") String analyticalServicesUrl) {
         this.nvclMethodMaker = nvclMethodMaker;
         this.httpServiceCaller = httpServiceCaller;
         this.analyticalServicesUrl = analyticalServicesUrl;
@@ -114,8 +114,7 @@ public class NVCL2_0_DataService {
         Bin[] totalBins = new Bin[0];
         for (String jobId: jobIds) {
             HttpRequestBase method = nvclMethodMaker.getNVCLJobsScalarMethod(analyticalServicesUrl, jobId, boreholeId);
-            InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
-            Bin[] bins = doBinning(binnedResponse, responseStream, binSizeMetres, '"', 1, 2, jobId);
+            Bin[] bins = doBinning(binnedResponse, method, binSizeMetres, '"', 1, 2, jobId);
             totalBins = (Bin[])ArrayUtils.addAll(totalBins, bins);
         }
         binnedResponse.setBinnedValues(totalBins);
@@ -134,16 +133,16 @@ public class NVCL2_0_DataService {
      * @param altName alternative name for a bin. Use null to force it to use CSV header
      * @return
      */     
-    private Bin[] doBinning(BinnedCSVResponse binnedResponse, InputStream responseStream, double binSizeMetres, char quoteChar, int startAtCol, int stopAtCol, String altName) throws Exception {
+    private Bin[] doBinning(BinnedCSVResponse binnedResponse, HttpRequestBase method, double binSizeMetres, char quoteChar, int startAtCol, int stopAtCol, String altName) throws Exception {
         final String MISSING_DATA_STRING = "null";
         final int INITIAL_LIST_SIZE = 512;
         
-        CSVReader reader = null;
         Bin[] bins = null;
         
-        try {
-            //Prepare parsing
-            reader = new CSVReader(new InputStreamReader(responseStream), ',', quoteChar, 0);
+        //Prepare parsing
+        try (
+            InputStream responseStream = httpServiceCaller.getMethodResponseAsStream(method);
+            CSVReader reader = new CSVReader(new InputStreamReader(responseStream), ',', quoteChar, 0)) {
             String[] headerLine = reader.readNext();
             if (headerLine == null || headerLine.length <= startAtCol) {
                 throw new IOException("No or malformed CSV header sent");
@@ -267,13 +266,7 @@ public class NVCL2_0_DataService {
                     }
                 }
             }
-
-
-        } finally {
-            IOUtils.closeQuietly(reader);
-            IOUtils.closeQuietly(responseStream);
         }
-
         return bins;
     }
         

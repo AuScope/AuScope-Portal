@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -293,7 +294,7 @@ public class NVCLController extends BasePortalController {
         response.setContentType(serviceResponse.getContentType());
         //vt:we have to hack the response because the html response has relative url and when
         //the result is proxied, the service url becomes portal's url.
-        String stringResponse = IOUtils.toString(serviceResponse.getResponse());
+        String stringResponse = IOUtils.toString(serviceResponse.getResponse(), StandardCharsets.UTF_8);
         stringResponse = stringResponse.replace("./Display_Tray_Thumb.html", serviceUrl + "Display_Tray_Thumb.html");
         if (!stringResponse.contains("style=\"max-width: 33%")) {
             stringResponse = stringResponse.replace("<img",
@@ -508,7 +509,7 @@ public class NVCLController extends BasePortalController {
         }
 
         response.setContentType(serviceResponse.getContentType());
-        String stringResponse = IOUtils.toString(serviceResponse.getResponse());
+        String stringResponse = IOUtils.toString(serviceResponse.getResponse(), StandardCharsets.UTF_8);
         stringResponse = stringResponse.replace("downloadtsg.html", serviceUrl + "downloadtsg.html");
 
         FileIOUtil.writeInputToOutputStream(new ByteArrayInputStream(stringResponse.getBytes()),
@@ -547,7 +548,7 @@ public class NVCLController extends BasePortalController {
         }
 
         response.setContentType(serviceResponse.getContentType());
-        String stringResponse = IOUtils.toString(serviceResponse.getResponse());
+        String stringResponse = IOUtils.toString(serviceResponse.getResponse(), StandardCharsets.UTF_8);
         stringResponse = stringResponse.replace("downloadtsg.html", serviceUrl + "downloadtsg.html");
         stringResponse = stringResponse.replace("href", " target='_blank' href");
 
