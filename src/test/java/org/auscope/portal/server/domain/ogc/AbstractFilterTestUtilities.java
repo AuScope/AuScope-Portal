@@ -7,10 +7,9 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.junit.Assert;
-
 import org.auscope.portal.core.services.namespaces.OGCNamespaceContext;
 import org.auscope.portal.core.util.DOMUtil;
+import org.junit.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
