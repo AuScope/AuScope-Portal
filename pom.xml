@@ -36,7 +36,7 @@
         <spring.version>3.0.5.RELEASE</spring.version>
         <spring.security.version>3.0.5.RELEASE</spring.security.version>
         <geotools.version>2.6.5</geotools.version>
-        <portal.core.version>2.3.0-SNAPSHOT</portal.core.version>
+        <portal.core.version>2.3.1-SNAPSHOT</portal.core.version>
     </properties>
     <build>
         <plugins>        
@@ -200,6 +200,7 @@
                         <configuration>
                             <overlays>
                                 <overlay>
+                                    <id>org.auscope.portal</id>
                                     <groupId>org.auscope.portal</groupId>
                                     <artifactId>portal-core</artifactId>
                                     <type>jar</type>
@@ -441,6 +442,12 @@
             <artifactId>selenium-java</artifactId>
             <version>3.0.1</version>
             <scope>test</scope>
+            <exclusions>
+              <exclusion>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
