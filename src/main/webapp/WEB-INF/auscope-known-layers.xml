@@ -40,10 +40,10 @@
         <property name="order" value="10" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureminoccview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>        
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -103,10 +103,10 @@
         <property name="order" value="11" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureminoccview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -167,10 +167,10 @@
         <property name="order" value="12" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureminoccview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -207,10 +207,10 @@
         <property name="order" value="150" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="TenementsLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeaturetenements</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -404,10 +404,10 @@
         <property name="order" value="160" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureminoccview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -468,10 +468,10 @@
         <property name="order" value="160" />    
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureminoccview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -541,10 +541,10 @@
         <property name="order" value="160" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureminoccview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -613,10 +613,10 @@
         <property name="order" value="13" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="EarthResourcesLayers"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureminoccview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">
@@ -825,12 +825,12 @@
         <property name="order" value="51" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="NVCLBoreholeViewLayer"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>nvcldataservices</value>
                 <value>nvcldownloadservices</value>
                 <value>wfsgetfeatureboreholeview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">    
@@ -1064,10 +1064,10 @@
         <property name="order" value="52" />
         <!-- To replace nagios check <property name="nagiosServiceGroup" value="BoreholeViewLayer"/> -->
         <property name="stackdriverCheckList">
-            <list>
+            <set>
                 <value>wfsgetfeatureboreholeview</value>
                 <value>wfsgetcaps</value>
-            </list>
+            </set>
         </property>
         <property name ="filterCollection">
              <bean class="org.auscope.portal.core.uifilter.FilterCollection">                
