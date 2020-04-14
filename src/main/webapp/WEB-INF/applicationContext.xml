@@ -165,6 +165,40 @@
             <bean class="org.auscope.portal.core.services.methodmakers.GoogleCloudMonitoringMethodMaker">
             </bean>
         </constructor-arg>    
+        <property name="servicesMap">
+            <map>
+                <entry key="EarthResourcesLayers">
+                    <list>
+                       <value>wfsgetfeatureminoccview</value>
+                       <value>wfsgetcaps</value>                      
+                       <!-- TODO: wms get cached tile -->
+                    </list>
+                </entry>
+                <entry key="TenementsLayers">
+                    <list>
+                       <value>wfsgetfeaturetenements</value>
+                       <value>wfsgetcaps</value>                       
+                        <!-- TODO: wms get cached tile -->
+                    </list>
+                </entry>
+                <entry key="NVCLBoreholeViewLayer">
+                    <list>
+                       <value>nvcldataservices</value>
+                       <value>nvcldownloadservices</value>
+                       <value>wfsgetfeatureboreholeview</value>
+                       <value>wfsgetcaps</value>                      
+                        <!-- TODO: wms get cached tile -->
+                    </list>
+                </entry>
+                <entry key="BoreholeViewLayer">
+                    <list>
+                       <value>wfsgetfeatureboreholeview</value>
+                       <value>wfsgetcaps</value>                      
+                        <!-- TODO: wms get cached tile -->
+                    </list>
+                </entry>
+            </map>
+        </property>
         <property name="privateKey" value="${env.stackdriver.private_key}" />
         <property name="privateKeyId" value="${env.stackdriver.private_key_id}" />
         <property name="clientId" value="${env.stackdriver.client_id}" />
