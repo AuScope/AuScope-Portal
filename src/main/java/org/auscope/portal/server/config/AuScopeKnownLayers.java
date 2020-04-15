@@ -708,56 +708,6 @@ public class AuScopeKnownLayers {
     }
 
     @Bean
-    public WFSSelector knownTypeBoreholePressureDBSelector() {
-        String[] serviceEndPoints = { "http://services-test.auscope.org:80/pressuredb/wfs",
-                        "http://services.auscope.org:80/pressuredb/wfs"};
-        WFSSelector wfsSelector = new WFSSelector("gsmlp:BoreholeView", serviceEndPoints, true);
-        String[] featNameList = { "sa:SamplingFeatureCollection", "om:GETPUBLISHEDSYSTEMTSA",
-                        "pdb:rft", "pdb:nacl", "pdb:t", "pdb:cl", "pdb:tds", "pdb:dst", "pdb:fitp"};
-        wfsSelector.setRelatedFeatureTypeNames(featNameList);
-        return wfsSelector;
-    }
-
-    @Bean
-    public KnownLayer knownTypeBoreholePressureDB() {
-        KnownLayer layer = new KnownLayer("pressuredb-borehole", knownTypeBoreholePressureDBSelector());
-        layer.setName("Pressure DB");
-        layer.setDescription("A collection of services implementing the Pressure DB Profile for gsml:Borehole and a collection of observations");
-        layer.setGroup("Boreholes");
-        layer.setProxyUrl("doBoreholeViewFilter.do");
-        layer.setProxyCountUrl("");
-        layer.setProxyStyleUrl("doPressureDBFilterStyle.do");
-        layer.setOrder("52");
-
-        // Optional filters
-        List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
-        UITextBox nameTextBox = new UITextBox("Borehole Name", "gsmlp:name", null, Predicate.ISLIKE);
-        UIDate startDate = new UIDate("Drilling Start Date", "gsmlp:drillStartDate", null, Predicate.BIGGER_THAN);
-        UIDate endDate = new UIDate("Drilling End Date", "gsmlp:drillStartDate", null, Predicate.SMALLER_THAN);
-        UIPolygonBBox uiPolygonBBox = new UIPolygonBBox("Polygon BBox - Clipboard","gsmlp:shape",null, Predicate.ISEQUAL);
-        optionalFilters.add(nameTextBox);
-        optionalFilters.add(startDate);
-        optionalFilters.add(endDate);
-        optionalFilters.add(uiPolygonBBox);
-        FilterCollection filterCollection = new FilterCollection();
-        filterCollection.setOptionalFilters(optionalFilters);
-        
-        // Mandatory filters - note use of full path names for declaring vars to prevent clashes with imported optional params
-        List<ImmutablePair<String,String>> mandatoryOptions = new ArrayList<ImmutablePair<String,String>>();
-        mandatoryOptions.add(new ImmutablePair("Length", "Length"));
-        mandatoryOptions.add(new ImmutablePair("Elevation", "Elevation"));
-        mandatoryOptions.add(new ImmutablePair("Default", null));
-        org.auscope.portal.core.uifilter.mandatory.UIDropDownSelectList mandDropDownSelectList;
-        mandDropDownSelectList = new org.auscope.portal.core.uifilter.mandatory.UIDropDownSelectList("Color Code", "ccProperty", "", mandatoryOptions);
-        List<AbstractMandatoryParamBinding> mandParamList = new ArrayList<AbstractMandatoryParamBinding>();
-        mandParamList.add(mandDropDownSelectList);
-        filterCollection.setMandatoryFilters(mandParamList);
-
-        layer.setFilterCollection(filterCollection);
-        return layer;
-    }
-
-    @Bean
     public CSWRecordSelector knownTypeAsterSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
         cswSelector.setRecordId("E6029ED0-636B-4F91-A6A1-535EBA4B5AD1");

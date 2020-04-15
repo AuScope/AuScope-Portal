@@ -61,8 +61,6 @@ public WebMvcConfigurer configurer() {
     @Autowired
     KnownLayer knownTypeBoreholeNvclV2;
     @Autowired
-    KnownLayer knownTypeBoreholePressureDB;
-    @Autowired
     KnownLayer knownTypeReports;
     @Autowired
     KnownLayer knownTypePMDCRCReports;
@@ -382,7 +380,6 @@ public WebMvcConfigurer configurer() {
         knownLayers.add(knownTypeEMAGRemanentAnomaliesTMI);
         knownLayers.add(knownTypeMineralOccurrenceView);
         knownLayers.add(knownTypeBoreholeNvclV2);
-        knownLayers.add(knownTypeBoreholePressureDB);
         knownLayers.add(knownTypeReports);
         knownLayers.add(knownTypePMDCRCReports);
         knownLayers.add(knownTypeGeotransects);
