@@ -254,28 +254,6 @@ public class AuScopeKnownLayers {
     }
 
     @Bean
-    public WFSSelector knownTypehydrogeochemSelector() {
-        return new WFSSelector("public:hydrogeochem");
-    }
-
-    @Bean
-    public KnownLayer knownTypehydrogeochem() {
-        KnownLayer layer = new KnownLayer("capdf-hydrogeochem", knownTypehydrogeochemSelector());
-        layer.setName("Hydrogeochemistry");
-        layer.setDescription("Northern Yilgarn Hydrogeochemistry ");
-        layer.setGroup("Northern Yilgarn Hydrogeochemistry ");
-        layer.setProxyUrl("");
-        layer.setProxyCountUrl("");
-        layer.setProxyStyleUrl("getCapdfHydroGeoChemStyle.do");
-        layer.setProxyDownloadUrl("doCapdfHydroGeoChemDownload.do");
-        layer.setOrder("160");
-        
-        // Optional filters
-        layer.setFilterCollection(this.createTextBoxFilterCollection("Batch Id", "batch_id"));
-        return layer;
-    }
-
-    @Bean
     public WFSSelector knownTypeErlMineViewSelector() {
         return new WFSSelector("erl:MineView");
     }
