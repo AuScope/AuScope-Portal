@@ -908,40 +908,6 @@ public class AuScopeKnownLayers {
     }
 
     @Bean
-    public CSWRecordSelector knownTypeFalseColorSelector() {
-        CSWRecordSelector cswSelector = new CSWRecordSelector();
-        cswSelector.setRecordId("bfd6b137-7227-47f4-82f0-9e7fb788c507");
-        return cswSelector;
-    }
-
-    @Bean
-    public KnownLayer knownTypeFalseColor() {
-        KnownLayer layer = new KnownLayer("aster-false-color", knownTypeFalseColorSelector());
-        layer.setName("ASTER Map false colour mosaic");
-        layer.setDescription("1. False colour RGB composite Red: B3Green: B2Blue: B1(red = green vegetation)");
-        layer.setGroup("ASTER Maps");
-        layer.setOrder("30_ASTER Maps_140");
-        return layer;
-    }
-
-    @Bean
-    public CSWRecordSelector knownTypeRegolithRatiosSelector() {
-        CSWRecordSelector cswSelector = new CSWRecordSelector();
-        cswSelector.setRecordId("768dcbde-ae8a-440e-9b4b-44624ba4c836");
-        return cswSelector;
-    }
-
-    @Bean
-    public KnownLayer knownTypeRegolithRatios() {
-        KnownLayer layer = new KnownLayer("aster-reg-ratio", knownTypeRegolithRatiosSelector());
-        layer.setName("ASTER Map Regolith Ratios");
-        layer.setDescription("1. 3 band RGB composite Red: B3/B2Green: B3/B7Blue: B4/B7(white = green vegetation)");
-        layer.setGroup("ASTER Maps");
-        layer.setOrder("30_ASTER Maps_150");
-        return layer;
-    }
-
-    @Bean
     public CSWRecordSelector knownTypeAlohGroupContentSelector() {
         CSWRecordSelector cswSelector = new CSWRecordSelector();
         cswSelector.setRecordId("b070d1d4-6420-4770-8ca6-3bf4b6682c3d");
