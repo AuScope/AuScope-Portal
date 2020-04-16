@@ -31,8 +31,6 @@ public WebMvcConfigurer configurer() {
 }
     
     @Autowired
-    KnownLayer knownTypehydrogeochem;
-    @Autowired
     KnownLayer knownTypeMine;
     @Autowired
     KnownLayer knownTypeErlMineView;
@@ -367,7 +365,6 @@ public WebMvcConfigurer configurer() {
  	public ArrayList<KnownLayer> knownTypes() {
 		ArrayList<KnownLayer> knownLayers = new ArrayList<KnownLayer>();
     
-        knownLayers.add(knownTypehydrogeochem);
         knownLayers.add(knownTypeMine);
         knownLayers.add(knownTypeErlMineView);
         knownLayers.add(knownTypeMineralOccurrence);

@@ -137,8 +137,6 @@ public class ProfilePortalProduction {
     KnownLayer knownTypeSeismologyInSchool;
     @Autowired
     KnownLayer knownTypeSF0BoreholeNVCL;
-    @Autowired
-    KnownLayer knownTypehydrogeochem;
 
     /* Generated from former prod "Registered" tab START */
     @Autowired
@@ -308,7 +306,6 @@ public class ProfilePortalProduction {
         knownLayers.add(knownTypeBoreholeMSCL);
         knownLayers.add(knownTypeSeismologyInSchool);
         knownLayers.add(knownTypeSF0BoreholeNVCL);
-        knownLayers.add(knownTypehydrogeochem);
         /* Generated from former prod "Registered" tab START */
         
         knownLayers.add(knownTypeHighpSiteIronlayer);
