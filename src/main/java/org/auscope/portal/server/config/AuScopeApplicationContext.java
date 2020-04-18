@@ -1,70 +1,66 @@
 package org.auscope.portal.server.config;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import org.auscope.portal.server.web.controllers.sessonobject.StringArrayToCustomRegistry;
-import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.auscope.portal.core.configuration.ServiceConfiguration;
 import org.auscope.portal.core.configuration.ServiceConfigurationItem;
+import org.auscope.portal.core.server.PortalPropertySourcesPlaceholderConfigurer;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
+import org.auscope.portal.core.server.http.download.FileDownloadService;
 import org.auscope.portal.core.services.CSWCacheService;
 import org.auscope.portal.core.services.CSWFilterService;
+import org.auscope.portal.core.services.GoogleCloudMonitoringCachedService;
 import org.auscope.portal.core.services.KnownLayerService;
+import org.auscope.portal.core.services.LocalCSWFilterService;
+import org.auscope.portal.core.services.NamespaceService;
 import org.auscope.portal.core.services.OpendapService;
+import org.auscope.portal.core.services.SISSVoc2Service;
+import org.auscope.portal.core.services.VocabularyCacheService;
+import org.auscope.portal.core.services.VocabularyFilterService;
 import org.auscope.portal.core.services.WCSService;
-import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.WFSService;
-
+import org.auscope.portal.core.services.WMSService;
 import org.auscope.portal.core.services.csw.CSWServiceItem;
-import org.auscope.portal.core.services.csw.custom.CustomRegistry;
+import org.auscope.portal.core.services.methodmakers.GoogleCloudMonitoringMethodMaker;
 import org.auscope.portal.core.services.methodmakers.OPeNDAPGetDataMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WCSMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WMSMethodMaker;
 import org.auscope.portal.core.services.methodmakers.WMSMethodMakerInterface;
 import org.auscope.portal.core.services.methodmakers.WMS_1_3_0_MethodMaker;
+import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc2MethodMaker;
+import org.auscope.portal.core.services.responses.vocab.ConceptFactory;
+import org.auscope.portal.core.services.vocabs.VocabularyServiceItem;
+import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.view.ViewKnownLayerFactory;
 import org.auscope.portal.core.view.knownlayer.KnownLayer;
-
-import org.auscope.portal.core.view.ViewCSWRecordFactory;
 import org.auscope.portal.core.xslt.WfsToKmlTransformer;
-import org.auscope.portal.core.services.VocabularyCacheService;
-import org.auscope.portal.core.services.VocabularyFilterService;
-import org.auscope.portal.core.services.responses.vocab.ConceptFactory;
-import org.auscope.portal.core.services.methodmakers.sissvoc.SISSVoc2MethodMaker;
-import org.auscope.portal.core.services.SISSVoc2Service;
-import org.auscope.portal.server.web.service.ErmlVocabService;
-import org.auscope.portal.server.web.service.NvclVocabService;
-import org.auscope.portal.core.server.http.download.FileDownloadService;
-import org.auscope.portal.core.services.vocabs.VocabularyServiceItem;
-import org.auscope.portal.core.services.VocabularyCacheService;
-import org.auscope.portal.nvcl.NvclVocabMethodMaker;
 import org.auscope.portal.mineraloccurrence.CommodityVocabMethodMaker;
-import org.auscope.portal.core.server.PortalPropertySourcesPlaceholderConfigurer;
-import org.auscope.portal.server.web.service.NotificationService;
-import org.auscope.portal.core.services.methodmakers.Nagios4MethodMaker;
-import org.auscope.portal.core.services.Nagios4CachedService;
 import org.auscope.portal.mscl.MSCLWFSService;
-import org.auscope.portal.core.services.NamespaceService;
-import org.auscope.portal.core.services.LocalCSWFilterService;
+import org.auscope.portal.nvcl.NvclVocabMethodMaker;
+import org.auscope.portal.server.web.controllers.sessonobject.StringArrayToCustomRegistry;
+import org.auscope.portal.server.web.service.ErmlVocabService;
+import org.auscope.portal.server.web.service.NotificationService;
+import org.auscope.portal.server.web.service.NvclVocabService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.support.ConversionServiceFactoryBean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
 /**
  * Bean definitions.
- * 
+ *
  * Most definitions originally migrated from Spring MVC applicationContext.xml.
- * 
+ *
  */
 @Configuration
 public class AuScopeApplicationContext {
@@ -156,7 +152,7 @@ public class AuScopeApplicationContext {
     public WfsToKmlTransformer wfsToKmlTransformer() {
         return new WfsToKmlTransformer();
     }
-    
+
     @Autowired
     VocabularyServiceItem vocabularyGeologicTimescales;
 
@@ -182,7 +178,7 @@ public class AuScopeApplicationContext {
         servList.add(vocabularyResourceCategories);
         return servList;
     }
-    
+
     @Bean
     public VocabularyCacheService vocabularyCacheService() {
         return new VocabularyCacheService(taskExecutor(), vocabularyServiceList());
@@ -192,7 +188,7 @@ public class AuScopeApplicationContext {
     public VocabularyFilterService vocabularyFilterService() {
         return new VocabularyFilterService(vocabularyCacheService());
     }
-    
+
     @Bean
     @Primary
     public CSWCacheService cswCacheService() {
@@ -225,12 +221,12 @@ public class AuScopeApplicationContext {
     public SISSVoc2MethodMaker sissVocMethodMaker() {
         return new SISSVoc2MethodMaker();
     }
-    
+
     @Bean
     public ConceptFactory conceptFactory() {
         return new ConceptFactory();
     }
-    
+
     @Bean
     public SISSVoc2Service sissVocService() {
         return new SISSVoc2Service(httpServiceCallerApp(), conceptFactory(),  sissVocMethodMaker());
@@ -240,7 +236,7 @@ public class AuScopeApplicationContext {
     public WCSMethodMaker wcsMethodMaker() {
     	return new WCSMethodMaker();
     }
-    
+
     @Bean
     public WCSService wcsService() {
     	return new WCSService(httpServiceCallerApp(), wcsMethodMaker());
@@ -255,7 +251,7 @@ public class AuScopeApplicationContext {
     public WMS_1_3_0_MethodMaker wms130methodMaker() {
     	return new WMS_1_3_0_MethodMaker(httpServiceCallerApp());
     }
-    
+
 
     @Bean
     public WMSService wmsService() {
@@ -267,7 +263,7 @@ public class AuScopeApplicationContext {
 
     @Value("${env.vocabService.url}")
     private String ermlVocabServiceURL;
-    
+
     @Bean
     public ErmlVocabService ermlVocabService() {
         return new ErmlVocabService(httpServiceCallerApp(), new CommodityVocabMethodMaker(), ermlVocabServiceURL);
@@ -286,21 +282,36 @@ public class AuScopeApplicationContext {
         return new FileDownloadService(httpServiceCallerApp());
     }
 
-    @Value("${env.nagios.url}") private String nagiosURL;
-    @Value("${env.nagios.user}") private String nagiosUser;
-    @Value("${env.nagios.password}") private String nagiosPassword;
+    @Value("${env.stackdriver.private_key}") private String privateKey;
+    @Value("${env.stackdriver.private_key_id}") private String privateKeyId;
+    @Value("${env.stackdriver.client_id}") private String clientId;
+    @Value("${env.stackdriver.client_email}") private String clientEmail;
+    @Value("${env.stackdriver.token_uri") private String tokenUri;
+    @Value("${env.stackdriver.project_id") private String projectId;
     @Bean
-    public Nagios4CachedService nagios4CachedService() {
-        return new Nagios4CachedService(nagiosURL, httpServiceCallerApp(), new Nagios4MethodMaker());
+    public GoogleCloudMonitoringCachedService googleCloudMonitoringCachedService(GoogleCloudMonitoringMethodMaker methodMaker) {
+    	GoogleCloudMonitoringCachedService stackdriverService = new GoogleCloudMonitoringCachedService(methodMaker);
+    	HashMap<String, List<String>> servicesMap = new HashMap<String, List<String>>();
+    	servicesMap.put("EarthResourcesLayers", Arrays.asList(
+         		new String[] {"wfsgetfeatureminoccview", "wfsgetcaps", "getcachedtile"}));
+        servicesMap.put("TenementsLayers", Arrays.asList(
+         		new String[] {"wfsgetfeaturetenements", "wfsgetcaps", "getcachedtile"}));
+        servicesMap.put("NVCLBoreholeViewLayer", Arrays.asList(
+         		new String[] {"nvcldataservices", "nvcldownloadservices", "wfsgetfeatureboreholeview", "wfsgetcaps", "getcachedtile"}));
+        servicesMap.put("BoreholeViewLayer", Arrays.asList(
+         		new String[] {"wfsgetfeatureboreholeview", "wfsgetcaps", "getcachedtile"}));
+
+        stackdriverService.setServicesMap(servicesMap);
+    	return stackdriverService;
     }
-    
+
     @Value("${env.twitter.enable}") private boolean twitterEnable;
     @Value("${env.twitter.user}") private String twitterUser;
     @Value("${env.twitter.consumerKey}") private String twitterConsumerKey;
     @Value("${env.twitter.consumerSecret}") private String twitterConsumerSecret;
     @Value("${env.twitter.accessToken}") private String twitterAccessToken;
     @Value("${env.twitter.accessTokenSecret}") private String twitterAccessTokenSecret;
-    @Bean 
+    @Bean
     public NotificationService notificationService() {
         return new NotificationService(twitterEnable, twitterUser, twitterConsumerKey, twitterConsumerSecret, twitterAccessToken, twitterAccessTokenSecret);
     }

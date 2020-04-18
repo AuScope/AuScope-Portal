@@ -8,10 +8,13 @@ spring:
          'registries'
       
 env:
-    nagios:
-        user: ENTER_NAGIOS_USER_NAME
-        password: ENTER_NAGIOS_PASSWORD_NAME
-        url: https://cg-admin.arrc.csiro.au/nagios
+    stackdriver:
+        project_id: ENTER_GOOGLE_PROJECT_ID
+        private_key_id: ENTER_GOOGLE_PRIVATE_KEY_ID
+        private_key: ENTER_GOOGLE_PRIVATE_KEY
+        client_email: ENTER_CLIENT_EMAIL
+        client_id: ENTER_CLIENT_ID
+        token_uri: https://oauth2.googleapis.com/token
     twitter:
         enable: false
         consumerKey: ENTER_TWITTER_CONSUMER_KEY
