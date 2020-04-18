@@ -1,0 +1,27 @@
+termsconditions:
+   version: 1
+
+spring:
+   # Include the registry definitions from application-registries.yaml
+   profiles:
+      include:
+         'registries'
+      
+env:
+    nagios:
+        user: ENTER_NAGIOS_USER_NAME
+        password: ENTER_NAGIOS_PASSWORD_NAME
+        url: https://cg-admin.arrc.csiro.au/nagios
+    twitter:
+        enable: false
+        consumerKey: ENTER_TWITTER_CONSUMER_KEY
+        consumerSecret: ENTER_TWITTER_CONSUMER_SECRET
+        accessToken: ENTER_TWITTER_ACCESS_TOKEN
+        accessTokenSecret: ENTER_TWITTER_ACCESS_SECRET
+        user: AuScope
+    vocabService:
+        url: http://vocabs.ga.gov.au/cgi/sissvoc/
+    nvclVocabService:
+        url: http://auscope-services-test.arrc.csiro.au/sissvoc/
+    nvclAnalyticalServices:
+        url: http://aus-analytical.it.csiro.au/NVCLAnalyticalServices/

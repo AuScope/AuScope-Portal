@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -118,7 +119,7 @@ public class SF0BoreholeController extends BasePortalController {
         } catch (Exception e) {
         	log.warn(String.format("Unable to request/transform WFS response from '%1$s': %2$s", serviceUrl,e));
             log.debug("Exception: ", e);  
-            IOUtils.write("An error has occurred: "+ e.getMessage(), outputStream);
+            IOUtils.write("An error has occurred: "+ e.getMessage(), outputStream, StandardCharsets.UTF_8);
             outputStream.close();
         }
     }

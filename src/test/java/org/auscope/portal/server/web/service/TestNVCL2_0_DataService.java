@@ -1,5 +1,6 @@
 package org.auscope.portal.server.web.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -8,7 +9,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.auscope.portal.core.server.http.HttpClientInputStream;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.ResourceUtil;
 import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputClassification;
 import org.auscope.portal.server.domain.nvcldataservice.AlgorithmOutputResponse;
 import org.auscope.portal.server.domain.nvcldataservice.AnalyticalJobResults;
@@ -204,38 +205,6 @@ public class TestNVCL2_0_DataService extends PortalTestClass {
         Assert.assertEquals(1.0, (Double)response.getBinnedValues()[2].getNumericValues().get(0), 0.001);
         Assert.assertEquals(1.7, (Double)response.getBinnedValues()[2].getNumericValues().get(1), 0.001);
     }
-
-    /**
-     * Tests cleanup of a download job scalars request
-     *
-     * @throws Exception
-     */
-    @Test(expected=IOException.class)
-    public void testGetNVCL2_0_JobsScalarBinned_closeStreamOnError() throws Exception {
-        final String boreholeId = "BOREHOLE_1234";
-        final String[] jobIds = new String[] {"job1"};
-        final double binSizeMetres = 1.0;
-        
-        final InputStream responseStream = context.mock(InputStream.class);
-
-        context.checking(new Expectations() {
-            {
-                atLeast(1).of(mockMethodMaker).getNVCLJobsScalarMethod(with(any(String.class)), with(any(String.class)), with(any(String.class)));
-                will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsStream(mockMethod);
-                will(returnValue(new HttpClientInputStream(responseStream, null)));
-                allowing(responseStream).read(with(any(byte[].class)), with(any(Integer.class)), with(any(Integer.class)));
-                will(throwException(new IOException()));
-                atLeast(1).of(responseStream).close();
-            }
-        });
-
-        dataService.getNVCL2_0_JobsScalarBinned(jobIds, boreholeId, binSizeMetres);
-    }
-
-    
-    
-    
     
     
     /**

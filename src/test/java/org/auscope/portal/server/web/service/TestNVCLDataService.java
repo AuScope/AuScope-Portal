@@ -14,7 +14,7 @@ import org.auscope.portal.core.server.http.HttpClientResponse;
 import org.auscope.portal.core.server.http.HttpServiceCaller;
 import org.auscope.portal.core.services.methodmakers.WFSGetFeatureMethodMaker;
 import org.auscope.portal.core.test.PortalTestClass;
-import org.auscope.portal.core.test.ResourceUtil;
+import org.auscope.portal.core.util.ResourceUtil;
 import org.auscope.portal.server.domain.nvcldataservice.GetDatasetCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.GetLogCollectionResponse;
 import org.auscope.portal.server.domain.nvcldataservice.MosaicResponse;
@@ -198,47 +198,6 @@ public class TestNVCLDataService extends PortalTestClass {
         dataService.getLogCollection(serviceUrl, datasetIdentifier, forMosaicService);
     }
 
-    /**
-     * Tests parsing of a GetMosaicResponse
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetMosaic() throws Exception {
-        final String serviceUrl = "http://example/url";
-        final String logId = "logId";
-        final Integer width = 10;
-        final Integer startSampleNo = 11;
-        final Integer endSampleNo = 12;
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/html";
-
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-                oneOf(mockMethodMaker).getMosaicMethod(serviceUrl, logId, width, startSampleNo, endSampleNo);
-                will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                oneOf(httpEntity).getContent();
-                will(returnValue(responseStream));
-                oneOf(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                oneOf(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        MosaicResponse response = dataService.getMosaic(serviceUrl, logId, width, startSampleNo, endSampleNo);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
 
     /**
      * Tests parsing of a GetMosaicResponse fails when we fail to connect to the service
@@ -267,94 +226,4 @@ public class TestNVCLDataService extends PortalTestClass {
         dataService.getMosaic(serviceUrl, logId, width, startSampleNo, endSampleNo);
     }
 
-
-    /**
-     * Tests parsing of a TSGDownloadResponse
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testTSGDownload() throws Exception {
-        final String serviceUrl = "http://example/url";
-        final String email = "email@test";
-        final String datasetId = "id";
-        final String matchString = null;
-        final Boolean lineScan = true;
-        final Boolean spectra = false;
-        final Boolean profilometer = null;
-        final Boolean trayPics = true;
-        final Boolean mosaicPics = false;
-        final Boolean mapPics = null;
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/html";
-
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockMethodMaker).getDownloadTSGMethod(serviceUrl, email, datasetId, matchString, lineScan,
-                        spectra, profilometer, trayPics, mosaicPics, mapPics);
-                will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                oneOf(httpEntity).getContent();
-                will(returnValue(responseStream));
-                oneOf(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                oneOf(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        TSGDownloadResponse response = dataService.getTSGDownload(serviceUrl, email, datasetId, matchString, lineScan,
-                spectra, profilometer, trayPics, mosaicPics, mapPics);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
-
-    /**
-     * Tests parsing of a TSGStatusResponse
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testTSGStatus() throws Exception {
-        final String serviceUrl = "http://example/url";
-        final String email = "email@test";
-        final InputStream responseStream = context.mock(InputStream.class);
-        final HttpResponse httpResponse = context.mock(HttpResponse.class);
-        final HttpEntity httpEntity = context.mock(HttpEntity.class);
-        final String contentType = "text/html";
-
-        final Header mockHeader = context.mock(Header.class);
-
-        context.checking(new Expectations() {
-            {
-
-                oneOf(mockMethodMaker).getCheckTSGStatusMethod(serviceUrl, email);
-                will(returnValue(mockMethod));
-                oneOf(mockServiceCaller).getMethodResponseAsHttpResponse(mockMethod);
-                will(returnValue(new HttpClientResponse(httpResponse, null)));
-                atLeast(1).of(httpResponse).getEntity();
-                will(returnValue(httpEntity));
-                oneOf(httpEntity).getContent();
-                will(returnValue(responseStream));
-                oneOf(httpEntity).getContentType();
-                will(returnValue(mockHeader));
-                oneOf(mockHeader).getValue();
-                will(returnValue(contentType));
-            }
-        });
-
-        TSGStatusResponse response = dataService.checkTSGStatus(serviceUrl, email);
-        Assert.assertNotNull(response);
-        Assert.assertSame(responseStream, response.getResponse());
-        Assert.assertEquals(contentType, response.getContentType());
-    }
 }
