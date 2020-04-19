@@ -289,8 +289,9 @@ public class AuScopeApplicationContext {
     @Value("${env.stackdriver.token_uri") private String tokenUri;
     @Value("${env.stackdriver.project_id") private String projectId;
     @Bean
-    public GoogleCloudMonitoringCachedService googleCloudMonitoringCachedService(GoogleCloudMonitoringMethodMaker methodMaker) {
-    	GoogleCloudMonitoringCachedService stackdriverService = new GoogleCloudMonitoringCachedService(methodMaker);
+    public GoogleCloudMonitoringCachedService googleCloudMonitoringCachedService() {
+    	GoogleCloudMonitoringCachedService stackdriverService = new GoogleCloudMonitoringCachedService(
+    			new GoogleCloudMonitoringMethodMaker());
     	HashMap<String, List<String>> servicesMap = new HashMap<String, List<String>>();
     	servicesMap.put("EarthResourcesLayers", Arrays.asList(
          		new String[] {"wfsgetfeatureminoccview", "wfsgetcaps", "getcachedtile"}));
