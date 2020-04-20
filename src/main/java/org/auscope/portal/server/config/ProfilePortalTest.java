@@ -107,10 +107,6 @@ public WebMvcConfigurer configurer() {
     @Autowired
     KnownLayer knownTypeMgohGroupComp;
     @Autowired
-    KnownLayer knownTypeFalseColor;
-    @Autowired
-    KnownLayer knownTypeRegolithRatios;
-    @Autowired
     KnownLayer knownTypeAlohGroupContent;
     @Autowired
     KnownLayer knownTypeGypsumContent;
@@ -401,8 +397,6 @@ public WebMvcConfigurer configurer() {
         knownLayers.add(knownTypeGreenVeg);
         knownLayers.add(knownTypeFerrCarb);
         knownLayers.add(knownTypeMgohGroupComp);
-        knownLayers.add(knownTypeFalseColor);
-        knownLayers.add(knownTypeRegolithRatios);
         knownLayers.add(knownTypeAlohGroupContent);
         knownLayers.add(knownTypeGypsumContent);
         knownLayers.add(knownTypeSilicaContent);
