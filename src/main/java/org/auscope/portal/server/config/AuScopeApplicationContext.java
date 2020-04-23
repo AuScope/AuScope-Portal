@@ -282,14 +282,18 @@ public class AuScopeApplicationContext {
         return new FileDownloadService(httpServiceCallerApp());
     }
 
+    @Value("${env.stackdriver.enable}") private boolean enableStackdriver;
     @Value("${env.stackdriver.private_key}") private String privateKey;
     @Value("${env.stackdriver.private_key_id}") private String privateKeyId;
     @Value("${env.stackdriver.client_id}") private String clientId;
     @Value("${env.stackdriver.client_email}") private String clientEmail;
-    @Value("${env.stackdriver.token_uri") private String tokenUri;
-    @Value("${env.stackdriver.project_id") private String projectId;
+    @Value("${env.stackdriver.token_uri}") private String tokenUri;
+    @Value("${env.stackdriver.project_id}") private String projectId;
     @Bean
     public GoogleCloudMonitoringCachedService googleCloudMonitoringCachedService() {
+    	if (!enableStackdriver) {
+    		return null;
+    	}
     	GoogleCloudMonitoringCachedService stackdriverService = new GoogleCloudMonitoringCachedService(
     			new GoogleCloudMonitoringMethodMaker());
     	HashMap<String, List<String>> servicesMap = new HashMap<String, List<String>>();
@@ -301,8 +305,14 @@ public class AuScopeApplicationContext {
          		new String[] {"nvcldataservices", "nvcldownloadservices", "wfsgetfeatureboreholeview", "wfsgetcaps", "getcachedtile"}));
         servicesMap.put("BoreholeViewLayer", Arrays.asList(
          		new String[] {"wfsgetfeatureboreholeview", "wfsgetcaps", "getcachedtile"}));
-
         stackdriverService.setServicesMap(servicesMap);
+        stackdriverService.setPrivateKey(privateKey);
+        stackdriverService.setPrivateKeyId(privateKeyId);
+        stackdriverService.setClientId(clientId);
+        stackdriverService.setClientEmail(clientEmail);
+        stackdriverService.setTokenUri(tokenUri);
+        stackdriverService.setProjectId(projectId);
+
     	return stackdriverService;
     }
 

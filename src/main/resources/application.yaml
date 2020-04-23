@@ -9,6 +9,7 @@ spring:
       
 env:
     stackdriver:
+        enable: false
         project_id: ENTER_GOOGLE_PROJECT_ID
         private_key_id: ENTER_GOOGLE_PRIVATE_KEY_ID
         private_key: ENTER_GOOGLE_PRIVATE_KEY
