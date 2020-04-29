@@ -120,10 +120,6 @@ public class ProfilePortalProduction {
     @Autowired
     KnownLayer knownTypeMgohGroupComp;
     @Autowired
-    KnownLayer knownTypeFalseColor;
-    @Autowired
-    KnownLayer knownTypeRegolithRatios;
-    @Autowired
     KnownLayer knownTypeAlohGroupContent;
     @Autowired
     KnownLayer knownTypeGypsumContent;
@@ -246,7 +242,9 @@ public class ProfilePortalProduction {
     KnownLayer knownTypeUOWOSLTLOutlets;
     /* END UOW OCTOPUS */
 
-
+    /* IGSN sample layer */
+    @Autowired
+    KnownLayer knownTypeIGSNSample;
     @Bean
 	public ArrayList<KnownLayer> knownTypes() {
 		ArrayList<KnownLayer> knownLayers = new ArrayList<KnownLayer>();
@@ -295,8 +293,6 @@ public class ProfilePortalProduction {
         knownLayers.add(knownTypeGreenVeg);
         knownLayers.add(knownTypeFerrCarb);
         knownLayers.add(knownTypeMgohGroupComp);
-        knownLayers.add(knownTypeFalseColor);
-        knownLayers.add(knownTypeRegolithRatios);
         knownLayers.add(knownTypeAlohGroupContent);
         knownLayers.add(knownTypeGypsumContent);
         knownLayers.add(knownTypeSilicaContent);
@@ -363,6 +359,7 @@ public class ProfilePortalProduction {
         knownLayers.add(knownTypeUOWOSLTLBasins);
         knownLayers.add(knownTypeUOWOSLTLOutlets);
         /* END UOW OCTOPUS */
+        knownLayers.add(knownTypeIGSNSample);        
 
 		return knownLayers;
 	}

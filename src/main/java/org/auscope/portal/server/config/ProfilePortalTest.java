@@ -107,10 +107,6 @@ public WebMvcConfigurer configurer() {
     @Autowired
     KnownLayer knownTypeMgohGroupComp;
     @Autowired
-    KnownLayer knownTypeFalseColor;
-    @Autowired
-    KnownLayer knownTypeRegolithRatios;
-    @Autowired
     KnownLayer knownTypeAlohGroupContent;
     @Autowired
     KnownLayer knownTypeGypsumContent;
@@ -355,8 +351,11 @@ public WebMvcConfigurer configurer() {
     KnownLayer knownTypeUOWOSLTLBasins;
     @Autowired
     KnownLayer knownTypeUOWOSLTLOutlets;
-    /* END UOW OCTOPUS */
     
+    /* END UOW OCTOPUS */
+    /* IGSN sample layer */
+    @Autowired
+    KnownLayer knownTypeIGSNSample;
     
     
     @Bean
@@ -401,8 +400,6 @@ public WebMvcConfigurer configurer() {
         knownLayers.add(knownTypeGreenVeg);
         knownLayers.add(knownTypeFerrCarb);
         knownLayers.add(knownTypeMgohGroupComp);
-        knownLayers.add(knownTypeFalseColor);
-        knownLayers.add(knownTypeRegolithRatios);
         knownLayers.add(knownTypeAlohGroupContent);
         knownLayers.add(knownTypeGypsumContent);
         knownLayers.add(knownTypeSilicaContent);
@@ -532,6 +529,7 @@ public WebMvcConfigurer configurer() {
         knownLayers.add(knownTypeUOWOSLTLBasins);
         knownLayers.add(knownTypeUOWOSLTLOutlets);
         /* END UOW OCTOPUS */
+        knownLayers.add(knownTypeIGSNSample);        
 
 		return knownLayers;
 	}
