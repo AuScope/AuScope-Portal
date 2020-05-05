@@ -3101,6 +3101,13 @@ public class AuScopeKnownLayers {
         layer.setDescription("A collection of igsn-csiro-sample");
         layer.setProxyStyleUrl("getDefaultStyle.do?colour=0xFF0000&layerName=igsn:sample");
         layer.setOrder("50");
+        // Optional filters
+        List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
+        UITextBox nameTextBox = new UITextBox("samplename", "igsn:samplename", null, Predicate.ISLIKE);
+        optionalFilters.add(nameTextBox);
+        FilterCollection filterCollection = new FilterCollection();
+        filterCollection.setOptionalFilters(optionalFilters);
+        layer.setFilterCollection(filterCollection);        
         return layer;
     }
 
@@ -3118,7 +3125,14 @@ public class AuScopeKnownLayers {
         layer.setDescription("A collection of igsn-ga-sample");
         layer.setProxyStyleUrl("getDefaultStyle.do?colour=0x00FF00&layerName=igsn:igsn_ga_sample");
         layer.setOrder("51");
-        return layer;
+        // Optional filters
+        List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
+        UITextBox nameTextBox = new UITextBox("samplename", "igsn:name", null, Predicate.ISLIKE);
+        optionalFilters.add(nameTextBox);
+        FilterCollection filterCollection = new FilterCollection();
+        filterCollection.setOptionalFilters(optionalFilters);
+        layer.setFilterCollection(filterCollection);        
+        return layer;   
     }
     @Bean
     public KnownLayerSelector knownTypeIGSNANDSSampleSelector() {
@@ -3134,6 +3148,13 @@ public class AuScopeKnownLayers {
         layer.setDescription("A collection of igsn-ands-sample");
         layer.setProxyStyleUrl("getDefaultStyle.do?colour=0x0000FF&layerName=igsn:igsn_ands_sample");
         layer.setOrder("52");
+        // Optional filters
+        List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
+        UITextBox nameTextBox = new UITextBox("Identifier", "igsn:identifier", null, Predicate.ISLIKE);
+        optionalFilters.add(nameTextBox);
+        FilterCollection filterCollection = new FilterCollection();
+        filterCollection.setOptionalFilters(optionalFilters);
+        layer.setFilterCollection(filterCollection);
         return layer;
     }
     @Bean
@@ -3150,6 +3171,13 @@ public class AuScopeKnownLayers {
         layer.setDescription("A collection of igsn-wdc-sample");
         layer.setProxyStyleUrl("getDefaultStyle.do?colour=0xFF00FF&layerName=igsn:igsn_wdc_sample");
         layer.setOrder("53");
+        // Optional filters
+        List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
+        UITextBox nameTextBox = new UITextBox("Identifier", "igsn:identifier", null, Predicate.ISLIKE);
+        optionalFilters.add(nameTextBox);
+        FilterCollection filterCollection = new FilterCollection();
+        filterCollection.setOptionalFilters(optionalFilters);
+        layer.setFilterCollection(filterCollection);        
         return layer;
     }       
 }
