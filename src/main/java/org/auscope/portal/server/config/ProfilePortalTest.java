@@ -356,7 +356,12 @@ public WebMvcConfigurer configurer() {
     /* IGSN sample layer */
     @Autowired
     KnownLayer knownTypeIGSNSample;
-    
+    @Autowired
+    KnownLayer knownTypeIGSNGASample;
+    @Autowired
+    KnownLayer knownTypeIGSNANDSSample;
+    @Autowired
+    KnownLayer knownTypeIGSNWdcSample;      
     
     @Bean
  	public ArrayList<KnownLayer> knownTypes() {
@@ -530,7 +535,9 @@ public WebMvcConfigurer configurer() {
         knownLayers.add(knownTypeUOWOSLTLOutlets);
         /* END UOW OCTOPUS */
         knownLayers.add(knownTypeIGSNSample);        
-
+        knownLayers.add(knownTypeIGSNGASample);        
+        knownLayers.add(knownTypeIGSNANDSSample);        
+        knownLayers.add(knownTypeIGSNWdcSample); 
 		return knownLayers;
 	}
                 

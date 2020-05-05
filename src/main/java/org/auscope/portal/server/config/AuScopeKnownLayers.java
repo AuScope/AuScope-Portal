@@ -3108,13 +3108,61 @@ public class AuScopeKnownLayers {
     @Bean
     public KnownLayer knownTypeIGSNSample() {
         KnownLayer layer = new KnownLayer("igsn-sample", knownTypeIGSNSampleSelector());
-        layer.setId("IGSN-SAMPLE");
-        layer.setName("igsn-sample");
+        layer.setId("IGSN-CSIRO-SAMPLE");
+        layer.setName("igsn-csiro-sample");
         layer.setGroup("IGSN");
-        layer.setDescription("A collection of igsn-sample");
-        layer.setProxyStyleUrl("getDefaultStyle.do?colour=0xFFDDAA&layerName=igsn:sample");
-        layer.setOrder("52");
+        layer.setDescription("A collection of igsn-csiro-sample");
+        layer.setProxyStyleUrl("getDefaultStyle.do?colour=0xFF0000&layerName=igsn:sample");
+        layer.setOrder("50");
         return layer;
     }
 
+    @Bean
+    public KnownLayerSelector knownTypeIGSNGASampleSelector() {
+        return new WMSSelector("igsn:igsn_ga_sample");
+    }
+
+    @Bean
+    public KnownLayer knownTypeIGSNGASample() {
+        KnownLayer layer = new KnownLayer("igsn-ga-sample", knownTypeIGSNGASampleSelector());
+        layer.setId("IGSN-GA-SAMPLE");
+        layer.setName("igsn-ga-sample");
+        layer.setGroup("IGSN");
+        layer.setDescription("A collection of igsn-ga-sample");
+        layer.setProxyStyleUrl("getDefaultStyle.do?colour=0x00FF00&layerName=igsn:igsn_ga_sample");
+        layer.setOrder("51");
+        return layer;
+    }
+    @Bean
+    public KnownLayerSelector knownTypeIGSNANDSSampleSelector() {
+        return new WMSSelector("igsn:igsn_ands_sample");
+    }
+
+    @Bean
+    public KnownLayer knownTypeIGSNANDSSample() {
+        KnownLayer layer = new KnownLayer("igsn-ands-sample", knownTypeIGSNANDSSampleSelector());
+        layer.setId("IGSN-ANDS-SAMPLE");
+        layer.setName("igsn-ands-sample");
+        layer.setGroup("IGSN");
+        layer.setDescription("A collection of igsn-ands-sample");
+        layer.setProxyStyleUrl("getDefaultStyle.do?colour=0x0000FF&layerName=igsn:igsn_ands_sample");
+        layer.setOrder("52");
+        return layer;
+    }
+    @Bean
+    public KnownLayerSelector knownTypeIGSNWdcSampleSelector() {
+        return new WMSSelector("igsn:igsn_wdc_sample");
+    }
+
+    @Bean
+    public KnownLayer knownTypeIGSNWdcSample() {
+        KnownLayer layer = new KnownLayer("igsn-sample", knownTypeIGSNWdcSampleSelector());
+        layer.setId("IGSN-WDC-SAMPLE");
+        layer.setName("igsn-wdc-sample");
+        layer.setGroup("IGSN");
+        layer.setDescription("A collection of igsn-wdc-sample");
+        layer.setProxyStyleUrl("getDefaultStyle.do?colour=0xFF00FF&layerName=igsn:igsn_wdc_sample");
+        layer.setOrder("53");
+        return layer;
+    }       
 }
