@@ -2,17 +2,21 @@ package org.auscope.portal.server.config;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.net.MalformedURLException;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
-
 import org.auscope.portal.core.uifilter.AbstractBaseFilter;
+import org.auscope.portal.core.uifilter.FilterCollection;
+import org.auscope.portal.core.uifilter.Predicate;
 import org.auscope.portal.core.uifilter.mandatory.AbstractMandatoryParamBinding;
+import org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider;
+import org.auscope.portal.core.uifilter.optional.xpath.UIDate;
+import org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote;
+import org.auscope.portal.core.uifilter.optional.xpath.UIDropDownSelectList;
+import org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox;
+import org.auscope.portal.core.uifilter.optional.xpath.UITextBox;
 import org.auscope.portal.core.view.knownlayer.CSWRecordSelector;
 import org.auscope.portal.core.view.knownlayer.KnownLayer;
 import org.auscope.portal.core.view.knownlayer.KnownLayerSelector;
@@ -20,14 +24,8 @@ import org.auscope.portal.core.view.knownlayer.WFSSelector;
 import org.auscope.portal.core.view.knownlayer.WMSSelector;
 import org.auscope.portal.core.view.knownlayer.WMSWFSSelector;
 import org.auscope.portal.view.knownlayer.IRISSelector;
-import org.auscope.portal.core.uifilter.FilterCollection;
-import org.auscope.portal.core.uifilter.optional.xpath.UITextBox;
-import org.auscope.portal.core.uifilter.optional.UICheckBoxGroupProvider;
-import org.auscope.portal.core.uifilter.Predicate;
-import org.auscope.portal.core.uifilter.optional.xpath.UIDropDownRemote;
-import org.auscope.portal.core.uifilter.optional.xpath.UIDropDownSelectList;
-import org.auscope.portal.core.uifilter.optional.xpath.UIDate;
-import org.auscope.portal.core.uifilter.optional.xpath.UIPolygonBBox;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Known layer bean definitions (originally migrated from Spring MVC
@@ -108,8 +106,7 @@ public class AuScopeKnownLayers {
         layer.setIconUrl("http://maps.google.com/mapfiles/kml/paddle/pink-blank.png");
         setupIcon(layer);
         layer.setOrder("10");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("EarthResourcesLayers");
+        layer.setStackdriverServiceGroup("EarthResourcesLayers");
 
         UITextBox uiTextBox = new UITextBox("Mine Name", "er:specification/er:Mine/er:mineName/er:MineName/er:mineName",
                 null, Predicate.ISLIKE);
@@ -147,8 +144,7 @@ public class AuScopeKnownLayers {
         layer.setIconUrl("http://maps.google.com/mapfiles/kml/paddle/purple-blank.png");
         setupIcon(layer);
         layer.setOrder("11");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("EarthResourcesLayers");
+        layer.setStackdriverServiceGroup("EarthResourcesLayers");
 
         UIDropDownRemote uiDropDownRemote = new UIDropDownRemote("Commodity",
                 "gsml:specification/er:MineralOccurrence/er:commodityDescription/er:Commodity/er:commodityName", null,
@@ -187,8 +183,7 @@ public class AuScopeKnownLayers {
         layer.setIconUrl("http://maps.google.com/mapfiles/kml/paddle/orange-blank.png");
         setupIcon(layer);
         layer.setOrder("12");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("EarthResourcesLayers");
+        layer.setStackdriverServiceGroup("EarthResourcesLayers");
 
         // Optional filters
         layer.setFilterCollection(this.createProviderFilterCollection());
@@ -213,8 +208,7 @@ public class AuScopeKnownLayers {
         layer.setProxyStyleUrl("getMineralTenementStyle.do");
         layer.setProxyDownloadUrl("doMineralTenementCSVDownload.do");
         layer.setOrder("150");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("TenementsLayers");
+        layer.setStackdriverServiceGroup("TenementsLayers");
 
         UITextBox nameTextBox = new UITextBox("Name", "mt:name", null, Predicate.ISLIKE);
         List<ImmutablePair<String, String>> options = new ArrayList<ImmutablePair<String, String>>();
@@ -272,8 +266,7 @@ public class AuScopeKnownLayers {
         layer.setProxyStyleUrl("getErlMineViewStyle.do");
         layer.setProxyDownloadUrl("");
         layer.setOrder("160");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("EarthResourcesLayers");
+        layer.setStackdriverServiceGroup("EarthResourcesLayers");
 
         // Optional filters
         List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
@@ -308,9 +301,7 @@ public class AuScopeKnownLayers {
         layer.setProxyStyleUrl("getErlMineralOccurrenceViewStyle.do");
         layer.setProxyDownloadUrl("");
         layer.setOrder("160");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("EarthResourcesLayers");
-
+        layer.setStackdriverServiceGroup("EarthResourcesLayers");
         // Optional filters
         List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
         UITextBox nameTextBox = new UITextBox("Name", "erl:name", null, Predicate.ISLIKE);
@@ -347,8 +338,7 @@ public class AuScopeKnownLayers {
         layer.setProxyStyleUrl("getErlCommodityResourceViewStyle.do");
         layer.setProxyDownloadUrl("");
         layer.setOrder("160");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("EarthResourcesLayers");
+        layer.setStackdriverServiceGroup("EarthResourcesLayers");
 
         // Optional filters
         List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
@@ -387,8 +377,7 @@ public class AuScopeKnownLayers {
         layer.setProxyStyleUrl("doMinOccurViewFilterStyle.do");
         layer.setProxyDownloadUrl("downloadMinOccurView.do");
         layer.setOrder("13");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("EarthResourcesLayers");
+        layer.setStackdriverServiceGroup("EarthResourcesLayers");
         layer.setFilterCollection(this.createProviderFilterCollection());
         return layer;
     }
@@ -525,8 +514,7 @@ public class AuScopeKnownLayers {
         layer.setProxyStyleUrl("doNvclV2FilterStyle.do");
         setupIcon(layer);
         layer.setOrder("51");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("NVCLBoreholeViewLayer");
+        layer.setStackdriverServiceGroup("NVCLBoreholeViewLayer");
 
         // Mandatory filters
         org.auscope.portal.core.uifilter.mandatory.UITextBox jobidTextBox;
@@ -621,8 +609,7 @@ public class AuScopeKnownLayers {
         layer.setProxyStyleUrl("doBoreholeViewFilterStyle.do");
         setupIcon(layer);
         layer.setOrder("52");
-        layer.setNagiosHostGroup("GeolSurveySISSDeployments");
-        layer.setNagiosServiceGroup("BoreholeViewLayer");
+        layer.setStackdriverServiceGroup("BoreholeViewLayer");
 
         // Mandatory filters
         org.auscope.portal.core.uifilter.mandatory.UITextBox jobidTextBox;
