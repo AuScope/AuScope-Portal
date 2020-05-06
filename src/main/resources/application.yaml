@@ -14,9 +14,9 @@ spring:
            'registries'
    # Comment out if you're a developer and you don't need to set up a database. 
    # This is to deal with "Failed to configure a datasource" error.
-   # autoconfigure:
-   #    exclude:
-   #        - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration      
+   autoconfigure:
+       exclude:
+           - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration      
 env:
     stackdriver:
         enable: false
