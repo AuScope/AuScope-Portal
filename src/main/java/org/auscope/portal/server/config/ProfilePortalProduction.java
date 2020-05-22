@@ -248,7 +248,7 @@ public class ProfilePortalProduction {
     @Autowired
     KnownLayer knownTypeIGSNGASample;
     @Autowired
-    KnownLayer knownTypeIGSNANDSSample;
+    KnownLayer knownTypeIGSNARDCSample;
     @Autowired
     KnownLayer knownTypeIGSNWdcSample;            
     @Bean
@@ -367,7 +367,7 @@ public class ProfilePortalProduction {
         /* END UOW OCTOPUS */
         knownLayers.add(knownTypeIGSNSample);        
         knownLayers.add(knownTypeIGSNGASample);        
-        knownLayers.add(knownTypeIGSNANDSSample);        
+        knownLayers.add(knownTypeIGSNARDCSample);        
         knownLayers.add(knownTypeIGSNWdcSample);   
 		return knownLayers;
 	}
