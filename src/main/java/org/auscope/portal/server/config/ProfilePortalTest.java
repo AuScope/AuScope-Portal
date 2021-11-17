@@ -359,7 +359,7 @@ public WebMvcConfigurer configurer() {
     @Autowired
     KnownLayer knownTypeIGSNGASample;
     @Autowired
-    KnownLayer knownTypeIGSNANDSSample;
+    KnownLayer knownTypeIGSNARDCSample;
     @Autowired
     KnownLayer knownTypeIGSNWdcSample;      
     
@@ -536,8 +536,8 @@ public WebMvcConfigurer configurer() {
         /* END UOW OCTOPUS */
         knownLayers.add(knownTypeIGSNSample);        
         knownLayers.add(knownTypeIGSNGASample);        
-        knownLayers.add(knownTypeIGSNANDSSample);        
-        knownLayers.add(knownTypeIGSNWdcSample); 
+        knownLayers.add(knownTypeIGSNARDCSample);        
+        knownLayers.add(knownTypeIGSNWdcSample);
 		return knownLayers;
 	}
                 

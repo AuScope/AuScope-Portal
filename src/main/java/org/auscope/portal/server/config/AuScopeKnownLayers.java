@@ -3135,18 +3135,18 @@ public class AuScopeKnownLayers {
         return layer;   
     }
     @Bean
-    public KnownLayerSelector knownTypeIGSNANDSSampleSelector() {
-        return new WMSSelector("igsn:igsn_ands_sample");
+    public KnownLayerSelector knownTypeIGSNARDCSampleSelector() {
+        return new WMSSelector("igsn:igsn_ardc_sample");
     }
 
     @Bean
-    public KnownLayer knownTypeIGSNANDSSample() {
-        KnownLayer layer = new KnownLayer("igsn-ands-sample", knownTypeIGSNANDSSampleSelector());
-        layer.setId("IGSN-ANDS-SAMPLE");
-        layer.setName("igsn-ands-sample");
+    public KnownLayer knownTypeIGSNARDCSample() {
+        KnownLayer layer = new KnownLayer("igsn-ardc-sample", knownTypeIGSNARDCSampleSelector());
+        layer.setId("IGSN-ARDC-SAMPLE");
+        layer.setName("igsn-ardc-sample");
         layer.setGroup("IGSN");
-        layer.setDescription("A collection of igsn-ands-sample");
-        layer.setProxyStyleUrl("getDefaultStyle.do?colour=0x0000FF&layerName=igsn:igsn_ands_sample");
+        layer.setDescription("A collection of igsn-ardc-sample");
+        layer.setProxyStyleUrl("getDefaultStyle.do?colour=0x0000FF&layerName=igsn:igsn_ardc_sample");
         layer.setOrder("52");
         // Optional filters
         List<AbstractBaseFilter> optionalFilters = new ArrayList<AbstractBaseFilter>();
